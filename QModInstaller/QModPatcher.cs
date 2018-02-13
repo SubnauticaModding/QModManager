@@ -43,6 +43,10 @@ namespace QModInstaller
                     mod.ModAssembly = modAssembly;
 
                     var entryMethodSig = mod.EntryMethod.Split('.');
+
+                    if (string.IsNullOrEmpty(mod.EntryMethod) || entryMethodSig.Length != 3)
+                        continue;
+
                     var entryNamespace = entryMethodSig[0];
                     var entryType = entryMethodSig[1];
                     var entryMethod = entryMethodSig[2];
