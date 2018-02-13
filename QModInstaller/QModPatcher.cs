@@ -12,35 +12,18 @@ namespace QModInstaller
 
         public static void Patch()
         {
-            var qmods = LoadQMods();
-
-            if (qmods == null) return;
-
-            foreach (var mod in qmods)
-            {
-                mod.QPatchMethod.Invoke(mod.ModAssembly, new object[] { });
-            }
-        }
-
-
-        public static List<QMod> LoadQMods()
-        {
             List<QMod> mods = new List<QMod>();
 
             if (!Directory.Exists(qModBaseDir))
             {
                 Directory.CreateDirectory(qModBaseDir);
-                return mods;
+                return;
             }
 
             var subDirs = Directory.GetDirectories(qModBaseDir);
 
-            File.AppendAllText(@"C:\users\qwiso\desktop\log.txt", "found "+subDirs.Length+" subdirectories" + Environment.NewLine);
-
             foreach (var subDir in subDirs)
             {
-                File.AppendAllText(@"C:\users\qwiso\desktop\log.txt", "scanning for qmods: " + subDir + Environment.NewLine);
-
                 var jsonFile = Path.Combine(subDir, "mod.json");
 
                 if (!File.Exists(jsonFile))
@@ -62,17 +45,14 @@ namespace QModInstaller
                     MethodInfo qPatchMethod = modAssembly.GetType(mod.AssemblyName.Replace(".dll", "") + ".QPatch").GetMethod("Patch");
                     mod.QPatchMethod = qPatchMethod;
 
-                    File.AppendAllText(@"C:\users\qwiso\desktop\log.txt", "added new QPatch.Patch method for " + mod.AssemblyName + Environment.NewLine);
+                    qPatchMethod.Invoke(modAssembly, new object[] { });
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
-                    File.AppendAllText(@"C:\users\qwiso\desktop\log.txt", "didn't find method" + Environment.NewLine);
                     Console.WriteLine("QMOD ERR: loading QPatch.Patch method failed: " + e.Message);
                     continue;
                 }
             }
-
-            return mods;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using QModInstaller;
 using System;
+using System.Linq;
 
 namespace QModManager
 {
@@ -7,24 +8,23 @@ namespace QModManager
     {
         static void Main(string[] args)
         {
-            var options = new Options();
+            var parsedArgs = args.Select(s => s.Split(new[] { '=' }, 1)).ToDictionary(s => s[0], s => s[1]);
 
-            if (CommandLine.Parser.Default.ParseArguments(args, options))
-            {
-                if (string.IsNullOrEmpty(options.SubnauticaDirectory))
-                    options.SubnauticaDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\Subnautica";
+            string SubnauticaDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\Subnautica";
+
+            if (parsedArgs.Keys.Contains("SubnauticaDirectory"))
+                SubnauticaDirectory = parsedArgs["SubnauticaDirectory"];
                 
-                // TODO check the subnautica path is valid
+            // TODO check the subnautica path is valid
 
-                Console.WriteLine(options.SubnauticaDirectory);
-            }
+            Console.WriteLine(SubnauticaDirectory);
 
-            QModInjector injector = new QModInjector(options.SubnauticaDirectory);
+            QModInjector injector = new QModInjector(SubnauticaDirectory);
 
             if (!injector.IsPatcherInjected())
             {
                 Console.WriteLine("No patch detected, type 'yes' to install: ");
-                string consent = Console.ReadLine();
+                string consent = Console.ReadLine().Replace("'", "");
                 if (consent == "yes" || consent == "YES")
                 {
                     if (injector.Inject())
