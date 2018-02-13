@@ -15,6 +15,7 @@ namespace QModInstaller
         public string[] Requires = new string[] { };
         public bool Enable = false;
         public string AssemblyName = "dll filename";
+        public string EntryMethod = "Namespace.Class.Method of harmony.PatchAll or your equivalent";
         public Dictionary<string, object> Config = new Dictionary<string, object>();
 
         [JsonIgnore]
