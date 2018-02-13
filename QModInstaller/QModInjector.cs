@@ -9,6 +9,7 @@ namespace QModInstaller
     public class QModInjector
     {
         private string subnauticaDirectory;
+        private string managedDirectory;
         private string installerFilename = @"QModInstaller.dll";
         private string mainFilename = @"\Assembly-CSharp.dll";
         private string backupFilename = @"\Assembly-CSharp.qoriginal.dll";
@@ -16,9 +17,10 @@ namespace QModInstaller
 
         public QModInjector(string dir)
         {
-            subnauticaDirectory = Path.Combine(dir, @"Subnautica_Data\Managed");
-            mainFilename = subnauticaDirectory + mainFilename;
-            backupFilename = subnauticaDirectory + backupFilename;
+            subnauticaDirectory = dir;
+            managedDirectory = Path.Combine(subnauticaDirectory, @"Subnautica_Data\Managed");
+            mainFilename = managedDirectory + mainFilename;
+            backupFilename = managedDirectory + backupFilename;
         }
 
 
@@ -55,6 +57,9 @@ namespace QModInstaller
 
             // save changes under original filename
             game.Write(mainFilename);
+
+            if (!Directory.Exists(subnauticaDirectory + @"\QMods"))
+                Directory.CreateDirectory(subnauticaDirectory + @"\QMods");
 
             return true;
         }

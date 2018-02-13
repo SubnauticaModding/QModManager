@@ -8,14 +8,18 @@ namespace QModInstaller
 {
     public class QMod
     {
-        public string Id;
-        public string DisplayName;
-        public string Author;
-        public string Version;
-        public string[] Requires;
-        public bool Enable;
-        public string AssemblyName;
-        public Dictionary<string, object> Config;
+        public string Id = "mod_id";
+        public string DisplayName = "Display name";
+        public string Author = "author";
+        public string Version = "0.0.0";
+        public string[] Requires = new string[] { };
+        public bool Enable = false;
+        public string AssemblyName = "dll filename";
+        public Dictionary<string, object> Config = new Dictionary<string, object>();
+
+        [JsonIgnore]
+        public Assembly ModAssembly;
+        [JsonIgnore]
         public MethodInfo QPatchMethod;
 
         public QMod() { }

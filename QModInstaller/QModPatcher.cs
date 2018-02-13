@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Oculus.Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
@@ -11,13 +12,13 @@ namespace QModInstaller
 
         public static void Patch()
         {
-            var modAssemblies = LoadQMods();
+            var qmods = LoadQMods();
 
-            if (modAssemblies == null) return;
+            if (qmods == null) return;
 
-            foreach (var mod in modAssemblies)
+            foreach (var mod in qmods)
             {
-                //qPatchMethod.Invoke(mod, new object[] { });
+                mod.QPatchMethod.Invoke(mod.ModAssembly, new object[] { });
             }
         }
 
@@ -34,8 +35,20 @@ namespace QModInstaller
 
             var subDirs = Directory.GetDirectories(qModBaseDir);
 
+            File.AppendAllText(@"C:\users\qwiso\desktop\log.txt", "found "+subDirs.Length+" subdirectories" + Environment.NewLine);
+
             foreach (var subDir in subDirs)
             {
+                File.AppendAllText(@"C:\users\qwiso\desktop\log.txt", "scanning for qmods: " + subDir + Environment.NewLine);
+
+                var jsonFile = Path.Combine(subDir, "mod.json");
+
+                if (!File.Exists(jsonFile))
+                {
+                    File.WriteAllText(jsonFile, JsonConvert.SerializeObject(new QMod()));
+                    continue;
+                }
+
                 QMod mod = QMod.FromJsonFile(Path.Combine(subDir, "mod.json"));
 
                 if (mod.Equals(null))
@@ -44,11 +57,16 @@ namespace QModInstaller
                 try
                 {
                     var modAssembly = Assembly.LoadFrom(Path.Combine(subDir, mod.AssemblyName));
-                    MethodInfo qPatchMethod = modAssembly.GetType(mod.Id + ".Qpatch").GetMethod("Patch");
+                    mod.ModAssembly = modAssembly;
+
+                    MethodInfo qPatchMethod = modAssembly.GetType(mod.AssemblyName.Replace(".dll", "") + ".QPatch").GetMethod("Patch");
                     mod.QPatchMethod = qPatchMethod;
+
+                    File.AppendAllText(@"C:\users\qwiso\desktop\log.txt", "added new QPatch.Patch method for " + mod.AssemblyName + Environment.NewLine);
                 }
                 catch(Exception e)
                 {
+                    File.AppendAllText(@"C:\users\qwiso\desktop\log.txt", "didn't find method" + Environment.NewLine);
                     Console.WriteLine("QMOD ERR: loading QPatch.Patch method failed: " + e.Message);
                     continue;
                 }
