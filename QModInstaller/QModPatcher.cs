@@ -7,41 +7,51 @@ namespace QModInstaller
 {
     public class QModPatcher
     {
+        private static string qModBaseDir = Environment.CurrentDirectory + @"\QMods";
+
         public static void Patch()
         {
-            var modAssemblies = GetQMods();
+            var modAssemblies = LoadQMods();
 
             if (modAssemblies == null) return;
 
             foreach (var mod in modAssemblies)
             {
-                var moduleName = mod.GetTypes()[0].ToString();
-                var modNamespace = moduleName.Split(new string[] { "." }, StringSplitOptions.None);
-
-                var qPatchMethod = mod.GetType(modNamespace[0] + ".QPatch").GetMethod("Patch");
-                qPatchMethod.Invoke(mod, new object[] { });
+                //qPatchMethod.Invoke(mod, new object[] { });
             }
         }
 
 
-        public static List<Assembly> GetQMods()
+        public static List<QMod> LoadQMods()
         {
-            var modDirectory = Environment.CurrentDirectory + @"\QMods";
+            List<QMod> mods = new List<QMod>();
 
-            if (!Directory.Exists(modDirectory))
+            if (!Directory.Exists(qModBaseDir))
             {
-                Directory.CreateDirectory(modDirectory);
-                return null;
+                Directory.CreateDirectory(qModBaseDir);
+                return mods;
             }
 
-            var mods = new List<Assembly>();
+            var subDirs = Directory.GetDirectories(qModBaseDir);
 
-            var files = Directory.GetFiles(modDirectory, "*.dll", SearchOption.TopDirectoryOnly);
-
-            foreach (var file in files)
+            foreach (var subDir in subDirs)
             {
-                var mod = Assembly.LoadFrom(file);
-                mods.Add(mod);
+                QMod mod = QMod.FromJsonFile(Path.Combine(subDir, "mod.json"));
+
+                if (mod.Equals(null))
+                    continue;
+
+                try
+                {
+                    var modAssembly = Assembly.LoadFrom(Path.Combine(subDir, mod.AssemblyName));
+                    MethodInfo qPatchMethod = modAssembly.GetType(mod.Id + ".Qpatch").GetMethod("Patch");
+                    mod.QPatchMethod = qPatchMethod;
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine("QMOD ERR: loading QPatch.Patch method failed: " + e.Message);
+                    continue;
+                }
             }
 
             return mods;

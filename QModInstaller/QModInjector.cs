@@ -8,18 +8,27 @@ namespace QModInstaller
 {
     public class QModInjector
     {
-        private const string installerFilename = "QModInstaller.dll";
-        private const string mainFilename = "Assembly-CSharp.dll";
-        private const string backupFilename = "Assembly-CSharp.qoriginal.dll";
+        private string subnauticaDirectory;
+        private string installerFilename = @"QModInstaller.dll";
+        private string mainFilename = @"\Assembly-CSharp.dll";
+        private string backupFilename = @"\Assembly-CSharp.qoriginal.dll";
 
 
-        public static bool IsPatcherInjected()
+        public QModInjector(string dir)
+        {
+            subnauticaDirectory = Path.Combine(dir, @"Subnautica_Data\Managed");
+            mainFilename = subnauticaDirectory + mainFilename;
+            backupFilename = subnauticaDirectory + backupFilename;
+        }
+
+
+        public bool IsPatcherInjected()
         {
             return isInjected();
         }
 
 
-        public static bool Inject()
+        public bool Inject()
         {
             if (isInjected()) return false;
 
@@ -51,7 +60,7 @@ namespace QModInstaller
         }
 
 
-        public static bool Remove()
+        public bool Remove()
         {
             // if a backup exists
             if (File.Exists(backupFilename))
@@ -69,7 +78,7 @@ namespace QModInstaller
         }
 
 
-        private static bool isInjected()
+        private bool isInjected()
         {
             var game = AssemblyDefinition.ReadAssembly(mainFilename);
 
