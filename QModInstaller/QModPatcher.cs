@@ -40,19 +40,20 @@ namespace QModInstaller
                 try
                 {
                     var modAssembly = Assembly.LoadFrom(Path.Combine(subDir, mod.AssemblyName));
-                    mod.ModAssembly = modAssembly;
+
+                    string entryNamespace = mod.AssemblyName.Replace(".dll", "");
+                    string entryType = "QPatch";
+                    string entryMethod = "Patch";
 
                     var entryMethodSig = mod.EntryMethod.Split('.');
-
-                    if (string.IsNullOrEmpty(mod.EntryMethod) || entryMethodSig.Length != 3)
-                        continue;
-
-                    var entryNamespace = entryMethodSig[0];
-                    var entryType = entryMethodSig[1];
-                    var entryMethod = entryMethodSig[2];
+                    if (!string.IsNullOrEmpty(mod.EntryMethod) && entryMethodSig[0] != "Namespace")
+                    {
+                        entryNamespace = entryMethodSig[0];
+                        entryType = entryMethodSig[1];
+                        entryMethod = entryMethodSig[2];
+                    }
 
                     MethodInfo qPatchMethod = modAssembly.GetType(entryNamespace + "." + entryType).GetMethod(entryMethod);
-                    mod.QPatchMethod = qPatchMethod;
 
                     if (mod.Enable)
                         qPatchMethod.Invoke(modAssembly, new object[] { });
