@@ -17,7 +17,9 @@ namespace QModInstaller
 
             if (!Directory.Exists(qModBaseDir))
             {
+                Console.WriteLine("QMOD ERR: QMod directory was not found");
                 Directory.CreateDirectory(qModBaseDir);
+                Console.WriteLine("QMOD INFO: Creaated QMod directory at {0}", qModBaseDir);
                 return;
             }
 
@@ -29,19 +31,33 @@ namespace QModInstaller
 
                 if (!File.Exists(jsonFile))
                 {
+                    Console.WriteLine("QMOD ERR: Mod is missing a mod.json file");
                     File.WriteAllText(jsonFile, JsonConvert.SerializeObject(new QMod()));
+                    Console.WriteLine("QMOD INFO: A template for mod.json was generated at {0}", jsonFile);
                     continue;
                 }
 
                 QMod mod = QMod.FromJsonFile(Path.Combine(subDir, "mod.json"));
 
-                if (mod.Equals(null))
+                if (mod.Equals(null)) // QMod.FromJsonFile will throw parser errors
                     continue;
 
-                var modAssembly = Assembly.LoadFrom(Path.Combine(subDir, mod.AssemblyName));
+                var modAssemblyPath = Path.Combine(subDir, mod.AssemblyName);
 
-                if (!string.IsNullOrEmpty(mod.EntryMethod))
+                if (!File.Exists(modAssemblyPath))
                 {
+                    Console.WriteLine("QMOD ERR: No matching dll found at {0} for {1}", modAssemblyPath, mod.Id);
+                }
+
+                var modAssembly = Assembly.LoadFrom(modAssemblyPath);
+
+                if (string.IsNullOrEmpty(mod.EntryMethod))
+                {
+                    Console.WriteLine("QMOD ERR: No EntryMethod specified for {0}", mod.Id);
+                    continue;
+                }
+                else
+                { 
                     try
                     {
                         var entryMethodSig = mod.EntryMethod.Split('.');
@@ -64,10 +80,6 @@ namespace QModInstaller
                         Console.WriteLine(e.Message);
                         continue;
                     }
-                }
-                else
-                {
-                    Console.WriteLine("QMOD ERR: Could not open the assembly file specificed: {0}", mod.AssemblyName);
                 }
             }
         }
