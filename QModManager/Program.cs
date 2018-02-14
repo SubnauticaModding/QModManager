@@ -10,7 +10,8 @@ namespace QModManager
         {
             var parsedArgs = args.Select(s => s.Split(new[] { '=' }, 1)).ToDictionary(s => s[0], s => s[1]);
 
-            string SubnauticaDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\Subnautica";
+            //string SubnauticaDirectory = @"C:\Program Files (x86)\Steam\steamapps\common\Subnautica";
+            string SubnauticaDirectory = Environment.CurrentDirectory;
 
             if (parsedArgs.Keys.Contains("SubnauticaDirectory"))
                 SubnauticaDirectory = parsedArgs["SubnauticaDirectory"];

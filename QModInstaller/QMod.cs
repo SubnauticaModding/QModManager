@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 
 namespace QModInstaller
 {
@@ -30,7 +29,8 @@ namespace QModInstaller
             }
             catch(Exception e)
             {
-                Console.WriteLine("QMOD WARN: mod.json deserialization failed: " + e.Message);
+                Console.WriteLine("QMOD ERR: mod.json deserialization failed!");
+                Console.WriteLine(e.Message);
                 return null;
             }
         }
