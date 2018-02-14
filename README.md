@@ -1,17 +1,8 @@
 ### Installation:
 
-1. Unzip the contents of [QModManager.zip](https://github.com/Qwiso/QModManager/releases/download/1.0.0/QModManager.zip) to  
-`steamapps\common\Subnautica\Subnautica_Data\ManagedSubnautica\Subnautica_Data\Managed`  
-2. Run `QModManager.exe`  
-3. Follow the command prompt  
+File and details available at 
 
-That's it!  
-If you want to uninstall QModManager, run the exe again  
-___
-
-### Using QMods
-
-There will be a new folder called `QMods`located at `steamapps\common\Subnautica\QMods`. This is where mods marked for support by QModManager should be placed
+https://www.nexusmods.com/subnautica/mods/16/
 ___
 
 ### Note to developers
