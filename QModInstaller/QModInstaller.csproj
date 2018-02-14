@@ -72,4 +72,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy $(TargetPath) $(SolutionDir)Installer\QModManager\ /q /y</PostBuildEvent>
+  </PropertyGroup>
 </Project>

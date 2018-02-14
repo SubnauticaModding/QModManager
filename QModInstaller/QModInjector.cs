@@ -14,10 +14,17 @@ namespace QModInstaller
         private string backupFilename = @"\Assembly-CSharp.qoriginal.dll";
 
 
-        public QModInjector(string dir)
+        public QModInjector(string dir, string managedDir = null)
         {
             subnauticaDirectory = dir;
-            managedDirectory = Path.Combine(subnauticaDirectory, @"Subnautica_Data\Managed");
+			if (managedDir == null)
+			{
+				managedDirectory = Path.Combine(subnauticaDirectory, @"Subnautica_Data\Managed");
+			}
+			else
+			{
+				managedDirectory = managedDir;
+			}
             mainFilename = managedDirectory + mainFilename;
             backupFilename = managedDirectory + backupFilename;
         }
