@@ -47,6 +47,7 @@ namespace QModInstaller
                 if (!File.Exists(modAssemblyPath))
                 {
                     Console.WriteLine("QMOD ERR: No matching dll found at {0} for {1}", modAssemblyPath, mod.Id);
+                    continue;
                 }
 
                 var modAssembly = Assembly.LoadFrom(modAssemblyPath);
@@ -74,11 +75,17 @@ namespace QModInstaller
                         Console.WriteLine("QMOD ERR: Could not parse EntryMethod {0} for {1}", mod.AssemblyName, mod.Id);
                         continue;
                     }
-                    catch(Exception e)
+                    catch(TargetInvocationException e)
                     {
                         Console.WriteLine("QMOD ERR: Invoking the specified EntryMethod {0} failed for {1}", mod.EntryMethod, mod.Id);
-                        Console.WriteLine(e.Message);
+
+                        Console.WriteLine(e.InnerException.Message);
                         continue;
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine("QMOD ERR: something strange happened");
+                        Console.WriteLine(e.Message);
                     }
                 }
             }

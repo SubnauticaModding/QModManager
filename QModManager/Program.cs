@@ -83,7 +83,7 @@ namespace QModManager
                 else
                 {
                     Console.WriteLine("Patch already installed! Type 'yes' to remove: ");
-                    string consent = Console.ReadLine();
+                    string consent = Console.ReadLine().Replace("'", "");
                     if (consent == "yes" || consent == "YES")
                     {
                         if (injector.Remove())
