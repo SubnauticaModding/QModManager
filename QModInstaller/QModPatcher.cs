@@ -39,8 +39,11 @@ namespace QModInstaller
 
                 QMod mod = QMod.FromJsonFile(Path.Combine(subDir, "mod.json"));
 
-                if (mod.Equals(null)) // QMod.FromJsonFile will throw parser errors
+                if (mod.Equals(null) || mod.Enable.Equals(false))
+                {
+                    Console.WriteLine("QMOD WARN: {0} is disabled via config, skipping", mod.DisplayName);
                     continue;
+                }
 
                 var modAssemblyPath = Path.Combine(subDir, mod.AssemblyName);
 
@@ -66,9 +69,7 @@ namespace QModInstaller
                         var entryMethod = entryMethodSig[entryMethodSig.Length - 1];
 
                         MethodInfo qPatchMethod = modAssembly.GetType(entryType).GetMethod(entryMethod);
-
-                        if (mod.Enable)
-                            qPatchMethod.Invoke(modAssembly, new object[] { });
+                        qPatchMethod.Invoke(modAssembly, new object[] { });
                     }
                     catch(ArgumentNullException e)
                     {
