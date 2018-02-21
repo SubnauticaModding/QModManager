@@ -25,7 +25,7 @@ To support your mod for the QMods system, you need to learn how `mod.json` is im
 
 `AssemblyName` must be the case sensitive name of the dll file containing your patching method
 
-`EntryMethod` is the entry method for your patch. QMods supports a default of `YOURNAMESPACE.QPatch.Patch` but any correctly targeted method should work
+`EntryMethod` is the entry method for your patch
 
 ```cs
 using Harmony;
