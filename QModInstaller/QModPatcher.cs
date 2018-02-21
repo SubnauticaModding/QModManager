@@ -39,7 +39,10 @@ namespace QModInstaller
 
                 QMod mod = QMod.FromJsonFile(Path.Combine(subDir, "mod.json"));
 
-                if (mod.Equals(null) || mod.Enable.Equals(false))
+                if (mod.Equals(null)) // QMod.FromJsonFile will throw parser errors
+                    continue;
+
+                if (mod.Enable.Equals(false))
                 {
                     Console.WriteLine("QMOD WARN: {0} is disabled via config, skipping", mod.DisplayName);
                     continue;
