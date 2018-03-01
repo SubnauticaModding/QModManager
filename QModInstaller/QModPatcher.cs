@@ -94,8 +94,7 @@ namespace QModInstaller
 
         private static void LoadMod(QMod mod, string modAssemblyPath)
         {
-            var aName = new AssemblyName(modAssemblyPath);
-            var modAssembly = Assembly.Load(aName); // Because otherwise, reference errors
+            var modAssembly = Assembly.LoadFrom(modAssemblyPath);
 
             if (string.IsNullOrEmpty(mod.EntryMethod))
             {
@@ -115,11 +114,11 @@ namespace QModInstaller
                 catch (ArgumentNullException e)
                 {
                     Console.WriteLine("QMOD ERR: Could not parse EntryMethod {0} for {1}", mod.AssemblyName, mod.Id);
+                    Console.WriteLine(e.InnerException.Message);
                 }
                 catch (TargetInvocationException e)
                 {
                     Console.WriteLine("QMOD ERR: Invoking the specified EntryMethod {0} failed for {1}", mod.EntryMethod, mod.Id);
-
                     Console.WriteLine(e.InnerException.Message);
                 }
                 catch (Exception e)
