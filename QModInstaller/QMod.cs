@@ -15,6 +15,7 @@ namespace QModInstaller
         public bool Enable = false;
         public string AssemblyName = "dll filename";
         public string EntryMethod = "Namespace.Class.Method of Harmony.PatchAll or your equivalent";
+        public string Priority = "Last or First"; 
         public Dictionary<string, object> Config = new Dictionary<string, object>();
 
 
