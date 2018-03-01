@@ -24,6 +24,9 @@ namespace QModInstaller
             }
 
             var subDirs = Directory.GetDirectories(qModBaseDir);
+            var lastMods = new Dictionary<QMod, string>();
+            var firstMods = new Dictionary<QMod, string>();
+            var otherMods = new Dictionary<QMod, string>();
 
             foreach (var subDir in subDirs)
             {
@@ -56,41 +59,73 @@ namespace QModInstaller
                     continue;
                 }
 
-                var modAssembly = Assembly.LoadFrom(modAssemblyPath);
-
-                if (string.IsNullOrEmpty(mod.EntryMethod))
+                if (mod.Priority.Equals("Last"))
                 {
-                    Console.WriteLine("QMOD ERR: No EntryMethod specified for {0}", mod.Id);
+                    lastMods.Add(mod, modAssemblyPath);
+                    continue;
+                }
+                else if(mod.Priority.Equals("First"))
+                {
+                    firstMods.Add(mod, modAssemblyPath);
                     continue;
                 }
                 else
-                { 
-                    try
-                    {
-                        var entryMethodSig = mod.EntryMethod.Split('.');
-                        var entryType = String.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
-                        var entryMethod = entryMethodSig[entryMethodSig.Length - 1];
+                {
+                    otherMods.Add(mod, modAssemblyPath);
+                    continue;
+                }
+            }
 
-                        MethodInfo qPatchMethod = modAssembly.GetType(entryType).GetMethod(entryMethod);
-                        qPatchMethod.Invoke(modAssembly, new object[] { });
-                    }
-                    catch(ArgumentNullException e)
-                    {
-                        Console.WriteLine("QMOD ERR: Could not parse EntryMethod {0} for {1}", mod.AssemblyName, mod.Id);
-                        continue;
-                    }
-                    catch(TargetInvocationException e)
-                    {
-                        Console.WriteLine("QMOD ERR: Invoking the specified EntryMethod {0} failed for {1}", mod.EntryMethod, mod.Id);
+            foreach(var mod in firstMods)
+            {
+                LoadMod(mod.Key, mod.Value);
+            }
 
-                        Console.WriteLine(e.InnerException.Message);
-                        continue;
-                    }
-                    catch(Exception e)
-                    {
-                        Console.WriteLine("QMOD ERR: something strange happened");
-                        Console.WriteLine(e.Message);
-                    }
+            foreach(var mod in otherMods)
+            {
+                LoadMod(mod.Key, mod.Value);
+            }
+
+            foreach(var mod in lastMods)
+            {
+                LoadMod(mod.Key, mod.Value);
+            }
+        }
+
+        private static void LoadMod(QMod mod, string modAssemblyPath)
+        {
+            var aName = new AssemblyName(modAssemblyPath);
+            var modAssembly = Assembly.Load(aName); // Because otherwise, reference errors
+
+            if (string.IsNullOrEmpty(mod.EntryMethod))
+            {
+                Console.WriteLine("QMOD ERR: No EntryMethod specified for {0}", mod.Id);
+            }
+            else
+            {
+                try
+                {
+                    var entryMethodSig = mod.EntryMethod.Split('.');
+                    var entryType = String.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
+                    var entryMethod = entryMethodSig[entryMethodSig.Length - 1];
+
+                    MethodInfo qPatchMethod = modAssembly.GetType(entryType).GetMethod(entryMethod);
+                    qPatchMethod.Invoke(modAssembly, new object[] { });
+                }
+                catch (ArgumentNullException e)
+                {
+                    Console.WriteLine("QMOD ERR: Could not parse EntryMethod {0} for {1}", mod.AssemblyName, mod.Id);
+                }
+                catch (TargetInvocationException e)
+                {
+                    Console.WriteLine("QMOD ERR: Invoking the specified EntryMethod {0} failed for {1}", mod.EntryMethod, mod.Id);
+
+                    Console.WriteLine(e.InnerException.Message);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("QMOD ERR: something strange happened");
+                    Console.WriteLine(e.Message);
                 }
             }
         }
