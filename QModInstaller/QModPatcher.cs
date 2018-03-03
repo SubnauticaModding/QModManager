@@ -11,6 +11,7 @@ namespace QModInstaller
     {
         private static string qModBaseDir = Environment.CurrentDirectory + @"\QMods";
         private static List<QMod> loadedMods = new List<QMod>();
+        private static bool patched = false;
 
         public static void Patch()
         {
@@ -29,6 +30,10 @@ namespace QModInstaller
                 return null;
             };
 
+            if (patched) return;
+
+            patched = true;
+
             if (!Directory.Exists(qModBaseDir))
             {
                 Console.WriteLine("QMOD ERR: QMod directory was not found");
@@ -38,9 +43,9 @@ namespace QModInstaller
             }
 
             var subDirs = Directory.GetDirectories(qModBaseDir);
-            var lastMods = new Dictionary<QMod, string>();
-            var firstMods = new Dictionary<QMod, string>();
-            var otherMods = new Dictionary<QMod, string>();
+            var lastMods = new List<QMod>();
+            var firstMods = new List<QMod>();
+            var otherMods = new List<QMod>();
 
             foreach (var subDir in subDirs)
             {
@@ -65,59 +70,56 @@ namespace QModInstaller
                     continue;
                 }
 
+                var modAssemblyPath = Path.Combine(subDir, mod.AssemblyName);
+
+                if (!File.Exists(modAssemblyPath))
+                {
+                    Console.WriteLine("QMOD ERR: No matching dll found at {0} for {1}", modAssemblyPath, mod.Id);
+                    continue;
+                }
+
+                mod.loadedAssembly = Assembly.LoadFrom(modAssemblyPath);
+                mod.modAssemblyPath = modAssemblyPath;
+
                 if (mod.Priority.Equals("Last"))
                 {
-                    lastMods.Add(mod, subDir);
+                    lastMods.Add(mod);
                     continue;
                 }
                 else if(mod.Priority.Equals("First"))
                 {
-                    firstMods.Add(mod, subDir);
+                    firstMods.Add(mod);
                     continue;
                 }
                 else
                 {
-                    otherMods.Add(mod, subDir);
+                    otherMods.Add(mod);
                     continue;
                 }
             }
 
             foreach(var mod in firstMods)
             {
-                var qMod = LoadMod(mod.Key, mod.Value);
-                if (qMod != null)
-                    loadedMods.Add(LoadMod(mod.Key, mod.Value));
+                if (mod != null)
+                    loadedMods.Add(LoadMod(mod));
             }
 
             foreach(var mod in otherMods)
             {
-                var qMod = LoadMod(mod.Key, mod.Value);
-                if (qMod != null)
-                    loadedMods.Add(LoadMod(mod.Key, mod.Value));
+                if (mod != null)
+                    loadedMods.Add(LoadMod(mod));
             }
 
             foreach(var mod in lastMods)
             {
-                var qMod = LoadMod(mod.Key, mod.Value);
-                if(qMod != null)
-                    loadedMods.Add(LoadMod(mod.Key, mod.Value));
+                if(mod != null)
+                    loadedMods.Add(LoadMod(mod));
             }
         }
 
-        private static QMod LoadMod(QMod mod, string subDir)
+        private static QMod LoadMod(QMod mod)
         {
             if (mod == null) return null;
-
-            var modAssemblyPath = Path.Combine(subDir, mod.AssemblyName);
-
-            if (!File.Exists(modAssemblyPath))
-            {
-                Console.WriteLine("QMOD ERR: No matching dll found at {0} for {1}", modAssemblyPath, mod.Id);
-                return null;
-            }
-
-            var modAssembly = Assembly.LoadFrom(modAssemblyPath);
-            var returnQMod = mod;
 
             if (string.IsNullOrEmpty(mod.EntryMethod))
             {
@@ -131,8 +133,8 @@ namespace QModInstaller
                     var entryType = String.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
                     var entryMethod = entryMethodSig[entryMethodSig.Length - 1];
 
-                    MethodInfo qPatchMethod = modAssembly.GetType(entryType).GetMethod(entryMethod);
-                    qPatchMethod.Invoke(modAssembly, new object[] { });
+                    MethodInfo qPatchMethod = mod.loadedAssembly.GetType(entryType).GetMethod(entryMethod);
+                    qPatchMethod.Invoke(mod.loadedAssembly, new object[] { });
                 }
                 catch (ArgumentNullException e)
                 {
@@ -154,10 +156,7 @@ namespace QModInstaller
                 }
             }
 
-            returnQMod.loadedAssembly = modAssembly;
-            returnQMod.modAssemblyPath = modAssemblyPath;
-
-            return returnQMod;
+            return mod;
         }
     }
 }
