@@ -10,10 +10,24 @@ namespace QModInstaller
     public class QModPatcher
     {
         private static string qModBaseDir = Environment.CurrentDirectory + @"\QMods";
+        private static List<QMod> loadedMods = new List<QMod>();
 
         public static void Patch()
         {
-            List<QMod> mods = new List<QMod>();
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
+            {
+                var allDlls = new DirectoryInfo(qModBaseDir).GetFiles("*.dll", SearchOption.AllDirectories);
+                foreach(var dll in allDlls)
+                {
+                    Console.WriteLine(Path.GetFileNameWithoutExtension(dll.Name) + " " + args.Name);
+                    if(args.Name.Contains(Path.GetFileNameWithoutExtension(dll.Name)))
+                    {
+                        return Assembly.LoadFrom(dll.FullName);
+                    }
+                }
+
+                return null;
+            };
 
             if (!Directory.Exists(qModBaseDir))
             {
@@ -51,50 +65,59 @@ namespace QModInstaller
                     continue;
                 }
 
-                var modAssemblyPath = Path.Combine(subDir, mod.AssemblyName);
-
-                if (!File.Exists(modAssemblyPath))
-                {
-                    Console.WriteLine("QMOD ERR: No matching dll found at {0} for {1}", modAssemblyPath, mod.Id);
-                    continue;
-                }
-
                 if (mod.Priority.Equals("Last"))
                 {
-                    lastMods.Add(mod, modAssemblyPath);
+                    lastMods.Add(mod, subDir);
                     continue;
                 }
                 else if(mod.Priority.Equals("First"))
                 {
-                    firstMods.Add(mod, modAssemblyPath);
+                    firstMods.Add(mod, subDir);
                     continue;
                 }
                 else
                 {
-                    otherMods.Add(mod, modAssemblyPath);
+                    otherMods.Add(mod, subDir);
                     continue;
                 }
             }
 
             foreach(var mod in firstMods)
             {
-                LoadMod(mod.Key, mod.Value);
+                var qMod = LoadMod(mod.Key, mod.Value);
+                if (qMod != null)
+                    loadedMods.Add(LoadMod(mod.Key, mod.Value));
             }
 
             foreach(var mod in otherMods)
             {
-                LoadMod(mod.Key, mod.Value);
+                var qMod = LoadMod(mod.Key, mod.Value);
+                if (qMod != null)
+                    loadedMods.Add(LoadMod(mod.Key, mod.Value));
             }
 
             foreach(var mod in lastMods)
             {
-                LoadMod(mod.Key, mod.Value);
+                var qMod = LoadMod(mod.Key, mod.Value);
+                if(qMod != null)
+                    loadedMods.Add(LoadMod(mod.Key, mod.Value));
             }
         }
 
-        private static void LoadMod(QMod mod, string modAssemblyPath)
+        private static QMod LoadMod(QMod mod, string subDir)
         {
+            if (mod == null) return null;
+
+            var modAssemblyPath = Path.Combine(subDir, mod.AssemblyName);
+
+            if (!File.Exists(modAssemblyPath))
+            {
+                Console.WriteLine("QMOD ERR: No matching dll found at {0} for {1}", modAssemblyPath, mod.Id);
+                return null;
+            }
+
             var modAssembly = Assembly.LoadFrom(modAssemblyPath);
+            var returnQMod = mod;
 
             if (string.IsNullOrEmpty(mod.EntryMethod))
             {
@@ -115,18 +138,26 @@ namespace QModInstaller
                 {
                     Console.WriteLine("QMOD ERR: Could not parse EntryMethod {0} for {1}", mod.AssemblyName, mod.Id);
                     Console.WriteLine(e.InnerException.Message);
+                    return null;
                 }
                 catch (TargetInvocationException e)
                 {
                     Console.WriteLine("QMOD ERR: Invoking the specified EntryMethod {0} failed for {1}", mod.EntryMethod, mod.Id);
                     Console.WriteLine(e.InnerException.Message);
+                    return null;
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine("QMOD ERR: something strange happened");
                     Console.WriteLine(e.Message);
+                    return null;
                 }
             }
+
+            returnQMod.loadedAssembly = modAssembly;
+            returnQMod.modAssemblyPath = modAssemblyPath;
+
+            return returnQMod;
         }
     }
 }

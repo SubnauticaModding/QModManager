@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 
 namespace QModInstaller
 {
@@ -17,6 +18,12 @@ namespace QModInstaller
         public string EntryMethod = "Namespace.Class.Method of Harmony.PatchAll or your equivalent";
         public string Priority = "Last or First"; 
         public Dictionary<string, object> Config = new Dictionary<string, object>();
+
+        [JsonIgnore]
+        public Assembly loadedAssembly;
+
+        [JsonIgnore]
+        public string modAssemblyPath;
 
 
         public QMod() { }
