@@ -3,6 +3,17 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+assemblies/0Harmony.dll
+assemblies/Assembly-CSharp.dll
+assemblies/UnityEngine.dll
+assemblies/UnityEngine.UI.dll
+assemblies/Newtonsoft.Json.dll
+assemblies/Mono.Cecil.dll
+assemblies/Mono.Cecil.Mdb.dll
+assemblies/Mono.Cecil.Pdb.dll
+assemblies/Mono.Cecil.Rocks.dll
+assemblies/QModInstaller.dll
+
 # User-specific files
 *.suo
 *.user
