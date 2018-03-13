@@ -136,5 +136,13 @@ namespace SMLHelper.Patchers
                 Console.WriteLine("Test123: " + test.Key.AsString());
             }
         }
+
+        public static void Postpatch()
+        {
+            foreach (var techType in customTechTypes.Keys)
+            {
+                KnownTech.Add(techType, true);
+            }
+        }
     }
 }

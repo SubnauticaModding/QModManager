@@ -6,7 +6,6 @@ using System.Reflection;
 using System.IO;
 using Harmony;
 using UnityEngine;
-using System.Drawing;
 
 namespace SMLHelper.Patchers
 {

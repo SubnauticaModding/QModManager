@@ -16,44 +16,34 @@ namespace SMLHelper.Patchers
         public static Dictionary<TechType, HarvestType> customHarvestTypeList = new Dictionary<TechType, HarvestType>();
         public static Dictionary<TechType, Vector2int> customItemSizes = new Dictionary<TechType, Vector2int>();
         public static Dictionary<TechType, EquipmentType> customEquipmentTypes = new Dictionary<TechType, EquipmentType>();
+        public static Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>> customGroups = new Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>();
+
+        public static List<TechType> customBuildables = new List<TechType>();
 
         private static readonly Type CraftDataType = typeof(CraftData);
 
         public static void Patch(HarmonyInstance harmony)
         {
-            var techData = CraftDataType.GetField("techData", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
-            var addMethod = techData.GetType().GetMethod("Add");
+            var dictField = typeof(CraftData).GetField("techData", BindingFlags.Static | BindingFlags.NonPublic);
+            var craftDataDict = dictField.GetValue(null);
+            var addMethod = craftDataDict.GetType().GetMethod("Add");
 
-            foreach(var customTech in customTechData)
+            foreach (var entry in customTechData)
             {
-                addMethod.Invoke(techData, new object[2] { customTech.Key, customTech.Value.GetTechDataObj() });
+                addMethod.Invoke(craftDataDict, new object[] { entry.Key, entry.Value.GetTechDataObj() });
             }
 
-            PatchDictionary("harvestOutputList", customHarvestOutputList, BindingFlags.Static | BindingFlags.Public);
-            PatchDictionary("harvestTypeList", customHarvestTypeList);
-            PatchDictionary("itemSizes", customItemSizes);
-            PatchDictionary("equipmentTypes", customEquipmentTypes);
+            Utility.PatchDictionary(CraftDataType, "harvestOutputList", customHarvestOutputList, BindingFlags.Static | BindingFlags.Public);
+            Utility.PatchDictionary(CraftDataType, "harvestTypeList", customHarvestTypeList);
+            Utility.PatchDictionary(CraftDataType, "itemSizes", customItemSizes);
+            Utility.PatchDictionary(CraftDataType, "equipmentTypes", customEquipmentTypes);
+
+            Utility.PatchList(CraftDataType, "buildables", customBuildables);
 
             var prepareEntTechCache = CraftDataType.GetMethod("PrepareEntTechCache", BindingFlags.NonPublic | BindingFlags.Static);
 
             harmony.Patch(prepareEntTechCache, null,
                 new HarmonyMethod(typeof(CraftDataPatcher).GetMethod("Postfix")));
-        }
-
-        public static void PatchDictionary(string name, IDictionary dictionary)
-        {
-            PatchDictionary(name, dictionary, BindingFlags.NonPublic | BindingFlags.Static);
-        }
-
-        public static void PatchDictionary(string name, IDictionary dictionary, BindingFlags flags)
-        {
-            var dictionaryField = CraftDataType.GetField(name, flags);
-            var craftDataDict = dictionaryField.GetValue(null) as IDictionary;
-
-            foreach (DictionaryEntry key in dictionary)
-            {
-                craftDataDict[key.Key] = key.Value;
-            }
         }
 
         public static void Postfix()

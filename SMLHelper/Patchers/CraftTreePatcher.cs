@@ -47,13 +47,5 @@ namespace SMLHelper.Patchers
             harmony.Patch(fabricatorScheme, null,
                 new HarmonyMethod(typeof(CraftTreePatcher).GetMethod("Postfix")));
         }
-
-        public static void Postpatch()
-        {
-            foreach(var techType in customCraftNodes.Values)
-            {
-                KnownTech.Add(techType, true);
-            }
-        }
     }
 }
