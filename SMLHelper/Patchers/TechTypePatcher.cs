@@ -10,8 +10,8 @@ namespace SMLHelper.Patchers
     {
         private static readonly FieldInfo CachedEnumString_valueToString =
             typeof(CachedEnumString<TechType>).GetField("valueToString", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static Dictionary<TechType, string> customTechTypes = new Dictionary<TechType, string>();
 
+        private static Dictionary<TechType, string> customTechTypes = new Dictionary<TechType, string>();
 
         private static int currentIndex = 11011;
         public static TechType AddTechType(string name, string languageName, string languageTooltip, bool unlockOnGameStart = true)
@@ -25,6 +25,24 @@ namespace SMLHelper.Patchers
             LanguagePatcher.customLines.Add("Tooltip_" + name, languageTooltip);
             var valueToString = (Dictionary<TechType, string>)CachedEnumString_valueToString.GetValue(TooltipFactory.techTypeTooltipStrings);
             valueToString[techType] = "Tooltip_" + name;
+
+            var techTypeExtensions = typeof(TechTypeExtensions);
+            var traverse = Traverse.Create(techTypeExtensions);
+
+            var stringsNormal = traverse.Field("stringsNormal").GetValue<Dictionary<TechType, string>>();
+            var stringsLowercase = traverse.Field("stringsLowercase").GetValue<Dictionary<TechType, string>>();
+            var techTypesNormal = traverse.Field("techTypesNormal").GetValue<Dictionary<string, TechType>>();
+            var techTypesIgnoreCase = traverse.Field("techTypesIgnoreCase").GetValue<Dictionary<string, TechType>>();
+            var techTypeKeys = traverse.Field("techTypeKeys").GetValue<Dictionary<TechType, string>>();
+            var keyTechTypes = traverse.Field("keyTechTypes").GetValue<Dictionary<string, TechType>>();
+
+            stringsNormal[techType] = name;
+            stringsLowercase[techType] = name.ToLowerInvariant();
+            techTypesNormal[name] = techType;
+            techTypesIgnoreCase[name] = techType;
+            string key3 = ((int)techType).ToString();
+            techTypeKeys[techType] = key3;
+            keyTechTypes[key3] = techType;
 
             if (unlockOnGameStart)
                 UnlockOnStart.Add(techType);
