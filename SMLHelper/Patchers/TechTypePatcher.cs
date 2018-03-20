@@ -132,11 +132,8 @@ namespace SMLHelper.Patchers
                 string key3 = ((int)key).ToString();
                 techTypeKeys[key] = key3;
                 keyTechTypes[key3] = key;
-            }
 
-            foreach (var test in customTechTypes)
-            {
-                Console.WriteLine("Test123: " + test.Key.AsString());
+                Console.WriteLine($"[SMLHelper]: TechTypeExtensions filled for the {techValue.Key:G}");
             }
         }
 
