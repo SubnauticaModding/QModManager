@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Reflection;
 
 namespace SMLHelper.Patchers
@@ -12,6 +11,7 @@ namespace SMLHelper.Patchers
         private static readonly FieldInfo CachedEnumString_valueToString =
             typeof(CachedEnumString<TechType>).GetField("valueToString", BindingFlags.NonPublic | BindingFlags.Instance);
         private static Dictionary<TechType, string> customTechTypes = new Dictionary<TechType, string>();
+
 
         private static int currentIndex = 11011;
         public static TechType AddTechType(string name, string languageName, string languageTooltip)
