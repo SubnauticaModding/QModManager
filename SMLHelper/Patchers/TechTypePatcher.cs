@@ -14,7 +14,7 @@ namespace SMLHelper.Patchers
 
 
         private static int currentIndex = 11011;
-        public static TechType AddTechType(string name, string languageName, string languageTooltip, bool unlockOnGameStart)
+        public static TechType AddTechType(string name, string languageName, string languageTooltip, bool unlockOnGameStart = true)
         {
             var techType = (TechType)currentIndex;
 
