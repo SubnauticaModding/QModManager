@@ -36,7 +36,7 @@ namespace SMLHelper
 
         private static void PatchDictionaryInternal(IDictionary origDict, IDictionary additions)
         {
-            foreach(DictionaryEntry entry in additions)
+            foreach (DictionaryEntry entry in additions)
             {
                 //As long as we have the type we wanna check, and the instance - "is" would do the trick
                 if (entry.Value is IDictionary)
@@ -61,7 +61,7 @@ namespace SMLHelper
                         {
                             //Now - we are modifying the entry list, so it would contain all the default data.
                             //There should be over way, but it would be way overcoded, and I didn't come to a better solution....
-                            PatchListInternal((IList)entry.Value,(IList)origDictEntry.Value);
+                            PatchListInternal((IList)entry.Value, (IList)origDictEntry.Value);
                         }
                     }
                 }

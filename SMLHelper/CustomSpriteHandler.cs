@@ -11,7 +11,7 @@ namespace SMLHelper
     public class CustomSprite
     {
         public TechType TechType;
-        public Sprite Sprite; 
+        public Sprite Sprite;
 
         public CustomSprite(TechType type, Sprite sprite)
         {
