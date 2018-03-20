@@ -14,7 +14,7 @@ namespace SMLHelper.Patchers
 
 
         private static int currentIndex = 11011;
-        public static TechType AddTechType(string name, string languageName, string languageTooltip)
+        public static TechType AddTechType(string name, string languageName, string languageTooltip, bool unlockOnGameStart)
         {
             var techType = (TechType)currentIndex;
 
@@ -25,6 +25,10 @@ namespace SMLHelper.Patchers
             LanguagePatcher.customLines.Add("Tooltip_" + name, languageTooltip);
             var valueToString = (Dictionary<TechType, string>)CachedEnumString_valueToString.GetValue(TooltipFactory.techTypeTooltipStrings);
             valueToString[techType] = "Tooltip_" + name;
+
+            if (unlockOnGameStart)
+                UnlockOnStart.Add(techType);
+
             return techType;
         }
 
@@ -137,9 +141,10 @@ namespace SMLHelper.Patchers
             }
         }
 
+        public static List<TechType> UnlockOnStart = new List<TechType>();
         public static void Postpatch()
         {
-            foreach (var techType in customTechTypes.Keys)
+            foreach (var techType in UnlockOnStart)
             {
                 KnownTech.Add(techType, true);
             }
