@@ -34,6 +34,7 @@ namespace SMLHelper.Patchers
             Utility.PatchDictionary(CraftDataType, "harvestTypeList", customHarvestTypeList);
             Utility.PatchDictionary(CraftDataType, "itemSizes", customItemSizes);
             Utility.PatchDictionary(CraftDataType, "equipmentTypes", customEquipmentTypes);
+            Utility.PatchDictionary(CraftDataType, "groups", customGroups);
 
             Utility.PatchList(CraftDataType, "buildables", customBuildables);
 
