@@ -1,11 +1,8 @@
 ﻿using Harmony;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
 using System.IO;
-using System.Collections;
+using System.Reflection;
 
 namespace SMLHelper.Patchers
 {
@@ -16,11 +13,20 @@ namespace SMLHelper.Patchers
         public static Dictionary<TechType, HarvestType> customHarvestTypeList = new Dictionary<TechType, HarvestType>();
         public static Dictionary<TechType, Vector2int> customItemSizes = new Dictionary<TechType, Vector2int>();
         public static Dictionary<TechType, EquipmentType> customEquipmentTypes = new Dictionary<TechType, EquipmentType>();
-        public static Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>> customGroups = new Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>();
+        private static Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>> customGroups = new Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>();
 
         public static List<TechType> customBuildables = new List<TechType>();
 
         private static readonly Type CraftDataType = typeof(CraftData);
+
+        public static void AddToCustomGroup(TechGroup group, TechCategory category, TechType techType)
+        {
+            if(!customGroups.ContainsKey(group))
+                customGroups.Add(group,new Dictionary<TechCategory, List<TechType>>());
+            if(!customGroups[group].ContainsKey(category))
+                customGroups[group][category] = new List<TechType>();
+            customGroups[group][category].Add(techType);
+        }
 
         public static void Patch(HarmonyInstance harmony)
         {
@@ -37,6 +43,7 @@ namespace SMLHelper.Patchers
             Utility.PatchDictionary(CraftDataType, "harvestTypeList", customHarvestTypeList);
             Utility.PatchDictionary(CraftDataType, "itemSizes", customItemSizes);
             Utility.PatchDictionary(CraftDataType, "equipmentTypes", customEquipmentTypes);
+            Utility.PatchDictionary(CraftDataType, "groups", customGroups);
 
             Utility.PatchList(CraftDataType, "buildables", customBuildables);
 

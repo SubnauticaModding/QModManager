@@ -2,14 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Reflection;
 
 namespace SMLHelper.Patchers
 {
     public class TechTypePatcher
     {
+        private static readonly FieldInfo CachedEnumString_valueToString =
+            typeof(CachedEnumString<TechType>).GetField("valueToString", BindingFlags.NonPublic | BindingFlags.Instance);
         private static Dictionary<TechType, string> customTechTypes = new Dictionary<TechType, string>();
+
 
         private static int currentIndex = 11011;
         public static TechType AddTechType(string name, string languageName, string languageTooltip)
@@ -21,7 +23,8 @@ namespace SMLHelper.Patchers
 
             LanguagePatcher.customLines.Add(name, languageName);
             LanguagePatcher.customLines.Add("Tooltip_" + name, languageTooltip);
-
+            var valueToString = (Dictionary<TechType, string>)CachedEnumString_valueToString.GetValue(TooltipFactory.techTypeTooltipStrings);
+            valueToString[techType] = "Tooltip_" + name;
             return techType;
         }
 
@@ -129,11 +132,8 @@ namespace SMLHelper.Patchers
                 string key3 = ((int)key).ToString();
                 techTypeKeys[key] = key3;
                 keyTechTypes[key3] = key;
-            }
 
-            foreach (var test in customTechTypes)
-            {
-                Console.WriteLine("Test123: " + test.Key.AsString());
+                Console.WriteLine($"[SMLHelper]: Successfully added Tech Type: {techValue.Key:G}");
             }
         }
 
