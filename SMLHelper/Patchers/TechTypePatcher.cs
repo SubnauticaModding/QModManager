@@ -133,7 +133,7 @@ namespace SMLHelper.Patchers
                 techTypeKeys[key] = key3;
                 keyTechTypes[key3] = key;
 
-                Console.WriteLine($"[SMLHelper]: TechTypeExtensions filled for the {techValue.Key:G}");
+                Console.WriteLine($"[SMLHelper]: Successfully added Tech Type: {techValue.Key:G}");
             }
         }
 
