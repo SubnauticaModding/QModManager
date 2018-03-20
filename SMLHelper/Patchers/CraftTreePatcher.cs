@@ -42,6 +42,7 @@ namespace SMLHelper.Patchers
 
             harmony.Patch(fabricatorScheme, null,
                 new HarmonyMethod(typeof(CraftTreePatcher).GetMethod("Postfix")));
+            Logger.Log($"CraftTreePatcher is done.");
         }
     }
 }

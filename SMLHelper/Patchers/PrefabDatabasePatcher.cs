@@ -9,7 +9,7 @@ namespace SMLHelper.Patchers
     {
         public static void Postfix()
         {
-            foreach(var prefab in CustomPrefabHandler.customPrefabs)
+            foreach (var prefab in CustomPrefabHandler.customPrefabs)
             {
                 PrefabDatabase.AddToCache(prefab.PrefabFileName, prefab.Object as GameObject);
                 PrefabDatabase.prefabFiles[prefab.ClassID] = prefab.PrefabFileName;
@@ -23,6 +23,7 @@ namespace SMLHelper.Patchers
 
             harmony.Patch(loadPrefabDatabaseMethod, null,
                 new HarmonyMethod(typeof(PrefabDatabasePatcher).GetMethod("Postfix")));
+            Logger.Log("PrefabDatabasePatcher is done.");
         }
     }
 }

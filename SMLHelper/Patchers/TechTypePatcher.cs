@@ -14,9 +14,10 @@ namespace SMLHelper.Patchers
         private static Dictionary<TechType, string> customTechTypes = new Dictionary<TechType, string>();
 
         private static int currentIndex = 11011;
-
-		public static TechType AddTechType(string name, string languageName, string languageTooltip)
+        private static string CallerName = null;
+        public static TechType AddTechType(string name, string languageName, string languageTooltip)
         {
+            CallerName = Assembly.GetCallingAssembly().GetName().Name;
             return AddTechType(name, languageName, languageTooltip, true);
         }
 
@@ -53,13 +54,16 @@ namespace SMLHelper.Patchers
             if (unlockOnGameStart)
                 UnlockOnStart.Add(techType);
 
-            Console.WriteLine($"[SMLHelper]: Successfully added Tech Type: {techType:G} for mod [{Assembly.GetCallingAssembly().GetName().Name}]");
+            CallerName = CallerName ?? Assembly.GetCallingAssembly().GetName().Name;
+            Logger.Log("Successfully added Tech Type: \"{0}\" for mod \"{1}\"", name, CallerName);
+            CallerName = null;
+
             return techType;
         }
 
         public static void Postfix_GetValues(Type enumType, ref Array __result)
         {
-            if(enumType.Equals(typeof(TechType)))
+            if (enumType.Equals(typeof(TechType)))
             {
                 var listArray = new List<TechType>();
                 foreach (var obj in __result)
@@ -75,9 +79,9 @@ namespace SMLHelper.Patchers
 
         public static bool Prefix_IsDefined(Type enumType, object value, ref bool __result)
         {
-            if(enumType.Equals(typeof(TechType)))
+            if (enumType.Equals(typeof(TechType)))
             {
-                if(customTechTypes.Keys.Contains((TechType)value))
+                if (customTechTypes.Keys.Contains((TechType)value))
                 {
                     __result = true;
                     return false;
@@ -89,11 +93,11 @@ namespace SMLHelper.Patchers
 
         public static bool Prefix_Parse(Type enumType, string value, bool ignoreCase, ref object __result)
         {
-            if(enumType.Equals(typeof(TechType)))
+            if (enumType.Equals(typeof(TechType)))
             {
-                foreach(var techType in customTechTypes)
-                {   
-                    if(value.Equals(techType.Value, ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture))
+                foreach (var techType in customTechTypes)
+                {
+                    if (value.Equals(techType.Value, ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture))
                     {
                         __result = techType.Key;
                         return false;
@@ -106,11 +110,11 @@ namespace SMLHelper.Patchers
 
         public static bool Prefix_ToString(Enum __instance, ref string __result)
         {
-            if(__instance.GetType().Equals(typeof(TechType)))
+            if (__instance.GetType().Equals(typeof(TechType)))
             {
-                foreach(var techType in customTechTypes)
+                foreach (var techType in customTechTypes)
                 {
-                    if(__instance.Equals(techType.Key))
+                    if (__instance.Equals(techType.Key))
                     {
                         __result = techType.Value;
                         return false;
@@ -146,6 +150,7 @@ namespace SMLHelper.Patchers
             foreach (var techType in UnlockOnStart)
             {
                 KnownTech.Add(techType, true);
+                Logger.Log($"Added {techType:G} to the known tech");
             }
         }
     }

@@ -21,11 +21,12 @@ namespace SMLHelper.Patchers
 
         public static void AddToCustomGroup(TechGroup group, TechCategory category, TechType techType)
         {
-            if(!customGroups.ContainsKey(group))
-                customGroups.Add(group,new Dictionary<TechCategory, List<TechType>>());
-            if(!customGroups[group].ContainsKey(category))
+            if (!customGroups.ContainsKey(group))
+                customGroups.Add(group, new Dictionary<TechCategory, List<TechType>>());
+            if (!customGroups[group].ContainsKey(category))
                 customGroups[group][category] = new List<TechType>();
             customGroups[group][category].Add(techType);
+            Logger.Log($"Added \"{techType:G}\" to groups under \"{group:G}->{category:G}\"");
         }
 
         public static void Patch(HarmonyInstance harmony)
@@ -51,6 +52,7 @@ namespace SMLHelper.Patchers
 
             harmony.Patch(prepareEntTechCache, null,
                 new HarmonyMethod(typeof(CraftDataPatcher).GetMethod("Postfix")));
+            Logger.Log("CraftDataPatcher is done.");
         }
 
         public static void Postfix()
@@ -95,7 +97,7 @@ namespace SMLHelper.Patchers
 
         public IIngredient GetIngredient(int index)
         {
-            if(_ingredients == null || index > (_ingredients.Count - 1) || index < 0)
+            if (_ingredients == null || index > (_ingredients.Count - 1) || index < 0)
             {
                 return _ingredients[index];
             }
@@ -117,7 +119,7 @@ namespace SMLHelper.Patchers
         {
             var ingredientsType = typeof(CraftData).GetNestedType("Ingredients", BindingFlags.NonPublic);
             var ingredientsObj = Activator.CreateInstance(ingredientsType);
-            var addMethod = ingredientsType.GetMethod("Add", new Type[] { IngredientHelper.IngredientType } );
+            var addMethod = ingredientsType.GetMethod("Add", new Type[] { IngredientHelper.IngredientType });
 
             foreach (var ingredient in _ingredients)
             {

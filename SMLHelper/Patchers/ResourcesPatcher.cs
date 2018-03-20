@@ -7,9 +7,9 @@ namespace SMLHelper.Patchers
     {
         public static bool Prefix(ref UnityEngine.Object __result, string path)
         {
-            foreach(var prefab in CustomPrefabHandler.customPrefabs)
+            foreach (var prefab in CustomPrefabHandler.customPrefabs)
             {
-                if(prefab.PrefabFileName.ToLowerInvariant() == path.ToLowerInvariant())
+                if (prefab.PrefabFileName.ToLowerInvariant() == path.ToLowerInvariant())
                 {
                     __result = prefab.Object;
                     return false;
@@ -29,7 +29,7 @@ namespace SMLHelper.Patchers
 
                     var request = new UnityEngine.ResourceRequest();
                     typeof(UnityEngine.ResourceRequest).GetProperty("asset").SetValue(request, prefab.Object, null);
-            
+
                     typeof(UnityEngine.ResourceRequest).GetField("m_Path", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(request, path);
                     typeof(UnityEngine.ResourceRequest).GetField("m_Type", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(request, prefab.Object.GetType());
 
@@ -47,17 +47,17 @@ namespace SMLHelper.Patchers
             var resourcesType = typeof(UnityEngine.Resources);
             var methods = resourcesType.GetMethods();
 
-            foreach(var method in methods)
+            foreach (var method in methods)
             {
-                if(method.Name == "Load")
+                if (method.Name == "Load")
                 {
-                    if(method.GetParameters().Length == 1)
+                    if (method.GetParameters().Length == 1)
                     {
-                        if(method.IsGenericMethod)
+                        if (method.IsGenericMethod)
                         {
                             var genericMethod = method.MakeGenericMethod(typeof(UnityEngine.Object));
 
-                            harmony.Patch(genericMethod, 
+                            harmony.Patch(genericMethod,
                                 new HarmonyMethod(typeof(ResourcesPatcher).GetMethod("Prefix")), null);
                         }
                         else
@@ -68,7 +68,7 @@ namespace SMLHelper.Patchers
                     }
                 }
 
-                if(method.Name == "LoadAsync")
+                if (method.Name == "LoadAsync")
                 {
                     if (method.GetParameters().Length == 1)
                     {
@@ -87,6 +87,7 @@ namespace SMLHelper.Patchers
                     }
                 }
             }
+            Logger.Log("ResourcesPatcher is done.");
         }
     }
 }
