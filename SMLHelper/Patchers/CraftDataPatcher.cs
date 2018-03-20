@@ -13,11 +13,20 @@ namespace SMLHelper.Patchers
         public static Dictionary<TechType, HarvestType> customHarvestTypeList = new Dictionary<TechType, HarvestType>();
         public static Dictionary<TechType, Vector2int> customItemSizes = new Dictionary<TechType, Vector2int>();
         public static Dictionary<TechType, EquipmentType> customEquipmentTypes = new Dictionary<TechType, EquipmentType>();
-        public static Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>> customGroups = new Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>();
+        private static Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>> customGroups = new Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>();
 
         public static List<TechType> customBuildables = new List<TechType>();
 
         private static readonly Type CraftDataType = typeof(CraftData);
+
+        public static void AddToCustomGroup(TechGroup group, TechCategory category, TechType techType)
+        {
+            if(!customGroups.ContainsKey(group))
+                customGroups.Add(group,new Dictionary<TechCategory, List<TechType>>());
+            if(!customGroups[group].ContainsKey(category))
+                customGroups[group][category] = new List<TechType>();
+            customGroups[group][category].Add(techType);
+        }
 
         public static void Patch(HarmonyInstance harmony)
         {
