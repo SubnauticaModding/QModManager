@@ -14,7 +14,8 @@ namespace SMLHelper.Patchers
         private static Dictionary<TechType, string> customTechTypes = new Dictionary<TechType, string>();
 
         private static int currentIndex = 11011;
-        public static TechType AddTechType(string name, string languageName, string languageTooltip, bool unlockOnGameStart = true)
+		public static TechType AddTechType(string name, string languageName, string languageTooltip) => AddTechType(name,languageName,languageTooltip,true);
+        public static TechType AddTechType(string name, string languageName, string languageTooltip, bool unlockOnGameStart)
         {
             var techType = (TechType)currentIndex;
 
@@ -47,6 +48,25 @@ namespace SMLHelper.Patchers
             if (unlockOnGameStart)
                 UnlockOnStart.Add(techType);
 
+            var techTypeExtensions = typeof(TechTypeExtensions);
+            var traverse = Traverse.Create(techTypeExtensions);
+
+            var stringsNormal = traverse.Field("stringsNormal").GetValue<Dictionary<TechType, string>>();
+            var stringsLowercase = traverse.Field("stringsLowercase").GetValue<Dictionary<TechType, string>>();
+            var techTypesNormal = traverse.Field("techTypesNormal").GetValue<Dictionary<string, TechType>>();
+            var techTypesIgnoreCase = traverse.Field("techTypesIgnoreCase").GetValue<Dictionary<string, TechType>>();
+            var techTypeKeys = traverse.Field("techTypeKeys").GetValue<Dictionary<TechType, string>>();
+            var keyTechTypes = traverse.Field("keyTechTypes").GetValue<Dictionary<string, TechType>>();
+
+            stringsNormal[techType] = name;
+            stringsLowercase[techType] = name.ToLowerInvariant();
+            techTypesNormal[name] = techType;
+            techTypesIgnoreCase[name] = techType;
+            string key3 = ((int)techType).ToString();
+            techTypeKeys[techType] = key3;
+            keyTechTypes[key3] = techType;
+
+            Console.WriteLine($"[SMLHelper]: Successfully added Tech Type: {techType:G} for mod [{Assembly.GetCallingAssembly().GetName().Name}]");
             return techType;
         }
 
@@ -131,32 +151,6 @@ namespace SMLHelper.Patchers
 
             harmony.Patch(techTypeType.GetMethod("ToString", new Type[0]),
                 new HarmonyMethod(thisType.GetMethod("Prefix_ToString", BindingFlags.Public | BindingFlags.Static)), null);
-
-            var techTypeExtensions = typeof(TechTypeExtensions);
-            var traverse = Traverse.Create(techTypeExtensions);
-
-            var stringsNormal = traverse.Field("stringsNormal").GetValue<Dictionary<TechType, string>>();
-            var stringsLowercase = traverse.Field("stringsLowercase").GetValue<Dictionary<TechType, string>>();
-            var techTypesNormal = traverse.Field("techTypesNormal").GetValue<Dictionary<string, TechType>>();
-            var techTypesIgnoreCase = traverse.Field("techTypesIgnoreCase").GetValue<Dictionary<string, TechType>>();
-            var techTypeKeys = traverse.Field("techTypeKeys").GetValue<Dictionary<TechType, string>>();
-            var keyTechTypes = traverse.Field("keyTechTypes").GetValue<Dictionary<string, TechType>>();
-
-            foreach (var techValue in customTechTypes)
-            {
-                var key = techValue.Key;
-                var value = techValue.Value;
-
-                stringsNormal[key] = value;
-                stringsLowercase[key] = value.ToLowerInvariant();
-                techTypesNormal[value] = key;
-                techTypesIgnoreCase[value] = key;
-                string key3 = ((int)key).ToString();
-                techTypeKeys[key] = key3;
-                keyTechTypes[key3] = key;
-
-                Console.WriteLine($"[SMLHelper]: Successfully added Tech Type: {techValue.Key:G}");
-            }
         }
 
         public static List<TechType> UnlockOnStart = new List<TechType>();
