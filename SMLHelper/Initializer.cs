@@ -22,6 +22,7 @@ namespace SMLHelper
                 ResourcesPatcher.Patch(harmony);
                 PrefabDatabasePatcher.Patch(harmony);
                 SpritePatcher.Patch(harmony);
+                KnownTechPatcher.Patch(harmony);
             }
             catch (Exception e)
             {

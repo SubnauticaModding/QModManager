@@ -58,6 +58,7 @@
     <Compile Include="CustomSpriteHandler.cs" />
     <Compile Include="Patchers\DevConsolePatcher.cs" />
     <Compile Include="Initializer.cs" />
+    <Compile Include="Patchers\KnownTechPatcher.cs" />
     <Compile Include="Patchers\LanguagePatcher.cs" />
     <Compile Include="Patchers\PrefabDatabasePatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

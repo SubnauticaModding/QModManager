@@ -31,7 +31,7 @@ namespace SMLHelper.Patchers
 
             LanguagePatcher.customLines.Add(name, languageName);
             LanguagePatcher.customLines.Add("Tooltip_" + name, languageTooltip);
-            var valueToString = (Dictionary<TechType, string>)CachedEnumString_valueToString.GetValue(TooltipFactory.techTypeTooltipStrings);
+            var valueToString = CachedEnumString_valueToString.GetValue(TooltipFactory.techTypeTooltipStrings) as Dictionary<TechType, string>;
             valueToString[techType] = "Tooltip_" + name;
 
             var techTypeExtensions = typeof(TechTypeExtensions);
