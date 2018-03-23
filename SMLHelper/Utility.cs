@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Reflection;
+using System.IO;
 using UnityEngine;
 
 namespace SMLHelper
@@ -19,6 +20,11 @@ namespace SMLHelper
             applier.anchorSky = Skies.Auto;
             var forces = _object.AddComponent<WorldForces>();
             forces.useRigidbody = rb;
+        }
+
+        public static string GetCurrentSaveDataDir()
+        {
+            return Path.Combine(@"./SNAppData/SavedGames/", Utils.GetSavegameDir());
         }
 
         public static void PatchDictionary(Type type, string name, IDictionary dictionary)

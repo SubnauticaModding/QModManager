@@ -15,6 +15,7 @@ namespace SMLHelper.Patchers
 
         private static int currentIndex = 11011;
         private static string CallerName = null;
+
         public static TechType AddTechType(string name, string languageName, string languageTooltip)
         {
             CallerName = Assembly.GetCallingAssembly().GetName().Name;
@@ -52,7 +53,7 @@ namespace SMLHelper.Patchers
             keyTechTypes[key3] = techType;
 
             if (unlockOnGameStart)
-                UnlockOnStart.Add(techType);
+                KnownTechPatcher.unlockedAtStart.Add(techType);
 
             CallerName = CallerName ?? Assembly.GetCallingAssembly().GetName().Name;
             Logger.Log("Successfully added Tech Type: \"{0}\" for mod \"{1}\"", name, CallerName);
@@ -142,16 +143,6 @@ namespace SMLHelper.Patchers
 
             harmony.Patch(techTypeType.GetMethod("ToString", new Type[0]),
                 new HarmonyMethod(thisType.GetMethod("Prefix_ToString", BindingFlags.Public | BindingFlags.Static)), null);
-        }
-
-        public static List<TechType> UnlockOnStart = new List<TechType>();
-        public static void Postpatch()
-        {
-            foreach (var techType in UnlockOnStart)
-            {
-                KnownTech.Add(techType, true);
-                Logger.Log($"Added {techType:G} to the known tech");
-            }
         }
     }
 }
