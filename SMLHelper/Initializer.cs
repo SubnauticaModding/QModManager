@@ -28,14 +28,6 @@ namespace SMLHelper
             {
                 Console.WriteLine(e.StackTrace);
             }
-
-            harmony.Patch(typeof(MainMenuMusic).GetMethod("Stop"), null,
-                new HarmonyMethod(typeof(Initializer).GetMethod("Postpatch")));
-        }
-
-        public static void Postpatch()
-        {
-            TechTypePatcher.Postpatch();
         }
     }
 }
