@@ -29,6 +29,8 @@ namespace SMLHelper.Patchers
             {
                 KnownTech.Add(techType, false);
             }
+
+            initialized = true;
         }
     }
 }
