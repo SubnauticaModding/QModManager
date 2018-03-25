@@ -11,7 +11,7 @@ namespace SMLHelper.Patchers
             {
                 if (prefab.PrefabFileName.ToLowerInvariant() == path.ToLowerInvariant())
                 {
-                    __result = prefab.Object;
+                    __result = prefab.GetResource();
                     return false;
                 }
             }
@@ -28,10 +28,10 @@ namespace SMLHelper.Patchers
                     //__result = prefab.Object;
 
                     var request = new UnityEngine.ResourceRequest();
-                    typeof(UnityEngine.ResourceRequest).GetProperty("asset").SetValue(request, prefab.Object, null);
+                    typeof(UnityEngine.ResourceRequest).GetProperty("asset").SetValue(request, prefab.GetResource(), null);
 
                     typeof(UnityEngine.ResourceRequest).GetField("m_Path", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(request, path);
-                    typeof(UnityEngine.ResourceRequest).GetField("m_Type", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(request, prefab.Object.GetType());
+                    typeof(UnityEngine.ResourceRequest).GetField("m_Type", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(request, prefab.GetResource().GetType());
 
                     __result = request;
 

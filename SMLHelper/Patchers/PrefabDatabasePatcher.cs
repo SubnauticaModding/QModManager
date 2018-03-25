@@ -11,7 +11,7 @@ namespace SMLHelper.Patchers
         {
             foreach (var prefab in CustomPrefabHandler.customPrefabs)
             {
-                PrefabDatabase.AddToCache(prefab.PrefabFileName, prefab.Object as GameObject);
+                PrefabDatabase.AddToCache(prefab.PrefabFileName, prefab.GetResource() as GameObject);
                 PrefabDatabase.prefabFiles[prefab.ClassID] = prefab.PrefabFileName;
             }
         }
