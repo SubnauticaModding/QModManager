@@ -26,7 +26,8 @@ namespace SMLHelper.Patchers
             if (!customGroups[group].ContainsKey(category))
                 customGroups[group][category] = new List<TechType>();
             customGroups[group][category].Add(techType);
-            Logger.Log($"Added \"{techType:G}\" to groups under \"{group:G}->{category:G}\"");
+
+            Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\"");
         }
 
         public static void Patch(HarmonyInstance harmony)
@@ -48,20 +49,21 @@ namespace SMLHelper.Patchers
 
             Utility.PatchList(CraftDataType, "buildables", customBuildables);
 
-            var prepareEntTechCache = CraftDataType.GetMethod("PrepareEntTechCache", BindingFlags.NonPublic | BindingFlags.Static);
+            var preparePrefabIDCache = CraftDataType.GetMethod("PreparePrefabIDCache", BindingFlags.Public | BindingFlags.Static);
 
-            harmony.Patch(prepareEntTechCache, null,
+            harmony.Patch(preparePrefabIDCache, null,
                 new HarmonyMethod(typeof(CraftDataPatcher).GetMethod("Postfix")));
+
             Logger.Log("CraftDataPatcher is done.");
         }
 
         public static void Postfix()
         {
-            var entTechMap = CraftDataType.GetField("entTechMap", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as Dictionary<string, TechType>;
+            var techMapping = CraftDataType.GetField("techMapping", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as Dictionary<TechType, string>;
 
-            foreach (var prefab in CustomPrefabHandler.customPrefabs)
+            foreach(var prefab in CustomPrefabHandler.customPrefabs)
             {
-                entTechMap[Path.GetFileName(prefab.PrefabFileName).ToLowerInvariant()] = prefab.TechType;
+                techMapping[prefab.TechType] = prefab.ClassID;
             }
         }
     }

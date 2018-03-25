@@ -11,9 +11,15 @@ namespace SMLHelper
     public class CustomSprite
     {
         public TechType TechType;
-        public Sprite Sprite;
+        public Atlas.Sprite Sprite;
 
         public CustomSprite(TechType type, Sprite sprite)
+        {
+            TechType = type;
+            Sprite = new Atlas.Sprite(sprite, false);
+        }
+
+        public CustomSprite(TechType type, Atlas.Sprite sprite)
         {
             TechType = type;
             Sprite = sprite;

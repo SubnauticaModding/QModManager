@@ -43,7 +43,7 @@ namespace SMLHelper.Patchers
             {
                 if (sprite.TechType.AsString(true) == name.ToLowerInvariant())
                 {
-                    __result = new Atlas.Sprite(sprite.Sprite, false);
+                    __result = sprite.Sprite;
                     return false;
                 }
             }
