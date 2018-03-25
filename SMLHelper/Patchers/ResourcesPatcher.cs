@@ -18,6 +18,14 @@ namespace SMLHelper.Patchers
 
             return true;
         }
+        private static readonly PropertyInfo AssetsInfo = 
+            typeof(UnityEngine.ResourceRequest).GetProperty("asset");
+
+        private static readonly FieldInfo MPathInfo =
+            typeof(UnityEngine.ResourceRequest).GetField("m_Path", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        private static readonly FieldInfo MTypeInfo =
+            typeof(UnityEngine.ResourceRequest).GetField("m_Type", BindingFlags.NonPublic | BindingFlags.Instance);
 
         public static bool Prefix_Async(ref UnityEngine.ResourceRequest __result, string path)
         {
@@ -27,13 +35,11 @@ namespace SMLHelper.Patchers
                 {
                     //__result = prefab.Object;
 
-                    var request = new UnityEngine.ResourceRequest();
-                    typeof(UnityEngine.ResourceRequest).GetProperty("asset").SetValue(request, prefab.GetResource(), null);
+                    __result = new UnityEngine.ResourceRequest();
+                    AssetsInfo.SetValue(__result, prefab.GetResource(), null);
 
-                    typeof(UnityEngine.ResourceRequest).GetField("m_Path", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(request, path);
-                    typeof(UnityEngine.ResourceRequest).GetField("m_Type", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(request, prefab.GetResource().GetType());
-
-                    __result = request;
+                    MPathInfo.SetValue(__result, path);
+                    MTypeInfo.SetValue(__result, prefab.GetResource().GetType());
 
                     return false;
                 }
