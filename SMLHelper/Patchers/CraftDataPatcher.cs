@@ -19,13 +19,19 @@ namespace SMLHelper.Patchers
 
         private static readonly Type CraftDataType = typeof(CraftData);
 
+        private static readonly FieldInfo GroupsField =
+            CraftDataType.GetField("groups", BindingFlags.NonPublic | BindingFlags.Static);
+
         public static void AddToCustomGroup(TechGroup group, TechCategory category, TechType techType)
         {
-            if (!customGroups.ContainsKey(group))
-                customGroups.Add(group, new Dictionary<TechCategory, List<TechType>>());
-            if (!customGroups[group].ContainsKey(category))
-                customGroups[group][category] = new List<TechType>();
-            customGroups[group][category].Add(techType);
+            //if (!customGroups.ContainsKey(group))
+            //    customGroups.Add(group, new Dictionary<TechCategory, List<TechType>>());
+            //if (!customGroups[group].ContainsKey(category))
+            //    customGroups[group][category] = new List<TechType>();
+            //customGroups[group][category].Add(techType);
+
+            var groups = GroupsField.GetValue(null) as Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>;
+            groups[group][category].Add(techType);
 
             Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\"");
         }
@@ -45,7 +51,7 @@ namespace SMLHelper.Patchers
             Utility.PatchDictionary(CraftDataType, "harvestTypeList", customHarvestTypeList);
             Utility.PatchDictionary(CraftDataType, "itemSizes", customItemSizes);
             Utility.PatchDictionary(CraftDataType, "equipmentTypes", customEquipmentTypes);
-            Utility.PatchDictionary(CraftDataType, "groups", customGroups);
+            //Utility.PatchDictionary(CraftDataType, "groups", customGroups);
 
             Utility.PatchList(CraftDataType, "buildables", customBuildables);
 
