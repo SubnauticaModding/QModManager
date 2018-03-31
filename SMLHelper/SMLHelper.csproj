@@ -51,6 +51,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CraftScheme.cs" />
+    <Compile Include="CustomCraftNode.cs" />
+    <Compile Include="CustomCraftTab.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Patchers\CraftDataPatcher.cs" />
     <Compile Include="Patchers\CraftTreePatcher.cs" />

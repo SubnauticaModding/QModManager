@@ -13,16 +13,30 @@ namespace SMLHelper
         public TechType TechType;
         public Atlas.Sprite Sprite;
 
-        public CustomSprite(TechType type, Sprite sprite)
-        {
-            TechType = type;
-            Sprite = new Atlas.Sprite(sprite, false);
-        }
+        public SpriteManager.Group Group;
+        public string Id;
 
         public CustomSprite(TechType type, Atlas.Sprite sprite)
         {
             TechType = type;
             Sprite = sprite;
+        }
+
+        public CustomSprite(SpriteManager.Group group, string id, Atlas.Sprite sprite)
+        {
+            Group = group;
+            Id = id;
+            Sprite = sprite;
+
+            TechType = TechType.None;
+        }
+
+        public CustomSprite(SpriteManager.Group group, string id, Sprite sprite) : this(group, id, new Atlas.Sprite(sprite, false))
+        {
+        }
+
+        public CustomSprite(TechType type, Sprite sprite) : this(type, new Atlas.Sprite(sprite, false))
+        {
         }
     }
 }

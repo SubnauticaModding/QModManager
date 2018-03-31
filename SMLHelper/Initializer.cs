@@ -12,6 +12,20 @@ namespace SMLHelper
         {
             harmony = HarmonyInstance.Create("com.ahk1221.smlhelper");
 
+            var techType = TechTypePatcher.AddTechType("Helno", "He l o no", "xD");
+
+            var anotherSprite = SpriteManager.Get(TechType.Aerogel);
+            CraftTreePatcher.customTabs.Add(new CustomCraftTab("BatteryMenu/Hmmz", "LLOZ", CraftScheme.Workbench, anotherSprite));
+            CraftTreePatcher.customTabs.Add(new CustomCraftTab("BatteryMenu/Hmmz/Asd", "Hmm", CraftScheme.Workbench, anotherSprite));
+            CraftTreePatcher.customNodes.Add(new CustomCraftNode(techType, CraftScheme.Workbench, "BatteryMenu/Hmmz/Asd/Helno"));
+
+            var sprite = SpriteManager.Get(TechType.Titanium);
+            CraftTreePatcher.customTabs.Add(new CustomCraftTab("Resources/TestMods", "Test Mods", CraftScheme.Fabricator, sprite));
+            CraftTreePatcher.customNodes.Add(new CustomCraftNode(techType, CraftScheme.Fabricator, "Resources/TestMods/Helno"));
+
+            CraftTreePatcher.customTabs.Add(new CustomCraftTab("hzad", "ASD", CraftScheme.SeamothUpgrades, anotherSprite));
+            CraftTreePatcher.customNodes.Add(new CustomCraftNode(techType, CraftScheme.SeamothUpgrades, "hzad/Helno"));
+
             try
             {
                 TechTypePatcher.Patch(harmony);
@@ -28,6 +42,7 @@ namespace SMLHelper
             {
                 Console.WriteLine(e.StackTrace);
             }
+
         }
     }
 }

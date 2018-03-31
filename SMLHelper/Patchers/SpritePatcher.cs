@@ -7,28 +7,6 @@ namespace SMLHelper.Patchers
     {
         public static void Patch(HarmonyInstance harmony)
         {
-            //var atlas = Atlas.GetAtlas("Items");
-            //if(atlas == null)
-            //{
-            //    SubnauticaModLoader.Logging.Logger.Log("ll");
-            //    return;
-            //}
-
-            //var propulsioncannon = atlas.GetSprite("propulsioncannon");
-            //GameObject[] allObjects = UnityEngine.Object.FindObjectsOfType<GameObject>();
-
-            //foreach(var gameobject in allObjects)
-            //{
-            //    if(gameobject.name == "MainCanvas")
-            //    {
-            //        var newGameOject = AssetBundle.LoadFromFile("testmodel").LoadAsset("Image") as GameObject;
-            //        newGameOject.GetComponent<UnityEngine.UI.Image>().sprite = Sprite.Create(propulsioncannon.texture, new Rect(0, 0, propulsioncannon.texture.width, propulsioncannon.texture.height),
-            //            new Vector2(0.5f, 0.5f));
-
-            //        UnityEngine.Object.Instantiate(newGameOject, gameobject.transform);
-            //    }
-            //}
-
             var spriteManager = typeof(SpriteManager);
             var getFromResources = spriteManager.GetMethod("GetFromResources", BindingFlags.Public | BindingFlags.Static);
 
@@ -42,6 +20,11 @@ namespace SMLHelper.Patchers
             foreach (var sprite in CustomSpriteHandler.customSprites)
             {
                 if (sprite.TechType.AsString(true) == name.ToLowerInvariant())
+                {
+                    __result = sprite.Sprite;
+                    return false;
+                }
+                else if(sprite.TechType == TechType.None && sprite.Id.ToLowerInvariant() == name.ToLowerInvariant())
                 {
                     __result = sprite.Sprite;
                     return false;
