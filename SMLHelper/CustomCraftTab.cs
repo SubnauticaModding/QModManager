@@ -29,8 +29,8 @@ namespace SMLHelper
         {
             Path = path;
             Name = name;
-            Sprite = new CustomSprite(SpriteManager.Group.Category, SpriteId, sprite);
             Scheme = scheme;
+            Sprite = new CustomSprite(SpriteManager.Group.Category, SpriteId, sprite);
 
             LanguagePatcher.customLines[LanguageId] = name;
             CustomSpriteHandler.customSprites.Add(Sprite);

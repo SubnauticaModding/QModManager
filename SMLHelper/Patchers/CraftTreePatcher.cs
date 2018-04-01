@@ -1,4 +1,5 @@
-﻿using Harmony;
+﻿using System;
+using Harmony;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -9,10 +10,21 @@ namespace SMLHelper.Patchers
         public static List<CustomCraftTab> customTabs = new List<CustomCraftTab>();
         public static List<CustomCraftNode> customNodes = new List<CustomCraftNode>();
 
+        [Obsolete("CraftTreePatcher.customCraftNodes is obsolete. Use CraftTreePatcher.customNodes", false)]
+        public static Dictionary<string, TechType> customCraftNodes = new Dictionary<string, TechType>();
+
         public static void FabricatorSchemePostfix(ref CraftNode __result)
         {
             AddCustomTabs(ref __result, customTabs, CraftScheme.Fabricator);
             PatchNodes(ref __result, customNodes, CraftScheme.Fabricator);
+
+            var list = new List<CustomCraftNode>();
+            foreach(var node in customCraftNodes)
+            {
+                list.Add(new CustomCraftNode(node.Value, CraftScheme.Fabricator, node.Key));
+            }
+
+            PatchNodes(ref __result, list, CraftScheme.Fabricator);
         }
 
         public static void ConstructorSchemePostfix(ref CraftNode __result)
