@@ -1,20 +1,184 @@
 ﻿using Harmony;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace SMLHelper.Patchers
 {
+    public class TechTypeCache
+    {
+        public int Index;
+        public string Name;
+    }
+
     public class TechTypePatcher
     {
         private static readonly FieldInfo CachedEnumString_valueToString =
             typeof(CachedEnumString<TechType>).GetField("valueToString", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private static Dictionary<TechType, string> customTechTypes = new Dictionary<TechType, string>();
+        private static Dictionary<TechType, TechTypeCache> customTechTypes = new Dictionary<TechType, TechTypeCache>();
 
-        private static int currentIndex = 11011;
+        private static int startingIndex = 11010;
         private static string CallerName = null;
+
+        private static List<TechTypeCache> cacheList = new List<TechTypeCache>();
+
+        private static bool cacheLoaded = false;
+
+        public static void Patch(HarmonyInstance harmony)
+        {
+            var enumType = typeof(Enum);
+            var thisType = typeof(TechTypePatcher);
+            var techTypeType = typeof(TechType);
+
+            harmony.Patch(enumType.GetMethod("GetValues", BindingFlags.Public | BindingFlags.Static), null,
+                new HarmonyMethod(thisType.GetMethod("Postfix_GetValues", BindingFlags.Public | BindingFlags.Static)));
+
+            harmony.Patch(enumType.GetMethod("IsDefined", BindingFlags.Public | BindingFlags.Static),
+                new HarmonyMethod(thisType.GetMethod("Prefix_IsDefined", BindingFlags.Public | BindingFlags.Static)), null);
+
+            harmony.Patch(enumType.GetMethod("Parse", new Type[] { typeof(Type), typeof(string), typeof(bool) }),
+                new HarmonyMethod(thisType.GetMethod("Prefix_Parse", BindingFlags.Public | BindingFlags.Static)), null);
+
+            harmony.Patch(techTypeType.GetMethod("ToString", new Type[0]),
+                new HarmonyMethod(thisType.GetMethod("Prefix_ToString", BindingFlags.Public | BindingFlags.Static)), null);
+
+            Logger.Log("TechTypePatcher is done.");
+        }
+
+        #region Caching
+
+        public static string GetCachePath()
+        {
+            var saveDir = @"./QMods/Modding Helper/TechTypeCache";
+
+            if (!Directory.Exists(saveDir))
+                Directory.CreateDirectory(saveDir);
+
+            return Path.Combine(saveDir, "TechTypeCache.txt");
+        }
+
+        public static void LoadCache()
+        {
+            if (cacheLoaded) return;
+
+            var savePathDir = GetCachePath();
+
+            if (!File.Exists(savePathDir))
+            {
+                SaveCache();
+                return;
+            }
+
+            var allText = File.ReadAllLines(savePathDir);
+
+            foreach(var line in allText)
+            {
+                var techTypeName = line.Split(':')[0];
+                var techTypeIndex = line.Split(':')[1];
+
+                var cache = new TechTypeCache()
+                { 
+                    Name = techTypeName,
+                    Index = int.Parse(techTypeIndex)
+                };
+
+                cacheList.Add(cache);
+            }
+
+            Logger.Log("Loaded TechTypeCache!");
+
+            cacheLoaded = true;
+        }
+
+        public static void SaveCache()
+        {
+            var savePathDir = GetCachePath();
+            var stringBuilder = new StringBuilder();
+
+            foreach (var techTypeEntry in customTechTypes)
+            {
+                cacheList.Add(techTypeEntry.Value);
+
+                stringBuilder.AppendLine(string.Format("{0}:{1}", techTypeEntry.Value.Name, techTypeEntry.Value.Index));
+            } 
+
+            File.WriteAllText(savePathDir, stringBuilder.ToString());
+        }
+
+        public static TechTypeCache GetCacheForTechTypeName(string name)
+        {
+            LoadCache();
+
+            foreach (var cache in cacheList)
+            {
+                if (cache.Name == name)
+                    return cache;
+            }
+
+            return null;
+        }
+
+        public static TechTypeCache GetCacheForIndex(int index)
+        {
+            LoadCache();
+
+            foreach (var cache in cacheList)
+            {
+                if (cache.Index == index)
+                    return cache;
+            }
+
+            return null;
+        }
+
+        public static int GetLargestIndexFromCache()
+        {
+            LoadCache();
+
+            var index = startingIndex;
+            
+            foreach(var cache in cacheList)
+            {
+                if (cache.Index > index)
+                    index = cache.Index;
+            }
+
+            return index;
+        }
+
+        public static int GetNextFreeIndex()
+        {
+            LoadCache();
+
+            var largestIndex = GetLargestIndexFromCache();
+            return largestIndex + 1;
+        }
+
+        public static bool MultipleCachesUsingSameIndex(int index)
+        {
+            LoadCache();
+
+            var count = 0;
+
+            foreach(var cache in cacheList)
+            {
+                if (cache.Index == index)
+                    count++;
+            }
+
+            if (count >= 2)
+                return true;
+
+            return false;
+        }
+
+        #endregion
+
+        #region Adding TechTypes
 
         public static TechType AddTechType(string name, string languageName, string languageTooltip)
         {
@@ -24,10 +188,23 @@ namespace SMLHelper.Patchers
 
         public static TechType AddTechType(string name, string languageName, string languageTooltip, bool unlockOnGameStart)
         {
-            var techType = (TechType)currentIndex;
+            var cache = GetCacheForTechTypeName(name);
 
-            customTechTypes.Add(techType, name);
-            currentIndex++;
+            if (cache == null)
+            {
+                cache = new TechTypeCache()
+                {
+                    Name = name,
+                    Index = GetNextFreeIndex()
+                };
+            }
+
+            if (MultipleCachesUsingSameIndex(cache.Index))
+                cache.Index = GetNextFreeIndex();
+
+            var techType = (TechType)cache.Index;
+
+            customTechTypes.Add(techType, cache);
 
             LanguagePatcher.customLines.Add(name, languageName);
             LanguagePatcher.customLines.Add("Tooltip_" + name, languageTooltip);
@@ -56,11 +233,17 @@ namespace SMLHelper.Patchers
                 KnownTechPatcher.unlockedAtStart.Add(techType);
 
             CallerName = CallerName ?? Assembly.GetCallingAssembly().GetName().Name;
-            Logger.Log("Successfully added Tech Type: \"{0}\" for mod \"{1}\"", name, CallerName);
+            Logger.Log("Successfully added Tech Type: \"{0}\" to Index: \"{1}\" for mod \"{2}\"", name, cache.Index, CallerName);
             CallerName = null;
+
+            SaveCache();
 
             return techType;
         }
+
+        #endregion
+
+        #region Patches
 
         public static void Postfix_GetValues(Type enumType, ref Array __result)
         {
@@ -98,7 +281,7 @@ namespace SMLHelper.Patchers
             {
                 foreach (var techType in customTechTypes)
                 {
-                    if (value.Equals(techType.Value, ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture))
+                    if (value.Equals(techType.Value.Name, ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture))
                     {
                         __result = techType.Key;
                         return false;
@@ -117,7 +300,7 @@ namespace SMLHelper.Patchers
                 {
                     if (__instance.Equals(techType.Key))
                     {
-                        __result = techType.Value;
+                        __result = techType.Value.Name;
                         return false;
                     }
                 }
@@ -126,23 +309,7 @@ namespace SMLHelper.Patchers
             return true;
         }
 
-        public static void Patch(HarmonyInstance harmony)
-        {
-            var enumType = typeof(Enum);
-            var thisType = typeof(TechTypePatcher);
-            var techTypeType = typeof(TechType);
+        #endregion
 
-            harmony.Patch(enumType.GetMethod("GetValues", BindingFlags.Public | BindingFlags.Static), null,
-                new HarmonyMethod(thisType.GetMethod("Postfix_GetValues", BindingFlags.Public | BindingFlags.Static)));
-
-            harmony.Patch(enumType.GetMethod("IsDefined", BindingFlags.Public | BindingFlags.Static),
-                new HarmonyMethod(thisType.GetMethod("Prefix_IsDefined", BindingFlags.Public | BindingFlags.Static)), null);
-
-            harmony.Patch(enumType.GetMethod("Parse", new Type[] { typeof(Type), typeof(string), typeof(bool) }),
-                new HarmonyMethod(thisType.GetMethod("Prefix_Parse", BindingFlags.Public | BindingFlags.Static)), null);
-
-            harmony.Patch(techTypeType.GetMethod("ToString", new Type[0]),
-                new HarmonyMethod(thisType.GetMethod("Prefix_ToString", BindingFlags.Public | BindingFlags.Static)), null);
-        }
     }
 }
