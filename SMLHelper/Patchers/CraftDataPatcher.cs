@@ -36,6 +36,13 @@ namespace SMLHelper.Patchers
             Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\"");
         }
 
+        public static void RemoveFromCustomGroup(TechGroup group, TechCategory category, TechType techType)
+        {
+            var groups = GroupsField.GetValue(null) as Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>;
+            groups[group][category].Remove(techType);
+
+            Logger.Log($"Removed \"{techType.AsString():G}\" from groups under \"{group:G}->{category:G}\"");
+        }
         public static void Patch(HarmonyInstance harmony)
         {
             var dictField = typeof(CraftData).GetField("techData", BindingFlags.Static | BindingFlags.NonPublic);
