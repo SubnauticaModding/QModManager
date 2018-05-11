@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CraftNodeToScrub.cs" />
     <Compile Include="CraftScheme.cs" />
     <Compile Include="CustomCraftNode.cs" />
     <Compile Include="CustomCraftTab.cs" />

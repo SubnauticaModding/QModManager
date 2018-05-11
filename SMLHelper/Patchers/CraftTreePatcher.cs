@@ -9,12 +9,14 @@ namespace SMLHelper.Patchers
     {
         public static List<CustomCraftTab> customTabs = new List<CustomCraftTab>();
         public static List<CustomCraftNode> customNodes = new List<CustomCraftNode>();
+        public static List<CraftNodeToScrub> nodesToRemove = new List<CraftNodeToScrub>();
 
         [Obsolete("CraftTreePatcher.customCraftNodes is obsolete. Use CraftTreePatcher.customNodes", false)]
         public static Dictionary<string, TechType> customCraftNodes = new Dictionary<string, TechType>();
 
         public static void FabricatorSchemePostfix(ref CraftNode __result)
         {
+            RemoveNodes(ref __result, nodesToRemove, CraftScheme.Fabricator);
             AddCustomTabs(ref __result, customTabs, CraftScheme.Fabricator);
             PatchNodes(ref __result, customNodes, CraftScheme.Fabricator);
 
@@ -29,30 +31,35 @@ namespace SMLHelper.Patchers
 
         public static void ConstructorSchemePostfix(ref CraftNode __result)
         {
+            RemoveNodes(ref __result, nodesToRemove, CraftScheme.Constructor);
             AddCustomTabs(ref __result, customTabs, CraftScheme.Constructor);
             PatchNodes(ref __result, customNodes, CraftScheme.Constructor);
         }
 
         public static void WorkbenchSchemePostfix(ref CraftNode __result)
         {
+            RemoveNodes(ref __result, nodesToRemove, CraftScheme.Workbench);
             AddCustomTabs(ref __result, customTabs, CraftScheme.Workbench);
             PatchNodes(ref __result, customNodes, CraftScheme.Workbench);
         }
 
         public static void SeamothUpgradesSchemePostfix(ref CraftNode __result)
         {
+            RemoveNodes(ref __result, nodesToRemove, CraftScheme.SeamothUpgrades);
             AddCustomTabs(ref __result, customTabs, CraftScheme.SeamothUpgrades);
             PatchNodes(ref __result, customNodes, CraftScheme.SeamothUpgrades);
         }
 
         public static void MapRoomShemePostfix(ref CraftNode __result)
         {
+            RemoveNodes(ref __result, nodesToRemove, CraftScheme.MapRoom);
             AddCustomTabs(ref __result, customTabs, CraftScheme.MapRoom);
             PatchNodes(ref __result, customNodes, CraftScheme.MapRoom);
         }
 
         public static void CyclopsFabricatorSchemePostfix(ref CraftNode __result)
         {
+            RemoveNodes(ref __result, nodesToRemove, CraftScheme.CyclopsFabricator);
             AddCustomTabs(ref __result, customTabs, CraftScheme.CyclopsFabricator);
             PatchNodes(ref __result, customNodes, CraftScheme.CyclopsFabricator);
         }
@@ -113,6 +120,46 @@ namespace SMLHelper.Patchers
                 {
                     new CraftNode(path[path.Length - 1], TreeAction.Craft, customNode.TechType)
                 });
+            }
+        }
+
+        private static void RemoveNodes(ref CraftNode nodes, List<CraftNodeToScrub> nodesToRemove, CraftScheme scheme)
+        {
+            // This method can be used to both remove single child nodes, thus removing one recipe from the tree.
+            // Or it can remove entire tabs at once, removing the tab and all the recipes it contained in one go.
+
+            foreach (var nodeToRemove in nodesToRemove)
+            {
+                // Not for this fabricator. Skip.
+                if (nodeToRemove.Scheme != scheme) continue;
+
+                // Get the names of each node in the path to traverse tree until we reach the node we want.
+                var path = nodeToRemove.Path.SplitByChar('/');
+                var currentNode = default(TreeNode);
+                currentNode = nodes;
+
+                // Travel the path down the tree.
+                string currentPath = null;
+                for (int step = 0; step < path.Length; step++)
+                {
+                    currentPath = path[step];
+                    if (step > path.Length)
+                    {
+                        break;
+                    }
+
+                    currentNode = currentNode[currentPath];
+                }
+                
+                // Hold a reference to the parent node
+                var parentNode = currentNode.parent;                
+
+                // Safty checks.
+                if (currentNode != null && currentNode.id == currentPath)
+                {
+                    currentNode.Clear(); // Remove all child nodes (if any)
+                    parentNode.RemoveNode(currentNode); // Remove the node
+                }
             }
         }
 
