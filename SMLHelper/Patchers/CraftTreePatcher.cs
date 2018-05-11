@@ -125,6 +125,9 @@ namespace SMLHelper.Patchers
 
         private static void RemoveNodes(ref CraftNode nodes, List<CraftNodeScrubber> nodesToRemove, CraftScheme scheme)
         {
+            // This method can be used to both remove single child nodes, thus removing one recipe from the tree.
+            // Or it can remove entire tabs at once, removing the tab and all the recipes it contained in one go.
+
             foreach (var nodeToRemove in nodesToRemove)
             {
                 // Not for this fabricator. Skip.
@@ -151,7 +154,7 @@ namespace SMLHelper.Patchers
                 // Hold a reference to the parent node
                 var parentNode = currentNode.parent;                
 
-                // Safty checks
+                // Safty checks.
                 if (currentNode != null && currentNode.id == currentPath)
                 {
                     currentNode.Clear(); // Remove all the child nodes to the one to remove
