@@ -9,7 +9,7 @@ namespace SMLHelper.Patchers
     {
         public static List<CustomCraftTab> customTabs = new List<CustomCraftTab>();
         public static List<CustomCraftNode> customNodes = new List<CustomCraftNode>();
-        public static List<CraftNodeScrubber> nodesToRemove = new List<CraftNodeScrubber>();
+        public static List<CraftNodeToScrub> nodesToRemove = new List<CraftNodeToScrub>();
 
         [Obsolete("CraftTreePatcher.customCraftNodes is obsolete. Use CraftTreePatcher.customNodes", false)]
         public static Dictionary<string, TechType> customCraftNodes = new Dictionary<string, TechType>();
@@ -123,7 +123,7 @@ namespace SMLHelper.Patchers
             }
         }
 
-        private static void RemoveNodes(ref CraftNode nodes, List<CraftNodeScrubber> nodesToRemove, CraftScheme scheme)
+        private static void RemoveNodes(ref CraftNode nodes, List<CraftNodeToScrub> nodesToRemove, CraftScheme scheme)
         {
             // This method can be used to both remove single child nodes, thus removing one recipe from the tree.
             // Or it can remove entire tabs at once, removing the tab and all the recipes it contained in one go.
@@ -157,8 +157,8 @@ namespace SMLHelper.Patchers
                 // Safty checks.
                 if (currentNode != null && currentNode.id == currentPath)
                 {
-                    currentNode.Clear(); // Remove all the child nodes to the one to remove
-                    parentNode.RemoveNode(currentNode); // Remove this node from the parent node
+                    currentNode.Clear(); // Remove all child nodes (if any)
+                    parentNode.RemoveNode(currentNode); // Remove the node
                 }
             }
         }

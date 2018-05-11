@@ -1,11 +1,11 @@
 ﻿namespace SMLHelper
 {    
-    public class CraftNodeScrubber
+    public class CraftNodeToScrub
     {
         public CraftScheme Scheme;
         public string Path;
 
-        public CraftNodeScrubber(CraftScheme scheme, string path)
+        public CraftNodeToScrub(CraftScheme scheme, string path)
         {
             Scheme = scheme;
             Path = path;
