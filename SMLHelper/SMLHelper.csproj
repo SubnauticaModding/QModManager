@@ -55,6 +55,7 @@
     <Compile Include="CraftScheme.cs" />
     <Compile Include="CustomCraftNode.cs" />
     <Compile Include="CustomCraftTab.cs" />
+    <Compile Include="CustomCraftTree.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Patchers\CraftDataPatcher.cs" />
     <Compile Include="Patchers\CraftTreePatcher.cs" />
@@ -63,7 +64,6 @@
     <Compile Include="Patchers\CraftTreeTypePatcher.cs" />
     <Compile Include="Patchers\DevConsolePatcher.cs" />
     <Compile Include="Initializer.cs" />
-    <Compile Include="Patchers\EnumPatcher.cs" />
     <Compile Include="Patchers\KnownTechPatcher.cs" />
     <Compile Include="Patchers\LanguagePatcher.cs" />
     <Compile Include="Patchers\PrefabDatabasePatcher.cs" />

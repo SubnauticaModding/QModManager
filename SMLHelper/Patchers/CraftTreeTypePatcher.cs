@@ -21,7 +21,7 @@ namespace SMLHelper.Patchers
 
         private static Dictionary<CraftTree.Type, CraftTreeTypeCache> customCraftTreeTypes = new Dictionary<CraftTree.Type, CraftTreeTypeCache>();
 
-        private const int startingIndex = 0xB;
+        internal const int StartingIndex = 0xA + 1; // The default CraftTree.Type contains indexes 0 through A
         private static string CallerName = null;
 
         private static List<CraftTreeTypeCache> cacheList = new List<CraftTreeTypeCache>();
@@ -139,7 +139,7 @@ namespace SMLHelper.Patchers
         {
             LoadCache();
 
-            var index = startingIndex;
+            var index = StartingIndex;
 
             foreach (var cache in cacheList)
             {
@@ -180,7 +180,7 @@ namespace SMLHelper.Patchers
 
         #region Adding TechTypes                
 
-        public static CraftTree.Type AddTechType(string name, string languageName, string languageTooltip)
+        public static CraftTree.Type AddCraftTreeType(string name)
         {
             var cache = GetCacheForTechTypeName(name);
 
@@ -200,8 +200,7 @@ namespace SMLHelper.Patchers
 
             customCraftTreeTypes.Add(techType, cache);
 
-            LanguagePatcher.customLines.Add(name, languageName);
-            LanguagePatcher.customLines.Add("Tooltip_" + name, languageTooltip);
+
             var valueToString = CachedEnumString_valueToString.GetValue(TooltipFactory.techTypeTooltipStrings) as Dictionary<CraftTree.Type, string>;
             valueToString[techType] = "Tooltip_" + name;
 
