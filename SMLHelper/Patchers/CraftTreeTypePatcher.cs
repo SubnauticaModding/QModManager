@@ -8,31 +8,31 @@ using System.Text;
 
 namespace SMLHelper.Patchers
 {
-    public class TechTypeCache
+    public class CraftTreeTypeCache
     {
         public int Index;
         public string Name;
     }
 
-    public class TechTypePatcher
+    public class CraftTreeTypePatcher
     {
         private static readonly FieldInfo CachedEnumString_valueToString =
-            typeof(CachedEnumString<TechType>).GetField("valueToString", BindingFlags.NonPublic | BindingFlags.Instance);
+            typeof(CachedEnumString<CraftTree.Type>).GetField("valueToString", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private static Dictionary<TechType, TechTypeCache> customTechTypes = new Dictionary<TechType, TechTypeCache>();
+        private static Dictionary<CraftTree.Type, CraftTreeTypeCache> customCraftTreeTypes = new Dictionary<CraftTree.Type, CraftTreeTypeCache>();
 
-        private const int startingIndex = 11010;
+        private const int startingIndex = 0xB;
         private static string CallerName = null;
 
-        private static List<TechTypeCache> cacheList = new List<TechTypeCache>();
+        private static List<CraftTreeTypeCache> cacheList = new List<CraftTreeTypeCache>();
 
         private static bool cacheLoaded = false;
 
         public static void Patch(HarmonyInstance harmony)
         {
             var enumType = typeof(Enum);
-            var thisType = typeof(TechTypePatcher);
-            var techTypeType = typeof(TechType);
+            var thisType = typeof(CraftTreeTypePatcher);
+            var techTypeType = typeof(CraftTree.Type);
 
             harmony.Patch(enumType.GetMethod("GetValues", BindingFlags.Public | BindingFlags.Static), null,
                 new HarmonyMethod(thisType.GetMethod("Postfix_GetValues", BindingFlags.Public | BindingFlags.Static)));
@@ -46,19 +46,19 @@ namespace SMLHelper.Patchers
             harmony.Patch(techTypeType.GetMethod("ToString", new Type[0]),
                 new HarmonyMethod(thisType.GetMethod("Prefix_ToString", BindingFlags.Public | BindingFlags.Static)), null);
 
-            Logger.Log("TechTypePatcher is done.");
+            Logger.Log("CraftTreeTypePatcher is done.");
         }
 
         #region Caching
 
         public static string GetCachePath()
         {
-            var saveDir = @"./QMods/Modding Helper/TechTypeCache";
+            var saveDir = @"./QMods/Modding Helper/CraftTreeTypeCache";
 
             if (!Directory.Exists(saveDir))
                 Directory.CreateDirectory(saveDir);
 
-            return Path.Combine(saveDir, "TechTypeCache.txt");
+            return Path.Combine(saveDir, "CraftTreeTypeCache.txt");
         }
 
         public static void LoadCache()
@@ -75,13 +75,13 @@ namespace SMLHelper.Patchers
 
             var allText = File.ReadAllLines(savePathDir);
 
-            foreach(var line in allText)
+            foreach (var line in allText)
             {
                 var techTypeName = line.Split(':')[0];
                 var techTypeIndex = line.Split(':')[1];
 
-                var cache = new TechTypeCache()
-                { 
+                var cache = new CraftTreeTypeCache()
+                {
                     Name = techTypeName,
                     Index = int.Parse(techTypeIndex)
                 };
@@ -89,7 +89,7 @@ namespace SMLHelper.Patchers
                 cacheList.Add(cache);
             }
 
-            Logger.Log("Loaded TechTypeCache!");
+            Logger.Log("Loaded CraftTreeTypeCache!");
 
             cacheLoaded = true;
         }
@@ -99,17 +99,17 @@ namespace SMLHelper.Patchers
             var savePathDir = GetCachePath();
             var stringBuilder = new StringBuilder();
 
-            foreach (var techTypeEntry in customTechTypes)
+            foreach (var techTypeEntry in customCraftTreeTypes)
             {
                 cacheList.Add(techTypeEntry.Value);
 
                 stringBuilder.AppendLine(string.Format("{0}:{1}", techTypeEntry.Value.Name, techTypeEntry.Value.Index));
-            } 
+            }
 
             File.WriteAllText(savePathDir, stringBuilder.ToString());
         }
 
-        public static TechTypeCache GetCacheForTechTypeName(string name)
+        public static CraftTreeTypeCache GetCacheForTechTypeName(string name)
         {
             LoadCache();
 
@@ -122,7 +122,7 @@ namespace SMLHelper.Patchers
             return null;
         }
 
-        public static TechTypeCache GetCacheForIndex(int index)
+        public static CraftTreeTypeCache GetCacheForIndex(int index)
         {
             LoadCache();
 
@@ -140,8 +140,8 @@ namespace SMLHelper.Patchers
             LoadCache();
 
             var index = startingIndex;
-            
-            foreach(var cache in cacheList)
+
+            foreach (var cache in cacheList)
             {
                 if (cache.Index > index)
                     index = cache.Index;
@@ -164,7 +164,7 @@ namespace SMLHelper.Patchers
 
             var count = 0;
 
-            foreach(var cache in cacheList)
+            foreach (var cache in cacheList)
             {
                 if (cache.Index == index)
                     count++;
@@ -178,21 +178,15 @@ namespace SMLHelper.Patchers
 
         #endregion
 
-        #region Adding TechTypes
+        #region Adding TechTypes                
 
-        public static TechType AddTechType(string name, string languageName, string languageTooltip)
-        {
-            CallerName = Assembly.GetCallingAssembly().GetName().Name;
-            return AddTechType(name, languageName, languageTooltip, true);
-        }
-
-        public static TechType AddTechType(string name, string languageName, string languageTooltip, bool unlockOnGameStart)
+        public static CraftTree.Type AddTechType(string name, string languageName, string languageTooltip)
         {
             var cache = GetCacheForTechTypeName(name);
 
             if (cache == null)
             {
-                cache = new TechTypeCache()
+                cache = new CraftTreeTypeCache()
                 {
                     Name = name,
                     Index = GetNextFreeIndex()
@@ -202,24 +196,24 @@ namespace SMLHelper.Patchers
             if (MultipleCachesUsingSameIndex(cache.Index))
                 cache.Index = GetNextFreeIndex();
 
-            var techType = (TechType)cache.Index;
+            var techType = (CraftTree.Type)cache.Index;
 
-            customTechTypes.Add(techType, cache);
+            customCraftTreeTypes.Add(techType, cache);
 
             LanguagePatcher.customLines.Add(name, languageName);
             LanguagePatcher.customLines.Add("Tooltip_" + name, languageTooltip);
-            var valueToString = CachedEnumString_valueToString.GetValue(TooltipFactory.techTypeTooltipStrings) as Dictionary<TechType, string>;
+            var valueToString = CachedEnumString_valueToString.GetValue(TooltipFactory.techTypeTooltipStrings) as Dictionary<CraftTree.Type, string>;
             valueToString[techType] = "Tooltip_" + name;
 
             var techTypeExtensions = typeof(TechTypeExtensions);
             var traverse = Traverse.Create(techTypeExtensions);
 
-            var stringsNormal = traverse.Field("stringsNormal").GetValue<Dictionary<TechType, string>>();
-            var stringsLowercase = traverse.Field("stringsLowercase").GetValue<Dictionary<TechType, string>>();
-            var techTypesNormal = traverse.Field("techTypesNormal").GetValue<Dictionary<string, TechType>>();
-            var techTypesIgnoreCase = traverse.Field("techTypesIgnoreCase").GetValue<Dictionary<string, TechType>>();
-            var techTypeKeys = traverse.Field("techTypeKeys").GetValue<Dictionary<TechType, string>>();
-            var keyTechTypes = traverse.Field("keyTechTypes").GetValue<Dictionary<string, TechType>>();
+            var stringsNormal = traverse.Field("stringsNormal").GetValue<Dictionary<CraftTree.Type, string>>();
+            var stringsLowercase = traverse.Field("stringsLowercase").GetValue<Dictionary<CraftTree.Type, string>>();
+            var techTypesNormal = traverse.Field("techTypesNormal").GetValue<Dictionary<string, CraftTree.Type>>();
+            var techTypesIgnoreCase = traverse.Field("techTypesIgnoreCase").GetValue<Dictionary<string, CraftTree.Type>>();
+            var techTypeKeys = traverse.Field("techTypeKeys").GetValue<Dictionary<CraftTree.Type, string>>();
+            var keyTechTypes = traverse.Field("keyTechTypes").GetValue<Dictionary<string, CraftTree.Type>>();
 
             stringsNormal[techType] = name;
             stringsLowercase[techType] = name.ToLowerInvariant();
@@ -227,13 +221,10 @@ namespace SMLHelper.Patchers
             techTypesIgnoreCase[name] = techType;
             string key3 = ((int)techType).ToString();
             techTypeKeys[techType] = key3;
-            keyTechTypes[key3] = techType;
-
-            if (unlockOnGameStart)
-                KnownTechPatcher.unlockedAtStart.Add(techType);
+            keyTechTypes[key3] = techType;            
 
             CallerName = CallerName ?? Assembly.GetCallingAssembly().GetName().Name;
-            Logger.Log("Successfully added Tech Type: \"{0}\" to Index: \"{1}\" for mod \"{2}\"", name, cache.Index, CallerName);
+            Logger.Log("Successfully added CraftTree Type: \"{0}\" to Index: \"{1}\" for mod \"{2}\"", name, cache.Index, CallerName);
             CallerName = null;
 
             SaveCache();
@@ -247,25 +238,25 @@ namespace SMLHelper.Patchers
 
         public static void Postfix_GetValues(Type enumType, ref Array __result)
         {
-            if (enumType.Equals(typeof(TechType)))
+            if (enumType.Equals(typeof(CraftTree.Type)))
             {
-                var listArray = new List<TechType>();
+                var listArray = new List<CraftTree.Type>();
                 foreach (var obj in __result)
                 {
-                    listArray.Add((TechType)obj);
+                    listArray.Add((CraftTree.Type)obj);
                 }
 
                 __result = listArray
-                    .Concat(customTechTypes.Keys)
+                    .Concat(customCraftTreeTypes.Keys)
                     .ToArray();
             }
         }
 
         public static bool Prefix_IsDefined(Type enumType, object value, ref bool __result)
         {
-            if (enumType.Equals(typeof(TechType)))
+            if (enumType.Equals(typeof(CraftTree.Type)))
             {
-                if (customTechTypes.Keys.Contains((TechType)value))
+                if (customCraftTreeTypes.Keys.Contains((CraftTree.Type)value))
                 {
                     __result = true;
                     return false;
@@ -277,9 +268,9 @@ namespace SMLHelper.Patchers
 
         public static bool Prefix_Parse(Type enumType, string value, bool ignoreCase, ref object __result)
         {
-            if (enumType.Equals(typeof(TechType)))
+            if (enumType.Equals(typeof(CraftTree.Type)))
             {
-                foreach (var techType in customTechTypes)
+                foreach (var techType in customCraftTreeTypes)
                 {
                     if (value.Equals(techType.Value.Name, ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture))
                     {
@@ -294,9 +285,9 @@ namespace SMLHelper.Patchers
 
         public static bool Prefix_ToString(Enum __instance, ref string __result)
         {
-            if (__instance.GetType().Equals(typeof(TechType)))
+            if (__instance.GetType().Equals(typeof(CraftTree.Type)))
             {
-                foreach (var techType in customTechTypes)
+                foreach (var techType in customCraftTreeTypes)
                 {
                     if (__instance.Equals(techType.Key))
                     {
@@ -310,6 +301,5 @@ namespace SMLHelper.Patchers
         }
 
         #endregion
-
     }
 }
