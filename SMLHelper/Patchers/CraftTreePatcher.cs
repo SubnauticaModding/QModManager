@@ -203,10 +203,7 @@ namespace SMLHelper.Patchers
             var workbenchScheme = type.GetMethod("WorkbenchScheme", BindingFlags.Static | BindingFlags.NonPublic);
             var seamothUpgradesScheme = type.GetMethod("SeamothUpgradesScheme", BindingFlags.NonPublic | BindingFlags.Static);
             var mapRoomSheme = type.GetMethod("MapRoomSheme", BindingFlags.Static | BindingFlags.NonPublic);
-            var cyclopsFabricatorScheme = type.GetMethod("CyclopsFabricatorScheme", BindingFlags.Static | BindingFlags.NonPublic);
-
-            var craftTreeGetTree = type.GetMethod("GetTree", BindingFlags.Static | BindingFlags.Public);
-            var craftTreeInitialize = type.GetMethod("Initialize", BindingFlags.Static | BindingFlags.Public);
+            var cyclopsFabricatorScheme = type.GetMethod("CyclopsFabricatorScheme", BindingFlags.Static | BindingFlags.NonPublic);            
 
             Type patcherClass = typeof(CraftTreePatcher);
 
@@ -228,12 +225,17 @@ namespace SMLHelper.Patchers
             harmony.Patch(cyclopsFabricatorScheme, null,
                 new HarmonyMethod(patcherClass.GetMethod("CyclopsFabricatorSchemePostfix")));
 
+            if (CustomCraftTree.HasCustomTrees)
+            {
+                var craftTreeGetTree = type.GetMethod("GetTree", BindingFlags.Static | BindingFlags.Public);
+                var craftTreeInitialize = type.GetMethod("Initialize", BindingFlags.Static | BindingFlags.Public);
 
-            harmony.Patch(craftTreeGetTree, null,
-                new HarmonyMethod(patcherClass.GetMethod("GetTreePostFix")));
+                harmony.Patch(craftTreeGetTree, null,
+                    new HarmonyMethod(patcherClass.GetMethod("GetTreePostFix")));
 
-            harmony.Patch(craftTreeInitialize, null,
-                new HarmonyMethod(patcherClass.GetMethod("InitializePostFix")));
+                harmony.Patch(craftTreeInitialize, null,
+                    new HarmonyMethod(patcherClass.GetMethod("InitializePostFix")));
+            }
 
             Logger.Log($"CraftTreePatcher is done.");
         }

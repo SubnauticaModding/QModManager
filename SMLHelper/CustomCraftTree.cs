@@ -3,7 +3,7 @@ using SMLHelper.Patchers;
 using UnityEngine.Assertions;
 
 namespace SMLHelper
-{  
+{
     /// <summary>
     /// Creating a new CraftTree only makes sense if you're going to use it in a new type of GhostCrafter
     /// </summary>
@@ -25,10 +25,13 @@ namespace SMLHelper
             CustomTree = new CraftTree(Name, Nodes);
 
             CustomTrees.Add(scheme, CustomTree);
+            HasCustomTrees = true;
         }
 
         internal static Dictionary<CraftTree.Type, CraftTree> CustomTrees = new Dictionary<CraftTree.Type, CraftTree>();
 
-        internal static bool Initialized = false;        
+        internal static bool Initialized = false;
+
+        internal static bool HasCustomTrees { get; private set; } = false;
     }
 }
