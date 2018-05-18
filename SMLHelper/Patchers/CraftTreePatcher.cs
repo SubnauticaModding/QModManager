@@ -22,7 +22,7 @@ namespace SMLHelper.Patchers
             PatchNodes(ref __result, customNodes, CraftScheme.Fabricator);
 
             var list = new List<CustomCraftNode>();
-            foreach (var node in customCraftNodes)
+            foreach(var node in customCraftNodes)
             {
                 list.Add(new CustomCraftNode(node.Value, CraftScheme.Fabricator, node.Key));
             }
@@ -98,7 +98,7 @@ namespace SMLHelper.Patchers
 
         private static void AddCustomTabs(ref CraftNode nodes, List<CustomCraftTab> customTabs, CraftScheme scheme)
         {
-            foreach (var tab in customTabs)
+            foreach(var tab in customTabs)
             {
                 if (tab.Scheme != scheme) continue;
 
@@ -106,12 +106,12 @@ namespace SMLHelper.Patchers
                 var currentNode = default(TreeNode);
                 currentNode = nodes;
 
-                for (int i = 0; i < path.Length; i++)
+                for(int i = 0; i < path.Length; i++)
                 {
                     var currentPath = path[i];
 
                     var node = currentNode[currentPath];
-                    if (node == null)
+                    if(node == null)
                     {
                         var newNode = new CraftNode(currentPath, TreeAction.Expand, TechType.None);
                         currentNode.AddNode(new TreeNode[]
@@ -129,7 +129,7 @@ namespace SMLHelper.Patchers
 
         private static void PatchNodes(ref CraftNode nodes, List<CustomCraftNode> customNodes, CraftScheme scheme)
         {
-            foreach (var customNode in customNodes)
+            foreach(var customNode in customNodes)
             {
                 if (customNode.Scheme != scheme) continue;
 
@@ -182,9 +182,9 @@ namespace SMLHelper.Patchers
 
                     currentNode = currentNode[currentPath];
                 }
-
+                
                 // Hold a reference to the parent node
-                var parentNode = currentNode.parent;
+                var parentNode = currentNode.parent;                
 
                 // Safty checks.
                 if (currentNode != null && currentNode.id == currentPath)
