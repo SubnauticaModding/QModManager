@@ -17,7 +17,7 @@ namespace SMLHelper
 
         public CustomCraftTree(CraftTree.Type scheme, CraftNode nodes, string name = null)
         {
-            Assert.IsTrue((int)scheme > CraftTreeTypePatcher.StartingIndex, "Custom CraftTree types must have an index higher than the in-game types.");
+            Assert.IsTrue((int)scheme > CraftTreeTypePatcher.startingIndex, "Custom CraftTree types must have an index higher than the in-game types.");
 
             Scheme = scheme;
             Nodes = nodes;

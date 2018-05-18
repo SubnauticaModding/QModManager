@@ -1,32 +1,19 @@
 ﻿using Harmony;
+using SMLHelper.Util;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace SMLHelper.Patchers
 {
-    public class CraftTreeTypeCache
-    {
-        public int Index;
-        public string Name;
-    }
-
     public class CraftTreeTypePatcher
     {
         private static readonly FieldInfo CachedEnumString_valueToString =
             typeof(CachedEnumString<CraftTree.Type>).GetField("valueToString", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private static Dictionary<CraftTree.Type, CraftTreeTypeCache> customCraftTreeTypes = new Dictionary<CraftTree.Type, CraftTreeTypeCache>();
-
-        internal const int StartingIndex = 0xA + 1; // The default CraftTree.Type contains indexes 0 through A
+        internal const int startingIndex = 0xB; // The default CraftTree.Type contains indexes 0 through A
         private static string CallerName = null;
-
-        private static List<CraftTreeTypeCache> cacheList = new List<CraftTreeTypeCache>();
-
-        private static bool cacheLoaded = false;
 
         public static void Patch(HarmonyInstance harmony)
         {
@@ -49,156 +36,29 @@ namespace SMLHelper.Patchers
             Logger.Log("CraftTreeTypePatcher is done.");
         }
 
-        #region Caching
-
-        public static string GetCachePath()
-        {
-            var saveDir = @"./QMods/Modding Helper/CraftTreeTypeCache";
-
-            if (!Directory.Exists(saveDir))
-                Directory.CreateDirectory(saveDir);
-
-            return Path.Combine(saveDir, "CraftTreeTypeCache.txt");
-        }
-
-        public static void LoadCache()
-        {
-            if (cacheLoaded) return;
-
-            var savePathDir = GetCachePath();
-
-            if (!File.Exists(savePathDir))
-            {
-                SaveCache();
-                return;
-            }
-
-            var allText = File.ReadAllLines(savePathDir);
-
-            foreach (var line in allText)
-            {
-                var techTypeName = line.Split(':')[0];
-                var techTypeIndex = line.Split(':')[1];
-
-                var cache = new CraftTreeTypeCache()
-                {
-                    Name = techTypeName,
-                    Index = int.Parse(techTypeIndex)
-                };
-
-                cacheList.Add(cache);
-            }
-
-            Logger.Log("Loaded CraftTreeTypeCache!");
-
-            cacheLoaded = true;
-        }
-
-        public static void SaveCache()
-        {
-            var savePathDir = GetCachePath();
-            var stringBuilder = new StringBuilder();
-
-            foreach (var techTypeEntry in customCraftTreeTypes)
-            {
-                cacheList.Add(techTypeEntry.Value);
-
-                stringBuilder.AppendLine(string.Format("{0}:{1}", techTypeEntry.Value.Name, techTypeEntry.Value.Index));
-            }
-
-            File.WriteAllText(savePathDir, stringBuilder.ToString());
-        }
-
-        public static CraftTreeTypeCache GetCacheForTechTypeName(string name)
-        {
-            LoadCache();
-
-            foreach (var cache in cacheList)
-            {
-                if (cache.Name == name)
-                    return cache;
-            }
-
-            return null;
-        }
-
-        public static CraftTreeTypeCache GetCacheForIndex(int index)
-        {
-            LoadCache();
-
-            foreach (var cache in cacheList)
-            {
-                if (cache.Index == index)
-                    return cache;
-            }
-
-            return null;
-        }
-
-        public static int GetLargestIndexFromCache()
-        {
-            LoadCache();
-
-            var index = StartingIndex;
-
-            foreach (var cache in cacheList)
-            {
-                if (cache.Index > index)
-                    index = cache.Index;
-            }
-
-            return index;
-        }
-
-        public static int GetNextFreeIndex()
-        {
-            LoadCache();
-
-            var largestIndex = GetLargestIndexFromCache();
-            return largestIndex + 1;
-        }
-
-        public static bool MultipleCachesUsingSameIndex(int index)
-        {
-            LoadCache();
-
-            var count = 0;
-
-            foreach (var cache in cacheList)
-            {
-                if (cache.Index == index)
-                    count++;
-            }
-
-            if (count >= 2)
-                return true;
-
-            return false;
-        }
-
-        #endregion
+        private static readonly EnumCacheManager<CraftTree.Type> cacheManager = new EnumCacheManager<CraftTree.Type>("CraftTreeType", startingIndex);
 
         #region Adding TechTypes                
 
         public static CraftTree.Type AddCraftTreeType(string name)
         {
-            var cache = GetCacheForTechTypeName(name);
+            var cache = cacheManager.GetCacheForTypeName(name);
 
             if (cache == null)
             {
-                cache = new CraftTreeTypeCache()
+                cache = new EnumTypeCache()
                 {
                     Name = name,
-                    Index = GetNextFreeIndex()
+                    Index = cacheManager.GetNextFreeIndex()
                 };
             }
 
-            if (MultipleCachesUsingSameIndex(cache.Index))
-                cache.Index = GetNextFreeIndex();
+            if (cacheManager.MultipleCachesUsingSameIndex(cache.Index))
+                cache.Index = cacheManager.GetNextFreeIndex();
 
             var techType = (CraftTree.Type)cache.Index;
 
-            customCraftTreeTypes.Add(techType, cache);
+            cacheManager.customEnumTypes.Add(techType, cache);
 
 
             var valueToString = CachedEnumString_valueToString.GetValue(TooltipFactory.techTypeTooltipStrings) as Dictionary<CraftTree.Type, string>;
@@ -220,13 +80,13 @@ namespace SMLHelper.Patchers
             techTypesIgnoreCase[name] = techType;
             string key3 = ((int)techType).ToString();
             techTypeKeys[techType] = key3;
-            keyTechTypes[key3] = techType;            
+            keyTechTypes[key3] = techType;
 
             CallerName = CallerName ?? Assembly.GetCallingAssembly().GetName().Name;
             Logger.Log("Successfully added CraftTree Type: \"{0}\" to Index: \"{1}\" for mod \"{2}\"", name, cache.Index, CallerName);
             CallerName = null;
 
-            SaveCache();
+            cacheManager.SaveCache();
 
             return techType;
         }
@@ -246,7 +106,7 @@ namespace SMLHelper.Patchers
                 }
 
                 __result = listArray
-                    .Concat(customCraftTreeTypes.Keys)
+                    .Concat(cacheManager.customEnumTypes.Keys)
                     .ToArray();
             }
         }
@@ -255,7 +115,7 @@ namespace SMLHelper.Patchers
         {
             if (enumType.Equals(typeof(CraftTree.Type)))
             {
-                if (customCraftTreeTypes.Keys.Contains((CraftTree.Type)value))
+                if (cacheManager.customEnumTypes.Keys.Contains((CraftTree.Type)value))
                 {
                     __result = true;
                     return false;
@@ -269,7 +129,7 @@ namespace SMLHelper.Patchers
         {
             if (enumType.Equals(typeof(CraftTree.Type)))
             {
-                foreach (var techType in customCraftTreeTypes)
+                foreach (var techType in cacheManager.customEnumTypes)
                 {
                     if (value.Equals(techType.Value.Name, ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture))
                     {
@@ -286,7 +146,7 @@ namespace SMLHelper.Patchers
         {
             if (__instance.GetType().Equals(typeof(CraftTree.Type)))
             {
-                foreach (var techType in customCraftTreeTypes)
+                foreach (var techType in cacheManager.customEnumTypes)
                 {
                     if (__instance.Equals(techType.Key))
                     {

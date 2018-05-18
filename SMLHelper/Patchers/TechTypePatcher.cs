@@ -1,32 +1,20 @@
 ﻿using Harmony;
+using SMLHelper.Util;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
 namespace SMLHelper.Patchers
 {
-    public class TechTypeCache
-    {
-        public int Index;
-        public string Name;
-    }
-
     public class TechTypePatcher
     {
         private static readonly FieldInfo CachedEnumString_valueToString =
             typeof(CachedEnumString<TechType>).GetField("valueToString", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private static Dictionary<TechType, TechTypeCache> customTechTypes = new Dictionary<TechType, TechTypeCache>();
-
-        private const int startingIndex = 11010;
+        internal const int startingIndex = 11010;
         private static string CallerName = null;
 
-        private static List<TechTypeCache> cacheList = new List<TechTypeCache>();
-
-        private static bool cacheLoaded = false;
 
         public static void Patch(HarmonyInstance harmony)
         {
@@ -49,134 +37,7 @@ namespace SMLHelper.Patchers
             Logger.Log("TechTypePatcher is done.");
         }
 
-        #region Caching
-
-        public static string GetCachePath()
-        {
-            var saveDir = @"./QMods/Modding Helper/TechTypeCache";
-
-            if (!Directory.Exists(saveDir))
-                Directory.CreateDirectory(saveDir);
-
-            return Path.Combine(saveDir, "TechTypeCache.txt");
-        }
-
-        public static void LoadCache()
-        {
-            if (cacheLoaded) return;
-
-            var savePathDir = GetCachePath();
-
-            if (!File.Exists(savePathDir))
-            {
-                SaveCache();
-                return;
-            }
-
-            var allText = File.ReadAllLines(savePathDir);
-
-            foreach(var line in allText)
-            {
-                var techTypeName = line.Split(':')[0];
-                var techTypeIndex = line.Split(':')[1];
-
-                var cache = new TechTypeCache()
-                { 
-                    Name = techTypeName,
-                    Index = int.Parse(techTypeIndex)
-                };
-
-                cacheList.Add(cache);
-            }
-
-            Logger.Log("Loaded TechTypeCache!");
-
-            cacheLoaded = true;
-        }
-
-        public static void SaveCache()
-        {
-            var savePathDir = GetCachePath();
-            var stringBuilder = new StringBuilder();
-
-            foreach (var techTypeEntry in customTechTypes)
-            {
-                cacheList.Add(techTypeEntry.Value);
-
-                stringBuilder.AppendLine(string.Format("{0}:{1}", techTypeEntry.Value.Name, techTypeEntry.Value.Index));
-            } 
-
-            File.WriteAllText(savePathDir, stringBuilder.ToString());
-        }
-
-        public static TechTypeCache GetCacheForTechTypeName(string name)
-        {
-            LoadCache();
-
-            foreach (var cache in cacheList)
-            {
-                if (cache.Name == name)
-                    return cache;
-            }
-
-            return null;
-        }
-
-        public static TechTypeCache GetCacheForIndex(int index)
-        {
-            LoadCache();
-
-            foreach (var cache in cacheList)
-            {
-                if (cache.Index == index)
-                    return cache;
-            }
-
-            return null;
-        }
-
-        public static int GetLargestIndexFromCache()
-        {
-            LoadCache();
-
-            var index = startingIndex;
-            
-            foreach(var cache in cacheList)
-            {
-                if (cache.Index > index)
-                    index = cache.Index;
-            }
-
-            return index;
-        }
-
-        public static int GetNextFreeIndex()
-        {
-            LoadCache();
-
-            var largestIndex = GetLargestIndexFromCache();
-            return largestIndex + 1;
-        }
-
-        public static bool MultipleCachesUsingSameIndex(int index)
-        {
-            LoadCache();
-
-            var count = 0;
-
-            foreach(var cache in cacheList)
-            {
-                if (cache.Index == index)
-                    count++;
-            }
-
-            if (count >= 2)
-                return true;
-
-            return false;
-        }
-
-        #endregion
+        private static readonly EnumCacheManager<TechType> cacheManager = new EnumCacheManager<TechType>("TechType", startingIndex);
 
         #region Adding TechTypes
 
@@ -188,23 +49,23 @@ namespace SMLHelper.Patchers
 
         public static TechType AddTechType(string name, string languageName, string languageTooltip, bool unlockOnGameStart)
         {
-            var cache = GetCacheForTechTypeName(name);
+            var cache = cacheManager.GetCacheForTypeName(name);
 
             if (cache == null)
             {
-                cache = new TechTypeCache()
+                cache = new EnumTypeCache()
                 {
                     Name = name,
-                    Index = GetNextFreeIndex()
+                    Index = cacheManager.GetNextFreeIndex()
                 };
             }
 
-            if (MultipleCachesUsingSameIndex(cache.Index))
-                cache.Index = GetNextFreeIndex();
+            if (cacheManager.MultipleCachesUsingSameIndex(cache.Index))
+                cache.Index = cacheManager.GetNextFreeIndex();
 
             var techType = (TechType)cache.Index;
 
-            customTechTypes.Add(techType, cache);
+            cacheManager.customEnumTypes.Add(techType, cache);
 
             LanguagePatcher.customLines.Add(name, languageName);
             LanguagePatcher.customLines.Add("Tooltip_" + name, languageTooltip);
@@ -236,7 +97,7 @@ namespace SMLHelper.Patchers
             Logger.Log("Successfully added Tech Type: \"{0}\" to Index: \"{1}\" for mod \"{2}\"", name, cache.Index, CallerName);
             CallerName = null;
 
-            SaveCache();
+            cacheManager.SaveCache();
 
             return techType;
         }
@@ -256,7 +117,7 @@ namespace SMLHelper.Patchers
                 }
 
                 __result = listArray
-                    .Concat(customTechTypes.Keys)
+                    .Concat(cacheManager.customEnumTypes.Keys)
                     .ToArray();
             }
         }
@@ -265,7 +126,7 @@ namespace SMLHelper.Patchers
         {
             if (enumType.Equals(typeof(TechType)))
             {
-                if (customTechTypes.Keys.Contains((TechType)value))
+                if (cacheManager.customEnumTypes.Keys.Contains((TechType)value))
                 {
                     __result = true;
                     return false;
@@ -279,7 +140,7 @@ namespace SMLHelper.Patchers
         {
             if (enumType.Equals(typeof(TechType)))
             {
-                foreach (var techType in customTechTypes)
+                foreach (var techType in cacheManager.customEnumTypes)
                 {
                     if (value.Equals(techType.Value.Name, ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture))
                     {
@@ -296,7 +157,7 @@ namespace SMLHelper.Patchers
         {
             if (__instance.GetType().Equals(typeof(TechType)))
             {
-                foreach (var techType in customTechTypes)
+                foreach (var techType in cacheManager.customEnumTypes)
                 {
                     if (__instance.Equals(techType.Key))
                     {
