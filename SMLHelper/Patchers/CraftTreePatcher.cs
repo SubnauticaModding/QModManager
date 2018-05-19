@@ -65,15 +65,15 @@ namespace SMLHelper.Patchers
             PatchNodes(ref __result, customNodes, CraftScheme.CyclopsFabricator);
         }
 
-        public static CraftTree GetTreePostFix(ref CraftTree.Type treeType, ref CraftTree __result)
-        {            
-            if (__result == null) // null would be the return result of the switch when the CraftTree.Type isn't found
+        public static bool GetTreePreFix(CraftTree.Type treeType, ref CraftTree __result)
+        {
+            if (CustomCraftTree.CustomTrees.ContainsKey(treeType))
             {
-                if (CustomCraftTree.CustomTrees.ContainsKey(treeType))
-                    return CustomCraftTree.CustomTrees[treeType];
+                __result = CustomCraftTree.CustomTrees[treeType];
+                return false;
             }
 
-            return null;
+            return true;
         }
 
         public static void InitializePostFix()
@@ -230,8 +230,8 @@ namespace SMLHelper.Patchers
                 var craftTreeGetTree = type.GetMethod("GetTree", BindingFlags.Static | BindingFlags.Public);
                 var craftTreeInitialize = type.GetMethod("Initialize", BindingFlags.Static | BindingFlags.Public);
 
-                harmony.Patch(craftTreeGetTree, null,
-                    new HarmonyMethod(patcherClass.GetMethod("GetTreePostFix")));
+                harmony.Patch(craftTreeGetTree,
+                    new HarmonyMethod(patcherClass.GetMethod("GetTreePreFix")), null);
 
                 harmony.Patch(craftTreeInitialize, null,
                     new HarmonyMethod(patcherClass.GetMethod("InitializePostFix")));
