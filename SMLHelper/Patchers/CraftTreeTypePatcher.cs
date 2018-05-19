@@ -56,31 +56,9 @@ namespace SMLHelper.Patchers
             if (cacheManager.MultipleCachesUsingSameIndex(cache.Index))
                 cache.Index = cacheManager.GetNextFreeIndex();
 
-            var techType = (CraftTree.Type)cache.Index;
+            var treeType = (CraftTree.Type)cache.Index;
 
-            cacheManager.customEnumTypes.Add(techType, cache);
-
-
-            var valueToString = CachedEnumString_valueToString.GetValue(TooltipFactory.techTypeTooltipStrings) as Dictionary<CraftTree.Type, string>;
-            valueToString[techType] = "Tooltip_" + name;
-
-            var techTypeExtensions = typeof(TechTypeExtensions);
-            var traverse = Traverse.Create(techTypeExtensions);
-
-            var stringsNormal = traverse.Field("stringsNormal").GetValue<Dictionary<CraftTree.Type, string>>();
-            var stringsLowercase = traverse.Field("stringsLowercase").GetValue<Dictionary<CraftTree.Type, string>>();
-            var techTypesNormal = traverse.Field("techTypesNormal").GetValue<Dictionary<string, CraftTree.Type>>();
-            var techTypesIgnoreCase = traverse.Field("techTypesIgnoreCase").GetValue<Dictionary<string, CraftTree.Type>>();
-            var techTypeKeys = traverse.Field("techTypeKeys").GetValue<Dictionary<CraftTree.Type, string>>();
-            var keyTechTypes = traverse.Field("keyTechTypes").GetValue<Dictionary<string, CraftTree.Type>>();
-
-            stringsNormal[techType] = name;
-            stringsLowercase[techType] = name.ToLowerInvariant();
-            techTypesNormal[name] = techType;
-            techTypesIgnoreCase[name] = techType;
-            string key3 = ((int)techType).ToString();
-            techTypeKeys[techType] = key3;
-            keyTechTypes[key3] = techType;
+            cacheManager.customEnumTypes.Add(treeType, cache);
 
             CallerName = CallerName ?? Assembly.GetCallingAssembly().GetName().Name;
             Logger.Log("Successfully added CraftTree Type: \"{0}\" to Index: \"{1}\" for mod \"{2}\"", name, cache.Index, CallerName);
@@ -88,7 +66,7 @@ namespace SMLHelper.Patchers
 
             cacheManager.SaveCache();
 
-            return techType;
+            return treeType;
         }
 
         #endregion
