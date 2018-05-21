@@ -12,7 +12,7 @@ namespace SMLHelper.Patchers
         private static readonly FieldInfo CachedEnumString_valueToString =
             typeof(CachedEnumString<CraftTree.Type>).GetField("valueToString", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        internal const int startingIndex = 0xB; // The default CraftTree.Type contains indexes 0 through A
+        internal const int startingIndex = 11; // The default CraftTree.Type contains indexes 0 through 10
         private static string CallerName = null;
 
         public static void Patch(HarmonyInstance harmony)

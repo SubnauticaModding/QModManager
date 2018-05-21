@@ -10,7 +10,7 @@ namespace SMLHelper.Patchers
         public static List<CustomCraftTab> customTabs = new List<CustomCraftTab>();
         public static List<CustomCraftNode> customNodes = new List<CustomCraftNode>();
         public static List<CraftNodeToScrub> nodesToRemove = new List<CraftNodeToScrub>();
-        public static List<CustomCraftTree> customTrees = new List<CustomCraftTree>();
+        public static Dictionary<CraftTree.Type, CustomCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, CustomCraftTreeRoot>();
 
         [Obsolete("CraftTreePatcher.customCraftNodes is obsolete. Use CraftTreePatcher.customNodes", false)]
         public static Dictionary<string, TechType> customCraftNodes = new Dictionary<string, TechType>();
@@ -67,9 +67,9 @@ namespace SMLHelper.Patchers
 
         public static bool GetTreePreFix(CraftTree.Type treeType, ref CraftTree __result)
         {
-            if (CustomCraftTree.CustomTrees.ContainsKey(treeType))
+            if (CustomTrees.ContainsKey(treeType))
             {
-                __result = CustomCraftTree.CustomTrees[treeType];
+                __result = CustomTrees[treeType].CraftTree;
                 return false;
             }
 
@@ -83,11 +83,11 @@ namespace SMLHelper.Patchers
 
             craftTreeClass.GetField("initialized", BindingFlags.Static | BindingFlags.NonPublic).GetValue(craftTreeInitialized);
 
-            if (craftTreeInitialized && !CustomCraftTree.Initialized)
+            if (craftTreeInitialized && !CustomCraftTreeNode.Initialized)
             {
-                foreach (CraftTree.Type cTreeKey in CustomCraftTree.CustomTrees.Keys)
+                foreach (CraftTree.Type cTreeKey in CustomTrees.Keys)
                 {
-                    CraftTree customTree = CustomCraftTree.CustomTrees[cTreeKey];
+                    CraftTree customTree = CustomTrees[cTreeKey].CraftTree;
 
                     MethodInfo addToCraftableTech = craftTreeClass.GetMethod("AddToCraftableTech", BindingFlags.Static | BindingFlags.NonPublic);
 
@@ -225,7 +225,7 @@ namespace SMLHelper.Patchers
             harmony.Patch(cyclopsFabricatorScheme, null,
                 new HarmonyMethod(patcherClass.GetMethod("CyclopsFabricatorSchemePostfix")));
 
-            if (CustomCraftTree.HasCustomTrees)
+            if (CustomCraftTreeNode.HasCustomTrees)
             {
                 var craftTreeGetTree = type.GetMethod("GetTree", BindingFlags.Static | BindingFlags.Public);
                 var craftTreeInitialize = type.GetMethod("Initialize", BindingFlags.Static | BindingFlags.Public);
