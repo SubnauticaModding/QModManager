@@ -38,6 +38,8 @@ namespace SMLHelper.Patchers
 
         private static readonly EnumCacheManager<CraftTree.Type> cacheManager = new EnumCacheManager<CraftTree.Type>("CraftTreeType", startingIndex);
 
+        internal static Dictionary<CraftTree.Type, string> craftTreeTypeToString = new Dictionary<CraftTree.Type, string>();
+
         #region Adding TechTypes                
 
         public static CraftTree.Type AddCraftTreeType(string name)
@@ -65,6 +67,8 @@ namespace SMLHelper.Patchers
             CallerName = null;
 
             cacheManager.SaveCache();
+
+            craftTreeTypeToString[treeType] = name;
 
             return treeType;
         }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SMLHelper.Patchers;
+using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace SMLHelper
@@ -68,7 +69,6 @@ namespace SMLHelper
                 child.Parent = this;
             }
         }
-
     }
 
     /// <summary>
@@ -77,7 +77,7 @@ namespace SMLHelper
     public class CustomCraftTreeRoot : CustomCraftTreeNode
     {
         /// <summary>
-        /// Creates a root node for a custom crafting tree.
+        /// Creates a root node for a custom crafting tree. Every CraftTree needs one, and only one, root node.
         /// </summary>
         /// <param name="scheme">The new craft tree type.</param>
         /// <param name="childNodes">The child nodes to the root. These must be either tab nodes or craft nodes from here on.</param>
@@ -113,28 +113,47 @@ namespace SMLHelper
     }
 
     /// <summary>
-    /// A tab node of a custom CraftTree.
+    /// A tab node of a custom CraftTree. Tab nodes help organize crafting nodes by grouping them into categories.
     /// </summary>
     public class CustomCraftTreeTab : CustomCraftTreeNode
     {
-        internal string TabLanguageID => $"{Scheme}Menu_{System.IO.Path.GetFileName(Name)}";
+        internal string TabLanguageID => $"{CraftTreeTypePatcher.craftTreeTypeToString[Scheme]}Menu_{Name}";
 
-        internal string GetTabSpriteID => $"{Scheme}_{System.IO.Path.GetFileName(Name)}";
+        internal string TabSpriteID => $"{CraftTreeTypePatcher.craftTreeTypeToString[Scheme]}_{Name}";
 
         /// <summary>
         /// Creates a new tab node for a custom crafting tree.
         /// </summary>
         /// <param name="scheme">The new craft tree type.</param>
-        /// <param name="name">The name/ID of this node.</param>
+        /// <param name="nameID">The name/ID of this node.</param>
         /// <param name="displayText">The hover text to display in-game.</param>
         /// <param name="sprite">The custom sprite to display on this tab node.</param>
         /// <param name="childNodes">The child nodes to this tab node. These must be either tab nodes or craft nodes from here on.</param>
-        public CustomCraftTreeTab(CraftTree.Type scheme, string name, string displayText, CustomSprite sprite, params CustomCraftTreeNode[] childNodes)
-            : base(scheme, name, TreeAction.Expand, TechType.None, childNodes)
+        public CustomCraftTreeTab(CraftTree.Type scheme, string nameID, string displayText, Atlas.Sprite sprite, params CustomCraftTreeNode[] childNodes)
+            : base(scheme, nameID, TreeAction.Expand, TechType.None, childNodes)
+        {            
+            LanguagePatcher.customLines[TabLanguageID] = displayText;
+
+            var custSprite = new CustomSprite(SpriteManager.Group.Category, TabSpriteID, sprite);
+            CustomSpriteHandler.customSprites.Add(custSprite);
+        }
+
+        /// <summary>
+        /// Creates a new tab node for a custom crafting tree. This sets what is being crafted.
+        /// </summary>
+        /// <param name="scheme">The new craft tree type.</param>
+        /// <param name="nameID">The name/ID of this node.</param>
+        /// <param name="displayText">The hover text to display in-game.</param>
+        /// <param name="sprite">The custom sprite to display on this tab node.</param>
+        /// <param name="childNodes">The child nodes to this tab node. These must be either tab nodes or craft nodes from here on.</param>
+        public CustomCraftTreeTab(CraftTree.Type scheme, string nameID, string displayText, Sprite sprite, params CustomCraftTreeNode[] childNodes)
+            : base(scheme, nameID, TreeAction.Expand, TechType.None, childNodes)
         {
             LanguagePatcher.customLines[TabLanguageID] = displayText;
-            CustomSpriteHandler.customSprites.Add(sprite);
-        }    
+
+            var custSprite = new CustomSprite(SpriteManager.Group.Category, TabSpriteID, sprite);
+            CustomSpriteHandler.customSprites.Add(custSprite);
+        }
 
         /// <summary>
         /// Adds one or more new tab nodes to this tab.        
