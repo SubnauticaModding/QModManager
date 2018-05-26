@@ -38,11 +38,17 @@ namespace SMLHelper.Patchers
 
         private static readonly EnumCacheManager<CraftTree.Type> cacheManager = new EnumCacheManager<CraftTree.Type>("CraftTreeType", startingIndex);
 
-        internal static Dictionary<CraftTree.Type, string> craftTreeTypeToString = new Dictionary<CraftTree.Type, string>();
+        #region Adding  CraftTree Types
 
-        #region Adding TechTypes                
-
-        public static CraftTree.Type AddCraftTreeType(string name)
+        /// <summary>
+        /// Your first method call to start a new custom crafting tree.
+        /// Creating a new CraftTree only makes sense if you're going to use it in a new type of GhostCrafter/Fabricator.
+        /// </summary>
+        /// <param name="name">The name for the new <see cref="CraftTree.Type"/> enum.</param>
+        /// <param name="cratfTreeType">The new enum instance for your custom craft tree.</param>
+        /// <returns>A new root node for your custom craft tree.</returns>
+        /// <remarks>This node must be assigned to <see cref="CraftTreePatcher.CustomTrees"/> once all nodes have been added.</remarks>
+        public static CustomCraftTreeRoot AddCraftTreeType(string name, out CraftTree.Type cratfTreeType)
         {
             var cache = cacheManager.GetCacheForTypeName(name);
 
@@ -58,9 +64,9 @@ namespace SMLHelper.Patchers
             if (cacheManager.MultipleCachesUsingSameIndex(cache.Index))
                 cache.Index = cacheManager.GetNextFreeIndex();
 
-            var treeType = (CraftTree.Type)cache.Index;
+            cratfTreeType = (CraftTree.Type)cache.Index;
 
-            cacheManager.customEnumTypes.Add(treeType, cache);
+            cacheManager.customEnumTypes.Add(cratfTreeType, cache);
 
             CallerName = CallerName ?? Assembly.GetCallingAssembly().GetName().Name;
             Logger.Log("Successfully added CraftTree Type: \"{0}\" to Index: \"{1}\" for mod \"{2}\"", name, cache.Index, CallerName);
@@ -68,9 +74,7 @@ namespace SMLHelper.Patchers
 
             cacheManager.SaveCache();
 
-            craftTreeTypeToString[treeType] = name;
-
-            return treeType;
+            return new CustomCraftTreeRoot(cratfTreeType, name);
         }
 
         #endregion
