@@ -37,7 +37,7 @@ namespace SMLHelper.Patchers
             Logger.Log("TechTypePatcher is done.");
         }
 
-        private static readonly EnumCacheManager<TechType> cacheManager = new EnumCacheManager<TechType>("TechType", startingIndex);
+        internal static readonly EnumCacheManager<TechType> cacheManager = new EnumCacheManager<TechType>("TechType", startingIndex);
 
         #region Adding TechTypes
 

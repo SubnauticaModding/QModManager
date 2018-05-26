@@ -98,6 +98,23 @@ namespace SMLHelper
                 this.AddCraftingNode(tType);
             }
         }
+
+        /// <summary>
+        /// Creates a new crafting node for a modded item for custom crafting tree and links it to the calling node.
+        /// </summary>
+        /// <param name="techType">The name of the custom TechType to be crafted.</param>
+        /// <remarks>If the player doesn't have the mod for this TechType installed, then nothing will happen.</remarks>
+        public void AddModdedCraftingNode(string moddedTechTypeName)
+        {
+            Util.EnumTypeCache cache = TechTypePatcher.cacheManager.GetCacheForTypeName(moddedTechTypeName);
+
+            if (cache != null)
+            {
+                var techType = (TechType)cache.Index;
+                var craftNode = new CustomCraftTreeCraft(techType);
+                craftNode.LinkToParent(this);
+            }
+        }
     }
 
     /// <summary>
