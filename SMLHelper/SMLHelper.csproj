@@ -55,11 +55,13 @@
     <Compile Include="CraftScheme.cs" />
     <Compile Include="CustomCraftNode.cs" />
     <Compile Include="CustomCraftTab.cs" />
+    <Compile Include="CustomCraftTreeFamily.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Patchers\CraftDataPatcher.cs" />
     <Compile Include="Patchers\CraftTreePatcher.cs" />
     <Compile Include="CustomPrefabHandler.cs" />
     <Compile Include="CustomSpriteHandler.cs" />
+    <Compile Include="Patchers\CraftTreeTypePatcher.cs" />
     <Compile Include="Patchers\DevConsolePatcher.cs" />
     <Compile Include="Initializer.cs" />
     <Compile Include="Patchers\KnownTechPatcher.cs" />
@@ -70,6 +72,7 @@
     <Compile Include="Patchers\SpritePatcher.cs" />
     <Compile Include="Patchers\TechTypePatcher.cs" />
     <Compile Include="Utility.cs" />
+    <Compile Include="Util\EnumCacheManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

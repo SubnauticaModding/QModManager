@@ -15,6 +15,7 @@ namespace SMLHelper
             try
             {
                 TechTypePatcher.Patch(harmony);
+                CraftTreeTypePatcher.Patch(harmony);
                 CraftDataPatcher.Patch(harmony);
                 CraftTreePatcher.Patch(harmony);
                 DevConsolePatcher.Patch(harmony);
