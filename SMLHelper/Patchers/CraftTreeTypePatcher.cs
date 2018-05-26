@@ -47,8 +47,8 @@ namespace SMLHelper.Patchers
         /// <param name="name">The name for the new <see cref="CraftTree.Type"/> enum.</param>
         /// <param name="cratfTreeType">The new enum instance for your custom craft tree.</param>
         /// <returns>A new root node for your custom craft tree.</returns>
-        /// <remarks>This node must be assigned to <see cref="CraftTreePatcher.CustomTrees"/> once all nodes have been added.</remarks>
-        public static CustomCraftTreeRoot AddCraftTreeType(string name, out CraftTree.Type cratfTreeType)
+        /// <remarks>This node is automatically assigned to <see cref="CraftTreePatcher.CustomTrees"/>.</remarks>
+        public static CustomCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type cratfTreeType)
         {
             var cache = cacheManager.GetCacheForTypeName(name);
 
@@ -74,7 +74,11 @@ namespace SMLHelper.Patchers
 
             cacheManager.SaveCache();
 
-            return new CustomCraftTreeRoot(cratfTreeType, name);
+            var customTreeRoot = new CustomCraftTreeRoot(cratfTreeType, name);
+
+            CraftTreePatcher.CustomTrees[cratfTreeType] = customTreeRoot;
+
+            return customTreeRoot;
         }
 
         #endregion

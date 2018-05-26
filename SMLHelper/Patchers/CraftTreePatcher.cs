@@ -10,7 +10,7 @@ namespace SMLHelper.Patchers
         public static List<CustomCraftTab> customTabs = new List<CustomCraftTab>();
         public static List<CustomCraftNode> customNodes = new List<CustomCraftNode>();
         public static List<CraftNodeToScrub> nodesToRemove = new List<CraftNodeToScrub>();
-        public static Dictionary<CraftTree.Type, CustomCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, CustomCraftTreeRoot>();
+        internal static Dictionary<CraftTree.Type, CustomCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, CustomCraftTreeRoot>();
 
         [Obsolete("CraftTreePatcher.customCraftNodes is obsolete. Use CraftTreePatcher.customNodes", false)]
         public static Dictionary<string, TechType> customCraftNodes = new Dictionary<string, TechType>();
