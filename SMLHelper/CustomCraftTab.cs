@@ -20,12 +20,12 @@ namespace SMLHelper
             }
         }
 
-        public CraftScheme Scheme;
+        public CraftTree.Type Scheme;
         public string Path;
         public string Name;
         public CustomSprite Sprite;
 
-        public CustomCraftTab(string path, string name, CraftScheme scheme, Atlas.Sprite sprite)
+        public CustomCraftTab(string path, string name, CraftTree.Type scheme, Atlas.Sprite sprite)
         {
             Path = path;
             Name = name;
@@ -36,7 +36,19 @@ namespace SMLHelper
             CustomSpriteHandler.customSprites.Add(Sprite);
         }
         
-        public CustomCraftTab(string path, string name, CraftScheme scheme, UnityEngine.Sprite sprite) : this(path, name, scheme, new Atlas.Sprite(sprite, false))
+        public CustomCraftTab(string path, string name, CraftTree.Type scheme, UnityEngine.Sprite sprite) : this(path, name, scheme, new Atlas.Sprite(sprite, false))
+        {
+        }
+
+        [System.Obsolete("CraftSchemes are obsolete. Use CraftTree.Types instead.")]
+        public CustomCraftTab(string path, string name, CraftScheme scheme, Atlas.Sprite sprite) 
+            : this(path, name, Utility.CraftSchemeMap[scheme], sprite)
+        {
+        }
+
+        [System.Obsolete("CraftSchemes are obsolete. Use CraftTree.Types instead.")]
+        public CustomCraftTab(string path, string name, CraftScheme scheme, UnityEngine.Sprite sprite)
+            : this(path, name, Utility.CraftSchemeMap[scheme], sprite)
         {
         }
     }

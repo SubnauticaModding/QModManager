@@ -3,11 +3,22 @@ using System.Collections;
 using System.Reflection;
 using System.IO;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace SMLHelper
 {
     public class Utility
     {
+        public readonly static Dictionary<CraftScheme, CraftTree.Type> CraftSchemeMap = new Dictionary<CraftScheme, CraftTree.Type>
+        {
+            { CraftScheme.Constructor, CraftTree.Type.Constructor },
+            { CraftScheme.CyclopsFabricator, CraftTree.Type.CyclopsFabricator },
+            { CraftScheme.Fabricator, CraftTree.Type.Fabricator },
+            { CraftScheme.MapRoom, CraftTree.Type.MapRoom },
+            { CraftScheme.SeamothUpgrades, CraftTree.Type.SeamothUpgrades },
+            { CraftScheme.Workbench, CraftTree.Type.Workbench },
+        };
+
         public static void AddBasicComponents(ref GameObject _object, string classId)
         {
             var rb = _object.AddComponent<Rigidbody>();

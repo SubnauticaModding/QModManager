@@ -17,52 +17,52 @@ namespace SMLHelper.Patchers
 
         public static void FabricatorSchemePostfix(ref CraftNode __result)
         {
-            RemoveNodes(ref __result, nodesToRemove, CraftScheme.Fabricator);
-            AddCustomTabs(ref __result, customTabs, CraftScheme.Fabricator);
-            PatchNodes(ref __result, customNodes, CraftScheme.Fabricator);
+            RemoveNodes(ref __result, nodesToRemove, CraftTree.Type.Fabricator);
+            AddCustomTabs(ref __result, customTabs, CraftTree.Type.Fabricator);
+            PatchNodes(ref __result, customNodes, CraftTree.Type.Fabricator);
 
             var list = new List<CustomCraftNode>();
             foreach(var node in customCraftNodes)
             {
-                list.Add(new CustomCraftNode(node.Value, CraftScheme.Fabricator, node.Key));
+                list.Add(new CustomCraftNode(node.Value, CraftTree.Type.Fabricator, node.Key));
             }
 
-            PatchNodes(ref __result, list, CraftScheme.Fabricator);
+            PatchNodes(ref __result, list, CraftTree.Type.Fabricator);
         }
 
         public static void ConstructorSchemePostfix(ref CraftNode __result)
         {
-            RemoveNodes(ref __result, nodesToRemove, CraftScheme.Constructor);
-            AddCustomTabs(ref __result, customTabs, CraftScheme.Constructor);
-            PatchNodes(ref __result, customNodes, CraftScheme.Constructor);
+            RemoveNodes(ref __result, nodesToRemove, CraftTree.Type.Constructor);
+            AddCustomTabs(ref __result, customTabs, CraftTree.Type.Constructor);
+            PatchNodes(ref __result, customNodes, CraftTree.Type.Constructor);
         }
 
         public static void WorkbenchSchemePostfix(ref CraftNode __result)
         {
-            RemoveNodes(ref __result, nodesToRemove, CraftScheme.Workbench);
-            AddCustomTabs(ref __result, customTabs, CraftScheme.Workbench);
-            PatchNodes(ref __result, customNodes, CraftScheme.Workbench);
+            RemoveNodes(ref __result, nodesToRemove, CraftTree.Type.Workbench);
+            AddCustomTabs(ref __result, customTabs, CraftTree.Type.Workbench);
+            PatchNodes(ref __result, customNodes, CraftTree.Type.Workbench);
         }
 
         public static void SeamothUpgradesSchemePostfix(ref CraftNode __result)
         {
-            RemoveNodes(ref __result, nodesToRemove, CraftScheme.SeamothUpgrades);
-            AddCustomTabs(ref __result, customTabs, CraftScheme.SeamothUpgrades);
-            PatchNodes(ref __result, customNodes, CraftScheme.SeamothUpgrades);
+            RemoveNodes(ref __result, nodesToRemove, CraftTree.Type.SeamothUpgrades);
+            AddCustomTabs(ref __result, customTabs, CraftTree.Type.SeamothUpgrades);
+            PatchNodes(ref __result, customNodes, CraftTree.Type.SeamothUpgrades);
         }
 
         public static void MapRoomShemePostfix(ref CraftNode __result)
         {
-            RemoveNodes(ref __result, nodesToRemove, CraftScheme.MapRoom);
-            AddCustomTabs(ref __result, customTabs, CraftScheme.MapRoom);
-            PatchNodes(ref __result, customNodes, CraftScheme.MapRoom);
+            RemoveNodes(ref __result, nodesToRemove, CraftTree.Type.MapRoom);
+            AddCustomTabs(ref __result, customTabs, CraftTree.Type.MapRoom);
+            PatchNodes(ref __result, customNodes, CraftTree.Type.MapRoom);
         }
 
         public static void CyclopsFabricatorSchemePostfix(ref CraftNode __result)
         {
-            RemoveNodes(ref __result, nodesToRemove, CraftScheme.CyclopsFabricator);
-            AddCustomTabs(ref __result, customTabs, CraftScheme.CyclopsFabricator);
-            PatchNodes(ref __result, customNodes, CraftScheme.CyclopsFabricator);
+            RemoveNodes(ref __result, nodesToRemove, CraftTree.Type.CyclopsFabricator);
+            AddCustomTabs(ref __result, customTabs, CraftTree.Type.CyclopsFabricator);
+            PatchNodes(ref __result, customNodes, CraftTree.Type.CyclopsFabricator);
         }
 
         public static bool GetTreePreFix(CraftTree.Type treeType, ref CraftTree __result)
@@ -96,7 +96,7 @@ namespace SMLHelper.Patchers
             }
         }
 
-        private static void AddCustomTabs(ref CraftNode nodes, List<CustomCraftTab> customTabs, CraftScheme scheme)
+        private static void AddCustomTabs(ref CraftNode nodes, List<CustomCraftTab> customTabs, CraftTree.Type scheme)
         {
             foreach(var tab in customTabs)
             {
@@ -127,7 +127,7 @@ namespace SMLHelper.Patchers
             }
         }
 
-        private static void PatchNodes(ref CraftNode nodes, List<CustomCraftNode> customNodes, CraftScheme scheme)
+        private static void PatchNodes(ref CraftNode nodes, List<CustomCraftNode> customNodes, CraftTree.Type scheme)
         {
             foreach(var customNode in customNodes)
             {
@@ -155,7 +155,7 @@ namespace SMLHelper.Patchers
             }
         }
 
-        private static void RemoveNodes(ref CraftNode nodes, List<CraftNodeToScrub> nodesToRemove, CraftScheme scheme)
+        private static void RemoveNodes(ref CraftNode nodes, List<CraftNodeToScrub> nodesToRemove, CraftTree.Type scheme)
         {
             // This method can be used to both remove single child nodes, thus removing one recipe from the tree.
             // Or it can remove entire tabs at once, removing the tab and all the recipes it contained in one go.
