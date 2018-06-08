@@ -131,6 +131,7 @@ namespace SMLHelper.Patchers
         {
             foreach(var customNode in customNodes)
             {
+                if (!customNode.ItemExists) continue;
                 if (customNode.Scheme != scheme) continue;
 
                 var path = customNode.Path.SplitByChar('/');

@@ -1,4 +1,5 @@
 ﻿using SMLHelper.Patchers;
+using SMLHelper.Util;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -106,7 +107,7 @@ namespace SMLHelper
         /// <remarks>If the player doesn't have the mod for this TechType installed, then nothing will happen.</remarks>
         public void AddModdedCraftingNode(string moddedTechTypeName)
         {
-            Util.EnumTypeCache cache = TechTypePatcher.cacheManager.GetCacheForTypeName(moddedTechTypeName);
+            EnumTypeCache cache = TechTypePatcher.cacheManager.GetCacheForTypeName(moddedTechTypeName);
 
             if (cache != null)
             {
