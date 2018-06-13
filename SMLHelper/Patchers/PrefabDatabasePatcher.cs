@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
+using SMLHelper.MonoBehaviours;
 using UWE;
 
 namespace SMLHelper.Patchers
@@ -16,6 +17,13 @@ namespace SMLHelper.Patchers
             foreach (var prefab in CustomPrefabHandler.customPrefabs)
             {
                 var goPrefab = prefab.GetResource() as GameObject;
+
+                if (goPrefab == null) continue;
+
+                // Just a failsafe
+                var fixer = goPrefab.AddComponent<TechTypeFixer>();
+                fixer.techType = prefab.TechType;
+
                 goPrefab.SetActive(false);
                 goPrefab.transform.position = new Vector3(5000, 5000, 5000);
 
