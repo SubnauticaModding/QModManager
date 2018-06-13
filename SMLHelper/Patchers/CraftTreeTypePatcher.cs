@@ -61,7 +61,7 @@ namespace SMLHelper.Patchers
                 };
             }
 
-            if (cacheManager.MultipleCachesUsingSameIndex(cache.Index))
+            if (cacheManager.IsIndexConflicting(cache.Index))
                 cache.Index = cacheManager.GetNextFreeIndex();
 
             cratfTreeType = (CraftTree.Type)cache.Index;

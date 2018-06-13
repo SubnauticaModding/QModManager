@@ -13,8 +13,16 @@ namespace SMLHelper.Patchers
             typeof(CachedEnumString<TechType>).GetField("valueToString", BindingFlags.NonPublic | BindingFlags.Instance);
 
         internal const int startingIndex = 11010;
-        private static string CallerName = null;
-
+        internal static string CallerName = null;
+        internal static List<int> bannedIndices = new List<int> // Can't make it constant, dunno why
+        {
+            11110, //AutosortLocker 
+            11111, //AutosortTarget
+            11112, //AutosortTargetStanding
+            11120, //HabitatControlPanel
+            11130, //DockedVehicleStorageAccess
+            11140  //BaseTeleporter (not released)
+        };
 
         public static void Patch(HarmonyInstance harmony)
         {
@@ -37,7 +45,7 @@ namespace SMLHelper.Patchers
             Logger.Log("TechTypePatcher is done.");
         }
 
-        internal static readonly EnumCacheManager<TechType> cacheManager = new EnumCacheManager<TechType>("TechType", startingIndex);
+        internal static readonly EnumCacheManager<TechType> cacheManager = new EnumCacheManager<TechType>("TechType", startingIndex, bannedIndices);
 
         #region Adding TechTypes
 
@@ -60,7 +68,7 @@ namespace SMLHelper.Patchers
                 };
             }
 
-            if (cacheManager.MultipleCachesUsingSameIndex(cache.Index))
+            if (cacheManager.IsIndexConflicting(cache.Index) || cacheManager.IsIndexBanned(cache.Index))
                 cache.Index = cacheManager.GetNextFreeIndex();
 
             var techType = (TechType)cache.Index;
@@ -86,9 +94,10 @@ namespace SMLHelper.Patchers
             stringsLowercase[techType] = name.ToLowerInvariant();
             techTypesNormal[name] = techType;
             techTypesIgnoreCase[name] = techType;
-            string key3 = ((int)techType).ToString();
-            techTypeKeys[techType] = key3;
-            keyTechTypes[key3] = techType;
+
+            var intKey = cache.Index.ToString();
+            techTypeKeys[techType] = intKey;
+            keyTechTypes[intKey] = techType;
 
             if (unlockOnGameStart)
                 KnownTechPatcher.unlockedAtStart.Add(techType);

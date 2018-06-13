@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace SMLHelper.Util
@@ -14,6 +15,7 @@ namespace SMLHelper.Util
     {
         internal readonly string enumTypeName;
         internal readonly int startingIndex;
+        internal readonly List<int> bannedIndices;
         internal bool cacheLoaded = false;
 
         internal List<EnumTypeCache> cacheList = new List<EnumTypeCache>();
@@ -23,6 +25,13 @@ namespace SMLHelper.Util
         {
             this.enumTypeName = enumTypeName;
             this.startingIndex = startingIndex;            
+        }
+
+        internal EnumCacheManager(string enumTypeName, int startingIndex, IEnumerable<int> bannedIndices)
+        {
+            this.enumTypeName = enumTypeName;
+            this.startingIndex = startingIndex;
+            this.bannedIndices = bannedIndices.ToList();
         }
 
         #region Caching
@@ -53,19 +62,19 @@ namespace SMLHelper.Util
 
             foreach (var line in allText)
             {
-                var techTypeName = line.Split(':')[0];
-                var techTypeIndex = line.Split(':')[1];
+                var name = line.Split(':')[0];
+                var index = line.Split(':')[1];
 
                 var cache = new EnumTypeCache()
                 {
-                    Name = techTypeName,
-                    Index = int.Parse(techTypeIndex)
+                    Name = name,
+                    Index = int.Parse(index)
                 };
 
                 cacheList.Add(cache);
             }
 
-            Logger.Log("Loaded EnumTypeCache!");
+            Logger.Log($"Loaded ${enumTypeName} Cache!");
 
             cacheLoaded = true;
         }
@@ -75,11 +84,11 @@ namespace SMLHelper.Util
             var savePathDir = GetCachePath();
             var stringBuilder = new StringBuilder();
 
-            foreach (var techTypeEntry in customEnumTypes)
+            foreach (var entry in customEnumTypes)
             {
-                cacheList.Add(techTypeEntry.Value);
+                cacheList.Add(entry.Value);
 
-                stringBuilder.AppendLine(string.Format("{0}:{1}", techTypeEntry.Value.Name, techTypeEntry.Value.Index));
+                stringBuilder.AppendLine(string.Format("{0}:{1}", entry.Value.Name, entry.Value.Index));
             }
 
             File.WriteAllText(savePathDir, stringBuilder.ToString());
@@ -131,10 +140,15 @@ namespace SMLHelper.Util
             LoadCache();
 
             var largestIndex = GetLargestIndexFromCache();
-            return largestIndex + 1;
+            var freeIndex = largestIndex + 1;
+
+            if (bannedIndices != null && bannedIndices.Contains(freeIndex))
+                freeIndex = bannedIndices[bannedIndices.Count - 1] + 1;
+
+            return freeIndex;
         }
 
-        internal bool MultipleCachesUsingSameIndex(int index)
+        internal bool IsIndexConflicting(int index)
         {
             LoadCache();
 
@@ -150,6 +164,11 @@ namespace SMLHelper.Util
                 return true;
 
             return false;
+        }
+
+        internal bool IsIndexBanned(int index)
+        {
+            return bannedIndices?.Contains(index) ?? false;
         }
 
         #endregion

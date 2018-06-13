@@ -12,6 +12,8 @@ namespace SMLHelper
         {
             harmony = HarmonyInstance.Create("com.ahk1221.smlhelper");
 
+            TechTypePatcher.AddTechType("Test!", "TEAT", "ASD");
+
             try
             {
                 TechTypePatcher.Patch(harmony);
