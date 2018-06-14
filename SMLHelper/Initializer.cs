@@ -29,12 +29,12 @@ namespace SMLHelper
             }
             catch (Exception e)
             {
-                Console.WriteLine("Exception caught" + ((e != null && !String.IsNullOrEmpty(e.Message)) ? " Message=[" + e.Message + "]" : ""));
-                Console.WriteLine("StackTrace=[" + e.StackTrace + "]");
+                Console.WriteLine("Exception caught" + (!String.IsNullOrEmpty(e.Message) ? ", Message: " + e.Message : ""));
+                Console.WriteLine("StackTrace: " + e.StackTrace);
                 if (e.InnerException != null)
                 {
-                    Console.WriteLine("Inner exception caught" + (!String.IsNullOrEmpty(e.InnerException.Message) ? " Message=[" + e.InnerException.Message + "]" : ""));
-                    Console.WriteLine("Inner stackTrace=[" + e.InnerException.StackTrace + "]");
+                    Console.WriteLine("Inner exception caught" + (!String.IsNullOrEmpty(e.InnerException.Message) ? ", Message: " + e.InnerException.Message : ""));
+                    Console.WriteLine("Inner StackTrace: " + e.InnerException.StackTrace);
                 }
             }
 
