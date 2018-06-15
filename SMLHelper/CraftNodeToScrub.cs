@@ -1,4 +1,6 @@
-﻿namespace SMLHelper
+﻿using CraftNodeToScrub2 = SMLHelper.V2.CraftNodeToScrub;
+
+namespace SMLHelper
 {    
     public class CraftNodeToScrub
     {
@@ -15,6 +17,12 @@
         public CraftNodeToScrub(CraftScheme scheme, string path)
             : this(Utility.CraftSchemeMap[scheme], path)
         {
+        }
+
+        public CraftNodeToScrub2 GetV2CraftNode()
+        {
+            var craftNode = new CraftNodeToScrub2(Scheme, Path);
+            return craftNode;
         }
     }
 }

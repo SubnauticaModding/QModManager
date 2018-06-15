@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace SMLHelper.MonoBehaviours
+namespace SMLHelper.V2.MonoBehaviours
 {
     public class TechTypeFixer : MonoBehaviour, IProtoEventListener
     {

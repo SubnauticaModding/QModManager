@@ -1,20 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using CustomPrefabHandler2 = SMLHelper.V2.CustomPrefabHandler;
-using CustomPrefab2 = SMLHelper.V2.CustomPrefab;
 
-namespace SMLHelper
+namespace SMLHelper.V2
 {
     public delegate GameObject GetResource();
 
     public class CustomPrefabHandler
     {
         public static List<CustomPrefab> customPrefabs = new List<CustomPrefab>();
-
-        internal static void Patch()
-        {
-            customPrefabs.ForEach(x => CustomPrefabHandler2.customPrefabs.Add(x.GetV2CustomPrefab()));
-        }
     }
 
     public class CustomPrefab
@@ -49,14 +42,6 @@ namespace SMLHelper
         {
             if (Object != null) return Object;
             else return GetResourceDelegate.Invoke();
-        }
-
-        public CustomPrefab2 GetV2CustomPrefab()
-        {
-            var customPrefab = new CustomPrefab2(ClassID, PrefabFileName, Object, TechType);
-            customPrefab.GetResourceDelegate = new V2.GetResource(GetResourceDelegate);
-
-            return customPrefab;
         }
     }
 }

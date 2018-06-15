@@ -1,8 +1,7 @@
-﻿using Harmony;
-using System;
+﻿using System.Reflection;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+using DevConsolePatcher2 = SMLHelper.V2.Patchers.DevConsolePatcher;
+using CommandInfo2 = SMLHelper.V2.Patchers.CommandInfo;
 
 namespace SMLHelper.Patchers
 {
@@ -10,44 +9,9 @@ namespace SMLHelper.Patchers
     {
         public static List<CommandInfo> commands = new List<CommandInfo>();
 
-        public static void Patch(HarmonyInstance harmony)
+        public static void Patch()
         {
-            var devConsoleType = typeof(DevConsole);
-            var thisType = typeof(DevConsolePatcher);
-            var submitMethod = devConsoleType.GetMethod("Submit", BindingFlags.Instance | BindingFlags.NonPublic);
-
-            harmony.Patch(submitMethod, null, new HarmonyMethod(thisType.GetMethod("Postfix")));
-            Logger.Log("DevConsolePatcher is done.");
-        }
-
-        public static void Postfix(bool __result, string value)
-        {
-            var separator = new char[]
-            {
-                ' ',
-                '\t'
-            };
-
-            var text = value.Trim();
-            var args = text.Split(separator, StringSplitOptions.RemoveEmptyEntries);
-
-            if (args.Length != 0)
-            {
-                foreach (var command in commands)
-                {
-                    if (command.Name.Contains(args[0]))
-                    {
-                        var argsList = args.ToList();
-                        argsList.RemoveAt(0);
-                        var newArgs = argsList.ToArray();
-                        command.CommandHandler.Invoke(null, new object[] { newArgs });
-                        __result = true;
-                        return;
-                    }
-                }
-            }
-
-            __result = false;
+            commands.ForEach(x => DevConsolePatcher2.commands.Add(x.GetV2CommandInfo()));
         }
     }
 
@@ -57,5 +21,16 @@ namespace SMLHelper.Patchers
         public string Name;
         public bool CaseSensitive;
         public bool CombineArgs;
+
+        public CommandInfo2 GetV2CommandInfo()
+        {
+            var commandInfo = new CommandInfo2();
+            commandInfo.CommandHandler = CommandHandler;
+            commandInfo.Name = Name;
+            commandInfo.CaseSensitive = CaseSensitive;
+            commandInfo.CombineArgs = CombineArgs;
+
+            return commandInfo;
+        }
     }
 }

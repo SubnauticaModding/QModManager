@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
-using Harmony;
+﻿using System.Collections.Generic;
+using KnownTechPatcher2 = SMLHelper.V2.Patchers.KnownTechPatcher;
 
 namespace SMLHelper.Patchers
 {
@@ -11,26 +7,9 @@ namespace SMLHelper.Patchers
     {
         public static List<TechType> unlockedAtStart = new List<TechType>();
 
-        public static void Patch(HarmonyInstance harmony)
+        public static void Patch()
         {
-            var knownTech = typeof(KnownTech);
-            var initMethod = knownTech.GetMethod("Initialize", BindingFlags.Public | BindingFlags.Static);
-            var postfix = typeof(KnownTechPatcher).GetMethod("Postfix", BindingFlags.Public | BindingFlags.Static);
-
-            harmony.Patch(initMethod, null, new HarmonyMethod(postfix));
-        }
-
-        private static bool initialized = false;
-        public static void Postfix()
-        {
-            if (initialized) return;
-
-            foreach(var techType in unlockedAtStart)
-            {
-                KnownTech.Add(techType, false);
-            }
-
-            initialized = true;
+            unlockedAtStart.ForEach(x => KnownTechPatcher2.unlockedAtStart.Add(x));
         }
     }
 }

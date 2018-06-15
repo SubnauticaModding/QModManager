@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace SMLHelper.Util
+namespace SMLHelper.V2.Util
 {
     internal class EnumTypeCache
     {

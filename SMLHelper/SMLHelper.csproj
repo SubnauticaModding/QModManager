@@ -7,7 +7,7 @@
     <ProjectGuid>{418502DD-372D-4EF9-8021-B262552DFEDE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SMLHelper</RootNamespace>
+    <RootNamespace>SMLHelper2</RootNamespace>
     <AssemblyName>SMLHelper</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -56,24 +56,39 @@
     <Compile Include="CustomCraftNode.cs" />
     <Compile Include="CustomCraftTab.cs" />
     <Compile Include="CustomCraftTreeFamily.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="MonoBehaviours\TechTypeFixer.cs" />
+    <Compile Include="V2\CraftNodeToScrub.cs" />
+    <Compile Include="V2\CustomCraftNode.cs" />
+    <Compile Include="V2\CustomCraftTab.cs" />
+    <Compile Include="V2\CustomCraftTreeFamily.cs" />
+    <Compile Include="V2\CustomPrefabHandler.cs" />
+    <Compile Include="V2\CustomSpriteHandler.cs" />
+    <Compile Include="V2\Logger.cs" />
+    <Compile Include="V2\MonoBehaviours\TechTypeFixer.cs" />
     <Compile Include="Patchers\CraftDataPatcher.cs" />
     <Compile Include="Patchers\CraftTreePatcher.cs" />
     <Compile Include="CustomPrefabHandler.cs" />
     <Compile Include="CustomSpriteHandler.cs" />
     <Compile Include="Patchers\CraftTreeTypePatcher.cs" />
     <Compile Include="Patchers\DevConsolePatcher.cs" />
-    <Compile Include="Initializer.cs" />
+    <Compile Include="V2\Initializer.cs" />
     <Compile Include="Patchers\KnownTechPatcher.cs" />
     <Compile Include="Patchers\LanguagePatcher.cs" />
-    <Compile Include="Patchers\PrefabDatabasePatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Patchers\ResourcesPatcher.cs" />
-    <Compile Include="Patchers\SpritePatcher.cs" />
     <Compile Include="Patchers\TechTypePatcher.cs" />
     <Compile Include="Utility.cs" />
-    <Compile Include="Util\EnumCacheManager.cs" />
+    <Compile Include="V2\Utility.cs" />
+    <Compile Include="V2\Util\EnumCacheManager.cs" />
+    <Compile Include="V2\Patchers\CraftDataPatcher.cs" />
+    <Compile Include="V2\Patchers\CraftTreePatcher.cs" />
+    <Compile Include="V2\Patchers\CraftTreeTypePatcher.cs" />
+    <Compile Include="V2\Patchers\DevConsolePatcher.cs" />
+    <Compile Include="V2\Patchers\KnownTechPatcher.cs" />
+    <Compile Include="V2\Patchers\LanguagePatcher.cs" />
+    <Compile Include="V2\Patchers\PrefabDatabasePatcher.cs" />
+    <Compile Include="V2\Patchers\ResourcesPatcher.cs" />
+    <Compile Include="V2\Patchers\SpritePatcher.cs" />
+    <Compile Include="V2\Patchers\TechTypePatcher.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

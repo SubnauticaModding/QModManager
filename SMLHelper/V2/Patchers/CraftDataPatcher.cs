@@ -3,11 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using CraftDataPatcher2 = SMLHelper.V2.Patchers.CraftDataPatcher;
-using TechDataHelper2 = SMLHelper.V2.Patchers.TechDataHelper;
-using IngredientHelper2 = SMLHelper.V2.Patchers.IngredientHelper;
 
-namespace SMLHelper.Patchers
+namespace SMLHelper.V2.Patchers
 {
     public class CraftDataPatcher
     {
@@ -16,27 +13,71 @@ namespace SMLHelper.Patchers
         public static Dictionary<TechType, HarvestType> customHarvestTypeList = new Dictionary<TechType, HarvestType>();
         public static Dictionary<TechType, Vector2int> customItemSizes = new Dictionary<TechType, Vector2int>();
         public static Dictionary<TechType, EquipmentType> customEquipmentTypes = new Dictionary<TechType, EquipmentType>();
+        private static Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>> customGroups = new Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>();
+
         public static List<TechType> customBuildables = new List<TechType>();
+
+        private static readonly Type CraftDataType = typeof(CraftData);
+
+        private static readonly FieldInfo GroupsField =
+            CraftDataType.GetField("groups", BindingFlags.NonPublic | BindingFlags.Static);
 
         public static void AddToCustomGroup(TechGroup group, TechCategory category, TechType techType)
         {
-            CraftDataPatcher2.AddToCustomGroup(group, category, techType);
+            //if (!customGroups.ContainsKey(group))
+            //    customGroups.Add(group, new Dictionary<TechCategory, List<TechType>>());
+            //if (!customGroups[group].ContainsKey(category))
+            //    customGroups[group][category] = new List<TechType>();
+            //customGroups[group][category].Add(techType);
+
+            var groups = GroupsField.GetValue(null) as Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>;
+            groups[group][category].Add(techType);
+
+            Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\"");
         }
 
         public static void RemoveFromCustomGroup(TechGroup group, TechCategory category, TechType techType)
         {
-            CraftDataPatcher2.RemoveFromCustomGroup(group, category, techType);
+            var groups = GroupsField.GetValue(null) as Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>;
+            groups[group][category].Remove(techType);
+
+            Logger.Log($"Removed \"{techType.AsString():G}\" from groups under \"{group:G}->{category:G}\"");
+        }
+        public static void Patch(HarmonyInstance harmony)
+        {
+            var dictField = typeof(CraftData).GetField("techData", BindingFlags.Static | BindingFlags.NonPublic);
+            var craftDataDict = dictField.GetValue(null);
+            var addMethod = craftDataDict.GetType().GetMethod("Add");
+
+            foreach (var entry in customTechData)
+            {
+                addMethod.Invoke(craftDataDict, new object[] { entry.Key, entry.Value.GetTechDataObj() });
+            }
+
+            Utility.PatchDictionary(CraftDataType, "harvestOutputList", customHarvestOutputList, BindingFlags.Static | BindingFlags.Public);
+            Utility.PatchDictionary(CraftDataType, "harvestTypeList", customHarvestTypeList);
+            Utility.PatchDictionary(CraftDataType, "itemSizes", customItemSizes);
+            Utility.PatchDictionary(CraftDataType, "equipmentTypes", customEquipmentTypes);
+            //Utility.PatchDictionary(CraftDataType, "groups", customGroups);
+
+            Utility.PatchList(CraftDataType, "buildables", customBuildables);
+
+            var preparePrefabIDCache = CraftDataType.GetMethod("PreparePrefabIDCache", BindingFlags.Public | BindingFlags.Static);
+
+            harmony.Patch(preparePrefabIDCache, null,
+                new HarmonyMethod(typeof(CraftDataPatcher).GetMethod("Postfix")));
+
+            Logger.Log("CraftDataPatcher is done.");
         }
 
-        public static void Patch()
+        public static void Postfix()
         {
-            customTechData.ForEach(x => CraftDataPatcher2.customTechData.Add(x.Key, x.Value.GetTechDataHelper()));
+            var techMapping = CraftDataType.GetField("techMapping", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as Dictionary<TechType, string>;
 
-            customHarvestOutputList.ForEach(x => CraftDataPatcher2.customHarvestOutputList.Add(x.Key, x.Value));
-            customHarvestTypeList.ForEach(x => CraftDataPatcher2.customHarvestTypeList.Add(x.Key, x.Value));
-            customItemSizes.ForEach(x => CraftDataPatcher2.customItemSizes.Add(x.Key, x.Value));
-            customEquipmentTypes.ForEach(x => CraftDataPatcher2.customEquipmentTypes.Add(x.Key, x.Value));
-            customBuildables.ForEach(x => CraftDataPatcher2.customBuildables.Add(x));
+            foreach(var prefab in CustomPrefabHandler.customPrefabs)
+            {
+                techMapping[prefab.TechType] = prefab.ClassID;
+            }
         }
     }
 
@@ -87,29 +128,6 @@ namespace SMLHelper.Patchers
             }
 
             return TechType.None;
-        }
-
-        public TechDataHelper2 GetTechDataHelper()
-        {
-            var techDataObj = new TechDataHelper2();
-            techDataObj._craftAmount = _craftAmount;
-            techDataObj._ingredients = GetIngredients();
-            techDataObj._linkedItems = _linkedItems;
-            techDataObj._techType = _techType;
-
-            return techDataObj;
-        }
-
-        public List<IngredientHelper2> GetIngredients()
-        {
-            var list = new List<IngredientHelper2>();
-
-            foreach(var ingredient in _ingredients)
-            {
-                list.Add(new IngredientHelper2(ingredient._techType, ingredient._amount));
-            }
-
-            return list;
         }
 
         private object GetIngredientsObj()

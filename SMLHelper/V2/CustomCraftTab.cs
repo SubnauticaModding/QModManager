@@ -1,7 +1,6 @@
 ﻿using SMLHelper.V2.Patchers;
-using CustomCraftTab2 = SMLHelper.V2.CustomCraftTab;
 
-namespace SMLHelper
+namespace SMLHelper.V2
 {
     public class CustomCraftTab
     {
@@ -39,24 +38,6 @@ namespace SMLHelper
         
         public CustomCraftTab(string path, string name, CraftTree.Type scheme, UnityEngine.Sprite sprite) : this(path, name, scheme, new Atlas.Sprite(sprite, false))
         {
-        }
-
-        [System.Obsolete("CraftSchemes are obsolete. Use CraftTree.Types instead.")]
-        public CustomCraftTab(string path, string name, CraftScheme scheme, Atlas.Sprite sprite) 
-            : this(path, name, Utility.CraftSchemeMap[scheme], sprite)
-        {
-        }
-
-        [System.Obsolete("CraftSchemes are obsolete. Use CraftTree.Types instead.")]
-        public CustomCraftTab(string path, string name, CraftScheme scheme, UnityEngine.Sprite sprite)
-            : this(path, name, Utility.CraftSchemeMap[scheme], sprite)
-        {
-        }
-
-        public CustomCraftTab2 GetV2CraftTab()
-        {
-            var customCraftTab = new CustomCraftTab2(Path, Name, Scheme, Sprite.Sprite);
-            return customCraftTab;
         }
     }
 }

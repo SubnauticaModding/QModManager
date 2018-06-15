@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SMLHelper
+namespace SMLHelper.V2
 {
     internal static class Logger
     {

@@ -1,7 +1,7 @@
 ﻿using Harmony;
 using System.Reflection;
 
-namespace SMLHelper.Patchers
+namespace SMLHelper.V2.Patchers
 {
     public class SpritePatcher
     {

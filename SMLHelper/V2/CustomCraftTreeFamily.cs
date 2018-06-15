@@ -2,9 +2,9 @@
 using SMLHelper.V2.Util;
 using UnityEngine;
 using UnityEngine.Assertions;
-using CustomCraftTreeRoot2 = SMLHelper.V2.CustomCraftTreeRoot;
+using CustomCraftTreeRoot1 = SMLHelper.CustomCraftTreeRoot;
 
-namespace SMLHelper
+namespace SMLHelper.V2
 {
     /// <summary>
     /// Basic data structure of a custom crafting tree node.
@@ -146,12 +146,12 @@ namespace SMLHelper
         /// </summary>
         internal CraftTree CraftTree => new CraftTree(_schemeAsString, CraftNode);
 
-        internal CustomCraftTreeRoot2 GetV2RootNode()
+        internal CustomCraftTreeRoot1 GetV1RootNode()
         {
-            var node = new CustomCraftTreeRoot2(Scheme, SchemeAsString);
+            var node = new CustomCraftTreeRoot1(Scheme, SchemeAsString);
             node.CraftNode = CraftNode;
 
-            return GetV2RootNode();
+            return node;
         }
     }
 

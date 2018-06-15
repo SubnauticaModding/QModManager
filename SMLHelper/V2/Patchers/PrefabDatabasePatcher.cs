@@ -2,10 +2,10 @@
 using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
-using SMLHelper.MonoBehaviours;
+using SMLHelper.V2.MonoBehaviours;
 using UWE;
 
-namespace SMLHelper.Patchers
+namespace SMLHelper.V2.Patchers
 {
     public class PrefabDatabasePatcher
     {
