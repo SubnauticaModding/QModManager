@@ -7,98 +7,16 @@ namespace SMLHelper.V2.Patchers
 {
     public class CraftTreePatcher
     {
-        public static List<CustomCraftTab> customTabs = new List<CustomCraftTab>();
-        public static List<CustomCraftNode> customNodes = new List<CustomCraftNode>();
-        public static List<CraftNodeToScrub> nodesToRemove = new List<CraftNodeToScrub>();
+        internal static List<CustomCraftTab> CustomTabs = new List<CustomCraftTab>();
+        internal static List<CustomCraftNode> CustomNodes = new List<CustomCraftNode>();
+        internal static List<CraftNodeToScrub> NodesToRemove = new List<CraftNodeToScrub>();
         internal static Dictionary<CraftTree.Type, CustomCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, CustomCraftTreeRoot>();
 
-        [Obsolete("CraftTreePatcher.customCraftNodes is obsolete. Use CraftTreePatcher.customNodes", false)]
-        public static Dictionary<string, TechType> customCraftNodes = new Dictionary<string, TechType>();
-
-        public static void FabricatorSchemePostfix(ref CraftNode __result)
-        {
-            RemoveNodes(ref __result, nodesToRemove, CraftTree.Type.Fabricator);
-            AddCustomTabs(ref __result, customTabs, CraftTree.Type.Fabricator);
-            PatchNodes(ref __result, customNodes, CraftTree.Type.Fabricator);
-
-            var list = new List<CustomCraftNode>();
-            foreach(var node in customCraftNodes)
-            {
-                list.Add(new CustomCraftNode(node.Value, CraftTree.Type.Fabricator, node.Key));
-            }
-
-            PatchNodes(ref __result, list, CraftTree.Type.Fabricator);
-        }
-
-        public static void ConstructorSchemePostfix(ref CraftNode __result)
-        {
-            RemoveNodes(ref __result, nodesToRemove, CraftTree.Type.Constructor);
-            AddCustomTabs(ref __result, customTabs, CraftTree.Type.Constructor);
-            PatchNodes(ref __result, customNodes, CraftTree.Type.Constructor);
-        }
-
-        public static void WorkbenchSchemePostfix(ref CraftNode __result)
-        {
-            RemoveNodes(ref __result, nodesToRemove, CraftTree.Type.Workbench);
-            AddCustomTabs(ref __result, customTabs, CraftTree.Type.Workbench);
-            PatchNodes(ref __result, customNodes, CraftTree.Type.Workbench);
-        }
-
-        public static void SeamothUpgradesSchemePostfix(ref CraftNode __result)
-        {
-            RemoveNodes(ref __result, nodesToRemove, CraftTree.Type.SeamothUpgrades);
-            AddCustomTabs(ref __result, customTabs, CraftTree.Type.SeamothUpgrades);
-            PatchNodes(ref __result, customNodes, CraftTree.Type.SeamothUpgrades);
-        }
-
-        public static void MapRoomShemePostfix(ref CraftNode __result)
-        {
-            RemoveNodes(ref __result, nodesToRemove, CraftTree.Type.MapRoom);
-            AddCustomTabs(ref __result, customTabs, CraftTree.Type.MapRoom);
-            PatchNodes(ref __result, customNodes, CraftTree.Type.MapRoom);
-        }
-
-        public static void CyclopsFabricatorSchemePostfix(ref CraftNode __result)
-        {
-            RemoveNodes(ref __result, nodesToRemove, CraftTree.Type.CyclopsFabricator);
-            AddCustomTabs(ref __result, customTabs, CraftTree.Type.CyclopsFabricator);
-            PatchNodes(ref __result, customNodes, CraftTree.Type.CyclopsFabricator);
-        }
-
-        public static bool GetTreePreFix(CraftTree.Type treeType, ref CraftTree __result)
-        {
-            if (CustomTrees.ContainsKey(treeType))
-            {
-                __result = CustomTrees[treeType].CraftTree;
-                return false;
-            }
-
-            return true;
-        }
-
-        public static void InitializePostFix()
-        {
-            bool craftTreeInitialized = false;
-            Type craftTreeClass = typeof(CraftTree);
-
-            craftTreeClass.GetField("initialized", BindingFlags.Static | BindingFlags.NonPublic).GetValue(craftTreeInitialized);
-
-            if (craftTreeInitialized && !CustomCraftTreeNode.Initialized)
-            {
-                foreach (CraftTree.Type cTreeKey in CustomTrees.Keys)
-                {
-                    CraftTree customTree = CustomTrees[cTreeKey].CraftTree;
-
-                    MethodInfo addToCraftableTech = craftTreeClass.GetMethod("AddToCraftableTech", BindingFlags.Static | BindingFlags.NonPublic);
-
-                    addToCraftableTech.Invoke(null, new[] { customTree });                    
-                }
-            }
-        }
+        #region Node Handling
 
         private static void AddCustomTabs(ref CraftNode nodes, List<CustomCraftTab> customTabs, CraftTree.Type scheme)
         {
-            foreach(var tab in customTabs)
+            foreach (var tab in customTabs)
             {
                 if (tab.Scheme != scheme) continue;
 
@@ -106,12 +24,12 @@ namespace SMLHelper.V2.Patchers
                 var currentNode = default(TreeNode);
                 currentNode = nodes;
 
-                for(int i = 0; i < path.Length; i++)
+                for (int i = 0; i < path.Length; i++)
                 {
                     var currentPath = path[i];
 
                     var node = currentNode[currentPath];
-                    if(node == null)
+                    if (node == null)
                     {
                         var newNode = new CraftNode(currentPath, TreeAction.Expand, TechType.None);
                         currentNode.AddNode(new TreeNode[]
@@ -129,7 +47,7 @@ namespace SMLHelper.V2.Patchers
 
         private static void PatchNodes(ref CraftNode nodes, List<CustomCraftNode> customNodes, CraftTree.Type scheme)
         {
-            foreach(var customNode in customNodes)
+            foreach (var customNode in customNodes)
             {
                 if (!customNode.ItemExists) continue;
                 if (customNode.Scheme != scheme) continue;
@@ -183,9 +101,9 @@ namespace SMLHelper.V2.Patchers
 
                     currentNode = currentNode[currentPath];
                 }
-                
+
                 // Hold a reference to the parent node
-                var parentNode = currentNode.parent;                
+                var parentNode = currentNode.parent;
 
                 // Safty checks.
                 if (currentNode != null && currentNode.id == currentPath)
@@ -196,6 +114,10 @@ namespace SMLHelper.V2.Patchers
             }
         }
 
+        #endregion
+
+        #region Patches
+
         public static void Patch(HarmonyInstance harmony)
         {
             var type = typeof(CraftTree);
@@ -204,27 +126,27 @@ namespace SMLHelper.V2.Patchers
             var workbenchScheme = type.GetMethod("WorkbenchScheme", BindingFlags.Static | BindingFlags.NonPublic);
             var seamothUpgradesScheme = type.GetMethod("SeamothUpgradesScheme", BindingFlags.NonPublic | BindingFlags.Static);
             var mapRoomSheme = type.GetMethod("MapRoomSheme", BindingFlags.Static | BindingFlags.NonPublic);
-            var cyclopsFabricatorScheme = type.GetMethod("CyclopsFabricatorScheme", BindingFlags.Static | BindingFlags.NonPublic);            
+            var cyclopsFabricatorScheme = type.GetMethod("CyclopsFabricatorScheme", BindingFlags.Static | BindingFlags.NonPublic);
 
             Type patcherClass = typeof(CraftTreePatcher);
 
             harmony.Patch(fabricatorScheme, null,
-                new HarmonyMethod(patcherClass.GetMethod("FabricatorSchemePostfix")));
+                new HarmonyMethod(patcherClass.GetMethod("FabricatorSchemePostfix", BindingFlags.Static | BindingFlags.NonPublic)));
 
             harmony.Patch(constructorScheme, null,
-                new HarmonyMethod(patcherClass.GetMethod("ConstructorSchemePostfix")));
+                new HarmonyMethod(patcherClass.GetMethod("ConstructorSchemePostfix", BindingFlags.Static | BindingFlags.NonPublic)));
 
             harmony.Patch(workbenchScheme, null,
-                new HarmonyMethod(patcherClass.GetMethod("WorkbenchSchemePostfix")));
+                new HarmonyMethod(patcherClass.GetMethod("WorkbenchSchemePostfix", BindingFlags.Static | BindingFlags.NonPublic)));
 
             harmony.Patch(seamothUpgradesScheme, null,
-                new HarmonyMethod(patcherClass.GetMethod("SeamothUpgradesSchemePostfix")));
+                new HarmonyMethod(patcherClass.GetMethod("SeamothUpgradesSchemePostfix", BindingFlags.Static | BindingFlags.NonPublic)));
 
             harmony.Patch(mapRoomSheme, null,
-                new HarmonyMethod(patcherClass.GetMethod("MapRoomShemePostfix")));
+                new HarmonyMethod(patcherClass.GetMethod("MapRoomShemePostfix", BindingFlags.Static | BindingFlags.NonPublic)));
 
             harmony.Patch(cyclopsFabricatorScheme, null,
-                new HarmonyMethod(patcherClass.GetMethod("CyclopsFabricatorSchemePostfix")));
+                new HarmonyMethod(patcherClass.GetMethod("CyclopsFabricatorSchemePostfix", BindingFlags.Static | BindingFlags.NonPublic)));
 
             if (CustomCraftTreeNode.HasCustomTrees)
             {
@@ -232,13 +154,88 @@ namespace SMLHelper.V2.Patchers
                 var craftTreeInitialize = type.GetMethod("Initialize", BindingFlags.Static | BindingFlags.Public);
 
                 harmony.Patch(craftTreeGetTree,
-                    new HarmonyMethod(patcherClass.GetMethod("GetTreePreFix")), null);
+                    new HarmonyMethod(patcherClass.GetMethod("GetTreePreFix", BindingFlags.Static | BindingFlags.NonPublic)), null);
 
                 harmony.Patch(craftTreeInitialize, null,
-                    new HarmonyMethod(patcherClass.GetMethod("InitializePostFix")));
+                    new HarmonyMethod(patcherClass.GetMethod("InitializePostFix", BindingFlags.Static | BindingFlags.NonPublic)));
             }
 
             Logger.Log($"CraftTreePatcher is done.");
         }
+
+        private static void FabricatorSchemePostfix(ref CraftNode __result)
+        {
+            RemoveNodes(ref __result, NodesToRemove, CraftTree.Type.Fabricator);
+            AddCustomTabs(ref __result, CustomTabs, CraftTree.Type.Fabricator);
+            PatchNodes(ref __result, CustomNodes, CraftTree.Type.Fabricator);
+        }
+
+        private static void ConstructorSchemePostfix(ref CraftNode __result)
+        {
+            RemoveNodes(ref __result, NodesToRemove, CraftTree.Type.Constructor);
+            AddCustomTabs(ref __result, CustomTabs, CraftTree.Type.Constructor);
+            PatchNodes(ref __result, CustomNodes, CraftTree.Type.Constructor);
+        }
+
+        private static void WorkbenchSchemePostfix(ref CraftNode __result)
+        {
+            RemoveNodes(ref __result, NodesToRemove, CraftTree.Type.Workbench);
+            AddCustomTabs(ref __result, CustomTabs, CraftTree.Type.Workbench);
+            PatchNodes(ref __result, CustomNodes, CraftTree.Type.Workbench);
+        }
+
+        private static void SeamothUpgradesSchemePostfix(ref CraftNode __result)
+        {
+            RemoveNodes(ref __result, NodesToRemove, CraftTree.Type.SeamothUpgrades);
+            AddCustomTabs(ref __result, CustomTabs, CraftTree.Type.SeamothUpgrades);
+            PatchNodes(ref __result, CustomNodes, CraftTree.Type.SeamothUpgrades);
+        }
+
+        private static void MapRoomShemePostfix(ref CraftNode __result)
+        {
+            RemoveNodes(ref __result, NodesToRemove, CraftTree.Type.MapRoom);
+            AddCustomTabs(ref __result, CustomTabs, CraftTree.Type.MapRoom);
+            PatchNodes(ref __result, CustomNodes, CraftTree.Type.MapRoom);
+        }
+
+        private static void CyclopsFabricatorSchemePostfix(ref CraftNode __result)
+        {
+            RemoveNodes(ref __result, NodesToRemove, CraftTree.Type.CyclopsFabricator);
+            AddCustomTabs(ref __result, CustomTabs, CraftTree.Type.CyclopsFabricator);
+            PatchNodes(ref __result, CustomNodes, CraftTree.Type.CyclopsFabricator);
+        }
+
+        private static bool GetTreePreFix(CraftTree.Type treeType, ref CraftTree __result)
+        {
+            if (CustomTrees.ContainsKey(treeType))
+            {
+                __result = CustomTrees[treeType].CraftTree;
+                return false;
+            }
+
+            return true;
+        }
+
+        private static void InitializePostFix()
+        {
+            bool craftTreeInitialized = false;
+            Type craftTreeClass = typeof(CraftTree);
+
+            craftTreeClass.GetField("initialized", BindingFlags.Static | BindingFlags.NonPublic).GetValue(craftTreeInitialized);
+
+            if (craftTreeInitialized && !CustomCraftTreeNode.Initialized)
+            {
+                foreach (CraftTree.Type cTreeKey in CustomTrees.Keys)
+                {
+                    CraftTree customTree = CustomTrees[cTreeKey].CraftTree;
+
+                    MethodInfo addToCraftableTech = craftTreeClass.GetMethod("AddToCraftableTech", BindingFlags.Static | BindingFlags.NonPublic);
+
+                    addToCraftableTech.Invoke(null, new[] { customTree });
+                }
+            }
+        }
+
+        #endregion
     }
 }

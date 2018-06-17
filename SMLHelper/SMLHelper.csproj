@@ -67,6 +67,7 @@
     <Compile Include="V2\CustomCraftTreeFamily.cs" />
     <Compile Include="V2\CustomPrefabHandler.cs" />
     <Compile Include="V2\CustomSpriteHandler.cs" />
+    <Compile Include="V2\Handlers\CraftTreeHandler.cs" />
     <Compile Include="V2\Handlers\TechTypeHandler.cs" />
     <Compile Include="V2\Logger.cs" />
     <Compile Include="V2\MonoBehaviours\TechTypeFixer.cs" />

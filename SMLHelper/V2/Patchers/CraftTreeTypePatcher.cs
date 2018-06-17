@@ -7,27 +7,15 @@ using System.Reflection;
 
 namespace SMLHelper.V2.Patchers
 {
-    public class CraftTreeTypePatcher
+    internal class CraftTreeTypePatcher
     {
         private static readonly FieldInfo CachedEnumString_valueToString =
             typeof(CachedEnumString<CraftTree.Type>).GetField("valueToString", BindingFlags.NonPublic | BindingFlags.Instance);
 
         internal const int startingIndex = 11; // The default CraftTree.Type contains indexes 0 through 10
-        internal static string CallerName = null;
-
         internal static readonly EnumCacheManager<CraftTree.Type> cacheManager = new EnumCacheManager<CraftTree.Type>("CraftTreeType", startingIndex);
 
-        #region Adding  CraftTree Types
-
-        /// <summary>
-        /// Your first method call to start a new custom crafting tree.
-        /// Creating a new CraftTree only makes sense if you're going to use it in a new type of GhostCrafter/Fabricator.
-        /// </summary>
-        /// <param name="name">The name for the new <see cref="CraftTree.Type"/> enum.</param>
-        /// <param name="craftTreeType">The new enum instance for your custom craft tree.</param>
-        /// <returns>A new root node for your custom craft tree.</returns>
-        /// <remarks>This node is automatically assigned to <see cref="CraftTreePatcher.CustomTrees"/>.</remarks>
-        public static CustomCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
+        internal static CustomCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
         {
             var cache = cacheManager.GetCacheForTypeName(name);
 
@@ -47,9 +35,7 @@ namespace SMLHelper.V2.Patchers
 
             cacheManager.customEnumTypes.Add(craftTreeType, cache);
 
-            CallerName = CallerName ?? Assembly.GetCallingAssembly().GetName().Name;
-            Logger.Log("Successfully added CraftTree Type: \"{0}\" to Index: \"{1}\" for mod \"{2}\"", name, cache.Index, CallerName);
-            CallerName = null;
+            Logger.Log("Successfully added CraftTree Type: \"{0}\" to Index: \"{1}\"", name, cache.Index);
 
             cacheManager.SaveCache();
 
@@ -59,8 +45,6 @@ namespace SMLHelper.V2.Patchers
 
             return customTreeRoot;
         }
-
-        #endregion
 
         #region Patches
 

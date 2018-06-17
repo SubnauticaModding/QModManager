@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using SMLHelper.V2.Patchers;
 
@@ -11,14 +12,18 @@ namespace SMLHelper.V2.Handlers
     /// </summary>
     public class TechTypeHandler
     {
+        private static readonly FieldInfo CachedEnumString_valueToString =
+            typeof(CachedEnumString<TechType>).GetField("valueToString", BindingFlags.NonPublic | BindingFlags.Instance);
+
         /// <summary>
         /// Adds a new TechType into the game.
         /// </summary>
         /// <param name="internalName">The internal name of the TechType. Should not contain special characters.</param>
         /// <param name="displayName">The display name of the TechType. Can be anything.</param>
         /// <param name="tooltip">The tooltip, displayed when hovered in an inventory. Can be anything.</param>
+        /// <param name="unlockAtStart">Whether this TechType should be unlocked on game start, or not. By default, true.</param>
         /// <returns>The new TechType that is created.</returns>
-        public static TechType AddTechType(string internalName, string displayName, string tooltip, bool unlockedAtStart = true)
+        public static TechType AddTechType(string internalName, string displayName, string tooltip, bool unlockAtStart = true)
         {
             // Register the TechType.
             var techType = TechTypePatcher.AddTechType(internalName);
@@ -26,9 +31,11 @@ namespace SMLHelper.V2.Handlers
             // Register Language lines.
             LanguagePatcher.customLines[internalName] = displayName;
             LanguagePatcher.customLines["Tooltip_" + internalName] = tooltip;
+            var valueToString = CachedEnumString_valueToString.GetValue(TooltipFactory.techTypeTooltipStrings) as Dictionary<TechType, string>;
+            valueToString[techType] = "Tooltip_" + internalName;
 
             // Unlock the TechType on start
-            if (unlockedAtStart)
+            if (unlockAtStart)
                 KnownTechPatcher.unlockedAtStart.Add(techType);
 
             // Return the new TechType.

@@ -24,10 +24,10 @@ namespace SMLHelper.Patchers
 
         internal static void Patch()
         {
-            customTabs.ForEach(x => CraftTreePatcher2.customTabs.Add(x.GetV2CraftTab()));
-            customNodes.ForEach(x => CraftTreePatcher2.customNodes.Add(x.GetV2CraftNode()));
-            nodesToRemove.ForEach(x => CraftTreePatcher2.nodesToRemove.Add(x.GetV2CraftNode()));
-            customCraftNodes.ForEach(x => CraftTreePatcher2.customCraftNodes.Add(x));
+            customTabs.ForEach(x => CraftTreePatcher2.CustomTabs.Add(x.GetV2CraftTab()));
+            customNodes.ForEach(x => CraftTreePatcher2.CustomNodes.Add(x.GetV2CraftNode()));
+            nodesToRemove.ForEach(x => CraftTreePatcher2.NodesToRemove.Add(x.GetV2CraftNode()));
+            customCraftNodes.ForEach(x => CraftTreePatcher2.CustomNodes.Add(new V2.CustomCraftNode(x.Value, CraftTree.Type.Fabricator, x.Key)));
             CustomTrees.ForEach(x => CraftTreePatcher2.CustomTrees.Add(x.Key, x.Value.GetV2RootNode()));
 
             V2.Logger.Log("Old CraftTreePatcher is done.");

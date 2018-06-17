@@ -90,7 +90,7 @@ namespace SMLHelper.V2.Patchers
             Logger.Log("TechTypePatcher is done.");
         }
 
-        internal static void Postfix_GetValues(Type enumType, ref Array __result)
+        private static void Postfix_GetValues(Type enumType, ref Array __result)
         {
             if (enumType.Equals(typeof(TechType)))
             {
@@ -106,7 +106,7 @@ namespace SMLHelper.V2.Patchers
             }
         }
 
-        internal static bool Prefix_IsDefined(Type enumType, object value, ref bool __result)
+        private static bool Prefix_IsDefined(Type enumType, object value, ref bool __result)
         {
             if (enumType.Equals(typeof(TechType)))
             {
@@ -120,7 +120,7 @@ namespace SMLHelper.V2.Patchers
             return true;
         }
 
-        internal static bool Prefix_Parse(Type enumType, string value, bool ignoreCase, ref object __result)
+        private static bool Prefix_Parse(Type enumType, string value, bool ignoreCase, ref object __result)
         {
             if (enumType.Equals(typeof(TechType)))
             {
@@ -137,7 +137,7 @@ namespace SMLHelper.V2.Patchers
             return true;
         }
 
-        internal static bool Prefix_ToString(Enum __instance, ref string __result)
+        private static bool Prefix_ToString(Enum __instance, ref string __result)
         {
             if (__instance.GetType().Equals(typeof(TechType)))
             {
