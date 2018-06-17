@@ -3,6 +3,7 @@ using CustomCraftTab2 = SMLHelper.V2.CustomCraftTab;
 
 namespace SMLHelper
 {
+    [System.Obsolete("SMLHelper.CustomCraftTab is obsolete. Please use SMLHelper.V2 instead.")]
     public class CustomCraftTab
     {
         public string SpriteId

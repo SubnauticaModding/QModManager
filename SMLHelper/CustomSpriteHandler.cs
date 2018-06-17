@@ -5,8 +5,10 @@ using CustomSprite2 = SMLHelper.V2.CustomSprite;
 
 namespace SMLHelper
 {
+    [System.Obsolete("SMLHelper.CustomSpriteHandler is obsolete. Please use SMLHelper.V2 instead.")]
     public class CustomSpriteHandler
     {
+        [System.Obsolete("SMLHelper.CustomSpriteHandler.customSprites is obsolete. Please use SMLHelper.V2 instead.")]
         public static List<CustomSprite> customSprites = new List<CustomSprite>();
 
         internal static void Patch()
@@ -15,6 +17,7 @@ namespace SMLHelper
         }
     }
 
+    [System.Obsolete("SMLHelper.CustomSprite is obsolete. Please use SMLHelper.V2 instead.")]
     public class CustomSprite
     {
         public TechType TechType;

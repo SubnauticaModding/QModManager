@@ -7,8 +7,10 @@ namespace SMLHelper
 {
     public delegate GameObject GetResource();
 
+    [System.Obsolete("SMLHelper.CustomPrefabHandler is obsolete. Please use SMLHelper.V2 instead.")]
     public class CustomPrefabHandler
     {
+        [System.Obsolete("SMLHelper.CustomPrefabHandler.customPrefabs is obsolete. Please use SMLHelper.V2 instead.")]
         public static List<CustomPrefab> customPrefabs = new List<CustomPrefab>();
 
         internal static void Patch()
@@ -17,6 +19,7 @@ namespace SMLHelper
         }
     }
 
+    [System.Obsolete("SMLHelper.CustomPrefab is obsolete. Please use SMLHelper.V2 instead.")]
     public class CustomPrefab
     {
         public GetResource GetResourceDelegate;
@@ -51,7 +54,7 @@ namespace SMLHelper
             else return GetResourceDelegate.Invoke();
         }
 
-        public CustomPrefab2 GetV2CustomPrefab()
+        internal CustomPrefab2 GetV2CustomPrefab()
         {
             var customPrefab = new CustomPrefab2(ClassID, PrefabFileName, Object, TechType);
             customPrefab.GetResourceDelegate = new V2.GetResource(GetResourceDelegate);

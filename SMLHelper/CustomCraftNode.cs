@@ -4,6 +4,7 @@ using CustomCraftNode2 = SMLHelper.V2.CustomCraftNode;
 
 namespace SMLHelper
 {
+    [System.Obsolete("SMLHelper.CustomCraftNode is obsolete. Please use SMLHelper.V2 instead.")]
     public class CustomCraftNode
     {
         public TechType TechType;

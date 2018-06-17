@@ -5,11 +5,13 @@ using CommandInfo2 = SMLHelper.V2.Patchers.CommandInfo;
 
 namespace SMLHelper.Patchers
 {
+    [System.Obsolete("SMLHelper.DevConsolePatcher is obsolete. Please use SMLHelper.V2 instead.")]
     public class DevConsolePatcher
     {
+        [System.Obsolete("SMLHelper.DevConsolePatcher.commands is obsolete. Please use SMLHelper.V2 instead.")]
         public static List<CommandInfo> commands = new List<CommandInfo>();
 
-        public static void Patch()
+        internal static void Patch()
         {
             commands.ForEach(x => DevConsolePatcher2.commands.Add(x.GetV2CommandInfo()));
 
@@ -17,6 +19,7 @@ namespace SMLHelper.Patchers
         }
     }
 
+    [System.Obsolete("SMLHelper.CommandInfo is obsolete. Please use SMLHelper.V2 instead.")]
     public class CommandInfo
     {
         public MethodInfo CommandHandler;
@@ -24,7 +27,7 @@ namespace SMLHelper.Patchers
         public bool CaseSensitive;
         public bool CombineArgs;
 
-        public CommandInfo2 GetV2CommandInfo()
+        internal CommandInfo2 GetV2CommandInfo()
         {
             var commandInfo = new CommandInfo2();
             commandInfo.CommandHandler = CommandHandler;

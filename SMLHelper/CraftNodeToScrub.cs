@@ -2,6 +2,7 @@
 
 namespace SMLHelper
 {    
+    [System.Obsolete("SMLHelper.CraftNodeToScrub is obsolete. Please use SMLHelper.V2 instead.")]
     public class CraftNodeToScrub
     {
         public CraftTree.Type Scheme;

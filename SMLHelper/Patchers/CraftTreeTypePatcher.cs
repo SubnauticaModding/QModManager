@@ -4,16 +4,10 @@ using CustomCraftTreeRoot2 = SMLHelper.V2.CustomCraftTreeRoot;
 
 namespace SMLHelper.Patchers
 {
+    [System.Obsolete("SMLHelper.CraftTreeTypePatcher is obsolete. Please use SMLHelper.V2 instead.")]
     public class CraftTreeTypePatcher
     {
-        /// <summary>
-        /// Your first method call to start a new custom crafting tree.
-        /// Creating a new CraftTree only makes sense if you're going to use it in a new type of GhostCrafter/Fabricator.
-        /// </summary>
-        /// <param name="name">The name for the new <see cref="CraftTree.Type"/> enum.</param>
-        /// <param name="craftTreeType">The new enum instance for your custom craft tree.</param>
-        /// <returns>A new root node for your custom craft tree.</returns>
-        /// <remarks>This node is automatically assigned to <see cref="CraftTreePatcher.CustomTrees"/>.</remarks>
+        [System.Obsolete("SMLHelper.CraftTreeTypePatcher.CreateCustomCraftTreeAndType is obsolete. Please use SMLHelper.V2 instead.")]
         public static CustomCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
         {
             var customCraftTreeRoot2 = CraftTreeTypePatcher2.CreateCustomCraftTreeAndType(name, out craftTreeType);

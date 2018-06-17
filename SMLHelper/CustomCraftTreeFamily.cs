@@ -6,6 +6,7 @@ using CustomCraftTreeRoot2 = SMLHelper.V2.CustomCraftTreeRoot;
 
 namespace SMLHelper
 {
+    [System.Obsolete("SMLHelper.CustomCraftTreeNode is obsolete. Please use SMLHelper.V2 instead.")]
     /// <summary>
     /// Basic data structure of a custom crafting tree node.
     /// </summary>
@@ -41,6 +42,7 @@ namespace SMLHelper
         }
     }
 
+    [System.Obsolete("SMLHelper.CustomCraftTreeLinkingNode is obsolete. Please use SMLHelper.V2 instead.")]
     /// <summary>
     /// Abstract class that provides methods for adding new nodes into the custom crafting tree.
     /// </summary>
@@ -119,6 +121,7 @@ namespace SMLHelper
         }
     }
 
+    [System.Obsolete("SMLHelper.CustomCraftTreeRoot is obsolete. Please use SMLHelper.V2 instead.")]
     /// <summary>
     /// The root node of a custom CraftTree. The whole tree starts here.
     /// </summary>
@@ -155,6 +158,7 @@ namespace SMLHelper
         }
     }
 
+    [System.Obsolete("SMLHelper.CustomCraftTreeTab is obsolete. Please use SMLHelper.V2 instead.")]
     /// <summary>
     /// A tab node of a custom CraftTree. Tab nodes help organize crafting nodes by grouping them into categories.
     /// </summary>
@@ -204,6 +208,7 @@ namespace SMLHelper
         }
     }
 
+    [System.Obsolete("SMLHelper.CustomCraftTreeCraft is obsolete. Please use SMLHelper.V2 instead.")]
     /// <summary>
     /// A crafting node of a custom CrafTree. This is the last node on a tree; The one that actuall crafts something.
     /// </summary>
