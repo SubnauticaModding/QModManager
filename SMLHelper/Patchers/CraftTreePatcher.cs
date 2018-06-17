@@ -23,6 +23,8 @@ namespace SMLHelper.Patchers
             nodesToRemove.ForEach(x => CraftTreePatcher2.nodesToRemove.Add(x.GetV2CraftNode()));
             customCraftNodes.ForEach(x => CraftTreePatcher2.customCraftNodes.Add(x));
             CustomTrees.ForEach(x => CraftTreePatcher2.CustomTrees.Add(x.Key, x.Value.GetV2RootNode()));
+
+            V2.Logger.Log("Old CraftTreePatcher is done.");
         }
     }
 }

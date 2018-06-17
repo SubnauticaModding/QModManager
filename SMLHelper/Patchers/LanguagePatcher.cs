@@ -10,6 +10,8 @@ namespace SMLHelper.Patchers
         public static void Patch()
         {
             customLines.ForEach(x => LanguagePatcher2.customLines.Add(x.Key, x.Value));
+
+            V2.Logger.Log("Old LanguagePatcher is done.");
         }
     }
 }

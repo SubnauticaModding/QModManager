@@ -24,10 +24,10 @@ namespace SMLHelper.V2.Patchers
         /// Creating a new CraftTree only makes sense if you're going to use it in a new type of GhostCrafter/Fabricator.
         /// </summary>
         /// <param name="name">The name for the new <see cref="CraftTree.Type"/> enum.</param>
-        /// <param name="cratfTreeType">The new enum instance for your custom craft tree.</param>
+        /// <param name="craftTreeType">The new enum instance for your custom craft tree.</param>
         /// <returns>A new root node for your custom craft tree.</returns>
         /// <remarks>This node is automatically assigned to <see cref="CraftTreePatcher.CustomTrees"/>.</remarks>
-        public static CustomCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type cratfTreeType)
+        public static CustomCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
         {
             var cache = cacheManager.GetCacheForTypeName(name);
 
@@ -43,9 +43,9 @@ namespace SMLHelper.V2.Patchers
             if (cacheManager.IsIndexConflicting(cache.Index))
                 cache.Index = cacheManager.GetNextFreeIndex();
 
-            cratfTreeType = (CraftTree.Type)cache.Index;
+            craftTreeType = (CraftTree.Type)cache.Index;
 
-            cacheManager.customEnumTypes.Add(cratfTreeType, cache);
+            cacheManager.customEnumTypes.Add(craftTreeType, cache);
 
             CallerName = CallerName ?? Assembly.GetCallingAssembly().GetName().Name;
             Logger.Log("Successfully added CraftTree Type: \"{0}\" to Index: \"{1}\" for mod \"{2}\"", name, cache.Index, CallerName);
@@ -53,9 +53,9 @@ namespace SMLHelper.V2.Patchers
 
             cacheManager.SaveCache();
 
-            var customTreeRoot = new CustomCraftTreeRoot(cratfTreeType, name);
+            var customTreeRoot = new CustomCraftTreeRoot(craftTreeType, name);
 
-            CraftTreePatcher.CustomTrees[cratfTreeType] = customTreeRoot;
+            CraftTreePatcher.CustomTrees[craftTreeType] = customTreeRoot;
 
             return customTreeRoot;
         }

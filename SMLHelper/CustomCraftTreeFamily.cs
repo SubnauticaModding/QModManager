@@ -12,12 +12,12 @@ namespace SMLHelper
     public abstract class CustomCraftTreeNode
     {
         internal static bool Initialized = false;
-        internal static bool HasCustomTrees { get; set; } = false;        
+        internal static bool HasCustomTrees { get; set; } = false;
+        internal CraftNode CraftNode;
 
         protected readonly TreeAction Action;
         protected readonly TechType TechType;
         protected readonly string Name;
-        internal CraftNode CraftNode;
 
         protected CustomCraftTreeLinkingNode Parent = null;
 
@@ -151,7 +151,7 @@ namespace SMLHelper
             var node = new CustomCraftTreeRoot2(Scheme, SchemeAsString);
             node.CraftNode = CraftNode;
 
-            return GetV2RootNode();
+            return node;
         }
     }
 

@@ -52,7 +52,7 @@ namespace SMLHelper
             customSprite.Id = Id;
             customSprite.Group = Group;
 
-            return GetV2Sprite();
-        } 
+            return customSprite;
+        }
     }
 }
