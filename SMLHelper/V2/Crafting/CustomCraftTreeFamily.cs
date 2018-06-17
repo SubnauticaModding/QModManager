@@ -1,4 +1,5 @@
-﻿using SMLHelper.V2.Patchers;
+﻿using System.Collections.Generic;
+using SMLHelper.V2.Patchers;
 using SMLHelper.V2.Util;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -12,12 +13,12 @@ namespace SMLHelper.V2.Crafting
     public abstract class CustomCraftTreeNode
     {
         internal static bool Initialized = false;
-        internal static bool HasCustomTrees { get; set; } = false;        
+        internal static bool HasCustomTrees { get; set; } = false;
 
-        protected readonly TreeAction Action;
-        protected readonly TechType TechType;
-        protected readonly string Name;
-        internal CraftNode CraftNode;
+        public readonly TreeAction Action;
+        public readonly TechType TechType;
+        public readonly string Name;
+        public CraftNode CraftNode;
 
         protected CustomCraftTreeLinkingNode Parent = null;
 
@@ -46,6 +47,8 @@ namespace SMLHelper.V2.Crafting
     /// </summary>
     public abstract class CustomCraftTreeLinkingNode : CustomCraftTreeNode
     {
+        public List<CustomCraftTreeNode> Nodes = new List<CustomCraftTreeNode>();
+
         protected CustomCraftTreeLinkingNode(string name, TreeAction action, TechType techType)
             : base(name, action, techType)
         {
@@ -57,11 +60,13 @@ namespace SMLHelper.V2.Crafting
         /// <param name="nameID">The name/ID of this node.</param>
         /// <param name="displayText">The hover text to display in-game.</param>
         /// <param name="sprite">The custom sprite to display on this tab node.</param>
-        /// <param name="childNodes">The child nodes to this tab node. These must be either tab nodes or craft nodes from here on.</param>
         public CustomCraftTreeTab AddTabNode(string nameID, string displayText, Atlas.Sprite sprite)
         {
             var tabNode = new CustomCraftTreeTab(nameID, displayText, sprite);
             tabNode.LinkToParent(this);
+
+            Nodes.Add(tabNode);
+
             return tabNode;
         }
 
@@ -76,7 +81,62 @@ namespace SMLHelper.V2.Crafting
         {
             var tabNode = new CustomCraftTreeTab(nameID, displayText, sprite);
             tabNode.LinkToParent(this);
+
+            Nodes.Add(tabNode);
+
             return tabNode;
+        }
+
+        /// <summary>
+        /// Creates a new tab node for the custom crafting tree and links it to the calling node. 
+        /// </summary>
+        /// <param name="nameID">The name/ID of this node.</param>
+        public CustomCraftTreeTab AddTabNode(string nameID)
+        {
+            var tabNode = new CustomCraftTreeTab(nameID);
+            tabNode.LinkToParent(this);
+
+            Nodes.Add(tabNode);
+
+            return tabNode;
+        }
+
+        /// <summary>
+        /// Gets the tab from the calling node.
+        /// </summary>
+        /// <param name="nameID">The name id of the tab to get.</param>
+        /// <returns></returns>
+        public CustomCraftTreeTab GetTabNode(string nameID)
+        {
+            foreach(var node in Nodes)
+            {
+                if (node.Name == nameID && node.Action == TreeAction.Expand)
+                {
+                    var tab = (CustomCraftTreeTab)node;
+                    return tab;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the crafting node from the calling node.
+        /// </summary>
+        /// <param name="techType">The TechType whose node to get.</param>
+        /// <returns></returns>
+        public CustomCraftTreeCraft GetCraftingNode(TechType techType)
+        {
+            foreach(var node in Nodes)
+            {
+                if(node.TechType == techType && node.Action == TreeAction.Craft)
+                {
+                    var craftNode = (CustomCraftTreeCraft)node;
+                    return craftNode;
+                }
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -87,6 +147,8 @@ namespace SMLHelper.V2.Crafting
         {
             var craftNode = new CustomCraftTreeCraft(techType);
             craftNode.LinkToParent(this);
+
+            Nodes.Add(craftNode);
         }
 
         /// <summary>
@@ -104,7 +166,7 @@ namespace SMLHelper.V2.Crafting
         /// <summary>
         /// Creates a new crafting node for a modded item for custom crafting tree and links it to the calling node.
         /// </summary>
-        /// <param name="techType">The name of the custom TechType to be crafted.</param>
+        /// <param name="moddedTechTypeName">The name of the custom TechType to be crafted.</param>
         /// <remarks>If the player doesn't have the mod for this TechType installed, then nothing will happen.</remarks>
         public void AddModdedCraftingNode(string moddedTechTypeName)
         {
@@ -115,6 +177,8 @@ namespace SMLHelper.V2.Crafting
                 var techType = (TechType)cache.Index;
                 var craftNode = new CustomCraftTreeCraft(techType);
                 craftNode.LinkToParent(this);
+
+                Nodes.Add(craftNode);
             }
         }
     }
@@ -146,12 +210,43 @@ namespace SMLHelper.V2.Crafting
         /// </summary>
         internal CraftTree CraftTree => new CraftTree(_schemeAsString, CraftNode);
 
+        /// <summary>
+        /// Converts the new V2 CustomCraftTreeRoot object into the older V1 CustomCraftTreeRoot object.
+        /// Needed for backwards compatibility.
+        /// </summary>
+        /// <returns></returns>
         internal CustomCraftTreeRoot1 GetV1RootNode()
         {
             var node = new CustomCraftTreeRoot1(Scheme, SchemeAsString);
             node.CraftNode = CraftNode;
 
             return node;
+        }
+
+        /// <summary>
+        /// Populates a new CustomCraftTreeRoot from a CraftNode tree.
+        /// </summary>
+        /// <param name="tree">The tree to create the CustomCraftTreeRoot from.</param>
+        /// <param name="root"></param>
+        internal static void CreateFromExistingTree(CraftNode tree, ref CustomCraftTreeLinkingNode root)
+        {
+            foreach(var node in tree)
+            {
+                if (node.action == TreeAction.Expand)
+                {
+                    var tab = root.AddTabNode(node.id);
+                    var thing = (CustomCraftTreeLinkingNode)tab;
+                    CreateFromExistingTree(node, ref thing);
+                }
+
+                if (node.action == TreeAction.Craft)
+                {
+                    var techType = TechType.None;
+                    var success = TechTypeExtensions.FromString(node.id, out techType, false);
+
+                    root.AddCraftingNode(techType);
+                }
+            }
         }
     }
 
@@ -163,6 +258,7 @@ namespace SMLHelper.V2.Crafting
         private readonly string DisplayText;
         private readonly Atlas.Sprite Asprite;
         private readonly Sprite Usprite;
+        private readonly bool IsExistingTab;
 
         internal CustomCraftTreeTab(string nameID, string displayText, Atlas.Sprite sprite)
             : base(nameID, TreeAction.Expand, TechType.None)
@@ -180,9 +276,17 @@ namespace SMLHelper.V2.Crafting
             Usprite = sprite;
         }
 
+        internal CustomCraftTreeTab(string nameID) 
+            : base(nameID, TreeAction.Expand, TechType.None)
+        {
+            IsExistingTab = true;
+        }
+
         internal override void LinkToParent(CustomCraftTreeLinkingNode parent)
         {
             base.LinkToParent(parent);
+
+            if (IsExistingTab) return;
 
             string tabLanguageID = $"{SchemeAsString}Menu_{Name}";
 
@@ -210,7 +314,7 @@ namespace SMLHelper.V2.Crafting
     public class CustomCraftTreeCraft : CustomCraftTreeNode
     {
         internal CustomCraftTreeCraft(TechType techType)
-            : base(techType.ToString(), TreeAction.Craft, techType)
+            : base(techType.AsString(), TreeAction.Craft, techType)
         {
         }
     }

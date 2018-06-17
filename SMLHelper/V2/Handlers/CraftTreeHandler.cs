@@ -22,6 +22,32 @@ namespace SMLHelper.V2.Handlers
             return CraftTreeTypePatcher.CreateCustomCraftTreeAndType(name, out craftTreeType);
         }
 
+        public static Crafting.CustomCraftTreeRoot GetExistingTree(CraftTree.Type Scheme)
+        {
+            switch(Scheme)
+            {
+                case CraftTree.Type.Fabricator:
+                    return CraftTreePatcher.FabricatorTree;
+
+                case CraftTree.Type.CyclopsFabricator:
+                    return CraftTreePatcher.CyclopsFabricatorTree;
+
+                case CraftTree.Type.MapRoom:
+                    return CraftTreePatcher.MapRoomTree;
+
+                case CraftTree.Type.Rocket:
+                    return CraftTreePatcher.RocketTree;
+
+                case CraftTree.Type.Workbench:
+                    return CraftTreePatcher.WorkbenchTree;
+
+                case CraftTree.Type.Constructor:
+                    return CraftTreePatcher.ConstructorTree;
+            }
+
+            return null;
+        }
+
         /// <summary>
         /// Adds a new tab in the specified crafter.
         /// </summary>
@@ -84,11 +110,6 @@ namespace SMLHelper.V2.Handlers
         public static void AddCustomNode(Crafting.CustomCraftNode node)
         {
             CraftTreePatcher.CustomNodes.Add(node);
-        }
-
-        public static CraftTreeTab GetTab(CraftTree.Type Scheme, string path)
-        {
-
         }
     }
 }

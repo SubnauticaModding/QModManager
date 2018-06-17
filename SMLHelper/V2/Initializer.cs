@@ -1,5 +1,7 @@
 ﻿using Harmony;
 using SMLHelper.V2.Patchers;
+using SMLHelper.V2.Crafting;
+using SMLHelper.V2.Handlers;
 using System;
 
 namespace SMLHelper.V2
