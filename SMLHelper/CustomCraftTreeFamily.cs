@@ -6,10 +6,10 @@ using CustomCraftTreeRoot2 = SMLHelper.V2.CustomCraftTreeRoot;
 
 namespace SMLHelper
 {
-    [System.Obsolete("SMLHelper.CustomCraftTreeNode is obsolete. Please use SMLHelper.V2 instead.")]
     /// <summary>
     /// Basic data structure of a custom crafting tree node.
     /// </summary>
+    [System.Obsolete("SMLHelper.CustomCraftTreeNode is obsolete. Please use SMLHelper.V2 instead.")]
     public abstract class CustomCraftTreeNode
     {
         internal static bool Initialized = false;
@@ -42,10 +42,10 @@ namespace SMLHelper
         }
     }
 
-    [System.Obsolete("SMLHelper.CustomCraftTreeLinkingNode is obsolete. Please use SMLHelper.V2 instead.")]
     /// <summary>
     /// Abstract class that provides methods for adding new nodes into the custom crafting tree.
     /// </summary>
+    [System.Obsolete("SMLHelper.CustomCraftTreeLinkingNode is obsolete. Please use SMLHelper.V2 instead.")]
     public abstract class CustomCraftTreeLinkingNode : CustomCraftTreeNode
     {
         protected CustomCraftTreeLinkingNode(string name, TreeAction action, TechType techType)
@@ -59,7 +59,6 @@ namespace SMLHelper
         /// <param name="nameID">The name/ID of this node.</param>
         /// <param name="displayText">The hover text to display in-game.</param>
         /// <param name="sprite">The custom sprite to display on this tab node.</param>
-        /// <param name="childNodes">The child nodes to this tab node. These must be either tab nodes or craft nodes from here on.</param>
         public CustomCraftTreeTab AddTabNode(string nameID, string displayText, Atlas.Sprite sprite)
         {
             var tabNode = new CustomCraftTreeTab(nameID, displayText, sprite);
@@ -73,7 +72,6 @@ namespace SMLHelper
         /// <param name="nameID">The name/ID of this node.</param>
         /// <param name="displayText">The hover text to display in-game.</param>
         /// <param name="sprite">The custom sprite to display on this tab node.</param>
-        /// <param name="childNodes">The child nodes to this tab node. These must be either tab nodes or craft nodes from here on.</param>
         public CustomCraftTreeTab AddTabNode(string nameID, string displayText, Sprite sprite)
         {
             var tabNode = new CustomCraftTreeTab(nameID, displayText, sprite);
@@ -94,7 +92,7 @@ namespace SMLHelper
         /// <summary>
         /// Creates a collection of new crafting nodes for the custom crafting tree and links it to the calling node.
         /// </summary>
-        /// <param name="techType">The TechType to be crafted.</param>
+        /// <param name="techTypes">The TechTypes to be crafted.</param>
         public void AddCraftingNode(params TechType[] techTypes)
         {
             foreach (var tType in techTypes)
@@ -106,7 +104,7 @@ namespace SMLHelper
         /// <summary>
         /// Creates a new crafting node for a modded item for custom crafting tree and links it to the calling node.
         /// </summary>
-        /// <param name="techType">The name of the custom TechType to be crafted.</param>
+        /// <param name="moddedTechTypeName">The name of the custom TechType to be crafted.</param>
         /// <remarks>If the player doesn't have the mod for this TechType installed, then nothing will happen.</remarks>
         public void AddModdedCraftingNode(string moddedTechTypeName)
         {
@@ -121,10 +119,10 @@ namespace SMLHelper
         }
     }
 
-    [System.Obsolete("SMLHelper.CustomCraftTreeRoot is obsolete. Please use SMLHelper.V2 instead.")]
     /// <summary>
     /// The root node of a custom CraftTree. The whole tree starts here.
     /// </summary>
+    [System.Obsolete("SMLHelper.CustomCraftTreeRoot is obsolete. Please use SMLHelper.V2 instead.")]
     public class CustomCraftTreeRoot : CustomCraftTreeLinkingNode
     {
         private readonly string _schemeAsString;
@@ -158,10 +156,10 @@ namespace SMLHelper
         }
     }
 
-    [System.Obsolete("SMLHelper.CustomCraftTreeTab is obsolete. Please use SMLHelper.V2 instead.")]
     /// <summary>
     /// A tab node of a custom CraftTree. Tab nodes help organize crafting nodes by grouping them into categories.
     /// </summary>
+    [System.Obsolete("SMLHelper.CustomCraftTreeTab is obsolete. Please use SMLHelper.V2 instead.")]
     public class CustomCraftTreeTab : CustomCraftTreeLinkingNode
     {
         private readonly string DisplayText;
@@ -208,10 +206,10 @@ namespace SMLHelper
         }
     }
 
-    [System.Obsolete("SMLHelper.CustomCraftTreeCraft is obsolete. Please use SMLHelper.V2 instead.")]
     /// <summary>
     /// A crafting node of a custom CrafTree. This is the last node on a tree; The one that actuall crafts something.
     /// </summary>
+    [System.Obsolete("SMLHelper.CustomCraftTreeCraft is obsolete. Please use SMLHelper.V2 instead.")]
     public class CustomCraftTreeCraft : CustomCraftTreeNode
     {
         internal CustomCraftTreeCraft(TechType techType)
