@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.V2
+﻿namespace SMLHelper.V2.Crafting
 {    
     public class CraftNodeToScrub
     {

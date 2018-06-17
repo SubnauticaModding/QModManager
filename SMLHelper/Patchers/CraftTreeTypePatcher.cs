@@ -1,6 +1,6 @@
 ﻿using CraftTreeTypePatcher2 = SMLHelper.V2.Patchers.CraftTreeTypePatcher;
 using CraftTreePatcher2 = SMLHelper.V2.Patchers.CraftTreePatcher;
-using CustomCraftTreeRoot2 = SMLHelper.V2.CustomCraftTreeRoot;
+using CustomCraftTreeRoot2 = SMLHelper.V2.Crafting.CustomCraftTreeRoot;
 
 namespace SMLHelper.Patchers
 {

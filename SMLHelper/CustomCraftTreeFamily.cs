@@ -2,7 +2,7 @@
 using SMLHelper.V2.Util;
 using UnityEngine;
 using UnityEngine.Assertions;
-using CustomCraftTreeRoot2 = SMLHelper.V2.CustomCraftTreeRoot;
+using CustomCraftTreeRoot2 = SMLHelper.V2.Crafting.CustomCraftTreeRoot;
 
 namespace SMLHelper
 {

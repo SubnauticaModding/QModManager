@@ -1,4 +1,4 @@
-﻿using CraftNodeToScrub2 = SMLHelper.V2.CraftNodeToScrub;
+﻿using CraftNodeToScrub2 = SMLHelper.V2.Crafting.CraftNodeToScrub;
 
 namespace SMLHelper
 {    

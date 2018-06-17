@@ -1,7 +1,7 @@
 ﻿using SMLHelper.V2.Patchers;
 using SMLHelper.V2.Util;
 
-namespace SMLHelper.V2
+namespace SMLHelper.V2.Crafting
 {
     public class CustomCraftNode
     {

@@ -61,10 +61,11 @@
     <Compile Include="CustomCraftNode.cs" />
     <Compile Include="CustomCraftTab.cs" />
     <Compile Include="CustomCraftTreeFamily.cs" />
-    <Compile Include="V2\CraftNodeToScrub.cs" />
-    <Compile Include="V2\CustomCraftNode.cs" />
-    <Compile Include="V2\CustomCraftTab.cs" />
-    <Compile Include="V2\CustomCraftTreeFamily.cs" />
+    <Compile Include="V2\Crafting\CraftNodeToScrub.cs" />
+    <Compile Include="V2\Crafting\CraftTreeFamily.cs" />
+    <Compile Include="V2\Crafting\CustomCraftNode.cs" />
+    <Compile Include="V2\Crafting\CustomCraftTab.cs" />
+    <Compile Include="V2\Crafting\CustomCraftTreeFamily.cs" />
     <Compile Include="V2\CustomPrefabHandler.cs" />
     <Compile Include="V2\CustomSpriteHandler.cs" />
     <Compile Include="V2\Handlers\CraftTreeHandler.cs" />

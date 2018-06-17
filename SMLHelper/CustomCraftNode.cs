@@ -1,6 +1,6 @@
 ﻿using SMLHelper.V2.Patchers;
 using SMLHelper.V2.Util;
-using CustomCraftNode2 = SMLHelper.V2.CustomCraftNode;
+using CustomCraftNode2 = SMLHelper.V2.Crafting.CustomCraftNode;
 
 namespace SMLHelper
 {

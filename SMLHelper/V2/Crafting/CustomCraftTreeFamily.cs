@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Assertions;
 using CustomCraftTreeRoot1 = SMLHelper.CustomCraftTreeRoot;
 
-namespace SMLHelper.V2
+namespace SMLHelper.V2.Crafting
 {
     /// <summary>
     /// Basic data structure of a custom crafting tree node.
@@ -92,7 +92,7 @@ namespace SMLHelper.V2
         /// <summary>
         /// Creates a collection of new crafting nodes for the custom crafting tree and links it to the calling node.
         /// </summary>
-        /// <param name="techType">The TechType to be crafted.</param>
+        /// <param name="techTypes">The TechTypes to be crafted.</param>
         public void AddCraftingNode(params TechType[] techTypes)
         {
             foreach (var tType in techTypes)

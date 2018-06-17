@@ -1,6 +1,6 @@
 ﻿using SMLHelper.V2.Patchers;
 
-namespace SMLHelper.V2
+namespace SMLHelper.V2.Crafting
 {
     public class CustomCraftTab
     {

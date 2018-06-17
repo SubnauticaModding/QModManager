@@ -1,5 +1,5 @@
 ﻿using SMLHelper.V2.Patchers;
-using CustomCraftTab2 = SMLHelper.V2.CustomCraftTab;
+using CustomCraftTab2 = SMLHelper.V2.Crafting.CustomCraftTab;
 
 namespace SMLHelper
 {

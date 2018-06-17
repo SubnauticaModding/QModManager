@@ -15,7 +15,7 @@ namespace SMLHelper.V2.Patchers
         internal const int startingIndex = 11; // The default CraftTree.Type contains indexes 0 through 10
         internal static readonly EnumCacheManager<CraftTree.Type> cacheManager = new EnumCacheManager<CraftTree.Type>("CraftTreeType", startingIndex);
 
-        internal static CustomCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
+        internal static Crafting.CustomCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
         {
             var cache = cacheManager.GetCacheForTypeName(name);
 
@@ -39,7 +39,7 @@ namespace SMLHelper.V2.Patchers
 
             cacheManager.SaveCache();
 
-            var customTreeRoot = new CustomCraftTreeRoot(craftTreeType, name);
+            var customTreeRoot = new Crafting.CustomCraftTreeRoot(craftTreeType, name);
 
             CraftTreePatcher.CustomTrees[craftTreeType] = customTreeRoot;
 

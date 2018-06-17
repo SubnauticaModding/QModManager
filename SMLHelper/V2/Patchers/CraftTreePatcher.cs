@@ -7,14 +7,14 @@ namespace SMLHelper.V2.Patchers
 {
     public class CraftTreePatcher
     {
-        internal static List<CustomCraftTab> CustomTabs = new List<CustomCraftTab>();
-        internal static List<CustomCraftNode> CustomNodes = new List<CustomCraftNode>();
-        internal static List<CraftNodeToScrub> NodesToRemove = new List<CraftNodeToScrub>();
-        internal static Dictionary<CraftTree.Type, CustomCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, CustomCraftTreeRoot>();
+        internal static List<Crafting.CustomCraftTab> CustomTabs = new List<Crafting.CustomCraftTab>();
+        internal static List<Crafting.CustomCraftNode> CustomNodes = new List<Crafting.CustomCraftNode>();
+        internal static List<Crafting.CraftNodeToScrub> NodesToRemove = new List<Crafting.CraftNodeToScrub>();
+        internal static Dictionary<CraftTree.Type, Crafting.CustomCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, Crafting.CustomCraftTreeRoot>();
 
         #region Node Handling
 
-        private static void AddCustomTabs(ref CraftNode nodes, List<CustomCraftTab> customTabs, CraftTree.Type scheme)
+        private static void AddCustomTabs(ref CraftNode nodes, List<Crafting.CustomCraftTab> customTabs, CraftTree.Type scheme)
         {
             foreach (var tab in customTabs)
             {
@@ -45,7 +45,7 @@ namespace SMLHelper.V2.Patchers
             }
         }
 
-        private static void PatchNodes(ref CraftNode nodes, List<CustomCraftNode> customNodes, CraftTree.Type scheme)
+        private static void PatchNodes(ref CraftNode nodes, List<Crafting.CustomCraftNode> customNodes, CraftTree.Type scheme)
         {
             foreach (var customNode in customNodes)
             {
@@ -74,7 +74,7 @@ namespace SMLHelper.V2.Patchers
             }
         }
 
-        private static void RemoveNodes(ref CraftNode nodes, List<CraftNodeToScrub> nodesToRemove, CraftTree.Type scheme)
+        private static void RemoveNodes(ref CraftNode nodes, List<Crafting.CraftNodeToScrub> nodesToRemove, CraftTree.Type scheme)
         {
             // This method can be used to both remove single child nodes, thus removing one recipe from the tree.
             // Or it can remove entire tabs at once, removing the tab and all the recipes it contained in one go.
@@ -223,7 +223,7 @@ namespace SMLHelper.V2.Patchers
 
             craftTreeClass.GetField("initialized", BindingFlags.Static | BindingFlags.NonPublic).GetValue(craftTreeInitialized);
 
-            if (craftTreeInitialized && !CustomCraftTreeNode.Initialized)
+            if (craftTreeInitialized && !Crafting.CustomCraftTreeNode.Initialized)
             {
                 foreach (CraftTree.Type cTreeKey in CustomTrees.Keys)
                 {
