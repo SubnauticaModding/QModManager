@@ -2,30 +2,31 @@
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-	<WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+    <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{418502DD-372D-4EF9-8021-B262552DFEDE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SMLHelper2</RootNamespace>
+    <RootNamespace>SMLHelper</RootNamespace>
     <AssemblyName>SMLHelper</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-	<WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+    <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\SMLHelper.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-	<WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+    <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -65,6 +66,7 @@
     <Compile Include="V2\CustomCraftTreeFamily.cs" />
     <Compile Include="V2\CustomPrefabHandler.cs" />
     <Compile Include="V2\CustomSpriteHandler.cs" />
+    <Compile Include="V2\Handlers\TechTypeHandler.cs" />
     <Compile Include="V2\Logger.cs" />
     <Compile Include="V2\MonoBehaviours\TechTypeFixer.cs" />
     <Compile Include="Patchers\CraftDataPatcher.cs" />
@@ -94,4 +96,8 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>

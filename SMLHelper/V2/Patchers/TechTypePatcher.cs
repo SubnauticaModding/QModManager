@@ -7,14 +7,10 @@ using System.Reflection;
 
 namespace SMLHelper.V2.Patchers
 {
-    public class TechTypePatcher
+    internal class TechTypePatcher
     {
-        private static readonly FieldInfo CachedEnumString_valueToString =
-            typeof(CachedEnumString<TechType>).GetField("valueToString", BindingFlags.NonPublic | BindingFlags.Instance);
-
-        internal const int startingIndex = 11010;
-        internal static string CallerName = null;
-        internal static List<int> bannedIndices = new List<int> // Can't make it constant, dunno why
+        internal static readonly int startingIndex = 11010;
+        internal static readonly List<int> bannedIndices = new List<int> // Can't make it constant, dunno why
         {
             11110, //AutosortLocker 
             11111, //AutosortTarget
@@ -23,39 +19,9 @@ namespace SMLHelper.V2.Patchers
             11130, //DockedVehicleStorageAccess
             11140  //BaseTeleporter (not released)
         };
-
-        public static void Patch(HarmonyInstance harmony)
-        {
-            var enumType = typeof(Enum);
-            var thisType = typeof(TechTypePatcher);
-            var techTypeType = typeof(TechType);
-
-            harmony.Patch(enumType.GetMethod("GetValues", BindingFlags.Public | BindingFlags.Static), null,
-                new HarmonyMethod(thisType.GetMethod("Postfix_GetValues", BindingFlags.Public | BindingFlags.Static)));
-
-            harmony.Patch(enumType.GetMethod("IsDefined", BindingFlags.Public | BindingFlags.Static),
-                new HarmonyMethod(thisType.GetMethod("Prefix_IsDefined", BindingFlags.Public | BindingFlags.Static)), null);
-
-            harmony.Patch(enumType.GetMethod("Parse", new Type[] { typeof(Type), typeof(string), typeof(bool) }),
-                new HarmonyMethod(thisType.GetMethod("Prefix_Parse", BindingFlags.Public | BindingFlags.Static)), null);
-
-            harmony.Patch(techTypeType.GetMethod("ToString", new Type[0]),
-                new HarmonyMethod(thisType.GetMethod("Prefix_ToString", BindingFlags.Public | BindingFlags.Static)), null);
-
-            Logger.Log("TechTypePatcher is done.");
-        }
-
         internal static readonly EnumCacheManager<TechType> cacheManager = new EnumCacheManager<TechType>("TechType", startingIndex, bannedIndices);
 
-        #region Adding TechTypes
-
-        public static TechType AddTechType(string name, string languageName, string languageTooltip)
-        {
-            CallerName = Assembly.GetCallingAssembly().GetName().Name;
-            return AddTechType(name, languageName, languageTooltip, true);
-        }
-
-        public static TechType AddTechType(string name, string languageName, string languageTooltip, bool unlockOnGameStart)
+        internal static TechType AddTechType(string name)
         {
             var cache = cacheManager.GetCacheForTypeName(name);
 
@@ -74,11 +40,6 @@ namespace SMLHelper.V2.Patchers
             var techType = (TechType)cache.Index;
 
             cacheManager.customEnumTypes.Add(techType, cache);
-
-            LanguagePatcher.customLines.Add(name, languageName);
-            LanguagePatcher.customLines.Add("Tooltip_" + name, languageTooltip);
-            var valueToString = CachedEnumString_valueToString.GetValue(TooltipFactory.techTypeTooltipStrings) as Dictionary<TechType, string>;
-            valueToString[techType] = "Tooltip_" + name;
 
             var techTypeExtensions = typeof(TechTypeExtensions);
             var traverse = Traverse.Create(techTypeExtensions);
@@ -99,23 +60,37 @@ namespace SMLHelper.V2.Patchers
             techTypeKeys[techType] = intKey;
             keyTechTypes[intKey] = techType;
 
-            if (unlockOnGameStart)
-                KnownTechPatcher.unlockedAtStart.Add(techType);
-
-            CallerName = CallerName ?? Assembly.GetCallingAssembly().GetName().Name;
-            Logger.Log("Successfully added Tech Type: \"{0}\" to Index: \"{1}\" for mod \"{2}\"", name, cache.Index, CallerName);
-            CallerName = null;
+            Logger.Log("Successfully added Tech Type: \"{0}\" to Index: \"{1}\"", name, cache.Index);
 
             cacheManager.SaveCache();
 
             return techType;
         }
 
-        #endregion
-
         #region Patches
 
-        public static void Postfix_GetValues(Type enumType, ref Array __result)
+        internal static void Patch(HarmonyInstance harmony)
+        {
+            var enumType = typeof(Enum);
+            var thisType = typeof(TechTypePatcher);
+            var techTypeType = typeof(TechType);
+
+            harmony.Patch(enumType.GetMethod("GetValues", BindingFlags.Public | BindingFlags.Static), null,
+                new HarmonyMethod(thisType.GetMethod("Postfix_GetValues", BindingFlags.NonPublic | BindingFlags.Static)));
+
+            harmony.Patch(enumType.GetMethod("IsDefined", BindingFlags.Public | BindingFlags.Static),
+                new HarmonyMethod(thisType.GetMethod("Prefix_IsDefined", BindingFlags.NonPublic | BindingFlags.Static)), null);
+
+            harmony.Patch(enumType.GetMethod("Parse", new Type[] { typeof(Type), typeof(string), typeof(bool) }),
+                new HarmonyMethod(thisType.GetMethod("Prefix_Parse", BindingFlags.NonPublic | BindingFlags.Static)), null);
+
+            harmony.Patch(techTypeType.GetMethod("ToString", new Type[0]),
+                new HarmonyMethod(thisType.GetMethod("Prefix_ToString", BindingFlags.NonPublic | BindingFlags.Static)), null);
+
+            Logger.Log("TechTypePatcher is done.");
+        }
+
+        internal static void Postfix_GetValues(Type enumType, ref Array __result)
         {
             if (enumType.Equals(typeof(TechType)))
             {
@@ -131,7 +106,7 @@ namespace SMLHelper.V2.Patchers
             }
         }
 
-        public static bool Prefix_IsDefined(Type enumType, object value, ref bool __result)
+        internal static bool Prefix_IsDefined(Type enumType, object value, ref bool __result)
         {
             if (enumType.Equals(typeof(TechType)))
             {
@@ -145,7 +120,7 @@ namespace SMLHelper.V2.Patchers
             return true;
         }
 
-        public static bool Prefix_Parse(Type enumType, string value, bool ignoreCase, ref object __result)
+        internal static bool Prefix_Parse(Type enumType, string value, bool ignoreCase, ref object __result)
         {
             if (enumType.Equals(typeof(TechType)))
             {
@@ -162,7 +137,7 @@ namespace SMLHelper.V2.Patchers
             return true;
         }
 
-        public static bool Prefix_ToString(Enum __instance, ref string __result)
+        internal static bool Prefix_ToString(Enum __instance, ref string __result)
         {
             if (__instance.GetType().Equals(typeof(TechType)))
             {
