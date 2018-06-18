@@ -9,31 +9,15 @@ namespace SMLHelper.V2.Patchers
     {
         internal static Dictionary<CraftTree.Type, Crafting.CustomCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, Crafting.CustomCraftTreeRoot>();
 
-        internal static Crafting.CustomCraftTreeRoot FabricatorTree;
-        internal static Crafting.CustomCraftTreeRoot CyclopsFabricatorTree;
-        internal static Crafting.CustomCraftTreeRoot MapRoomTree;
-        internal static Crafting.CustomCraftTreeRoot ConstructorTree;
-        internal static Crafting.CustomCraftTreeRoot RocketTree;
-        internal static Crafting.CustomCraftTreeRoot SeamothUpgradesTree;
-        internal static Crafting.CustomCraftTreeRoot WorkbenchTree;
-        
-        static CraftTreePatcher()
-        {
-            LoadTrees();
-        }
+        internal static Crafting.CustomCraftTreeRoot FabricatorTree = LoadTree(CraftTree.Type.Fabricator);
+        internal static Crafting.CustomCraftTreeRoot CyclopsFabricatorTree = LoadTree(CraftTree.Type.CyclopsFabricator);
+        internal static Crafting.CustomCraftTreeRoot MapRoomTree = LoadTree(CraftTree.Type.MapRoom);
+        internal static Crafting.CustomCraftTreeRoot ConstructorTree = LoadTree(CraftTree.Type.Constructor);
+        internal static Crafting.CustomCraftTreeRoot RocketTree = LoadTree(CraftTree.Type.Rocket);
+        internal static Crafting.CustomCraftTreeRoot SeamothUpgradesTree = LoadTree(CraftTree.Type.SeamothUpgrades);
+        internal static Crafting.CustomCraftTreeRoot WorkbenchTree = LoadTree(CraftTree.Type.Workbench);
 
-        internal static void LoadTrees()
-        {
-            FabricatorTree = LoadTree(CraftTree.Type.Fabricator);
-            CyclopsFabricatorTree = LoadTree(CraftTree.Type.CyclopsFabricator);
-            MapRoomTree = LoadTree(CraftTree.Type.MapRoom);
-            ConstructorTree = LoadTree(CraftTree.Type.Constructor);
-            RocketTree = LoadTree(CraftTree.Type.Rocket);
-            SeamothUpgradesTree = LoadTree(CraftTree.Type.SeamothUpgrades);
-            WorkbenchTree = LoadTree(CraftTree.Type.Workbench);
-        }
-
-        private static Crafting.CustomCraftTreeRoot LoadTree(CraftTree.Type Scheme)
+        internal static Crafting.CustomCraftTreeRoot LoadTree(CraftTree.Type Scheme)
         {
             var treeRoot = new Crafting.CustomCraftTreeRoot(Scheme, Scheme.ToString());
             var treeLinkingNode = (Crafting.CustomCraftTreeLinkingNode)treeRoot;
