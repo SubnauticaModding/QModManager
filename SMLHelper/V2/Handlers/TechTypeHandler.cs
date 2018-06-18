@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using SMLHelper.V2.Patchers;
-
-namespace SMLHelper.V2.Handlers
+﻿namespace SMLHelper.V2.Handlers
 {
+    using System.Collections.Generic;
+    using System.Reflection;
+    using Patchers;
+
     /// <summary>
     /// Handles everything related to creating new TechTypes.
     /// </summary>
