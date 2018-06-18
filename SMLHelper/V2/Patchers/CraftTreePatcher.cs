@@ -1,31 +1,33 @@
-﻿using System;
-using Harmony;
-using System.Collections.Generic;
-using System.Reflection;
-
+﻿
 namespace SMLHelper.V2.Patchers
 {
+    using Harmony;
+    using System.Collections.Generic;
+    using System.Reflection;
+    using Util;
+    using Crafting;
+
     public class CraftTreePatcher
     {
-        internal static Dictionary<CraftTree.Type, Crafting.CustomCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, Crafting.CustomCraftTreeRoot>();
+        internal static Dictionary<CraftTree.Type, CustomCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, CustomCraftTreeRoot>();
 
-        internal static Crafting.CustomCraftTreeRoot FabricatorTree = LoadTree(CraftTree.Type.Fabricator);
-        internal static Crafting.CustomCraftTreeRoot CyclopsFabricatorTree = LoadTree(CraftTree.Type.CyclopsFabricator);
-        internal static Crafting.CustomCraftTreeRoot MapRoomTree = LoadTree(CraftTree.Type.MapRoom);
-        internal static Crafting.CustomCraftTreeRoot ConstructorTree = LoadTree(CraftTree.Type.Constructor);
-        internal static Crafting.CustomCraftTreeRoot RocketTree = LoadTree(CraftTree.Type.Rocket);
-        internal static Crafting.CustomCraftTreeRoot SeamothUpgradesTree = LoadTree(CraftTree.Type.SeamothUpgrades);
-        internal static Crafting.CustomCraftTreeRoot WorkbenchTree = LoadTree(CraftTree.Type.Workbench);
+        internal static CustomCraftTreeRoot FabricatorTree = LoadTree(CraftTree.Type.Fabricator);
+        internal static CustomCraftTreeRoot CyclopsFabricatorTree = LoadTree(CraftTree.Type.CyclopsFabricator);
+        internal static CustomCraftTreeRoot MapRoomTree = LoadTree(CraftTree.Type.MapRoom);
+        internal static CustomCraftTreeRoot ConstructorTree = LoadTree(CraftTree.Type.Constructor);
+        internal static CustomCraftTreeRoot RocketTree = LoadTree(CraftTree.Type.Rocket);
+        internal static CustomCraftTreeRoot SeamothUpgradesTree = LoadTree(CraftTree.Type.SeamothUpgrades);
+        internal static CustomCraftTreeRoot WorkbenchTree = LoadTree(CraftTree.Type.Workbench);
 
-        internal static Crafting.CustomCraftTreeRoot LoadTree(CraftTree.Type Scheme)
+        internal static CustomCraftTreeRoot LoadTree(CraftTree.Type Scheme)
         {
-            var treeRoot = new Crafting.CustomCraftTreeRoot(Scheme, Scheme.ToString());
-            var treeLinkingNode = (Crafting.CustomCraftTreeLinkingNode)treeRoot;
+            var treeRoot = new CustomCraftTreeRoot(Scheme, Scheme.ToString());
+            var treeLinkingNode = (CustomCraftTreeLinkingNode)treeRoot;
             var tree = CraftTree.GetTree(Scheme);
 
             if (tree == null || treeRoot == null || treeLinkingNode == null) return null;
 
-            Crafting.CustomCraftTreeRoot.CreateFromExistingTree(tree.nodes, ref treeLinkingNode);
+            CustomCraftTreeRoot.CreateFromExistingTree(tree.nodes, ref treeLinkingNode);
 
             return treeRoot;
         }
@@ -93,12 +95,10 @@ namespace SMLHelper.V2.Patchers
 
         private static void InitializePostFix()
         {
-            var craftTreeInitialized = false;
+            var craftTreeInitialized = (bool)ReflectionHelper.GetStaticPrivateField<CraftTree>("initialized");
             var craftTreeClass = typeof(CraftTree);
-
-            craftTreeClass.GetField("initialized", BindingFlags.Static | BindingFlags.NonPublic).GetValue(craftTreeInitialized);
-
-            if (craftTreeInitialized && !Crafting.CustomCraftTreeNode.Initialized)
+        
+            if (craftTreeInitialized && !CustomCraftTreeNode.Initialized)
             {
                 foreach (CraftTree.Type cTreeKey in CustomTrees.Keys)
                 {

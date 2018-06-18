@@ -44,7 +44,7 @@ namespace SMLHelper.Patchers
 
                 if (tree == null) continue;
 
-                var tabNode = default(Crafting.CustomCraftTreeTab);
+                var tabNode = default(CustomCraftTreeTab);
 
                 foreach (var pathNode in path)
                 {
@@ -65,15 +65,54 @@ namespace SMLHelper.Patchers
 
                 if (tree == null) continue;
 
-                var tabNode = default(Crafting.CustomCraftTreeTab);
+                var tabNode = default(CustomCraftTreeTab);
 
                 foreach(var pathNode in path)
                 {
                     var newTabNode = tree.GetTabNode(pathNode);
                     if (newTabNode == null)
-                        tabNode.AddModdedCraftingNode(pathNode);
+                    {
+                        var techType = TechType.None;
+
+                        if(TechTypeExtensions.FromString(pathNode, out techType, false))
+                        {
+                            tabNode.AddCraftingNode(techType);
+                        }
+                        else
+                        {
+                            tabNode.AddModdedCraftingNode(pathNode);
+                        }
+                    }
                     else
+                    {
                         tabNode = newTabNode;
+                    }
+                }
+            }
+
+            foreach(var node in nodesToRemove)
+            {
+                if (node == null) continue;
+
+                var path = node.Path.SplitByChar('/');
+                var tree = CraftTreeHandler.GetExistingTree(node.Scheme);
+
+                if (tree == null) continue;
+
+                var treeNode = default(CustomCraftTreeNode);
+
+                foreach (var pathNode in path)
+                {
+                    var newTreeNode = tree.GetNode(pathNode);
+
+                    if(newTreeNode == null)
+                    {
+                        treeNode.RemoveNode();
+                    }
+                    else
+                    {
+                        treeNode = newTreeNode;
+                    }
                 }
             }
 

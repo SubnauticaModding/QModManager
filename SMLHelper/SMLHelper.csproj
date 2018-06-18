@@ -95,11 +95,12 @@
     <Compile Include="V2\Patchers\ResourcesPatcher.cs" />
     <Compile Include="V2\Patchers\SpritePatcher.cs" />
     <Compile Include="V2\Patchers\TechTypePatcher.cs" />
+    <Compile Include="V2\Util\ReflectionHelper.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
-</PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

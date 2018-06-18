@@ -52,6 +52,18 @@
             CraftNode = new CraftNode(Name, Action, TechType);
         }
 
+        /// <summary>
+        /// Removes the calling node from parent. 
+        /// </summary>
+        public void RemoveNode()
+        {
+            Assert.IsNotNull(this.Parent, "No parent found to remove node from!");
+            Assert.IsNotNull(this.Parent.CraftNode, "No CraftNode found on parent!");
+
+            this.Parent.CraftNode.RemoveNode(this.CraftNode);
+            this.Parent = null;
+        }
+
         internal virtual void LinkToParent(CustomCraftTreeLinkingNode parent)
         {
             parent.CraftNode.AddNode(this.CraftNode);
@@ -130,6 +142,8 @@
         {
             foreach (var node in Nodes)
             {
+                if (node == null) continue;
+
                 if (node.Name == nameID && node.Action == TreeAction.Expand)
                 {
                     var tab = (CustomCraftTreeTab)node;
@@ -149,11 +163,31 @@
         {
             foreach (var node in Nodes)
             {
+                if (node == null) continue;
+
                 if (node.TechType == techType && node.Action == TreeAction.Craft)
                 {
                     var craftNode = (CustomCraftTreeCraft)node;
                     return craftNode;
                 }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Gets the node associated with the ID specified. Used if you don't know whether node is a tab or a craft node.
+        /// </summary>
+        /// <param name="nameID"></param>
+        /// <returns></returns>
+        public CustomCraftTreeNode GetNode(string nameID)
+        {
+            foreach(var node in Nodes)
+            {
+                if (node == null) continue;
+
+                if (node.Name == nameID)
+                    return node;
             }
 
             return null;
