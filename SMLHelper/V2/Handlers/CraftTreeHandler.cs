@@ -20,6 +20,11 @@
             return CraftTreeTypePatcher.CreateCustomCraftTreeAndType(name, out craftTreeType);
         }
 
+        /// <summary>
+        /// Returns a CustomCraftTreeRoot for an existing CraftTree.Type scheme, which you can edit to your liking.
+        /// </summary>
+        /// <param name="Scheme">The scheme whose craft tree to get.</param>
+        /// <returns>The CustomCraftTreeRoot for that scheme.</returns>
         public static Crafting.CustomCraftTreeRoot GetExistingTree(CraftTree.Type Scheme)
         {
             switch(Scheme)
@@ -41,73 +46,12 @@
 
                 case CraftTree.Type.Constructor:
                     return CraftTreePatcher.ConstructorTree;
+
+                case CraftTree.Type.SeamothUpgrades:
+                    return CraftTreePatcher.SeamothUpgradesTree;
             }
 
             return null;
-        }
-
-        /// <summary>
-        /// Adds a new tab in the specified crafter.
-        /// </summary>
-        /// <param name="path">The path to the new tab.</param>
-        /// <param name="name">The name of the new tab.</param>
-        /// <param name="scheme">The crafter to add a new tab to.</param>
-        /// <param name="sprite">The sprite for the tab.</param>
-        public static void AddCustomTab(string path, string name, CraftTree.Type scheme, Atlas.Sprite sprite)
-        {
-            CraftTreePatcher.CustomTabs.Add(new Crafting.CustomCraftTab(path, name, scheme, sprite));
-        }
-
-        /// <summary>
-        /// Adds a new tab in the specified crafter.
-        /// </summary>
-        /// <param name="path">The path to the new tab.</param>
-        /// <param name="name">The name of the new tab.</param>
-        /// <param name="scheme">The crafter to add a new tab to.</param>
-        /// <param name="sprite">The sprite for the tab.</param>
-        public static void AddCustomTab(string path, string name, CraftTree.Type scheme, UnityEngine.Sprite sprite)
-        {
-            CraftTreePatcher.CustomTabs.Add(new Crafting.CustomCraftTab(path, name, scheme, sprite));
-        }
-
-        /// <summary>
-        /// Adds a new tab in the specified crafter.
-        /// </summary>
-        /// <param name="tab">The tab to add.</param>
-        public static void AddCustomTab(Crafting.CustomCraftTab tab)
-        {
-            CraftTreePatcher.CustomTabs.Add(tab);
-        }
-
-        /// <summary>
-        /// Adds a new node in the specified crafter.
-        /// </summary>
-        /// <param name="techType">The TechType to craft in the node.</param>
-        /// <param name="scheme">The crafter to add the node to.</param>
-        /// <param name="path">The path to the node. Example: Resources/BasicMaterials. You can get the paths from dnSpy -> CraftTree.cs</param>
-        public static void AddCustomNode(TechType techType, CraftTree.Type scheme, string path) 
-        {
-            CraftTreePatcher.CustomNodes.Add(new Crafting.CustomCraftNode(techType, scheme, path));
-        }
-
-        /// <summary>
-        /// Adds a new node in the specified crafter.
-        /// </summary>
-        /// <param name="moddedTechType">The modded TechType to craft in the node.</param>
-        /// <param name="scheme">The crafter to add the node to.</param>
-        /// <param name="path">The path to the node. Example: Resources/BasicMaterials. You can get the paths from dnSpy -&gt; CraftTree.cs</param>
-        public static void AddCustomNode(string moddedTechType, CraftTree.Type scheme, string path)
-        {
-            CraftTreePatcher.CustomNodes.Add(new Crafting.CustomCraftNode(moddedTechType, scheme, path));
-        }
-
-        /// <summary>
-        /// Adds a new node in the specified crafter.
-        /// </summary>
-        /// <param name="node">The node to add.</param>
-        public static void AddCustomNode(Crafting.CustomCraftNode node)
-        {
-            CraftTreePatcher.CustomNodes.Add(node);
         }
     }
 }

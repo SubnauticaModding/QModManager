@@ -48,16 +48,9 @@ namespace SMLHelper.Patchers
 
                 foreach (var pathNode in path)
                 {
-                    SMLHelper.V2.Logger.Log("PathNod: " + pathNode);
-                    V2.Logger.Log("Tab Node: " + ((tabNode != null) ? tabNode.Name : ""));
-
                     var newTabNode = tree.GetTabNode(pathNode);
                     if (newTabNode == null)
-                    {
-                        V2.Logger.Log("Adding TabNode");
                         tabNode.AddTabNode(pathNode, tab.Name, tab.Sprite.Sprite);
-                        V2.Logger.Log("Added TabNode");
-                    }
                     else
                         tabNode = newTabNode;
                 }
@@ -76,17 +69,9 @@ namespace SMLHelper.Patchers
 
                 foreach(var pathNode in path)
                 {
-                    SMLHelper.V2.Logger.Log("PathNod: " + pathNode);
-                    V2.Logger.Log("Tab Node: " + ((tabNode != null) ? tabNode.Name : ""));
-
                     var newTabNode = tree.GetTabNode(pathNode);
-
                     if (newTabNode == null)
-                    {
-                        V2.Logger.Log("Adding CraftNode");
-                        tabNode.AddCraftingNode(node.TechType);
-                        V2.Logger.Log("Added CraftNode");
-                    }
+                        tabNode.AddModdedCraftingNode(pathNode);
                     else
                         tabNode = newTabNode;
                 }
