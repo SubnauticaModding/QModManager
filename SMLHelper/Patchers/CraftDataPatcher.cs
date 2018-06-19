@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using CraftDataPatcher2 = SMLHelper.V2.Patchers.CraftDataPatcher;
-using TechDataHelper2 = SMLHelper.V2.Patchers.TechDataHelper;
-using IngredientHelper2 = SMLHelper.V2.Patchers.IngredientHelper;
 
 namespace SMLHelper.Patchers
 {
@@ -44,20 +42,20 @@ namespace SMLHelper.Patchers
 
         internal static void Patch()
         {
-            customTechData.ForEach(x => CraftDataPatcher2.customTechData.Add(x.Key, x.Value.GetTechDataHelper()));
+            customTechData.ForEach(x => CraftDataPatcher2.CustomTechData.Add(x.Key, x.Value));
 
-            customHarvestOutputList.ForEach(x => CraftDataPatcher2.customHarvestOutputList.Add(x.Key, x.Value));
-            customHarvestTypeList.ForEach(x => CraftDataPatcher2.customHarvestTypeList.Add(x.Key, x.Value));
-            customItemSizes.ForEach(x => CraftDataPatcher2.customItemSizes.Add(x.Key, x.Value));
-            customEquipmentTypes.ForEach(x => CraftDataPatcher2.customEquipmentTypes.Add(x.Key, x.Value));
-            customBuildables.ForEach(x => CraftDataPatcher2.customBuildables.Add(x));
+            customHarvestOutputList.ForEach(x => CraftDataPatcher2.CustomHarvestOutputList.Add(x.Key, x.Value));
+            customHarvestTypeList.ForEach(x => CraftDataPatcher2.CustomHarvestTypeList.Add(x.Key, x.Value));
+            customItemSizes.ForEach(x => CraftDataPatcher2.CustomItemSizes.Add(x.Key, x.Value));
+            customEquipmentTypes.ForEach(x => CraftDataPatcher2.CustomEquipmentTypes.Add(x.Key, x.Value));
+            customBuildables.ForEach(x => CraftDataPatcher2.CustomBuildables.Add(x));
 
             V2.Logger.Log("Old CraftDataPatcher is done.");
         }
     }
 
     [Obsolete("SMLHelper.Patchers.TechDataHelper is obsolete. Please use SMLHelper.V2 instead.")]
-    public class TechDataHelper
+    public class TechDataHelper : ITechData
     {
         public int _craftAmount;
         public TechType _techType;
@@ -88,7 +86,7 @@ namespace SMLHelper.Patchers
 
         public IIngredient GetIngredient(int index)
         {
-            if (_ingredients == null || index > (_ingredients.Count - 1) || index < 0)
+            if (_ingredients != null || index > (_ingredients.Count - 1) || index < 0)
             {
                 return _ingredients[index];
             }
@@ -98,35 +96,12 @@ namespace SMLHelper.Patchers
 
         public TechType GetLinkedItem(int index)
         {
-            if (_linkedItems == null || index > (_linkedItems.Count - 1) || index < 0)
+            if (_linkedItems != null || index > (_linkedItems.Count - 1) || index < 0)
             {
                 return _linkedItems[index];
             }
 
             return TechType.None;
-        }
-
-        internal TechDataHelper2 GetTechDataHelper()
-        {
-            var techDataObj = new TechDataHelper2();
-            techDataObj._craftAmount = _craftAmount;
-            techDataObj._ingredients = GetIngredients();
-            techDataObj._linkedItems = _linkedItems;
-            techDataObj._techType = _techType;
-
-            return techDataObj;
-        }
-
-        internal List<IngredientHelper2> GetIngredients()
-        {
-            var list = new List<IngredientHelper2>();
-
-            foreach(var ingredient in _ingredients)
-            {
-                list.Add(new IngredientHelper2(ingredient._techType, ingredient._amount));
-            }
-
-            return list;
         }
 
         private object GetIngredientsObj()

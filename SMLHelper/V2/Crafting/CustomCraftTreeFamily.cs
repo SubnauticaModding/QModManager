@@ -292,7 +292,7 @@
                 if (node.action == TreeAction.Craft)
                 {
                     var techType = TechType.None;
-                    var success = TechTypeExtensions.FromString(node.id, out techType, false);
+                    TechTypeExtensions.FromString(node.id, out techType, false);
 
                     if (node.id == "SeamothHullModule2") techType = TechType.VehicleHullModule2;
                     else if (node.id == "SeamothHullModule3") techType = TechType.VehicleHullModule3;

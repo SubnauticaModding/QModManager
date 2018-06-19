@@ -9,8 +9,9 @@ namespace SMLHelper.V2.Patchers
 
     public class CraftTreePatcher
     {
-        internal static Dictionary<CraftTree.Type, CustomCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, CustomCraftTreeRoot>();
+        #region Internal Fields
 
+        internal static Dictionary<CraftTree.Type, CustomCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, CustomCraftTreeRoot>();
         internal static CustomCraftTreeRoot FabricatorTree = LoadTree(CraftTree.Type.Fabricator);
         internal static CustomCraftTreeRoot CyclopsFabricatorTree = LoadTree(CraftTree.Type.CyclopsFabricator);
         internal static CustomCraftTreeRoot MapRoomTree = LoadTree(CraftTree.Type.MapRoom);
@@ -31,6 +32,8 @@ namespace SMLHelper.V2.Patchers
 
             return treeRoot;
         }
+
+        #endregion
 
         #region Patches
 

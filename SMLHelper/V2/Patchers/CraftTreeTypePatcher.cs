@@ -9,11 +9,14 @@
 
     internal class CraftTreeTypePatcher
     {
-        private static readonly FieldInfo CachedEnumString_valueToString =
-            typeof(CachedEnumString<CraftTree.Type>).GetField("valueToString", BindingFlags.NonPublic | BindingFlags.Instance);
+        #region Internal Fields
 
         internal const int startingIndex = 11; // The default CraftTree.Type contains indexes 0 through 10
         internal static readonly EnumCacheManager<CraftTree.Type> cacheManager = new EnumCacheManager<CraftTree.Type>("CraftTreeType", startingIndex);
+
+        #endregion
+
+        #region Adding CraftTreeTypes and TreeRoots
 
         internal static Crafting.CustomCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
         {
@@ -45,6 +48,8 @@
 
             return customTreeRoot;
         }
+
+        #endregion
 
         #region Patches
 

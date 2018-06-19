@@ -7,69 +7,104 @@
 
     public class CraftDataPatcher
     {
-        public static Dictionary<TechType, TechDataHelper> customTechData = new Dictionary<TechType, TechDataHelper>();
-        public static Dictionary<TechType, TechType> customHarvestOutputList = new Dictionary<TechType, TechType>();
-        public static Dictionary<TechType, HarvestType> customHarvestTypeList = new Dictionary<TechType, HarvestType>();
-        public static Dictionary<TechType, Vector2int> customItemSizes = new Dictionary<TechType, Vector2int>();
-        public static Dictionary<TechType, EquipmentType> customEquipmentTypes = new Dictionary<TechType, EquipmentType>();
-        private static Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>> customGroups = new Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>();
+        #region Internal Fields
 
-        public static List<TechType> customBuildables = new List<TechType>();
+        internal static Dictionary<TechType, ITechData> CustomTechData = new Dictionary<TechType, ITechData>();
+        internal static Dictionary<TechType, TechType> CustomHarvestOutputList = new Dictionary<TechType, TechType>();
+        internal static Dictionary<TechType, HarvestType> CustomHarvestTypeList = new Dictionary<TechType, HarvestType>();
+        internal static Dictionary<TechType, Vector2int> CustomItemSizes = new Dictionary<TechType, Vector2int>();
+        internal static Dictionary<TechType, EquipmentType> CustomEquipmentTypes = new Dictionary<TechType, EquipmentType>();
+        internal static Dictionary<TechType, QuickSlotType> CustomSlotTypes = new Dictionary<TechType, QuickSlotType>();
+        internal static Dictionary<TechType, float> CustomCraftingTimes = new Dictionary<TechType, float>();
+        internal static Dictionary<TechType, TechType> CustomCookedCreatureList = new Dictionary<TechType, TechType>();
+        internal static List<TechType> CustomBuildables = new List<TechType>();
 
+        #endregion
+
+        #region Reflection
         private static readonly Type CraftDataType = typeof(CraftData);
 
         private static readonly FieldInfo GroupsField =
             CraftDataType.GetField("groups", BindingFlags.NonPublic | BindingFlags.Static);
 
-        public static void AddToCustomGroup(TechGroup group, TechCategory category, TechType techType)
-        {
-            //if (!customGroups.ContainsKey(group))
-            //    customGroups.Add(group, new Dictionary<TechCategory, List<TechType>>());
-            //if (!customGroups[group].ContainsKey(category))
-            //    customGroups[group][category] = new List<TechType>();
-            //customGroups[group][category].Add(techType);
+        #endregion
 
+        #region Group Handling
+
+        internal static void AddToCustomGroup(TechGroup group, TechCategory category, TechType techType)
+        {
             var groups = GroupsField.GetValue(null) as Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>;
-            groups[group][category].Add(techType);
+            var techGroup = groups[group];
+            if(techGroup == null)
+            {
+                // Should never happen, but doesn't hurt to add it.
+                Logger.Log("Invalid TechGroup!");
+                return;
+            }
+
+            var techCategory = techGroup[category];
+            if(techCategory == null)
+            {
+                Logger.Log($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}");
+                return;
+            }
+
+            techCategory.Add(techType);
 
             Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\"");
         }
 
-        public static void RemoveFromCustomGroup(TechGroup group, TechCategory category, TechType techType)
+        internal static void RemoveFromCustomGroup(TechGroup group, TechCategory category, TechType techType)
         {
             var groups = GroupsField.GetValue(null) as Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>;
-            groups[group][category].Remove(techType);
+            var techGroup = groups[group];
+            if (techGroup == null)
+            {
+                // Should never happen, but doesn't hurt to add it.
+                Logger.Log("Invalid TechGroup!");
+                return;
+            }
+
+            var techCategory = techGroup[category];
+            if (techCategory == null)
+            {
+                Logger.Log($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}");
+                return;
+            }
+
+            techCategory.Remove(techType);
 
             Logger.Log($"Removed \"{techType.AsString():G}\" from groups under \"{group:G}->{category:G}\"");
         }
-        public static void Patch(HarmonyInstance harmony)
+
+        #endregion
+
+        #region Patching
+
+        internal static void Patch(HarmonyInstance harmony)
         {
-            var dictField = typeof(CraftData).GetField("techData", BindingFlags.Static | BindingFlags.NonPublic);
-            var craftDataDict = dictField.GetValue(null);
-            var addMethod = craftDataDict.GetType().GetMethod("Add");
-
-            foreach (var entry in customTechData)
-            {
-                addMethod.Invoke(craftDataDict, new object[] { entry.Key, entry.Value.GetTechDataObj() });
-            }
-
-            Utility.PatchDictionary(CraftDataType, "harvestOutputList", customHarvestOutputList, BindingFlags.Static | BindingFlags.Public);
-            Utility.PatchDictionary(CraftDataType, "harvestTypeList", customHarvestTypeList);
-            Utility.PatchDictionary(CraftDataType, "itemSizes", customItemSizes);
-            Utility.PatchDictionary(CraftDataType, "equipmentTypes", customEquipmentTypes);
-            //Utility.PatchDictionary(CraftDataType, "groups", customGroups);
-
-            Utility.PatchList(CraftDataType, "buildables", customBuildables);
+            Utility.PatchDictionary(CraftDataType, "harvestOutputList", CustomHarvestOutputList, BindingFlags.Static | BindingFlags.Public);
+            Utility.PatchDictionary(CraftDataType, "harvestTypeList", CustomHarvestTypeList);
+            Utility.PatchDictionary(CraftDataType, "itemSizes", CustomItemSizes);
+            Utility.PatchDictionary(CraftDataType, "equipmentTypes", CustomEquipmentTypes);
+            Utility.PatchDictionary(CraftDataType, "slotTypes", CustomSlotTypes);
+            Utility.PatchDictionary(CraftDataType, "craftingTimes", CustomCraftingTimes);
+            Utility.PatchDictionary(CraftDataType, "cookedCreatureList", CustomCookedCreatureList);
+            Utility.PatchList(CraftDataType, "buildables", CustomBuildables);
 
             var preparePrefabIDCache = CraftDataType.GetMethod("PreparePrefabIDCache", BindingFlags.Public | BindingFlags.Static);
+            var getMethod = CraftDataType.GetMethod("Get", BindingFlags.Public | BindingFlags.Static);
 
             harmony.Patch(preparePrefabIDCache, null,
-                new HarmonyMethod(typeof(CraftDataPatcher).GetMethod("Postfix")));
+                new HarmonyMethod(typeof(CraftDataPatcher).GetMethod("PreparePrefabIDCachePostfix", BindingFlags.NonPublic | BindingFlags.Static)));
+
+            harmony.Patch(getMethod, 
+                new HarmonyMethod(typeof(CraftDataPatcher).GetMethod("GetTechDataPrefix", BindingFlags.NonPublic | BindingFlags.Static)), null);
 
             Logger.Log("CraftDataPatcher is done.");
         }
 
-        public static void Postfix()
+        private static void PreparePrefabIDCachePostfix()
         {
             var techMapping = CraftDataType.GetField("techMapping", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as Dictionary<TechType, string>;
 
@@ -78,105 +113,18 @@
                 techMapping[prefab.TechType] = prefab.ClassID;
             }
         }
-    }
 
-    public class TechDataHelper
-    {
-        public int _craftAmount;
-        public TechType _techType;
-        public List<IngredientHelper> _ingredients = new List<IngredientHelper>();
-        public List<TechType> _linkedItems = new List<TechType>();
-
-        public static Type TechDataType = typeof(CraftData).GetNestedType("TechData", BindingFlags.NonPublic);
-
-        public int craftAmount { get { return _craftAmount; } }
-
-        public int ingredientCount
+        private static bool GetTechDataPrefix(ref ITechData __result, TechType techType)
         {
-            get
+            if(CustomTechData.ContainsKey(techType))
             {
-                if (_ingredients != null) return _ingredients.Count;
-                else return 0;
-            }
-        }
-
-        public int linkedItemCount
-        {
-            get
-            {
-                if (_linkedItems != null) return _linkedItems.Count;
-                else return 0;
-            }
-        }
-
-        public IIngredient GetIngredient(int index)
-        {
-            if (_ingredients == null || index > (_ingredients.Count - 1) || index < 0)
-            {
-                return _ingredients[index];
+                __result = CustomTechData[techType];
+                return false;
             }
 
-            return new IngredientHelper(TechType.None, 0);
+            return true;
         }
 
-        public TechType GetLinkedItem(int index)
-        {
-            if (_linkedItems == null || index > (_linkedItems.Count - 1) || index < 0)
-            {
-                return _linkedItems[index];
-            }
-
-            return TechType.None;
-        }
-
-        private object GetIngredientsObj()
-        {
-            var ingredientsType = typeof(CraftData).GetNestedType("Ingredients", BindingFlags.NonPublic);
-            var ingredientsObj = Activator.CreateInstance(ingredientsType);
-            var addMethod = ingredientsType.GetMethod("Add", new Type[] { IngredientHelper.IngredientType });
-
-            foreach (var ingredient in _ingredients)
-            {
-                addMethod.Invoke(ingredientsObj, new object[] { ingredient.GetIngredientObj() });
-            }
-
-            return ingredientsObj;
-        }
-
-        public object GetTechDataObj()
-        {
-            var techDataObj = Activator.CreateInstance(TechDataType);
-            var ingredientsObj = GetIngredientsObj();
-
-            TechDataType.GetField("_craftAmount").SetValue(techDataObj, _craftAmount);
-            TechDataType.GetField("_ingredients").SetValue(techDataObj, ingredientsObj);
-            TechDataType.GetField("_linkedItems").SetValue(techDataObj, _linkedItems);
-            TechDataType.GetField("_techType").SetValue(techDataObj, _techType);
-
-            return techDataObj;
-        }
-
-    }
-
-    public class IngredientHelper : IIngredient
-    {
-        public TechType _techType;
-        public int _amount;
-
-        public TechType techType => _techType;
-        public int amount => _amount;
-
-        public static Type IngredientType = typeof(CraftData).GetNestedType("Ingredient", BindingFlags.NonPublic);
-
-        public IngredientHelper(TechType techType, int amount)
-        {
-            _amount = amount;
-            _techType = techType;
-        }
-
-        public object GetIngredientObj()
-        {
-            return Activator.CreateInstance(IngredientType, _techType, _amount);
-        }
+        #endregion
     }
 }
