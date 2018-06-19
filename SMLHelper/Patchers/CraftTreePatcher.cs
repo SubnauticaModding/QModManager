@@ -1,26 +1,27 @@
-﻿using System;
-using Harmony;
-using System.Collections.Generic;
-using CraftTreePatcher2 = SMLHelper.V2.Patchers.CraftTreePatcher;
-using CraftTreeHandler = SMLHelper.V2.Handlers.CraftTreeHandler;
-using Crafting = SMLHelper.V2.Crafting;
+﻿
 
 namespace SMLHelper.Patchers
 {
+    using System;
+    using Harmony;
+    using System.Collections.Generic;
+    using CraftTreePatcher2 = SMLHelper.V2.Patchers.CraftTreePatcher;
+    using V2.Handlers;
+    using V2.Crafting;
 
     [Obsolete("SMLHelper.Patchers.CraftTreePatcher is obsolete. Please use SMLHelper.V2 instead.")]
     public class CraftTreePatcher
     {
         [Obsolete("SMLHelper.Patchers.CraftTreePatcher.customTabs is obsolete. Please use SMLHelper.V2 instead.")]
-        public static List<CustomCraftTab> customTabs = new List<CustomCraftTab>();
+        public static List<SMLHelper.CustomCraftTab> customTabs = new List<SMLHelper.CustomCraftTab>();
 
         [Obsolete("SMLHelper.Patchers.CraftTreePatcher.customNodes is obsolete. Please use SMLHelper.V2 instead.")]
-        public static List<CustomCraftNode> customNodes = new List<CustomCraftNode>();
+        public static List<SMLHelper.CustomCraftNode> customNodes = new List<SMLHelper.CustomCraftNode>();
 
         [Obsolete("SMLHelper.Patchers.CraftTreePatcher.nodesToRemove is obsolete. Please use SMLHelper.V2 instead.")]
-        public static List<CraftNodeToScrub> nodesToRemove = new List<CraftNodeToScrub>();
+        public static List<SMLHelper.CraftNodeToScrub> nodesToRemove = new List<SMLHelper.CraftNodeToScrub>();
 
-        internal static Dictionary<CraftTree.Type, CustomCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, CustomCraftTreeRoot>();
+        internal static Dictionary<CraftTree.Type, SMLHelper.CustomCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, SMLHelper.CustomCraftTreeRoot>();
 
         [Obsolete("CraftTreePatcher.customCraftNodes is obsolete. Use CraftTreePatcher.customNodes", false)]
         public static Dictionary<string, TechType> customCraftNodes = new Dictionary<string, TechType>();
@@ -30,7 +31,7 @@ namespace SMLHelper.Patchers
             var nodes = new List<CustomCraftNode>();
 
             foreach (var customNode in customNodes)
-                nodes.Add(customNode);
+                nodes.Add(new CustomCraftNode(customNode.TechType, customNode.Scheme, customNode.Path));
 
             foreach (var customNode in customCraftNodes)
                 nodes.Add(new CustomCraftNode(customNode.Value, CraftTree.Type.Fabricator, customNode.Key));
