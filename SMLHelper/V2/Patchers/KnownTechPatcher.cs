@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Reflection;
-using Harmony;
-
-namespace SMLHelper.V2.Patchers
+﻿namespace SMLHelper.V2.Patchers
 {
+    using System.Collections.Generic;
+    using System.Reflection;
+    using Harmony;
+
     public class KnownTechPatcher
     {
         public static List<TechType> unlockedAtStart = new List<TechType>();

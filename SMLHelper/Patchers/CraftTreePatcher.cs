@@ -46,7 +46,13 @@
 
                 foreach (var pathNode in path)
                 {
-                    var newTabNode = tree.GetTabNode(pathNode);
+                    var newTabNode = default(CustomCraftTreeTab);
+
+                    if (tabNode == null)
+                        newTabNode = tree.GetTabNode(pathNode);
+                    else
+                        newTabNode = tabNode.GetTabNode(pathNode);
+
                     if (newTabNode == null)
                         tabNode.AddTabNode(pathNode, tab.Name, tab.Sprite.Sprite);
                     else
@@ -67,18 +73,25 @@
 
                 foreach(var pathNode in path)
                 {
-                    var newTabNode = tree.GetTabNode(pathNode);
-                    if (newTabNode == null)
+                    var newTabNode = default(CustomCraftTreeTab);
+
+                    if (tabNode == null)
+                        newTabNode = tree.GetTabNode(pathNode);
+                    else
+                        newTabNode = tabNode.GetTabNode(pathNode);
+
+                    if (newTabNode == null && tabNode != null)
                     {
                         var techType = TechType.None;
+                        var craftNode = default(CustomCraftTreeCraft);
 
                         if(TechTypeExtensions.FromString(pathNode, out techType, false))
                         {
-                            tabNode.AddCraftingNode(techType);
+                            craftNode = tabNode.AddCraftingNode(techType);
                         }
                         else
                         {
-                            tabNode.AddModdedCraftingNode(pathNode);
+                            craftNode = tabNode.AddModdedCraftingNode(pathNode);
                         }
                     }
                     else
@@ -88,7 +101,7 @@
                 }
             }
 
-            foreach(var node in nodesToRemove)
+            foreach (var node in nodesToRemove)
             {
                 if (node == null) continue;
 
@@ -112,6 +125,8 @@
                         treeNode = newTreeNode;
                     }
                 }
+
+                CraftTreeHandler.SetExistingTree(node.Scheme, tree);
             }
 
             CustomTrees.ForEach(x => CraftTreePatcher2.CustomTrees.Add(x.Key, x.Value.GetV2RootNode()));

@@ -1,5 +1,4 @@
 ﻿using SMLHelper.V2.Patchers;
-using CustomCraftTab2 = SMLHelper.V2.Crafting.CustomCraftTab;
 
 namespace SMLHelper
 {
@@ -52,12 +51,6 @@ namespace SMLHelper
         public CustomCraftTab(string path, string name, CraftScheme scheme, UnityEngine.Sprite sprite)
             : this(path, name, Utility.CraftSchemeMap[scheme], sprite)
         {
-        }
-
-        public CustomCraftTab2 GetV2CraftTab()
-        {
-            var customCraftTab = new CustomCraftTab2(Path, Name, Scheme, Sprite.Sprite);
-            return customCraftTab;
         }
     }
 }

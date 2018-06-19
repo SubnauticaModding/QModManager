@@ -1,6 +1,5 @@
 ﻿using SMLHelper.V2.Patchers;
 using SMLHelper.V2.Util;
-using CustomCraftNode2 = SMLHelper.V2.Crafting.CustomCraftNode;
 
 namespace SMLHelper
 {
@@ -39,12 +38,6 @@ namespace SMLHelper
         public CustomCraftNode(TechType techType, CraftScheme scheme, string path)
             : this(techType, Utility.CraftSchemeMap[scheme], path)
         {
-        }
-
-        public CustomCraftNode2 GetV2CraftNode()
-        {
-            var customNode = new CustomCraftNode2(TechType, Scheme, Path);
-            return customNode;
         }
     }
 }

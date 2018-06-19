@@ -1,6 +1,7 @@
 ﻿namespace SMLHelper.V2.Handlers
 {
     using Patchers;
+    using Crafting;
 
     /// <summary>
     /// A class for handling creating and editing of crafting trees.
@@ -15,7 +16,7 @@
         /// <param name="craftTreeType">The new enum instance for your custom craft tree.</param>
         /// <returns>A new root node for your custom craft tree.</returns>
         /// <remarks>This node is automatically assigned to <see cref="CraftTreePatcher.CustomTrees" />.</remarks>
-        public static Crafting.CustomCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
+        public static CustomCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
         {
             return CraftTreeTypePatcher.CreateCustomCraftTreeAndType(name, out craftTreeType);
         }
@@ -25,7 +26,7 @@
         /// </summary>
         /// <param name="Scheme">The scheme whose craft tree to get.</param>
         /// <returns>The CustomCraftTreeRoot for that scheme.</returns>
-        public static Crafting.CustomCraftTreeRoot GetExistingTree(CraftTree.Type Scheme)
+        public static CustomCraftTreeRoot GetExistingTree(CraftTree.Type Scheme)
         {
             switch(Scheme)
             {

@@ -1,6 +1,4 @@
-﻿using CraftNodeToScrub2 = SMLHelper.V2.Crafting.CraftNodeToScrub;
-
-namespace SMLHelper
+﻿namespace SMLHelper
 {    
     [System.Obsolete("SMLHelper.CraftNodeToScrub is obsolete. Please use SMLHelper.V2 instead.")]
     public class CraftNodeToScrub
@@ -18,12 +16,6 @@ namespace SMLHelper
         public CraftNodeToScrub(CraftScheme scheme, string path)
             : this(Utility.CraftSchemeMap[scheme], path)
         {
-        }
-
-        public CraftNodeToScrub2 GetV2CraftNode()
-        {
-            var craftNode = new CraftNodeToScrub2(Scheme, Path);
-            return craftNode;
         }
     }
 }

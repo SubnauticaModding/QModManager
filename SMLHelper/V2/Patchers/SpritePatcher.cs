@@ -1,8 +1,8 @@
-﻿using Harmony;
-using System.Reflection;
-
-namespace SMLHelper.V2.Patchers
+﻿namespace SMLHelper.V2.Patchers
 {
+    using Harmony;
+    using System.Reflection;
+
     public class SpritePatcher
     {
         public static void Patch(HarmonyInstance harmony)

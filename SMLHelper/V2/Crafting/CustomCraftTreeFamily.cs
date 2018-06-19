@@ -197,12 +197,14 @@
         /// Creates a new crafting node for the custom crafting tree and links it to the calling node.
         /// </summary>
         /// <param name="techType">The TechType to be crafted.</param>
-        public void AddCraftingNode(TechType techType)
+        public CustomCraftTreeCraft AddCraftingNode(TechType techType)
         {
             var craftNode = new CustomCraftTreeCraft(techType);
             craftNode.LinkToParent(this);
 
             Nodes.Add(craftNode);
+
+            return craftNode;
         }
 
         /// <summary>
@@ -224,7 +226,7 @@
         /// <remarks>
         /// If the player doesn't have the mod for this TechType installed, then nothing will happen.
         /// </remarks>
-        public void AddModdedCraftingNode(string moddedTechTypeName)
+        public CustomCraftTreeCraft AddModdedCraftingNode(string moddedTechTypeName)
         {
             EnumTypeCache cache = TechTypePatcher.cacheManager.GetCacheForTypeName(moddedTechTypeName);
 
@@ -235,7 +237,11 @@
                 craftNode.LinkToParent(this);
 
                 Nodes.Add(craftNode);
+
+                return craftNode;
             }
+
+            return null;
         }
     }
 

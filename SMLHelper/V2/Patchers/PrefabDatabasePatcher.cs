@@ -1,12 +1,13 @@
-﻿using Harmony;
-using System.Reflection;
-using System.Collections.Generic;
-using UnityEngine;
-using SMLHelper.V2.MonoBehaviours;
-using UWE;
-
-namespace SMLHelper.V2.Patchers
+﻿namespace SMLHelper.V2.Patchers
 {
+    using Harmony;
+    using System.Reflection;
+    using System.Collections.Generic;
+    using UnityEngine;
+    using SMLHelper.V2.MonoBehaviours;
+    using UWE;
+    using Logger = SMLHelper.V2.Logger;
+
     public class PrefabDatabasePatcher
     {
         private static Dictionary<string, GameObject> prefabsByFileName = new Dictionary<string, GameObject>();
