@@ -1,11 +1,9 @@
-﻿using Harmony;
-using SMLHelper.V2.Patchers;
-using SMLHelper.V2.Crafting;
-using SMLHelper.V2.Handlers;
-using System;
-
-namespace SMLHelper.V2
+﻿namespace SMLHelper.V2
 {
+    using Harmony;
+    using Patchers;
+    using System;
+
     public class Initializer
     {
         private static HarmonyInstance harmony;

@@ -1,11 +1,10 @@
-﻿using Harmony;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-
-namespace SMLHelper.V2.Patchers
+﻿namespace SMLHelper.V2.Patchers
 {
+    using Harmony;
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+
     public class CraftDataPatcher
     {
         public static Dictionary<TechType, TechDataHelper> customTechData = new Dictionary<TechType, TechDataHelper>();

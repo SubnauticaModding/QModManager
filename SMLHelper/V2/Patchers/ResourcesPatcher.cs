@@ -1,8 +1,8 @@
-﻿using Harmony;
-using System.Reflection;
-
-namespace SMLHelper.V2.Patchers
+﻿namespace SMLHelper.V2.Patchers
 {
+    using Harmony;
+    using System.Reflection;
+
     public class ResourcesPatcher
     {
         public static bool Prefix(ref UnityEngine.Object __result, string path)

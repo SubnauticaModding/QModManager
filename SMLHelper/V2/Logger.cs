@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace SMLHelper.V2
+﻿namespace SMLHelper.V2
 {
+    using System;
+
     internal static class Logger
     {
         internal static void Log(string text, params object[] args)

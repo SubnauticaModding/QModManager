@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Reflection;
-using System.IO;
-using UnityEngine;
-using System.Collections.Generic;
-
-namespace SMLHelper.V2
+﻿namespace SMLHelper.V2
 {
+    using System;
+    using System.Collections;
+    using System.Reflection;
+    using System.IO;
+    using UnityEngine;
+
     public class Utility
     {
         public static void AddBasicComponents(ref GameObject _object, string classId)

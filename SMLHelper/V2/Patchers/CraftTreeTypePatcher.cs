@@ -1,12 +1,12 @@
-﻿using Harmony;
-using SMLHelper.V2.Util;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
-namespace SMLHelper.V2.Patchers
+﻿namespace SMLHelper.V2.Patchers
 {
+    using Harmony;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
+    using Util;
+
     internal class CraftTreeTypePatcher
     {
         private static readonly FieldInfo CachedEnumString_valueToString =

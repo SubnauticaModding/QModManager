@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-
-namespace SMLHelper.V2
+﻿namespace SMLHelper.V2
 {
+    using System.Collections.Generic;
+    using UnityEngine;
+
     public class CustomSpriteHandler
     {
         public static List<CustomSprite> customSprites = new List<CustomSprite>();

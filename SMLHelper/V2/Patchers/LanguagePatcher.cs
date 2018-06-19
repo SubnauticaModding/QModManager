@@ -1,10 +1,10 @@
-﻿using Harmony;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-
-namespace SMLHelper.V2.Patchers
+﻿namespace SMLHelper.V2.Patchers
 {
+    using Harmony;
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+
     public class LanguagePatcher
     {
         public static Dictionary<string, string> customLines = new Dictionary<string, string>();

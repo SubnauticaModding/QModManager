@@ -1,9 +1,6 @@
-﻿
-
-namespace SMLHelper.Patchers
+﻿namespace SMLHelper.Patchers
 {
     using System;
-    using Harmony;
     using System.Collections.Generic;
     using CraftTreePatcher2 = SMLHelper.V2.Patchers.CraftTreePatcher;
     using V2.Handlers;
@@ -13,13 +10,13 @@ namespace SMLHelper.Patchers
     public class CraftTreePatcher
     {
         [Obsolete("SMLHelper.Patchers.CraftTreePatcher.customTabs is obsolete. Please use SMLHelper.V2 instead.")]
-        public static List<SMLHelper.CustomCraftTab> customTabs = new List<SMLHelper.CustomCraftTab>();
+        public static List<CustomCraftTab> customTabs = new List<CustomCraftTab>();
 
         [Obsolete("SMLHelper.Patchers.CraftTreePatcher.customNodes is obsolete. Please use SMLHelper.V2 instead.")]
-        public static List<SMLHelper.CustomCraftNode> customNodes = new List<SMLHelper.CustomCraftNode>();
+        public static List<CustomCraftNode> customNodes = new List<CustomCraftNode>();
 
         [Obsolete("SMLHelper.Patchers.CraftTreePatcher.nodesToRemove is obsolete. Please use SMLHelper.V2 instead.")]
-        public static List<SMLHelper.CraftNodeToScrub> nodesToRemove = new List<SMLHelper.CraftNodeToScrub>();
+        public static List<CraftNodeToScrub> nodesToRemove = new List<CraftNodeToScrub>();
 
         internal static Dictionary<CraftTree.Type, SMLHelper.CustomCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, SMLHelper.CustomCraftTreeRoot>();
 
