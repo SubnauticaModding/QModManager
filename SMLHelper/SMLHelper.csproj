@@ -61,12 +61,14 @@
     <Compile Include="CustomCraftNode.cs" />
     <Compile Include="CustomCraftTab.cs" />
     <Compile Include="CustomCraftTreeFamily.cs" />
+    <Compile Include="V2\Assets\ModPrefab.cs" />
+    <Compile Include="V2\Assets\ModSprite.cs" />
     <Compile Include="V2\Crafting\CustomCraftTreeFamily.cs" />
     <Compile Include="V2\Crafting\TechData.cs" />
-    <Compile Include="V2\CustomPrefabHandler.cs" />
-    <Compile Include="V2\CustomSpriteHandler.cs" />
     <Compile Include="V2\Handlers\CraftDataHandler.cs" />
     <Compile Include="V2\Handlers\CraftTreeHandler.cs" />
+    <Compile Include="V2\Handlers\PrefabHandler.cs" />
+    <Compile Include="V2\Handlers\SpriteHandler.cs" />
     <Compile Include="V2\Handlers\TechTypeHandler.cs" />
     <Compile Include="V2\Logger.cs" />
     <Compile Include="V2\MonoBehaviours\TechTypeFixer.cs" />

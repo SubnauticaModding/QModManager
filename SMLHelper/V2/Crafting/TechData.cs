@@ -26,7 +26,7 @@
         {
             foreach(var ingredient in ingredients)
             {
-                Ingredients.Add(ingredient);
+                Ingredients.Add(ingredient); 
             }
         }
 

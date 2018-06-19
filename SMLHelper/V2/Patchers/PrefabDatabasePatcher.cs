@@ -4,7 +4,8 @@
     using System.Reflection;
     using System.Collections.Generic;
     using UnityEngine;
-    using SMLHelper.V2.MonoBehaviours;
+    using MonoBehaviours;
+    using Assets;
     using UWE;
     using Logger = SMLHelper.V2.Logger;
 
@@ -15,9 +16,9 @@
 
         public static void LoadPrefabDatabase_Postfix()
         {
-            foreach (var prefab in CustomPrefabHandler.customPrefabs)
+            foreach (var prefab in ModPrefab.Prefabs)
             {
-                var goPrefab = prefab.GetResource() as GameObject;
+                var goPrefab = prefab.GetGameObject();
 
                 if (goPrefab == null) continue;
 

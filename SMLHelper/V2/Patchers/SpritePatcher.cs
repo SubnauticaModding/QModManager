@@ -2,6 +2,7 @@
 {
     using Harmony;
     using System.Reflection;
+    using Assets;
 
     public class SpritePatcher
     {
@@ -17,7 +18,7 @@
 
         public static bool Prefix(ref Atlas.Sprite __result, string name)
         {
-            foreach (var sprite in CustomSpriteHandler.customSprites)
+            foreach (var sprite in ModSprite.Sprites)
             {
                 if (sprite.TechType.AsString(true) == name.ToLowerInvariant())
                 {

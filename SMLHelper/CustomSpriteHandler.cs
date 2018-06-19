@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using CustomSpriteHandler2 = SMLHelper.V2.CustomSpriteHandler;
-using CustomSprite2 = SMLHelper.V2.CustomSprite;
+using SMLHelper.V2.Assets;
 
 namespace SMLHelper
 {
@@ -13,7 +12,7 @@ namespace SMLHelper
 
         internal static void Patch()
         {
-            customSprites.ForEach(x => CustomSpriteHandler2.customSprites.Add(x.GetV2Sprite()));
+            customSprites.ForEach(x => ModSprite.Sprites.Add(x.GetModSprite()));
         }
     }
 
@@ -49,9 +48,9 @@ namespace SMLHelper
         {
         }
 
-        public CustomSprite2 GetV2Sprite()
+        internal ModSprite GetModSprite()
         {
-            var customSprite = new CustomSprite2(TechType, Sprite);
+            var customSprite = new ModSprite(TechType, Sprite);
             customSprite.Id = Id;
             customSprite.Group = Group;
 

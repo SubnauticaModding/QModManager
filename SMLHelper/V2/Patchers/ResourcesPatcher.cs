@@ -2,16 +2,17 @@
 {
     using Harmony;
     using System.Reflection;
+    using Assets;
 
     public class ResourcesPatcher
     {
         public static bool Prefix(ref UnityEngine.Object __result, string path)
         {
-            foreach (var prefab in CustomPrefabHandler.customPrefabs)
+            foreach (var prefab in ModPrefab.Prefabs)
             {
                 if (prefab.PrefabFileName.ToLowerInvariant() == path.ToLowerInvariant())
                 {
-                    __result = prefab.GetResource();
+                    __result = prefab.GetGameObject();
                     return false;
                 }
             }

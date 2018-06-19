@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Reflection;
     using Patchers;
+    using Assets;
 
     /// <summary>
     /// Handles everything related to creating new TechTypes.
@@ -55,7 +56,7 @@
 
             // Register the Sprite
             if(sprite != null)
-                CustomSpriteHandler.customSprites.Add(new CustomSprite(techType, sprite));
+                ModSprite.Sprites.Add(new ModSprite(techType, sprite));
 
             // Return the new TechType
             return techType;
@@ -77,7 +78,7 @@
 
             // Register the Sprite
             if (sprite != null)
-                CustomSpriteHandler.customSprites.Add(new CustomSprite(techType, sprite));
+                ModSprite.Sprites.Add(new ModSprite(techType, sprite));
 
             // Return the new TechType
             return techType;
