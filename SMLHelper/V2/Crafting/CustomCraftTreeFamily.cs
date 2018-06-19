@@ -274,19 +274,6 @@
         internal CraftTree CraftTree => new CraftTree(_schemeAsString, CraftNode);
 
         /// <summary>
-        /// Converts the new V2 CustomCraftTreeRoot object into the older V1 CustomCraftTreeRoot object.
-        /// Needed for backwards compatibility.
-        /// </summary>
-        /// <returns></returns>
-        internal CustomCraftTreeRoot1 GetV1RootNode()
-        {
-            var node = new CustomCraftTreeRoot1(Scheme, SchemeAsString);
-            node.CraftNode = CraftNode;
-
-            return node;
-        }
-
-        /// <summary>
         /// Populates a new CustomCraftTreeRoot from a CraftNode tree.
         /// </summary>
         /// <param name="tree">The tree to create the CustomCraftTreeRoot from.</param>
