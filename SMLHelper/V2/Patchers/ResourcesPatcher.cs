@@ -19,6 +19,7 @@
 
             return true;
         }
+
         private static readonly PropertyInfo AssetsInfo = 
             typeof(UnityEngine.ResourceRequest).GetProperty("asset");
 
@@ -30,17 +31,17 @@
 
         public static bool Prefix_Async(ref UnityEngine.ResourceRequest __result, string path)
         {
-            foreach (var prefab in CustomPrefabHandler.customPrefabs)
+            foreach (var prefab in ModPrefab.Prefabs)
             {
                 if (prefab.PrefabFileName.ToLowerInvariant() == path.ToLowerInvariant())
                 {
                     //__result = prefab.Object;
 
                     __result = new UnityEngine.ResourceRequest();
-                    AssetsInfo.SetValue(__result, prefab.GetResource(), null);
+                    AssetsInfo.SetValue(__result, prefab.GetGameObject(), null);
 
                     MPathInfo.SetValue(__result, path);
-                    MTypeInfo.SetValue(__result, prefab.GetResource().GetType());
+                    MTypeInfo.SetValue(__result, prefab.GetGameObject().GetType());
 
                     return false;
                 }
