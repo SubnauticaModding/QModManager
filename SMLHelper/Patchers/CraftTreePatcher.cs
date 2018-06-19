@@ -125,8 +125,6 @@
                         treeNode = newTreeNode;
                     }
                 }
-
-                CraftTreeHandler.SetExistingTree(node.Scheme, tree);
             }
 
             CustomTrees.ForEach(x => CraftTreePatcher2.CustomTrees.Add(x.Key, x.Value.GetV2RootNode()));
