@@ -364,7 +364,7 @@
     }
 
     /// <summary>
-    /// A crafting node of a custom CrafTree. This is the last node on a tree; The one that actuall crafts something.
+    /// A crafting node of a custom CrafTree. This is the last node on a tree; The one that actually crafts something.
     /// </summary>
     /// <seealso cref="CustomCraftTreeNode" />
     public class CustomCraftTreeCraft : CustomCraftTreeNode

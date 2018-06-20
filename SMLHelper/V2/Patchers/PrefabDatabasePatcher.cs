@@ -23,7 +23,7 @@
                 if (goPrefab == null) continue;
 
                 // Just a failsafe
-                var fixer = goPrefab.AddComponent<TechTypeFixer>();
+                var fixer = goPrefab.AddComponent<InfoFixer>();
                 fixer.techType = prefab.TechType;
 
                 goPrefab.SetActive(false);
