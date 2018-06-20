@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using Patchers;
+    using Assets;
     using UnityEngine;
     using UnityEngine.Assertions;
     using Util;
@@ -348,17 +349,17 @@
 
             string spriteID = $"{SchemeAsString}_{Name}";
 
-            CustomSprite custSprite;
+            ModSprite modSprite;
             if (Asprite != null)
             {
-                custSprite = new CustomSprite(SpriteManager.Group.Category, spriteID, Asprite);
+                modSprite = new ModSprite(SpriteManager.Group.Category, spriteID, Asprite);
             }
             else
             {
-                custSprite = new CustomSprite(SpriteManager.Group.Category, spriteID, Usprite);
+                modSprite = new ModSprite(SpriteManager.Group.Category, spriteID, Usprite);
             }
 
-            CustomSpriteHandler.customSprites.Add(custSprite);
+            ModSprite.Sprites.Add(modSprite);
         }
     }
 

@@ -95,6 +95,7 @@
                     }
                 }
             }
+
             Logger.Log("ResourcesPatcher is done.");
         }
     }
