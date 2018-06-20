@@ -67,11 +67,12 @@
     <Compile Include="V2\Crafting\TechData.cs" />
     <Compile Include="V2\Handlers\CraftDataHandler.cs" />
     <Compile Include="V2\Handlers\CraftTreeHandler.cs" />
+    <Compile Include="V2\Handlers\KnownTechHandler.cs" />
     <Compile Include="V2\Handlers\PrefabHandler.cs" />
     <Compile Include="V2\Handlers\SpriteHandler.cs" />
     <Compile Include="V2\Handlers\TechTypeHandler.cs" />
     <Compile Include="V2\Logger.cs" />
-    <Compile Include="V2\MonoBehaviours\TechTypeFixer.cs" />
+    <Compile Include="V2\MonoBehaviours\InfoFixer.cs" />
     <Compile Include="Patchers\CraftDataPatcher.cs" />
     <Compile Include="Patchers\CraftTreePatcher.cs" />
     <Compile Include="CustomPrefabHandler.cs" />

@@ -34,7 +34,7 @@
 
             // Unlock the TechType on start
             if (unlockAtStart)
-                KnownTechPatcher.unlockedAtStart.Add(techType);
+                KnownTechPatcher.UnlockedAtStart.Add(techType);
 
             // Return the new TechType.
             return techType;

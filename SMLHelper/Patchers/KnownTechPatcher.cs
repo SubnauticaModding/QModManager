@@ -11,7 +11,7 @@ namespace SMLHelper.Patchers
 
         internal static void Patch()
         {
-            unlockedAtStart.ForEach(x => KnownTechPatcher2.unlockedAtStart.Add(x));
+            unlockedAtStart.ForEach(x => KnownTechPatcher2.UnlockedAtStart.Add(x));
 
             V2.Logger.Log("Old KnownTechPatcher is done.");
         }
