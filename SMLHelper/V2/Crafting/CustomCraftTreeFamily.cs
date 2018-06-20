@@ -6,7 +6,6 @@
     using UnityEngine;
     using UnityEngine.Assertions;
     using Util;
-    using CustomCraftTreeRoot1 = SMLHelper.CustomCraftTreeRoot;
 
     /// <summary>
     /// Basic data structure of a custom crafting tree node.
@@ -78,7 +77,10 @@
     /// <seealso cref="CustomCraftTreeNode" />
     public abstract class CustomCraftTreeLinkingNode : CustomCraftTreeNode
     {
-        public List<CustomCraftTreeNode> Nodes = new List<CustomCraftTreeNode>();
+        /// <summary>
+        /// The child nodes linked bellow this node.
+        /// </summary>
+        public readonly List<CustomCraftTreeNode> ChildNodes = new List<CustomCraftTreeNode>();
 
         protected CustomCraftTreeLinkingNode(string name, TreeAction action, TechType techType)
             : base(name, action, techType)
@@ -97,7 +99,7 @@
             var tabNode = new CustomCraftTreeTab(nameID, displayText, sprite);
             tabNode.LinkToParent(this);
 
-            Nodes.Add(tabNode);
+            ChildNodes.Add(tabNode);
 
             return tabNode;
         }
@@ -114,7 +116,7 @@
             var tabNode = new CustomCraftTreeTab(nameID, displayText, sprite);
             tabNode.LinkToParent(this);
 
-            Nodes.Add(tabNode);
+            ChildNodes.Add(tabNode);
 
             return tabNode;
         }
@@ -129,7 +131,7 @@
             var tabNode = new CustomCraftTreeTab(nameID);
             tabNode.LinkToParent(this);
 
-            Nodes.Add(tabNode);
+            ChildNodes.Add(tabNode);
 
             return tabNode;
         }
@@ -141,7 +143,7 @@
         /// <returns></returns>
         public CustomCraftTreeTab GetTabNode(string nameID)
         {
-            foreach (var node in Nodes)
+            foreach (var node in ChildNodes)
             {
                 if (node == null) continue;
 
@@ -162,7 +164,7 @@
         /// <returns></returns>
         public CustomCraftTreeCraft GetCraftingNode(TechType techType)
         {
-            foreach (var node in Nodes)
+            foreach (var node in ChildNodes)
             {
                 if (node == null) continue;
 
@@ -183,7 +185,7 @@
         /// <returns></returns>
         public CustomCraftTreeNode GetNode(string nameID)
         {
-            foreach(var node in Nodes)
+            foreach(var node in ChildNodes)
             {
                 if (node == null) continue;
 
@@ -203,7 +205,7 @@
             var craftNode = new CustomCraftTreeCraft(techType);
             craftNode.LinkToParent(this);
 
-            Nodes.Add(craftNode);
+            ChildNodes.Add(craftNode);
 
             return craftNode;
         }
@@ -237,7 +239,7 @@
                 var craftNode = new CustomCraftTreeCraft(techType);
                 craftNode.LinkToParent(this);
 
-                Nodes.Add(craftNode);
+                ChildNodes.Add(craftNode);
 
                 return craftNode;
             }

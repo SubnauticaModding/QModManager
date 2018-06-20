@@ -4,7 +4,7 @@
     using Crafting;
 
     /// <summary>
-    /// A class for handling creating and editing of crafting trees.
+    /// A handler class for creating and editing of crafting trees.
     /// </summary>
     public class CraftTreeHandler
     {
@@ -22,13 +22,21 @@
         }
 
         /// <summary>
-        /// Returns a CustomCraftTreeRoot for an existing CraftTree.Type scheme, which you can edit to your liking.
+        /// <para>Returns a CustomCraftTreeRoot for an existing CraftTree.Type scheme, which you can edit to your liking.</para>
+        /// <para>Valid schemes are:</para>
+        /// <para>Standard Fabricator:<see cref="CraftTree.Type.Fabricator"/></para>
+        /// <para>Cyclops Fabricator:<see cref="CraftTree.Type.CyclopsFabricator"/></para>
+        /// <para>Scanner Room Fabricator:<see cref="CraftTree.Type.MapRoom"/></para>
+        /// <para>Neptune Rocket Fabricator:<see cref="CraftTree.Type.Rocket"/></para>
+        /// <para>Modification Station:<see cref="CraftTree.Type.Workbench"/></para>
+        /// <para>Mobile Vehicle Bay:<see cref="CraftTree.Type.Constructor"/></para>
+        /// <para>Vehicle Upgrade Console:<see cref="CraftTree.Type.SeamothUpgrades"/></para>
         /// </summary>
-        /// <param name="Scheme">The scheme whose craft tree to get.</param>
-        /// <returns>The CustomCraftTreeRoot for that scheme.</returns>
+        /// <param name="Scheme">The fabricator scheme whose craft tree to get.</param>
+        /// <returns>The CustomCraftTreeRoot for the given <see cref="CraftTree.Type"/> when valid; Otherwise returns null.</returns>
         public static CustomCraftTreeRoot GetExistingTree(CraftTree.Type Scheme)
         {
-            switch(Scheme)
+            switch (Scheme)
             {
                 case CraftTree.Type.Fabricator:
                     return CraftTreePatcher.FabricatorTree;

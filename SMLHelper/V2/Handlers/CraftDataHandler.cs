@@ -1,17 +1,16 @@
 ﻿namespace SMLHelper.V2.Handlers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using Crafting;
     using Patchers;
 
+    /// <summary>
+    /// A handler class for editing crafted items.
+    /// </summary>
     public class CraftDataHandler
     {
         /// <summary>
-        /// Allows you to edit recipes, i.e. TechData for TechTypes. 
-        /// Can be used for existing TechTypes too.
+        /// <para>Allows you to edit recipes, i.e. TechData for TechTypes.</para>
+        /// <para>Can be used for existing TechTypes too.</para>
         /// </summary>
         /// <param name="techType">The TechType whose TechData you want to edit.</param>
         /// <param name="techData">The TechData for that TechType.</param>
@@ -22,8 +21,8 @@
         }
 
         /// <summary>
-        /// Allows you to edit EquipmentTypes for TechTypes. 
-        /// Can be used for existing TechTypes too.
+        /// <para>Allows you to edit EquipmentTypes for TechTypes.</para>
+        /// <para>Can be used for existing TechTypes too.</para>
         /// </summary>
         /// <param name="techType">The TechType whose EqiupmentType you want to edit.</param>
         /// <param name="equipmentType">The EquipmentType for that TechType.</param>
@@ -33,8 +32,8 @@
         }
 
         /// <summary>
-        /// Allows you to edit QuickSlotType for TechTypes. 
-        /// Can be used for existing TechTypes too.
+        /// <para>Allows you to edit QuickSlotType for TechTypes.</para>
+        /// <para>Can be used for existing TechTypes too.</para>
         /// </summary>
         /// <param name="techType">The TechType whose QuickSlotType you want to edit.</param>
         /// <param name="slotType">The QuickSlotType for that TechType.</param>
@@ -44,8 +43,8 @@
         }
 
         /// <summary>
-        /// Allows you to edit harvest output, i.e. what TechType you get when you "harvest" a TechType. 
-        /// Can be used for existing TechTypes too.
+        /// <para>Allows you to edit harvest output, i.e. what TechType you get when you "harvest" a TechType.</para>
+        /// <para>Can be used for existing TechTypes too.</para>
         /// </summary>
         /// <param name="techType">The TechType whose harvest output you want to edit.</param>
         /// <param name="harvestOutput">The harvest output for that TechType.</param>
@@ -55,8 +54,8 @@
         }
 
         /// <summary>
-        /// Allows you to edit HarvestType for TechTypes. 
-        /// Can be used for existing TechTypes too.
+        /// <para>Allows you to edit HarvestType for TechTypes.</para>
+        /// <para>Can be used for existing TechTypes too.</para>
         /// </summary>
         /// <param name="techType">The TechType whose HarvestType you want to edit.</param>
         /// <param name="harvestType">The HarvestType for that TechType.</param>
@@ -66,8 +65,8 @@
         }
 
         /// <summary>
-        /// Allows you to edit item sizes for TechTypes.
-        /// Can be used for existing TechTypes too.
+        /// <para>Allows you to edit item sizes for TechTypes.</para>
+        /// <para>Can be used for existing TechTypes too.</para>
         /// </summary>
         /// <param name="techType">The TechType whose item size you want to edit.</param>
         /// <param name="size">The item size for that TechType.</param>
@@ -77,8 +76,8 @@
         }
 
         /// <summary>
-        /// Allows you to edit crafting times for TechTypes.
-        /// Can be used for existing TechTypes too.
+        /// <para>Allows you to edit crafting times for TechTypes.</para>
+        /// <para>Can be used for existing TechTypes too.</para>
         /// </summary>
         /// <param name="techType">The TechType whose crafting time you want to edit.</param>
         /// <param name="time">The crafting time for that TechType.</param>
@@ -88,8 +87,8 @@
         }
 
         /// <summary>
-        /// Allows you to edit the cooked creature list, i.e. associate the unedible TechType to the cooked TechType.
-        /// Can be used for existing TechTypes too.
+        /// <para>Allows you to edit the cooked creature list, i.e. associate the unedible TechType to the cooked TechType.</para>
+        /// <para>Can be used for existing TechTypes too.</para>
         /// </summary>
         /// <param name="techType">The TechType whose cooked creature counterpart to edit.</param>
         /// <param name="cooked">The cooked creature counterpart for that TechType.</param>
