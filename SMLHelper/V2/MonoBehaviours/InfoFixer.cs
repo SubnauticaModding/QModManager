@@ -1,13 +1,11 @@
-﻿namespace SMLHelper.V2.MonoBehaviours
+namespace SMLHelper.V2.MonoBehaviours
 {
     using UnityEngine;
 
     public class InfoFixer : MonoBehaviour, IProtoEventListener
     {
-        [SerializeField] // I think this is important, it started working after I added it
         public TechType techType;
 
-        [SerializeField]
         public string ClassId;
 
         public void OnProtoSerialize(ProtobufSerializer serializer)
