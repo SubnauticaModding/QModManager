@@ -2,13 +2,15 @@
 {
     using System.Collections.Generic;
 
+    /// <summary>
+    /// A class that handles a custom sprite and what item it is associated to.
+    /// </summary>
     public class ModSprite
     {
         internal static List<ModSprite> Sprites = new List<ModSprite>();
 
         public TechType TechType;
         public Atlas.Sprite Sprite;
-
         public SpriteManager.Group Group;
         public string Id;
 
