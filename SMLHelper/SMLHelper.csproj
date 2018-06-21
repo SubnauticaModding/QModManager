@@ -85,6 +85,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Patchers\TechTypePatcher.cs" />
     <Compile Include="Utility.cs" />
+    <Compile Include="V2\Patchers\PDAEncyclopediaPatcher.cs" />
     <Compile Include="V2\Utility.cs" />
     <Compile Include="V2\Util\EnumCacheManager.cs" />
     <Compile Include="V2\Patchers\CraftDataPatcher.cs" />
