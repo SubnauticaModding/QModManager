@@ -6,7 +6,7 @@
     using Assets;
 
     /// <summary>
-    /// Handles everything related to creating new TechTypes.
+    /// A handler class for everything related to creating new TechTypes.
     /// </summary>
     public class TechTypeHandler
     {
@@ -14,13 +14,13 @@
             typeof(CachedEnumString<TechType>).GetField("valueToString", BindingFlags.NonPublic | BindingFlags.Instance);
 
         /// <summary>
-        /// Adds a new TechType into the game.
+        /// Adds a new <see cref="TechType"/> into the game.
         /// </summary>
         /// <param name="internalName">The internal name of the TechType. Should not contain special characters.</param>
         /// <param name="displayName">The display name of the TechType. Can be anything.</param>
         /// <param name="tooltip">The tooltip, displayed when hovered in an inventory. Can be anything.</param>
-        /// <param name="unlockAtStart">Whether this TechType should be unlocked on game start, or not. By default, true.</param>
-        /// <returns>The new TechType that is created.</returns>
+        /// <param name="unlockAtStart">Whether this TechType should be unlocked on game start, or not. By default, <c>true</c>.</param>
+        /// <returns>The new <see cref="TechType"/> that is created.</returns>
         public static TechType AddTechType(string internalName, string displayName, string tooltip, bool unlockAtStart = true)
         {
             // Register the TechType.
@@ -34,21 +34,21 @@
 
             // Unlock the TechType on start
             if (unlockAtStart)
-                KnownTechPatcher.unlockedAtStart.Add(techType);
+                KnownTechPatcher.UnlockedAtStart.Add(techType);
 
             // Return the new TechType.
             return techType;
         }
 
         /// <summary>
-        /// Adds a new TechType into the game, with a sprite.
+        /// Adds a new <see cref="TechType"/> into the game, with a sprite.
         /// </summary>
         /// <param name="internalName">The internal name of the TechType. Should not contain special characters.</param>
         /// <param name="displayName">The display name of the TechType. Can be anything.</param>
         /// <param name="tooltip">The tooltip, displayed when hovered in an inventory. Can be anything.</param>
         /// <param name="sprite">The sprite that will related to this TechType.</param>
-        /// <param name="unlockAtStart">Whether this TechType should be unlocked on game start, or not. By default, true.</param>
-        /// <returns>The new TechType that is created.</returns>
+        /// <param name="unlockAtStart">Whether this TechType should be unlocked on game start, or not. By default, <c>true</c>.</param>
+        /// <returns>The new <see cref="TechType"/> that is created.</returns>
         public static TechType AddTechType(string internalName, string displayName, string tooltip, Atlas.Sprite sprite, bool unlockAtStart = true)
         {
             // Register the TechType using overload.
@@ -63,14 +63,14 @@
         }
 
         /// <summary>
-        /// Adds a new TechType into the game, with a sprite.
+        /// Adds a new <see cref="TechType"/> into the game, with a sprite.
         /// </summary>
         /// <param name="internalName">The internal name of the TechType. Should not contain special characters.</param>
         /// <param name="displayName">The display name of the TechType. Can be anything.</param>
         /// <param name="tooltip">The tooltip, displayed when hovered in an inventory. Can be anything.</param>
         /// <param name="sprite">The sprite that will related to this TechType.</param>
-        /// <param name="unlockAtStart">Whether this TechType should be unlocked on game start, or not. By default, true.</param>
-        /// <returns>The new TechType that is created.</returns>
+        /// <param name="unlockAtStart">Whether this TechType should be unlocked on game start, or not. By default, <c>true</c>.</param>
+        /// <returns>The new <see cref="TechType"/> that is created.</returns>
         public static TechType AddTechType(string internalName, string displayName, string tooltip, UnityEngine.Sprite sprite, bool unlockAtStart = true)
         {
             // Register the TechType using overload.

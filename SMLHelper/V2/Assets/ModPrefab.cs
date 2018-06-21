@@ -3,6 +3,9 @@
     using System.Collections.Generic;
     using UnityEngine;
 
+    /// <summary>
+    /// The abstract class to inherit when you want to add new PreFabs into the game.
+    /// </summary>
     public abstract class ModPrefab
     {
         internal static List<ModPrefab> Prefabs = new List<ModPrefab>();

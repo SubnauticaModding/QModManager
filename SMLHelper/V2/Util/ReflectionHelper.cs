@@ -16,17 +16,29 @@
             fieldInfo.SetValue(instance, value);
         }
 
-        public static object GetStaticPrivateField<T>(string fieldName, BindingFlags bindingFlags = BindingFlags.Default)
+        public static object GetPrivateStatic<T>(string fieldName, BindingFlags bindingFlags = BindingFlags.Default)
         {
             FieldInfo fieldInfo = typeof(T).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static | bindingFlags);
             return fieldInfo.GetValue(null);
         }
 
 
-        public static void SetStaticPrivateField<T>(string fieldName, object value, BindingFlags bindingFlags = BindingFlags.Default)
+        public static void SetPrivateStaticField<T>(string fieldName, object value, BindingFlags bindingFlags = BindingFlags.Default)
         {
             FieldInfo fieldInfo = typeof(T).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static | bindingFlags);
             fieldInfo.SetValue(null, value);
+        }
+
+        public static MethodInfo GetPrivateMethod<T>(string methodName, BindingFlags flags = BindingFlags.Default)
+        {
+            MethodInfo methodInfo = typeof(T).GetMethod(methodName, BindingFlags.NonPublic | flags);
+            return methodInfo;
+        } 
+
+        public static MethodInfo GetPrivateStaticMethod<T>(string methodName, BindingFlags flags = BindingFlags.Default)
+        {
+            MethodInfo methodInfo = typeof(T).GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Static | flags);
+            return methodInfo;
         }
     }
 }
