@@ -9,6 +9,17 @@
     public class CraftDataHandler
     {
         /// <summary>
+        /// <para>Allows you to edit background type of a specific TechType.</para>
+        /// </summary>
+        /// <param name="techType">The TechType whose BackgroundType you want to edit.</param>
+        /// <param name="backgroundType">The BackgroundType for that TechType.</param>
+        /// <seealso cref="CraftData.BackgroundType"/>
+        public static void EditBackgroundTypes(TechType techType, CraftData.BackgroundType backgroundType)
+        {
+            CraftDataPatcher.CustomBackgroundTypes[techType] = backgroundType;
+        }
+
+        /// <summary>
         /// <para>Allows you to edit recipes, i.e. TechData for TechTypes.</para>
         /// <para>Can be used for existing TechTypes too.</para>
         /// </summary>

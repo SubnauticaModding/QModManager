@@ -9,6 +9,7 @@
     {
         #region Internal Fields
 
+        internal static Dictionary<TechType, CraftData.BackgroundType> CustomBackgroundTypes = new Dictionary<TechType, CraftData.BackgroundType>();
         internal static Dictionary<TechType, ITechData> CustomTechData = new Dictionary<TechType, ITechData>();
         internal static Dictionary<TechType, TechType> CustomHarvestOutputList = new Dictionary<TechType, TechType>();
         internal static Dictionary<TechType, HarvestType> CustomHarvestTypeList = new Dictionary<TechType, HarvestType>();
@@ -90,6 +91,7 @@
             Utility.PatchDictionary(CraftDataType, "slotTypes", CustomSlotTypes);
             Utility.PatchDictionary(CraftDataType, "craftingTimes", CustomCraftingTimes);
             Utility.PatchDictionary(CraftDataType, "cookedCreatureList", CustomCookedCreatureList);
+            Utility.PatchDictionary(CraftDataType, "backgroundTypes", CustomBackgroundTypes);
             Utility.PatchList(CraftDataType, "buildables", CustomBuildables);
 
             var preparePrefabIDCache = CraftDataType.GetMethod("PreparePrefabIDCache", BindingFlags.Public | BindingFlags.Static);
