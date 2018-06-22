@@ -6,7 +6,7 @@
   "Enable": true,
   "Priority": "Last",
   "AssemblyName": "SMLHelper.dll",
-  "EntryMethod": "SMLHelper.V2.Initializer.Patchh",
+  "EntryMethod": "SMLHelper.V2.Initializer.Patch",
   "Config": {
   }
 }
