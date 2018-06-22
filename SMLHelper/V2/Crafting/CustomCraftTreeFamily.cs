@@ -60,6 +60,16 @@
             Assert.IsNotNull(this.Parent, "No parent found to remove node from!");
             Assert.IsNotNull(this.Parent.CraftNode, "No CraftNode found on parent!");
 
+            if (this is CustomCraftTreeLinkingNode)
+            {
+                CustomCraftTreeLinkingNode linkingNode = this as CustomCraftTreeLinkingNode;
+                foreach (CustomCraftTreeNode cNode in linkingNode.ChildNodes)
+                {
+                    cNode.RemoveNode();
+                }
+            }
+
+            this.Parent.ChildNodes.Remove(this);
             this.Parent.CraftNode.RemoveNode(this.CraftNode);
             this.Parent = null;
         }
@@ -185,7 +195,7 @@
         /// <returns></returns>
         public CustomCraftTreeNode GetNode(string nameID)
         {
-            foreach(var node in ChildNodes)
+            foreach (var node in ChildNodes)
             {
                 if (node == null) continue;
 
