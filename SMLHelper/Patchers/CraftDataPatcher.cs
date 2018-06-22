@@ -10,9 +10,6 @@ namespace SMLHelper.Patchers
     [Obsolete("SMLHelper.Patchers.CraftDataPatcher is obsolete. Please use SMLHelper.V2 instead.")]
     public class CraftDataPatcher
     {
-        [Obsolete("SMLHelper.Patchers.CraftDataPatcher.customBackgroundType is obsolete. Please use SMLHelper.V2 instead.")]
-        public static Dictionary<TechType, CraftData.BackgroundType> customBackgroundTypes = new Dictionary<TechType, CraftData.BackgroundType>();
-
         [Obsolete("SMLHelper.Patchers.CraftDataPatcher.customTechData is obsolete. Please use SMLHelper.V2 instead.")]
         public static Dictionary<TechType, TechDataHelper> customTechData = new Dictionary<TechType, TechDataHelper>();
 
@@ -45,7 +42,6 @@ namespace SMLHelper.Patchers
 
         internal static void Patch()
         {
-            customBackgroundTypes.ForEach(x => CraftDataPatcher2.CustomBackgroundTypes.Add(x.Key, x.Value));
             customTechData.ForEach(x => CraftDataPatcher2.CustomTechData.Add(x.Key, x.Value));
 
             customHarvestOutputList.ForEach(x => CraftDataPatcher2.CustomHarvestOutputList.Add(x.Key, x.Value));
