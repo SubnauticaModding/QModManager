@@ -2,7 +2,7 @@
 {
     using UnityEngine;
 
-    public class InfoFixer : MonoBehaviour, IProtoEventListener
+    public class TechTypeFixer : MonoBehaviour, IProtoEventListener
     {
         [SerializeField] // I think this is important, it started working after I added it
         public TechType techType;
@@ -26,12 +26,6 @@
             if (techTag != null)
             {
                 techTag.type = techType;
-            }
-
-            var prefabIdentifier = GetComponent<PrefabIdentifier>();
-            if(prefabIdentifier != null)
-            {
-                prefabIdentifier.ClassId = ClassId;
             }
         }
     }
