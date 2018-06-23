@@ -5,7 +5,7 @@
     using System.Collections.Generic;
     using System.Reflection;
 
-    public class CraftDataPatcher
+    internal class CraftDataPatcher
     {
         #region Internal Fields
 

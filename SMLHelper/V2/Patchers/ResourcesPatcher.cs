@@ -4,9 +4,9 @@
     using System.Reflection;
     using Assets;
 
-    public class ResourcesPatcher
+    internal class ResourcesPatcher
     {
-        public static bool Prefix(ref UnityEngine.Object __result, string path)
+        internal static bool Prefix(ref UnityEngine.Object __result, string path)
         {
             foreach (var prefab in ModPrefab.Prefabs)
             {
@@ -29,7 +29,7 @@
         private static readonly FieldInfo MTypeInfo =
             typeof(UnityEngine.ResourceRequest).GetField("m_Type", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        public static bool Prefix_Async(ref UnityEngine.ResourceRequest __result, string path)
+        internal static bool Prefix_Async(ref UnityEngine.ResourceRequest __result, string path)
         {
             foreach (var prefab in ModPrefab.Prefabs)
             {
@@ -50,7 +50,7 @@
             return true;
         }
 
-        public static void Patch(HarmonyInstance harmony)
+        internal static void Patch(HarmonyInstance harmony)
         {
             var resourcesType = typeof(UnityEngine.Resources);
             var methods = resourcesType.GetMethods();

@@ -7,7 +7,7 @@ namespace SMLHelper.V2.Patchers
     using Util;
     using Crafting;
 
-    public class CraftTreePatcher
+    internal class CraftTreePatcher
     {
         #region Internal Fields
 

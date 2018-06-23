@@ -5,7 +5,7 @@
     using System.Linq;
     using Harmony;
 
-    public class KnownTechPatcher
+    internal class KnownTechPatcher
     {
         internal static List<TechType> UnlockedAtStart = new List<TechType>();
         internal static List<KnownTech.AnalysisTech> AnalysisTech = new List<KnownTech.AnalysisTech>();

@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Reflection;
 
-    public class DevConsolePatcher
+    internal class DevConsolePatcher
     {
         public static List<CommandInfo> commands = new List<CommandInfo>();
 
@@ -20,7 +20,7 @@
             Logger.Log("DevConsolePatcher is done.");
         }
 
-        public static void Postfix(bool __result, string value)
+        internal static void Postfix(bool __result, string value)
         {
             var separator = new char[]
             {
@@ -51,7 +51,7 @@
         }
     }
 
-    public class CommandInfo
+    internal class CommandInfo
     {
         public MethodInfo CommandHandler;
         public string Name;
