@@ -1,11 +1,12 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
     using Harmony;
+    using Assets;
     using System;
     using System.Collections.Generic;
     using System.Reflection;
 
-    public class CraftDataPatcher
+    internal class CraftDataPatcher
     {
         #region Internal Fields
 
@@ -110,7 +111,7 @@
         {
             var techMapping = CraftDataType.GetField("techMapping", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as Dictionary<TechType, string>;
 
-            foreach(var prefab in CustomPrefabHandler.customPrefabs)
+            foreach(var prefab in ModPrefab.Prefabs)
             {
                 techMapping[prefab.TechType] = prefab.ClassID;
             }
