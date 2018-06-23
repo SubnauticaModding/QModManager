@@ -7,14 +7,14 @@
     using MonoBehaviours;
     using Assets;
     using UWE;
-    using Logger = SMLHelper.V2.Logger;
+    using Logger = V2.Logger;
 
-    public class PrefabDatabasePatcher
+    internal class PrefabDatabasePatcher
     {
         private static Dictionary<string, GameObject> prefabsByFileName = new Dictionary<string, GameObject>();
         private static Dictionary<string, GameObject> prefabsByClassId = new Dictionary<string, GameObject>();
 
-        public static void LoadPrefabDatabase_Postfix()
+        internal static void LoadPrefabDatabase_Postfix()
         {
             foreach (var prefab in ModPrefab.Prefabs)
             {
@@ -37,7 +37,7 @@
             }
         }
 
-        public static bool GetPrefabForFilename_Prefix(string filename, ref GameObject __result)
+        internal static bool GetPrefabForFilename_Prefix(string filename, ref GameObject __result)
         {
             foreach(var prefab in prefabsByFileName)
             {
@@ -56,7 +56,7 @@
             return true;
         }
 
-        public static bool GetPrefabAsync_Prefix(ref IPrefabRequest __result, string classId)
+        internal static bool GetPrefabAsync_Prefix(ref IPrefabRequest __result, string classId)
         {
             foreach(var prefab in prefabsByClassId)
             {
@@ -75,7 +75,7 @@
             return true;
         }
 
-        public static void Patch(HarmonyInstance harmony)
+        internal static void Patch(HarmonyInstance harmony)
         {
             var prefabDatabaseType = typeof(PrefabDatabase);
             var loadPrefabDatabaseMethod = prefabDatabaseType.GetMethod("LoadPrefabDatabase", BindingFlags.Public | BindingFlags.Static);

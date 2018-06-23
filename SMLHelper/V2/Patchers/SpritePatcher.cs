@@ -4,9 +4,9 @@
     using System.Reflection;
     using Assets;
 
-    public class SpritePatcher
+    internal class SpritePatcher
     {
-        public static void Patch(HarmonyInstance harmony)
+        internal static void Patch(HarmonyInstance harmony)
         {
             var spriteManager = typeof(SpriteManager);
             var getFromResources = spriteManager.GetMethod("GetFromResources", BindingFlags.Public | BindingFlags.Static);
@@ -16,7 +16,7 @@
             Logger.Log("SpritePatcher is done.");
         }
 
-        public static bool Prefix(ref Atlas.Sprite __result, string name)
+        internal static bool Prefix(ref Atlas.Sprite __result, string name)
         {
             foreach (var sprite in ModSprite.Sprites)
             {

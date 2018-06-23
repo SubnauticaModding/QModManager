@@ -1,0 +1,12 @@
+{
+  "Id": "SMLHelper",
+  "DisplayName": "Modding Helper",
+  "Author": "AHK1221",
+  "Version": "2.0",
+  "Enable": true,
+  "Priority": "Last",
+  "AssemblyName": "SMLHelper.dll",
+  "EntryMethod": "SMLHelper.V2.Initializer.Patch",
+  "Config": {
+  }
+}
