@@ -110,10 +110,12 @@
         private static void PreparePrefabIDCachePostfix()
         {
             var techMapping = CraftDataType.GetField("techMapping", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as Dictionary<TechType, string>;
+            var entClassTechTable = CraftDataType.GetField("entClassTechTable", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as Dictionary<string, TechType>;
 
-            foreach(var prefab in ModPrefab.Prefabs)
+            foreach (var prefab in ModPrefab.Prefabs)
             {
                 techMapping[prefab.TechType] = prefab.ClassID;
+                entClassTechTable[prefab.ClassID] = prefab.TechType;
             }
         }
 
