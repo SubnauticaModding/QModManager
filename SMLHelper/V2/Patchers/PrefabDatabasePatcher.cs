@@ -27,7 +27,7 @@
                 fixer.techType = prefab.TechType;
 
                 goPrefab.SetActive(false);
-                goPrefab.transform.position = new Vector3(5000, 5000, 5000);
+                goPrefab.transform.position = new Vector3(-5000, -5000, -5000);
 
                 PrefabDatabase.AddToCache(prefab.PrefabFileName, goPrefab);
                 PrefabDatabase.prefabFiles[prefab.ClassID] = prefab.PrefabFileName;
