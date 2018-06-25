@@ -11,7 +11,7 @@
         #region Core Methods
 
         /// <summary>
-        /// <para>Allows you to edit background type of a specific TechType.</para>
+        /// <para>Allows you to edit inventory background type for TechTypes.</para>
         /// </summary>
         /// <param name="techType">The TechType whose BackgroundType you want to edit.</param>
         /// <param name="backgroundType">The BackgroundType for that TechType.</param>
@@ -126,7 +126,7 @@
         #region Redundant but friendly
 
         /// <summary>
-        /// <para>Allows you to set a non-default background type for your TechType.</para>
+        /// <para>Allows you to associate an inventory background type to your TechType.</para>
         /// </summary>
         /// <param name="techType">The TechType whose BackgroundType you want to set.</param>
         /// <param name="backgroundType">The BackgroundType for that TechType.</param>

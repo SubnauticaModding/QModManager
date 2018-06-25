@@ -58,6 +58,7 @@
             SpritePatcher.Patch(harmony);
             KnownTechPatcher.Patch(harmony);
             PDAEncyclopediaPatcher.Patch(harmony);
+            BaseBioReactorPatcher.Patch(harmony);
         }
     }
 }
