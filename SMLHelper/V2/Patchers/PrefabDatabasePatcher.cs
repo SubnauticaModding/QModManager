@@ -83,13 +83,13 @@
             var getPrefabAsync = prefabDatabaseType.GetMethod("GetPrefabAsync", BindingFlags.Public | BindingFlags.Static);
 
             harmony.Patch(loadPrefabDatabaseMethod, null,
-                new HarmonyMethod(typeof(PrefabDatabasePatcher).GetMethod("LoadPrefabDatabase_Postfix")));
+                new HarmonyMethod(typeof(PrefabDatabasePatcher).GetMethod("LoadPrefabDatabase_Postfix", BindingFlags.Static | BindingFlags.NonPublic)));
 
             harmony.Patch(getPrefabForFilename, 
-                new HarmonyMethod(typeof(PrefabDatabasePatcher).GetMethod("GetPrefabForFilename_Prefix")), null);
+                new HarmonyMethod(typeof(PrefabDatabasePatcher).GetMethod("GetPrefabForFilename_Prefix", BindingFlags.Static | BindingFlags.NonPublic)), null);
 
             harmony.Patch(getPrefabAsync,
-                new HarmonyMethod(typeof(PrefabDatabasePatcher).GetMethod("GetPrefabAsync_Prefix")), null);
+                new HarmonyMethod(typeof(PrefabDatabasePatcher).GetMethod("GetPrefabAsync_Prefix", BindingFlags.Static | BindingFlags.NonPublic)), null);
 
             Logger.Log("PrefabDatabasePatcher is done.");
         }

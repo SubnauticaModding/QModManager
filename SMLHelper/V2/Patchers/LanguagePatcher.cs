@@ -25,7 +25,7 @@
             var method = languageType.GetMethod("LoadLanguageFile", BindingFlags.NonPublic | BindingFlags.Instance);
 
             harmony.Patch(method, null,
-                new HarmonyMethod(typeof(LanguagePatcher).GetMethod("Postfix")));
+                new HarmonyMethod(typeof(LanguagePatcher).GetMethod("Postfix", BindingFlags.Static | BindingFlags.NonPublic)));
             Logger.Log("LanguagePatcher is done.");
         }
     }

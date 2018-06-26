@@ -16,7 +16,7 @@
             var thisType = typeof(DevConsolePatcher);
             var submitMethod = devConsoleType.GetMethod("Submit", BindingFlags.Instance | BindingFlags.NonPublic);
 
-            harmony.Patch(submitMethod, null, new HarmonyMethod(thisType.GetMethod("Postfix")));
+            harmony.Patch(submitMethod, null, new HarmonyMethod(thisType.GetMethod("Postfix", BindingFlags.Static | BindingFlags.NonPublic)));
             Logger.Log("DevConsolePatcher is done.");
         }
 

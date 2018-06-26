@@ -66,12 +66,12 @@
                             var genericMethod = method.MakeGenericMethod(typeof(UnityEngine.Object));
 
                             harmony.Patch(genericMethod,
-                                new HarmonyMethod(typeof(ResourcesPatcher).GetMethod("Prefix")), null);
+                                new HarmonyMethod(typeof(ResourcesPatcher).GetMethod("Prefix", BindingFlags.Static | BindingFlags.NonPublic)), null);
                         }
                         else
                         {
                             harmony.Patch(method,
-                                new HarmonyMethod(typeof(ResourcesPatcher).GetMethod("Prefix")), null);
+                                new HarmonyMethod(typeof(ResourcesPatcher).GetMethod("Prefix", BindingFlags.Static | BindingFlags.NonPublic)), null);
                         }
                     }
                 }
@@ -85,12 +85,12 @@
                             var genericMethod = method.MakeGenericMethod(typeof(UnityEngine.Object));
 
                             harmony.Patch(genericMethod,
-                                new HarmonyMethod(typeof(ResourcesPatcher).GetMethod("Prefix_Async")), null);
+                                new HarmonyMethod(typeof(ResourcesPatcher).GetMethod("Prefix_Async", BindingFlags.Static | BindingFlags.NonPublic)), null);
                         }
                         else
                         {
                             harmony.Patch(method,
-                                new HarmonyMethod(typeof(ResourcesPatcher).GetMethod("Prefix_Async")), null);
+                                new HarmonyMethod(typeof(ResourcesPatcher).GetMethod("Prefix_Async", BindingFlags.Static | BindingFlags.NonPublic)), null);
                         }
                     }
                 }
