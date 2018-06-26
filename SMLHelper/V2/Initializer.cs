@@ -3,6 +3,7 @@
     using Harmony;
     using Patchers;
     using System;
+    using UnityEngine;
 
     public class Initializer
     {
@@ -56,6 +57,8 @@
             PrefabDatabasePatcher.Patch(harmony);
             SpritePatcher.Patch(harmony);
             KnownTechPatcher.Patch(harmony);
+            PDAEncyclopediaPatcher.Patch(harmony);
+            BaseBioReactorPatcher.Patch(harmony);
         }
     }
 }

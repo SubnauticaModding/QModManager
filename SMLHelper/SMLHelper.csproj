@@ -65,6 +65,7 @@
     <Compile Include="V2\Assets\ModSprite.cs" />
     <Compile Include="V2\Crafting\CustomCraftTreeFamily.cs" />
     <Compile Include="V2\Crafting\TechData.cs" />
+    <Compile Include="V2\Handlers\BaseBioReactorHandler.cs" />
     <Compile Include="V2\Handlers\CraftDataHandler.cs" />
     <Compile Include="V2\Handlers\CraftTreeHandler.cs" />
     <Compile Include="V2\Handlers\KnownTechHandler.cs" />
@@ -85,6 +86,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Patchers\TechTypePatcher.cs" />
     <Compile Include="Utility.cs" />
+    <Compile Include="V2\Patchers\BaseBioReactorPatcher.cs" />
+    <Compile Include="V2\Patchers\PDAEncyclopediaPatcher.cs" />
     <Compile Include="V2\Utility.cs" />
     <Compile Include="V2\Util\EnumCacheManager.cs" />
     <Compile Include="V2\Patchers\CraftDataPatcher.cs" />
@@ -99,7 +102,11 @@
     <Compile Include="V2\Patchers\TechTypePatcher.cs" />
     <Compile Include="V2\Util\ReflectionHelper.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="V2\mod.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

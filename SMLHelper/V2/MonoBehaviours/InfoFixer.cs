@@ -2,7 +2,7 @@ namespace SMLHelper.V2.MonoBehaviours
 {
     using UnityEngine;
 
-    public class InfoFixer : MonoBehaviour, IProtoEventListener
+    public class TechTypeFixer : MonoBehaviour, IProtoEventListener
     {
         public TechType techType;
 
@@ -24,12 +24,6 @@ namespace SMLHelper.V2.MonoBehaviours
             if (techTag != null)
             {
                 techTag.type = techType;
-            }
-
-            var prefabIdentifier = GetComponent<PrefabIdentifier>();
-            if(prefabIdentifier != null)
-            {
-                prefabIdentifier.ClassId = ClassId;
             }
         }
     }

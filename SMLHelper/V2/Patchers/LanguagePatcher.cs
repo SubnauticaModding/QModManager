@@ -5,12 +5,12 @@
     using System.Collections.Generic;
     using System.Reflection;
 
-    public class LanguagePatcher
+    internal class LanguagePatcher
     {
         public static Dictionary<string, string> customLines = new Dictionary<string, string>();
         private static Type languageType = typeof(Language);
 
-        public static void Postfix(ref Language __instance)
+        internal static void Postfix(ref Language __instance)
         {
             var stringsField = languageType.GetField("strings", BindingFlags.NonPublic | BindingFlags.Instance);
             var strings = stringsField.GetValue(__instance) as Dictionary<string, string>;
@@ -20,12 +20,12 @@
             }
         }
 
-        public static void Patch(HarmonyInstance harmony)
+        internal static void Patch(HarmonyInstance harmony)
         {
             var method = languageType.GetMethod("LoadLanguageFile", BindingFlags.NonPublic | BindingFlags.Instance);
 
             harmony.Patch(method, null,
-                new HarmonyMethod(typeof(LanguagePatcher).GetMethod("Postfix")));
+                new HarmonyMethod(typeof(LanguagePatcher).GetMethod("Postfix", BindingFlags.Static | BindingFlags.NonPublic)));
             Logger.Log("LanguagePatcher is done.");
         }
     }

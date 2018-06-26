@@ -7,7 +7,7 @@ namespace SMLHelper.V2.Patchers
     using Util;
     using Crafting;
 
-    public class CraftTreePatcher
+    internal class CraftTreePatcher
     {
         #region Internal Fields
 
@@ -98,7 +98,7 @@ namespace SMLHelper.V2.Patchers
 
         private static void InitializePostFix()
         {
-            var craftTreeInitialized = (bool)ReflectionHelper.GetPrivateStatic<CraftTree>("initialized");
+            var craftTreeInitialized = (bool)ReflectionHelper.GetPrivateStaticField<CraftTree>("initialized");
             var craftTreeClass = typeof(CraftTree);
         
             if (craftTreeInitialized && !CustomCraftTreeNode.Initialized)

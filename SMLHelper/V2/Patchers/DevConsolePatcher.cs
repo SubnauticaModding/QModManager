@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Reflection;
 
-    public class DevConsolePatcher
+    internal class DevConsolePatcher
     {
         public static List<CommandInfo> commands = new List<CommandInfo>();
 
@@ -16,11 +16,11 @@
             var thisType = typeof(DevConsolePatcher);
             var submitMethod = devConsoleType.GetMethod("Submit", BindingFlags.Instance | BindingFlags.NonPublic);
 
-            harmony.Patch(submitMethod, null, new HarmonyMethod(thisType.GetMethod("Postfix")));
+            harmony.Patch(submitMethod, null, new HarmonyMethod(thisType.GetMethod("Postfix", BindingFlags.Static | BindingFlags.NonPublic)));
             Logger.Log("DevConsolePatcher is done.");
         }
 
-        public static void Postfix(bool __result, string value)
+        internal static void Postfix(bool __result, string value)
         {
             var separator = new char[]
             {
@@ -51,7 +51,7 @@
         }
     }
 
-    public class CommandInfo
+    internal class CommandInfo
     {
         public MethodInfo CommandHandler;
         public string Name;

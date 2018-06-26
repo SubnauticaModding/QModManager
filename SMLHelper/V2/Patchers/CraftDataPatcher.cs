@@ -1,14 +1,16 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
     using Harmony;
+    using Assets;
     using System;
     using System.Collections.Generic;
     using System.Reflection;
 
-    public class CraftDataPatcher
+    internal class CraftDataPatcher
     {
         #region Internal Fields
 
+        internal static Dictionary<TechType, CraftData.BackgroundType> CustomBackgroundTypes = new Dictionary<TechType, CraftData.BackgroundType>();
         internal static Dictionary<TechType, ITechData> CustomTechData = new Dictionary<TechType, ITechData>();
         internal static Dictionary<TechType, TechType> CustomHarvestOutputList = new Dictionary<TechType, TechType>();
         internal static Dictionary<TechType, HarvestType> CustomHarvestTypeList = new Dictionary<TechType, HarvestType>();
@@ -90,6 +92,7 @@
             Utility.PatchDictionary(CraftDataType, "slotTypes", CustomSlotTypes);
             Utility.PatchDictionary(CraftDataType, "craftingTimes", CustomCraftingTimes);
             Utility.PatchDictionary(CraftDataType, "cookedCreatureList", CustomCookedCreatureList);
+            Utility.PatchDictionary(CraftDataType, "backgroundTypes", CustomBackgroundTypes);
             Utility.PatchList(CraftDataType, "buildables", CustomBuildables);
 
             var preparePrefabIDCache = CraftDataType.GetMethod("PreparePrefabIDCache", BindingFlags.Public | BindingFlags.Static);
@@ -107,10 +110,12 @@
         private static void PreparePrefabIDCachePostfix()
         {
             var techMapping = CraftDataType.GetField("techMapping", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as Dictionary<TechType, string>;
+            var entClassTechTable = CraftDataType.GetField("entClassTechTable", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as Dictionary<string, TechType>;
 
-            foreach(var prefab in CustomPrefabHandler.customPrefabs)
+            foreach (var prefab in ModPrefab.Prefabs)
             {
                 techMapping[prefab.TechType] = prefab.ClassID;
+                entClassTechTable[prefab.ClassID] = prefab.TechType;
             }
         }
 

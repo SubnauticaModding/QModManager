@@ -5,7 +5,7 @@
     using System.Linq;
     using Harmony;
 
-    public class KnownTechPatcher
+    internal class KnownTechPatcher
     {
         internal static List<TechType> UnlockedAtStart = new List<TechType>();
         internal static List<KnownTech.AnalysisTech> AnalysisTech = new List<KnownTech.AnalysisTech>();
@@ -27,10 +27,7 @@
             if (initialized) return;
             initialized = true;
 
-            foreach (var techType in UnlockedAtStart)
-            {
-                KnownTech.Add(techType, false);
-            }
+            UnlockedAtStart.ForEach(x => KnownTech.Add(x));
 
             var analysisTech = (List<KnownTech.AnalysisTech>)typeof(KnownTech).GetField("analysisTech", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
             var techToAdd = AnalysisTech.Where(a => !analysisTech.Any(a2 => a.techType == a2.techType));
@@ -44,7 +41,17 @@
                 {
                     if(tech.techType == customTech.techType)
                     {
-                        tech.unlockTechTypes.AddRange(customTech.unlockTechTypes);
+                        if(customTech.unlockTechTypes != null)
+                            tech.unlockTechTypes.AddRange(customTech.unlockTechTypes);
+
+                        if (customTech.unlockSound != null)
+                            tech.unlockSound = customTech.unlockSound;
+
+                        if (customTech.unlockPopup != null)
+                            tech.unlockPopup = customTech.unlockPopup;
+
+                        if (customTech.unlockMessage != "")
+                            tech.unlockMessage = customTech.unlockMessage;
                     }
                 }
             }
