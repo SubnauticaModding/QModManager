@@ -13,6 +13,7 @@
 
             harmony.Patch(getFromResources,
                 new HarmonyMethod(typeof(SpritePatcher).GetMethod("Prefix", BindingFlags.Static | BindingFlags.NonPublic)), null);
+
             Logger.Log("SpritePatcher is done.");
         }
 
