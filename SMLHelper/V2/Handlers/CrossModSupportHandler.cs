@@ -58,34 +58,6 @@
         }
 
         /// <summary>
-        /// Safely looks for a modded CraftTree from another mod in the SMLHelper CraftTreeTypeCache and outputs its <see cref="CraftTree.Type" /> value when found.
-        /// </summary>
-        /// <param name="craftTreeString">The string used to define the modded item's new techtype.</param>
-        /// <param name="modTechType">The TechType enum value of the modded. Defaults to <see cref="CraftTree.Type.None" /> when the item was not found.</param>
-        /// <returns>
-        ///   <c>True</c> if the craft tree was found; Otherwise <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// There's no guarante in which order SMLHelper dependent mods are loaded,
-        /// so if two mods are added at the same time, it may take a second game load for both to be visible to each other.
-        /// </remarks>
-        public static bool TryGetModdedCraftTreeType(string craftTreeString, out CraftTree.Type modTechType)
-        {
-            EnumTypeCache cache = CraftTreeTypePatcher.cacheManager.GetCacheForTypeName(craftTreeString);
-
-            if (cache != null) // Tree Found
-            {
-                modTechType = (CraftTree.Type)cache.Index;
-                return true;
-            }
-            else // Mod not present or not yet loaded
-            {
-                modTechType = CraftTree.Type.None;
-                return false;
-            }
-        }
-
-        /// <summary>
         /// Safely looks for a modded CraftTree Type from another mod in the SMLHelper CraftTreeTypeCache.
         /// </summary>
         /// <param name="craftTreeString">The string used to define the modded item's new techtype.</param>
