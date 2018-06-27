@@ -4,8 +4,10 @@ namespace SMLHelper.V2.MonoBehaviours
 
     public class TechTypeFixer : MonoBehaviour, IProtoEventListener
     {
+        [SerializeField]
         public TechType techType;
 
+        [SerializeField]
         public string ClassId;
 
         public void OnProtoSerialize(ProtobufSerializer serializer)
