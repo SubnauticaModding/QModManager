@@ -98,7 +98,7 @@ namespace SMLHelper.V2.Patchers
 
         private static void InitializePostFix()
         {
-            var craftTreeInitialized = (bool)ReflectionHelper.GetPrivateStaticField<CraftTree>("initialized");
+            var craftTreeInitialized = (bool)ReflectionHelper.GetStaticField<CraftTree>("initialized");
             var craftTreeClass = typeof(CraftTree);
         
             if (craftTreeInitialized && !CustomCraftTreeNode.Initialized)
