@@ -6,7 +6,7 @@
     /// <summary>
     /// A handler class for adding and editing crafted items.
     /// </summary>
-    public class CraftDataHandler
+    public static class CraftDataHandler
     {
         #region Core Methods
 

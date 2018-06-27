@@ -52,12 +52,12 @@
             CraftDataPatcher.Patch(harmony);
             CraftTreePatcher.Patch(harmony);
             DevConsolePatcher.Patch(harmony);
+            PDAEncyclopediaPatcher.Patch(harmony);
             LanguagePatcher.Patch(harmony);
             ResourcesPatcher.Patch(harmony);
             PrefabDatabasePatcher.Patch(harmony);
             SpritePatcher.Patch(harmony);
             KnownTechPatcher.Patch(harmony);
-            PDAEncyclopediaPatcher.Patch(harmony);
             BaseBioReactorPatcher.Patch(harmony);
         }
     }

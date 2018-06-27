@@ -7,7 +7,7 @@
     /// <summary>
     /// A handler class for configuring custom unlocking conditions for item blueprints.
     /// </summary>
-    public class KnownTechHandler
+    public static class KnownTechHandler
     {
         /// <summary>
         /// Allows you to define which TechTypes are unlocked when a certain TechType is unlocked, i.e., "analysed".

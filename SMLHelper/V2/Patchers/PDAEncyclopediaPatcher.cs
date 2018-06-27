@@ -18,13 +18,6 @@
         internal static void InitializePostfix()
         {
             var mapping = (Dictionary<string, PDAEncyclopedia.EntryData>)typeof(PDAEncyclopedia).GetField("mapping", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
-
-            foreach(var entry in mapping)
-            {
-                Console.WriteLine("Key: " + entry.Key);
-                Console.WriteLine("EntryData key: " + entry.Value.key);
-                Console.WriteLine("EntryData Path: " + entry.Value.path);
-            }
         }
     }
 }

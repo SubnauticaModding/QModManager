@@ -8,7 +8,7 @@
     /// <summary>
     /// A handler class for everything related to creating new TechTypes.
     /// </summary>
-    public class TechTypeHandler
+    public static class TechTypeHandler
     {
         private static readonly FieldInfo CachedEnumString_valueToString =
             typeof(CachedEnumString<TechType>).GetField("valueToString", BindingFlags.NonPublic | BindingFlags.Instance);

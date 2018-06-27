@@ -68,6 +68,7 @@
     <Compile Include="V2\Handlers\BaseBioReactorHandler.cs" />
     <Compile Include="V2\Handlers\CraftDataHandler.cs" />
     <Compile Include="V2\Handlers\CraftTreeHandler.cs" />
+    <Compile Include="V2\Handlers\CrossModSupportHandler.cs" />
     <Compile Include="V2\Handlers\KnownTechHandler.cs" />
     <Compile Include="V2\Handlers\PrefabHandler.cs" />
     <Compile Include="V2\Handlers\SpriteHandler.cs" />
