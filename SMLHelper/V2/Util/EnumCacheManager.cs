@@ -62,8 +62,9 @@
 
             foreach (var line in allText)
             {
-                var name = line.Split(':')[0];
-                var index = line.Split(':')[1];
+                string[] split = line.Split(':');
+                var name = split[0];
+                var index = split[1];
 
                 var cache = new EnumTypeCache()
                 {

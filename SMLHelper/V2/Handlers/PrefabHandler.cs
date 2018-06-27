@@ -2,7 +2,7 @@
 {
     using Assets;
 
-    public class PrefabHandler
+    public static class PrefabHandler
     {
         /// <summary>
         /// Registers a ModPrefab into the game.
