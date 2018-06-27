@@ -1,8 +1,8 @@
-﻿using SMLHelper.V2.Patchers;
-
-namespace SMLHelper.V2.Handlers
+﻿namespace SMLHelper.V2.Handlers
 {
-    public class BaseBioReactorHandler
+    using Patchers;
+
+    public static class BaseBioReactorHandler
     {
         #region Core Methods
 

@@ -5,7 +5,7 @@
     /// <summary>
     /// A handler class for adding custom sprites into the game.
     /// </summary>
-    public class SpriteHandler
+    public static class SpriteHandler
     {
         /// <summary>
         /// Registers a Sprite into the game.

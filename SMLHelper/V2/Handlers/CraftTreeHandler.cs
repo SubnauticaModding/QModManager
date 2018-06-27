@@ -6,7 +6,7 @@
     /// <summary>
     /// A handler class for creating and editing of crafting trees.
     /// </summary>
-    public class CraftTreeHandler
+    public static class CraftTreeHandler
     {
         /// <summary>
         /// Your first method call to start a new custom crafting tree.
