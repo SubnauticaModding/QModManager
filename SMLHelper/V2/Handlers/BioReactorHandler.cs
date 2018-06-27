@@ -2,7 +2,7 @@
 {
     using Patchers;
 
-    public static class BaseBioReactorHandler
+    public static class BioReactorHandler
     {
         #region Core Methods
 
