@@ -2,7 +2,7 @@
 
 namespace SMLHelper
 {
-    [System.Obsolete("SMLHelper.CustomCraftTab is obsolete. Please use SMLHelper.V2 instead.")]
+    [System.Obsolete("Use SMLHelper.V2 instead.")]
     public class CustomCraftTab
     {
         public string SpriteId
@@ -41,13 +41,13 @@ namespace SMLHelper
         {
         }
 
-        [System.Obsolete("CraftSchemes are obsolete. Use CraftTree.Types instead.")]
+        [System.Obsolete("Use CraftTree.Type instead.")]
         public CustomCraftTab(string path, string name, CraftScheme scheme, Atlas.Sprite sprite) 
             : this(path, name, Utility.CraftSchemeMap[scheme], sprite)
         {
         }
 
-        [System.Obsolete("CraftSchemes are obsolete. Use CraftTree.Types instead.")]
+        [System.Obsolete("Use CraftTree.Type instead.")]
         public CustomCraftTab(string path, string name, CraftScheme scheme, UnityEngine.Sprite sprite)
             : this(path, name, Utility.CraftSchemeMap[scheme], sprite)
         {

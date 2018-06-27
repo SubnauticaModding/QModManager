@@ -7,34 +7,34 @@ using CraftDataPatcher2 = SMLHelper.V2.Patchers.CraftDataPatcher;
 
 namespace SMLHelper.Patchers
 {
-    [Obsolete("SMLHelper.Patchers.CraftDataPatcher is obsolete. Please use SMLHelper.V2 instead.")]
+    [Obsolete("Use SMLHelper.V2 instead.")]
     public class CraftDataPatcher
     {
-        [Obsolete("SMLHelper.Patchers.CraftDataPatcher.customTechData is obsolete. Please use SMLHelper.V2 instead.")]
+        [Obsolete("Use SMLHelper.V2 instead.")]
         public static Dictionary<TechType, TechDataHelper> customTechData = new Dictionary<TechType, TechDataHelper>();
 
-        [Obsolete("SMLHelper.Patchers.CraftDataPatcher.customHarvestOutputList is obsolete. Please use SMLHelper.V2 instead.")]
+        [Obsolete("Use SMLHelper.V2 instead.")]
         public static Dictionary<TechType, TechType> customHarvestOutputList = new Dictionary<TechType, TechType>();
 
-        [Obsolete("SMLHelper.Patchers.CraftDataPatcher.customHarvestTypeList is obsolete. Please use SMLHelper.V2 instead.")]
+        [Obsolete("Use SMLHelper.V2 instead.")]
         public static Dictionary<TechType, HarvestType> customHarvestTypeList = new Dictionary<TechType, HarvestType>();
 
-        [Obsolete("SMLHelper.Patchers.CraftDataPatcher.customItemsSizes is obsolete. Please use SMLHelper.V2 instead.")]
+        [Obsolete("Use SMLHelper.V2 instead.")]
         public static Dictionary<TechType, Vector2int> customItemSizes = new Dictionary<TechType, Vector2int>();
 
-        [Obsolete("SMLHelper.Patchers.CraftDataPatcher.customEquipmentTypes is obsolete. Please use SMLHelper.V2 instead.")]
+        [Obsolete("Use SMLHelper.V2 instead.")]
         public static Dictionary<TechType, EquipmentType> customEquipmentTypes = new Dictionary<TechType, EquipmentType>();
 
-        [Obsolete("SMLHelper.Patchers.CraftDataPatcher.customBuildables is obsolete. Please use SMLHelper.V2 instead.")]
+        [Obsolete("Use SMLHelper.V2 instead.")]
         public static List<TechType> customBuildables = new List<TechType>();
 
-        [Obsolete("SMLHelper.Patchers.CraftDataPatcher.AddToCustomGroup is obsolete. Please use SMLHelper.V2 instead.")]
+        [Obsolete("Use SMLHelper.V2 instead.")]
         public static void AddToCustomGroup(TechGroup group, TechCategory category, TechType techType)
         {
             CraftDataPatcher2.AddToCustomGroup(group, category, techType);
         }
 
-        [Obsolete("SMLHelper.Patchers.CraftDataPatcher.RemoveFromCustomGroup is obsolete. Please use SMLHelper.V2 instead.")]
+        [Obsolete("Use SMLHelper.V2 instead.")]
         public static void RemoveFromCustomGroup(TechGroup group, TechCategory category, TechType techType)
         {
             CraftDataPatcher2.RemoveFromCustomGroup(group, category, techType);
@@ -54,7 +54,7 @@ namespace SMLHelper.Patchers
         }
     }
 
-    [Obsolete("SMLHelper.Patchers.TechDataHelper is obsolete. Please use SMLHelper.V2 instead.")]
+    [Obsolete("Use SMLHelper.V2 instead.")]
     public class TechDataHelper : ITechData
     {
         public int _craftAmount;
@@ -120,7 +120,7 @@ namespace SMLHelper.Patchers
 
     }
 
-    [Obsolete("SMLHelper.Patchers.IngredientHelper is obsolete. Please use SMLHelper.V2 instead.")]
+    [Obsolete("Use SMLHelper.V2 instead.")]
     public class IngredientHelper : IIngredient
     {
         public TechType _techType;

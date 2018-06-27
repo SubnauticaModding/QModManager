@@ -9,7 +9,7 @@ namespace SMLHelper
     /// <summary>
     /// Basic data structure of a custom crafting tree node.
     /// </summary>
-    [System.Obsolete("SMLHelper.CustomCraftTreeNode is obsolete. Please use SMLHelper.V2 instead.")]
+    [System.Obsolete("Use SMLHelper.V2 instead.")]
     public abstract class CustomCraftTreeNode
     {
         internal static bool Initialized = false;
@@ -45,7 +45,7 @@ namespace SMLHelper
     /// <summary>
     /// Abstract class that provides methods for adding new nodes into the custom crafting tree.
     /// </summary>
-    [System.Obsolete("SMLHelper.CustomCraftTreeLinkingNode is obsolete. Please use SMLHelper.V2 instead.")]
+    [System.Obsolete("Use SMLHelper.V2 instead.")]
     public abstract class CustomCraftTreeLinkingNode : CustomCraftTreeNode
     {
         protected CustomCraftTreeLinkingNode(string name, TreeAction action, TechType techType)
@@ -122,7 +122,7 @@ namespace SMLHelper
     /// <summary>
     /// The root node of a custom CraftTree. The whole tree starts here.
     /// </summary>
-    [System.Obsolete("SMLHelper.CustomCraftTreeRoot is obsolete. Please use SMLHelper.V2 instead.")]
+    [System.Obsolete("Use SMLHelper.V2 instead.")]
     public class CustomCraftTreeRoot : CustomCraftTreeLinkingNode
     {
         private readonly string _schemeAsString;
@@ -159,7 +159,7 @@ namespace SMLHelper
     /// <summary>
     /// A tab node of a custom CraftTree. Tab nodes help organize crafting nodes by grouping them into categories.
     /// </summary>
-    [System.Obsolete("SMLHelper.CustomCraftTreeTab is obsolete. Please use SMLHelper.V2 instead.")]
+    [System.Obsolete("Use SMLHelper.V2 instead.")]
     public class CustomCraftTreeTab : CustomCraftTreeLinkingNode
     {
         private readonly string DisplayText;
@@ -209,7 +209,7 @@ namespace SMLHelper
     /// <summary>
     /// A crafting node of a custom CrafTree. This is the last node on a tree; The one that actuall crafts something.
     /// </summary>
-    [System.Obsolete("SMLHelper.CustomCraftTreeCraft is obsolete. Please use SMLHelper.V2 instead.")]
+    [System.Obsolete("Use SMLHelper.V2 instead.")]
     public class CustomCraftTreeCraft : CustomCraftTreeNode
     {
         internal CustomCraftTreeCraft(TechType techType)
