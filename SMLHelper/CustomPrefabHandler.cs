@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿#pragma warning disable CS0618 // Type or member is obsolete
+using System.Collections.Generic;
 using UnityEngine;
 using SMLHelper.V2.Assets;
 
@@ -6,10 +7,10 @@ namespace SMLHelper
 {
     public delegate GameObject GetResource();
 
-    [System.Obsolete("SMLHelper.CustomPrefabHandler is obsolete. Please use SMLHelper.V2 instead.")]
+    [System.Obsolete("Use SMLHelper.V2 instead.")]
     public class CustomPrefabHandler
     {
-        [System.Obsolete("SMLHelper.CustomPrefabHandler.customPrefabs is obsolete. Please use SMLHelper.V2 instead.")]
+        [System.Obsolete("Use SMLHelper.V2 instead.")]
         public static List<CustomPrefab> customPrefabs = new List<CustomPrefab>();
 
         internal static void Patch()
@@ -18,7 +19,7 @@ namespace SMLHelper
         }
     }
 
-    [System.Obsolete("SMLHelper.CustomPrefab is obsolete. Please use SMLHelper.V2 instead.")]
+    [System.Obsolete("Use SMLHelper.V2 instead.")]
     public class CustomPrefab
     {
         public GetResource GetResourceDelegate;

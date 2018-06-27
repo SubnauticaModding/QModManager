@@ -3,7 +3,7 @@ using SMLHelper.V2.Util;
 
 namespace SMLHelper
 {
-    [System.Obsolete("SMLHelper.CustomCraftNode is obsolete. Please use SMLHelper.V2 instead.")]
+    [System.Obsolete("Use SMLHelper.V2 instead.")]
     public class CustomCraftNode
     {
         public TechType TechType;
@@ -34,7 +34,7 @@ namespace SMLHelper
             }
         }
 
-        [System.Obsolete("CraftSchemes are obsolete. Use CraftTree.Types instead.")]
+        [System.Obsolete("Use CraftTree.Type instead.")]
         public CustomCraftNode(TechType techType, CraftScheme scheme, string path)
             : this(techType, Utility.CraftSchemeMap[scheme], path)
         {

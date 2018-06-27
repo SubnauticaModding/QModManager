@@ -1,10 +1,10 @@
-﻿namespace SMLHelper.V2.MonoBehaviours
+namespace SMLHelper.V2.MonoBehaviours
 {
     using UnityEngine;
 
     public class TechTypeFixer : MonoBehaviour, IProtoEventListener
     {
-        [SerializeField] // I think this is important, it started working after I added it
+        [SerializeField]
         public TechType techType;
 
         [SerializeField]

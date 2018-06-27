@@ -1,6 +1,6 @@
 ﻿namespace SMLHelper
 {    
-    [System.Obsolete("SMLHelper.CraftNodeToScrub is obsolete. Please use SMLHelper.V2 instead.")]
+    [System.Obsolete("Use SMLHelper.V2 instead.")]
     public class CraftNodeToScrub
     {
         public CraftTree.Type Scheme;
@@ -12,7 +12,7 @@
             Path = path;
         }
 
-        [System.Obsolete("CraftSchemes are obsolete. Use CraftTree.Types instead.")]
+        [System.Obsolete("Use CraftTree.Type instead.")]
         public CraftNodeToScrub(CraftScheme scheme, string path)
             : this(Utility.CraftSchemeMap[scheme], path)
         {

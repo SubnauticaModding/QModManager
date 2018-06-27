@@ -65,7 +65,7 @@
     <Compile Include="V2\Assets\ModSprite.cs" />
     <Compile Include="V2\Crafting\CustomCraftTreeFamily.cs" />
     <Compile Include="V2\Crafting\TechData.cs" />
-    <Compile Include="V2\Handlers\BaseBioReactorHandler.cs" />
+    <Compile Include="V2\Handlers\BioReactorHandler.cs" />
     <Compile Include="V2\Handlers\CraftDataHandler.cs" />
     <Compile Include="V2\Handlers\CraftTreeHandler.cs" />
     <Compile Include="V2\Handlers\CrossModSupportHandler.cs" />

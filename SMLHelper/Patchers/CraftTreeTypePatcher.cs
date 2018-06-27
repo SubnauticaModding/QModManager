@@ -4,10 +4,10 @@ using CustomCraftTreeRoot2 = SMLHelper.V2.Crafting.CustomCraftTreeRoot;
 
 namespace SMLHelper.Patchers
 {
-    [System.Obsolete("SMLHelper.CraftTreeTypePatcher is obsolete. Please use SMLHelper.V2 instead.")]
+    [System.Obsolete("Use SMLHelper.V2 instead.")]
     public class CraftTreeTypePatcher
     {
-        [System.Obsolete("SMLHelper.CraftTreeTypePatcher.CreateCustomCraftTreeAndType is obsolete. Please use SMLHelper.V2 instead.")]
+        [System.Obsolete("Use SMLHelper.V2 instead.")]
         public static CustomCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
         {
             var customCraftTreeRoot2 = CraftTreeTypePatcher2.CreateCustomCraftTreeAndType(name, out craftTreeType);

@@ -6,21 +6,21 @@
     using V2.Handlers;
     using V2.Crafting;
 
-    [Obsolete("SMLHelper.Patchers.CraftTreePatcher is obsolete. Please use SMLHelper.V2 instead.")]
+    [Obsolete("Use SMLHelper.V2 instead.")]
     public class CraftTreePatcher
     {
-        [Obsolete("SMLHelper.Patchers.CraftTreePatcher.customTabs is obsolete. Please use SMLHelper.V2 instead.")]
+        [Obsolete("Use SMLHelper.V2 instead.")]
         public static List<CustomCraftTab> customTabs = new List<CustomCraftTab>();
 
-        [Obsolete("SMLHelper.Patchers.CraftTreePatcher.customNodes is obsolete. Please use SMLHelper.V2 instead.")]
+        [Obsolete("Use SMLHelper.V2 instead.")]
         public static List<CustomCraftNode> customNodes = new List<CustomCraftNode>();
 
-        [Obsolete("SMLHelper.Patchers.CraftTreePatcher.nodesToRemove is obsolete. Please use SMLHelper.V2 instead.")]
+        [Obsolete("Use SMLHelper.V2 instead.")]
         public static List<CraftNodeToScrub> nodesToRemove = new List<CraftNodeToScrub>();
 
         internal static Dictionary<CraftTree.Type, SMLHelper.CustomCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, SMLHelper.CustomCraftTreeRoot>();
 
-        [Obsolete("CraftTreePatcher.customCraftNodes is obsolete. Use CraftTreePatcher.customNodes", false)]
+        [Obsolete("Use SMLHelper.V2 instead.")]
         public static Dictionary<string, TechType> customCraftNodes = new Dictionary<string, TechType>();
 
         internal static void Patch()

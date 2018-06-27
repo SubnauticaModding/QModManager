@@ -1,4 +1,5 @@
-﻿namespace SMLHelper.V2
+﻿#pragma warning disable CS0618 // Type or member is obsolete
+namespace SMLHelper.V2
 {
     using Harmony;
     using Patchers;

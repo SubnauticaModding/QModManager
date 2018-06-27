@@ -3,10 +3,10 @@ using LanguagePatcher2 = SMLHelper.V2.Patchers.LanguagePatcher;
 
 namespace SMLHelper.Patchers
 {
-    [System.Obsolete("SMLHelper.LanguagePatcher is obsolete. Please use SMLHelper.V2 instead.")]
+    [System.Obsolete("Use SMLHelper.V2 instead.")]
     public class LanguagePatcher
     {
-        [System.Obsolete("SMLHelper.LanguagePatcher.unlockedAtStart is obsolete. Please use SMLHelper.V2 instead.")]
+        [System.Obsolete("Use SMLHelper.V2 instead.")]
         public static Dictionary<string, string> customLines = new Dictionary<string, string>();
 
         internal static void Patch()

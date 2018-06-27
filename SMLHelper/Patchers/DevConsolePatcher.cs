@@ -5,10 +5,10 @@ using CommandInfo2 = SMLHelper.V2.Patchers.CommandInfo;
 
 namespace SMLHelper.Patchers
 {
-    [System.Obsolete("SMLHelper.DevConsolePatcher is obsolete. Please use SMLHelper.V2 instead.")]
+    [System.Obsolete("Use SMLHelper.V2 instead.")]
     public class DevConsolePatcher
     {
-        [System.Obsolete("SMLHelper.DevConsolePatcher.commands is obsolete. Please use SMLHelper.V2 instead.")]
+        [System.Obsolete("Use SMLHelper.V2 instead.")]
         public static List<CommandInfo> commands = new List<CommandInfo>();
 
         internal static void Patch()
@@ -19,7 +19,7 @@ namespace SMLHelper.Patchers
         }
     }
 
-    [System.Obsolete("SMLHelper.CommandInfo is obsolete. Please use SMLHelper.V2 instead.")]
+    [System.Obsolete("Use SMLHelper.V2 instead.")]
     public class CommandInfo
     {
         public MethodInfo CommandHandler;
