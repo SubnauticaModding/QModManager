@@ -10,15 +10,16 @@
     {
         #region Internal Fields
 
-        internal static Dictionary<TechType, CraftData.BackgroundType> CustomBackgroundTypes = new Dictionary<TechType, CraftData.BackgroundType>();
         internal static Dictionary<TechType, ITechData> CustomTechData = new Dictionary<TechType, ITechData>();
         internal static Dictionary<TechType, TechType> CustomHarvestOutputList = new Dictionary<TechType, TechType>();
         internal static Dictionary<TechType, HarvestType> CustomHarvestTypeList = new Dictionary<TechType, HarvestType>();
+        internal static Dictionary<TechType, int> CustomFinalCutBonusList = new Dictionary<TechType, int>(TechTypeExtensions.sTechTypeComparer);
         internal static Dictionary<TechType, Vector2int> CustomItemSizes = new Dictionary<TechType, Vector2int>();
         internal static Dictionary<TechType, EquipmentType> CustomEquipmentTypes = new Dictionary<TechType, EquipmentType>();
         internal static Dictionary<TechType, QuickSlotType> CustomSlotTypes = new Dictionary<TechType, QuickSlotType>();
         internal static Dictionary<TechType, float> CustomCraftingTimes = new Dictionary<TechType, float>();
         internal static Dictionary<TechType, TechType> CustomCookedCreatureList = new Dictionary<TechType, TechType>();
+        internal static Dictionary<TechType, CraftData.BackgroundType> CustomBackgroundTypes = new Dictionary<TechType, CraftData.BackgroundType>(TechTypeExtensions.sTechTypeComparer);
         internal static List<TechType> CustomBuildables = new List<TechType>();
 
         #endregion
@@ -87,6 +88,7 @@
         {
             Utility.PatchDictionary(CraftDataType, "harvestOutputList", CustomHarvestOutputList, BindingFlags.Static | BindingFlags.Public);
             Utility.PatchDictionary(CraftDataType, "harvestTypeList", CustomHarvestTypeList);
+            Utility.PatchDictionary(CraftDataType, "harvestFinalCutBonusList", CustomFinalCutBonusList);
             Utility.PatchDictionary(CraftDataType, "itemSizes", CustomItemSizes);
             Utility.PatchDictionary(CraftDataType, "equipmentTypes", CustomEquipmentTypes);
             Utility.PatchDictionary(CraftDataType, "slotTypes", CustomSlotTypes);
