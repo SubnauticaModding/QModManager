@@ -18,11 +18,8 @@
         /// <returns>
         /// The value of the requested field as an <see cref="object" />.
         /// </returns>
-        public static object GetPrivateField<T>(this T instance, string fieldName, BindingFlags bindingFlags = BindingFlags.Default)
-        {
-            FieldInfo fieldInfo = typeof(T).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance | bindingFlags);
-            return fieldInfo.GetValue(instance);
-        }
+        public static object GetInstanceField<T>(this T instance, string fieldName, BindingFlags bindingFlags = BindingFlags.Default) where T : class
+            => typeof(T).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance | bindingFlags).GetValue(instance);
 
         /// <summary>
         /// Sets the value of the requested private field, using reflection, on the instance object.
@@ -33,11 +30,8 @@
         /// <param name="value">The value to set.</param>
         /// <param name="bindingFlags">The additional binding flags you wish to set.
         /// <see cref="BindingFlags.NonPublic" /> and <see cref="BindingFlags.Instance" /> are already included.</param>
-        public static void SetPrivateField<T>(this T instance, string fieldName, object value, BindingFlags bindingFlags = BindingFlags.Default)
-        {
-            FieldInfo fieldInfo = typeof(T).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance | bindingFlags);
-            fieldInfo.SetValue(instance, value);
-        }
+        public static void SetInstanceField<T>(this T instance, string fieldName, object value, BindingFlags bindingFlags = BindingFlags.Default) where T : class
+            => typeof(T).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance | bindingFlags).SetValue(instance, value);
 
         /// <summary>
         /// Gets the value of the requested private static field, using reflection, from the static object.
@@ -49,11 +43,8 @@
         /// <returns>
         /// The value of the requested static field as an <see cref="object" />.
         /// </returns>
-        public static object GetPrivateStaticField<T>(string fieldName, BindingFlags bindingFlags = BindingFlags.Default)
-        {
-            FieldInfo fieldInfo = typeof(T).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static | bindingFlags);
-            return fieldInfo.GetValue(null);
-        }
+        public static object GetStaticField<T>(string fieldName, BindingFlags bindingFlags = BindingFlags.Default) where T : class
+            => typeof(T).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static | bindingFlags).GetValue(null);
 
         /// <summary>
         /// Gets the value of the requested private static field, using reflection, from the instance object.
@@ -66,7 +57,8 @@
         /// <returns>
         /// The value of the requested static field as an <see cref="object" />.
         /// </returns>
-        public static object GetPrivateStaticField<T>(this T instance, string fieldName, BindingFlags bindingFlags = BindingFlags.Default) => GetPrivateStaticField<T>(fieldName, bindingFlags);
+        public static object GetStaticField<T>(this T instance, string fieldName, BindingFlags bindingFlags = BindingFlags.Default) where T : class
+            => GetStaticField<T>(fieldName, bindingFlags);
 
         /// <summary>
         /// Sets the value of the requested private static field, using reflection, on the static object.
@@ -76,11 +68,9 @@
         /// <param name="value">The value to set.</param>
         /// <param name="bindingFlags">The additional binding flags you wish to set.
         /// <see cref="BindingFlags.NonPublic" /> and <see cref="BindingFlags.Static" /> are already included.</param>
-        public static void SetPrivateStaticField<T>(string fieldName, object value, BindingFlags bindingFlags = BindingFlags.Default)
-        {
-            FieldInfo fieldInfo = typeof(T).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static | bindingFlags);
-            fieldInfo.SetValue(null, value);
-        }
+        public static void SetStaticField<T>(string fieldName, object value, BindingFlags bindingFlags = BindingFlags.Default) where T : class
+            => typeof(T).GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Static | bindingFlags).SetValue(null, value);
+
 
         /// <summary>
         /// Sets the value of the requested private static field, using reflection, on the instance object.
@@ -91,7 +81,8 @@
         /// <param name="value">The value to set.</param>
         /// <param name="bindingFlags">The additional binding flags you wish to set.
         /// <see cref="BindingFlags.NonPublic" /> and <see cref="BindingFlags.Static" /> are already included.</param>
-        public static void SetPrivateStaticField<T>(this T instance, string fieldName, object value, BindingFlags bindingFlags = BindingFlags.Default) => SetPrivateStaticField<T>(fieldName, value, bindingFlags);
+        public static void SetStaticField<T>(this T instance, string fieldName, object value, BindingFlags bindingFlags = BindingFlags.Default) where T : class
+            => SetStaticField<T>(fieldName, value, bindingFlags);
 
         /// <summary>
         /// Gets the <see cref="MethodInfo" /> of a private instance method, using refelction, from the specified class.
@@ -103,11 +94,8 @@
         /// <returns>
         /// The <see cref="MethodInfo" /> of the requested private method.
         /// </returns>
-        public static MethodInfo GetPrivateMethod<T>(string methodName, BindingFlags bindingFlags = BindingFlags.Default)
-        {
-            MethodInfo methodInfo = typeof(T).GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance | bindingFlags);
-            return methodInfo;
-        }
+        public static MethodInfo GetInstanceMethod<T>(string methodName, BindingFlags bindingFlags = BindingFlags.Default) where T : class
+            => typeof(T).GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Instance | bindingFlags);
 
         /// <summary>
         /// Gets the <see cref="MethodInfo" /> of a private instance method, using refelction, from the instance object.
@@ -120,7 +108,8 @@
         /// <returns>
         /// The <see cref="MethodInfo" /> of the requested private method.
         /// </returns>
-        public static MethodInfo GetPrivateMethod<T>(this T instance, string methodName, BindingFlags bindingFlags = BindingFlags.Default) => GetPrivateMethod<T>(methodName, bindingFlags);
+        public static MethodInfo GetInstanceMethod<T>(this T instance, string methodName, BindingFlags bindingFlags = BindingFlags.Default) where T : class 
+            => GetInstanceMethod<T>(methodName, bindingFlags);
 
         /// <summary>
         /// Gets the <see cref="MethodInfo" /> of a private static method, using refelction, from the specified class.
@@ -132,11 +121,8 @@
         /// <returns>
         /// The <see cref="MethodInfo" /> of the requested private method.
         /// </returns>
-        public static MethodInfo GetPrivateStaticMethod<T>(string methodName, BindingFlags bindingFlags = BindingFlags.Default)
-        {
-            MethodInfo methodInfo = typeof(T).GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Static | bindingFlags);
-            return methodInfo;
-        }
+        public static MethodInfo GetStaticMethod<T>(string methodName, BindingFlags bindingFlags = BindingFlags.Default) where T : class
+            => typeof(T).GetMethod(methodName, BindingFlags.NonPublic | BindingFlags.Static | bindingFlags);
 
         /// <summary>
         /// Gets the <see cref="MethodInfo" /> of a private static method, using refelction, from the instance object.
@@ -149,7 +135,8 @@
         /// <returns>
         /// The <see cref="MethodInfo" /> of the requested private method.
         /// </returns>
-        public static MethodInfo GetPrivateStaticMethod<T>(this T instance, string methodName, BindingFlags bindingFlags = BindingFlags.Default) => GetPrivateStaticMethod<T>(methodName, bindingFlags);
+        public static MethodInfo GetStaticMethod<T>(this T instance, string methodName, BindingFlags bindingFlags = BindingFlags.Default) where T : class
+            => GetStaticMethod<T>(methodName, bindingFlags);
 
         /// <summary>
         /// Does a deep copy of all field values from the original instance onto the copied instance.
@@ -159,7 +146,7 @@
         /// <param name="copy">The instance receiving the copied values.</param>
         /// <param name="bindingFlags">The additional binding flags you wish to set.
         /// <see cref="BindingFlags.Instance" /> is already included.</param>
-        public static void CopyFields<T>(this T original, T copy, BindingFlags bindingFlags = BindingFlags.Default)
+        public static void CopyFields<T>(this T original, T copy, BindingFlags bindingFlags = BindingFlags.Default) where T : class
         {
             FieldInfo[] fieldsInfo = typeof(T).GetFields(BindingFlags.Instance | bindingFlags);
 
