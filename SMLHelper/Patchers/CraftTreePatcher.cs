@@ -1,135 +1,119 @@
-﻿namespace SMLHelper.Patchers
+﻿
+namespace SMLHelper.V2.Patchers
 {
-    using System;
+    using Harmony;
     using System.Collections.Generic;
-    using CraftTreePatcher2 = SMLHelper.V2.Patchers.CraftTreePatcher;
-    using V2.Handlers;
-    using V2.Crafting;
+    using System.Reflection;
+    using Utilities;
+    using Crafting;
 
-    [Obsolete("Use SMLHelper.V2 instead.")]
-    public class CraftTreePatcher
+    internal class CraftTreePatcher
     {
-        [Obsolete("Use SMLHelper.V2 instead.")]
-        public static List<CustomCraftTab> customTabs = new List<CustomCraftTab>();
+        #region Internal Fields
 
-        [Obsolete("Use SMLHelper.V2 instead.")]
-        public static List<CustomCraftNode> customNodes = new List<CustomCraftNode>();
+        internal static Dictionary<CraftTree.Type, CustomCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, CustomCraftTreeRoot>();
+        internal static CustomCraftTreeRoot FabricatorTree = LoadTree(CraftTree.Type.Fabricator);
+        internal static CustomCraftTreeRoot CyclopsFabricatorTree = LoadTree(CraftTree.Type.CyclopsFabricator);
+        internal static CustomCraftTreeRoot MapRoomTree = LoadTree(CraftTree.Type.MapRoom);
+        internal static CustomCraftTreeRoot ConstructorTree = LoadTree(CraftTree.Type.Constructor);
+        internal static CustomCraftTreeRoot RocketTree = LoadTree(CraftTree.Type.Rocket);
+        internal static CustomCraftTreeRoot SeamothUpgradesTree = LoadTree(CraftTree.Type.SeamothUpgrades);
+        internal static CustomCraftTreeRoot WorkbenchTree = LoadTree(CraftTree.Type.Workbench);
 
-        [Obsolete("Use SMLHelper.V2 instead.")]
-        public static List<CraftNodeToScrub> nodesToRemove = new List<CraftNodeToScrub>();
-
-        internal static Dictionary<CraftTree.Type, SMLHelper.CustomCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, SMLHelper.CustomCraftTreeRoot>();
-
-        [Obsolete("Use SMLHelper.V2 instead.")]
-        public static Dictionary<string, TechType> customCraftNodes = new Dictionary<string, TechType>();
-
-        internal static void Patch()
+        internal static CustomCraftTreeRoot LoadTree(CraftTree.Type Scheme)
         {
-            var nodes = new List<CustomCraftNode>();
+            var treeRoot = new CustomCraftTreeRoot(Scheme, Scheme.ToString());
+            var treeLinkingNode = (CustomCraftTreeLinkingNode)treeRoot;
+            var tree = CraftTree.GetTree(Scheme);
 
-            foreach (var customNode in customNodes)
-                nodes.Add(new CustomCraftNode(customNode.TechType, customNode.Scheme, customNode.Path));
+            if (tree == null || treeRoot == null || treeLinkingNode == null) return null;
 
-            foreach (var customNode in customCraftNodes)
-                nodes.Add(new CustomCraftNode(customNode.Value, CraftTree.Type.Fabricator, customNode.Key));
+            CustomCraftTreeRoot.CreateFromExistingTree(tree.nodes, ref treeLinkingNode);
 
-            foreach(var tab in customTabs)
-            {
-                if (tab == null) continue;
-
-                var path = tab.Path.SplitByChar('/');
-                var tree = CraftTreeHandler.GetExistingTree(tab.Scheme);
-
-                if (tree == null) continue;
-
-                var tabNode = default(CustomCraftTreeTab);
-
-                foreach (var pathNode in path)
-                {
-                    var newTabNode = default(CustomCraftTreeTab);
-
-                    if (tabNode == null)
-                        newTabNode = tree.GetTabNode(pathNode);
-                    else
-                        newTabNode = tabNode.GetTabNode(pathNode);
-
-                    if (newTabNode == null)
-                        tabNode.AddTabNode(pathNode, tab.Name, tab.Sprite.Sprite);
-                    else
-                        tabNode = newTabNode;
-                }
-            }
-
-            foreach(var node in nodes)
-            {
-                if (node == null) continue;
-
-                var path = node.Path.SplitByChar('/');
-                var tree = CraftTreeHandler.GetExistingTree(node.Scheme);
-
-                if (tree == null) continue;
-
-                var tabNode = default(CustomCraftTreeTab);
-
-                foreach(var pathNode in path)
-                {
-                    var newTabNode = default(CustomCraftTreeTab);
-
-                    if (tabNode == null)
-                        newTabNode = tree.GetTabNode(pathNode);
-                    else
-                        newTabNode = tabNode.GetTabNode(pathNode);
-
-                    if (newTabNode == null && tabNode != null)
-                    {
-                        var techType = TechType.None;
-                        var craftNode = default(CustomCraftTreeCraft);
-
-                        if(TechTypeExtensions.FromString(pathNode, out techType, false))
-                        {
-                            craftNode = tabNode.AddCraftingNode(techType);
-                        }
-                        else
-                        {
-                            craftNode = tabNode.AddModdedCraftingNode(pathNode);
-                        }
-                    }
-                    else
-                    {
-                        tabNode = newTabNode;
-                    }
-                }
-            }
-
-            foreach (var node in nodesToRemove)
-            {
-                if (node == null) continue;
-
-                var path = node.Path.SplitByChar('/');
-                var tree = CraftTreeHandler.GetExistingTree(node.Scheme);
-
-                if (tree == null) continue;
-
-                var treeNode = default(CustomCraftTreeNode);
-
-                foreach (var pathNode in path)
-                {
-                    var newTreeNode = tree.GetNode(pathNode);
-
-                    if(newTreeNode == null)
-                    {
-                        treeNode.RemoveNode();
-                    }
-                    else
-                    {
-                        treeNode = newTreeNode;
-                    }
-                }
-            }
-
-            CustomTrees.ForEach(x => CraftTreePatcher2.CustomTrees.Add(x.Key, x.Value.GetV2RootNode()));
-
-            V2.Logger.Log("Old CraftTreePatcher is done.");
+            return treeRoot;
         }
+
+        #endregion
+
+        #region Patches
+
+        internal static void Patch(HarmonyInstance harmony)
+        {
+            var type = typeof(CraftTree);
+            var patcherClass = typeof(CraftTreePatcher);
+
+            var craftTreeGetTree = type.GetMethod("GetTree", BindingFlags.Static | BindingFlags.Public);
+            var craftTreeInitialize = type.GetMethod("Initialize", BindingFlags.Static | BindingFlags.Public);
+
+            harmony.Patch(craftTreeGetTree,
+                new HarmonyMethod(patcherClass.GetMethod("GetTreePreFix", BindingFlags.Static | BindingFlags.NonPublic)), null);
+
+            harmony.Patch(craftTreeInitialize, null,
+                new HarmonyMethod(patcherClass.GetMethod("InitializePostFix", BindingFlags.Static | BindingFlags.NonPublic)));
+
+            Logger.Log($"CraftTreePatcher is done.");
+        }
+
+        private static bool GetTreePreFix(CraftTree.Type treeType, ref CraftTree __result)
+        {
+            switch (treeType)
+            {
+                case CraftTree.Type.Fabricator:
+                    __result = FabricatorTree.CraftTree;
+                    return false;
+
+                case CraftTree.Type.SeamothUpgrades:
+                    __result = SeamothUpgradesTree.CraftTree;
+                    return false;
+
+                case CraftTree.Type.CyclopsFabricator:
+                    __result = CyclopsFabricatorTree.CraftTree;
+                    return false;
+
+                case CraftTree.Type.MapRoom:
+                    __result = MapRoomTree.CraftTree;
+                    return false;
+
+                case CraftTree.Type.Rocket:
+                    __result = RocketTree.CraftTree;
+                    return false;
+
+                case CraftTree.Type.Workbench:
+                    __result = WorkbenchTree.CraftTree;
+                    return false;
+
+                case CraftTree.Type.Constructor:
+                    __result = ConstructorTree.CraftTree;
+                    return false;
+            }
+
+            if (CustomTrees.ContainsKey(treeType))
+            {
+                __result = CustomTrees[treeType].CraftTree;
+                return false;
+            }
+
+            return true;
+        }
+
+        private static void InitializePostFix()
+        {
+            var craftTreeInitialized = (bool)ReflectionHelper.GetStaticField<CraftTree>("initialized");
+            var craftTreeClass = typeof(CraftTree);
+        
+            if (craftTreeInitialized && !CustomCraftTreeNode.Initialized)
+            {
+                foreach (CraftTree.Type cTreeKey in CustomTrees.Keys)
+                {
+                    CraftTree customTree = CustomTrees[cTreeKey].CraftTree;
+
+                    MethodInfo addToCraftableTech = craftTreeClass.GetMethod("AddToCraftableTech", BindingFlags.Static | BindingFlags.NonPublic);
+
+                    addToCraftableTech.Invoke(null, new[] { customTree });
+                }
+            }
+        }
+
+        #endregion
     }
 }

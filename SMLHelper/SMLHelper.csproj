@@ -56,55 +56,55 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CraftNodeToScrub.cs" />
-    <Compile Include="CraftScheme.cs" />
-    <Compile Include="CustomCraftNode.cs" />
-    <Compile Include="CustomCraftTab.cs" />
-    <Compile Include="CustomCraftTreeFamily.cs" />
-    <Compile Include="V2\Assets\ModPrefab.cs" />
-    <Compile Include="V2\Assets\ModSprite.cs" />
-    <Compile Include="V2\Crafting\CustomCraftTreeFamily.cs" />
-    <Compile Include="V2\Crafting\TechData.cs" />
-    <Compile Include="V2\Handlers\BioReactorHandler.cs" />
-    <Compile Include="V2\Handlers\CraftDataHandler.cs" />
-    <Compile Include="V2\Handlers\CraftTreeHandler.cs" />
-    <Compile Include="V2\Handlers\CrossModSupportHandler.cs" />
-    <Compile Include="V2\Handlers\KnownTechHandler.cs" />
-    <Compile Include="V2\Handlers\PrefabHandler.cs" />
-    <Compile Include="V2\Handlers\SpriteHandler.cs" />
-    <Compile Include="V2\Handlers\TechTypeHandler.cs" />
-    <Compile Include="V2\Logger.cs" />
-    <Compile Include="V2\MonoBehaviours\InfoFixer.cs" />
+    <Compile Include="Legacy\CraftNodeToScrub.cs" />
+    <Compile Include="Legacy\CraftScheme.cs" />
+    <Compile Include="Legacy\CustomCraftNode.cs" />
+    <Compile Include="Legacy\CustomCraftTab.cs" />
+    <Compile Include="Legacy\CustomCraftTreeFamily.cs" />
+    <Compile Include="Assets\ModPrefab.cs" />
+    <Compile Include="Assets\ModSprite.cs" />
+    <Compile Include="Crafting\CustomCraftTreeFamily.cs" />
+    <Compile Include="Crafting\TechData.cs" />
+    <Compile Include="Handlers\BioReactorHandler.cs" />
+    <Compile Include="Handlers\CraftDataHandler.cs" />
+    <Compile Include="Handlers\CraftTreeHandler.cs" />
+    <Compile Include="Handlers\CrossModSupportHandler.cs" />
+    <Compile Include="Handlers\KnownTechHandler.cs" />
+    <Compile Include="Handlers\PrefabHandler.cs" />
+    <Compile Include="Handlers\SpriteHandler.cs" />
+    <Compile Include="Handlers\TechTypeHandler.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="MonoBehaviours\InfoFixer.cs" />
+    <Compile Include="Legacy\Patchers\CraftDataPatcher.cs" />
+    <Compile Include="Legacy\Patchers\CraftTreePatcher.cs" />
+    <Compile Include="Legacy\CustomPrefabHandler.cs" />
+    <Compile Include="Legacy\CustomSpriteHandler.cs" />
+    <Compile Include="Legacy\Patchers\CraftTreeTypePatcher.cs" />
+    <Compile Include="Legacy\Patchers\DevConsolePatcher.cs" />
+    <Compile Include="Initializer.cs" />
+    <Compile Include="Legacy\Patchers\KnownTechPatcher.cs" />
+    <Compile Include="Legacy\Patchers\LanguagePatcher.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Legacy\Patchers\TechTypePatcher.cs" />
+    <Compile Include="Legacy\Utility.cs" />
+    <Compile Include="Patchers\BaseBioReactorPatcher.cs" />
+    <Compile Include="Patchers\PDAEncyclopediaPatcher.cs" />
+    <Compile Include="Utility.cs" />
+    <Compile Include="Util\EnumCacheManager.cs" />
     <Compile Include="Patchers\CraftDataPatcher.cs" />
     <Compile Include="Patchers\CraftTreePatcher.cs" />
-    <Compile Include="CustomPrefabHandler.cs" />
-    <Compile Include="CustomSpriteHandler.cs" />
     <Compile Include="Patchers\CraftTreeTypePatcher.cs" />
     <Compile Include="Patchers\DevConsolePatcher.cs" />
-    <Compile Include="V2\Initializer.cs" />
     <Compile Include="Patchers\KnownTechPatcher.cs" />
     <Compile Include="Patchers\LanguagePatcher.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Patchers\PrefabDatabasePatcher.cs" />
+    <Compile Include="Patchers\ResourcesPatcher.cs" />
+    <Compile Include="Patchers\SpritePatcher.cs" />
     <Compile Include="Patchers\TechTypePatcher.cs" />
-    <Compile Include="Utility.cs" />
-    <Compile Include="V2\Patchers\BaseBioReactorPatcher.cs" />
-    <Compile Include="V2\Patchers\PDAEncyclopediaPatcher.cs" />
-    <Compile Include="V2\Utility.cs" />
-    <Compile Include="V2\Util\EnumCacheManager.cs" />
-    <Compile Include="V2\Patchers\CraftDataPatcher.cs" />
-    <Compile Include="V2\Patchers\CraftTreePatcher.cs" />
-    <Compile Include="V2\Patchers\CraftTreeTypePatcher.cs" />
-    <Compile Include="V2\Patchers\DevConsolePatcher.cs" />
-    <Compile Include="V2\Patchers\KnownTechPatcher.cs" />
-    <Compile Include="V2\Patchers\LanguagePatcher.cs" />
-    <Compile Include="V2\Patchers\PrefabDatabasePatcher.cs" />
-    <Compile Include="V2\Patchers\ResourcesPatcher.cs" />
-    <Compile Include="V2\Patchers\SpritePatcher.cs" />
-    <Compile Include="V2\Patchers\TechTypePatcher.cs" />
-    <Compile Include="V2\Util\ReflectionHelper.cs" />
+    <Compile Include="Util\ReflectionHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="V2\mod.json">
+    <None Include="mod.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
