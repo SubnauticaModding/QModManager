@@ -9,18 +9,7 @@
     public static class CraftDataHandler
     {
         #region Core Methods
-
-        /// <summary>
-        /// <para>Allows you to edit inventory background type for TechTypes.</para>
-        /// </summary>
-        /// <param name="techType">The TechType whose BackgroundType you want to edit.</param>
-        /// <param name="backgroundType">The BackgroundType for that TechType.</param>
-        /// <seealso cref="CraftData.BackgroundType"/>
-        public static void EditBackgroundType(TechType techType, CraftData.BackgroundType backgroundType)
-        {
-            CraftDataPatcher.CustomBackgroundTypes[techType] = backgroundType;
-        }
-
+        
         /// <summary>
         /// <para>Allows you to edit recipes, i.e. TechData for TechTypes.</para>
         /// <para>Can be used for existing TechTypes too.</para>
@@ -78,6 +67,17 @@
         }
 
         /// <summary>
+        /// <para>Allows you to edit how much additional slices/seeds are given upon last knife hit.</para>
+        /// <para>Can be used for existing TechTypes too.</para>
+        /// </summary>
+        /// <param name="techType">The TechType whose final cut bonus you want to edit.</param>
+        /// <param name="bonus">The number of additional slices/seeds you'll receive on last cut.</param>
+        public static void EditHarvestFinalCutBonus(TechType techType, int bonus)
+        {
+            CraftDataPatcher.CustomFinalCutBonusList[techType] = bonus;
+        }
+
+        /// <summary>
         /// <para>Allows you to edit item sizes for TechTypes.</para>
         /// <para>Can be used for existing TechTypes too.</para>
         /// </summary>
@@ -111,6 +111,17 @@
         }
 
         /// <summary>
+        /// <para>Allows you to edit inventory background type for TechTypes.</para>
+        /// </summary>
+        /// <param name="techType">The TechType whose BackgroundType you want to edit.</param>
+        /// <param name="backgroundType">The BackgroundType for that TechType.</param>
+        /// <seealso cref="CraftData.BackgroundType"/>
+        public static void EditBackgroundType(TechType techType, CraftData.BackgroundType backgroundType)
+        {
+            CraftDataPatcher.CustomBackgroundTypes[techType] = backgroundType;
+        }
+
+        /// <summary>
         /// Allows you to add items to the buildable list.
         /// </summary>
         /// <param name="techType">The TechType which you want to add to the buildable list.</param>
@@ -124,15 +135,7 @@
         // Typically, when adding custom items, other modders will likely be looking for "Add" methods without realising that the "Edit" methods above also add.
         // This set of methods below is here to to address the naming expectations without altering actual functionality.
         #region Redundant but friendly
-
-        /// <summary>
-        /// <para>Allows you to associate an inventory background type to your TechType.</para>
-        /// </summary>
-        /// <param name="techType">The TechType whose BackgroundType you want to set.</param>
-        /// <param name="backgroundType">The BackgroundType for that TechType.</param>
-        /// <seealso cref="CraftData.BackgroundType"/>
-        public static void AddBackgroundType(TechType techType, CraftData.BackgroundType backgroundType) => EditBackgroundType(techType, backgroundType);
-
+        
         /// <summary>
         /// <para>Allows you to add a recipe, i.e. TechData for your TechType.</para>
         /// </summary>
@@ -170,6 +173,13 @@
         public static void AddHarvestTypeList(TechType techType, HarvestType harvestType) => EditHarvestTypeList(techType, harvestType);
 
         /// <summary>
+        /// <para>Allows you to add final cut bonus slices/seeds to your TechType.</para>
+        /// </summary>
+        /// <param name="techType">The TechType whose final cut bonus you want to set.</param>
+        /// <param name="bonus">The number of additional slices/seeds you'll receive on last cut.</param>
+        public static void AddHarvestFinalCutBonus(TechType techType, int bonus) => EditHarvestFinalCutBonus(techType, bonus);
+
+        /// <summary>
         /// <para>Allows you to set a non-default item size for your TechType.</para>
         /// <para>By default item sizes are 1x1 in the inventory.</para>
         /// </summary>
@@ -190,6 +200,14 @@
         /// <param name="uncooked">The TechType whose cooked creature counterpart to edit.</param>
         /// <param name="cooked">The cooked creature counterpart for that TechType.</param>
         public static void AddCookedCreatureList(TechType uncooked, TechType cooked) => EditCookedCreatureList(uncooked, cooked);
+
+        /// <summary>
+        /// <para>Allows you to associate an inventory background type to your TechType.</para>
+        /// </summary>
+        /// <param name="techType">The TechType whose BackgroundType you want to set.</param>
+        /// <param name="backgroundType">The BackgroundType for that TechType.</param>
+        /// <seealso cref="CraftData.BackgroundType"/>
+        public static void AddBackgroundType(TechType techType, CraftData.BackgroundType backgroundType) => EditBackgroundType(techType, backgroundType);
 
         #endregion
     }
