@@ -1,7 +1,7 @@
 ﻿namespace SMLHelper.V2.Handlers
 {
     using Patchers;
-    using Util;
+    using Utilities;
 
     /// <summary>
     /// A handler class with features to aid in making your mod safely cross-compatible with another without DLL references.

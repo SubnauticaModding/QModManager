@@ -4,7 +4,7 @@ namespace SMLHelper.V2.Patchers
     using Harmony;
     using System.Collections.Generic;
     using System.Reflection;
-    using Util;
+    using Utilities;
     using Crafting;
 
     internal class CraftTreePatcher
@@ -98,7 +98,7 @@ namespace SMLHelper.V2.Patchers
 
         private static void InitializePostFix()
         {
-            var craftTreeInitialized = (bool)ReflectionHelper.GetPrivateStaticField<CraftTree>("initialized");
+            var craftTreeInitialized = (bool)ReflectionHelper.GetStaticField<CraftTree>("initialized");
             var craftTreeClass = typeof(CraftTree);
         
             if (craftTreeInitialized && !CustomCraftTreeNode.Initialized)
