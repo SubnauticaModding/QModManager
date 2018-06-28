@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.V2.Utilities
+﻿namespace SMLHelper.V2.Utility
 {
     using System.Reflection;
 

@@ -1,5 +1,5 @@
 ﻿using SMLHelper.V2.Patchers;
-using SMLHelper.V2.Utilities;
+using SMLHelper.V2.Utility;
 
 namespace SMLHelper
 {

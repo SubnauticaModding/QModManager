@@ -1,5 +1,5 @@
 ﻿using SMLHelper.V2.Patchers;
-using SMLHelper.V2.Utilities;
+using SMLHelper.V2.Utility;
 using UnityEngine;
 using UnityEngine.Assertions;
 using CustomCraftTreeRoot2 = SMLHelper.V2.Crafting.CustomCraftTreeRoot;

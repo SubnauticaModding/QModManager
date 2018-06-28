@@ -6,7 +6,7 @@
     using System.IO;
     using UnityEngine;
 
-    public class Utility
+    public class MiscUtils
     {
         public static void AddBasicComponents(ref GameObject _object, string classId)
         {
