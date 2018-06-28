@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.V2.Util
+﻿namespace SMLHelper.V2.Utilities
 {
     using System.Collections.Generic;
     using System.IO;
