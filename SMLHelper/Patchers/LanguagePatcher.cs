@@ -1,19 +1,32 @@
-﻿using System.Collections.Generic;
-using LanguagePatcher2 = SMLHelper.V2.Patchers.LanguagePatcher;
-
-namespace SMLHelper.Patchers
+﻿namespace SMLHelper.V2.Patchers
 {
-    [System.Obsolete("Use SMLHelper.V2 instead.")]
-    public class LanguagePatcher
+    using Harmony;
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+
+    internal class LanguagePatcher
     {
-        [System.Obsolete("Use SMLHelper.V2 instead.")]
         public static Dictionary<string, string> customLines = new Dictionary<string, string>();
+        private static Type languageType = typeof(Language);
 
-        internal static void Patch()
+        internal static void Postfix(ref Language __instance)
         {
-            customLines.ForEach(x => LanguagePatcher2.customLines.Add(x.Key, x.Value));
+            var stringsField = languageType.GetField("strings", BindingFlags.NonPublic | BindingFlags.Instance);
+            var strings = stringsField.GetValue(__instance) as Dictionary<string, string>;
+            foreach (var a in customLines)
+            {
+                strings[a.Key] = a.Value;
+            }
+        }
 
-            V2.Logger.Log("Old LanguagePatcher is done.");
+        internal static void Patch(HarmonyInstance harmony)
+        {
+            var method = languageType.GetMethod("LoadLanguageFile", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            harmony.Patch(method, null,
+                new HarmonyMethod(typeof(LanguagePatcher).GetMethod("Postfix", BindingFlags.Static | BindingFlags.NonPublic)));
+            Logger.Log("LanguagePatcher is done.");
         }
     }
 }
