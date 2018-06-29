@@ -1,9 +1,10 @@
-﻿using Harmony;
-using System.Collections.Generic;
-
-namespace SMLHelper.V2.Patchers
+﻿namespace SMLHelper.V2.Patchers
 {
-    internal class BaseBioReactorPatcher
+    using Harmony;
+    using System.Collections.Generic;
+    using Utility;
+
+    internal class BioReactorPatcher
     {
         #region Internal Fields
 
@@ -15,7 +16,7 @@ namespace SMLHelper.V2.Patchers
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            Utility.PatchDictionary(typeof(BaseBioReactor), "charge", CustomBioreactorCharges);
+            PatchUtils.PatchDictionary(typeof(BaseBioReactor), "charge", CustomBioreactorCharges);
 
             Logger.Log("BaseBioReactorPatcher is done.");
         }

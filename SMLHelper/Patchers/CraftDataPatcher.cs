@@ -5,6 +5,7 @@
     using System;
     using System.Collections.Generic;
     using System.Reflection;
+    using Utility;
 
     internal class CraftDataPatcher
     {
@@ -86,16 +87,16 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            Utility.PatchDictionary(CraftDataType, "harvestOutputList", CustomHarvestOutputList, BindingFlags.Static | BindingFlags.Public);
-            Utility.PatchDictionary(CraftDataType, "harvestTypeList", CustomHarvestTypeList);
-            Utility.PatchDictionary(CraftDataType, "harvestFinalCutBonusList", CustomFinalCutBonusList);
-            Utility.PatchDictionary(CraftDataType, "itemSizes", CustomItemSizes);
-            Utility.PatchDictionary(CraftDataType, "equipmentTypes", CustomEquipmentTypes);
-            Utility.PatchDictionary(CraftDataType, "slotTypes", CustomSlotTypes);
-            Utility.PatchDictionary(CraftDataType, "craftingTimes", CustomCraftingTimes);
-            Utility.PatchDictionary(CraftDataType, "cookedCreatureList", CustomCookedCreatureList);
-            Utility.PatchDictionary(CraftDataType, "backgroundTypes", CustomBackgroundTypes);
-            Utility.PatchList(CraftDataType, "buildables", CustomBuildables);
+            PatchUtils.PatchDictionary(CraftDataType, "harvestOutputList", CustomHarvestOutputList, BindingFlags.Static | BindingFlags.Public);
+            PatchUtils.PatchDictionary(CraftDataType, "harvestTypeList", CustomHarvestTypeList);
+            PatchUtils.PatchDictionary(CraftDataType, "harvestFinalCutBonusList", CustomFinalCutBonusList);
+            PatchUtils.PatchDictionary(CraftDataType, "itemSizes", CustomItemSizes);
+            PatchUtils.PatchDictionary(CraftDataType, "equipmentTypes", CustomEquipmentTypes);
+            PatchUtils.PatchDictionary(CraftDataType, "slotTypes", CustomSlotTypes);
+            PatchUtils.PatchDictionary(CraftDataType, "craftingTimes", CustomCraftingTimes);
+            PatchUtils.PatchDictionary(CraftDataType, "cookedCreatureList", CustomCookedCreatureList);
+            PatchUtils.PatchDictionary(CraftDataType, "backgroundTypes", CustomBackgroundTypes);
+            PatchUtils.PatchList(CraftDataType, "buildables", CustomBuildables);
 
             var preparePrefabIDCache = CraftDataType.GetMethod("PreparePrefabIDCache", BindingFlags.Public | BindingFlags.Static);
             var getMethod = CraftDataType.GetMethod("Get", BindingFlags.Public | BindingFlags.Static);

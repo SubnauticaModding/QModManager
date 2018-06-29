@@ -5,7 +5,7 @@
     using Assets;
     using UnityEngine;
     using UnityEngine.Assertions;
-    using Utilities;
+    using Utility;
 
     /// <summary>
     /// Basic data structure of a custom crafting tree node.

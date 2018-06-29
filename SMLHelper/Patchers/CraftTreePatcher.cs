@@ -4,7 +4,7 @@ namespace SMLHelper.V2.Patchers
     using Harmony;
     using System.Collections.Generic;
     using System.Reflection;
-    using Utilities;
+    using Utility;
     using Crafting;
 
     internal class CraftTreePatcher
