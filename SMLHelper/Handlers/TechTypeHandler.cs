@@ -26,9 +26,6 @@
             // Register the TechType.
             var techType = TechTypePatcher.AddTechType(internalName);
 
-            // If TechType wasn't added successfully
-            if (techType == TechType.None) return techType;
-
             // Register Language lines.
             LanguagePatcher.customLines[internalName] = displayName;
             LanguagePatcher.customLines["Tooltip_" + internalName] = tooltip;
@@ -57,11 +54,8 @@
             // Register the TechType using overload.
             var techType = AddTechType(internalName, displayName, tooltip, unlockAtStart);
 
-            // If TechType wasn't added successfully
-            if (techType == TechType.None) return techType;
-
             // Register the Sprite
-            if (sprite != null)
+            if(sprite != null)
                 ModSprite.Sprites.Add(new ModSprite(techType, sprite));
 
             // Return the new TechType
@@ -81,9 +75,6 @@
         {
             // Register the TechType using overload.
             var techType = AddTechType(internalName, displayName, tooltip, unlockAtStart);
-
-            // If TechType wasn't added successfully
-            if (techType == TechType.None) return techType;
 
             // Register the Sprite
             if (sprite != null)
