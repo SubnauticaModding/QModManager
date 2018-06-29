@@ -5,6 +5,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Text.RegularExpressions;
     using Utility;
 
     internal class TechTypePatcher
@@ -23,6 +24,15 @@
 
         internal static TechType AddTechType(string name)
         {
+            var regex = new Regex("[^0-9a-zA-Z_]"); // Regex of allowed characters
+            var match = regex.Match(name);
+
+            if(!match.Success)
+            {
+                Logger.Log($"TechType name {name} contains invalid characters!");
+                return TechType.None;
+            }
+
             var cache = cacheManager.GetCacheForTypeName(name);
 
             if (cache == null)
