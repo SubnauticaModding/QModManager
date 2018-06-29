@@ -75,7 +75,7 @@
                 cacheList.Add(cache);
             }
 
-            Logger.Log($"Loaded ${enumTypeName} Cache!");
+            Logger.Log($"Loaded {enumTypeName} Cache!");
 
             cacheLoaded = true;
         }

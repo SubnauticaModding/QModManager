@@ -1,5 +1,6 @@
 namespace SMLHelper.V2.MonoBehaviours
 {
+    using System;
     using UnityEngine;
 
     public class TechTypeFixer : MonoBehaviour, IProtoEventListener
@@ -9,6 +10,11 @@ namespace SMLHelper.V2.MonoBehaviours
 
         [SerializeField]
         public string ClassId;
+
+        void Update()
+        {
+            Console.WriteLine("Transform position: " + transform.position);
+        }
 
         public void OnProtoSerialize(ProtobufSerializer serializer)
         {
