@@ -88,7 +88,7 @@
     <Compile Include="Legacy\Patchers\TechTypePatcher.cs" />
     <Compile Include="Legacy\Utility.cs" />
     <Compile Include="Patchers\PDAEncyclopediaPatcher.cs" />
-	<Compile Include="Patchers\BioReactorPatcher.cs" />
+    <Compile Include="Patchers\BioReactorPatcher.cs" />
     <Compile Include="Patchers\CraftDataPatcher.cs" />
     <Compile Include="Patchers\CraftTreePatcher.cs" />
     <Compile Include="Patchers\CraftTreeTypePatcher.cs" />
@@ -99,9 +99,9 @@
     <Compile Include="Patchers\ResourcesPatcher.cs" />
     <Compile Include="Patchers\SpritePatcher.cs" />
     <Compile Include="Patchers\TechTypePatcher.cs" />
-	<Compile Include="Utility\EnumCacheManager.cs" />
-	<Compile Include="Utility\ReflectionHelper.cs" />
-	<Compile Include="Utility\MiscUtils.cs" />
+    <Compile Include="Utility\EnumCacheManager.cs" />
+    <Compile Include="Utility\ReflectionHelper.cs" />
+    <Compile Include="Utility\PatchUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="mod.json">
