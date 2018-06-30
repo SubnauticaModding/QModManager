@@ -19,7 +19,7 @@
 
         #region Adding CraftTreeTypes and TreeRoots
 
-        internal static SmlCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
+        internal static ModCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
         {
             var cache = cacheManager.GetCacheForTypeName(name);
 
@@ -43,7 +43,7 @@
 
             cacheManager.SaveCache();
 
-            var customTreeRoot = new SmlCraftTreeRoot(craftTreeType, name);
+            var customTreeRoot = new ModCraftTreeRoot(craftTreeType, name);
 
             CraftTreePatcher.CustomTrees[craftTreeType] = customTreeRoot;
 

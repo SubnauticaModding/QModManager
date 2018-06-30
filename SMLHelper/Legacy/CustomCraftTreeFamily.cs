@@ -4,7 +4,7 @@
     using SMLHelper.V2.Utility;
     using UnityEngine;
     using UnityEngine.Assertions;
-    using CustomCraftTreeRoot2 = V2.Crafting.SmlCraftTreeRoot;
+    using CustomCraftTreeRoot2 = V2.Crafting.ModCraftTreeRoot;
 
     /// <summary>
     /// Basic data structure of a custom crafting tree node.

@@ -41,8 +41,8 @@
                 else // Added under an existing tab
                 {
                     var path = tab.Path.SplitByChar('/');
-                    SmlCraftTreeTab node = root.GetTabNode(path[0]);
-                    // Do not use SmlCraftTreeRoot.GetTabNode(params string[] stepsToTab) for this.
+                    ModCraftTreeTab node = root.GetTabNode(path[0]);
+                    // Do not use ModCraftTreeRoot.GetTabNode(params string[] stepsToTab) for this.
                     // This path also contains the node name which is not supported by the method mentioned above.
 
                     for (int i = 1; i < path.Length - 1; i++)
@@ -80,8 +80,8 @@
                 else // Added under an existing tab
                 {
                     var path = craftNode.Path.SplitByChar('/');
-                    SmlCraftTreeTab node = root.GetTabNode(path[0]);
-                    // Do not use SmlCraftTreeRoot.GetTabNode(params string[] stepsToTab) for this.
+                    ModCraftTreeTab node = root.GetTabNode(path[0]);
+                    // Do not use ModCraftTreeRoot.GetTabNode(params string[] stepsToTab) for this.
                     // This path also contains the node name which is not supported by the method mentioned above.
 
                     for (int i = 1; i < path.Length - 1; i++)
@@ -114,8 +114,8 @@
                 else // Removed from an existing tab
                 {
                     var path = scrubNode.Path.SplitByChar('/');
-                    SmlCraftTreeTab node = root.GetTabNode(path[0]);
-                    // Do not use SmlCraftTreeRoot.GetTabNode(params string[] stepsToTab) for this.
+                    ModCraftTreeTab node = root.GetTabNode(path[0]);
+                    // Do not use ModCraftTreeRoot.GetTabNode(params string[] stepsToTab) for this.
                     // This path also contains the node name which is not supported by the method mentioned above.
 
                     for (int i = 1; i < path.Length - 1; i++)

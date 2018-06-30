@@ -11,24 +11,24 @@ namespace SMLHelper.V2.Patchers
     {
         #region Internal Fields
 
-        internal static Dictionary<CraftTree.Type, SmlCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, SmlCraftTreeRoot>();
-        internal static SmlCraftTreeRoot FabricatorTree = LoadTree(CraftTree.Type.Fabricator);
-        internal static SmlCraftTreeRoot CyclopsFabricatorTree = LoadTree(CraftTree.Type.CyclopsFabricator);
-        internal static SmlCraftTreeRoot MapRoomTree = LoadTree(CraftTree.Type.MapRoom);
-        internal static SmlCraftTreeRoot ConstructorTree = LoadTree(CraftTree.Type.Constructor);
-        internal static SmlCraftTreeRoot RocketTree = LoadTree(CraftTree.Type.Rocket);
-        internal static SmlCraftTreeRoot SeamothUpgradesTree = LoadTree(CraftTree.Type.SeamothUpgrades);
-        internal static SmlCraftTreeRoot WorkbenchTree = LoadTree(CraftTree.Type.Workbench);
+        internal static Dictionary<CraftTree.Type, ModCraftTreeRoot> CustomTrees = new Dictionary<CraftTree.Type, ModCraftTreeRoot>();
+        internal static ModCraftTreeRoot FabricatorTree = LoadTree(CraftTree.Type.Fabricator);
+        internal static ModCraftTreeRoot CyclopsFabricatorTree = LoadTree(CraftTree.Type.CyclopsFabricator);
+        internal static ModCraftTreeRoot MapRoomTree = LoadTree(CraftTree.Type.MapRoom);
+        internal static ModCraftTreeRoot ConstructorTree = LoadTree(CraftTree.Type.Constructor);
+        internal static ModCraftTreeRoot RocketTree = LoadTree(CraftTree.Type.Rocket);
+        internal static ModCraftTreeRoot SeamothUpgradesTree = LoadTree(CraftTree.Type.SeamothUpgrades);
+        internal static ModCraftTreeRoot WorkbenchTree = LoadTree(CraftTree.Type.Workbench);
 
-        internal static SmlCraftTreeRoot LoadTree(CraftTree.Type Scheme)
+        internal static ModCraftTreeRoot LoadTree(CraftTree.Type Scheme)
         {
-            var treeRoot = new SmlCraftTreeRoot(Scheme, Scheme.ToString());
-            var treeLinkingNode = (SmlCraftTreeLinkingNode)treeRoot;
+            var treeRoot = new ModCraftTreeRoot(Scheme, Scheme.ToString());
+            var treeLinkingNode = (ModCraftTreeLinkingNode)treeRoot;
             var tree = CraftTree.GetTree(Scheme);
 
             if (tree == null || treeRoot == null || treeLinkingNode == null) return null;
 
-            SmlCraftTreeRoot.CreateFromExistingTree(tree.nodes, ref treeLinkingNode);
+            ModCraftTreeRoot.CreateFromExistingTree(tree.nodes, ref treeLinkingNode);
 
             return treeRoot;
         }
@@ -101,7 +101,7 @@ namespace SMLHelper.V2.Patchers
             var craftTreeInitialized = (bool)ReflectionHelper.GetStaticField<CraftTree>("initialized");
             var craftTreeClass = typeof(CraftTree);
         
-            if (craftTreeInitialized && !SmlCraftTreeNode.Initialized)
+            if (craftTreeInitialized && !ModCraftTreeNode.Initialized)
             {
                 foreach (CraftTree.Type cTreeKey in CustomTrees.Keys)
                 {

@@ -16,15 +16,15 @@
         /// <param name="name">The name for the new <see cref="CraftTree.Type" /> enum.</param>
         /// <param name="craftTreeType">The new enum instance for your custom craft tree.</param>
         /// <returns>
-        /// <para>The root node for your custom craft tree, as a new <see cref="SmlCraftTreeRoot"/> instance.</para>
+        /// <para>The root node for your custom craft tree, as a new <see cref="ModCraftTreeRoot"/> instance.</para>
         /// <para>Build up your custom crafting tree from this root node.</para>
         /// <para>This tree will automatically patched into the game. No further calls required.</para>
         /// </returns>
-        /// <seealso cref="SmlCraftTreeNode"/>
-        /// <seealso cref="SmlCraftTreeLinkingNode"/>
-        /// <seealso cref="SmlCraftTreeTab"/>
-        /// <seealso cref="SmlCraftTreeCraft"/>
-        public static SmlCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
+        /// <seealso cref="ModCraftTreeNode"/>
+        /// <seealso cref="ModCraftTreeLinkingNode"/>
+        /// <seealso cref="ModCraftTreeTab"/>
+        /// <seealso cref="ModCraftTreeCraft"/>
+        public static ModCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
         {
             return CraftTreeTypePatcher.CreateCustomCraftTreeAndType(name, out craftTreeType);
         }
@@ -42,7 +42,7 @@
         /// </summary>
         /// <param name="Scheme">The fabricator scheme whose craft tree to get.</param>
         /// <returns>The CustomCraftTreeRoot for the given <see cref="CraftTree.Type"/> when valid; Otherwise returns null.</returns>
-        public static SmlCraftTreeRoot GetExistingTree(CraftTree.Type Scheme)
+        public static ModCraftTreeRoot GetExistingTree(CraftTree.Type Scheme)
         {
             switch (Scheme)
             {
@@ -77,10 +77,10 @@
         /// <param name="craftTree">The target craft tree to edit.</param>
         /// <param name="craftingItem">The item to turn into a crafting node.</param>
         /// <seealso cref="GetExistingTree"/>
-        /// <seealso cref="SmlCraftTreeLinkingNode.AddCraftingNode(TechType)"/>
+        /// <seealso cref="ModCraftTreeLinkingNode.AddCraftingNode(TechType)"/>
         public static void AddCraftingNodeToRoot(CraftTree.Type craftTree, TechType craftingItem)
         {
-            SmlCraftTreeRoot root = GetExistingTree(craftTree);
+            ModCraftTreeRoot root = GetExistingTree(craftTree);
 
             if (root == null)
                 return;
@@ -94,10 +94,10 @@
         /// <param name="craftTree">The target craft tree to edit.</param>
         /// <param name="craftingItems">The items to turn into new crafting nodes.</param>
         /// <seealso cref="GetExistingTree"/>
-        /// <seealso cref="SmlCraftTreeLinkingNode.AddCraftingNode(TechType[])"/>
+        /// <seealso cref="ModCraftTreeLinkingNode.AddCraftingNode(TechType[])"/>
         public static void AddCraftingNodeToRoot(CraftTree.Type craftTree, params TechType[] craftingItems)
         {            
-            SmlCraftTreeRoot root = GetExistingTree(craftTree);
+            ModCraftTreeRoot root = GetExistingTree(craftTree);
 
             if (root == null)
                 return;
@@ -116,16 +116,16 @@
         /// <para>Do not include "root" in this path.</para>
         /// </param>
         /// <seealso cref="GetExistingTree"/>
-        /// <seealso cref="SmlCraftTreeRoot.GetTabNode(string[])"/>
-        /// <seealso cref="SmlCraftTreeLinkingNode.AddCraftingNode(TechType)"/>
+        /// <seealso cref="ModCraftTreeRoot.GetTabNode(string[])"/>
+        /// <seealso cref="ModCraftTreeLinkingNode.AddCraftingNode(TechType)"/>
         public static void AddCraftingNodeToTab(CraftTree.Type craftTree, TechType craftingItem, params string[] stepsToTab)
         {
-            SmlCraftTreeRoot root = GetExistingTree(craftTree);
+            ModCraftTreeRoot root = GetExistingTree(craftTree);
 
             if (root == null)
                 return;
 
-            SmlCraftTreeTab tab = root.GetTabNode(stepsToTab);
+            ModCraftTreeTab tab = root.GetTabNode(stepsToTab);
 
             if (tab == null)
                 return;
@@ -144,16 +144,16 @@
         /// <para>Do not include "root" in this path.</para>
         /// </param>
         /// <seealso cref="GetExistingTree"/>
-        /// <seealso cref="SmlCraftTreeRoot.GetTabNode(string[])"/>
-        /// <seealso cref="SmlCraftTreeLinkingNode.AddCraftingNode(IEnumerable{TechType})"/>
+        /// <seealso cref="ModCraftTreeRoot.GetTabNode(string[])"/>
+        /// <seealso cref="ModCraftTreeLinkingNode.AddCraftingNode(IEnumerable{TechType})"/>
         public static void AddCraftingNodeToTab(CraftTree.Type craftTree, IEnumerable<TechType> craftingItems, params string[] stepsToTab)
         {            
-            SmlCraftTreeRoot root = GetExistingTree(craftTree);
+            ModCraftTreeRoot root = GetExistingTree(craftTree);
 
             if (root == null)
                 return;
 
-            SmlCraftTreeTab tab = root.GetTabNode(stepsToTab);
+            ModCraftTreeTab tab = root.GetTabNode(stepsToTab);
 
             if (tab == null)
                 return;

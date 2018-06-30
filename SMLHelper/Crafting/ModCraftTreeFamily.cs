@@ -10,7 +10,7 @@
     /// <summary>
     /// Basic data structure of a crafting tree node.
     /// </summary>
-    public abstract class SmlCraftTreeNode
+    public abstract class ModCraftTreeNode
     {
         internal static bool Initialized = false;
         internal static bool HasCustomTrees { get; set; } = false;
@@ -37,12 +37,12 @@
         /// </summary>
         public CraftNode CraftNode;
 
-        protected SmlCraftTreeLinkingNode Parent = null;
+        protected ModCraftTreeLinkingNode Parent = null;
 
         protected virtual CraftTree.Type Scheme => this.Parent.Scheme;
         protected virtual string SchemeAsString => this.Parent.SchemeAsString;
 
-        protected SmlCraftTreeNode(string name, TreeAction action, TechType techType)
+        protected ModCraftTreeNode(string name, TreeAction action, TechType techType)
         {
             Name = name;
             Action = action;
@@ -60,10 +60,10 @@
             Assert.IsNotNull(this.Parent, "No parent found to remove node from!");
             Assert.IsNotNull(this.Parent.CraftNode, "No CraftNode found on parent!");
 
-            if (this is SmlCraftTreeLinkingNode)
+            if (this is ModCraftTreeLinkingNode)
             {
-                SmlCraftTreeLinkingNode linkingNode = this as SmlCraftTreeLinkingNode;
-                foreach (SmlCraftTreeNode cNode in linkingNode.ChildNodes)
+                ModCraftTreeLinkingNode linkingNode = this as ModCraftTreeLinkingNode;
+                foreach (ModCraftTreeNode cNode in linkingNode.ChildNodes)
                 {
                     cNode.RemoveNode();
                 }
@@ -74,7 +74,7 @@
             this.Parent = null;
         }
 
-        internal virtual void LinkToParent(SmlCraftTreeLinkingNode parent)
+        internal virtual void LinkToParent(ModCraftTreeLinkingNode parent)
         {
             parent.CraftNode.AddNode(this.CraftNode);
             this.Parent = parent;
@@ -84,15 +84,15 @@
     /// <summary>
     /// Abstract class that provides methods for adding new nodes into the crafting tree.
     /// </summary>
-    /// <seealso cref="SmlCraftTreeNode" />
-    public abstract class SmlCraftTreeLinkingNode : SmlCraftTreeNode
+    /// <seealso cref="ModCraftTreeNode" />
+    public abstract class ModCraftTreeLinkingNode : ModCraftTreeNode
     {
         /// <summary>
         /// The child nodes linked bellow this node.
         /// </summary>
-        public readonly List<SmlCraftTreeNode> ChildNodes = new List<SmlCraftTreeNode>();
+        public readonly List<ModCraftTreeNode> ChildNodes = new List<ModCraftTreeNode>();
 
-        protected SmlCraftTreeLinkingNode(string name, TreeAction action, TechType techType)
+        protected ModCraftTreeLinkingNode(string name, TreeAction action, TechType techType)
             : base(name, action, techType)
         {
         }
@@ -104,9 +104,9 @@
         /// <param name="displayText">The hover text to display in-game.</param>
         /// <param name="sprite">The custom sprite to display on this tab node.</param>
         /// <returns>A new tab node linked to the root node and ready to use.</returns>
-        public SmlCraftTreeTab AddTabNode(string nameID, string displayText, Atlas.Sprite sprite)
+        public ModCraftTreeTab AddTabNode(string nameID, string displayText, Atlas.Sprite sprite)
         {
-            var tabNode = new SmlCraftTreeTab(nameID, displayText, sprite);
+            var tabNode = new ModCraftTreeTab(nameID, displayText, sprite);
             tabNode.LinkToParent(this);
 
             ChildNodes.Add(tabNode);
@@ -121,9 +121,9 @@
         /// <param name="displayText">The hover text to display in-game.</param>
         /// <param name="sprite">The custom sprite to display on this tab node.</param>
         /// <returns>A new tab node linked to the root node and ready to use.</returns>
-        public SmlCraftTreeTab AddTabNode(string nameID, string displayText, Sprite sprite)
+        public ModCraftTreeTab AddTabNode(string nameID, string displayText, Sprite sprite)
         {
-            var tabNode = new SmlCraftTreeTab(nameID, displayText, sprite);
+            var tabNode = new ModCraftTreeTab(nameID, displayText, sprite);
             tabNode.LinkToParent(this);
 
             ChildNodes.Add(tabNode);
@@ -136,9 +136,9 @@
         /// </summary>
         /// <param name="nameID">The name/ID of this node.</param>
         /// <returns>A new tab node linked to the root node and ready to use.</returns>
-        public SmlCraftTreeTab AddTabNode(string nameID)
+        public ModCraftTreeTab AddTabNode(string nameID)
         {
-            var tabNode = new SmlCraftTreeTab(nameID);
+            var tabNode = new ModCraftTreeTab(nameID);
             tabNode.LinkToParent(this);
 
             ChildNodes.Add(tabNode);
@@ -151,7 +151,7 @@
         /// </summary>
         /// <param name="nameID">The name id of the tab to get.</param>
         /// <returns></returns>
-        public SmlCraftTreeTab GetTabNode(string nameID)
+        public ModCraftTreeTab GetTabNode(string nameID)
         {
             foreach (var node in ChildNodes)
             {
@@ -159,7 +159,7 @@
 
                 if (node.Name == nameID && node.Action == TreeAction.Expand)
                 {
-                    var tab = (SmlCraftTreeTab)node;
+                    var tab = (ModCraftTreeTab)node;
                     return tab;
                 }
             }
@@ -168,11 +168,32 @@
         }
 
         /// <summary>
+        /// Gets the tab node at the specified path from the root.
+        /// </summary>
+        /// <param name="stepsToTab">
+        /// <para>The steps to the target tab.</para>
+        /// <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
+        /// <para>Do not include "root" in this path.</para>
+        /// </param>
+        /// <returns>If the specified tab node is found, returns that <see cref="ModCraftTreeTab"/>; Otherwise, returns null.</returns>
+        public ModCraftTreeTab GetTabNode(params string[] stepsToTab)
+        {
+            ModCraftTreeTab tab = GetTabNode(stepsToTab[0]);
+
+            for (int i = 1; i < stepsToTab.Length && tab != null; i++)
+            {
+                tab = tab.GetTabNode(stepsToTab[i]);
+            }
+
+            return tab;
+        }
+
+        /// <summary>
         /// Gets the crafting node from the calling node.
         /// </summary>
         /// <param name="techType">The TechType whose node to get.</param>
         /// <returns></returns>
-        public SmlCraftTreeCraft GetCraftingNode(TechType techType)
+        public ModCraftTreeCraft GetCraftingNode(TechType techType)
         {
             foreach (var node in ChildNodes)
             {
@@ -180,7 +201,7 @@
 
                 if (node.TechType == techType && node.Action == TreeAction.Craft)
                 {
-                    var craftNode = (SmlCraftTreeCraft)node;
+                    var craftNode = (ModCraftTreeCraft)node;
                     return craftNode;
                 }
             }
@@ -193,7 +214,7 @@
         /// </summary>
         /// <param name="nameID"></param>
         /// <returns></returns>
-        public SmlCraftTreeNode GetNode(string nameID)
+        public ModCraftTreeNode GetNode(string nameID)
         {
             foreach (var node in ChildNodes)
             {
@@ -214,7 +235,7 @@
         {
             Assert.AreNotEqual(TechType.None, techType, "Attempt to add TechType.None as a crafting node.");
 
-            var craftNode = new SmlCraftTreeCraft(techType);
+            var craftNode = new ModCraftTreeCraft(techType);
             craftNode.LinkToParent(this);
 
             ChildNodes.Add(craftNode);
@@ -253,7 +274,7 @@
             if (cache != null)
             {
                 var techType = (TechType)cache.Index;
-                var craftNode = new SmlCraftTreeCraft(techType);
+                var craftNode = new ModCraftTreeCraft(techType);
                 craftNode.LinkToParent(this);
 
                 ChildNodes.Add(craftNode);
@@ -264,8 +285,8 @@
     /// <summary>
     /// The root node of a CraftTree. The whole tree starts here.
     /// </summary>    
-    /// <seealso cref="SmlCraftTreeLinkingNode" />
-    public class SmlCraftTreeRoot : SmlCraftTreeLinkingNode
+    /// <seealso cref="ModCraftTreeLinkingNode" />
+    public class ModCraftTreeRoot : ModCraftTreeLinkingNode
     {
         private readonly string _schemeAsString;
         private readonly CraftTree.Type _scheme;
@@ -273,7 +294,7 @@
         protected override string SchemeAsString => _schemeAsString;
         protected override CraftTree.Type Scheme => _scheme;
 
-        internal SmlCraftTreeRoot(CraftTree.Type scheme, string schemeAsString)
+        internal ModCraftTreeRoot(CraftTree.Type scheme, string schemeAsString)
             : base("Root", TreeAction.None, TechType.None)
         {
             Assert.IsTrue((int)scheme > CraftTreeTypePatcher.startingIndex, "Custom CraftTree types must have an index higher than the in-game types.");
@@ -285,23 +306,23 @@
 
         /// <summary>
         /// Dynamically creates the CraftTree object for this crafting tree.
-        /// The CraftNode objects were created and linked as the classes of the SmlCraftTreeFamily were created and linked.
+        /// The CraftNode objects were created and linked as the classes of the ModCraftTreeFamily were created and linked.
         /// </summary>
         internal CraftTree CraftTree => new CraftTree(_schemeAsString, CraftNode);
 
         /// <summary>
-        /// Populates a new SmlCraftTreeRoot from a CraftNode tree.
+        /// Populates a new ModCraftTreeRoot from a CraftNode tree.
         /// </summary>
-        /// <param name="tree">The tree to create the SmlCraftTreeRoot from.</param>
+        /// <param name="tree">The tree to create the ModCraftTreeRoot from.</param>
         /// <param name="root"></param>
-        internal static void CreateFromExistingTree(CraftNode tree, ref SmlCraftTreeLinkingNode root)
+        internal static void CreateFromExistingTree(CraftNode tree, ref ModCraftTreeLinkingNode root)
         {
             foreach (var node in tree)
             {
                 if (node.action == TreeAction.Expand)
                 {
                     var tab = root.AddTabNode(node.id);
-                    var thing = (SmlCraftTreeLinkingNode)tab;
+                    var thing = (ModCraftTreeLinkingNode)tab;
                     CreateFromExistingTree(node, ref thing);
                 }
 
@@ -317,41 +338,20 @@
                 }
             }
         }
-
-        /// <summary>
-        /// Gets the tab node at the specified path from the root.
-        /// </summary>
-        /// <param name="stepsToTab">
-        /// <para>The steps to the target tab.</para>
-        /// <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
-        /// <para>Do not include "root" in this path.</para>
-        /// </param>
-        /// <returns>If the specified tab node is found, returns that <see cref="SmlCraftTreeTab"/>; Otherwise, returns null.</returns>
-        public SmlCraftTreeTab GetTabNode(params string[] stepsToTab)
-        {
-            SmlCraftTreeTab tab = base.GetTabNode(stepsToTab[0]);
-
-            for (int i = 1; i < stepsToTab.Length && tab != null; i++)
-            {
-                tab = tab.GetTabNode(stepsToTab[i]);
-            }
-
-            return tab;
-        }
     }
 
     /// <summary>
     /// A tab node of a CraftTree. Tab nodes help organize crafting nodes by grouping them into categories.
     /// </summary>
-    /// <seealso cref="SmlCraftTreeLinkingNode" />
-    public class SmlCraftTreeTab : SmlCraftTreeLinkingNode
+    /// <seealso cref="ModCraftTreeLinkingNode" />
+    public class ModCraftTreeTab : ModCraftTreeLinkingNode
     {
         private readonly string DisplayText;
         private readonly Atlas.Sprite Asprite;
         private readonly Sprite Usprite;
         private readonly bool IsExistingTab;
 
-        internal SmlCraftTreeTab(string nameID, string displayText, Atlas.Sprite sprite)
+        internal ModCraftTreeTab(string nameID, string displayText, Atlas.Sprite sprite)
             : base(nameID, TreeAction.Expand, TechType.None)
         {
             DisplayText = displayText;
@@ -359,7 +359,7 @@
             Usprite = null;
         }
 
-        internal SmlCraftTreeTab(string nameID, string displayText, Sprite sprite)
+        internal ModCraftTreeTab(string nameID, string displayText, Sprite sprite)
             : base(nameID, TreeAction.Expand, TechType.None)
         {
             DisplayText = displayText;
@@ -367,13 +367,13 @@
             Usprite = sprite;
         }
 
-        internal SmlCraftTreeTab(string nameID)
+        internal ModCraftTreeTab(string nameID)
             : base(nameID, TreeAction.Expand, TechType.None)
         {
             IsExistingTab = true;
         }
 
-        internal override void LinkToParent(SmlCraftTreeLinkingNode parent)
+        internal override void LinkToParent(ModCraftTreeLinkingNode parent)
         {
             base.LinkToParent(parent);
 
@@ -402,10 +402,10 @@
     /// <summary>
     /// A crafting node of a CraftTree. This is the last node on a tree; The one that actually crafts something.
     /// </summary>
-    /// <seealso cref="SmlCraftTreeNode" />
-    public class SmlCraftTreeCraft : SmlCraftTreeNode
+    /// <seealso cref="ModCraftTreeNode" />
+    public class ModCraftTreeCraft : ModCraftTreeNode
     {
-        internal SmlCraftTreeCraft(TechType techType)
+        internal ModCraftTreeCraft(TechType techType)
             : base(techType.AsString(), TreeAction.Craft, techType)
         {
         }
