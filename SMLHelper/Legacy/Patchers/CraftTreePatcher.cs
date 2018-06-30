@@ -86,7 +86,15 @@
                     }
 
                     var tabName = path[path.Length - 1]; // Last
-                    node.AddCraftingNode(node.TechType);
+                    var techType = TechType.None;
+                    if(TechTypeExtensions.FromString(tabName, out techType, false))
+                    {
+                        node.AddCraftingNode(techType);
+                    }
+                    else
+                    {
+                        node.AddModdedCraftingNode(tabName);
+                    }
                 }
             }
 
