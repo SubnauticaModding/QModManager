@@ -168,27 +168,6 @@
         }
 
         /// <summary>
-        /// Gets the tab node at the specified path from the root.
-        /// </summary>
-        /// <param name="stepsToTab">
-        /// <para>The steps to the target tab.</para>
-        /// <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
-        /// <para>Do not include "root" in this path.</para>
-        /// </param>
-        /// <returns>If the specified tab node is found, returns that <see cref="ModCraftTreeTab"/>; Otherwise, returns null.</returns>
-        public ModCraftTreeTab GetTabNode(params string[] stepsToTab)
-        {
-            ModCraftTreeTab tab = GetTabNode(stepsToTab[0]);
-
-            for (int i = 1; i < stepsToTab.Length && tab != null; i++)
-            {
-                tab = tab.GetTabNode(stepsToTab[i]);
-            }
-
-            return tab;
-        }
-
-        /// <summary>
         /// Gets the crafting node from the calling node.
         /// </summary>
         /// <param name="techType">The TechType whose node to get.</param>
@@ -337,6 +316,27 @@
                     root.AddCraftingNode(techType);
                 }
             }
+        }
+
+        /// <summary>
+        /// Gets the tab node at the specified path from the root.
+        /// </summary>
+        /// <param name="stepsToTab">
+        /// <para>The steps to the target tab.</para>
+        /// <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
+        /// <para>Do not include "root" in this path.</para>
+        /// </param>
+        /// <returns>If the specified tab node is found, returns that <see cref="ModCraftTreeTab"/>; Otherwise, returns null.</returns>
+        public ModCraftTreeTab GetTabNode(params string[] stepsToTab)
+        {
+            ModCraftTreeTab tab = base.GetTabNode(stepsToTab[0]);
+
+            for (int i = 1; i < stepsToTab.Length && tab != null; i++)
+            {
+                tab = tab.GetTabNode(stepsToTab[i]);
+            }
+
+            return tab;
         }
     }
 
