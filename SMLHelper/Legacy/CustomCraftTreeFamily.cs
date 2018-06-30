@@ -1,11 +1,11 @@
-﻿using SMLHelper.V2.Patchers;
-using SMLHelper.V2.Utility;
-using UnityEngine;
-using UnityEngine.Assertions;
-using CustomCraftTreeRoot2 = SMLHelper.V2.Crafting.CustomCraftTreeRoot;
-
-namespace SMLHelper
+﻿namespace SMLHelper
 {
+    using SMLHelper.V2.Patchers;
+    using SMLHelper.V2.Utility;
+    using UnityEngine;
+    using UnityEngine.Assertions;
+    using CustomCraftTreeRoot2 = V2.Crafting.ModCraftTreeRoot;
+
     /// <summary>
     /// Basic data structure of a custom crafting tree node.
     /// </summary>

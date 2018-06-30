@@ -6,6 +6,7 @@
     using System.Linq;
     using System.Reflection;
     using Utility;
+    using Crafting;
 
     internal class CraftTreeTypePatcher
     {
@@ -18,7 +19,7 @@
 
         #region Adding CraftTreeTypes and TreeRoots
 
-        internal static Crafting.CustomCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
+        internal static ModCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
         {
             var cache = cacheManager.GetCacheForTypeName(name);
 
@@ -42,7 +43,7 @@
 
             cacheManager.SaveCache();
 
-            var customTreeRoot = new Crafting.CustomCraftTreeRoot(craftTreeType, name);
+            var customTreeRoot = new ModCraftTreeRoot(craftTreeType, name);
 
             CraftTreePatcher.CustomTrees[craftTreeType] = customTreeRoot;
 
