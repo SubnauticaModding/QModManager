@@ -91,10 +91,6 @@
                     {
                         node.AddCraftingNode(techType);
                     }
-                    else
-                    {
-                        node.AddModdedCraftingNode(tabName);
-                    }
                 }
             }
 
