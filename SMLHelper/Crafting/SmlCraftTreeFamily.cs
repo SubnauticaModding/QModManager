@@ -324,6 +324,7 @@
         /// <param name="stepsToTab">
         /// <para>The steps to the target tab.</para>
         /// <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
+        /// <para>Do not include "root" in this path.</para>
         /// </param>
         /// <returns>If the specified tab node is found, returns that <see cref="SmlCraftTreeTab"/>; Otherwise, returns null.</returns>
         public SmlCraftTreeTab GetTabNode(params string[] stepsToTab)

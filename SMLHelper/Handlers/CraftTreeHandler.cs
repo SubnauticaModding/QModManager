@@ -113,6 +113,7 @@
         /// <param name="stepsToTab">
         /// <para>The steps to the target tab.</para>
         /// <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
+        /// <para>Do not include "root" in this path.</para>
         /// </param>
         /// <seealso cref="GetExistingTree"/>
         /// <seealso cref="SmlCraftTreeRoot.GetTabNode(string[])"/>
@@ -140,6 +141,7 @@
         /// <param name="stepsToTab">
         /// <para>The steps to the target tab.</para>
         /// <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
+        /// <para>Do not include "root" in this path.</para>
         /// </param>
         /// <seealso cref="GetExistingTree"/>
         /// <seealso cref="SmlCraftTreeRoot.GetTabNode(string[])"/>
