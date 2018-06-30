@@ -41,7 +41,7 @@
                 else // Added under an existing tab
                 {
                     var path = tab.Path.SplitByChar('/');
-                    CustomCraftTreeTab node = root.GetTabNode(path[0]);
+                    SmlCraftTreeTab node = root.GetTabNode(path[0]);
 
                     for (int i = 1; i < path.Length - 1; i++)
                     {
@@ -78,7 +78,7 @@
                 else // Added under an existing tab
                 {
                     var path = craftNode.Path.SplitByChar('/');
-                    CustomCraftTreeTab node = root.GetTabNode(path[0]);
+                    SmlCraftTreeTab node = root.GetTabNode(path[0]);
 
                     for (int i = 1; i < path.Length - 1; i++)
                     {
@@ -110,7 +110,7 @@
                 else // Removed from an existing tab
                 {
                     var path = scrubNode.Path.SplitByChar('/');
-                    CustomCraftTreeTab node = root.GetTabNode(path[0]);
+                    SmlCraftTreeTab node = root.GetTabNode(path[0]);
 
                     for (int i = 1; i < path.Length - 1; i++)
                     {

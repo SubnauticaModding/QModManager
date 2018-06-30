@@ -63,7 +63,7 @@
     <Compile Include="Legacy\CustomCraftTreeFamily.cs" />
     <Compile Include="Assets\ModPrefab.cs" />
     <Compile Include="Assets\ModSprite.cs" />
-    <Compile Include="Crafting\CustomCraftTreeFamily.cs" />
+    <Compile Include="Crafting\SmlCraftTreeFamily.cs" />
     <Compile Include="Crafting\TechData.cs" />
     <Compile Include="Handlers\BioReactorHandler.cs" />
     <Compile Include="Handlers\CraftDataHandler.cs" />
