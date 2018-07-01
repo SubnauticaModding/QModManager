@@ -160,5 +160,93 @@
 
             tab.AddCraftingNode(craftingItems);
         }
+
+        /// <summary>
+        /// Adds a new tab node to the root of the specified crafting tree.
+        /// </summary>
+        /// <param name="craftTree">The target craft tree to edit.</param>
+        /// <param name="name">The ID of the tab node. Must be unique!</param>
+        /// <param name="displayName">The display name of the tab, which will show up when you hover your mouse on the tab.</param>
+        /// <param name="sprite">The sprite of the tab.</param>
+        public static void AddTabNodeToRoot(CraftTree.Type craftTree, string name, string displayName, Atlas.Sprite sprite)
+        {
+            ModCraftTreeRoot root = GetExistingTree(craftTree);
+
+            if (root == null)
+                return;
+
+            root.AddTabNode(name, displayName, sprite);
+        }
+
+        /// <summary>
+        /// Adds a new tab node to the root of the specified crafting tree.
+        /// </summary>
+        /// <param name="craftTree">The target craft tree to edit.</param>
+        /// <param name="name">The ID of the tab node. Must be unique!</param>
+        /// <param name="displayName">The display name of the tab, which will show up when you hover your mouse on the tab.</param>
+        /// <param name="sprite">The sprite of the tab.</param>
+        public static void AddTabNodeToRoot(CraftTree.Type craftTree, string name, string displayName, UnityEngine.Sprite sprite)
+        {
+            ModCraftTreeRoot root = GetExistingTree(craftTree);
+
+            if (root == null)
+                return;
+
+            root.AddTabNode(name, displayName, sprite);
+        }
+
+        /// <summary>
+        /// Adds a new tab node to the root of the specified crafting tree, at the specified tab location.
+        /// </summary>
+        /// <param name="craftTree">The target craft tree to edit.</param>
+        /// <param name="name">The ID of the tab node. Must be unique!</param>
+        /// <param name="displayName">The display name of the tab, which will show up when you hover your mouse on the tab.</param>
+        /// <param name="sprite">The sprite of the tab.</param>
+        /// <param name="stepsToTab">
+        /// <para>The steps to the target tab.</para>
+        /// <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
+        /// <para>Do not include "root" in this path.</para>
+        /// </param>
+        public static void AddTabNodeToTab(CraftTree.Type craftTree, string name, string displayName, Atlas.Sprite sprite, params string[] stepsToTab)
+        {
+            ModCraftTreeRoot root = GetExistingTree(craftTree);
+
+            if (root == null)
+                return;
+
+            ModCraftTreeTab tab = root.GetTabNode(stepsToTab);
+
+            if (tab == null)
+                return;
+
+            tab.AddTabNode(name, displayName, sprite);
+        }
+
+        /// <summary>
+        /// Adds a new tab node to the root of the specified crafting tree, at the specified tab location.
+        /// </summary>
+        /// <param name="craftTree">The target craft tree to edit.</param>
+        /// <param name="name">The ID of the tab node. Must be unique!</param>
+        /// <param name="displayName">The display name of the tab, which will show up when you hover your mouse on the tab.</param>
+        /// <param name="sprite">The sprite of the tab.</param>
+        /// <param name="stepsToTab">
+        /// <para>The steps to the target tab.</para>
+        /// <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
+        /// <para>Do not include "root" in this path.</para>
+        /// </param>
+        public static void AddTabNodeToTab(CraftTree.Type craftTree, string name, string displayName, UnityEngine.Sprite sprite, params string[] stepsToTab)
+        {
+            ModCraftTreeRoot root = GetExistingTree(craftTree);
+
+            if (root == null)
+                return;
+
+            ModCraftTreeTab tab = root.GetTabNode(stepsToTab);
+
+            if (tab == null)
+                return;
+
+            tab.AddTabNode(name, displayName, sprite);
+        }
     }
 }

@@ -4,7 +4,6 @@ namespace SMLHelper.V2
     using Harmony;
     using Patchers;
     using System;
-    using UnityEngine;
 
     public class Initializer
     {
