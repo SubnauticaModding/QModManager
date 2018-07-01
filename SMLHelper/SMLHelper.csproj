@@ -8,7 +8,7 @@
     <ProjectGuid>{418502DD-372D-4EF9-8021-B262552DFEDE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SMLHelper</RootNamespace>
+    <RootNamespace>SMLHelper.V2</RootNamespace>
     <AssemblyName>SMLHelper</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -54,6 +54,9 @@
     <Reference Include="UnityEngine">
       <HintPath>..\Dependencies\UnityEngine.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\Dependencies\UnityEngine.UI.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Legacy\CraftNodeToScrub.cs" />
@@ -84,6 +87,7 @@
     <Compile Include="Initializer.cs" />
     <Compile Include="Legacy\Patchers\KnownTechPatcher.cs" />
     <Compile Include="Legacy\Patchers\LanguagePatcher.cs" />
+    <Compile Include="Patchers\OptionsPanelPatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Legacy\Patchers\TechTypePatcher.cs" />
     <Compile Include="Legacy\Utility.cs" />

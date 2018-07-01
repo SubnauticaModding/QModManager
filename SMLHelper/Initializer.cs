@@ -59,6 +59,7 @@ namespace SMLHelper.V2
             SpritePatcher.Patch(harmony);
             KnownTechPatcher.Patch(harmony);
             BioReactorPatcher.Patch(harmony);
+            OptionsPanelPatcher.Patch(harmony);
         }
     }
 }
