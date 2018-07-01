@@ -89,6 +89,18 @@
         }
 
         /// <summary>
+        /// <para>Allows you to edit item sizes for TechTypes.</para>
+        /// <para>Can be used for existing TechTypes too.</para>
+        /// </summary>
+        /// <param name="techType">The TechType whose item size you want to edit.</param>
+        /// <param name="x">The width of the item</param>
+        /// <param name="y">The hight of the item</param>
+        public static void EditItemSize(TechType techType, int x, int y)
+        {
+            CraftDataPatcher.CustomItemSizes[techType] = new Vector2int(x, y);
+        }
+
+        /// <summary>
         /// <para>Allows you to edit crafting times for TechTypes.</para>
         /// <para>Can be used for existing TechTypes too.</para>
         /// </summary>
@@ -186,6 +198,15 @@
         /// <param name="techType">The TechType whose item size you want to set.</param>
         /// <param name="size">The item size for that TechType.</param>
         public static void AddItemSize(TechType techType, Vector2int size) => EditItemSize(techType, size);
+
+        /// <summary>
+        /// <para>Allows you to edit item sizes for TechTypes.</para>
+        /// <para>By default item sizes are 1x1 in the inventory.</para>
+        /// </summary>
+        /// <param name="techType">The TechType whose item size you want to edit.</param>
+        /// <param name="x">The width of the item</param>
+        /// <param name="y">The hight of the item</param>
+        public static void AddItemSize(TechType techType, int x, int y) => EditItemSize(techType, x, y);
 
         /// <summary>
         /// <para>Allows you to add a non-default crafting time for your TechType.</para>
