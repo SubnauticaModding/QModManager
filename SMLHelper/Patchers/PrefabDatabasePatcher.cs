@@ -25,7 +25,7 @@
             {
                 if(prefab.PrefabFileName.ToLowerInvariant() == filename.ToLowerInvariant())
                 {
-                    var go = prefab.GetGameObject();
+                    var go = prefab.GetGameObjectInternal();
                     __result = go;
 
                     return false;
@@ -41,7 +41,7 @@
             {
                 if (prefab.ClassID.ToLowerInvariant() == classId.ToLowerInvariant())
                 {
-                    var go = prefab.GetGameObject();
+                    var go = prefab.GetGameObjectInternal();
                     __result = new LoadedPrefabRequest(go);
 
                     return false;
