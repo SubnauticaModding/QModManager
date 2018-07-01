@@ -342,6 +342,11 @@
 
         public ModCraftTreeNode GetNode(params string[] stepsToNode)
         {
+            if(stepsToNode.Length == 1)
+            {
+                return base.GetNode(stepsToNode[0]);
+            }
+
             string nodeID = stepsToNode[stepsToNode.Length - 1];
             string[] stepsToTab = stepsToNode.Take(stepsToNode.Length - 1).ToArray();
             ModCraftTreeTab tab = GetTabNode(stepsToTab);
