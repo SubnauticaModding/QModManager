@@ -11,45 +11,24 @@
 
     internal class PrefabDatabasePatcher
     {
-        private static Dictionary<string, GameObject> prefabsByFileName = new Dictionary<string, GameObject>();
-        private static Dictionary<string, GameObject> prefabsByClassId = new Dictionary<string, GameObject>();
-
         internal static void LoadPrefabDatabase_Postfix()
         {
-            foreach (var prefab in ModPrefab.Prefabs)
+            foreach(var prefab in ModPrefab.Prefabs)
             {
-                var goPrefab = prefab.GetGameObject();
-
-                if (goPrefab == null) continue;
-
-                // Just a failsafe
-                var fixer = goPrefab.AddComponent<TechTypeFixer>();
-                fixer.techType = prefab.TechType;
-
-                goPrefab.SetActive(false);
-                goPrefab.transform.position = new Vector3(-5000, -5000, -5000);
-
-                PrefabDatabase.AddToCache(prefab.PrefabFileName, goPrefab);
                 PrefabDatabase.prefabFiles[prefab.ClassID] = prefab.PrefabFileName;
-
-                prefabsByFileName[prefab.PrefabFileName] = goPrefab;
-                prefabsByClassId[prefab.ClassID] = goPrefab;
             }
         }
 
         internal static bool GetPrefabForFilename_Prefix(string filename, ref GameObject __result)
         {
-            foreach(var prefab in prefabsByFileName)
+            foreach(var prefab in ModPrefab.Prefabs)
             {
-                if(prefab.Key.ToLowerInvariant() == filename.ToLowerInvariant())
+                if(prefab.PrefabFileName.ToLowerInvariant() == filename.ToLowerInvariant())
                 {
-                    if(prefab.Value != null)
-                    {
-                        prefab.Value.SetActive(true);
-                        __result = prefab.Value;
+                    var go = prefab.GetGameObject();
+                    __result = go;
 
-                        return false;
-                    }
+                    return false;
                 }
             }
 
@@ -58,17 +37,14 @@
 
         internal static bool GetPrefabAsync_Prefix(ref IPrefabRequest __result, string classId)
         {
-            foreach(var prefab in prefabsByClassId)
+            foreach (var prefab in ModPrefab.Prefabs)
             {
-                if(prefab.Key.ToLowerInvariant() == classId.ToLowerInvariant())
+                if (prefab.ClassID.ToLowerInvariant() == classId.ToLowerInvariant())
                 {
-                    if(prefab.Value != null)
-                    {
-                        prefab.Value.SetActive(true);
-                        __result = new LoadedPrefabRequest(prefab.Value);
+                    var go = prefab.GetGameObject();
+                    __result = new LoadedPrefabRequest(go);
 
-                        return false;
-                    }
+                    return false;
                 }
             }
 
@@ -78,12 +54,12 @@
         internal static void Patch(HarmonyInstance harmony)
         {
             var prefabDatabaseType = typeof(PrefabDatabase);
-            var loadPrefabDatabaseMethod = prefabDatabaseType.GetMethod("LoadPrefabDatabase", BindingFlags.Public | BindingFlags.Static);
+            var loadPrefabDatabase = prefabDatabaseType.GetMethod("LoadPrefabDatabase", BindingFlags.Public | BindingFlags.Static);
             var getPrefabForFilename = prefabDatabaseType.GetMethod("GetPrefabForFilename", BindingFlags.Public | BindingFlags.Static);
             var getPrefabAsync = prefabDatabaseType.GetMethod("GetPrefabAsync", BindingFlags.Public | BindingFlags.Static);
 
-            harmony.Patch(loadPrefabDatabaseMethod, null,
-                new HarmonyMethod(typeof(PrefabDatabasePatcher).GetMethod("LoadPrefabDatabase_Postfix", BindingFlags.Static | BindingFlags.NonPublic)));
+            harmony.Patch(loadPrefabDatabase, null,
+                new HarmonyMethod(typeof(PrefabDatabasePatcher).GetMethod("LoadPrefabDatabase_Postfix", BindingFlags.NonPublic | BindingFlags.Static)));
 
             harmony.Patch(getPrefabForFilename, 
                 new HarmonyMethod(typeof(PrefabDatabasePatcher).GetMethod("GetPrefabForFilename_Prefix", BindingFlags.Static | BindingFlags.NonPublic)), null);
