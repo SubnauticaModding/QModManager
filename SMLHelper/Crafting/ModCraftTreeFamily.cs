@@ -1,6 +1,7 @@
 ﻿namespace SMLHelper.V2.Crafting
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Patchers;
     using Assets;
     using UnityEngine;
@@ -337,6 +338,17 @@
             }
 
             return tab;
+        }
+
+        public ModCraftTreeNode GetNode(params string[] stepsToNode)
+        {
+            string nodeID = stepsToNode[stepsToNode.Length - 1];
+            string[] stepsToTab = stepsToNode.Take(stepsToNode.Length - 1).ToArray();
+            ModCraftTreeTab tab = GetTabNode(stepsToTab);
+
+            if (tab == null) return null;
+
+            return tab.GetNode(nodeID);
         }
     }
 
