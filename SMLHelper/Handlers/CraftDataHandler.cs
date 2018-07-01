@@ -94,7 +94,7 @@
         /// </summary>
         /// <param name="techType">The TechType whose item size you want to edit.</param>
         /// <param name="x">The width of the item</param>
-        /// <param name="y">The hight of the item</param>
+        /// <param name="y">The height of the item</param>
         public static void EditItemSize(TechType techType, int x, int y)
         {
             CraftDataPatcher.CustomItemSizes[techType] = new Vector2int(x, y);
@@ -205,7 +205,7 @@
         /// </summary>
         /// <param name="techType">The TechType whose item size you want to edit.</param>
         /// <param name="x">The width of the item</param>
-        /// <param name="y">The hight of the item</param>
+        /// <param name="y">The height of the item</param>
         public static void AddItemSize(TechType techType, int x, int y) => EditItemSize(techType, x, y);
 
         /// <summary>
