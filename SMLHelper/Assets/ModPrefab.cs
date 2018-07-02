@@ -26,9 +26,15 @@
         {
             var go = GetGameObject();
 
-            go.name = ClassID;
+            if(go == null)
+            {
+                return null;
+            }
 
-            if(go.GetComponent<PrefabIdentifier>() != null)
+            go.name = ClassID;
+            go.AddComponent<TechTypeFixer>().techType = TechType;
+
+            if (go.GetComponent<PrefabIdentifier>() != null)
             {
                 go.GetComponent<PrefabIdentifier>().ClassId = ClassID;
             }
@@ -42,8 +48,6 @@
             {
                 go.GetComponent<Constructable>().techType = TechType;
             }
-
-            go.AddComponent<TechTypeFixer>().techType = TechType;
 
             return go;
         }
