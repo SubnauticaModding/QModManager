@@ -15,37 +15,46 @@ namespace SMLHelper.V2.Options
         {
         }
 
-        public override ModOptionsData BuildModOptions()
+        public override void BuildModOptions()
         {
-            var modOptionsData = new ModOptionsData();
-            modOptionsData.AddSliderOption("Slider", 0f, 100f, Slider, OnSliderChange);
-            modOptionsData.AddToggleOption("Toggle", Toggle, OnToggleChange);
-            modOptionsData.AddChoiceOption("Choice", new string[]
+            AddSliderOption("SliderId", "Slider", 0f, 100f, Slider);
+            AddToggleOption("ToggleId", "Toggle", Toggle);
+            AddChoiceOption("ChoiceId", "Choice", new string[]
             {
                 "Test1",
                 "Test2",
                 "Test3"
-            }, index, OnChoiceChange);
-
-            return modOptionsData;
+            }, index);
         }
 
-        public static void OnSliderChange(float thing)
+        public override void OnToggleChange(string id, bool value)
         {
-            ErrorMessage.AddDebug("Slider: " + thing);
-            Slider = thing;
+            ErrorMessage.AddDebug("Toggle Changed Id: " + id + " Value: " + value);
+
+            if (id == "ToggleId")
+            {
+                Toggle = value;
+            }
         }
 
-        public static void OnToggleChange(bool toggle)
+        public override void OnSliderChange(string id, float value)
         {
-            ErrorMessage.AddDebug("Toggle: " + toggle);
-            Toggle = toggle;
+            ErrorMessage.AddDebug("Slider Changed Id: " + id + " Value: " + value);
+
+            if(id == "SliderId")
+            {
+                Slider = value;
+            }
         }
 
-        public static void OnChoiceChange(int choice)
+        public override void OnChoiceChange(string id, int indexValue)
         {
-            ErrorMessage.AddDebug("Choice: " + choice);
-            index = choice;
+            ErrorMessage.AddDebug("Choice Changed Id: " + id + " Index: " + indexValue);
+
+            if(id == "ChoiceId")
+            {
+                index = indexValue;
+            }
         }
     }
 }

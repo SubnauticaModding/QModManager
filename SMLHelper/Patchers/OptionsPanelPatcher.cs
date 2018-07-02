@@ -24,38 +24,39 @@
         internal static void AddTabs_Postfix(uGUI_OptionsPanel __instance)
         {
             var optionsPanel = __instance;
-
-            // Make the Mods tab
             var modsTab = optionsPanel.AddTab("Mods");
 
             foreach(var modOption in modOptions)
             {
-                var data = modOption.BuildModOptions();
-
                 optionsPanel.AddHeading(modsTab, modOption.Name);
 
-                foreach(var option in data.Options)
+                var data = modOption.Options;
+
+                foreach(var option in data)
                 {
                     if(option.Type == ModOptionType.Slider)
                     {
                         var slider = (ModSliderOption)option;
 
                         optionsPanel.AddSliderOption(modsTab, slider.Label, slider.Value, slider.MinValue, slider.MaxValue, slider.Value,
-                        new UnityEngine.Events.UnityAction<float>((float sliderVal) => slider.OnSliderChange.Invoke(sliderVal)));
+                            new UnityEngine.Events.UnityAction<float>((float sliderVal) => 
+                                modOption.OnSliderChange(slider.Id, sliderVal)));
                     }
                     else if(option.Type == ModOptionType.Toggle)
                     {
                         var toggle = (ModToggleOption)option;
 
                         optionsPanel.AddToggleOption(modsTab, toggle.Label, toggle.Value,
-                        new UnityEngine.Events.UnityAction<bool>((bool toggleVal) => toggle.OnToggleChange.Invoke(toggleVal)));
+                            new UnityEngine.Events.UnityAction<bool>((bool toggleVal) => 
+                                modOption.OnToggleChange(toggle.Id, toggleVal)));
                     }
                     else
                     {
                         var choice = (ModChoiceOption)option;
 
                         optionsPanel.AddChoiceOption(modsTab, choice.Label, choice.Options, choice.Index,
-                        new UnityEngine.Events.UnityAction<int>((int index) => choice.OnChoiceChange.Invoke(index)));
+                            new UnityEngine.Events.UnityAction<int>((int index) => 
+                                modOption.OnChoiceChange(choice.Id, index)));
                     }
                 }
             }
