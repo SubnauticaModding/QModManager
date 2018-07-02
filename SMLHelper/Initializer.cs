@@ -4,6 +4,7 @@ namespace SMLHelper.V2
     using Harmony;
     using Patchers;
     using System;
+    using Options;
 
     public class Initializer
     {
@@ -12,6 +13,9 @@ namespace SMLHelper.V2
         public static void Patch()
         {
             harmony = HarmonyInstance.Create("com.ahk1221.smlhelper");
+
+            var modOptions = new TestOptions();
+            Handlers.OptionsPanelHandler.RegisterModOptions(modOptions);
 
             try
             {
