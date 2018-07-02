@@ -50,7 +50,7 @@
         /// </summary>
         /// <param name="techType">The TechType whose harvest output you want to edit.</param>
         /// <param name="harvestOutput">The harvest output for that TechType.</param>
-        public static void EditHarvestOutputList(TechType techType, TechType harvestOutput)
+        public static void EditHarvestable(TechType techType, TechType harvestOutput)
         {
             CraftDataPatcher.CustomHarvestOutputList[techType] = harvestOutput;
         }
@@ -61,7 +61,7 @@
         /// </summary>
         /// <param name="techType">The TechType whose HarvestType you want to edit.</param>
         /// <param name="harvestType">The HarvestType for that TechType.</param>
-        public static void EditHarvestTypeList(TechType techType, HarvestType harvestType)
+        public static void EditHarvestType(TechType techType, HarvestType harvestType)
         {
             CraftDataPatcher.CustomHarvestTypeList[techType] = harvestType;
         }
@@ -89,6 +89,18 @@
         }
 
         /// <summary>
+        /// <para>Allows you to edit item sizes for TechTypes.</para>
+        /// <para>Can be used for existing TechTypes too.</para>
+        /// </summary>
+        /// <param name="techType">The TechType whose item size you want to edit.</param>
+        /// <param name="x">The width of the item</param>
+        /// <param name="y">The height of the item</param>
+        public static void EditItemSize(TechType techType, int x, int y)
+        {
+            CraftDataPatcher.CustomItemSizes[techType] = new Vector2int(x, y);
+        }
+
+        /// <summary>
         /// <para>Allows you to edit crafting times for TechTypes.</para>
         /// <para>Can be used for existing TechTypes too.</para>
         /// </summary>
@@ -105,7 +117,7 @@
         /// </summary>
         /// <param name="uncooked">The TechType whose cooked creature counterpart to edit.</param>
         /// <param name="cooked">The cooked creature counterpart for that TechType.</param>
-        public static void EditCookedCreatureList(TechType uncooked, TechType cooked)
+        public static void EditCookable(TechType uncooked, TechType cooked)
         {
             CraftDataPatcher.CustomCookedCreatureList[uncooked] = cooked;
         }
@@ -163,14 +175,14 @@
         /// </summary>
         /// <param name="techType">The TechType whose harvest output you want to set.</param>
         /// <param name="harvestOutput">The harvest output for that TechType.</param>
-        public static void AddHarvestOutputList(TechType techType, TechType harvestOutput) => EditHarvestOutputList(techType, harvestOutput);
+        public static void AddHarvestable(TechType techType, TechType harvestOutput) => EditHarvestable(techType, harvestOutput);
 
         /// <summary>
         /// <para>Allows you to set how your TechType is harvested.</para>
         /// </summary>
         /// <param name="techType">The TechType whose HarvestType you want to set.</param>
         /// <param name="harvestType">The HarvestType for that TechType.</param>
-        public static void AddHarvestTypeList(TechType techType, HarvestType harvestType) => EditHarvestTypeList(techType, harvestType);
+        public static void AddHarvestType(TechType techType, HarvestType harvestType) => EditHarvestType(techType, harvestType);
 
         /// <summary>
         /// <para>Allows you to add final cut bonus slices/seeds to your TechType.</para>
@@ -188,6 +200,15 @@
         public static void AddItemSize(TechType techType, Vector2int size) => EditItemSize(techType, size);
 
         /// <summary>
+        /// <para>Allows you to edit item sizes for TechTypes.</para>
+        /// <para>By default item sizes are 1x1 in the inventory.</para>
+        /// </summary>
+        /// <param name="techType">The TechType whose item size you want to edit.</param>
+        /// <param name="x">The width of the item</param>
+        /// <param name="y">The height of the item</param>
+        public static void AddItemSize(TechType techType, int x, int y) => EditItemSize(techType, x, y);
+
+        /// <summary>
         /// <para>Allows you to add a non-default crafting time for your TechType.</para>
         /// </summary>
         /// <param name="techType">The TechType whose crafting time you want to set.</param>
@@ -199,7 +220,7 @@
         /// </summary>
         /// <param name="uncooked">The TechType whose cooked creature counterpart to edit.</param>
         /// <param name="cooked">The cooked creature counterpart for that TechType.</param>
-        public static void AddCookedCreatureList(TechType uncooked, TechType cooked) => EditCookedCreatureList(uncooked, cooked);
+        public static void AddCookable(TechType uncooked, TechType cooked) => EditCookable(uncooked, cooked);
 
         /// <summary>
         /// <para>Allows you to associate an inventory background type to your TechType.</para>
