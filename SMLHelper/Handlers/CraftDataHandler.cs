@@ -161,14 +161,14 @@
         /// </summary>
         /// <param name="techType">The TechType whose EqiupmentType you want to set.</param>
         /// <param name="equipmentType">The EquipmentType for that TechType.</param>
-        public static void AddEquipmentType(TechType techType, EquipmentType equipmentType) => EditEquipmentType(techType, equipmentType);
+        public static void SetEquipmentType(TechType techType, EquipmentType equipmentType) => EditEquipmentType(techType, equipmentType);
 
         /// <summary>
         /// <para>Allows you to add a QuickSlotType attribute to your TechType.</para>
         /// </summary>
         /// <param name="techType">The TechType whose QuickSlotType you want to set.</param>
         /// <param name="slotType">The QuickSlotType for that TechType.</param>
-        public static void AddQuickSlotType(TechType techType, QuickSlotType slotType) => EditQuickSlotType(techType, slotType);
+        public static void SetQuickSlotType(TechType techType, QuickSlotType slotType) => EditQuickSlotType(techType, slotType);
 
         /// <summary>
         /// <para>Allows you to add harvest output, i.e. what TechType you get when you "harvest" your TechType.</para>        
@@ -182,14 +182,14 @@
         /// </summary>
         /// <param name="techType">The TechType whose HarvestType you want to set.</param>
         /// <param name="harvestType">The HarvestType for that TechType.</param>
-        public static void AddHarvestType(TechType techType, HarvestType harvestType) => EditHarvestType(techType, harvestType);
+        public static void SetHarvestType(TechType techType, HarvestType harvestType) => EditHarvestType(techType, harvestType);
 
         /// <summary>
         /// <para>Allows you to add final cut bonus slices/seeds to your TechType.</para>
         /// </summary>
         /// <param name="techType">The TechType whose final cut bonus you want to set.</param>
         /// <param name="bonus">The number of additional slices/seeds you'll receive on last cut.</param>
-        public static void AddHarvestFinalCutBonus(TechType techType, int bonus) => EditHarvestFinalCutBonus(techType, bonus);
+        public static void SetHarvestFinalCutBonus(TechType techType, int bonus) => EditHarvestFinalCutBonus(techType, bonus);
 
         /// <summary>
         /// <para>Allows you to set a non-default item size for your TechType.</para>
@@ -197,7 +197,7 @@
         /// </summary>
         /// <param name="techType">The TechType whose item size you want to set.</param>
         /// <param name="size">The item size for that TechType.</param>
-        public static void AddItemSize(TechType techType, Vector2int size) => EditItemSize(techType, size);
+        public static void SetItemSize(TechType techType, Vector2int size) => EditItemSize(techType, size);
 
         /// <summary>
         /// <para>Allows you to edit item sizes for TechTypes.</para>
@@ -206,14 +206,14 @@
         /// <param name="techType">The TechType whose item size you want to edit.</param>
         /// <param name="x">The width of the item</param>
         /// <param name="y">The height of the item</param>
-        public static void AddItemSize(TechType techType, int x, int y) => EditItemSize(techType, x, y);
+        public static void SetItemSize(TechType techType, int x, int y) => EditItemSize(techType, x, y);
 
         /// <summary>
         /// <para>Allows you to add a non-default crafting time for your TechType.</para>
         /// </summary>
         /// <param name="techType">The TechType whose crafting time you want to set.</param>
         /// <param name="time">The crafting time, in seconds, for that TechType.</param>
-        public static void AddCraftingTime(TechType techType, float time) => EditCraftingTime(techType, time);
+        public static void SetCraftingTime(TechType techType, float time) => EditCraftingTime(techType, time);
 
         /// <summary>
         /// <para>Allows you to pair your cooked creature TechType with your unedible/uncooked creature TechType.</para>
