@@ -102,8 +102,10 @@
     <Compile Include="Patchers\TechTypePatcher.cs" />
     <Compile Include="Utility\EnumCacheManager.cs" />
     <Compile Include="Utility\ImageUtils.cs" />
+    <Compile Include="Utility\PrefabUtils.cs" />
     <Compile Include="Utility\ReflectionHelper.cs" />
     <Compile Include="Utility\PatchUtils.cs" />
+    <Compile Include="Utility\SaveUtils.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="mod.json">
