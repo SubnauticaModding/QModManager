@@ -1,6 +1,68 @@
 ﻿namespace SMLHelper.V2.Options
 {
+    using System;
     using System.Collections.Generic;
+    using System.Linq;
+
+    /// <summary>
+    /// Contains all the information about a choice changed event.
+    /// </summary>
+    public class ChoiceChangedEventArgs : EventArgs
+    {
+        /// <summary>
+        /// The ID of the <see cref="ModChoiceOption"/> that was changed.
+        /// </summary>
+        public string Id { get; }
+
+        /// <summary>
+        /// The new index for the <see cref="ModChoiceOption"/>.
+        /// </summary>
+        public int Index { get; }
+
+        public ChoiceChangedEventArgs(string id, int index)
+        {
+            Id = id;
+            Index = index;
+        }
+    }
+
+    public class SliderChangedEventArgs : EventArgs
+    {        
+        /// <summary>
+        /// The ID of the <see cref="ModSliderOption"/> that was changed.
+        /// </summary>
+        public string Id { get; }
+
+        /// <summary>
+        /// The new value for the <see cref="ModSliderOption"/>.
+        /// </summary>
+        public float Value { get; }
+
+        public SliderChangedEventArgs(string id, float value)
+        {
+            Id = id;
+            Value = value;
+        }
+    }
+
+    public class ToggleChangedEventArgs : EventArgs
+    {        
+        /// <summary>
+        /// The ID of the <see cref="ModToggleOption"/> that was changed.
+        /// </summary>
+        public string Id { get; }
+
+        /// <summary>
+        /// The new value for the <see cref="ModToggleOption"/>.
+        /// </summary>
+        public bool Value { get; }
+
+        public ToggleChangedEventArgs(string id, bool value)
+        {
+            Id = id;
+            Value = value;
+        }
+    }
 
     /// <summary>
     /// Indicates how the option is interacted with by the user.
@@ -34,20 +96,37 @@
         public readonly string Name;
 
         /// <summary>
+        /// The event that is called whenever a slider is changed. Subscribe to this in the constructor.
+        /// </summary>
+        protected event EventHandler<SliderChangedEventArgs> SliderChanged;
+
+        /// <summary>
+        /// The event that is called whenever a toggle is changed. Subscribe to this in the constructor.
+        /// </summary>
+        protected event EventHandler<ToggleChangedEventArgs> ToggleChanged;
+
+        /// <summary>
+        /// The event that is called whenever a choice is changed. Subscribe to this in the constructor.
+        /// </summary>
+        protected event EventHandler<ChoiceChangedEventArgs> ChoiceChanged;
+
+        /// <summary>
         /// Builds and obtains the <see cref="ModOption"/>s that belong to this instance.
         /// </summary>
         public List<ModOption> Options
         {
             get
             {
-                _options = new List<ModOption>();
+                _options = new Dictionary<string, ModOption>();
                 BuildModOptions();
 
-                return _options;
+                return _options.Values.ToList();
             }
         }
 
-        private List<ModOption> _options;
+        // This is a dictionary now in case we want to get the ModOption quickly
+        // based on the provided ID.
+        private Dictionary<string, ModOption> _options;
 
         /// <summary>
         /// Creates a new insteance of <see cref="ModOptions"/>.
@@ -62,34 +141,40 @@
         /// <para>Builds up the configuration the options.</para>
         /// <para>This method should be composed of calls into the following methods: 
         /// <seealso cref="AddSliderOption"/> | <seealso cref="AddToggleOption"/> | <seealso cref="AddChoiceOption"/>.</para>
-        /// <para>Make sure you override the corresponding method to handle what happens when the value is changed:
-        /// <seealso cref="OnSliderChange"/> | <seealso cref="OnToggleChange"/> | <seealso cref="OnChoiceChange"/>.</para>
+        /// <para>Make sure you have subscribed to the events in the constructor to handle what happens when the value is changed:
+        /// <seealso cref="SliderChanged"/> | <seealso cref="ToggleChanged"/> | <seealso cref="ChoiceChanged"/>.</para>
         /// </summary>
         public abstract void BuildModOptions();
 
         /// <summary>
-        /// This method is executed whenever the slider value at the specified ID changes.
+        /// Notifies a slider change to all subsribed event handlers.
         /// </summary>
-        /// <param name="id">The <see cref="ModSliderOption"/> id.</param>
-        /// <param name="value">The new slider value.</param>
-        /// <seealso cref="ModSliderOption"/>
-        public virtual void OnSliderChange(string id, float value) { }
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        internal void OnSliderChange(string id, float value)
+        {
+            SliderChanged(this, new SliderChangedEventArgs(id, value));
+        }
 
         /// <summary>
-        /// This method is executed whenever the toggle value at the specified ID changes.
+        /// Notifies a toggle change to all subscribed event handlers.
         /// </summary>
-        /// <param name="id">The <see cref="ModToggleOption"/> id.</param>
-        /// <param name="value">The new toggle value.</param>
-        /// <seealso cref="ModToggleOption"/>
-        public virtual void OnToggleChange(string id, bool value) { }
+        /// <param name="id"></param>
+        /// <param name="value"></param>
+        internal void OnToggleChange(string id, bool value)
+        {
+            ToggleChanged(this, new ToggleChangedEventArgs(id, value));
+        }
 
         /// <summary>
-        /// This method is executed whenever the choice option at the specified ID changes.
+        /// Notifies a choice change to all subscribed event handlers.
         /// </summary>
-        /// <param name="id">The <see cref="ModChoiceOption"/> id.</param>
-        /// <param name="indexValue">The new index value.</param>
-        /// <seealso cref="ModChoiceOption"/>
-        public virtual void OnChoiceChange(string id, int indexValue) { }
+        /// <param name="id"></param>
+        /// <param name="indexValue"></param>
+        internal void OnChoiceChange(string id, int indexValue)
+        {
+            ChoiceChanged(this, new ChoiceChangedEventArgs(id, indexValue));
+        }
 
         /// <summary>
         /// Adds a new <see cref="ModSliderOption"/> to this instance.
@@ -101,7 +186,7 @@
         /// <param name="value">The starting value.</param>
         protected void AddSliderOption(string id, string label, float minValue, float maxValue, float value)
         {
-            _options.Add(new ModSliderOption(id, label, minValue, maxValue, value));
+            _options.Add(id, new ModSliderOption(id, label, minValue, maxValue, value));
         }
 
         /// <summary>
@@ -112,7 +197,7 @@
         /// <param name="value">The starting value.</param>
         protected void AddToggleOption(string id, string label, bool value)
         {
-            _options.Add(new ModToggleOption(id, label, value));
+            _options.Add(id, new ModToggleOption(id, label, value));
         }
 
         /// <summary>
@@ -124,7 +209,7 @@
         /// <param name="index">The starting value.</param>
         protected void AddChoiceOption(string id, string label, string[] options, int index)
         {
-            _options.Add(new ModChoiceOption(id, label, options, index));
+            _options.Add(id, new ModChoiceOption(id, label, options, index));
         }
     }
 

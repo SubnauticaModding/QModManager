@@ -8,6 +8,9 @@
 
         public TestOptions() : base("Test")
         {
+            ToggleChanged += OnToggleChange;
+            ChoiceChanged += OnChoiceChange;
+            SliderChanged += OnSliderChange;
         }
 
         public override void BuildModOptions()
@@ -22,33 +25,33 @@
             }, index);
         }
 
-        public override void OnToggleChange(string id, bool value)
+        public void OnToggleChange(object sender, ToggleChangedEventArgs args)
         {
-            ErrorMessage.AddDebug("Toggle Changed Id: " + id + " Value: " + value);
+            ErrorMessage.AddDebug("Toggle Changed Id: " + args.Id + " Value: " + args.Value);
 
-            if (id == "ToggleId")
+            if (args.Id == "ToggleId")
             {
-                Toggle = value;
+                Toggle = args.Value;
             }
         }
 
-        public override void OnSliderChange(string id, float value)
+        public void OnSliderChange(object sender, SliderChangedEventArgs args)
         {
-            ErrorMessage.AddDebug("Slider Changed Id: " + id + " Value: " + value);
+            ErrorMessage.AddDebug("Slider Changed Id: " + args.Id + " Value: " + args.Value);
 
-            if(id == "SliderId")
+            if(args.Id == "SliderId")
             {
-                Slider = value;
+                Slider = args.Value;
             }
         }
 
-        public override void OnChoiceChange(string id, int indexValue)
+        public void OnChoiceChange(object sender, ChoiceChangedEventArgs args)
         {
-            ErrorMessage.AddDebug("Choice Changed Id: " + id + " Index: " + indexValue);
+            ErrorMessage.AddDebug("Choice Changed Id: " + args.Id + " Index: " + args.Index);
 
-            if(id == "ChoiceId")
+            if(args.Id == "ChoiceId")
             {
-                index = indexValue;
+                index = args.Index;
             }
         }
     }
