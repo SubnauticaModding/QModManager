@@ -32,7 +32,7 @@
             }
 
             go.name = ClassID;
-            go.AddComponent<TechTypeFixer>().techType = TechType;
+            go.AddComponent<Fixer>().techType = TechType;
 
             if (go.GetComponent<PrefabIdentifier>() != null)
             {
