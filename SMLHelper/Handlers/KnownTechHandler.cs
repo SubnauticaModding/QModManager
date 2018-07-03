@@ -10,6 +10,15 @@
     public static class KnownTechHandler
     {
         /// <summary>
+        /// Allows you to unlock a TechType on game start.
+        /// </summary>
+        /// <param name="techType"></param>
+        public static void AddToUnlockOnStartList(TechType techType)
+        {
+            KnownTechPatcher.UnlockedAtStart.Add(techType);
+        }
+
+        /// <summary>
         /// Allows you to define which TechTypes are unlocked when a certain TechType is unlocked, i.e., "analysed".
         /// </summary>
         /// <param name="techTypeToEdit">This TechType is the criteria for all of the "unlock TechTypes"; when this TechType is unlocked, so are all the ones in that list</param>
