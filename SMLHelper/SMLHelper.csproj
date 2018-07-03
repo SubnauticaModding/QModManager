@@ -101,6 +101,7 @@
     <Compile Include="Patchers\SpritePatcher.cs" />
     <Compile Include="Patchers\TechTypePatcher.cs" />
     <Compile Include="Utility\EnumCacheManager.cs" />
+    <Compile Include="Utility\ImageUtils.cs" />
     <Compile Include="Utility\ReflectionHelper.cs" />
     <Compile Include="Utility\PatchUtils.cs" />
   </ItemGroup>
