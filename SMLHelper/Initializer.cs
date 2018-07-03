@@ -52,7 +52,6 @@ namespace SMLHelper.V2
             CraftDataPatcher.Patch(harmony);
             CraftTreePatcher.Patch(harmony);
             DevConsolePatcher.Patch(harmony);
-            PDAEncyclopediaPatcher.Patch(harmony);
             LanguagePatcher.Patch(harmony);
             ResourcesPatcher.Patch(harmony);
             PrefabDatabasePatcher.Patch(harmony);
