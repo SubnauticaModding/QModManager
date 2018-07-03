@@ -117,7 +117,7 @@
         /// </summary>
         /// <param name="uncooked">The TechType whose cooked creature counterpart to edit.</param>
         /// <param name="cooked">The cooked creature counterpart for that TechType.</param>
-        public static void EditCookable(TechType uncooked, TechType cooked)
+        public static void EditCookedVariant(TechType uncooked, TechType cooked)
         {
             CraftDataPatcher.CustomCookedCreatureList[uncooked] = cooked;
         }
@@ -220,7 +220,7 @@
         /// </summary>
         /// <param name="uncooked">The TechType whose cooked creature counterpart to edit.</param>
         /// <param name="cooked">The cooked creature counterpart for that TechType.</param>
-        public static void AddCookable(TechType uncooked, TechType cooked) => EditCookable(uncooked, cooked);
+        public static void SetCookedVariant(TechType uncooked, TechType cooked) => EditCookedVariant(uncooked, cooked);
 
         /// <summary>
         /// <para>Allows you to associate an inventory background type to your TechType.</para>
