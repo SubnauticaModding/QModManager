@@ -13,7 +13,7 @@
         /// Allows you to unlock a TechType on game start.
         /// </summary>
         /// <param name="techType"></param>
-        public static void AddToUnlockOnStartList(TechType techType)
+        public static void UnlockOnStart(TechType techType)
         {
             KnownTechPatcher.UnlockedAtStart.Add(techType);
         }

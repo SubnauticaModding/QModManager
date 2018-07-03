@@ -8,6 +8,25 @@
     /// </summary>
     public static class CraftDataHandler
     {
+        /// <summary>
+        /// Contains possible background colors
+        /// </summary>
+        public enum BackgroundColor
+        {
+            /// <summary>
+            /// The default, blue background color
+            /// </summary>
+            Normal = CraftData.BackgroundType.Normal,
+            /// <summary>
+            /// The purple background color seen in prawn suit arms and seeds
+            /// </summary>
+            Purple = CraftData.BackgroundType.ExosuitArm,
+            /// <summary>
+            /// The green background color seen in plants
+            /// </summary>
+            Green = CraftData.BackgroundType.PlantAirSeed
+        }
+
         #region Core Methods
         
         /// <summary>
@@ -50,7 +69,7 @@
         /// </summary>
         /// <param name="techType">The TechType whose harvest output you want to edit.</param>
         /// <param name="harvestOutput">The harvest output for that TechType.</param>
-        public static void EditHarvestable(TechType techType, TechType harvestOutput)
+        public static void EditHarvestOutput(TechType techType, TechType harvestOutput)
         {
             CraftDataPatcher.CustomHarvestOutputList[techType] = harvestOutput;
         }
@@ -117,27 +136,35 @@
         /// </summary>
         /// <param name="uncooked">The TechType whose cooked creature counterpart to edit.</param>
         /// <param name="cooked">The cooked creature counterpart for that TechType.</param>
-        public static void EditCookable(TechType uncooked, TechType cooked)
+        public static void EditCookedVariant(TechType uncooked, TechType cooked)
         {
             CraftDataPatcher.CustomCookedCreatureList[uncooked] = cooked;
         }
 
         /// <summary>
-        /// <para>Allows you to edit inventory background type for TechTypes.</para>
+        /// <para>Allows you to edit inventory background colors for TechTypes.</para>
         /// </summary>
         /// <param name="techType">The TechType whose BackgroundType you want to edit.</param>
-        /// <param name="backgroundType">The BackgroundType for that TechType.</param>
+        /// <param name="backgroundColor">The background color for that TechType.</param>
         /// <seealso cref="CraftData.BackgroundType"/>
-        public static void EditBackgroundType(TechType techType, CraftData.BackgroundType backgroundType)
+        public static void EditBackgroundColor(TechType techType, BackgroundColor backgroundColor) => EditBackgroundColor(techType, (CraftData.BackgroundType)(int)backgroundColor);
+
+        /// <summary>
+        /// <para>Allows you to edit inventory background colors for TechTypes.</para>
+        /// </summary>
+        /// <param name="techType">The TechType whose BackgroundType you want to edit.</param>
+        /// <param name="backgroundColor">The background color for that TechType.</param>
+        /// <seealso cref="CraftData.BackgroundType"/>
+        public static void EditBackgroundColor(TechType techType, CraftData.BackgroundType backgroundColor)
         {
-            CraftDataPatcher.CustomBackgroundTypes[techType] = backgroundType;
+            CraftDataPatcher.CustomBackgroundTypes[techType] = backgroundColor;
         }
 
         /// <summary>
         /// Allows you to add items to the buildable list.
         /// </summary>
         /// <param name="techType">The TechType which you want to add to the buildable list.</param>
-        public static void AddToBuildableList(TechType techType)
+        public static void AddBuildable(TechType techType)
         {
             CraftDataPatcher.CustomBuildables.Add(techType);
         }
@@ -161,35 +188,35 @@
         /// </summary>
         /// <param name="techType">The TechType whose EqiupmentType you want to set.</param>
         /// <param name="equipmentType">The EquipmentType for that TechType.</param>
-        public static void AddEquipmentType(TechType techType, EquipmentType equipmentType) => EditEquipmentType(techType, equipmentType);
+        public static void SetEquipmentType(TechType techType, EquipmentType equipmentType) => EditEquipmentType(techType, equipmentType);
 
         /// <summary>
         /// <para>Allows you to add a QuickSlotType attribute to your TechType.</para>
         /// </summary>
         /// <param name="techType">The TechType whose QuickSlotType you want to set.</param>
         /// <param name="slotType">The QuickSlotType for that TechType.</param>
-        public static void AddQuickSlotType(TechType techType, QuickSlotType slotType) => EditQuickSlotType(techType, slotType);
+        public static void SetQuickSlotType(TechType techType, QuickSlotType slotType) => EditQuickSlotType(techType, slotType);
 
         /// <summary>
         /// <para>Allows you to add harvest output, i.e. what TechType you get when you "harvest" your TechType.</para>        
         /// </summary>
         /// <param name="techType">The TechType whose harvest output you want to set.</param>
         /// <param name="harvestOutput">The harvest output for that TechType.</param>
-        public static void AddHarvestable(TechType techType, TechType harvestOutput) => EditHarvestable(techType, harvestOutput);
+        public static void SetHarvestOutput(TechType techType, TechType harvestOutput) => EditHarvestOutput(techType, harvestOutput);
 
         /// <summary>
         /// <para>Allows you to set how your TechType is harvested.</para>
         /// </summary>
         /// <param name="techType">The TechType whose HarvestType you want to set.</param>
         /// <param name="harvestType">The HarvestType for that TechType.</param>
-        public static void AddHarvestType(TechType techType, HarvestType harvestType) => EditHarvestType(techType, harvestType);
+        public static void SetHarvestType(TechType techType, HarvestType harvestType) => EditHarvestType(techType, harvestType);
 
         /// <summary>
         /// <para>Allows you to add final cut bonus slices/seeds to your TechType.</para>
         /// </summary>
         /// <param name="techType">The TechType whose final cut bonus you want to set.</param>
         /// <param name="bonus">The number of additional slices/seeds you'll receive on last cut.</param>
-        public static void AddHarvestFinalCutBonus(TechType techType, int bonus) => EditHarvestFinalCutBonus(techType, bonus);
+        public static void SetHarvestFinalCutBonus(TechType techType, int bonus) => EditHarvestFinalCutBonus(techType, bonus);
 
         /// <summary>
         /// <para>Allows you to set a non-default item size for your TechType.</para>
@@ -197,7 +224,7 @@
         /// </summary>
         /// <param name="techType">The TechType whose item size you want to set.</param>
         /// <param name="size">The item size for that TechType.</param>
-        public static void AddItemSize(TechType techType, Vector2int size) => EditItemSize(techType, size);
+        public static void SetItemSize(TechType techType, Vector2int size) => EditItemSize(techType, size);
 
         /// <summary>
         /// <para>Allows you to edit item sizes for TechTypes.</para>
@@ -206,29 +233,37 @@
         /// <param name="techType">The TechType whose item size you want to edit.</param>
         /// <param name="x">The width of the item</param>
         /// <param name="y">The height of the item</param>
-        public static void AddItemSize(TechType techType, int x, int y) => EditItemSize(techType, x, y);
+        public static void SetItemSize(TechType techType, int x, int y) => EditItemSize(techType, x, y);
 
         /// <summary>
         /// <para>Allows you to add a non-default crafting time for your TechType.</para>
         /// </summary>
         /// <param name="techType">The TechType whose crafting time you want to set.</param>
         /// <param name="time">The crafting time, in seconds, for that TechType.</param>
-        public static void AddCraftingTime(TechType techType, float time) => EditCraftingTime(techType, time);
+        public static void SetCraftingTime(TechType techType, float time) => EditCraftingTime(techType, time);
 
         /// <summary>
         /// <para>Allows you to pair your cooked creature TechType with your unedible/uncooked creature TechType.</para>
         /// </summary>
         /// <param name="uncooked">The TechType whose cooked creature counterpart to edit.</param>
         /// <param name="cooked">The cooked creature counterpart for that TechType.</param>
-        public static void AddCookable(TechType uncooked, TechType cooked) => EditCookable(uncooked, cooked);
+        public static void SetCookedVariant(TechType uncooked, TechType cooked) => EditCookedVariant(uncooked, cooked);
 
         /// <summary>
-        /// <para>Allows you to associate an inventory background type to your TechType.</para>
+        /// <para>Allows you to associate an inventory background color to your TechType.</para>
         /// </summary>
         /// <param name="techType">The TechType whose BackgroundType you want to set.</param>
-        /// <param name="backgroundType">The BackgroundType for that TechType.</param>
+        /// <param name="backgroundColor">The background color for that TechType.</param>
         /// <seealso cref="CraftData.BackgroundType"/>
-        public static void AddBackgroundType(TechType techType, CraftData.BackgroundType backgroundType) => EditBackgroundType(techType, backgroundType);
+        public static void SetBackgroundColor(TechType techType, BackgroundColor backgroundColor) => EditBackgroundColor(techType, backgroundColor);
+
+        /// <summary>
+        /// <para>Allows you to associate an inventory background color to your TechType.</para>
+        /// </summary>
+        /// <param name="techType">The TechType whose BackgroundType you want to set.</param>
+        /// <param name="backgroundColor">The background color for that TechType.</param>
+        /// <seealso cref="CraftData.BackgroundType"/>
+        public static void SetBackgroundColor(TechType techType, CraftData.BackgroundType backgroundColor) => EditBackgroundColor(techType, backgroundColor);
 
         #endregion
     }
