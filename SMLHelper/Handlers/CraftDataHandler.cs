@@ -164,7 +164,7 @@
         /// Allows you to add items to the buildable list.
         /// </summary>
         /// <param name="techType">The TechType which you want to add to the buildable list.</param>
-        public static void AddToBuildableList(TechType techType)
+        public static void AddBuildable(TechType techType)
         {
             CraftDataPatcher.CustomBuildables.Add(techType);
         }
