@@ -78,7 +78,6 @@
     <Compile Include="Handlers\SpriteHandler.cs" />
     <Compile Include="Handlers\TechTypeHandler.cs" />
     <Compile Include="Logger.cs" />
-    <Compile Include="MonoBehaviours\InfoFixer.cs" />
     <Compile Include="Legacy\Patchers\CraftDataPatcher.cs" />
     <Compile Include="Legacy\Patchers\CraftTreePatcher.cs" />
     <Compile Include="Legacy\CustomPrefabHandler.cs" />
@@ -88,6 +87,7 @@
     <Compile Include="Initializer.cs" />
     <Compile Include="Legacy\Patchers\KnownTechPatcher.cs" />
     <Compile Include="Legacy\Patchers\LanguagePatcher.cs" />
+    <Compile Include="MonoBehaviours\Fixer.cs" />
     <Compile Include="Options\ModOptions.cs" />
     <Compile Include="Options\TestOptions.cs" />
     <Compile Include="Patchers\OptionsPanelPatcher.cs" />
