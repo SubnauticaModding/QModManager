@@ -49,6 +49,8 @@
                 go.GetComponent<Constructable>().techType = TechType;
             }
 
+            go.SetActive(false);
+
             return go;
         }
 

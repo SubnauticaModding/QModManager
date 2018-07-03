@@ -10,23 +10,6 @@ namespace SMLHelper.V2.MonoBehaviours
         [SerializeField]
         public string ClassId;
 
-        void Update()
-        {
-            if (Utils.NearlyEqual(transform.position.x, 0f) || Utils.NearlyEqual(transform.position.y, 0f))
-            {
-                SetActiveRecursively(gameObject, false);
-            }
-        }
-
-        void SetActiveRecursively(GameObject go, bool active)
-        {
-            go.SetActive(active);
-            foreach(Transform transform in go.transform)
-            {
-                SetActiveRecursively(transform.gameObject, active);
-            }
-        }
-
         public void OnProtoSerialize(ProtobufSerializer serializer)
         {
         }
