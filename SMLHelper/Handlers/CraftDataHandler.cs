@@ -8,6 +8,25 @@
     /// </summary>
     public static class CraftDataHandler
     {
+        /// <summary>
+        /// Contains possible background colors
+        /// </summary>
+        public enum BackgroundColor
+        {
+            /// <summary>
+            /// The default, blue background color
+            /// </summary>
+            Normal = CraftData.BackgroundType.Normal,
+            /// <summary>
+            /// The purple background color seen in prawn suit arms and seeds
+            /// </summary>
+            Purple = CraftData.BackgroundType.ExosuitArm,
+            /// <summary>
+            /// The green background color seen in plants
+            /// </summary>
+            Green = CraftData.BackgroundType.PlantAirSeed
+        }
+
         #region Core Methods
         
         /// <summary>
@@ -123,14 +142,22 @@
         }
 
         /// <summary>
-        /// <para>Allows you to edit inventory background type for TechTypes.</para>
+        /// <para>Allows you to edit inventory background colors for TechTypes.</para>
         /// </summary>
         /// <param name="techType">The TechType whose BackgroundType you want to edit.</param>
-        /// <param name="backgroundType">The BackgroundType for that TechType.</param>
+        /// <param name="backgroundColor">The background color for that TechType.</param>
         /// <seealso cref="CraftData.BackgroundType"/>
-        public static void EditBackgroundType(TechType techType, CraftData.BackgroundType backgroundType)
+        public static void EditBackgroundColor(TechType techType, BackgroundColor backgroundColor) => EditBackgroundColor(techType, (CraftData.BackgroundType)(int)backgroundColor);
+
+        /// <summary>
+        /// <para>Allows you to edit inventory background colors for TechTypes.</para>
+        /// </summary>
+        /// <param name="techType">The TechType whose BackgroundType you want to edit.</param>
+        /// <param name="backgroundColor">The background color for that TechType.</param>
+        /// <seealso cref="CraftData.BackgroundType"/>
+        public static void EditBackgroundColor(TechType techType, CraftData.BackgroundType backgroundColor)
         {
-            CraftDataPatcher.CustomBackgroundTypes[techType] = backgroundType;
+            CraftDataPatcher.CustomBackgroundTypes[techType] = backgroundColor;
         }
 
         /// <summary>
@@ -223,12 +250,20 @@
         public static void SetCookedVariant(TechType uncooked, TechType cooked) => EditCookedVariant(uncooked, cooked);
 
         /// <summary>
-        /// <para>Allows you to associate an inventory background type to your TechType.</para>
+        /// <para>Allows you to associate an inventory background color to your TechType.</para>
         /// </summary>
         /// <param name="techType">The TechType whose BackgroundType you want to set.</param>
-        /// <param name="backgroundType">The BackgroundType for that TechType.</param>
+        /// <param name="backgroundColor">The background color for that TechType.</param>
         /// <seealso cref="CraftData.BackgroundType"/>
-        public static void AddBackgroundType(TechType techType, CraftData.BackgroundType backgroundType) => EditBackgroundType(techType, backgroundType);
+        public static void SetBackgroundColor(TechType techType, BackgroundColor backgroundColor) => EditBackgroundColor(techType, backgroundColor);
+
+        /// <summary>
+        /// <para>Allows you to associate an inventory background color to your TechType.</para>
+        /// </summary>
+        /// <param name="techType">The TechType whose BackgroundType you want to set.</param>
+        /// <param name="backgroundColor">The background color for that TechType.</param>
+        /// <seealso cref="CraftData.BackgroundType"/>
+        public static void SetBackgroundColor(TechType techType, CraftData.BackgroundType backgroundColor) => EditBackgroundColor(techType, backgroundColor);
 
         #endregion
     }
