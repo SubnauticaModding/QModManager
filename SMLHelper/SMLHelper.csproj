@@ -8,7 +8,7 @@
     <ProjectGuid>{418502DD-372D-4EF9-8021-B262552DFEDE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SMLHelper</RootNamespace>
+    <RootNamespace>SMLHelper.V2</RootNamespace>
     <AssemblyName>SMLHelper</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -56,6 +56,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Handlers\LanguageHandler.cs" />
     <Compile Include="Legacy\CraftNodeToScrub.cs" />
     <Compile Include="Legacy\CraftScheme.cs" />
     <Compile Include="Legacy\CustomCraftNode.cs" />
