@@ -7,7 +7,7 @@
         /// <summary>
         /// Registers a ModPrefab into the game.
         /// </summary>
-        /// <param name="prefab"></param>
+        /// <param name="prefab">The mod prefab to register. Create a child class inheriting off this one and configure as needed.</param>
         /// <seealso cref="ModPrefab"/>
         public static void RegisterPrefab(ModPrefab prefab)
         {
