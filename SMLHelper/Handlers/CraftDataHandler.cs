@@ -50,7 +50,7 @@
         /// </summary>
         /// <param name="techType">The TechType whose harvest output you want to edit.</param>
         /// <param name="harvestOutput">The harvest output for that TechType.</param>
-        public static void EditHarvestable(TechType techType, TechType harvestOutput)
+        public static void EditHarvestOutput(TechType techType, TechType harvestOutput)
         {
             CraftDataPatcher.CustomHarvestOutputList[techType] = harvestOutput;
         }
@@ -175,7 +175,7 @@
         /// </summary>
         /// <param name="techType">The TechType whose harvest output you want to set.</param>
         /// <param name="harvestOutput">The harvest output for that TechType.</param>
-        public static void AddHarvestable(TechType techType, TechType harvestOutput) => EditHarvestable(techType, harvestOutput);
+        public static void SetHarvestOutput(TechType techType, TechType harvestOutput) => EditHarvestOutput(techType, harvestOutput);
 
         /// <summary>
         /// <para>Allows you to set how your TechType is harvested.</para>
