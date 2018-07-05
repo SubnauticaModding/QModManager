@@ -50,6 +50,7 @@
                 return null;
             }
 
+            go.transform.position = new Vector3(-5000, -5000, -5000);
             go.name = ClassID;
             go.AddComponent<Fixer>().techType = TechType;
 
@@ -67,8 +68,6 @@
             {
                 go.GetComponent<Constructable>().techType = TechType;
             }
-
-            go.SetActive(false);
 
             return go;
         }
