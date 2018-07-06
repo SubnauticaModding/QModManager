@@ -23,11 +23,13 @@
         internal List<EnumTypeCache> cacheList = new List<EnumTypeCache>();
         internal Dictionary<T, EnumTypeCache> customEnumTypes = new Dictionary<T, EnumTypeCache>();
 
+        /*
         internal EnumCacheManager(string enumTypeName, int startingIndex)
         {
             this.enumTypeName = enumTypeName;
             this.startingIndex = startingIndex;            
         }
+        */
 
         internal EnumCacheManager(string enumTypeName, int startingIndex, IEnumerable<int> bannedIndices)
         {
@@ -70,9 +72,44 @@
                 }
 #endif
             }
+            else if (enumTypeName.CompareTo("CraftTreeType") == 0)
+            {
+#if DEBUG
+                Logger.Log("DEBUG: Now loading known CraftTreeTypes...");
+#endif
+                int addedToBanList = 0;
+                var enumValues = Enum.GetValues(typeof(CraftTree.Type));
+                foreach (var enumValue in enumValues)
+                {
+                    if (enumValue != null)
+                    {
+                        int realEnumValue = (int)enumValue;
+#if DEBUG
+                        Logger.Log("DEBUG: Found known CraftTreeType: ID=[" + realEnumValue + "]");
+#endif
+                        if (realEnumValue > startingIndex)
+                        {
+                            if (!this.bannedIndices.Contains(realEnumValue))
+                            {
+                                this.bannedIndices.Add(realEnumValue);
+                                ++addedToBanList;
+                            }
+#if DEBUG
+                            else
+                                Logger.Log("DEBUG: CraftTreeType ID=[" + realEnumValue + "] already present in ban list.");
+                        }
+                        else
+                            Logger.Log("DEBUG: CraftTreeType ID=[" + realEnumValue + "] is one of the game CraftTreeType.");
+#else
+                        }
+#endif
+                    }
+                }
+                Logger.Log("DEBUG: Finished known CraftTreeType exclusion. " + addedToBanList + " ID were added in ban list.");
+            }
         }
 
-        #region Caching
+#region Caching
 
         private string GetCachePath()
         {
@@ -177,9 +214,8 @@
         internal int GetNextFreeIndex()
         {
             LoadCache();
-
-            var largestIndex = GetLargestIndexFromCache();
-            var freeIndex = largestIndex + 1;
+            
+            var freeIndex = GetLargestIndexFromCache() + 1;
 
             if (bannedIndices != null)
                 while (bannedIndices.Contains(freeIndex))
@@ -211,6 +247,6 @@
             return bannedIndices?.Contains(index) ?? false;
         }
 
-        #endregion
+#endregion
     }
 }

@@ -13,7 +13,8 @@
         #region Internal Fields
 
         internal const int startingIndex = 11; // The default CraftTree.Type contains indexes 0 through 10
-        internal static readonly EnumCacheManager<CraftTree.Type> cacheManager = new EnumCacheManager<CraftTree.Type>("CraftTreeType", startingIndex);
+        internal static readonly List<int> bannedIndices = new List<int> { /* Add known custom CrafTreeType IDs here. */ };
+        internal static readonly EnumCacheManager<CraftTree.Type> cacheManager = new EnumCacheManager<CraftTree.Type>("CraftTreeType", startingIndex, bannedIndices);
 
         #endregion
 
