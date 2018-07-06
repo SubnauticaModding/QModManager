@@ -78,7 +78,6 @@
     <Compile Include="Handlers\BioReactorHandler.cs" />
     <Compile Include="Handlers\CraftDataHandler.cs" />
     <Compile Include="Handlers\CraftTreeHandler.cs" />
-    <Compile Include="Handlers\CrossModSupportHandler.cs" />
     <Compile Include="Handlers\KnownTechHandler.cs" />
     <Compile Include="Handlers\PrefabHandler.cs" />
     <Compile Include="Handlers\SpriteHandler.cs" />

@@ -18,7 +18,7 @@
 
             foreach(DictionaryEntry entry in dictionary)
             {
-                dict.Add(entry.Key, entry.Value);
+                dict[entry.Key] = entry.Value;
             }
         }
 
