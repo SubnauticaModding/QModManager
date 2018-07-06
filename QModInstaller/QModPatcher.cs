@@ -1,6 +1,7 @@
 ﻿using Oculus.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -12,6 +13,7 @@ namespace QModInstaller
         private static string qModBaseDir = Environment.CurrentDirectory + @"\QMods";
         private static List<QMod> loadedMods = new List<QMod>();
         private static bool patched = false;
+        private static Stopwatch sw = null; // Used for performance review.
 
         public static void Patch()
         {
@@ -38,7 +40,7 @@ namespace QModInstaller
             {
                 Console.WriteLine("QMOD ERR: QMod directory was not found");
                 Directory.CreateDirectory(qModBaseDir);
-                Console.WriteLine("QMOD INFO: Creaated QMod directory at {0}", qModBaseDir);
+                Console.WriteLine("QMOD INFO: Created QMod directory at {0}", qModBaseDir);
                 return;
             }
 
@@ -98,7 +100,11 @@ namespace QModInstaller
                 }
             }
 
-            foreach(var mod in firstMods)
+            // Enable Stopwatch just before loading mods.
+            if (sw == null)
+                sw = new Stopwatch();
+
+            foreach (var mod in firstMods)
             {
                 if (mod != null)
                     loadedMods.Add(LoadMod(mod));
@@ -115,6 +121,11 @@ namespace QModInstaller
                 if(mod != null)
                     loadedMods.Add(LoadMod(mod));
             }
+
+            // Disable Stopwatch when all loading is done.
+            if (sw.IsRunning)
+                sw.Stop();
+            sw = null;
         }
 
         private static QMod LoadMod(QMod mod)
@@ -129,12 +140,26 @@ namespace QModInstaller
             {
                 try
                 {
+                    Console.WriteLine("QMOD INFO: Now loading mod \"" + (!String.IsNullOrEmpty(mod.DisplayName) ? mod.DisplayName : mod.AssemblyName) + "\"...");
+                    // Reset Stopwatch
+                    if (sw.IsRunning)
+                        sw.Stop();
+                    sw.Reset();
+                    // Start Stopwatch
+                    sw.Start();
+
                     var entryMethodSig = mod.EntryMethod.Split('.');
                     var entryType = String.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
                     var entryMethod = entryMethodSig[entryMethodSig.Length - 1];
 
                     MethodInfo qPatchMethod = mod.loadedAssembly.GetType(entryType).GetMethod(entryMethod);
                     qPatchMethod.Invoke(mod.loadedAssembly, new object[] { });
+
+                    // Stop Stopwatch
+                    sw.Stop();
+                    // Log elapsed time
+                    string elapsedTime = String.Format("{0:00}h{1:00}m{2:00}s{3:00}ms", sw.Elapsed.Hours, sw.Elapsed.Minutes, sw.Elapsed.Seconds, sw.Elapsed.Milliseconds / 10);
+                    Console.WriteLine("QMOD INFO: Mod \"" + (!String.IsNullOrEmpty(mod.DisplayName) ? mod.DisplayName : mod.AssemblyName) + "\" took " + elapsedTime + " to load.");
                 }
                 catch (ArgumentNullException e)
                 {
