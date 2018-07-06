@@ -109,7 +109,7 @@
             }
         }
 
-#region Caching
+        #region Caching
 
         private string GetCachePath()
         {
@@ -247,6 +247,6 @@
             return bannedIndices?.Contains(index) ?? false;
         }
 
-#endregion
+        #endregion
     }
 }
