@@ -1,10 +1,8 @@
 ﻿namespace SMLHelper.V2.Utility
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
     using System.Text;
 
     internal class EnumTypeCache
@@ -34,42 +32,6 @@
             this.enumTypeName = enumTypeName;
             this.startingIndex = startingIndex;
             this.bannedIndices = bannedIndices.ToList();
-
-            // Make sure to exclude already registered TechTypes
-            if (enumTypeName.CompareTo("TechType") == 0)
-            {
-#if DEBUG
-                Logger.Log("DEBUG: Now loading known TechTypes...");
-#endif
-                int addedToBanList = 0;
-                FieldInfo keyTechTypesField = typeof(TechTypeExtensions).GetField("keyTechTypes", BindingFlags.NonPublic | BindingFlags.Static);
-                Dictionary<string, TechType> knownTechTypes = keyTechTypesField.GetValue(null) as Dictionary<string, TechType>;
-                foreach (KeyValuePair<string, TechType> knownTechType in knownTechTypes)
-                {
-#if DEBUG
-                    Logger.Log("DEBUG: Found known TechType: ID=[" + knownTechType.Key + "] Name=[" + knownTechType.Value.AsString(false) + "]");
-#endif
-                    int currentTechTypeKey = Convert.ToInt32(knownTechType.Key);
-                    if (currentTechTypeKey > startingIndex)
-                    {
-                        if (!this.bannedIndices.Contains(currentTechTypeKey))
-                        {
-                            this.bannedIndices.Add(currentTechTypeKey);
-                            ++addedToBanList;
-                        }
-#if DEBUG
-                        else
-                            Logger.Log("DEBUG: TechType ID=[" + knownTechType.Key + "] Name=[" + knownTechType.Value.AsString(false) + "] already present in ban list.");
-                    }
-                    else
-                        Logger.Log("DEBUG: TechType ID=[" + knownTechType.Key + "] Name=[" + knownTechType.Value.AsString(false) + "] is one of the game TechTypes.");
-                }
-                Logger.Log("DEBUG: Finished known TechTypes exclusion. " + addedToBanList + " ID were added in ban list.");
-#else
-                    }
-                }
-#endif
-            }
         }
 
         #region Caching
@@ -181,9 +143,8 @@
             var largestIndex = GetLargestIndexFromCache();
             var freeIndex = largestIndex + 1;
 
-            if (bannedIndices != null)
-                while (bannedIndices.Contains(freeIndex))
-                    ++freeIndex;
+            if (bannedIndices != null && bannedIndices.Contains(freeIndex))
+                freeIndex = bannedIndices[bannedIndices.Count - 1] + 1;
 
             return freeIndex;
         }

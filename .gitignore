@@ -261,4 +261,3 @@ __pycache__/
 *.pyc
 Dependencies/Assembly-CSharp-firstpass.dll
 Dependencies/Assembly-CSharp.dll
-SMLHelper/SMLHelper.csproj
