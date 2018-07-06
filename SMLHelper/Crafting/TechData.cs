@@ -90,7 +90,7 @@
         /// <returns>The <see cref="TechType"/> at the requested the index if the index is value; Otherwise returns null.</returns>
         public TechType GetLinkedItem(int index)
         {
-            if (LinkedItems != null && Ingredients.Count > index)
+            if (LinkedItems != null && LinkedItems.Count > index)
             {
                 return LinkedItems[index];
             }
