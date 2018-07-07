@@ -10,9 +10,9 @@
 
         private static readonly Dictionary<string, List<int>> BannedIdDictionary = new Dictionary<string, List<int>>();
 
-        private const string BannedIdDirectory = @"./QMods/Modding Helper/RestrictedIDs/";
+        private const string BannedIdDirectory = @"./QMods/Modding Helper/RestrictedIDs";
 
-        internal static IEnumerable<int> GetBannedIdsFor(string keyName, List<int> combineWith)
+        internal static IEnumerable<int> GetBannedIdsFor(string keyName, IList<int> combineWith)
         {
             if (!IsInitialized)
                 LoadFromFiles();
@@ -40,14 +40,29 @@
         {
             if (!Directory.Exists(BannedIdDirectory))
             {
-                Directory.CreateDirectory(BannedIdDirectory);                
-                IsInitialized = true; // No folder. No entries.
-                Logger.Log("RetrictedIDs folder was not found. Folder created.");
+
+                try
+                {
+                    Directory.CreateDirectory(BannedIdDirectory);
+                    Logger.Log("RetrictedIDs folder was not found. Folder created.");
+                }
+                catch (Exception ex)
+                {
+                    Logger.Log($"RetrictedIDs folder was not found. Failed to create folder.{Environment.NewLine}" +
+                               $"        Exception: {ex}");
+
+                }
+                finally
+                {
+                    IsInitialized = true; // No folder. No entries.
+                }                
+                
                 return;
             }
 
+
             string[] files = Directory.GetFiles(BannedIdDirectory);
-            
+
             foreach (string filePath in files) // An empty directory will skip over this
             {
                 string[] entries = File.ReadAllLines(filePath);
@@ -78,13 +93,13 @@
                         BannedIdDictionary.Add(key, new List<int>());
 
                     BannedIdDictionary[key].Add(id);
-                }                
+                }
             }
 
             foreach (string bannedIdType in BannedIdDictionary.Keys)
             {
                 Logger.Log($"{BannedIdDictionary[bannedIdType].Count} retricted IDs were register for {bannedIdType}.");
-            }            
+            }
 
             IsInitialized = true;
         }
