@@ -32,7 +32,7 @@
                 };
             }
 
-            if (cacheManager.IsIndexConflicting(cache.Index) || cacheManager.IsIndexBanned(cache.Index))
+            if (!cacheManager.IsIndexValid(cache.Index))
                 cache.Index = cacheManager.GetNextFreeIndex();
 
             craftTreeType = (CraftTree.Type)cache.Index;

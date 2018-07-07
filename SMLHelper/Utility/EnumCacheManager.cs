@@ -199,9 +199,10 @@
             return freeIndex;
         }
 
-        internal bool IsIndexConflicting(int index)
+        private bool IsIndexConflicting(int index)
         {
             LoadCache();
+            LoadBanlist();
 
             var count = 0;
 
@@ -211,17 +212,19 @@
                     count++;
             }
 
-            if (count >= 2)
-                return true;
-
-            return false;
+            return count >= 2;
         }
 
-        internal bool IsIndexBanned(int index)
+        private bool IsIndexBanned(int index)
         {
             LoadBanlist();
 
             return bannedIndices?.Contains(index) ?? false;
+        }
+
+        internal bool IsIndexValid(int index)
+        {
+            return !IsIndexConflicting(index) && !IsIndexBanned(index);
         }
 
         #endregion
