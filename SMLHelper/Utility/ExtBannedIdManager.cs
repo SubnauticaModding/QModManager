@@ -106,7 +106,7 @@
 
         private static void LogBadEntry(string filePath, string line)
         {
-            Logger.Log($"Badly formatter entry for Retricted IDs{Environment.NewLine}" +
+            Logger.Log($"Badly formatted entry for Retricted IDs{Environment.NewLine}" +
                        $"        File: '{filePath}{Environment.NewLine}'" +
                        $"        Line: '{line}'{Environment.NewLine}" +
                        $"        This entry has been skipped.");
