@@ -3,7 +3,11 @@
     using System.IO;
     using System.Collections.Generic;
     using System;
+    using System.Collections;
 
+    /// <summary>
+    /// This class is tasked with checking external txt files for banned IDs that are not to be isssued when patching in new enum entries.
+    /// </summary>
     internal static class ExtBannedIdManager
     {
         private static bool IsInitialized = false;
@@ -12,63 +16,68 @@
 
         private const string BannedIdDirectory = @"./QMods/Modding Helper/RestrictedIDs";
 
-        internal static IEnumerable<int> GetBannedIdsFor(string keyName, IList<int> combineWith)
+        /// <summary>
+        /// Gets the banned ids, reported by the external files, for the specified enum.
+        /// </summary>
+        /// <param name="enumName">Name of the enum.</param>
+        /// <param name="combineWith">Any previously known banned IDs for this enum can be combined into the final list.</param>
+        /// <returns>An <see cref="IEnumerable"/> of banned indexes not to be issued for new entries of the specified enum.</returns>
+        internal static IEnumerable<int> GetBannedIdsFor(string enumName, IList<int> combineWith)
         {
             if (!IsInitialized)
                 LoadFromFiles();
 
-            if (!BannedIdDictionary.ContainsKey(keyName))
-                BannedIdDictionary.Add(keyName, new List<int>(combineWith));
+            if (!BannedIdDictionary.ContainsKey(enumName))
+                BannedIdDictionary.Add(enumName, new List<int>(combineWith));
             else
-                BannedIdDictionary[keyName].AddRange(combineWith);
+                BannedIdDictionary[enumName].AddRange(combineWith);
 
-            return GetBannedIdsFor(keyName);
+            return GetBannedIdsFor(enumName);
         }
 
-        internal static IEnumerable<int> GetBannedIdsFor(string keyName)
+        /// <summary>
+        /// Gets the banned ids, reported by the external files, for the specified enum.
+        /// </summary>
+        /// <param name="enumName">Name of the enum.</param>
+        /// <returns>An <see cref="IEnumerable"/> of banned indexes not to be issued for new entries of the specified enum.</returns>
+        internal static IEnumerable<int> GetBannedIdsFor(string enumName)
         {
             if (!IsInitialized)
                 LoadFromFiles();
 
-            if (!BannedIdDictionary.ContainsKey(keyName))
+            if (!BannedIdDictionary.ContainsKey(enumName))
                 return new int[0]; // No entries
 
-            return BannedIdDictionary[keyName].ToArray();
+            return BannedIdDictionary[enumName].ToArray();
         }
 
         private static void LoadFromFiles()
         {
             if (!Directory.Exists(BannedIdDirectory))
             {
-
-                try
-                {
-                    Directory.CreateDirectory(BannedIdDirectory);
-                    Logger.Log("RetrictedIDs folder was not found. Folder created.");
-                }
-                catch (Exception ex)
-                {
-                    Logger.Log($"RetrictedIDs folder was not found. Failed to create folder.{Environment.NewLine}" +
-                               $"        Exception: {ex}");
-
-                }
-                finally
-                {
-                    IsInitialized = true; // No folder. No entries.
-                }                
-                
+                CreateBannedIdDirectory();
+                IsInitialized = true; // No folder. No entries.
                 return;
             }
 
-
+            // Check every individual file in the BannedIdDirectory
             string[] files = Directory.GetFiles(BannedIdDirectory);
 
             foreach (string filePath in files) // An empty directory will skip over this
             {
+                // Each file in this directory represents a list of enum IDs that have been patched from outside of SMLHelper.
+                // Normally, this means that each file will represent one specific mod.
+                // This would also be user configurable so warning must be issued to the user not to alter these files.
+
                 string[] entries = File.ReadAllLines(filePath);
 
                 foreach (string line in entries) // A blank file will skip over this
                 {
+                    // Each line in the file must define a numeric ID and the name of the enum the entry belongs to.
+                    // The format should look like this <numeric_id>:<enum_name>, with the number preceding the name and separated by a colon.                
+                    // For example "11110:TechType" would be a valid entry.
+                    // For ease of use, whitespace is ignored.
+
                     string[] components = line.Split(':');
 
                     int id = -1;
@@ -98,10 +107,25 @@
 
             foreach (string bannedIdType in BannedIdDictionary.Keys)
             {
-                Logger.Log($"{BannedIdDictionary[bannedIdType].Count} retricted IDs were register for {bannedIdType}.");
+                Logger.Log($"{BannedIdDictionary[bannedIdType].Count} retricted IDs were registered for {bannedIdType}.");
             }
 
             IsInitialized = true;
+        }
+
+        private static void CreateBannedIdDirectory()
+        {
+            try
+            {
+                Directory.CreateDirectory(BannedIdDirectory);
+                Logger.Log("RetrictedIDs folder was not found. Folder created.");
+            }
+            catch (Exception ex)
+            {
+                Logger.Log($"RetrictedIDs folder was not found. Failed to create folder.{Environment.NewLine}" +
+                           $"        Exception: {ex}");
+
+            }
         }
 
         private static void LogBadEntry(string filePath, string line)

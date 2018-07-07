@@ -11,7 +11,7 @@
     {
         private const string TechTypeEnumName = "TechType";
         internal static readonly int startingIndex = 11010;
-        internal static readonly List<int> bannedIndices = new List<int> // Can't make it constant, dunno why
+        internal static readonly List<int> bannedIndices = new List<int>
         {
             11110, //AutosortLocker 
             11111, //AutosortTarget
