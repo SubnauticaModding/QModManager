@@ -25,7 +25,7 @@
             new EnumCacheManager<TechType>(
                 enumTypeName: TechTypeEnumName,
                 startingIndex: startingIndex,
-                bannedIndices: ExtBannedIdManager.GetBannedIdsFor(TechTypeEnumName, bannedIndices, PreRegisteredTechTypes()));
+                bannedIDs: ExtBannedIdManager.GetBannedIdsFor(TechTypeEnumName, bannedIndices, PreRegisteredTechTypes()));
 
         internal static TechType AddTechType(string name)
         {

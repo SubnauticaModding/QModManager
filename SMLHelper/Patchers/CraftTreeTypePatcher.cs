@@ -18,7 +18,7 @@
             new EnumCacheManager<CraftTree.Type>(
                 enumTypeName: CraftTreeTypeEnumName,
                 startingIndex: startingIndex,
-                bannedIndices: ExtBannedIdManager.GetBannedIdsFor(CraftTreeTypeEnumName, PreRegisteredCraftTreeTypes()));
+                bannedIDs: ExtBannedIdManager.GetBannedIdsFor(CraftTreeTypeEnumName, PreRegisteredCraftTreeTypes()));
 
         internal static ModCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
         {

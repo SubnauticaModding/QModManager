@@ -13,27 +13,28 @@
 
     internal class EnumCacheManager<T>
     {
-        internal readonly string enumTypeName;
-        internal readonly int startingIndex;
+        internal readonly string EnumTypeName;
+        internal readonly int StartingIndex;
         internal bool cacheLoaded = false;
-        internal bool banlistLoaded = false;
 
-        internal List<EnumTypeCache> cacheList = new List<EnumTypeCache>();
-        internal readonly List<int> bannedIndices = new List<int>();
+        private List<EnumTypeCache> cacheList = new List<EnumTypeCache>();
+        private readonly SortedList<int, int> bannedIndices = new SortedList<int, int>();
         internal Dictionary<T, EnumTypeCache> customEnumTypes = new Dictionary<T, EnumTypeCache>();
 
-        internal EnumCacheManager(string enumTypeName, int startingIndex, IEnumerable<int> bannedIndices)
+        internal EnumCacheManager(string enumTypeName, int startingIndex, IEnumerable<int> bannedIDs)
         {
-            this.enumTypeName = enumTypeName;
-            this.startingIndex = startingIndex;
-            this.bannedIndices = bannedIndices.ToList();
+            EnumTypeName = enumTypeName;
+            StartingIndex = startingIndex;
+
+            foreach (int id in bannedIDs)
+                bannedIndices.Add(id, id);
         }
 
         #region Caching
 
         private string GetCacheDirectoryPath()
         {
-            var saveDir = @"./QMods/Modding Helper/" + $"{enumTypeName}Cache";
+            var saveDir = @"./QMods/Modding Helper/" + $"{EnumTypeName}Cache";
 
             if (!Directory.Exists(saveDir))
                 Directory.CreateDirectory(saveDir);
@@ -43,7 +44,7 @@
 
         private string GetCachePath()
         {
-            return Path.Combine(GetCacheDirectoryPath(), $"{enumTypeName}Cache.txt");
+            return Path.Combine(GetCacheDirectoryPath(), $"{EnumTypeName}Cache.txt");
         }
 
         internal void LoadCache()
@@ -75,7 +76,7 @@
                 cacheList.Add(cache);
             }
 
-            Logger.Log($"Loaded {enumTypeName} Cache!");
+            Logger.Log($"Loaded {EnumTypeName} Cache!");
 
             cacheLoaded = true;
         }
@@ -125,7 +126,7 @@
         {
             LoadCache();
 
-            var index = startingIndex;
+            var index = StartingIndex;
 
             foreach (var cache in cacheList)
             {
@@ -142,13 +143,9 @@
 
             var freeIndex = GetLargestIndexFromCache() + 1;
 
-            if (bannedIndices != null)
-                while (bannedIndices.Contains(freeIndex))
-                    ++freeIndex;
-            
-            if (bannedIndices != null && bannedIndices.Contains(freeIndex))
+            if (bannedIndices != null && bannedIndices.ContainsKey(freeIndex))
             {
-                var largestBannIndex = bannedIndices.Max();
+                int largestBannIndex = bannedIndices.Keys.Max();
                 freeIndex = largestBannIndex + 1;
             }
 
