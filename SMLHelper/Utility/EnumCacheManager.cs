@@ -1,5 +1,6 @@
 ﻿namespace SMLHelper.V2.Utility
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
@@ -17,8 +18,9 @@
         internal bool cacheLoaded = false;
 
         private List<EnumTypeCache> cacheList = new List<EnumTypeCache>();
-        private readonly List<int> BannedIDs;
-        private readonly int LastBannedIdIndex;
+        private readonly HashSet<int> BannedIDs;
+        private readonly int LargestBannedID;
+
         internal Dictionary<T, EnumTypeCache> customEnumTypes = new Dictionary<T, EnumTypeCache>();
 
         internal EnumCacheManager(string enumTypeName, int startingIndex, IEnumerable<int> bannedIDs)
@@ -26,12 +28,15 @@
             EnumTypeName = enumTypeName;
             StartingIndex = startingIndex;
 
-            BannedIDs = new List<int>(bannedIDs);
-            BannedIDs.Sort();
+            int largestID = 0;
+            BannedIDs = new HashSet<int>();
+            foreach (int id in bannedIDs)
+            {
+                BannedIDs.Add(id);
+                largestID = Math.Max(largestID, id);
+            }
 
-            LastBannedIdIndex = BannedIDs.Count - 1;
-            // Since we aren't adding any more indexes by this point, 
-            // we only need to sort once to get the lookup benefits.
+            LargestBannedID = largestID;
         }
 
         #region Caching
@@ -149,8 +154,7 @@
 
             if (BannedIDs != null && BannedIDs.Contains(freeIndex))
             {
-                int largestBannIndex = BannedIDs[LastBannedIdIndex];
-                freeIndex = largestBannIndex + 1;
+                freeIndex = LargestBannedID + 1;
             }
 
             return freeIndex;
