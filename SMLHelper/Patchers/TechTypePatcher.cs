@@ -21,11 +21,11 @@
             11140  //BaseTeleporter (not released)
         };
 
-        internal static readonly EnumCacheManager<TechType> cacheManager = 
+        internal static readonly EnumCacheManager<TechType> cacheManager =
             new EnumCacheManager<TechType>(
-                enumTypeName: TechTypeEnumName, 
+                enumTypeName: TechTypeEnumName,
                 startingIndex: startingIndex,
-                bannedIndices: ExtBannedIdManager.GetBannedIdsFor(TechTypeEnumName, bannedIndices));
+                bannedIndices: ExtBannedIdManager.GetBannedIdsFor(TechTypeEnumName, bannedIndices, PreRegisteredTechTypes()));
 
         internal static TechType AddTechType(string name)
         {
@@ -71,6 +71,34 @@
             cacheManager.SaveCache();
 
             return techType;
+        }
+
+        private static List<int> PreRegisteredTechTypes()
+        {
+            // Make sure to exclude already registered TechTypes.
+            // Be aware that this approach is still subject to race conditions.
+            // Any mod that patches after this one will not be picked up by this method.
+            // For those cases, there are additional ways of excluding these IDs.
+
+            var bannedIndices = new List<int>();
+
+            FieldInfo keyTechTypesField = typeof(TechTypeExtensions).GetField("keyTechTypes", BindingFlags.NonPublic | BindingFlags.Static);
+            Dictionary<string, TechType> knownTechTypes = keyTechTypesField.GetValue(null) as Dictionary<string, TechType>;
+            foreach (KeyValuePair<string, TechType> knownTechType in knownTechTypes)
+            {
+                int currentTechTypeKey = Convert.ToInt32(knownTechType.Key);
+                if (currentTechTypeKey > startingIndex)
+                {
+                    if (!bannedIndices.Contains(currentTechTypeKey))
+                    {
+                        bannedIndices.Add(currentTechTypeKey);
+                    }
+                }
+            }
+
+            Logger.Log($"Finished known TechTypes exclusion. {bannedIndices.Count} IDs were added in ban list.");
+
+            return bannedIndices;
         }
 
         #region Patches

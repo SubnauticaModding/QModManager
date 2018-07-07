@@ -1,10 +1,8 @@
 ﻿namespace SMLHelper.V2.Utility
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
     using System.Text;
 
     internal class EnumTypeCache
@@ -24,91 +22,11 @@
         internal readonly List<int> bannedIndices = new List<int>();
         internal Dictionary<T, EnumTypeCache> customEnumTypes = new Dictionary<T, EnumTypeCache>();
 
-        /*
-        internal EnumCacheManager(string enumTypeName, int startingIndex)
-        {
-            this.enumTypeName = enumTypeName;
-            this.startingIndex = startingIndex;
-            this.bannedIndices = new List<int>();
-        }
-        */
-
         internal EnumCacheManager(string enumTypeName, int startingIndex, IEnumerable<int> bannedIndices)
         {
             this.enumTypeName = enumTypeName;
             this.startingIndex = startingIndex;
             this.bannedIndices = bannedIndices.ToList();
-
-            // Make sure to exclude already registered TechTypes
-            if (enumTypeName.CompareTo("TechType") == 0)
-            {
-#if DEBUG
-                Logger.Log("DEBUG: Now loading known TechTypes...");
-#endif
-                int addedToBanList = 0;
-                FieldInfo keyTechTypesField = typeof(TechTypeExtensions).GetField("keyTechTypes", BindingFlags.NonPublic | BindingFlags.Static);
-                Dictionary<string, TechType> knownTechTypes = keyTechTypesField.GetValue(null) as Dictionary<string, TechType>;
-                foreach (KeyValuePair<string, TechType> knownTechType in knownTechTypes)
-                {
-#if DEBUG
-                    Logger.Log("DEBUG: Found known TechType: ID=[" + knownTechType.Key + "] Name=[" + knownTechType.Value.AsString(false) + "]");
-#endif
-                    int currentTechTypeKey = Convert.ToInt32(knownTechType.Key);
-                    if (currentTechTypeKey > startingIndex)
-                    {
-                        if (!this.bannedIndices.Contains(currentTechTypeKey))
-                        {
-                            this.bannedIndices.Add(currentTechTypeKey);
-                            ++addedToBanList;
-                        }
-#if DEBUG
-                        else
-                            Logger.Log("DEBUG: TechType ID=[" + knownTechType.Key + "] Name=[" + knownTechType.Value.AsString(false) + "] already present in ban list.");
-                    }
-                    else
-                        Logger.Log("DEBUG: TechType ID=[" + knownTechType.Key + "] Name=[" + knownTechType.Value.AsString(false) + "] is one of the game TechTypes.");
-                }
-                Logger.Log("DEBUG: Finished known TechTypes exclusion. " + addedToBanList + " ID were added in ban list.");
-#else
-                    }
-                }
-#endif
-            }
-            else if (enumTypeName.CompareTo("CraftTreeType") == 0)
-            {
-#if DEBUG
-                Logger.Log("DEBUG: Now loading known CraftTreeTypes...");
-#endif
-                int addedToBanList = 0;
-                var enumValues = Enum.GetValues(typeof(CraftTree.Type));
-                foreach (var enumValue in enumValues)
-                {
-                    if (enumValue != null)
-                    {
-                        int realEnumValue = (int)enumValue;
-#if DEBUG
-                        Logger.Log("DEBUG: Found known CraftTreeType: ID=[" + realEnumValue + "]");
-#endif
-                        if (realEnumValue > startingIndex)
-                        {
-                            if (!this.bannedIndices.Contains(realEnumValue))
-                            {
-                                this.bannedIndices.Add(realEnumValue);
-                                ++addedToBanList;
-                            }
-#if DEBUG
-                            else
-                                Logger.Log("DEBUG: CraftTreeType ID=[" + realEnumValue + "] already present in ban list.");
-                        }
-                        else
-                            Logger.Log("DEBUG: CraftTreeType ID=[" + realEnumValue + "] is one of the game CraftTreeType.");
-#else
-                        }
-#endif
-                    }
-                }
-                Logger.Log("DEBUG: Finished known CraftTreeType exclusion. " + addedToBanList + " ID were added in ban list.");
-            }
         }
 
         #region Caching
@@ -221,16 +139,13 @@
         internal int GetNextFreeIndex()
         {
             LoadCache();
-            
+
             var freeIndex = GetLargestIndexFromCache() + 1;
 
             if (bannedIndices != null)
                 while (bannedIndices.Contains(freeIndex))
                     ++freeIndex;
-
-            //if (bannedIndices != null && bannedIndices.Contains(freeIndex))
-            //    freeIndex = bannedIndices[bannedIndices.Count - 1] + 1;
-
+            
             if (bannedIndices != null && bannedIndices.Contains(freeIndex))
             {
                 var largestBannIndex = bannedIndices.Max();
