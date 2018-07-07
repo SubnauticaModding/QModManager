@@ -9,8 +9,9 @@
 
     internal class TechTypePatcher
     {
+        private const string TechTypeEnumName = "TechType";
         internal static readonly int startingIndex = 11010;
-        internal static readonly List<int> bannedIndices = new List<int> // Can't make it constant, dunno why
+        internal static readonly List<int> bannedIndices = new List<int>
         {
             11110, //AutosortLocker 
             11111, //AutosortTarget
@@ -19,7 +20,12 @@
             11130, //DockedVehicleStorageAccess
             11140  //BaseTeleporter (not released)
         };
-        internal static readonly EnumCacheManager<TechType> cacheManager = new EnumCacheManager<TechType>("TechType", startingIndex, bannedIndices);
+
+        internal static readonly EnumCacheManager<TechType> cacheManager = 
+            new EnumCacheManager<TechType>(
+                enumTypeName: TechTypeEnumName, 
+                startingIndex: startingIndex,
+                bannedIndices: ExtBannedIdManager.GetBannedIdsFor(TechTypeEnumName, bannedIndices));
 
         internal static TechType AddTechType(string name)
         {
@@ -34,7 +40,7 @@
                 };
             }
 
-            if (cacheManager.IsIndexConflicting(cache.Index) || cacheManager.IsIndexBanned(cache.Index))
+            if (cacheManager.IsIndexConflicting(cache.Index))
                 cache.Index = cacheManager.GetNextFreeIndex();
 
             var techType = (TechType)cache.Index;

@@ -10,14 +10,16 @@
 
     internal class CraftTreeTypePatcher
     {
-        #region Internal Fields
+        private const string CraftTreeTypeEnumName = "CraftTreeType";
 
         internal const int startingIndex = 11; // The default CraftTree.Type contains indexes 0 through 10
-        internal static readonly List<int> bannedIndices = new List<int> { /* Add known custom CrafTreeType IDs here. */ };
-        internal static readonly EnumCacheManager<CraftTree.Type> cacheManager = new EnumCacheManager<CraftTree.Type>("CraftTreeType", startingIndex, bannedIndices);
 
-        #endregion
-
+        internal static readonly EnumCacheManager<CraftTree.Type> cacheManager =
+            new EnumCacheManager<CraftTree.Type>(
+                enumTypeName: CraftTreeTypeEnumName,
+                startingIndex: startingIndex,
+                bannedIndices: ExtBannedIdManager.GetBannedIdsFor(CraftTreeTypeEnumName));
+        
         #region Adding CraftTreeTypes and TreeRoots
 
         internal static ModCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)

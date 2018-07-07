@@ -17,17 +17,19 @@
     {
         internal readonly string enumTypeName;
         internal readonly int startingIndex;
-        internal readonly List<int> bannedIndices;
         internal bool cacheLoaded = false;
+        internal bool banlistLoaded = false;
 
         internal List<EnumTypeCache> cacheList = new List<EnumTypeCache>();
+        internal readonly List<int> bannedIndices = new List<int>();
         internal Dictionary<T, EnumTypeCache> customEnumTypes = new Dictionary<T, EnumTypeCache>();
 
         /*
         internal EnumCacheManager(string enumTypeName, int startingIndex)
         {
             this.enumTypeName = enumTypeName;
-            this.startingIndex = startingIndex;            
+            this.startingIndex = startingIndex;
+            this.bannedIndices = new List<int>();
         }
         */
 
@@ -111,14 +113,19 @@
 
         #region Caching
 
-        private string GetCachePath()
+        private string GetCacheDirectoryPath()
         {
             var saveDir = @"./QMods/Modding Helper/" + $"{enumTypeName}Cache";
 
             if (!Directory.Exists(saveDir))
                 Directory.CreateDirectory(saveDir);
 
-            return Path.Combine(saveDir, $"{enumTypeName}Cache.txt");
+            return saveDir;
+        }
+
+        private string GetCachePath()
+        {
+            return Path.Combine(GetCacheDirectoryPath(), $"{enumTypeName}Cache.txt");
         }
 
         internal void LoadCache()
@@ -150,7 +157,7 @@
                 cacheList.Add(cache);
             }
 
-            Logger.Log($"Loaded ${enumTypeName} Cache!");
+            Logger.Log($"Loaded {enumTypeName} Cache!");
 
             cacheLoaded = true;
         }
@@ -221,6 +228,15 @@
                 while (bannedIndices.Contains(freeIndex))
                     ++freeIndex;
 
+            //if (bannedIndices != null && bannedIndices.Contains(freeIndex))
+            //    freeIndex = bannedIndices[bannedIndices.Count - 1] + 1;
+
+            if (bannedIndices != null && bannedIndices.Contains(freeIndex))
+            {
+                var largestBannIndex = bannedIndices.Max();
+                freeIndex = largestBannIndex + 1;
+            }
+
             return freeIndex;
         }
 
@@ -236,15 +252,7 @@
                     count++;
             }
 
-            if (count >= 2)
-                return true;
-
-            return false;
-        }
-
-        internal bool IsIndexBanned(int index)
-        {
-            return bannedIndices?.Contains(index) ?? false;
+            return count >= 2;
         }
 
         #endregion
