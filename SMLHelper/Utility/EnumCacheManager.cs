@@ -177,8 +177,6 @@
             return count >= 2;
         }
 
-        internal bool IsIndexValid(int index) => !IsIndexConflicting(index);
-
         #endregion
     }
 }

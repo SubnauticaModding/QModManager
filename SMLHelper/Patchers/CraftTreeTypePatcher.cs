@@ -19,9 +19,7 @@
                 enumTypeName: CraftTreeTypeEnumName,
                 startingIndex: startingIndex,
                 bannedIndices: ExtBannedIdManager.GetBannedIdsFor(CraftTreeTypeEnumName));
-
-
-
+        
         #region Adding CraftTreeTypes and TreeRoots
 
         internal static ModCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
@@ -37,7 +35,7 @@
                 };
             }
 
-            if (!cacheManager.IsIndexValid(cache.Index))
+            if (cacheManager.IsIndexConflicting(cache.Index))
                 cache.Index = cacheManager.GetNextFreeIndex();
 
             craftTreeType = (CraftTree.Type)cache.Index;

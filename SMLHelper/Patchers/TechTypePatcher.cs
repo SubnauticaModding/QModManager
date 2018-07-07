@@ -40,7 +40,7 @@
                 };
             }
 
-            if (!cacheManager.IsIndexValid(cache.Index))
+            if (cacheManager.IsIndexConflicting(cache.Index))
                 cache.Index = cacheManager.GetNextFreeIndex();
 
             var techType = (TechType)cache.Index;
