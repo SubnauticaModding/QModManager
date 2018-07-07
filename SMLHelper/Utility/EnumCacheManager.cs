@@ -53,42 +53,6 @@
             return Path.Combine(GetCacheDirectoryPath(), $"{enumTypeName}Cache.txt");
         }
 
-        private string GetBanListPath()
-        {
-            return Path.Combine(GetCacheDirectoryPath(), "Banlist.txt");
-        }
-
-        internal void LoadBanlist()
-        {
-            if (banlistLoaded) return;
-
-            var banlistDir = GetBanListPath();
-
-            if(!File.Exists(banlistDir))
-            {
-                File.Create(banlistDir);
-                return;
-            }
-
-            var allText = File.ReadAllLines(banlistDir);
-
-            foreach(var line in allText)
-            {
-                if (int.TryParse(line, out int id))
-                {
-                    bannedIndices.Add(id);
-                }
-                else
-                {
-                    Logger.Log("Invalid id: " + line + " in " + enumTypeName + " ban list!");
-                }
-            }
-
-            banlistLoaded = true;
-
-            Logger.Log($"{enumTypeName} ban list loaded!");
-        }
-
         internal void LoadCache()
         {
             if (cacheLoaded) return;
@@ -182,7 +146,6 @@
         internal int GetNextFreeIndex()
         {
             LoadCache();
-            LoadBanlist();
 
             var largestIndex = GetLargestIndexFromCache();
             var freeIndex = largestIndex + 1;
@@ -190,7 +153,7 @@
             //if (bannedIndices != null && bannedIndices.Contains(freeIndex))
             //    freeIndex = bannedIndices[bannedIndices.Count - 1] + 1;
 
-            if(bannedIndices != null && bannedIndices.Contains(freeIndex))
+            if (bannedIndices != null && bannedIndices.Contains(freeIndex))
             {
                 var largestBannIndex = bannedIndices.Max();
                 freeIndex = largestBannIndex + 1;
@@ -199,10 +162,9 @@
             return freeIndex;
         }
 
-        private bool IsIndexConflicting(int index)
+        internal bool IsIndexConflicting(int index)
         {
             LoadCache();
-            LoadBanlist();
 
             var count = 0;
 
@@ -215,17 +177,7 @@
             return count >= 2;
         }
 
-        private bool IsIndexBanned(int index)
-        {
-            LoadBanlist();
-
-            return bannedIndices?.Contains(index) ?? false;
-        }
-
-        internal bool IsIndexValid(int index)
-        {
-            return !IsIndexConflicting(index) && !IsIndexBanned(index);
-        }
+        internal bool IsIndexValid(int index) => !IsIndexConflicting(index);
 
         #endregion
     }
