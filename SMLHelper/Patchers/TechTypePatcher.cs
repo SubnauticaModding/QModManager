@@ -84,16 +84,18 @@
 
             FieldInfo keyTechTypesField = typeof(TechTypeExtensions).GetField("keyTechTypes", BindingFlags.NonPublic | BindingFlags.Static);
             Dictionary<string, TechType> knownTechTypes = keyTechTypesField.GetValue(null) as Dictionary<string, TechType>;
-            foreach (KeyValuePair<string, TechType> knownTechType in knownTechTypes)
+            foreach (TechType knownTechType in knownTechTypes.Values)
             {
-                int currentTechTypeKey = Convert.ToInt32(knownTechType.Key);
-                if (currentTechTypeKey > startingIndex)
-                {
-                    if (!bannedIndices.Contains(currentTechTypeKey))
-                    {
-                        bannedIndices.Add(currentTechTypeKey);
-                    }
-                }
+                int currentTechTypeKey = (int)knownTechType;
+
+                if (currentTechTypeKey < startingIndex)
+                    continue; // This is possibly a default TechType,
+                // Anything below this range we won't ever assign
+
+                if (bannedIndices.Contains(currentTechTypeKey))
+                    continue; // Already exists in list
+
+                bannedIndices.Add(currentTechTypeKey);
             }
 
             Logger.Log($"Finished known TechTypes exclusion. {bannedIndices.Count} IDs were added in ban list.");

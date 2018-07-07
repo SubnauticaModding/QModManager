@@ -61,21 +61,22 @@
             var bannedIndices = new List<int>();
 
             var enumValues = Enum.GetValues(typeof(CraftTree.Type));
+
             foreach (var enumValue in enumValues)
             {
-                if (enumValue != null)
-                {
-                    int realEnumValue = (int)enumValue;
+                if (enumValue == null)
+                    continue; // Saftey check
 
-                    if (realEnumValue > startingIndex)
-                    {
-                        if (!bannedIndices.Contains(realEnumValue))
-                        {
-                            bannedIndices.Add(realEnumValue);
-                        }
-                    }
+                int realEnumValue = (int)enumValue;
 
-                }
+                if (realEnumValue < startingIndex)
+                    continue; // This is possibly a default tree
+                // Anything below this range we won't ever assign
+
+                if (bannedIndices.Contains(realEnumValue))
+                    continue;// Already exists in list
+
+                bannedIndices.Add(realEnumValue);
             }
 
             Logger.Log($"Finished known CraftTreeType exclusion. {bannedIndices.Count} IDs were added in ban list.");
