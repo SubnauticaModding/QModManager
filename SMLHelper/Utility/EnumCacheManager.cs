@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Text;
 
     internal class EnumTypeCache
@@ -18,7 +17,8 @@
         internal bool cacheLoaded = false;
 
         private List<EnumTypeCache> cacheList = new List<EnumTypeCache>();
-        private readonly SortedList<int, int> bannedIndices = new SortedList<int, int>();
+        private readonly List<int> BannedIDs;
+        private readonly int LastBannedIdIndex;
         internal Dictionary<T, EnumTypeCache> customEnumTypes = new Dictionary<T, EnumTypeCache>();
 
         internal EnumCacheManager(string enumTypeName, int startingIndex, IEnumerable<int> bannedIDs)
@@ -26,8 +26,12 @@
             EnumTypeName = enumTypeName;
             StartingIndex = startingIndex;
 
-            foreach (int id in bannedIDs)
-                bannedIndices.Add(id, id);
+            BannedIDs = new List<int>(bannedIDs);
+            BannedIDs.Sort();
+
+            LastBannedIdIndex = BannedIDs.Count - 1;
+            // Since we aren't adding any more indexes by this point, 
+            // we only need to sort once to get the lookup benefits.
         }
 
         #region Caching
@@ -143,9 +147,9 @@
 
             var freeIndex = GetLargestIndexFromCache() + 1;
 
-            if (bannedIndices != null && bannedIndices.ContainsKey(freeIndex))
+            if (BannedIDs != null && BannedIDs.Contains(freeIndex))
             {
-                int largestBannIndex = bannedIndices.Keys.Max();
+                int largestBannIndex = BannedIDs[LastBannedIdIndex];
                 freeIndex = largestBannIndex + 1;
             }
 
