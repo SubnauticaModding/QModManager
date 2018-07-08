@@ -1,8 +1,8 @@
 ﻿namespace SMLHelper.V2.Utility
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Text;
 
     internal class EnumTypeCache
@@ -13,37 +13,47 @@
 
     internal class EnumCacheManager<T>
     {
-        internal readonly string enumTypeName;
-        internal readonly int startingIndex;
-        internal readonly List<int> bannedIndices;
+        internal readonly string EnumTypeName;
+        internal readonly int StartingIndex;
         internal bool cacheLoaded = false;
 
-        internal List<EnumTypeCache> cacheList = new List<EnumTypeCache>();
+        private List<EnumTypeCache> cacheList = new List<EnumTypeCache>();
+        private readonly HashSet<int> BannedIDs;
+        private readonly int LargestBannedID;
+
         internal Dictionary<T, EnumTypeCache> customEnumTypes = new Dictionary<T, EnumTypeCache>();
 
-        internal EnumCacheManager(string enumTypeName, int startingIndex)
+        internal EnumCacheManager(string enumTypeName, int startingIndex, IEnumerable<int> bannedIDs)
         {
-            this.enumTypeName = enumTypeName;
-            this.startingIndex = startingIndex;            
-        }
+            EnumTypeName = enumTypeName;
+            StartingIndex = startingIndex;
 
-        internal EnumCacheManager(string enumTypeName, int startingIndex, IEnumerable<int> bannedIndices)
-        {
-            this.enumTypeName = enumTypeName;
-            this.startingIndex = startingIndex;
-            this.bannedIndices = bannedIndices.ToList();
+            int largestID = 0;
+            BannedIDs = new HashSet<int>();
+            foreach (int id in bannedIDs)
+            {
+                BannedIDs.Add(id);
+                largestID = Math.Max(largestID, id);
+            }
+
+            LargestBannedID = largestID;
         }
 
         #region Caching
 
-        private string GetCachePath()
+        private string GetCacheDirectoryPath()
         {
-            var saveDir = @"./QMods/Modding Helper/" + $"{enumTypeName}Cache";
+            var saveDir = @"./QMods/Modding Helper/" + $"{EnumTypeName}Cache";
 
             if (!Directory.Exists(saveDir))
                 Directory.CreateDirectory(saveDir);
 
-            return Path.Combine(saveDir, $"{enumTypeName}Cache.txt");
+            return saveDir;
+        }
+
+        private string GetCachePath()
+        {
+            return Path.Combine(GetCacheDirectoryPath(), $"{EnumTypeName}Cache.txt");
         }
 
         internal void LoadCache()
@@ -75,7 +85,7 @@
                 cacheList.Add(cache);
             }
 
-            Logger.Log($"Loaded ${enumTypeName} Cache!");
+            Logger.Log($"Loaded {EnumTypeName} Cache!");
 
             cacheLoaded = true;
         }
@@ -125,7 +135,7 @@
         {
             LoadCache();
 
-            var index = startingIndex;
+            var index = StartingIndex;
 
             foreach (var cache in cacheList)
             {
@@ -140,11 +150,12 @@
         {
             LoadCache();
 
-            var largestIndex = GetLargestIndexFromCache();
-            var freeIndex = largestIndex + 1;
+            var freeIndex = GetLargestIndexFromCache() + 1;
 
-            if (bannedIndices != null && bannedIndices.Contains(freeIndex))
-                freeIndex = bannedIndices[bannedIndices.Count - 1] + 1;
+            if (BannedIDs != null && BannedIDs.Contains(freeIndex))
+            {
+                freeIndex = LargestBannedID + 1;
+            }
 
             return freeIndex;
         }
@@ -161,15 +172,7 @@
                     count++;
             }
 
-            if (count >= 2)
-                return true;
-
-            return false;
-        }
-
-        internal bool IsIndexBanned(int index)
-        {
-            return bannedIndices?.Contains(index) ?? false;
+            return count >= 2;
         }
 
         #endregion
