@@ -40,7 +40,6 @@
         /// <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
         /// <para>Do not include "root" in this path.</para>
         /// </param>
-        /// <seealso cref="GetExistingTree"/>
         /// <seealso cref="ModCraftTreeRoot.GetTabNode(string[])"/>
         /// <seealso cref="ModCraftTreeLinkingNode.AddCraftingNode(TechType)"/>
         public static void AddCraftingNode(CraftTree.Type craftTree, TechType craftingItem, params string[] stepsToTab)
@@ -54,7 +53,6 @@
         /// </summary>
         /// <param name="craftTree">The target craft tree to edit.</param>
         /// <param name="craftingItem">The item to craft.</param>
-        /// <seealso cref="GetExistingTree"/>
         /// <seealso cref="ModCraftTreeRoot.GetTabNode(string[])"/>
         /// <seealso cref="ModCraftTreeLinkingNode.AddCraftingNode(TechType)"/>
         public static void AddCraftingNode(CraftTree.Type craftTree, TechType craftingItem)
