@@ -1,6 +1,7 @@
 namespace SMLHelper.V2.MonoBehaviours
 {
     using UnityEngine;
+    using System.Reflection;
     using Logger = V2.Logger;
 
     public class Fixer : MonoBehaviour, IProtoEventListener
@@ -14,6 +15,8 @@ namespace SMLHelper.V2.MonoBehaviours
         private float time;
         private bool initalized;
 
+        private static FieldInfo BuilderPrefab = typeof(Builder).GetField("prefab", BindingFlags.NonPublic | BindingFlags.Static);
+
         private void Update()
         {
             if (!initalized)
@@ -22,7 +25,9 @@ namespace SMLHelper.V2.MonoBehaviours
                 initalized = true;
             }
 
-            if (transform.position == new Vector3(-5000, -5000, -5000) && Time.time > time)
+            var prefab = (GameObject)BuilderPrefab.GetValue(null);
+
+            if (transform.position == new Vector3(-5000, -5000, -5000) && gameObject != prefab && Time.time > time)
             {
                 Logger.Log("Destroying object: " + gameObject);
                 Destroy(gameObject);
