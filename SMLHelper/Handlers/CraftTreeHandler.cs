@@ -1,9 +1,8 @@
 ﻿namespace SMLHelper.V2.Handlers
 {
-    using Patchers;
     using Crafting;
-    using System.Collections.Generic;
-    using Assets;
+    using Patchers;
+    using UnityEngine.Assertions;
 
     /// <summary>
     /// A handler class for creating and editing of crafting trees.
@@ -12,14 +11,14 @@
     {
         /// <summary>
         /// <para>Your first method call to start a new custom crafting tree.</para>
-        /// <para>Creating a new CraftTree only makes sense if you're going to use it in a new type of GhostCrafter/Fabricator.</para>
+        /// <para>Creating a new CraftTree only makes sense if you're going to use it in a new type of <see cref="GhostCrafter"/>.</para>
         /// </summary>
         /// <param name="name">The name for the new <see cref="CraftTree.Type" /> enum.</param>
-        /// <param name="craftTreeType">The new enum instance for your custom craft tree.</param>
+        /// <param name="craftTreeType">The new enum instance for your custom craft tree type.</param>
         /// <returns>
-        /// <para>The root node for your custom craft tree, as a new <see cref="ModCraftTreeRoot"/> instance.</para>
+        /// <para>Returns the root node for your custom craft tree, as a new <see cref="ModCraftTreeRoot"/> instance.</para>
         /// <para>Build up your custom crafting tree from this root node.</para>
-        /// <para>This tree will automatically patched into the game. No further calls required.</para>
+        /// <para>This tree will be automatically patched into the game. No further calls into <see cref="CraftTreeHandler"/> required.</para>
         /// </returns>
         /// <seealso cref="ModCraftTreeNode"/>
         /// <seealso cref="ModCraftTreeLinkingNode"/>
@@ -40,11 +39,10 @@
         /// <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
         /// <para>Do not include "root" in this path.</para>
         /// </param>
-        /// <seealso cref="ModCraftTreeRoot.GetTabNode(string[])"/>
-        /// <seealso cref="ModCraftTreeLinkingNode.AddCraftingNode(TechType)"/>
+        /// <exception cref="AssertionException">This method is intended for use only with standard crafting trees, not custom ones.</exception>
         public static void AddCraftingNode(CraftTree.Type craftTree, TechType craftingItem, params string[] stepsToTab)
         {
-            // Add to game
+            Assert.IsTrue(craftTree <= CraftTree.Type.Rocket, $"{nameof(AddCraftingNode)} is intended for use only with standard crafting trees, not custom ones.");
             CraftTreePatcher.CraftingNodes.Add(new CraftingNode(stepsToTab, craftTree, craftingItem));
         }
 
@@ -53,10 +51,10 @@
         /// </summary>
         /// <param name="craftTree">The target craft tree to edit.</param>
         /// <param name="craftingItem">The item to craft.</param>
-        /// <seealso cref="ModCraftTreeRoot.GetTabNode(string[])"/>
-        /// <seealso cref="ModCraftTreeLinkingNode.AddCraftingNode(TechType)"/>
+        /// <exception cref="AssertionException">This method is intended for use only with standard crafting trees, not custom ones.</exception>
         public static void AddCraftingNode(CraftTree.Type craftTree, TechType craftingItem)
         {
+            Assert.IsTrue(craftTree <= CraftTree.Type.Rocket, $"{nameof(AddCraftingNode)} is intended for use only with standard crafting trees, not custom ones.");
             CraftTreePatcher.CraftingNodes.Add(new CraftingNode(new string[0], craftTree, craftingItem));
         }
 
@@ -67,9 +65,10 @@
         /// <param name="name">The ID of the tab node. Must be unique!</param>
         /// <param name="displayName">The display name of the tab, which will show up when you hover your mouse on the tab.</param>
         /// <param name="sprite">The sprite of the tab.</param>
+        /// <exception cref="AssertionException">This method is intended for use only with standard crafting trees, not custom ones.</exception>
         public static void AddTabNode(CraftTree.Type craftTree, string name, string displayName, Atlas.Sprite sprite)
         {
-            // Adds sprites and language lines too.
+            Assert.IsTrue(craftTree <= CraftTree.Type.Rocket, $"{nameof(AddTabNode)} is intended for use only with standard crafting trees, not custom ones.");
             CraftTreePatcher.TabNodes.Add(new TabNode(new string[0], craftTree, sprite, name, displayName));
         }
 
@@ -80,8 +79,10 @@
         /// <param name="name">The ID of the tab node. Must be unique!</param>
         /// <param name="displayName">The display name of the tab, which will show up when you hover your mouse on the tab.</param>
         /// <param name="sprite">The sprite of the tab.</param>
+        /// <exception cref="AssertionException">This method is intended for use only with standard crafting trees, not custom ones.</exception>
         public static void AddTabNode(CraftTree.Type craftTree, string name, string displayName, UnityEngine.Sprite sprite)
         {
+            Assert.IsTrue(craftTree <= CraftTree.Type.Rocket, $"{nameof(AddTabNode)} is intended for use only with standard crafting trees, not custom ones.");
             CraftTreePatcher.TabNodes.Add(new TabNode(new string[0], craftTree, new Atlas.Sprite(sprite), name, displayName));
         }
 
@@ -97,8 +98,10 @@
         /// <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
         /// <para>Do not include "root" in this path.</para>
         /// </param>
+        /// <exception cref="AssertionException">This method is intended for use only with standard crafting trees, not custom ones.</exception>
         public static void AddTabNode(CraftTree.Type craftTree, string name, string displayName, Atlas.Sprite sprite, params string[] stepsToTab)
         {
+            Assert.IsTrue(craftTree <= CraftTree.Type.Rocket, $"{nameof(AddTabNode)} is intended for use only with standard crafting trees, not custom ones.");
             CraftTreePatcher.TabNodes.Add(new TabNode(stepsToTab, craftTree, sprite, name, displayName));
         }
 
@@ -114,22 +117,28 @@
         /// <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
         /// <para>Do not include "root" in this path.</para>
         /// </param>
+        /// <exception cref="AssertionException">This method is intended for use only with standard crafting trees, not custom ones.</exception>
         public static void AddTabNode(CraftTree.Type craftTree, string name, string displayName, UnityEngine.Sprite sprite, params string[] stepsToTab)
         {
+            Assert.IsTrue(craftTree <= CraftTree.Type.Rocket, $"{nameof(AddTabNode)} is intended for use only with standard crafting trees, not custom ones.");
             CraftTreePatcher.TabNodes.Add(new TabNode(stepsToTab, craftTree, new Atlas.Sprite(sprite), name, displayName));
         }
 
         /// <summary>
-        /// Removes a node at the specified node location. Can be used with both tabs and normal craft nodes.
+        /// <para>Removes a node at the specified node location. Can be used to remove either tabs or craft nodes.</para>
+        /// <para>If a tab node is selected, all child nodes to it will also be removed.</para>
         /// </summary>
         /// <param name="craftTree">The target craft tree to edit.</param>
         /// <param name="stepsToNode">
         /// <para>The steps to the target node.</para>
         /// <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
+        /// <para>This means matching the id of the crafted item or the id of the tab name.</para>
         /// <para>Do not include "root" in this path.</para>
         /// </param>
+        /// <exception cref="AssertionException">This method is intended for use only with standard crafting trees, not custom ones.</exception>
         public static void RemoveNode(CraftTree.Type craftTree, params string[] stepsToNode)
         {
+            Assert.IsTrue(craftTree <= CraftTree.Type.Rocket, $"{nameof(RemoveNode)} is intended for use only with standard crafting trees, not custom ones.");
             CraftTreePatcher.NodesToRemove.Add(new Node(stepsToNode, craftTree));
         }
     }
