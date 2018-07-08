@@ -60,6 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Crafting\NodeFamily.cs" />
     <Compile Include="Handlers\LanguageHandler.cs" />
     <Compile Include="Handlers\OptionsPanelHandler.cs" />
     <Compile Include="Legacy\CraftNodeToScrub.cs" />

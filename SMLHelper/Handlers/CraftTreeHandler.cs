@@ -3,6 +3,7 @@
     using Patchers;
     using Crafting;
     using System.Collections.Generic;
+    using Assets;
 
     /// <summary>
     /// A handler class for creating and editing of crafting trees.
@@ -30,48 +31,6 @@
         }
 
         /// <summary>
-        /// <para>Returns a CustomCraftTreeRoot for an existing CraftTree.Type scheme, which you can edit to your liking.</para>
-        /// <para>Valid schemes are:</para>
-        /// <para>Standard Fabricator: <see cref="CraftTree.Type.Fabricator"/></para>
-        /// <para>Cyclops Fabricator: <see cref="CraftTree.Type.CyclopsFabricator"/></para>
-        /// <para>Scanner Room Fabricator: <see cref="CraftTree.Type.MapRoom"/></para>
-        /// <para>Neptune Rocket Fabricator: <see cref="CraftTree.Type.Rocket"/></para>
-        /// <para>Modification Station: <see cref="CraftTree.Type.Workbench"/></para>
-        /// <para>Mobile Vehicle Bay: <see cref="CraftTree.Type.Constructor"/></para>
-        /// <para>Vehicle Upgrade Console: <see cref="CraftTree.Type.SeamothUpgrades"/></para>
-        /// </summary>
-        /// <param name="Scheme">The fabricator scheme whose craft tree to get.</param>
-        /// <returns>The CustomCraftTreeRoot for the given <see cref="CraftTree.Type"/> when valid; Otherwise returns null.</returns>
-        public static ModCraftTreeRoot GetExistingTree(CraftTree.Type Scheme)
-        {
-            switch (Scheme)
-            {
-                case CraftTree.Type.Fabricator:
-                    return CraftTreePatcher.FabricatorTree;
-
-                case CraftTree.Type.CyclopsFabricator:
-                    return CraftTreePatcher.CyclopsFabricatorTree;
-
-                case CraftTree.Type.MapRoom:
-                    return CraftTreePatcher.MapRoomTree;
-
-                case CraftTree.Type.Rocket:
-                    return CraftTreePatcher.RocketTree;
-
-                case CraftTree.Type.Workbench:
-                    return CraftTreePatcher.WorkbenchTree;
-
-                case CraftTree.Type.Constructor:
-                    return CraftTreePatcher.ConstructorTree;
-
-                case CraftTree.Type.SeamothUpgrades:
-                    return CraftTreePatcher.SeamothUpgradesTree;
-            }
-
-            return null;
-        }
-
-        /// <summary>
         /// Adds a new crafting node to the root of the specified crafting tree, at the provided tab location.
         /// </summary>
         /// <param name="craftTree">The target craft tree to edit.</param>
@@ -86,45 +45,8 @@
         /// <seealso cref="ModCraftTreeLinkingNode.AddCraftingNode(TechType)"/>
         public static void AddCraftingNode(CraftTree.Type craftTree, TechType craftingItem, params string[] stepsToTab)
         {
-            ModCraftTreeRoot root = GetExistingTree(craftTree);
-
-            if (root == null)
-                return;
-
-            ModCraftTreeTab tab = root.GetTabNode(stepsToTab);
-
-            if (tab == null)
-                return;
-
-            tab.AddCraftingNode(craftingItem);
-        }
-
-        /// <summary>
-        /// Adds a collection of new crafting nodes to the root of the specified crafting tree, at the provided tab location.
-        /// </summary>
-        /// <param name="craftTree">The target craft tree to edit.</param>
-        /// <param name="craftingItems">The item to craft.</param>
-        /// <param name="stepsToTab">
-        /// <para>The steps to the target tab.</para>
-        /// <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
-        /// <para>Do not include "root" in this path.</para>
-        /// </param>
-        /// <seealso cref="GetExistingTree"/>
-        /// <seealso cref="ModCraftTreeRoot.GetTabNode(string[])"/>
-        /// <seealso cref="ModCraftTreeLinkingNode.AddCraftingNode(IEnumerable{TechType})"/>
-        public static void AddCraftingNode(CraftTree.Type craftTree, IEnumerable<TechType> craftingItems, params string[] stepsToTab)
-        {            
-            ModCraftTreeRoot root = GetExistingTree(craftTree);
-
-            if (root == null)
-                return;
-
-            ModCraftTreeTab tab = root.GetTabNode(stepsToTab);
-
-            if (tab == null)
-                return;
-
-            tab.AddCraftingNode(craftingItems);
+            // Add to game
+            CraftTreePatcher.CraftingNodes.Add(new CraftingNode(stepsToTab, craftTree, craftingItem));
         }
 
         /// <summary>
@@ -137,30 +59,7 @@
         /// <seealso cref="ModCraftTreeLinkingNode.AddCraftingNode(TechType)"/>
         public static void AddCraftingNode(CraftTree.Type craftTree, TechType craftingItem)
         {
-            ModCraftTreeRoot root = GetExistingTree(craftTree);
-
-            if (root == null)
-                return;
-
-            root.AddCraftingNode(craftingItem);
-        }
-
-        /// <summary>
-        /// Adds a collection of new crafting nodes to the root of the specified crafting tree.
-        /// </summary>
-        /// <param name="craftTree">The target craft tree to edit.</param>
-        /// <param name="craftingItems">The item to craft.</param>
-        /// <seealso cref="GetExistingTree"/>
-        /// <seealso cref="ModCraftTreeRoot.GetTabNode(string[])"/>
-        /// <seealso cref="ModCraftTreeLinkingNode.AddCraftingNode(IEnumerable{TechType})"/>
-        public static void AddCraftingNode(CraftTree.Type craftTree, IEnumerable<TechType> craftingItems)
-        {
-            ModCraftTreeRoot root = GetExistingTree(craftTree);
-
-            if (root == null)
-                return;
-
-            root.AddCraftingNode(craftingItems);
+            CraftTreePatcher.CraftingNodes.Add(new CraftingNode(new string[0], craftTree, craftingItem));
         }
 
         /// <summary>
@@ -172,12 +71,8 @@
         /// <param name="sprite">The sprite of the tab.</param>
         public static void AddTabNode(CraftTree.Type craftTree, string name, string displayName, Atlas.Sprite sprite)
         {
-            ModCraftTreeRoot root = GetExistingTree(craftTree);
-
-            if (root == null)
-                return;
-
-            root.AddTabNode(name, displayName, sprite);
+            // Adds sprites and language lines too.
+            CraftTreePatcher.TabNodes.Add(new TabNode(new string[0], craftTree, sprite, name, displayName));
         }
 
         /// <summary>
@@ -189,12 +84,7 @@
         /// <param name="sprite">The sprite of the tab.</param>
         public static void AddTabNode(CraftTree.Type craftTree, string name, string displayName, UnityEngine.Sprite sprite)
         {
-            ModCraftTreeRoot root = GetExistingTree(craftTree);
-
-            if (root == null)
-                return;
-
-            root.AddTabNode(name, displayName, sprite);
+            CraftTreePatcher.TabNodes.Add(new TabNode(new string[0], craftTree, new Atlas.Sprite(sprite), name, displayName));
         }
 
         /// <summary>
@@ -211,17 +101,7 @@
         /// </param>
         public static void AddTabNode(CraftTree.Type craftTree, string name, string displayName, Atlas.Sprite sprite, params string[] stepsToTab)
         {
-            ModCraftTreeRoot root = GetExistingTree(craftTree);
-
-            if (root == null)
-                return;
-
-            ModCraftTreeTab tab = root.GetTabNode(stepsToTab);
-
-            if (tab == null)
-                return;
-
-            tab.AddTabNode(name, displayName, sprite);
+            CraftTreePatcher.TabNodes.Add(new TabNode(stepsToTab, craftTree, sprite, name, displayName));
         }
 
         /// <summary>
@@ -238,17 +118,7 @@
         /// </param>
         public static void AddTabNode(CraftTree.Type craftTree, string name, string displayName, UnityEngine.Sprite sprite, params string[] stepsToTab)
         {
-            ModCraftTreeRoot root = GetExistingTree(craftTree);
-
-            if (root == null)
-                return;
-
-            ModCraftTreeTab tab = root.GetTabNode(stepsToTab);
-
-            if (tab == null)
-                return;
-
-            tab.AddTabNode(name, displayName, sprite);
+            CraftTreePatcher.TabNodes.Add(new TabNode(stepsToTab, craftTree, new Atlas.Sprite(sprite), name, displayName));
         }
 
         /// <summary>
@@ -262,17 +132,7 @@
         /// </param>
         public static void RemoveNode(CraftTree.Type craftTree, params string[] stepsToNode)
         {
-            ModCraftTreeRoot root = GetExistingTree(craftTree);
-
-            if (root == null)
-                return;
-
-            ModCraftTreeNode node = root.GetNode(stepsToNode);
-
-            if (node == null)
-                return;
-
-            node.RemoveNode();
+            CraftTreePatcher.NodesToRemove.Add(new Node(stepsToNode, craftTree));
         }
     }
 }
