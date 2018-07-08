@@ -22,15 +22,17 @@
         /// <param name="enumName">Name of the enum.</param>
         /// <param name="combineWith">Any previously known banned IDs for this enum can be combined into the final list.</param>
         /// <returns>An <see cref="IEnumerable"/> of banned indexes not to be issued for new entries of the specified enum.</returns>
-        internal static IEnumerable<int> GetBannedIdsFor(string enumName, IList<int> combineWith)
+        internal static IEnumerable<int> GetBannedIdsFor(string enumName, params IList<int>[] combineWith)
         {
             if (!IsInitialized)
                 LoadFromFiles();
 
             if (!BannedIdDictionary.ContainsKey(enumName))
-                BannedIdDictionary.Add(enumName, new List<int>(combineWith));
-            else
-                BannedIdDictionary[enumName].AddRange(combineWith);
+                BannedIdDictionary.Add(enumName, new List<int>());
+
+            foreach (IList<int> otherBannedIds in combineWith)
+                BannedIdDictionary[enumName].AddRange(otherBannedIds);
+
 
             return GetBannedIdsFor(enumName);
         }

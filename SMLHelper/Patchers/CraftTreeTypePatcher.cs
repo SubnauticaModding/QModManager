@@ -12,15 +12,13 @@
     {
         private const string CraftTreeTypeEnumName = "CraftTreeType";
 
-        internal const int startingIndex = 11; // The default CraftTree.Type contains indexes 0 through 10        
+        internal const int startingIndex = 11; // The default CraftTree.Type contains indexes 0 through 10
 
         internal static readonly EnumCacheManager<CraftTree.Type> cacheManager =
             new EnumCacheManager<CraftTree.Type>(
                 enumTypeName: CraftTreeTypeEnumName,
                 startingIndex: startingIndex,
-                bannedIndices: ExtBannedIdManager.GetBannedIdsFor(CraftTreeTypeEnumName));
-        
-        #region Adding CraftTreeTypes and TreeRoots
+                bannedIDs: ExtBannedIdManager.GetBannedIdsFor(CraftTreeTypeEnumName, PreRegisteredCraftTreeTypes()));
 
         internal static ModCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
         {
@@ -53,7 +51,38 @@
             return customTreeRoot;
         }
 
-        #endregion
+        private static List<int> PreRegisteredCraftTreeTypes()
+        {
+            // Make sure to exclude already registered CraftTreeTypes.
+            // Be aware that this approach is still subject to race conditions.
+            // Any mod that patches after this one will not be picked up by this method.
+            // For those cases, there are additional ways of excluding these IDs.
+
+            var bannedIndices = new List<int>();
+
+            var enumValues = Enum.GetValues(typeof(CraftTree.Type));
+
+            foreach (var enumValue in enumValues)
+            {
+                if (enumValue == null)
+                    continue; // Saftey check
+
+                int realEnumValue = (int)enumValue;
+
+                if (realEnumValue < startingIndex)
+                    continue; // This is possibly a default tree
+                // Anything below this range we won't ever assign
+
+                if (bannedIndices.Contains(realEnumValue))
+                    continue;// Already exists in list
+
+                bannedIndices.Add(realEnumValue);
+            }
+
+            Logger.Log($"Finished known CraftTreeType exclusion. {bannedIndices.Count} IDs were added in ban list.");
+
+            return bannedIndices;
+        }
 
         #region Patches
 
