@@ -160,7 +160,7 @@
             return freeIndex;
         }
 
-        internal bool IsIndexConflicting(int index)
+        internal bool IsIndexValid(int index)
         {
             LoadCache();
 
@@ -172,7 +172,7 @@
                     count++;
             }
 
-            return count >= 2;
+            return count >= 2 && (!BannedIDs?.Contains(index) ?? false);
         }
 
         #endregion
