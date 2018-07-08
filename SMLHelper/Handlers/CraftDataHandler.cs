@@ -139,5 +139,28 @@
         {
             CraftDataPatcher.CustomBuildables.Add(techType);
         }
+
+        /// <summary>
+        /// Allows you to add items to the game's internal grouping system.
+        /// Required if you want to make buildable items show up in the Habitat Builder.
+        /// </summary>
+        /// <param name="group">The TechGroup you want to add your TechType to.</param>
+        /// <param name="category">The TechCategory (in the TechGroup) you want to add your TechType to.</param>
+        /// <param name="techType">The TechType you want to add.</param>
+        public static void AddToGroup(TechGroup group, TechCategory category, TechType techType)
+        {
+            CraftDataPatcher.AddToCustomGroup(group, category, techType);
+        }
+
+        /// <summary>
+        /// Allows you to remove an existing TechType from the game's internal group system.
+        /// </summary>
+        /// <param name="group">The TechGroup in which the TechType is located.</param>
+        /// <param name="category">The TechCategory in which the TechType is located.</param>
+        /// <param name="techType">The TechType which you want to remove.</param>
+        public static void RemoveFromGroup(TechGroup group, TechCategory category, TechType techType)
+        {
+            CraftDataPatcher.RemoveFromCustomGroup(group, category, techType);
+        }
     }
 }
