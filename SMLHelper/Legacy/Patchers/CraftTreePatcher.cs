@@ -5,6 +5,7 @@
     using CraftTreePatcher2 = SMLHelper.V2.Patchers.CraftTreePatcher;
     using V2.Handlers;
     using V2.Crafting;
+    using System.Linq;
 
     [Obsolete("Use SMLHelper.V2 instead.")]
     public class CraftTreePatcher
@@ -25,108 +26,10 @@
 
         internal static void Patch()
         {
-            // Old custom tabs added through new CustomCraftTreeNode classes
-            foreach (var tab in customTabs)
-            {
-                if (tab == null) continue;
-
-                var root = CraftTreeHandler.GetExistingTree(tab.Scheme);
-
-                if (root == null) continue;
-
-                if (!tab.Path.Contains("/")) // Added to the root
-                {
-                    root.AddTabNode(tab.Path, tab.Name, tab.Sprite.Sprite);
-                }
-                else // Added under an existing tab
-                {
-                    var path = tab.Path.SplitByChar('/');
-                    ModCraftTreeTab node = root.GetTabNode(path[0]);
-                    // Do not use ModCraftTreeRoot.GetTabNode(params string[] stepsToTab) for this.
-                    // This path also contains the node name which is not supported by the method mentioned above.
-
-                    for (int i = 1; i < path.Length - 1; i++)
-                    {
-                        node = node.GetTabNode(path[i]);
-                    }
-
-                    var tabName = path[path.Length - 1]; // Last
-                    node.AddTabNode(tabName, tab.Name, tab.Sprite.Sprite);
-                }
-            }
-
-            // Old custom craft nodes added through new CustomCraftTreeNode classes
-
-            var craftNodes = new List<CustomCraftNode>();
-
-            foreach (var customNode in customNodes)
-                craftNodes.Add(new CustomCraftNode(customNode.TechType, customNode.Scheme, customNode.Path));
-
-            foreach (var customNode in customCraftNodes)
-                craftNodes.Add(new CustomCraftNode(customNode.Value, CraftTree.Type.Fabricator, customNode.Key));
-
-            foreach (var craftNode in craftNodes)
-            {
-                if (craftNode == null) continue;
-
-                var root = CraftTreeHandler.GetExistingTree(craftNode.Scheme);
-
-                if (root == null) continue;
-
-                if (!craftNode.Path.Contains("/")) // Added to the root
-                {
-                    root.AddCraftingNode(craftNode.TechType);
-                }
-                else // Added under an existing tab
-                {
-                    var path = craftNode.Path.SplitByChar('/');
-                    ModCraftTreeTab node = root.GetTabNode(path[0]);
-                    // Do not use ModCraftTreeRoot.GetTabNode(params string[] stepsToTab) for this.
-                    // This path also contains the node name which is not supported by the method mentioned above.
-
-                    for (int i = 1; i < path.Length - 1; i++)
-                    {
-                        node = node.GetTabNode(path[i]);
-                    }
-
-                    var tabName = path[path.Length - 1]; // Last
-                    var techType = TechType.None;
-                    if(TechTypeExtensions.FromString(tabName, out techType, false))
-                    {
-                        node.AddCraftingNode(techType);
-                    }
-                }
-            }
-
-            // Old node scrubbing handled through new CustomCraftTreeNode classes
-            foreach (var scrubNode in nodesToRemove)
-            {
-                if (scrubNode == null) continue;
-
-                var root = CraftTreeHandler.GetExistingTree(scrubNode.Scheme);
-
-                if (root == null) continue;
-
-                if (!scrubNode.Path.Contains("/")) // Removed from the root
-                {
-                    root.GetNode(scrubNode.Path).RemoveNode();
-                }
-                else // Removed from an existing tab
-                {
-                    var path = scrubNode.Path.SplitByChar('/');
-                    ModCraftTreeTab node = root.GetTabNode(path[0]);
-                    // Do not use ModCraftTreeRoot.GetTabNode(params string[] stepsToTab) for this.
-                    // This path also contains the node name which is not supported by the method mentioned above.
-
-                    for (int i = 1; i < path.Length - 1; i++)
-                    {
-                        node = node.GetTabNode(path[i]);
-                    }
-
-                    var tabName = path[path.Length - 1]; // Last
-                    node.RemoveNode();
-                }
-            }
+            customTabs.ForEach(x => CraftTreePatcher2.TabNodes.Add(new TabNode(x.Path.Split('/'), x.Scheme, x.Sprite.Sprite, System.IO.Path.GetFileName(x.Path), x.Name)));
+            customNodes.ForEach(x => CraftTreePatcher2.CraftingNodes.Add(new CraftingNode(x.Path.Split('/').Take(x.Path.Split('/').Length - 1).ToArray(), x.Scheme, x.TechType)));
+            customCraftNodes.ForEach(x => CraftTreePatcher2.CraftingNodes.Add(new CraftingNode(x.Key.Split('/').Take(x.Key.Split('/').Length - 1).ToArray(), CraftTree.Type.Fabricator, x.Value)));
+            nodesToRemove.ForEach(x => CraftTreePatcher2.NodesToRemove.Add(new Node(x.Path.Split('/'), x.Scheme)));
 
             CustomTrees.ForEach(x => CraftTreePatcher2.CustomTrees.Add(x.Key, x.Value.GetV2RootNode()));
 
