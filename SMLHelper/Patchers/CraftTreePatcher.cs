@@ -152,24 +152,23 @@ namespace SMLHelper.V2.Patchers
                 for (int i = 0; i < tab.Path.Length; i++)
                 {
                     var currentPath = tab.Path[i];
+                    Logger.Log("Tab Current Path: " + currentPath + " Tab: " + tab.Name + " Crafter: " + tab.Scheme.ToString());
 
                     var node = currentNode[currentPath];
 
                     // Reached the end of the line.
-                    if (node == null)
-                    {
-                        // Add the new tab node.
-                        var newNode = new CraftNode(currentPath, TreeAction.Expand, TechType.None);
-                        currentNode.AddNode(new TreeNode[]
-                        {
-                            newNode
-                        });
-
+                    if (node != null)
+                        currentNode = node;
+                    else
                         break;
-                    }
-
-                    currentNode = node;
                 }
+
+                // Add the new tab node.
+                var newNode = new CraftNode(tab.Name, TreeAction.Expand, TechType.None);
+                currentNode.AddNode(new TreeNode[]
+                {
+                    newNode
+                });
             }
         }
 
@@ -181,20 +180,22 @@ namespace SMLHelper.V2.Patchers
                 if (customNode.Scheme != scheme) continue;
 
                 // Have to do this to make sure C# shuts up.
-                var currentNode = default(TreeNode);
-                currentNode = nodes;
+                var node = default(TreeNode);
+                node = nodes;
 
                 // Loop through the path provided by the node.
                 // Get the node for the last path.
                 for (int i = 0; i < customNode.Path.Length; i++)
                 {
                     var currentPath = customNode.Path[i];
+                    var currentNode = node[currentPath];
 
-                    currentNode = currentNode[currentPath];
+                    if (currentNode != null) node = currentNode;
+                    else break;
                 }
 
                 // Add the node.
-                currentNode.AddNode(new TreeNode[]
+                node.AddNode(new TreeNode[]
                 {
                     new CraftNode(customNode.TechType.AsString(false), TreeAction.Craft, customNode.TechType)
                 });
