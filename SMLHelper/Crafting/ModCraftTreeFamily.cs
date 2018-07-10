@@ -225,7 +225,7 @@
         /// Creates a collection of new crafting nodes for the crafting tree and links it to the calling node.
         /// </summary>
         /// <param name="techTypes">The TechTypes to be crafted.</param>
-        public void AddCraftingNode(params TechType[] techTypes) => AddCraftingNode(techTypes);        
+        public void AddCraftingNode(params TechType[] techTypes) => AddCraftingNode(techTypes.AsEnumerable());        
 
         /// <summary>
         /// Creates a collection of new crafting nodes for the crafting tree and links it to the calling node.
