@@ -4,7 +4,7 @@
     using UnityEngine;
     using Logger = V2.Logger;
 
-    class ImageUtils
+    public class ImageUtils
     {
         /// <summary>
         /// Creates a new <see cref="Texture2D" /> from an image file.
