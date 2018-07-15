@@ -21,7 +21,7 @@ _(Last updated: July 2nd 2018)_
 * [More Ingots](https://www.nexusmods.com/subnautica/mods/60) by AlexejheroYTB
 * ~~[More Hull Plates](https://www.nexusmods.com/subnautica/mods/82) by AlexejheroYTB~~
 * [MoreSeamothUpgrades](https://www.nexusmods.com/subnautica/mods/98) by ahk1221
-* [Refillable Oxygen Tanks](https://www.nexusmods.com/subnautica/mods/67) by newman55
+* _[Refillable Oxygen Tanks](https://www.nexusmods.com/subnautica/mods/67) by newman55 (not compatible with SMLHelper 2.0)_
 * [Replenish Reactor Rods](https://www.nexusmods.com/subnautica/mods/106) by AlexejheroYTB
 * [Unpack Ingots (Titanium and Plasteel)](https://www.nexusmods.com/subnautica/mods/69) by AlexejheroYTB
 * ~~[UnpackTitaniumIngots](https://www.nexusmods.com/subnautica/mods/57) by Vlad00003~~
