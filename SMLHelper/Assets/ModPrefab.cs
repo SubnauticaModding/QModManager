@@ -14,18 +14,18 @@
         /// <summary>
         /// The class identifier used for the <see cref="PrefabIdentifier" /> component whenever applicable.
         /// </summary>
-        public readonly string ClassID;
+        public string ClassID { get; protected set; }
 
         /// <summary>
         /// Name of the prefab file.
         /// </summary>
-        public readonly string PrefabFileName;
+        public string PrefabFileName { get; protected set; }
 
         /// <summary>
         /// The techtype of the corresponding item.
-        /// Used for the <see cref="TechTypeFixer" />, <see cref="TechTag" />, and <see cref="Constructable" /> components whenever applicable.
+        /// Used for the <see cref="Fixer" />, <see cref="TechTag" />, and <see cref="Constructable" /> components whenever applicable.
         /// </summary>
-        public readonly TechType TechType;
+        public TechType TechType { get; protected set; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ModPrefab" /> class.
@@ -33,7 +33,7 @@
         /// <param name="classId">The class identifier used for the <see cref="PrefabIdentifier" /> component whenever applicable.</param>
         /// <param name="prefabFileName">Name of the prefab file.</param>
         /// <param name="techType">The techtype of the corresponding item.
-        /// Used for the <see cref="TechTypeFixer" />, <see cref="TechTag" />, and <see cref="Constructable" /> components whenever applicable.</param>
+        /// Used for the <see cref="Fixer" />, <see cref="TechTag" />, and <see cref="Constructable" /> components whenever applicable.</param>
         protected ModPrefab(string classId, string prefabFileName, TechType techType)
         {
             ClassID = classId;

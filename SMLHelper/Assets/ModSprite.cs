@@ -5,7 +5,7 @@
     /// <summary>
     /// A class that handles a custom sprite and what item it is associated to.
     /// </summary>
-    public class ModSprite
+    internal class ModSprite
     {
         internal static List<ModSprite> Sprites = new List<ModSprite>();
 

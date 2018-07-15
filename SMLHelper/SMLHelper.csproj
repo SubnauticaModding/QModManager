@@ -106,7 +106,6 @@
     <Compile Include="Patchers\ResourcesPatcher.cs" />
     <Compile Include="Patchers\SpritePatcher.cs" />
     <Compile Include="Patchers\TechTypePatcher.cs" />
-    <Compile Include="Options\TestOptions.cs" />
     <Compile Include="Utility\EnumCacheManager.cs" />
     <Compile Include="Utility\ExtBannedIdManager.cs" />
     <Compile Include="Utility\ImageUtils.cs" />
