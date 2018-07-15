@@ -27,7 +27,7 @@
             if (initialized) return;
             initialized = true;
 
-            UnlockedAtStart.ForEach(x => KnownTech.Add(x));
+            UnlockedAtStart.ForEach(x => KnownTech.Add(x, false));
 
             var analysisTech = (List<KnownTech.AnalysisTech>)typeof(KnownTech).GetField("analysisTech", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
             var techToAdd = AnalysisTech.Where(a => !analysisTech.Any(a2 => a.techType == a2.techType));

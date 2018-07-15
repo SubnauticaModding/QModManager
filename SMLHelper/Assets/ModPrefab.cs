@@ -32,9 +32,10 @@
         /// </summary>
         /// <param name="classId">The class identifier used for the <see cref="PrefabIdentifier" /> component whenever applicable.</param>
         /// <param name="prefabFileName">Name of the prefab file.</param>
-        /// <param name="techType">The techtype of the corresponding item.
-        /// Used for the <see cref="Fixer" />, <see cref="TechTag" />, and <see cref="Constructable" /> components whenever applicable.</param>
-        protected ModPrefab(string classId, string prefabFileName, TechType techType)
+        /// <param name="techType">The techtype of the corresponding item. 
+        /// Used for the <see cref="Fixer" />, <see cref="TechTag" />, and <see cref="Constructable" /> components whenever applicable.
+        /// Can also be set later in the constructor if it is not yet provided.</param>
+        protected ModPrefab(string classId, string prefabFileName, TechType techType = TechType.None)
         {
             ClassID = classId;
             PrefabFileName = prefabFileName;
@@ -52,21 +53,25 @@
 
             go.transform.position = new Vector3(-5000, -5000, -5000);
             go.name = ClassID;
-            go.AddComponent<Fixer>().techType = TechType;
+
+            if(TechType != TechType.None)
+            {
+                go.AddComponent<Fixer>().techType = TechType;
+
+                if (go.GetComponent<TechTag>() != null)
+                {
+                    go.GetComponent<TechTag>().type = TechType;
+                }
+
+                if (go.GetComponent<Constructable>() != null)
+                {
+                    go.GetComponent<Constructable>().techType = TechType;
+                }
+            }
 
             if (go.GetComponent<PrefabIdentifier>() != null)
             {
                 go.GetComponent<PrefabIdentifier>().ClassId = ClassID;
-            }
-
-            if (go.GetComponent<TechTag>() != null)
-            {
-                go.GetComponent<TechTag>().type = TechType;
-            }
-
-            if (go.GetComponent<Constructable>() != null)
-            {
-                go.GetComponent<Constructable>().techType = TechType;
             }
 
             return go;
