@@ -14,10 +14,6 @@ namespace SMLHelper.V2
         {
             harmony = HarmonyInstance.Create("com.ahk1221.smlhelper");
 
-#if DEBUG
-            var modOptions = new TestOptions();
-            Handlers.OptionsPanelHandler.RegisterModOptions(modOptions);
-#endif
             try
             {
                 InitializeOld(); // Some patch methods add values/call methods to V2 patchers, and so they need to called first.
