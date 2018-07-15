@@ -38,7 +38,7 @@
         ///   <c>True</c> if the craft tree was found; Otherwise <c>false</c>.
         /// </returns>
         /// <remarks>
-        /// There's no guarante in which order SMLHelper dependent mods are loaded,
+        /// There's no guarantee in which order SMLHelper dependent mods are loaded,
         /// so if two mods are added at the same time, it may take a second game load for both to be visible to each other.
         /// </remarks>
         public static bool ModdedCraftTreeTypeExists(string craftTreeString)
