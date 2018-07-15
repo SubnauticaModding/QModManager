@@ -9,6 +9,7 @@ _(Last updated: July 2nd 2018)_
 
 * [Base Clocks](https://www.nexusmods.com/subnautica/mods/75) by Fenolpthalien
 * [Base Light Switch](https://www.nexusmods.com/subnautica/mods/46) by ahk1221
+* [Custom Craft 2 (for SMLHelper V2)](https://www.nexusmods.com/subnautica/mods/114) by PrimeSonic
 * [Custom Item Sizes](https://www.nexusmods.com/subnautica/mods/79) by AlexejheroYTB
 * [CustomFood](https://www.nexusmods.com/subnautica/mods/73) by yenzgaming
 * [CustomHullPlates](https://www.nexusmods.com/subnautica/mods/95) by ahk1221
@@ -24,6 +25,7 @@ _(Last updated: July 2nd 2018)_
 * [Replenish Reactor Rods](https://www.nexusmods.com/subnautica/mods/106) by AlexejheroYTB
 * [Unpack Ingots (Titanium and Plasteel)](https://www.nexusmods.com/subnautica/mods/69) by AlexejheroYTB
 * ~~[UnpackTitaniumIngots](https://www.nexusmods.com/subnautica/mods/57) by Vlad00003~~
+* [Upgraded Vehicles](https://www.nexusmods.com/subnautica/mods/115) by PrimeSonic
 * [Vehicle Module Fabricator](https://www.nexusmods.com/subnautica/mods/93) by PrimeSonic
 * [Vehicle Upgrades In Cyclops](https://www.nexusmods.com/subnautica/mods/83) by PrimeSonic
 * [Warp Cannon (QMods)](https://www.nexusmods.com/subnautica/mods/40) by ahk1221
