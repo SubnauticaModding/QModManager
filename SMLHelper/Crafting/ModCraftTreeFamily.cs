@@ -247,7 +247,7 @@
         /// <remarks>
         /// If the player doesn't have the mod for this TechType installed, then nothing will happen.
         /// </remarks>
-        public void AddModdedCraftingNode(string moddedTechTypeName)
+        public bool AddModdedCraftingNode(string moddedTechTypeName)
         {
             EnumTypeCache cache = TechTypePatcher.cacheManager.GetCacheForTypeName(moddedTechTypeName);
 
@@ -258,7 +258,11 @@
                 craftNode.LinkToParent(this);
 
                 ChildNodes.Add(craftNode);
+
+                return true;
             }
+
+            return false;
         }
     }
 
