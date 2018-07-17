@@ -96,8 +96,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y "$(TargetDir)Mono.Cecil.dll" "D:\Mods\Subnautica Mods\SN-QMM-plusplus\Result\Mono.Cecil.dll"
-copy /y "$(TargetDir)QModInstaller.dll" "D:\Mods\Subnautica Mods\SN-QMM-plusplus\Result\QModInstaller.dll"
-copy /y "$(TargetDir)QModManager.exe" "D:\Mods\Subnautica Mods\SN-QMM-plusplus\Result\QModManager.exe"</PostBuildEvent>
+    <PostBuildEvent>copy /y "$(TargetDir)Mono.Cecil.dll" "$(SolutionDir)Result\Mono.Cecil.dll"
+copy /y "$(TargetDir)QModInstaller.dll" "$(SolutionDir)Result\QModInstaller.dll"
+copy /y "$(TargetDir)QModManager.exe" "$(SolutionDir)Result\QModManager.exe"</PostBuildEvent>
   </PropertyGroup>
 </Project>
