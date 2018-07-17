@@ -140,7 +140,6 @@ namespace QModInstaller
             {
                 try
                 {
-                    Console.WriteLine("QMOD INFO: Now loading mod \"" + (!String.IsNullOrEmpty(mod.DisplayName) ? mod.DisplayName : mod.AssemblyName) + "\"...");
                     // Reset Stopwatch
                     if (sw.IsRunning)
                         sw.Stop();
