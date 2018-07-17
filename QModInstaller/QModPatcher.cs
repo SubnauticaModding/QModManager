@@ -12,7 +12,6 @@ namespace QModInstaller
         private static string qModBaseDir = Environment.CurrentDirectory + @"\QMods";
         private static List<QMod> loadedMods = new List<QMod>();
         private static bool patched = false;
-        private static Dictionary<QMod, List<QMod>> dependencies = new Dictionary<QMod, List<QMod>>();
 
         public static void Patch()
         {
@@ -96,48 +95,6 @@ namespace QModInstaller
                 {
                     otherMods.Add(mod);
                     continue;
-                }
-            }
-
-            List<QMod> mods = firstMods;
-            mods.AddRange(otherMods);
-            mods.AddRange(lastMods);
-
-            foreach (QMod mod in mods)
-            {
-                List<string> requirements = mod.Requires.ToList();
-                // I could've done this statement by doing str == "..." || str == "..." || ...
-                // but I decided to split it into multiple lines
-                requirements.RemoveAll(new Predicate<string>(str => str == "0Harmony.dll"));
-                requirements.RemoveAll(new Predicate<string>(str => str == "Assembly-CSharp.dll"));
-                requirements.RemoveAll(new Predicate<string>(str => str == "Assembly-CSharp-firstpass.dll"));
-                requirements.RemoveAll(new Predicate<string>(str => str == "QModManager"));
-                requirements.RemoveAll(new Predicate<string>(str => str == "0Harmony"));
-                requirements.RemoveAll(new Predicate<string>(str => str == "Assembly-CSharp"));
-                requirements.RemoveAll(new Predicate<string>(str => str == "Assembly-CSharp-firstpass"));
-                foreach (string requirement in requirements)
-                {
-                    foreach (QMod match in mods)
-                    {
-                        if (match.Id == requirement)
-                        {
-                            if (dependencies.ContainsKey(mod))
-                            {
-                                List<QMod> temp = dependencies[mod];
-                                temp.Add(match);
-                                temp.Sort();
-                                dependencies[mod] = temp;
-                            }
-                            else
-                            {
-                                List<QMod> temp = new List<QMod>() { match };
-                                dependencies.Add(mod, temp);
-                            }
-                            goto foundDependency;
-                        }
-                    }
-                    Console.WriteLine($"QMOD WARN: The mod {mod.Id} requires the mod {requirement}, but it isn't installed! Things might go wrong here!");
-                    foundDependency:;
                 }
             }
 
