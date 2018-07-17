@@ -3,7 +3,7 @@
 
 #define MyAppName "QModManager (Subnautica)"
 #define MyAppVersion "1.3"
-#define MyAppPublisher "Qwiso, RandyKnapp, AlexejheroYTB, AHK1221 & PrimeSonic"
+#define MyAppPublisher "Qwiso, RandyKnapp & AlexejheroYTB"
 #define MyAppURL "https://github.com/Qwiso/QModManager"
 
 [Setup]
