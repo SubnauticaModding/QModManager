@@ -156,9 +156,47 @@ namespace QModInstaller
 
                     // Stop Stopwatch
                     sw.Stop();
+                    // Parse elapsed time
+                    string elapsedTime = "";
+                    if (sw.Elapsed.Hours == 0)
+                    {
+                        if (sw.Elapsed.Minutes == 0)
+                        {
+                            if (sw.Elapsed.Seconds == 0)
+                            {
+                                if (sw.Elapsed.Milliseconds == 0)
+                                {
+                                    elapsedTime = "";
+                                }
+                                else
+                                {
+                                    elapsedTime = String.Format("{0:00}ms", sw.Elapsed.Milliseconds / 10);
+                                }
+                            }
+                            else
+                            {
+                                elapsedTime = String.Format("{0:00}s{1:00}ms", sw.Elapsed.Seconds, sw.Elapsed.Milliseconds / 10);
+                            }
+                        }
+                        else
+                        {
+                            elapsedTime = String.Format("{0:00}m{1:00}s{2:00}ms", sw.Elapsed.Minutes, sw.Elapsed.Seconds, sw.Elapsed.Milliseconds / 10);
+                        }
+                    }
+                    else
+                    {
+                        elapsedTime = String.Format("{0:00}h{1:00}m{2:00}s{3:00}ms", sw.Elapsed.Hours, sw.Elapsed.Minutes, sw.Elapsed.Seconds, sw.Elapsed.Milliseconds / 10);
+                    }
+                    string _modname = (!String.IsNullOrEmpty(mod.Id) ? mod.Id : mod.AssemblyName);
                     // Log elapsed time
-                    string elapsedTime = String.Format("{0:00}h{1:00}m{2:00}s{3:00}ms", sw.Elapsed.Hours, sw.Elapsed.Minutes, sw.Elapsed.Seconds, sw.Elapsed.Milliseconds / 10);
-                    Console.WriteLine("QMOD INFO: Mod \"" + (!String.IsNullOrEmpty(mod.DisplayName) ? mod.DisplayName : mod.AssemblyName) + "\" took " + elapsedTime + " to load.");
+                    if (elapsedTime == "")
+                    {
+                        Console.WriteLine($"QMOD INFO: Mod \"{_modname}\" loaded IMMEDIATELY! This shouldn't even be possible ;)");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"QMOD INFO: Mod \"{_modname}\" took {elapsedTime} to load.");
+                    }
                 }
                 catch (ArgumentNullException e)
                 {
