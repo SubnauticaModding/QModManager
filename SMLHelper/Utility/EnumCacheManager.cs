@@ -99,7 +99,7 @@
             cacheLoaded = true;
         }
 
-        internal void SaveCache()
+        internal bool SaveCache()
         {
             try
             {
@@ -120,9 +120,13 @@
                 Logger.Log("Caught exception when saving cache!");
                 Logger.Log("Exception message: " + exception.Message);
                 Logger.Log("StackTrace: " + Environment.NewLine + exception.StackTrace);
+
+                return false;
             }
 
             Logger.Log($"Successfully saved {EnumTypeName} cache!");
+
+            return true;
         }
 
         internal EnumTypeCache GetCacheForTypeName(string name)
