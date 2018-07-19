@@ -31,7 +31,7 @@ WizardSmallImageFile=WizardSmallImage.bmp
 DisableWelcomePage=no
 DisableDirPage=no
 DirExistsWarning=no
-UsePreviousAppDir=no
+UsePreviousAppDir=yes
 
 [Messages]
 ExitSetupMessage=Setup is not complete. If you exit now, {#MyAppName} will not be installed.%n%nExit Setup?
