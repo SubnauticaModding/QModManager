@@ -62,7 +62,7 @@
 
             var savePathDir = GetCachePath();
 
-            if (!File.Exists(savePathDir))
+            if (!File.Exists(savePathDir) || FileUtils.IsFileLocked(savePathDir))
             {
                 return;
             }
@@ -92,6 +92,15 @@
         internal void SaveCache()
         {
             var savePathDir = GetCachePath();
+
+            if(File.Exists(savePathDir)) // File exists
+            {
+                if(FileUtils.IsFileLocked(savePathDir))
+                {
+                    return; // File is locked
+                }
+            }
+
             var stringBuilder = new StringBuilder();
 
             foreach (var entry in customEnumTypes)

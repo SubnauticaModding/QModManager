@@ -108,6 +108,7 @@
     <Compile Include="Patchers\TechTypePatcher.cs" />
     <Compile Include="Utility\EnumCacheManager.cs" />
     <Compile Include="Utility\ExtBannedIdManager.cs" />
+    <Compile Include="Utility\FileUtils.cs" />
     <Compile Include="Utility\ImageUtils.cs" />
     <Compile Include="Utility\PrefabUtils.cs" />
     <Compile Include="Utility\ReflectionHelper.cs" />
