@@ -64,7 +64,6 @@
 
             if (!File.Exists(savePathDir))
             {
-                SaveCache();
                 return;
             }
 

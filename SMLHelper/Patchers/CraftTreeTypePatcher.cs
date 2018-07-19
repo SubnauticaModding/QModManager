@@ -42,8 +42,6 @@
 
             Logger.Log("Successfully added CraftTree Type: \"{0}\" to Index: \"{1}\"", name, cache.Index);
 
-            cacheManager.SaveCache();
-
             var customTreeRoot = new ModCraftTreeRoot(craftTreeType, name);
 
             CraftTreePatcher.CustomTrees[craftTreeType] = customTreeRoot;
@@ -88,6 +86,8 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
+            cacheManager.SaveCache();
+
             var enumType = typeof(Enum);
             var thisType = typeof(CraftTreeTypePatcher);
             var techTypeType = typeof(CraftTree.Type);
