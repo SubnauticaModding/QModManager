@@ -1,4 +1,6 @@
-﻿using Mono.Cecil;
+﻿#pragma warning disable IDE1006 // Naming Styles
+
+using Mono.Cecil;
 using Mono.Cecil.Cil;
 using System.IO;
 using System.Linq;
