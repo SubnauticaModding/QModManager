@@ -60,29 +60,38 @@
         {
             if (cacheLoaded) return;
 
-            var savePathDir = GetCachePath();
-
-            if (!File.Exists(savePathDir))
+            try
             {
-                SaveCache();
-                return;
-            }
+                var savePathDir = GetCachePath();
 
-            var allText = File.ReadAllLines(savePathDir);
-
-            foreach (var line in allText)
-            {
-                string[] split = line.Split(':');
-                var name = split[0];
-                var index = split[1];
-
-                var cache = new EnumTypeCache()
+                if (!File.Exists(savePathDir))
                 {
-                    Name = name,
-                    Index = int.Parse(index)
-                };
+                    cacheLoaded = true; // Just so it wont keep calling this over and over again.
+                    return;
+                }
 
-                cacheList.Add(cache);
+                var allText = File.ReadAllLines(savePathDir);
+
+                foreach (var line in allText)
+                {
+                    string[] split = line.Split(':');
+                    var name = split[0];
+                    var index = split[1];
+
+                    var cache = new EnumTypeCache()
+                    {
+                        Name = name,
+                        Index = int.Parse(index)
+                    };
+
+                    cacheList.Add(cache);
+                }
+            }
+            catch(Exception exception)
+            {
+                Logger.Log("Caught exception when reading cache!");
+                Logger.Log("Exception message: " + exception.Message);
+                Logger.Log("StackTrace: " + Environment.NewLine + exception.StackTrace);
             }
 
             Logger.Log($"Loaded {EnumTypeName} Cache!");
@@ -90,19 +99,34 @@
             cacheLoaded = true;
         }
 
-        internal void SaveCache()
+        internal bool SaveCache()
         {
-            var savePathDir = GetCachePath();
-            var stringBuilder = new StringBuilder();
-
-            foreach (var entry in customEnumTypes)
+            try
             {
-                cacheList.Add(entry.Value);
+                var savePathDir = GetCachePath();
+                var stringBuilder = new StringBuilder();
 
-                stringBuilder.AppendLine(string.Format("{0}:{1}", entry.Value.Name, entry.Value.Index));
+                foreach (var entry in customEnumTypes)
+                {
+                    cacheList.Add(entry.Value);
+
+                    stringBuilder.AppendLine(string.Format("{0}:{1}", entry.Value.Name, entry.Value.Index));
+                }
+
+                File.WriteAllText(savePathDir, stringBuilder.ToString());
+            }
+            catch(Exception exception)
+            {
+                Logger.Log("Caught exception when saving cache!");
+                Logger.Log("Exception message: " + exception.Message);
+                Logger.Log("StackTrace: " + Environment.NewLine + exception.StackTrace);
+
+                return false;
             }
 
-            File.WriteAllText(savePathDir, stringBuilder.ToString());
+            Logger.Log($"Successfully saved {EnumTypeName} cache!");
+
+            return true;
         }
 
         internal EnumTypeCache GetCacheForTypeName(string name)
