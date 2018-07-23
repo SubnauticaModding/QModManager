@@ -245,13 +245,10 @@
         /// <para>If the modded item isn't present for the player, this call is safely ignored.</para>
         /// </summary>
         /// <param name="moddedTechTypeName">The internal name of the custom TechType to be crafted.</param>
-        /// <returns>
-        ///   <c>True</c> if the modded item was found and the node was successfully added; Otherwise <c>false</c>.
-        /// </returns>
         /// <remarks>
         /// If the player doesn't have the mod for this TechType installed, then nothing will happen.
         /// </remarks>
-        public bool AddModdedCraftingNode(string moddedTechTypeName)
+        public void AddModdedCraftingNode(string moddedTechTypeName)
         {
             EnumTypeCache cache = TechTypePatcher.cacheManager.GetCacheForTypeName(moddedTechTypeName);
 
@@ -262,11 +259,7 @@
                 craftNode.LinkToParent(this);
 
                 ChildNodes.Add(craftNode);
-
-                return true;
             }
-
-            return false;
         }
     }
 
