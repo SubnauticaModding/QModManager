@@ -53,14 +53,15 @@
                 return;
             }
 
-            if(after == TechType.None)
+            int index = techCategory.IndexOf(after);
+
+            if(index == -1) // Not found
             {
                 techCategory.Add(techType);
                 Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\"");
             }
             else
-            { 
-                int index = techCategory.IndexOf(after);
+            {
                 techCategory.Insert(index + 1, techType);
 
                 Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\" after \"{after.AsString():G}\"");
