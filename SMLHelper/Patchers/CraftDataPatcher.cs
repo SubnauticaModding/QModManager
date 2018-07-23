@@ -35,11 +35,11 @@
 
         #region Group Handling
 
-        internal static void AddToCustomGroup(TechGroup group, TechCategory category, TechType techType)
+        internal static void AddToCustomGroup(TechGroup group, TechCategory category, TechType techType, TechType after)
         {
             var groups = GroupsField.GetValue(null) as Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>;
             var techGroup = groups[group];
-            if(techGroup == null)
+            if (techGroup == null)
             {
                 // Should never happen, but doesn't hurt to add it.
                 Logger.Log("Invalid TechGroup!");
@@ -47,15 +47,25 @@
             }
 
             var techCategory = techGroup[category];
-            if(techCategory == null)
+            if (techCategory == null)
             {
                 Logger.Log($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}");
                 return;
             }
 
-            techCategory.Add(techType);
+            int index = techCategory.IndexOf(after);
 
-            Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\"");
+            if(index == -1) // Not found
+            {
+                techCategory.Add(techType);
+                Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\"");
+            }
+            else
+            {
+                techCategory.Insert(index + 1, techType);
+
+                Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\" after \"{after.AsString():G}\"");
+            }
         }
 
         internal static void RemoveFromCustomGroup(TechGroup group, TechCategory category, TechType techType)
