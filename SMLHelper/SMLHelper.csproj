@@ -106,6 +106,10 @@
     <Compile Include="Patchers\ResourcesPatcher.cs" />
     <Compile Include="Patchers\SpritePatcher.cs" />
     <Compile Include="Patchers\TechTypePatcher.cs" />
+    <Compile Include="QuickStart\Buildable.cs" />
+    <Compile Include="QuickStart\Craftable.cs" />
+    <Compile Include="QuickStart\PdaItem.cs" />
+    <Compile Include="QuickStart\Spawnable.cs" />
     <Compile Include="Utility\EnumCacheManager.cs" />
     <Compile Include="Utility\ExtBannedIdManager.cs" />
     <Compile Include="Utility\ImageUtils.cs" />
