@@ -1,8 +1,9 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
-    using Harmony;
+    using System.Collections.Generic;
     using System.Reflection;
     using Assets;
+    using Harmony;
 
     internal class SpritePatcher
     {
@@ -17,24 +18,20 @@
             Logger.Log("SpritePatcher is done.");
         }
 
-        internal static bool Prefix(ref Atlas.Sprite __result, string name)
+        internal static bool Prefix(ref Atlas.Sprite __result, SpriteManager.Group group, string name)
         {
-            foreach (var sprite in ModSprite.Sprites)
-            {
-                if (sprite.TechType.AsString(true) == name.ToLowerInvariant())
-                {
-                    __result = sprite.Sprite;
-                    return false;
-                }
-                else if(sprite.TechType == TechType.None && sprite.Id.ToLowerInvariant() == name.ToLowerInvariant())
-                {
-                    __result = sprite.Sprite;
-                    return false;
-                }
-            }
+            if (!ModSprite.ModSprites.ContainsKey(group))
+                return true;
 
-            return true;
+            Logger.Log($"Get Sprite Call {group}:{name}.");
+
+            Dictionary<string, Atlas.Sprite> modGroup = ModSprite.ModSprites[group];
+
+            if (!modGroup.ContainsKey(name))
+                return true;
+
+            __result = modGroup[name];
+            return false;
         }
-
     }
 }

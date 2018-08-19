@@ -12,7 +12,7 @@ namespace SMLHelper
 
         internal static void Patch()
         {
-            customSprites.ForEach(x => ModSprite.Sprites.Add(x.GetModSprite()));
+            customSprites.ForEach(x => ModSprite.Add(x.GetModSprite()));
         }
     }
 
@@ -27,7 +27,9 @@ namespace SMLHelper
 
         public CustomSprite(TechType type, Atlas.Sprite sprite)
         {
+            Group = SpriteManager.Group.None;
             TechType = type;
+            Id = type.AsString();
             Sprite = sprite;
         }
 
@@ -36,7 +38,6 @@ namespace SMLHelper
             Group = group;
             Id = id;
             Sprite = sprite;
-
             TechType = TechType.None;
         }
 
