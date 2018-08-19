@@ -1,11 +1,10 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
-    using Harmony;
-    using Assets;
     using System;
     using System.Collections.Generic;
     using System.Reflection;
-    using Utility;
+    using Assets;
+    using Harmony;
 
     internal class CraftDataPatcher
     {
@@ -114,8 +113,7 @@
             harmony.Patch(preparePrefabIDCache, null,
                 new HarmonyMethod(typeof(CraftDataPatcher).GetMethod("PreparePrefabIDCachePostfix", BindingFlags.NonPublic | BindingFlags.Static)));
 
-            harmony.Patch(getMethod, 
-                new HarmonyMethod(typeof(CraftDataPatcher).GetMethod("GetTechDataPrefix", BindingFlags.NonPublic | BindingFlags.Static)), null);
+            AddCustomTechDataToOriginalDictionary();
 
             Logger.Log("CraftDataPatcher is done.");
         }
@@ -132,15 +130,87 @@
             }
         }
 
-        private static bool GetTechDataPrefix(ref ITechData __result, TechType techType)
+        private static void AddCustomTechDataToOriginalDictionary()
         {
-            if(CustomTechData.ContainsKey(techType))
+            Type CraftDataType = typeof(CraftData);
+            Type TechDataType = CraftDataType.GetNestedType("TechData", BindingFlags.NonPublic);
+            Type IngredientType = CraftDataType.GetNestedType("Ingredient", BindingFlags.NonPublic);
+            Type IngredientsType = CraftDataType.GetNestedType("Ingredients", BindingFlags.NonPublic);
+
+            MethodInfo Ingredients_Add = IngredientsType.GetMethod("Add", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+
+            FieldInfo TechData_techTypeField = TechDataType.GetField("_techType", BindingFlags.Public | BindingFlags.Instance);
+            FieldInfo TechData_craftAmountField = TechDataType.GetField("_craftAmount", BindingFlags.Public | BindingFlags.Instance);
+            FieldInfo TechData_ingredientsField = TechDataType.GetField("_ingredients", BindingFlags.Public | BindingFlags.Instance);
+            FieldInfo TechData_linkedItemsField = TechDataType.GetField("_linkedItems", BindingFlags.Public | BindingFlags.Instance);
+
+            FieldInfo CraftData_techdata = CraftDataType.GetField("techData", BindingFlags.NonPublic | BindingFlags.Static);
+            object techData = CraftData_techdata.GetValue(null);
+            Type techDataType = techData.GetType();
+
+            MethodInfo techData_Add = techDataType.GetMethod("Add", BindingFlags.Public | BindingFlags.Instance);
+            MethodInfo techData_Contains = techDataType.GetMethod("ContainsKey", BindingFlags.Public | BindingFlags.Instance);
+            MethodInfo techData_Remove = techDataType.GetMethod("Remove", BindingFlags.Public | BindingFlags.Instance);
+
+            short added = 0;
+            short replaced = 0;
+            foreach (TechType techType in CustomTechData.Keys)
             {
-                __result = CustomTechData[techType];
-                return false;
+                ITechData smlTechData = CustomTechData[techType];
+
+                object techDataInstance = Activator.CreateInstance(TechDataType, true);
+
+                TechData_techTypeField.SetValue(techDataInstance, techType);
+
+                TechData_craftAmountField.SetValue(techDataInstance, smlTechData.craftAmount);
+
+                object ingredientsList = Activator.CreateInstance(IngredientsType, true);
+
+                if (smlTechData.ingredientCount > 0)
+                {
+                    for (int i = 0; i < smlTechData.ingredientCount; i++)
+                    {
+                        IIngredient smlIngredient = smlTechData.GetIngredient(i);
+
+                        object ingredient = Activator.CreateInstance(IngredientType, new object[] { smlIngredient.techType, smlIngredient.amount });
+
+                        Ingredients_Add.Invoke(ingredientsList, new object[] { smlIngredient.techType, smlIngredient.amount });
+                    }
+
+                    TechData_ingredientsField.SetValue(techDataInstance, ingredientsList);
+                }
+
+                if (smlTechData.linkedItemCount > 0)
+                {
+                    var linkedItems = new List<TechType>();
+                    for (int l = 0; l < smlTechData.linkedItemCount; l++)
+                    {
+                        linkedItems.Add(smlTechData.GetLinkedItem(l));
+                    }
+
+                    TechData_linkedItemsField.SetValue(techDataInstance, linkedItems);
+                }
+
+                bool techDataExists = (bool)techData_Contains.Invoke(techData, new object[] { techType });
+
+                if (techDataExists)
+                {
+                    techData_Remove.Invoke(techData, new object[] { techType });
+                    Logger.Log($"{techType} TechType already existed in the CraftData.techData dictionary. Original value was replaced.");
+                    replaced++;
+                }
+                else
+                {
+                    added++;
+                }
+
+                techData_Add.Invoke(techData, new object[] { techType, techDataInstance });
             }
 
-            return true;
+            Logger.Log($"Added {added} new entries to the CraftData.techData dictionary.");
+
+            if (replaced > 0)
+                Logger.Log($"Replaced {replaced} existing entries to the CraftData.techData dictionary.");
         }
 
         #endregion
