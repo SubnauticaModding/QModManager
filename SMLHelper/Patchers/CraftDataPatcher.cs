@@ -152,6 +152,8 @@
             MethodInfo techData_Contains = techDataType.GetMethod("ContainsKey", BindingFlags.Public | BindingFlags.Instance);
             MethodInfo techData_Remove = techDataType.GetMethod("Remove", BindingFlags.Public | BindingFlags.Instance);
 
+            short added = 0;
+            short replaced = 0;
             foreach (TechType techType in CustomTechData.Keys)
             {
                 ITechData smlTechData = CustomTechData[techType];
@@ -193,15 +195,22 @@
 
                 if (techDataExists)
                 {
-                    Logger.Log($"{techType} TechType already existed in the CraftData.techData dictionary.");
                     techData_Remove.Invoke(techData, new object[] { techType });
-                    Logger.Log($"Original value was removed.");
+                    Logger.Log($"{techType} TechType already existed in the CraftData.techData dictionary. Original value was replaced.");
+                    replaced++;
+                }
+                else
+                {
+                    added++;
                 }
 
                 techData_Add.Invoke(techData, new object[] { techType, techDataInstance });
-
-                Logger.Log($"Added {techType} to the CraftData.techData dictionary.");
             }
+
+            Logger.Log($"Added {added} new entries to the CraftData.techData dictionary.");
+
+            if (replaced > 0)
+                Logger.Log($"Replaced {replaced} existing entries to the CraftData.techData dictionary.");
         }
 
         #endregion
