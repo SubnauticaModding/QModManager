@@ -1,40 +1,28 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
-    using Harmony;
+    using System.Collections.Generic;
     using System.Reflection;
     using Assets;
 
     internal class SpritePatcher
     {
-        internal static void Patch(HarmonyInstance harmony)
+        internal static void Patch()
         {
-            var spriteManager = typeof(SpriteManager);
-            var getFromResources = spriteManager.GetMethod("GetFromResources", BindingFlags.Public | BindingFlags.Static);
+            FieldInfo groupsField = typeof(SpriteManager).GetField("groups", BindingFlags.Static | BindingFlags.NonPublic);
 
-            harmony.Patch(getFromResources,
-                new HarmonyMethod(typeof(SpritePatcher).GetMethod("Prefix", BindingFlags.Static | BindingFlags.NonPublic)), null);
+            var groups = (Dictionary<SpriteManager.Group, Dictionary<string, Atlas.Sprite>>)groupsField.GetValue(null);
 
-            Logger.Log("SpritePatcher is done.");
-        }
-
-        internal static bool Prefix(ref Atlas.Sprite __result, string name)
-        {
-            foreach (var sprite in ModSprite.Sprites)
+            foreach (SpriteManager.Group moddedGroup in ModSprite.ModSprites.Keys)
             {
-                if (sprite.TechType.AsString(true) == name.ToLowerInvariant())
+                Dictionary<string, Atlas.Sprite> spriteGroup = groups[moddedGroup];
+
+                foreach (string spriteKey in ModSprite.ModSprites[moddedGroup].Keys)
                 {
-                    __result = sprite.Sprite;
-                    return false;
-                }
-                else if(sprite.TechType == TechType.None && sprite.Id.ToLowerInvariant() == name.ToLowerInvariant())
-                {
-                    __result = sprite.Sprite;
-                    return false;
+                    spriteGroup.Add(spriteKey, ModSprite.ModSprites[moddedGroup][spriteKey]);
                 }
             }
 
-            return true;
+            Logger.Log("SpritePatcher is done.");
         }
-
     }
 }

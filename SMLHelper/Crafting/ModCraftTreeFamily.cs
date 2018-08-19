@@ -2,8 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using Patchers;
     using Assets;
+    using Patchers;
     using UnityEngine;
     using UnityEngine.Assertions;
     using Utility;
@@ -411,9 +411,10 @@
             else
             {
                 modSprite = new ModSprite(SpriteManager.Group.Category, spriteID, Usprite);
+
             }
 
-            ModSprite.Sprites.Add(modSprite);
+            ModSprite.Add(modSprite);
         }
     }
 
