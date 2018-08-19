@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.V2.QuickStart
+﻿namespace SMLHelper.V2.Assets
 {
     using Crafting;
     using Handlers;
