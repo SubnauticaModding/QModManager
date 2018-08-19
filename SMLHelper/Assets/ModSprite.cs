@@ -12,7 +12,8 @@
         {
             if (group == SpriteManager.Group.None)
                 group = SpriteManager.Group.Item;
-            // Using Item instead of None is necessary as this is the typical group the game will call.
+            // There are no calls for sprites in the None Group.
+            // All sprite calls for almost anything we don't manually group is in the Item group.
 
             if (!ModSprites.ContainsKey(group))
                 ModSprites.Add(group, new Dictionary<string, Atlas.Sprite>(StringComparer.InvariantCultureIgnoreCase));

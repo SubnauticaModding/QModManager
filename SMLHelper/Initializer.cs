@@ -56,7 +56,7 @@ namespace SMLHelper.V2
             LanguagePatcher.Patch(harmony);
             ResourcesPatcher.Patch(harmony);
             PrefabDatabasePatcher.Patch(harmony);
-            SpritePatcher.Patch(harmony);
+            SpritePatcher.Patch();
             KnownTechPatcher.Patch(harmony);
             BioReactorPatcher.Patch(harmony);
             OptionsPanelPatcher.Patch(harmony);
