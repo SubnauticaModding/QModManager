@@ -1,7 +1,6 @@
 ﻿namespace SMLHelper.V2.Assets
 {
     using System.Reflection;
-    using Assets;
     using Handlers;
 
     /// <summary>
