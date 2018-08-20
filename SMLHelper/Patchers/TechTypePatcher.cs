@@ -66,6 +66,8 @@
             techTypeKeys[techType] = intKey;
             keyTechTypes[intKey] = techType;
 
+            cacheManager.SaveCache();
+
             Logger.Log("Successfully added Tech Type: \"{0}\" to Index: \"{1}\"", name, cache.Index);
 
             return techType;
@@ -105,8 +107,6 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            cacheManager.SaveCache();
-
             var enumType = typeof(Enum);
             var thisType = typeof(TechTypePatcher);
             var techTypeType = typeof(TechType);
