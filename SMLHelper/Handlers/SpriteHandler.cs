@@ -16,7 +16,7 @@
         /// <param name="sprite">The sprite to be added.</param>
         public static void RegisterSprite(TechType type, Atlas.Sprite sprite)
         {
-            ModSprite.Sprites.Add(new ModSprite(type, sprite));
+            ModSprite.Add(SpriteManager.Group.None, type.AsString(), sprite);
         }
 
         /// <summary>
@@ -27,7 +27,7 @@
         /// <param name="sprite">The sprite to be added.</param>
         public static void RegisterSprite(SpriteManager.Group group, string id, Atlas.Sprite sprite)
         {
-            ModSprite.Sprites.Add(new ModSprite(group, id, sprite));
+            ModSprite.Add(group, id, sprite);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@
         /// <param name="sprite">The sprite to be added.</param>
         public static void RegisterSprite(SpriteManager.Group group, string id, Sprite sprite)
         {
-            ModSprite.Sprites.Add(new ModSprite(group, id, sprite));
+            ModSprite.Add(group, id, new Atlas.Sprite(sprite));
         }
 
         /// <summary>
@@ -48,7 +48,7 @@
         /// <param name="sprite">The sprite to be added.</param>
         public static void RegisterSprite(TechType type, Sprite sprite)
         {
-            ModSprite.Sprites.Add(new ModSprite(type, sprite));
+            ModSprite.Add(SpriteManager.Group.None, type.AsString(), new Atlas.Sprite(sprite));
         }
 
         /// <summary>

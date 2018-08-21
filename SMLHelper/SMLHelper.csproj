@@ -106,6 +106,10 @@
     <Compile Include="Patchers\ResourcesPatcher.cs" />
     <Compile Include="Patchers\SpritePatcher.cs" />
     <Compile Include="Patchers\TechTypePatcher.cs" />
+    <Compile Include="Assets\Buildable.cs" />
+    <Compile Include="Assets\Craftable.cs" />
+    <Compile Include="Assets\PdaItem.cs" />
+    <Compile Include="Assets\Spawnable.cs" />
     <Compile Include="Utility\EnumCacheManager.cs" />
     <Compile Include="Utility\ExtBannedIdManager.cs" />
     <Compile Include="Utility\ImageUtils.cs" />

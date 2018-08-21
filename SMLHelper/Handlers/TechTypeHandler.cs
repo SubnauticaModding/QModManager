@@ -57,7 +57,7 @@
 
             // Register the Sprite
             if(sprite != null)
-                ModSprite.Sprites.Add(new ModSprite(techType, sprite));
+                ModSprite.Add(SpriteManager.Group.None, internalName, sprite);
 
             // Return the new TechType
             return techType;
@@ -79,7 +79,7 @@
 
             // Register the Sprite
             if (sprite != null)
-                ModSprite.Sprites.Add(new ModSprite(techType, sprite));
+                ModSprite.Add(SpriteManager.Group.None, internalName, new Atlas.Sprite(sprite));
 
             // Return the new TechType
             return techType;
