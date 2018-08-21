@@ -43,7 +43,7 @@
 
         private string GetCacheDirectoryPath()
         {
-            var saveDir = @"./QMods/Modding Helper/" + $"{EnumTypeName}Cache";
+            var saveDir = $"./QMods/Modding Helper/{EnumTypeName}Cache";
 
             if (!Directory.Exists(saveDir))
                 Directory.CreateDirectory(saveDir);
@@ -94,8 +94,6 @@
                 Logger.Log("StackTrace: " + Environment.NewLine + exception.StackTrace);
             }
 
-            Logger.Log($"Loaded {EnumTypeName} Cache!");
-
             cacheLoaded = true;
         }
 
@@ -110,7 +108,7 @@
                 {
                     cacheList.Add(entry.Value);
 
-                    stringBuilder.AppendLine(string.Format("{0}:{1}", entry.Value.Name, entry.Value.Index));
+                    stringBuilder.AppendLine($"{entry.Value.Name}:{entry.Value.Index}");
                 }
 
                 File.WriteAllText(savePathDir, stringBuilder.ToString());
@@ -121,8 +119,6 @@
                 Logger.Log("Exception message: " + exception.Message);
                 Logger.Log("StackTrace: " + Environment.NewLine + exception.StackTrace);
             }
-
-            Logger.Log($"Successfully saved {EnumTypeName} cache!");
         }
 
         internal EnumTypeCache GetCacheForTypeName(string name)
