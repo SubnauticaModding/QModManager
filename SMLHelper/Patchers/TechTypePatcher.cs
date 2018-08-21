@@ -3,7 +3,6 @@
     using Harmony;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Reflection;
     using Utility;
 
@@ -45,7 +44,7 @@
 
             var techType = (TechType)cache.Index;
 
-            cacheManager.customEnumTypes.Add(techType, cache);
+            cacheManager.Add(techType, cache);
 
             var techTypeExtensions = typeof(TechTypeExtensions);
             var traverse = Traverse.Create(techTypeExtensions);
@@ -66,8 +65,9 @@
             techTypeKeys[techType] = intKey;
             keyTechTypes[intKey] = techType;
 
-            Logger.Log("Successfully added Tech Type: \"{0}\" to Index: \"{1}\"", name, cache.Index);
+            cacheManager.SaveCache();
 
+            Logger.Log($"Successfully added Tech Type: '{name}' to Index: '{cache.Index}'");
             return techType;
         }
 
@@ -81,7 +81,7 @@
             var bannedIndices = new List<int>();
 
             FieldInfo keyTechTypesField = typeof(TechTypeExtensions).GetField("keyTechTypes", BindingFlags.NonPublic | BindingFlags.Static);
-            Dictionary<string, TechType> knownTechTypes = keyTechTypesField.GetValue(null) as Dictionary<string, TechType>;
+            var knownTechTypes = keyTechTypesField.GetValue(null) as Dictionary<string, TechType>;
             foreach (TechType knownTechType in knownTechTypes.Values)
             {
                 int currentTechTypeKey = (int)knownTechType;
@@ -105,8 +105,6 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            cacheManager.SaveCache();
-
             var enumType = typeof(Enum);
             var thisType = typeof(TechTypePatcher);
             var techTypeType = typeof(TechType);
@@ -131,14 +129,14 @@
             if (enumType.Equals(typeof(TechType)))
             {
                 var listArray = new List<TechType>();
-                foreach (var obj in __result)
+                foreach (object obj in __result)
                 {
                     listArray.Add((TechType)obj);
                 }
 
-                __result = listArray
-                    .Concat(cacheManager.customEnumTypes.Keys)
-                    .ToArray();
+                listArray.AddRange(cacheManager.ModdedKeys);
+
+                __result = listArray.ToArray();
             }
         }
 
@@ -146,7 +144,7 @@
         {
             if (enumType.Equals(typeof(TechType)))
             {
-                if (cacheManager.customEnumTypes.Keys.Contains((TechType)value))
+                if (cacheManager.ContainsKey((TechType)value))
                 {
                     __result = true;
                     return false;
@@ -160,13 +158,10 @@
         {
             if (enumType.Equals(typeof(TechType)))
             {
-                foreach (var techType in cacheManager.customEnumTypes)
+                if (cacheManager.TryParse(value, out TechType techType))
                 {
-                    if (value.Equals(techType.Value.Name, ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture))
-                    {
-                        __result = techType.Key;
-                        return false;
-                    }
+                    __result = techType;
+                    return false;
                 }
             }
 
@@ -175,15 +170,12 @@
 
         private static bool Prefix_ToString(Enum __instance, ref string __result)
         {
-            if (__instance.GetType().Equals(typeof(TechType)))
+            if (__instance is TechType techType)
             {
-                foreach (var techType in cacheManager.customEnumTypes)
+                if (cacheManager.TryGetValue(techType, out EnumTypeCache techTypeCache))
                 {
-                    if (__instance.Equals(techType.Key))
-                    {
-                        __result = techType.Value.Name;
-                        return false;
-                    }
+                    __result = techTypeCache.Name;
+                    return false;
                 }
             }
 

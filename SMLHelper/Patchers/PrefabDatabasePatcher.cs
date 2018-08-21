@@ -1,11 +1,9 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
-    using Harmony;
     using System.Reflection;
-    using System.Collections.Generic;
-    using UnityEngine;
-    using MonoBehaviours;
     using Assets;
+    using Harmony;
+    using UnityEngine;
     using UWE;
     using Logger = V2.Logger;
 
@@ -21,15 +19,12 @@
 
         internal static bool GetPrefabForFilename_Prefix(string filename, ref GameObject __result)
         {
-            foreach(var prefab in ModPrefab.Prefabs)
+            if (ModPrefab.TryGetFromFileName(filename, out ModPrefab prefab))
             {
-                if(prefab.PrefabFileName.ToLowerInvariant() == filename.ToLowerInvariant())
-                {
-                    var go = prefab.GetGameObjectInternal();
-                    __result = go;
+                var go = prefab.GetGameObjectInternal();
+                __result = go;
 
-                    return false;
-                }
+                return false;
             }
 
             return true;
@@ -37,15 +32,12 @@
 
         internal static bool GetPrefabAsync_Prefix(ref IPrefabRequest __result, string classId)
         {
-            foreach (var prefab in ModPrefab.Prefabs)
-            {
-                if (prefab.ClassID.ToLowerInvariant() == classId.ToLowerInvariant())
-                {
-                    var go = prefab.GetGameObjectInternal();
-                    __result = new LoadedPrefabRequest(go);
+            if (ModPrefab.TryGetFromClassId(classId, out ModPrefab prefab))
+            { 
+                var go = prefab.GetGameObjectInternal();
+                __result = new LoadedPrefabRequest(go);
 
-                    return false;
-                }
+                return false;
             }
 
             return true;

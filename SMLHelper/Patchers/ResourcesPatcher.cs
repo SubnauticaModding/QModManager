@@ -8,13 +8,10 @@
     {
         internal static bool Prefix(ref UnityEngine.Object __result, string path)
         {
-            foreach (var prefab in ModPrefab.Prefabs)
+            if (ModPrefab.TryGetFromFileName(path, out ModPrefab prefab))
             {
-                if (prefab.PrefabFileName.ToLowerInvariant() == path.ToLowerInvariant())
-                {
-                    __result = prefab.GetGameObject();
-                    return false;
-                }
+                __result = prefab.GetGameObject();
+                return false;
             }
 
             return true;
@@ -31,20 +28,15 @@
 
         internal static bool Prefix_Async(ref UnityEngine.ResourceRequest __result, string path)
         {
-            foreach (var prefab in ModPrefab.Prefabs)
+            if (ModPrefab.TryGetFromFileName(path, out ModPrefab prefab))
             {
-                if (prefab.PrefabFileName.ToLowerInvariant() == path.ToLowerInvariant())
-                {
-                    //__result = prefab.Object;
+                __result = new UnityEngine.ResourceRequest();
+                AssetsInfo.SetValue(__result, prefab.GetGameObject(), null);
 
-                    __result = new UnityEngine.ResourceRequest();
-                    AssetsInfo.SetValue(__result, prefab.GetGameObject(), null);
+                MPathInfo.SetValue(__result, path);
+                MTypeInfo.SetValue(__result, prefab.GetGameObject().GetType());
 
-                    MPathInfo.SetValue(__result, path);
-                    MTypeInfo.SetValue(__result, prefab.GetGameObject().GetType());
-
-                    return false;
-                }
+                return false;
             }
 
             return true;

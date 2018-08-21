@@ -3,7 +3,6 @@
     using Harmony;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Reflection;
     using Utility;
     using Crafting;
@@ -38,9 +37,11 @@
 
             craftTreeType = (CraftTree.Type)cache.Index;
 
-            cacheManager.customEnumTypes.Add(craftTreeType, cache);
+            cacheManager.Add(craftTreeType, cache);
 
-            Logger.Log("Successfully added CraftTree Type: \"{0}\" to Index: \"{1}\"", name, cache.Index);
+            cacheManager.SaveCache();
+
+            Logger.Log($"Successfully added CraftTree Type: '{name}' to Index: '{cache.Index}'");
 
             var customTreeRoot = new ModCraftTreeRoot(craftTreeType, name);
 
@@ -86,7 +87,6 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            cacheManager.SaveCache();
 
             var enumType = typeof(Enum);
             var thisType = typeof(CraftTreeTypePatcher);
@@ -117,9 +117,9 @@
                     listArray.Add((CraftTree.Type)obj);
                 }
 
-                __result = listArray
-                    .Concat(cacheManager.customEnumTypes.Keys)
-                    .ToArray();
+                listArray.AddRange(cacheManager.ModdedKeys);
+
+                __result = listArray.ToArray();
             }
         }
 
@@ -127,7 +127,7 @@
         {
             if (enumType.Equals(typeof(CraftTree.Type)))
             {
-                if (cacheManager.customEnumTypes.Keys.Contains((CraftTree.Type)value))
+                if (cacheManager.ContainsKey((CraftTree.Type)value))
                 {
                     __result = true;
                     return false;
@@ -141,13 +141,10 @@
         {
             if (enumType.Equals(typeof(CraftTree.Type)))
             {
-                foreach (var techType in cacheManager.customEnumTypes)
+                if (cacheManager.TryParse(value, out CraftTree.Type craftTreeType))
                 {
-                    if (value.Equals(techType.Value.Name, ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture))
-                    {
-                        __result = techType.Key;
-                        return false;
-                    }
+                    __result = craftTreeType;
+                    return false;
                 }
             }
 
@@ -156,15 +153,12 @@
 
         internal static bool Prefix_ToString(Enum __instance, ref string __result)
         {
-            if (__instance.GetType().Equals(typeof(CraftTree.Type)))
+            if (__instance is CraftTree.Type craftTreeType)
             {
-                foreach (var techType in cacheManager.customEnumTypes)
+                if (cacheManager.TryGetValue(craftTreeType, out EnumTypeCache craftTreeTypeCache))
                 {
-                    if (__instance.Equals(techType.Key))
-                    {
-                        __result = techType.Value.Name;
-                        return false;
-                    }
+                    __result = craftTreeTypeCache.Name;
+                    return false;
                 }
             }
 
