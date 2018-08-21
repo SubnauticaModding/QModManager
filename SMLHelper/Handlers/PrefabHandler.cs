@@ -17,7 +17,7 @@
                     return;
             }
 
-            ModPrefab.Prefabs.Add(prefab);
+            ModPrefab.Add(prefab);
         }
     }
 }

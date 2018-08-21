@@ -3,13 +3,27 @@
     using System.Collections.Generic;
     using UnityEngine;
     using MonoBehaviours;
+    using System;
 
     /// <summary>
     /// The abstract class to inherit when you want to add new PreFabs into the game.
     /// </summary>
     public abstract class ModPrefab
     {
-        internal static List<ModPrefab> Prefabs = new List<ModPrefab>();
+        private static readonly Dictionary<string, ModPrefab> FileNameDictionary = new Dictionary<string, ModPrefab>(StringComparer.InvariantCultureIgnoreCase);
+        private static readonly Dictionary<string, ModPrefab> ClassIdDictionary = new Dictionary<string, ModPrefab>(StringComparer.InvariantCultureIgnoreCase);
+        private static readonly List<ModPrefab> PreFabsList = new List<ModPrefab>();
+
+        internal static void Add(ModPrefab prefab)
+        {
+            FileNameDictionary.Add(prefab.PrefabFileName, prefab);
+            ClassIdDictionary.Add(prefab.ClassID, prefab);
+            PreFabsList.Add(prefab);
+        }
+
+        internal static IEnumerable<ModPrefab> Prefabs => PreFabsList;
+        internal static bool TryGetFromFileName(string classId, out ModPrefab prefab) => FileNameDictionary.TryGetValue(classId, out prefab);
+        internal static bool TryGetFromClassId(string classId, out ModPrefab prefab) => ClassIdDictionary.TryGetValue(classId, out prefab);
 
         /// <summary>
         /// The class identifier used for the <see cref="PrefabIdentifier" /> component whenever applicable.

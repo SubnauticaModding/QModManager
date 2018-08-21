@@ -15,7 +15,7 @@ namespace SMLHelper
 
         internal static void Patch()
         {
-            customPrefabs.ForEach(x => ModPrefab.Prefabs.Add(new WrapperPrefab(x)));
+            customPrefabs.ForEach(x => ModPrefab.Add(new WrapperPrefab(x)));
         }
     }
 
