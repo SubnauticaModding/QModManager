@@ -68,8 +68,7 @@
 
             cacheManager.SaveCache();
 
-            Logger.Log("Successfully added Tech Type: \"{0}\" to Index: \"{1}\"", name, cache.Index);
-
+            Logger.Log($"Successfully added Tech Type: '{name}' to Index: '{cache.Index}'");
             return techType;
         }
 

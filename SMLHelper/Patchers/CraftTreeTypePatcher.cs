@@ -42,7 +42,7 @@
 
             cacheManager.SaveCache();
 
-            Logger.Log("Successfully added CraftTree Type: \"{0}\" to Index: \"{1}\"", name, cache.Index);
+            Logger.Log($"Successfully added CraftTree Type: '{name}' to Index: '{cache.Index}'");
 
             var customTreeRoot = new ModCraftTreeRoot(craftTreeType, name);
 
