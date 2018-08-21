@@ -13,7 +13,7 @@ _(Last updated: August 21st 2018)_
 * [Custom Craft 2 (for SMLHelper V2)](https://www.nexusmods.com/subnautica/mods/114) by PrimeSonic
 * [CustomCraft2SML - Alchemy Updated](https://www.nexusmods.com/subnautica/mods/132) by zachzilla04
 * [Custom Item Sizes](https://www.nexusmods.com/subnautica/mods/79) by AlexejheroYTB
-* ~~[CustomFood](https://www.nexusmods.com/subnautica/mods/73) by yenzgaming~~
+* ~~CustomFood by yenzgaming~~
 * [CustomFood 2](https://www.nexusmods.com/subnautica/mods/130) by yenzgaming
 * [CustomHullPlates](https://www.nexusmods.com/subnautica/mods/95) by ahk1221
 * [Deconstruct Fire Extinguishers](https://www.nexusmods.com/subnautica/mods/103) by AlexejheroYTB
@@ -23,7 +23,7 @@ _(Last updated: August 21st 2018)_
 * [Laser Cannon](https://www.nexusmods.com/subnautica/mods/136) by senna7608
 * [More Cyclops Upgrades](https://www.nexusmods.com/subnautica/mods/101) by PrimeSonic
 * [More Ingots](https://www.nexusmods.com/subnautica/mods/60) by AlexejheroYTB
-* ~~[More Hull Plates](https://www.nexusmods.com/subnautica/mods/82) by AlexejheroYTB~~
+* ~~More Hull Plates by AlexejheroYTB~~
 * [MoreSeamothUpgrades](https://www.nexusmods.com/subnautica/mods/98) by ahk1221
 * [Scanner Module](https://www.nexusmods.com/subnautica/mods/131) by senna7608
 * [Refillable Oxygen Tanks](https://www.nexusmods.com/subnautica/mods/67) by newman55
@@ -34,7 +34,7 @@ _(Last updated: August 21st 2018)_
 * [Stargate themed hull plates](https://www.nexusmods.com/subnautica/mods/96) by IngloriousBastard2
 * [StOrM'S_World](https://www.nexusmods.com/subnautica/mods/54) by StOrM0HyDrA0DBS
 * [Unpack Ingots (Titanium and Plasteel)](https://www.nexusmods.com/subnautica/mods/69) by AlexejheroYTB
-* ~~[UnpackTitaniumIngots](https://www.nexusmods.com/subnautica/mods/57) by Vlad00003~~
+* ~~UnpackTitaniumIngots by Vlad00003~~
 * [Upgraded Vehicles](https://www.nexusmods.com/subnautica/mods/115) by PrimeSonic
 * [Vehicle Module Fabricator](https://www.nexusmods.com/subnautica/mods/93) by PrimeSonic
 * [Vehicle Upgrades In Cyclops](https://www.nexusmods.com/subnautica/mods/83) by PrimeSonic
