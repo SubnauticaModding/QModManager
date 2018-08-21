@@ -5,7 +5,7 @@ SMLHelper is a complete library that helps you out on your Subnautica modding ad
 We would love to have people contribute to SMLHelper. To get started, first fork the repo and then clone it, and then copy Assembly-CSharp.dll and Assembly-CSharp-firstpass.dll (located in your Subnautica_Data/Managed folder) to the Dependencies folder. Then, load up the solution, make your edits and PR them!
 
 ## Alphabetical list of mods using SMLHelper
-_(Last updated: August 19th 2018)_
+_(Last updated: August 21st 2018)_
 
 * [Base Clocks](https://www.nexusmods.com/subnautica/mods/75) by Fenolpthalien
 * [Base Light Switch](https://www.nexusmods.com/subnautica/mods/46) by ahk1221
