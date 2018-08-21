@@ -11,7 +11,7 @@
         internal string Name;
     }
 
-    internal class EnumCacheManager<T>
+    internal class EnumCacheManager<T> where T : Enum
     {
         internal readonly string EnumTypeName;
         internal readonly int StartingIndex;
@@ -21,7 +21,26 @@
         private readonly HashSet<int> BannedIDs;
         private readonly int LargestBannedID;
 
-        internal Dictionary<T, EnumTypeCache> customEnumTypes = new Dictionary<T, EnumTypeCache>();
+        private readonly Dictionary<T, EnumTypeCache> customEnumTypes = new Dictionary<T, EnumTypeCache>();
+        private readonly Dictionary<string, T> customEnumNames = new Dictionary<string, T>();
+        private readonly HashSet<T> HashedKeys = new HashSet<T>();
+
+        public IEnumerable<T> ModdedKeys => HashedKeys;
+
+        public bool TryGetValue(T key, out EnumTypeCache value) => customEnumTypes.TryGetValue(key, out value);
+
+        public bool TryParse(string value, out T type) => customEnumNames.TryGetValue(value, out type);
+
+        public void Add(T value, EnumTypeCache entry)
+        {
+            HashedKeys.Add(value);
+            customEnumTypes.Add(value, entry);
+            customEnumNames.Add(entry.Name, value);
+        }
+
+        public void Add(KeyValuePair<T, EnumTypeCache> item) => Add(item.Key, item.Value);
+
+        public bool ContainsKey(T key) => HashedKeys.Contains(key);
 
         internal EnumCacheManager(string enumTypeName, int startingIndex, IEnumerable<int> bannedIDs)
         {
@@ -43,7 +62,7 @@
 
         private string GetCacheDirectoryPath()
         {
-            var saveDir = $"./QMods/Modding Helper/{EnumTypeName}Cache";
+            string saveDir = $"./QMods/Modding Helper/{EnumTypeName}Cache";
 
             if (!Directory.Exists(saveDir))
                 Directory.CreateDirectory(saveDir);
@@ -51,10 +70,7 @@
             return saveDir;
         }
 
-        private string GetCachePath()
-        {
-            return Path.Combine(GetCacheDirectoryPath(), $"{EnumTypeName}Cache.txt");
-        }
+        private string GetCachePath() => Path.Combine(GetCacheDirectoryPath(), $"{EnumTypeName}Cache.txt");
 
         internal void LoadCache()
         {
@@ -62,7 +78,7 @@
 
             try
             {
-                var savePathDir = GetCachePath();
+                string savePathDir = GetCachePath();
 
                 if (!File.Exists(savePathDir))
                 {
@@ -70,13 +86,13 @@
                     return;
                 }
 
-                var allText = File.ReadAllLines(savePathDir);
+                string[] allText = File.ReadAllLines(savePathDir);
 
-                foreach (var line in allText)
+                foreach (string line in allText)
                 {
                     string[] split = line.Split(':');
-                    var name = split[0];
-                    var index = split[1];
+                    string name = split[0];
+                    string index = split[1];
 
                     var cache = new EnumTypeCache()
                     {
@@ -87,7 +103,7 @@
                     cacheList.Add(cache);
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 Logger.Log("Caught exception when reading cache!");
                 Logger.Log("Exception message: " + exception.Message);
@@ -101,10 +117,10 @@
         {
             try
             {
-                var savePathDir = GetCachePath();
+                string savePathDir = GetCachePath();
                 var stringBuilder = new StringBuilder();
 
-                foreach (var entry in customEnumTypes)
+                foreach (KeyValuePair<T, EnumTypeCache> entry in customEnumTypes)
                 {
                     cacheList.Add(entry.Value);
 
@@ -113,7 +129,7 @@
 
                 File.WriteAllText(savePathDir, stringBuilder.ToString());
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 Logger.Log("Caught exception when saving cache!");
                 Logger.Log("Exception message: " + exception.Message);
@@ -125,7 +141,7 @@
         {
             LoadCache();
 
-            foreach (var cache in cacheList)
+            foreach (EnumTypeCache cache in cacheList)
             {
                 if (cache.Name == name)
                     return cache;
@@ -138,7 +154,7 @@
         {
             LoadCache();
 
-            foreach (var cache in cacheList)
+            foreach (EnumTypeCache cache in cacheList)
             {
                 if (cache.Index == index)
                     return cache;
@@ -151,9 +167,9 @@
         {
             LoadCache();
 
-            var index = StartingIndex;
+            int index = StartingIndex;
 
-            foreach (var cache in cacheList)
+            foreach (EnumTypeCache cache in cacheList)
             {
                 if (cache.Index > index)
                     index = cache.Index;
@@ -166,7 +182,7 @@
         {
             LoadCache();
 
-            var freeIndex = GetLargestIndexFromCache() + 1;
+            int freeIndex = GetLargestIndexFromCache() + 1;
 
             if (BannedIDs != null && BannedIDs.Contains(freeIndex))
             {
@@ -180,9 +196,9 @@
         {
             LoadCache();
 
-            var count = 0;
+            int count = 0;
 
-            foreach (var cache in cacheList)
+            foreach (EnumTypeCache cache in cacheList)
             {
                 if (cache.Index == index)
                     count++;
