@@ -22,7 +22,7 @@
         private readonly int LargestBannedID;
 
         private readonly Dictionary<T, EnumTypeCache> customEnumTypes = new Dictionary<T, EnumTypeCache>();
-        private readonly Dictionary<string, T> customEnumNames = new Dictionary<string, T>();
+        private readonly Dictionary<string, T> customEnumNames = new Dictionary<string, T>(StringComparer.InvariantCultureIgnoreCase);
         private readonly HashSet<T> HashedKeys = new HashSet<T>();
 
         public IEnumerable<T> ModdedKeys => HashedKeys;
