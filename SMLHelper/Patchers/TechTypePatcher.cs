@@ -158,12 +158,8 @@
         {
             if (enumType.Equals(typeof(TechType)))
             {
-                ErrorMessage.AddDebug("Asked for: " + value);
-
                 if (cacheManager.TryParse(value, out TechType techType))
                 {
-                    ErrorMessage.AddDebug("Found: " + value);
-
                     __result = techType;
                     return false;
                 }
