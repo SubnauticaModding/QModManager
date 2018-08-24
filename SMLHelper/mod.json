@@ -2,7 +2,7 @@
   "Id": "SMLHelper",
   "DisplayName": "Modding Helper",
   "Author": "AHK1221-PrimeSonic-AlexejheroYTB",
-  "Version": "2.0.2",
+  "Version": "2.0.3",
   "Enable": true,
   "Priority": "Last",
   "AssemblyName": "SMLHelper.dll",
