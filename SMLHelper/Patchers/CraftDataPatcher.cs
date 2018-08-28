@@ -108,7 +108,6 @@
             PatchUtils.PatchList(CraftDataType, "buildables", CustomBuildables);
 
             var preparePrefabIDCache = CraftDataType.GetMethod("PreparePrefabIDCache", BindingFlags.Public | BindingFlags.Static);
-            var getMethod = CraftDataType.GetMethod("Get", BindingFlags.Public | BindingFlags.Static);
 
             harmony.Patch(preparePrefabIDCache, null,
                 new HarmonyMethod(typeof(CraftDataPatcher).GetMethod("PreparePrefabIDCachePostfix", BindingFlags.NonPublic | BindingFlags.Static)));
