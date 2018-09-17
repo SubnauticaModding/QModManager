@@ -1,6 +1,5 @@
 ﻿namespace SMLHelper.V2.Assets
 {
-    using System.Reflection;
     using Handlers;
 
     /// <summary>
@@ -16,10 +15,10 @@
 
         /// <summary>
         /// Override with the folder where your mod's icons and other assets are stored.
-        /// If not overriden, this defaults to "[your mod assembly name]/Assets".
+        /// Normally, this will be something like "MyModAssembly/Assets".
         /// </summary>
         /// <example>"MyModAssembly/Assets"</example>
-        public virtual string AssetsFolder => $"{Assembly.GetCallingAssembly().GetName().Name}/Assets";
+        public abstract string AssetsFolder { get; }
 
         /// <summary>
         /// Override with the file name for this item's icon.
@@ -105,7 +104,7 @@
         {
             PrefabHandler.RegisterPrefab(this);
 
-            SpriteHandler.RegisterSprite(this.TechType, $"./QMods/{this.AssetsFolder}/{this.IconFileName}");
+            SpriteHandler.RegisterSprite(this.TechType, $"./QMods/{this.AssetsFolder.Trim('/')}/{this.IconFileName}");
         }
     }
 }
