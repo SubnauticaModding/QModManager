@@ -10,6 +10,7 @@
     {
         #region Internal Fields
 
+        internal static List<TechType> DuplicateTechDataAttempts = new List<TechType>();
         internal static Dictionary<TechType, ITechData> CustomTechData = new Dictionary<TechType, ITechData>();
         internal static Dictionary<TechType, TechType> CustomHarvestOutputList = new Dictionary<TechType, TechType>();
         internal static Dictionary<TechType, HarvestType> CustomHarvestTypeList = new Dictionary<TechType, HarvestType>();
@@ -131,6 +132,18 @@
 
         private static void AddCustomTechDataToOriginalDictionary()
         {
+            if (DuplicateTechDataAttempts.Count > 0)
+            {
+                Logger.Log($"Removing conflicting TechData entries from patching.{Environment.NewLine}" +
+                           $"This is so the user will take notice and know to resolve the conflict.{Environment.NewLine}" +
+                           "Only one custom TechData may be added per TechType.");
+
+                foreach (TechType dup in DuplicateTechDataAttempts)
+                {
+                    CustomTechData.Remove(dup);
+                }
+            }
+
             Type CraftDataType = typeof(CraftData);
             Type TechDataType = CraftDataType.GetNestedType("TechData", BindingFlags.NonPublic);
             Type IngredientType = CraftDataType.GetNestedType("Ingredient", BindingFlags.NonPublic);

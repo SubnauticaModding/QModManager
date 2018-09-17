@@ -1,5 +1,6 @@
 ﻿namespace SMLHelper.V2.Handlers
 {
+    using System;
     using Crafting;
     using Patchers;
 
@@ -7,7 +8,7 @@
     /// A handler class for adding and editing crafted items.
     /// </summary>
     public static class CraftDataHandler
-    {        
+    {
         /// <summary>
         /// <para>Allows you to edit recipes, i.e. TechData for TechTypes.</para>
         /// <para>Can be used for existing TechTypes too.</para>
@@ -17,6 +18,14 @@
         /// <seealso cref="TechData"/>
         public static void SetTechData(TechType techType, TechData techData)
         {
+            if (CraftDataPatcher.CustomTechData.ContainsKey(techType))
+            {
+                Logger.Log($"[ERROR] Custom TechData already exists for '{techType}'. {Environment.NewLine}" +
+                            "All entries will be removed so conflict can be noted and resolved.");
+                CraftDataPatcher.DuplicateTechDataAttempts.Add(techType);
+                return; // Error condition exit
+            }
+
             CraftDataPatcher.CustomTechData[techType] = techData;
         }
 
