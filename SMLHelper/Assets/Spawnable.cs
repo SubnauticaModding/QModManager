@@ -1,5 +1,6 @@
 ﻿namespace SMLHelper.V2.Assets
 {
+    using System;
     using Handlers;
 
     /// <summary>
@@ -52,6 +53,12 @@
         protected Spawnable(string classId, string friendlyName, string description)
             : base(classId, $"{classId}Prefab")
         {
+            if (string.IsNullOrEmpty(classId))
+            {
+                Logger.Log($"[ERROR] ClassID for Spawnables must be a non-empty value.");
+                throw new Exception($"Error patching Spawnable");
+            }
+
             this.FriendlyName = friendlyName;
             this.Description = description;
 
@@ -104,7 +111,14 @@
         {
             PrefabHandler.RegisterPrefab(this);
 
-            SpriteHandler.RegisterSprite(this.TechType, $"./QMods/{this.AssetsFolder.Trim('/')}/{this.IconFileName}");
+            string assetsFolder = this.AssetsFolder;
+            if (string.IsNullOrEmpty(assetsFolder))
+            {
+                Logger.Log($"[ERROR] AssetsFolder property for Spawnable instance of {this.ClassID} must have a non-empty value.");
+                throw new Exception($"Error patching Spawnable:{this.ClassID}");
+            }
+
+            SpriteHandler.RegisterSprite(this.TechType, $"./QMods/{assetsFolder.Trim('/')}/{this.IconFileName}");
         }
     }
 }
