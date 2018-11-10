@@ -54,6 +54,10 @@
             go.name = ClassID;
             go.AddComponent<Fixer>().techType = TechType;
 
+            /* Make sure prefab doesn't get cleared when quiting game to menu. */
+            SceneCleanerPreserve scp = go.AddComponent<SceneCleanerPreserve>();
+            scp.enabled = true;
+
             if (go.GetComponent<PrefabIdentifier>() != null)
             {
                 go.GetComponent<PrefabIdentifier>().ClassId = ClassID;
