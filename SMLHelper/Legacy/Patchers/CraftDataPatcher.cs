@@ -31,7 +31,7 @@ namespace SMLHelper.Patchers
         [Obsolete("Use SMLHelper.V2 instead.")]
         public static void AddToCustomGroup(TechGroup group, TechCategory category, TechType techType)
         {
-            CraftDataPatcher2.AddToCustomGroup(group, category, techType);
+            CraftDataPatcher2.AddToCustomGroup(group, category, techType, TechType.None);
         }
 
         [Obsolete("Use SMLHelper.V2 instead.")]

@@ -1,10 +1,10 @@
 ﻿#pragma warning disable CS0618 // Type or member is obsolete
 namespace SMLHelper.V2
 {
+    using System.Reflection;
     using Harmony;
     using Patchers;
     using System;
-    using Options;
 
     public class Initializer
     {
@@ -12,12 +12,10 @@ namespace SMLHelper.V2
 
         public static void Patch()
         {
+            Logger.Log($"Loading v{Assembly.GetExecutingAssembly().GetName().Version}...");
+
             harmony = HarmonyInstance.Create("com.ahk1221.smlhelper");
 
-#if DEBUG
-            var modOptions = new TestOptions();
-            Handlers.OptionsPanelHandler.RegisterModOptions(modOptions);
-#endif
             try
             {
                 InitializeOld(); // Some patch methods add values/call methods to V2 patchers, and so they need to called first.
@@ -60,10 +58,11 @@ namespace SMLHelper.V2
             LanguagePatcher.Patch(harmony);
             ResourcesPatcher.Patch(harmony);
             PrefabDatabasePatcher.Patch(harmony);
-            SpritePatcher.Patch(harmony);
+            SpritePatcher.Patch();
             KnownTechPatcher.Patch(harmony);
             BioReactorPatcher.Patch(harmony);
             OptionsPanelPatcher.Patch(harmony);
+            InventoryPatcher.Patch(harmony);
         }
     }
 }

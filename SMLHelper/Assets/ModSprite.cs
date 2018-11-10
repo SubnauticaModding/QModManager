@@ -1,13 +1,30 @@
 ﻿namespace SMLHelper.V2.Assets
 {
+    using System;
     using System.Collections.Generic;
 
     /// <summary>
     /// A class that handles a custom sprite and what item it is associated to.
     /// </summary>
-    public class ModSprite
+    internal class ModSprite
     {
-        internal static List<ModSprite> Sprites = new List<ModSprite>();
+        internal static void Add(SpriteManager.Group group, string name, Atlas.Sprite sprite)
+        {
+            if (group == SpriteManager.Group.None)
+                group = SpriteManager.Group.Item;
+            // There are no calls for sprites in the None Group.
+            // All sprite calls for almost anything we don't manually group is in the Item group.
+
+            if (!ModSprites.ContainsKey(group))
+                ModSprites.Add(group, new Dictionary<string, Atlas.Sprite>(StringComparer.InvariantCultureIgnoreCase));
+
+            ModSprites[group][name] = sprite;
+        }
+
+        internal static void Add(ModSprite sprite) => Add(sprite.Group, sprite.Id, sprite.Sprite);
+
+        internal static Dictionary<SpriteManager.Group, Dictionary<string, Atlas.Sprite>> ModSprites 
+            = new Dictionary<SpriteManager.Group, Dictionary<string, Atlas.Sprite>>();
 
         /// <summary>
         /// The tech type of a specific item associated with this sprite.
@@ -40,8 +57,9 @@
         public ModSprite(TechType type, Atlas.Sprite sprite)
         {
             TechType = type;
+            Id = type.AsString();
             Sprite = sprite;
-            Group = SpriteManager.Group.None;
+            Group = SpriteManager.Group.Item;
         }
 
         /// <summary>
@@ -57,6 +75,21 @@
             Id = id;
             Sprite = sprite;
             TechType = TechType.None;
+        }
+
+        /// <summary>
+        /// Creates a new ModSprite to be used with a specific group and internal ID.
+        /// Created with an Atlas Sprite.
+        /// </summary>
+        /// <param name="group">The sprite group.</param>
+        /// <param name="type">The techtype paired to this sprite.</param>
+        /// <param name="sprite">The sprite to be added.</param>
+        public ModSprite(SpriteManager.Group group, TechType type, Atlas.Sprite sprite)
+        {
+            Group = group;
+            Id = type.AsString();
+            Sprite = sprite;
+            TechType = type;
         }
 
         /// <summary>

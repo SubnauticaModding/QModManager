@@ -57,7 +57,7 @@
 
             // Register the Sprite
             if(sprite != null)
-                ModSprite.Sprites.Add(new ModSprite(techType, sprite));
+                ModSprite.Add(SpriteManager.Group.None, internalName, sprite);
 
             // Return the new TechType
             return techType;
@@ -79,7 +79,7 @@
 
             // Register the Sprite
             if (sprite != null)
-                ModSprite.Sprites.Add(new ModSprite(techType, sprite));
+                ModSprite.Add(SpriteManager.Group.None, internalName, new Atlas.Sprite(sprite));
 
             // Return the new TechType
             return techType;
@@ -94,7 +94,7 @@
         ///   <c>True</c> if the item was found; Otherwise <c>false</c>.
         /// </returns>
         /// <remarks>
-        /// There's no guarante in which order SMLHelper dependent mods are loaded,
+        /// There's no guarantee in which order SMLHelper dependent mods are loaded,
         /// so if two mods are added at the same time, it may take a second game load for both to be visible to each other.
         /// </remarks>
         public static bool TryGetModdedTechType(string techtypeString, out TechType modTechType)
@@ -121,29 +121,12 @@
         ///   <c>True</c> if the item was found; Otherwise <c>false</c>.
         /// </returns>
         /// <remarks>
-        /// There's no guarante in which order SMLHelper dependent mods are loaded,
+        /// There's no guarantee in which order SMLHelper dependent mods are loaded,
         /// so if two mods are added at the same time, it may take a second game load for both to be visible to each other.
         /// </remarks>
         public static bool ModdedTechTypeExists(string techtypeString)
         {
             EnumTypeCache cache = TechTypePatcher.cacheManager.GetCacheForTypeName(techtypeString);
-            return cache != null;
-        }
-
-        /// <summary>
-        /// Safely looks for a modded CraftTree Type from another mod in the SMLHelper CraftTreeTypeCache.
-        /// </summary>
-        /// <param name="craftTreeString">The string used to define the modded item's new techtype.</param>
-        /// <returns>
-        ///   <c>True</c> if the craft tree was found; Otherwise <c>false</c>.
-        /// </returns>
-        /// <remarks>
-        /// There's no guarante in which order SMLHelper dependent mods are loaded,
-        /// so if two mods are added at the same time, it may take a second game load for both to be visible to each other.
-        /// </remarks>
-        public static bool ModdedCraftTreeTypeExists(string craftTreeString)
-        {
-            EnumTypeCache cache = CraftTreeTypePatcher.cacheManager.GetCacheForTypeName(craftTreeString);
             return cache != null;
         }
     }

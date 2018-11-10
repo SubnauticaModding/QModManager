@@ -25,6 +25,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\SMLHelper.xml</DocumentationFile>
     <NoWarn>1591</NoWarn>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
@@ -34,6 +35,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
@@ -91,6 +93,7 @@
     <Compile Include="Legacy\Patchers\LanguagePatcher.cs" />
     <Compile Include="Options\ModOptions.cs" />
     <Compile Include="MonoBehaviours\Fixer.cs" />
+    <Compile Include="Patchers\InventoryPatcher.cs" />
     <Compile Include="Patchers\OptionsPanelPatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Legacy\Patchers\TechTypePatcher.cs" />
@@ -106,7 +109,10 @@
     <Compile Include="Patchers\ResourcesPatcher.cs" />
     <Compile Include="Patchers\SpritePatcher.cs" />
     <Compile Include="Patchers\TechTypePatcher.cs" />
-    <Compile Include="Options\TestOptions.cs" />
+    <Compile Include="Assets\Buildable.cs" />
+    <Compile Include="Assets\Craftable.cs" />
+    <Compile Include="Assets\PdaItem.cs" />
+    <Compile Include="Assets\Spawnable.cs" />
     <Compile Include="Utility\EnumCacheManager.cs" />
     <Compile Include="Utility\ExtBannedIdManager.cs" />
     <Compile Include="Utility\ImageUtils.cs" />
