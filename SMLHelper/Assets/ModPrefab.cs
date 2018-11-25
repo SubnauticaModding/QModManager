@@ -68,6 +68,10 @@
             go.transform.position = new Vector3(-5000, -5000, -5000);
             go.name = ClassID;
 
+            /* Make sure prefab doesn't get cleared when quiting game to menu. */
+            SceneCleanerPreserve scp = go.AddComponent<SceneCleanerPreserve>();
+            scp.enabled = true;
+          
             if(TechType != TechType.None)
             {
                 go.AddComponent<Fixer>().techType = TechType;
