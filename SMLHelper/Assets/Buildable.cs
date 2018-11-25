@@ -12,7 +12,7 @@
         /// <summary>
         /// Override with the text to be displayed when your hover the cursor over the built item.
         /// </summary>
-        public abstract string HandOverText { get; }
+        public virtual string HandOverText => null;
 
         /// <summary>
         /// Initializes a new <see cref="Buildable"/>, the basic class for any item that can built using the Habitat Builder Tool.
@@ -30,7 +30,10 @@
         {
             CraftDataHandler.AddBuildable(this.TechType);
 
-            LanguageHandler.SetLanguageLine($"{this.ClassID}HandOver", this.HandOverText);
+            if (!string.IsNullOrEmpty(HandOverText))
+            {
+                LanguageHandler.SetLanguageLine($"{this.ClassID}HandOver", this.HandOverText);
+            }
         }
     }
 }

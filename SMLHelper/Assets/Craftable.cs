@@ -1,5 +1,6 @@
 ﻿namespace SMLHelper.V2.Assets
 {
+    using System;
     using Handlers;
 
     /// <summary>
@@ -34,7 +35,13 @@
 
         private void PatchCraftingTree()
         {
-            if (this.StepsToFabricatorTab is null)
+            if (FabricatorType == CraftTree.Type.None)
+            {
+                Logger.Log($"[ERROR] FabricatorType property for Craftable instance of {this.ClassID} must have a value greater than CraftTree.Type.None.");
+                throw new Exception($"Error patching Craftable:{this.ClassID}");
+            }
+
+            if (this.StepsToFabricatorTab == null || this.StepsToFabricatorTab.Length == 0)
                 CraftTreeHandler.AddCraftingNode(this.FabricatorType, this.TechType);
             else
                 CraftTreeHandler.AddCraftingNode(this.FabricatorType, this.TechType, this.StepsToFabricatorTab);

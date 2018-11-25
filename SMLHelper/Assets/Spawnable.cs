@@ -1,6 +1,6 @@
 ﻿namespace SMLHelper.V2.Assets
 {
-    using System.Reflection;
+    using System;
     using Handlers;
 
     /// <summary>
@@ -16,10 +16,10 @@
 
         /// <summary>
         /// Override with the folder where your mod's icons and other assets are stored.
-        /// If not overriden, this defaults to "[your mod assembly name]/Assets".
+        /// Normally, this will be something like "MyModAssembly/Assets".
         /// </summary>
         /// <example>"MyModAssembly/Assets"</example>
-        public virtual string AssetsFolder => $"{Assembly.GetCallingAssembly().GetName().Name}/Assets";
+        public abstract string AssetsFolder { get; }
 
         /// <summary>
         /// Override with the file name for this item's icon.
@@ -53,6 +53,12 @@
         protected Spawnable(string classId, string friendlyName, string description)
             : base(classId, $"{classId}Prefab")
         {
+            if (string.IsNullOrEmpty(classId))
+            {
+                Logger.Log($"[ERROR] ClassID for Spawnables must be a non-empty value.");
+                throw new Exception($"Error patching Spawnable");
+            }
+
             this.FriendlyName = friendlyName;
             this.Description = description;
 
@@ -105,7 +111,14 @@
         {
             PrefabHandler.RegisterPrefab(this);
 
-            SpriteHandler.RegisterSprite(this.TechType, $"./QMods/{this.AssetsFolder}/{this.IconFileName}");
+            string assetsFolder = this.AssetsFolder;
+            if (string.IsNullOrEmpty(assetsFolder))
+            {
+                Logger.Log($"[ERROR] AssetsFolder property for Spawnable instance of {this.ClassID} must have a non-empty value.");
+                throw new Exception($"Error patching Spawnable:{this.ClassID}");
+            }
+
+            SpriteHandler.RegisterSprite(this.TechType, $"./QMods/{assetsFolder.Trim('/')}/{this.IconFileName}");
         }
     }
 }
