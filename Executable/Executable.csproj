@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{DA63F59D-4676-4726-AFEC-BD9D3682733F}</ProjectGuid>
+    <ProjectGuid>{E00B7FE8-0F1D-4AE6-9E47-4BFD81537F14}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>QModManager</RootNamespace>
     <AssemblyName>QModManager</AssemblyName>
