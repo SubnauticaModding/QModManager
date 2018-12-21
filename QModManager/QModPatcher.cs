@@ -9,7 +9,7 @@ namespace QModManager
 {
     public class QModPatcher
     {
-        private static string qModBaseDir = Environment.CurrentDirectory + @"\QMods";
+        private static string qModBaseDir = Path.Combine(Environment.CurrentDirectory, "QMods");
         private static List<QMod> loadedMods = new List<QMod>();
         private static bool patched = false;
 
