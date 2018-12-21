@@ -10,10 +10,16 @@
   #error An unicode version of Inno Setup is required to compile this script (5.6.1 unicode)
 #endif
 
-#define MyAppName "QMods"
-#define MyAppVersion "1.1.1"
-#define MyAppPublisher "Qwiso & RandyKnapp"
-#define MyAppURL "https://github.com/Qwiso/QModManager"
+; Defines some variables
+#define Name "QModManager"
+#define Version "1.4"
+#define Author "the QModManager team"
+#define URL "https://github.com/Qwiso/QModManager"
+#define SupportURL "https://discord.gg/UpWuWwq"
+#define UpdatesURL "https://nexusmods.com/subnautica/mods/16"
+
+; Defines special flags that change the way the installer behaves
+#define PreRelease true ; If this is true, a window will appear, promting the user to agree to download even if this is a prerelease
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
