@@ -19,7 +19,7 @@
 #define UpdatesURL "https://nexusmods.com/subnautica/mods/16"
 
 ; Defines special flags that change the way the installer behaves
-#define PreRelease true ; If this is true, a window will appear, promting the user to agree to download even if this is a prerelease
+#define PreRelease false ; If this is true, a window will appear, promting the user to agree to download even if this is a prerelease
 
 [Setup]
 AllowNetworkDrive=no
