@@ -68,6 +68,16 @@ RestartApplications=yes
 SetupIconFile=..\Assets\QModsIcon.ico
 ; Changes compression, smaller size
 SolidCompression=yes
+; Uninstall icon file
+UninstallDisplayIcon=..\Assets\icon.ico
+; Uninstall app name
+; TODO: Append game name at the end
+UninstallDisplayName={#Name}
+; Use previous app directory if possible
+UsePreviousAppDir=yes
+; Images that appear in the installer
+WizardImageFile=..\Assets\WizardImage.bmp
+WizardSmallImageFile=..\Assets\WizardSmallImage.bmp
 
 [Messages]
 ExitSetupMessage=Setup is not complete. If you exit now, QMods will not be installed.%n%nExit Setup?
