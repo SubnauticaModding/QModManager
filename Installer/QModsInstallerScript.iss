@@ -79,27 +79,42 @@ UsePreviousAppDir=yes
 WizardImageFile=..\Assets\WizardImage.bmp
 WizardSmallImageFile=..\Assets\WizardSmallImage.bmp
 
-[Messages]
-ExitSetupMessage=Setup is not complete. If you exit now, QMods will not be installed.%n%nExit Setup?
-SelectDirLabel3=Please select your Subnautica install folder.
-SelectDirBrowseLabel=If this is correct, click Next. If you need to select a different Subnautica install folder, click Browse.
-WizardSelectDir=Select Subnautica Install Location
-
+; Uses default messages when not overriden
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
+; Required files
 [Files]
-Source: "QModManager\0Harmony.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: ignoreversion
-Source: "QModManager\Mono.Cecil.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: ignoreversion
-Source: "QModManager\Newtonsoft.Json.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: ignoreversion
-Source: "QModManager\QModInstaller.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: ignoreversion
-Source: "QModManager\QModManager.exe"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: ignoreversion
+Source: "0Harmony.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion
+Source: "Mono.Cecil.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion
+Source: "QModInstaller.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion
+Source: "QModManager.exe"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion
 
+; On install and uninstall, run executable based on condition
 [Run]
 Filename: "{app}\Subnautica_Data\Managed\QModManager.exe"; Parameters: "-i"
 
 [UninstallRun]
 Filename: "{app}\Subnautica_Data\Managed\QModManager.exe"; Parameters: "-u"
+
+[Messages]
+; The text that appears in the bottom-left, on the line of the box
+BeveledLabel={#Name} {#Version}
+; The installer isn't password-protected, but the feature is used for the pre-release warning if the condition is set to true
+WizardPassword=Warning
+PasswordLabel1=Please read the following important information before continuing.
+PasswordLabel3=You are trying to install a pre-release version of QModManager.%nPre-releases are unstable and might contain bugs.%nWe are not responsible for any crashes or world corruptions that might occur.%n%nPlease type 'YES' (without quotes) to continue with the installation.
+PasswordEditLabel=Consent:
+; The text that appears on the Select install location page
+WizardSelectDir=Select install location
+SelectDirLabel3=Please select the install folder of the game.
+SelectDirBrowseLabel=If this is correct, click Next. If you need to select a different install folder, click Browse.
+; The installer doesn't use components, but the feature is used for displaying the install type
+WizardSelectComponents=Review Install
+SelectComponentsDesc=
+SelectComponentsLabel2=
+; The message that appears when the user tries to cancel the install
+ExitSetupMessage=Setup is not complete. If you exit now, {#Name} will not be installed.%nExit Setup?
 
 [Code]
 function GetDefaultDir(def: string): string;
