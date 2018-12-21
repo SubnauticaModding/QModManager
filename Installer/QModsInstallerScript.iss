@@ -22,31 +22,52 @@
 #define PreRelease true ; If this is true, a window will appear, promting the user to agree to download even if this is a prerelease
 
 [Setup]
-; NOTE: The value of AppId uniquely identifies this application.
-; Do not use the same AppId value in installers for other applications.
-; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
+AllowNetworkDrive=no
+AllowUNCPath=no
+; Makes the install path appear on the Ready to Install page
+AlwaysShowDirOnReadyPage=yes
+; Fixes an issue with the previous version where 'not found' would appear at the end of the path
+AppendDefaultDirName=no
+; The GUID of the app
 AppId={{52CC87AA-645D-40FB-8411-510142191678}
-AppName={#MyAppName}
-AppVersion={#MyAppVersion}
-;AppVerName={#MyAppName} {#MyAppVersion}
-AppPublisher={#MyAppPublisher}
-AppPublisherURL={#MyAppURL}
-AppSupportURL={#MyAppURL}
-AppUpdatesURL={#MyAppURL}
-DefaultDirName={code:GetDefaultDir}
-DefaultGroupName={#MyAppName}
-DisableProgramGroupPage=yes
-OutputDir=.
-OutputBaseFilename=QModsSetup
-SetupIconFile=QModsIcon.ico
+; The app name
+AppName={#Name}
+; The authors of the app
+AppPublisher={#Author}
+; URLs that will appear on the information page of the app in the Add or Remove Programs page
+AppPublisherURL={#URL}
+AppSupportURL={#SupportURL}
+AppUpdatesURL={#UpdatesURL}
+; Display name of the app in the Add or Remove Programs page
+AppVerName={#Name} {#Version}
+; Sets the version of the app
+AppVersion={#Version}
+; How the installer compresses the required files
 Compression=lzma
-SolidCompression=yes
-WizardImageFile=WizardImage.bmp
-WizardSmallImageFile=WizardSmallImage.bmp
-DisableWelcomePage=no
-DisableDirPage=no
+; The default directory name (this is not used, but it needs to have a value)
+DefaultDirName=.
+; Disables directory exists warnings
 DirExistsWarning=no
-UsePreviousAppDir=no
+; Forces the choose install path page to appear
+DisableDirPage=no
+; Disables the start menu group page
+DisableProgramGroupPage=yes
+; Enables the welcome page
+DisableWelcomePage=no
+; Enables directory doesn't exist warnings
+EnableDirDoesntExistWarning=yes
+; The output file name
+OutputBaseFilename=QModManager_Setup
+; The output directory
+OutputDir=.
+; The application might administrator access
+PrivilegesRequired=admin
+; Restarts closed applications after install
+RestartApplications=yes
+; Icon file
+SetupIconFile=..\Assets\QModsIcon.ico
+; Changes compression, smaller size
+SolidCompression=yes
 
 [Messages]
 ExitSetupMessage=Setup is not complete. If you exit now, QMods will not be installed.%n%nExit Setup?
