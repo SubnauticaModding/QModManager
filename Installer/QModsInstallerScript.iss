@@ -44,8 +44,8 @@ AppVerName={#Name} {#Version}
 AppVersion={#Version}
 ; How the installer compresses the required files
 Compression=lzma
-; The default directory name (this is not used, but it needs to have a value)
-DefaultDirName=.
+; The default directory name
+DefaultDirName=C:\Program Files (x86)\Steam\steamapps\common\Subnautica
 ; Disables directory exists warnings
 DirExistsWarning=no
 ; Forces the choose install path page to appear
