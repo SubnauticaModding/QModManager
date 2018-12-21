@@ -41,9 +41,9 @@ namespace QModManager
             }
             catch (Exception e)
             {
-                AddLog("ERROR! mod.json deserialization failed!");
-                AddLog(e.Message);
-                AddLog(e.StackTrace);
+                Console.WriteLine("ERROR! mod.json deserialization failed!");
+                Console.WriteLine(e.Message);
+                Console.WriteLine(e.StackTrace);
 
                 return null;
             }
