@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace QModInstaller
+namespace QModManager
 {
     public class QModInjector
     {

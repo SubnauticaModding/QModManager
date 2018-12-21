@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace QModInstaller
+namespace QModManager
 {
     public class QModPatcher
     {

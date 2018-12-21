@@ -1,4 +1,4 @@
-﻿using QModInstaller;
+﻿using QModManager;
 using System;
 using System.Collections.Generic;
 using System.IO;
