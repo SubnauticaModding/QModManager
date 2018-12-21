@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DA63F59D-4676-4726-AFEC-BD9D3682733F}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>QModInstaller</RootNamespace>
+    <RootNamespace>QModManager</RootNamespace>
     <AssemblyName>QModInstaller</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
