@@ -118,8 +118,6 @@ ExitSetupMessage=Setup is not complete. If you exit now, {#Name} will not be ins
 
 [Code]
 
-var SN_Already: Boolean; // True if a message has already been outputted to the console saying that Subnautica is (not) installed in the current folder, false otherwise
-
 function IsSubnautica: Boolean; // Checks if Subnautica is installed in the current folder
 var
   app: String;
@@ -133,27 +131,15 @@ begin
   end;
   if (FileExists(app + '\Subnautica.exe')) and (FileExists(app + '\Subnautica_Data\Managed\Assembly-CSharp.dll')) then // If Subnautica-specific files exist
   begin
-    if SN_Already = false then // If the message hasn't already been logged
-    begin
-      Log('[GAME-DETECT] Subnautica is installed in the chosen directory')
-      SN_Already := true;
-    end;
     Result := true // Returns true
     Exit
   end
   else
   begin
-    if SN_Already = false then // If the message hasn't already been logged
-    begin
-      Log('[GAME-DETECT] Subnautica is not installed')
-      SN_Already := true;
-    end;
     Result := false // Returns false
     Exit
   end
 end;
-
-var Output: TStringList;
 
 function GetDir(folder: String; name: String): String;
 var
@@ -168,11 +154,6 @@ begin
   RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\WOW6432Node\Valve\Steam', 'InstallPath', steamInstallPath) // Gets the install path of steam from the registry
   if (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '.exe')) and (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '_Data\Managed\Assembly-CSharp.dll')) then // If game files exist
   begin
-    if Output.IndexOf(folder) = -1 then // If the game hasn't already been logged
-    begin
-      Log('[GET-DIR] Game "' + folder + '" found in base steam folder (' + steamInstallPath + ')')
-      Output.Add(folder) // Adds it to the array, essentially marking it as logged
-    end;
     Result := steamInstallPath + '\steamapps\common\' + folder
     Exit
   end
@@ -192,11 +173,6 @@ begin
             steamInstallPath := Copy(FileLines[I], P + 23, Length(FileLines[i]) - P - 23)
             if (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '.exe')) and (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '_Data\Managed\Assembly-CSharp.dll')) then // If the folder is correct
             begin
-              if Output.IndexOf(folder) = -1 then // If it hasn't already been logged
-              begin
-                Log('[GET-DIR] Game "' + folder + '" found in alternate steam install location (' + steamInstallPath + ')')
-                Output.Add(folder)
-              end;
               Result := steamInstallPath + '\steamapps\common\' + folder
               Exit
             end
@@ -204,11 +180,6 @@ begin
         end
       end
     end
-  end;
-  if Output.IndexOf(folder) = -1 then
-  begin
-    Log('[GET-DIR] Game "' + folder + '" not found on steam. (Might be cracked?)')
-    Output.Add(folder)
   end;
   Result := 'x' // Returns dummy value (before it was an empty string, but that would conflict with other stuff, so I changed it)
   Exit
@@ -245,7 +216,6 @@ end;
       WizardForm.PasswordEdit.Password := false;
       WizardForm.NextButton.Enabled := false;
       LastValue_PreRelease := false;
-      Log('[PRE-RELEASE] Next button disabled, need pre-release consent')
     end
   end;
 
@@ -255,13 +225,11 @@ end;
     begin
       WizardForm.NextButton.Enabled := true
       LastValue_PreRelease := true
-      Log('[PRE-RELEASE] Next button enabled, consent granted')
     end
     else if (LastValue_PreRelease = true) and not (WizardForm.PasswordEdit.Text = '') then
     begin
       WizardForm.NextButton.Enabled := false
       LastValue_PreRelease := false
-      Log('[PRE-RELEASE] Next button disabled, consent changed')
     end
   end;
 
@@ -269,7 +237,6 @@ end;
   begin
     PasswordEditOnChangePrev := WizardForm.PasswordEdit.OnChange
     WizardForm.PasswordEdit.OnChange := @PasswordEditOnChange
-    Log('[EVENTS] Added password on change event')
   end;
 
   function CheckPassword(Password: String): Boolean;
