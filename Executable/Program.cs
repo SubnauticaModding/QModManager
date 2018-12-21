@@ -32,6 +32,7 @@ namespace QModManager
                         parsedArgs = args.Select(s => s.Split(new[] { '=' }, 1)).ToDictionary(s => s[0], s => s[1]);
                     }
                     else if (arg == "-i") action = Action.Install;
+                    else if (arg == "-u") action = Action.Uninstall;
                 }
 
                 string directory = Path.Combine(Environment.CurrentDirectory, @"..\..");
