@@ -108,7 +108,7 @@ PasswordEditLabel=Consent:
 ; The text that appears on the Select install location page
 WizardSelectDir=Select install location
 SelectDirLabel3=Please select the install folder of the game.
-SelectDirBrowseLabel=If this is correct, click Next. If you need to select a different install folder, click Browse.
+SelectDirBrowseLabel=If you cannot click yes, it is because Subnautica is not installed in that folder.
 ; The installer doesn't use components, but the feature is used for displaying the install type
 WizardSelectComponents=Review Install
 SelectComponentsDesc=
@@ -118,18 +118,9 @@ ExitSetupMessage=Setup is not complete. If you exit now, {#Name} will not be ins
 
 [Code]
 
-function IsSubnautica: Boolean; // Checks if Subnautica is installed in the current folder
-var
-  app: String;
+function IsSubnautica(path: String): Boolean; // Checks if Subnautica is installed in the current folder
 begin
-  try
-    app := ExpandConstant('{app}') // Saves the app variable so it doesn't need to be extended every time
-  except // If an exception is thrown (the app variable is not defined) <<THIS SHOULD NEVER HAPPEN>>
-    Log('[GAME-DETECT] ERROR: "{app}" variable not defined!')
-    Result := false // Returns false
-    Exit
-  end;
-  if (FileExists(app + '\Subnautica.exe')) and (FileExists(app + '\Subnautica_Data\Managed\Assembly-CSharp.dll')) then // If Subnautica-specific files exist
+  if (FileExists(path + '\Subnautica.exe')) and (FileExists(path + '\Subnautica_Data\Managed\Assembly-CSharp.dll')) then // If Subnautica-specific files exist
   begin
     Result := true // Returns true
     Exit
@@ -141,67 +132,19 @@ begin
   end
 end;
 
-function GetDir(folder: String; name: String): String;
-var
-I : Integer;
-P : Integer;
-steamInstallPath : String;
-configFile : String;
-fileLines: TArrayOfString;
-temp: Integer;
-begin
-  steamInstallPath := 'Steam install location not found in registry' // Sets a dummy value
-  RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\WOW6432Node\Valve\Steam', 'InstallPath', steamInstallPath) // Gets the install path of steam from the registry
-  if (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '.exe')) and (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '_Data\Managed\Assembly-CSharp.dll')) then // If game files exist
-  begin
-    Result := steamInstallPath + '\steamapps\common\' + folder
-    Exit
-  end
-  else // If the game files DON'T exist
-  begin
-    configFile := steamInstallPath + '\config\config.vdf' // Gets the path to the steam config file
-    if FileExists(configFile) then // If the config file exists
-    begin
-      // Does some very complicated stuff to get other install folders
-      if LoadStringsFromFile(configFile, FileLines) then 
-      begin
-        for I := 0 to GetArrayLength(FileLines) - 1 do
-        begin
-          P := Pos('BaseInstallFolder_', FileLines[I])
-          if P > 0 then
-          begin
-            steamInstallPath := Copy(FileLines[I], P + 23, Length(FileLines[i]) - P - 23)
-            if (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '.exe')) and (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '_Data\Managed\Assembly-CSharp.dll')) then // If the folder is correct
-            begin
-              Result := steamInstallPath + '\steamapps\common\' + folder
-              Exit
-            end
-          end
-        end
-      end
-    end
-  end;
-  Result := 'x' // Returns dummy value (before it was an empty string, but that would conflict with other stuff, so I changed it)
-  Exit
-end;
 
-function CurPageChanged_(CurPageID: Integer): Boolean; // Executes whenever the page is changed
-var
-  Index: Integer;
-  app: String;
+var DirEditOnChangePrev: TNotifyEvent;
+
+procedure DirEditOnChange(Sender: TObject);
 begin
-  if CurPageID = wpSelectDir then // If the page is Select components (aka Review install)
+  if not IsSubnautica(WizardForm.DirEdit.Text) then // If subnautica isnt installed in that path, disable the buttons
   begin
-    try
-      app := ExpandConstant('{app}')
-    except
-      app := 'null'
-    end;
-    if IsSubnautica then
-    begin
-      WizardForm.DirEdit.Text := GetDir('Subnautica', 'Subnautica')
-    end
+    WizardForm.NextButton.Enabled := false
   end
+  else // else enable them
+  begin
+    WizardForm.NextButton.Enabled := true
+  end 
 end;
 
 #if PreRelease == true
@@ -210,12 +153,15 @@ end;
 
   procedure CurPageChanged(CurPageID: Integer);
   begin
-    CurPageChanged_(CurPageID);
     if CurPageID = wpPassword then
     begin
       WizardForm.PasswordEdit.Password := false;
       WizardForm.NextButton.Enabled := false;
       LastValue_PreRelease := false;
+    end
+    else if CurPageID = wpSelectDir then
+    begin
+      DirEditOnChange(1)
     end
   end;
 
@@ -233,7 +179,7 @@ end;
     end
   end;
 
-  procedure InitializeWizard();
+  function InitializeWizard_: Boolean;
   begin
     PasswordEditOnChangePrev := WizardForm.PasswordEdit.OnChange
     WizardForm.PasswordEdit.OnChange := @PasswordEditOnChange
@@ -247,3 +193,12 @@ end;
     end
   end;
 #endif
+
+procedure InitializeWizard();
+begin
+  DirEditOnChangePrev := WizardForm.DirEdit.OnChange
+  WizardForm.DirEdit.OnChange := @DirEditOnChange
+  #if PreRelease == true
+    InitializeWizard_();
+  #endif
+end;
