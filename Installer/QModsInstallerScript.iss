@@ -117,47 +117,166 @@ SelectComponentsLabel2=
 ExitSetupMessage=Setup is not complete. If you exit now, {#Name} will not be installed.%nExit Setup?
 
 [Code]
-function GetDefaultDir(def: string): string;
+
+var SN_Already: Boolean; // True if a message has already been outputted to the console saying that Subnautica is (not) installed in the current folder, false otherwise
+
+function IsSubnautica: Boolean; // Checks if Subnautica is installed in the current folder
+var
+  app: String;
+begin
+  try
+    app := ExpandConstant('{app}') // Saves the app variable so it doesn't need to be extended every time
+  except // If an exception is thrown (the app variable is not defined) <<THIS SHOULD NEVER HAPPEN>>
+    Log('[GAME-DETECT] ERROR: "{app}" variable not defined!')
+    Result := false // Returns false
+    Exit
+  end;
+  if (FileExists(app + '\Subnautica.exe')) and (FileExists(app + '\Subnautica_Data\Managed\Assembly-CSharp.dll')) then // If Subnautica-specific files exist
+  begin
+    if SN_Already = false then // If the message hasn't already been logged
+    begin
+      Log('[GAME-DETECT] Subnautica is installed in the chosen directory')
+      SN_Already := true;
+    end;
+    Result := true // Returns true
+    Exit
+  end
+  else
+  begin
+    if SN_Already = false then // If the message hasn't already been logged
+    begin
+      Log('[GAME-DETECT] Subnautica is not installed')
+      SN_Already := true;
+    end;
+    Result := false // Returns false
+    Exit
+  end
+end;
+
+var Output: TStringList;
+
+function GetDir(folder: String; name: String): String;
 var
 I : Integer;
 P : Integer;
-steamInstallPath : string;
-configFile : string;
+steamInstallPath : String;
+configFile : String;
 fileLines: TArrayOfString;
+temp: Integer;
 begin
-	steamInstallPath := 'not found';
-	if RegQueryStringValue( HKEY_LOCAL_MACHINE, 'SOFTWARE\WOW6432Node\Valve\Steam', 'InstallPath', steamInstallPath ) then
-	begin
-	end;
-
-	if FileExists(steamInstallPath + '\steamapps\common\Subnautica\Subnautica.exe') then
-	begin
-		Result := steamInstallPath + '\steamapps\common\Subnautica';
-		Exit;
-	end
-	else
-	begin
-		configFile := steamInstallPath + '\config\config.vdf';
-		if FileExists(configFile) then
-		begin
-			if LoadStringsFromFile(configFile, FileLines) then
-			begin
-				for I := 0 to GetArrayLength(FileLines) - 1 do
-				begin
-					P := Pos('BaseInstallFolder_', FileLines[I]);
-					if P > 0 then
-					begin
-						steamInstallPath := Copy(FileLines[I], P + 23, Length(FileLines[i]) - P - 23);
-						if FileExists(steamInstallPath + '\steamapps\common\Subnautica\Subnautica.exe') then
-						begin
-							Result := steamInstallPath + '\steamapps\common\Subnautica';
-							Exit;
-						end;
-					end;
-				end;
-			end;
-		end;
-	end;
-	
-	Result := 'not found';
+  steamInstallPath := 'Steam install location not found in registry' // Sets a dummy value
+  RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\WOW6432Node\Valve\Steam', 'InstallPath', steamInstallPath) // Gets the install path of steam from the registry
+  if (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '.exe')) and (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '_Data\Managed\Assembly-CSharp.dll')) then // If game files exist
+  begin
+    if Output.IndexOf(folder) = -1 then // If the game hasn't already been logged
+    begin
+      Log('[GET-DIR] Game "' + folder + '" found in base steam folder (' + steamInstallPath + ')')
+      Output.Add(folder) // Adds it to the array, essentially marking it as logged
+    end;
+    Result := steamInstallPath + '\steamapps\common\' + folder
+    Exit
+  end
+  else // If the game files DON'T exist
+  begin
+    configFile := steamInstallPath + '\config\config.vdf' // Gets the path to the steam config file
+    if FileExists(configFile) then // If the config file exists
+    begin
+      // Does some very complicated stuff to get other install folders
+      if LoadStringsFromFile(configFile, FileLines) then 
+      begin
+        for I := 0 to GetArrayLength(FileLines) - 1 do
+        begin
+          P := Pos('BaseInstallFolder_', FileLines[I])
+          if P > 0 then
+          begin
+            steamInstallPath := Copy(FileLines[I], P + 23, Length(FileLines[i]) - P - 23)
+            if (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '.exe')) and (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '_Data\Managed\Assembly-CSharp.dll')) then // If the folder is correct
+            begin
+              if Output.IndexOf(folder) = -1 then // If it hasn't already been logged
+              begin
+                Log('[GET-DIR] Game "' + folder + '" found in alternate steam install location (' + steamInstallPath + ')')
+                Output.Add(folder)
+              end;
+              Result := steamInstallPath + '\steamapps\common\' + folder
+              Exit
+            end
+          end
+        end
+      end
+    end
+  end;
+  if Output.IndexOf(folder) = -1 then
+  begin
+    Log('[GET-DIR] Game "' + folder + '" not found on steam. (Might be cracked?)')
+    Output.Add(folder)
+  end;
+  Result := 'x' // Returns dummy value (before it was an empty string, but that would conflict with other stuff, so I changed it)
+  Exit
 end;
+
+function CurPageChanged_(CurPageID: Integer): Boolean; // Executes whenever the page is changed
+var
+  Index: Integer;
+  app: String;
+begin
+  if CurPageID = wpSelectDir then // If the page is Select components (aka Review install)
+  begin
+    try
+      app := ExpandConstant('{app}')
+    except
+      app := 'null'
+    end;
+    if IsSubnautica then
+    begin
+      WizardForm.DirEdit.Text := GetDir('Subnautica', 'Subnautica')
+    end
+  end
+end;
+
+#if PreRelease == true
+  var PasswordEditOnChangePrev: TNotifyEvent;
+  var LastValue_PreRelease: Boolean;
+
+  procedure CurPageChanged(CurPageID: Integer);
+  begin
+    CurPageChanged_(CurPageID);
+    if CurPageID = wpPassword then
+    begin
+      WizardForm.PasswordEdit.Password := false;
+      WizardForm.NextButton.Enabled := false;
+      LastValue_PreRelease := false;
+      Log('[PRE-RELEASE] Next button disabled, need pre-release consent')
+    end
+  end;
+
+  procedure PasswordEditOnChange(Sender: TObject);
+  begin
+    if (LowerCase(WizardForm.PasswordEdit.Text) = 'yes') then
+    begin
+      WizardForm.NextButton.Enabled := true
+      LastValue_PreRelease := true
+      Log('[PRE-RELEASE] Next button enabled, consent granted')
+    end
+    else if (LastValue_PreRelease = true) and not (WizardForm.PasswordEdit.Text = '') then
+    begin
+      WizardForm.NextButton.Enabled := false
+      LastValue_PreRelease := false
+      Log('[PRE-RELEASE] Next button disabled, consent changed')
+    end
+  end;
+
+  procedure InitializeWizard();
+  begin
+    PasswordEditOnChangePrev := WizardForm.PasswordEdit.OnChange
+    WizardForm.PasswordEdit.OnChange := @PasswordEditOnChange
+    Log('[EVENTS] Added password on change event')
+  end;
+
+  function CheckPassword(Password: String): Boolean;
+  begin
+    if LowerCase(Password) = 'yes' then
+    begin
+      Result := true
+    end
+  end;
+#endif
