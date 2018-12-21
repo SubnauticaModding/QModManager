@@ -1,5 +1,6 @@
 ﻿using Mono.Cecil;
 using Mono.Cecil.Cil;
+using QModManager.Utility;
 using System;
 using System.IO;
 using System.Linq;
@@ -78,7 +79,7 @@ namespace QModManager
         }
 
 
-        public bool Remove()
+        public void Remove()
         {
             try
             {
