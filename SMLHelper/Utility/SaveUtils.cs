@@ -8,7 +8,7 @@
     {
         public static string GetCurrentSaveDataDir()
         {
-            return Path.Combine(@"./SNAppData/SavedGames/", Utils.GetSavegameDir());
+            return Path.Combine(SNUtils.savedGamesDir, Utils.GetSavegameDir());
         }
     }
 }
