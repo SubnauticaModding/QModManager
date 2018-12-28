@@ -79,7 +79,7 @@
                 return;
             }
 
-            var techCategory = techGroup[category];
+            List<TechType> techCategory = techGroup[category];
             if (techCategory == null)
             {
                 Logger.Log($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}");
@@ -108,7 +108,7 @@
             PatchUtils.PatchDictionary(CraftDataType, "backgroundTypes", CustomBackgroundTypes);
             PatchUtils.PatchList(CraftDataType, "buildables", CustomBuildables);
 
-            var preparePrefabIDCache = CraftDataType.GetMethod("PreparePrefabIDCache", BindingFlags.Public | BindingFlags.Static);
+            MethodInfo preparePrefabIDCache = CraftDataType.GetMethod("PreparePrefabIDCache", BindingFlags.Public | BindingFlags.Static);
 
             harmony.Patch(preparePrefabIDCache, null,
                 new HarmonyMethod(typeof(CraftDataPatcher).GetMethod("PreparePrefabIDCachePostfix", BindingFlags.NonPublic | BindingFlags.Static)));
@@ -123,7 +123,7 @@
             var techMapping = CraftDataType.GetField("techMapping", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as Dictionary<TechType, string>;
             var entClassTechTable = CraftDataType.GetField("entClassTechTable", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as Dictionary<string, TechType>;
 
-            foreach (var prefab in ModPrefab.Prefabs)
+            foreach (ModPrefab prefab in ModPrefab.Prefabs)
             {
                 techMapping[prefab.TechType] = prefab.ClassID;
                 entClassTechTable[prefab.ClassID] = prefab.TechType;
