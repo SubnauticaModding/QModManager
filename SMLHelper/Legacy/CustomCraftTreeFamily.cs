@@ -149,9 +149,10 @@
 
         internal CustomCraftTreeRoot2 GetV2RootNode()
         {
-            node.CraftNode = CraftNode;
-
             CustomCraftTreeRoot2 node = new CustomCraftTreeRoot2(Scheme, SchemeAsString)
+            {
+                CraftNode = CraftNode
+            };
             return node;
         }
     }

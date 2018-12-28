@@ -29,11 +29,13 @@ namespace SMLHelper.Patchers
 
         internal CommandInfo2 GetV2CommandInfo()
         {
-            commandInfo.CommandHandler = CommandHandler;
-            commandInfo.Name = Name;
-            commandInfo.CaseSensitive = CaseSensitive;
-            commandInfo.CombineArgs = CombineArgs;
             CommandInfo2 commandInfo = new CommandInfo2
+            {
+                CommandHandler = CommandHandler,
+                Name = Name,
+                CaseSensitive = CaseSensitive,
+                CombineArgs = CombineArgs
+            };
 
             return commandInfo;
         }
