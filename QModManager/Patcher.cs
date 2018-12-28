@@ -80,9 +80,7 @@ namespace QModManager
             }
 
             var subDirs = Directory.GetDirectories(QModBaseDir);
-            var firstMods = new List<QMod>();
-            var otherMods = new List<QMod>();
-            var lastMods = new List<QMod>();
+            var Mods = new List<QMod>();
 
             foreach (var subDir in subDirs)
             {
@@ -117,48 +115,30 @@ namespace QModManager
                 mod.LoadedAssembly = Assembly.LoadFrom(modAssemblyPath);
                 mod.ModAssemblyPath = modAssemblyPath;
 
-                if (mod.Priority.Equals("Last"))
+                if (mod.Priority == "Last" && mod.NewPriority == 0)
                 {
-                    lastMods.Add(mod);
-                    continue;
+                    mod.NewPriority = 1000;
                 }
-                else if (mod.Priority.Equals("First"))
+                else if (mod.Priority == "First" && mod.NewPriority == 0)
                 {
-                    firstMods.Add(mod);
-                    continue;
+                    mod.NewPriority = -1000;
                 }
-                else
-                {
-                    otherMods.Add(mod);
-                    continue;
-                }
+
+                Mods.Add(mod);
             }
 
-            foreach (var mod in firstMods)
+            Mods.Sort();
+
+            foreach (var mod in Mods)
             {
                 if (mod != null)
                     loadedMods.Add(LoadMod(mod));
             }
-
-            foreach (var mod in otherMods)
-            {
-                if (mod != null)
-                    loadedMods.Add(LoadMod(mod));
-            }
-
-            foreach (var mod in lastMods)
-            {
-                if (mod != null)
-                    loadedMods.Add(LoadMod(mod));
-            }
-
-            List<QMod> mods = firstMods.Union(otherMods).Union(lastMods).ToList();
-            mods.Sort();
 
             Console.WriteLine(" ");
             Console.WriteLine("Installed mods:");
 
-            foreach (var mod in mods)
+            foreach (var mod in Mods)
             {
                 Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");
             }
