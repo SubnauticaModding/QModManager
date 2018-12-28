@@ -23,9 +23,9 @@ namespace QModManager
         {
             try
             {
-                var parsedArgs = new Dictionary<string, string>();
+                Dictionary<string, string> parsedArgs = new Dictionary<string, string>();
 
-                foreach (var arg in args)
+                foreach (string arg in args)
                 {
                     if (arg.Contains("="))
                     {
@@ -105,7 +105,7 @@ namespace QModManager
                     if (!isInjected)
                     {
                         Console.Write("No patch detected, install? [Y/N] > ");
-                        var key = Console.ReadKey().Key;
+                        ConsoleKey key = Console.ReadKey().Key;
                         Console.WriteLine();
                         if (key == ConsoleKey.Y)
                         {
@@ -122,7 +122,7 @@ namespace QModManager
                     else
                     {
                         Console.Write("Patch installed, remove? [Y/N] > ");
-                        var key = Console.ReadKey().Key;
+                        ConsoleKey key = Console.ReadKey().Key;
                         Console.WriteLine();
                         if (key == ConsoleKey.Y)
                         {

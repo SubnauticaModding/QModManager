@@ -126,7 +126,7 @@ namespace QModManager
         {
             try
             {
-                var game = AssemblyDefinition.ReadAssembly(mainFilename);
+                AssemblyDefinition game = AssemblyDefinition.ReadAssembly(mainFilename);
 
                 AssemblyDefinition installer = AssemblyDefinition.ReadAssembly(installerFilename);
                 MethodDefinition patchMethod = installer.MainModule.GetType("QModInstaller.QModPatcher").Methods.Single(x => x.Name == "Patch");
@@ -134,7 +134,7 @@ namespace QModManager
                 TypeDefinition type = game.MainModule.GetType("GameInput");
                 MethodDefinition method = type.Methods.First(x => x.Name == "Awake");
 
-                foreach (var instruction in method.Body.Instructions)
+                foreach (Instruction instruction in method.Body.Instructions)
                 {
                     if (instruction.OpCode.Equals(OpCodes.Call) && instruction.Operand.ToString().Equals("System.Void QModInstaller.QModPatcher::Patch()"))
                     {

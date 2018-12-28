@@ -35,8 +35,8 @@ namespace QModManager
         {
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {
-                var allDlls = new DirectoryInfo(QModBaseDir).GetFiles("*.dll", SearchOption.AllDirectories);
-                foreach (var dll in allDlls)
+                FileInfo[] allDlls = new DirectoryInfo(QModBaseDir).GetFiles("*.dll", SearchOption.AllDirectories);
+                foreach (FileInfo dll in allDlls)
                 {
                     Console.WriteLine(Path.GetFileNameWithoutExtension(dll.Name) + " " + args.Name);
                     if (args.Name.Contains(Path.GetFileNameWithoutExtension(dll.Name)))
@@ -79,12 +79,12 @@ namespace QModManager
                 return;
             }
 
-            var subDirs = Directory.GetDirectories(QModBaseDir);
-            var Mods = new List<QMod>();
+            string[] subDirs = Directory.GetDirectories(QModBaseDir);
+            List<QMod> Mods = new List<QMod>();
 
-            foreach (var subDir in subDirs)
+            foreach (string subDir in subDirs)
             {
-                var jsonFile = Path.Combine(subDir, "mod.json");
+                string jsonFile = Path.Combine(subDir, "mod.json");
 
                 if (!File.Exists(jsonFile))
                 {
@@ -104,7 +104,7 @@ namespace QModManager
                     continue;
                 }
 
-                var modAssemblyPath = Path.Combine(subDir, mod.AssemblyName);
+                string modAssemblyPath = Path.Combine(subDir, mod.AssemblyName);
 
                 if (!File.Exists(modAssemblyPath))
                 {
@@ -132,7 +132,7 @@ namespace QModManager
             Console.WriteLine(" ");
             Console.WriteLine("Installed mods:");
 
-            foreach (var mod in Mods)
+            foreach (QMod mod in Mods)
             {
                 if (mod != null)
                 {
@@ -154,9 +154,9 @@ namespace QModManager
             {
                 try
                 {
-                    var entryMethodSig = mod.EntryMethod.Split('.');
-                    var entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
-                    var entryMethod = entryMethodSig[entryMethodSig.Length - 1];
+                    string[] entryMethodSig = mod.EntryMethod.Split('.');
+                    string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
+                    string entryMethod = entryMethodSig[entryMethodSig.Length - 1];
 
                     MethodInfo qPatchMethod = mod.LoadedAssembly.GetType(entryType).GetMethod(entryMethod);
                     qPatchMethod.Invoke(mod.LoadedAssembly, new object[] { });
