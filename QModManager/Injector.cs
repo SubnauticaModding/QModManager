@@ -61,7 +61,9 @@ namespace QModManager
 
                 game.Write(mainFilename);
 
-                if (!Directory.Exists(Path.Combine(gameDirectory, "QMods"))) Directory.CreateDirectory(Path.Combine(gameDirectory, "QMods"));
+                string qmodsDirectory = Path.Combine(gameDirectory, "QMods");
+
+                if (!Directory.Exists(qmodsDirectory)) Directory.CreateDirectory(qmodsDirectory);
 
                 Console.WriteLine();
                 Console.WriteLine("QModManager installed successfully");
