@@ -102,6 +102,7 @@ namespace QModManager
                 mod.LoadedAssembly = Assembly.LoadFrom(modAssemblyPath);
                 mod.ModAssemblyPath = modAssemblyPath;
 
+                // Backward compatibility for Priority
                 if (mod.Priority == "Last" && mod.NewPriority == 0)
                 {
                     mod.NewPriority = 1000;
@@ -114,7 +115,7 @@ namespace QModManager
                 Mods.Add(mod);
             }
 
-            Mods.Sort();
+            Mods.Sort(); // The mods are sorted in the order of their priorities
 
             Console.WriteLine(" ");
             Console.WriteLine("Installed mods:");
