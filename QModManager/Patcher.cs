@@ -129,18 +129,16 @@ namespace QModManager
 
             Mods.Sort();
 
-            foreach (var mod in Mods)
-            {
-                if (mod != null)
-                    loadedMods.Add(LoadMod(mod));
-            }
-
             Console.WriteLine(" ");
             Console.WriteLine("Installed mods:");
 
             foreach (var mod in Mods)
             {
-                Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");
+                if (mod != null)
+                {
+                    loadedMods.Add(LoadMod(mod));
+                    Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");
+                }
             }
         }
 
