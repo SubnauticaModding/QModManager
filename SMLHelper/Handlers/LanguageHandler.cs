@@ -13,5 +13,11 @@
         {
             LanguagePatcher.customLines[lineId] = text;
         }
+        
+        public static void SetTechTypeName(TechType techType, string text)
+            => SetLanguageLine(techType.AsString(), text);
+        
+        public static void SetTechTypeTooltip(TechType techType, string text)
+            => SetLanguageLine($"Tooltip_{techType.AsString()}", text);
     }
 }
