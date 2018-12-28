@@ -154,7 +154,7 @@
         /// <returns></returns>
         public ModCraftTreeTab GetTabNode(string nameID)
         {
-            foreach (var node in ChildNodes)
+            foreach (ModCraftTreeTab node in ChildNodes)
             {
                 if (node == null) continue;
 
@@ -175,7 +175,7 @@
         /// <returns></returns>
         public ModCraftTreeCraft GetCraftingNode(TechType techType)
         {
-            foreach (var node in ChildNodes)
+            foreach (ModCraftTreeNode node in ChildNodes)
             {
                 if (node == null) continue;
 
@@ -196,7 +196,7 @@
         /// <returns></returns>
         public ModCraftTreeNode GetNode(string nameID)
         {
-            foreach (var node in ChildNodes)
+            foreach (ModCraftTreeNode node in ChildNodes)
             {
                 if (node == null) continue;
 
@@ -233,7 +233,7 @@
         /// <param name="techTypes">The TechTypes to be crafted.</param>
         public void AddCraftingNode(IEnumerable<TechType> techTypes)
         {
-            foreach (var tType in techTypes)
+            foreach (TechType tType in techTypes)
             {
                 Assert.AreNotEqual(TechType.None, tType, "Attempt to add TechType.None as a crafting node.");
                 this.AddCraftingNode(tType);
@@ -298,12 +298,12 @@
         /// <param name="root"></param>
         internal static void CreateFromExistingTree(CraftNode tree, ref ModCraftTreeLinkingNode root)
         {
-            foreach (var node in tree)
+            foreach (CraftNode node in tree)
             {
                 if (node.action == TreeAction.Expand)
                 {
-                    var tab = root.AddTabNode(node.id);
                     var thing = (ModCraftTreeLinkingNode)tab;
+                    ModCraftTreeTab tab = root.AddTabNode(node.id);
                     CreateFromExistingTree(node, ref thing);
                 }
 

@@ -38,7 +38,7 @@
         internal static void AddToCustomGroup(TechGroup group, TechCategory category, TechType techType, TechType after)
         {
             var groups = GroupsField.GetValue(null) as Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>;
-            var techGroup = groups[group];
+            Dictionary<TechCategory, List<TechType>> techGroup = groups[group];
             if (techGroup == null)
             {
                 // Should never happen, but doesn't hurt to add it.
@@ -46,7 +46,7 @@
                 return;
             }
 
-            var techCategory = techGroup[category];
+            List<TechType> techCategory = techGroup[category];
             if (techCategory == null)
             {
                 Logger.Log($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}");
@@ -71,7 +71,7 @@
         internal static void RemoveFromCustomGroup(TechGroup group, TechCategory category, TechType techType)
         {
             var groups = GroupsField.GetValue(null) as Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>;
-            var techGroup = groups[group];
+            Dictionary<TechCategory, List<TechType>> techGroup = groups[group];
             if (techGroup == null)
             {
                 // Should never happen, but doesn't hurt to add it.

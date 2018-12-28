@@ -154,14 +154,14 @@
             {
                 if (fieldInfo.GetType().IsClass)
                 {
-                    var origValue = fieldInfo.GetValue(original);
-                    var copyValue = fieldInfo.GetValue(copy);
+                    object origValue = fieldInfo.GetValue(original);
+                    object copyValue = fieldInfo.GetValue(copy);
 
                     origValue.CopyFields(copyValue);
                 }
                 else
                 {
-                    var value = fieldInfo.GetValue(original);
+                    object value = fieldInfo.GetValue(original);
                     fieldInfo.SetValue(copy, value);
                 }
             }

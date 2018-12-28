@@ -46,8 +46,8 @@ namespace SMLHelper
 
         public static void PatchDictionary(Type type, string name, IDictionary dictionary, BindingFlags flags)
         {
-            var dictionaryField = type.GetField(name, flags);
             var craftDataDict = dictionaryField.GetValue(null) as IDictionary;
+            FieldInfo dictionaryField = type.GetField(name, flags);
 
             PatchDictionaryInternal(craftDataDict, dictionary);
         }

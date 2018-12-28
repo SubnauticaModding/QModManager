@@ -95,7 +95,7 @@
         /// <param name="techTypes">The TechTypes to be crafted.</param>
         public void AddCraftingNode(params TechType[] techTypes)
         {
-            foreach (var tType in techTypes)
+            foreach (TechType tType in techTypes)
             {
                 this.AddCraftingNode(tType);
             }
