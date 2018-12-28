@@ -1,6 +1,5 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
-    using System;
     using System.Reflection;
     using Assets;
     using Harmony;
@@ -12,7 +11,7 @@
     {
         internal static void LoadPrefabDatabase_Postfix()
         {
-            foreach(ModPrefab prefab in ModPrefab.Prefabs)
+            foreach(var prefab in ModPrefab.Prefabs)
             {
                 PrefabDatabase.prefabFiles[prefab.ClassID] = prefab.PrefabFileName;
             }
@@ -22,7 +21,7 @@
         {
             if (ModPrefab.TryGetFromFileName(filename, out ModPrefab prefab))
             {
-                GameObject go = prefab.GetGameObjectInternal();
+                var go = prefab.GetGameObjectInternal();
                 __result = go;
 
                 return false;
@@ -35,7 +34,7 @@
         {
             if (ModPrefab.TryGetFromClassId(classId, out ModPrefab prefab))
             { 
-                GameObject go = prefab.GetGameObjectInternal();
+                var go = prefab.GetGameObjectInternal();
                 __result = new LoadedPrefabRequest(go);
 
                 return false;
@@ -46,10 +45,10 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            Type prefabDatabaseType = typeof(PrefabDatabase);
-            MethodInfo loadPrefabDatabase = prefabDatabaseType.GetMethod("LoadPrefabDatabase", BindingFlags.Public | BindingFlags.Static);
-            MethodInfo getPrefabForFilename = prefabDatabaseType.GetMethod("GetPrefabForFilename", BindingFlags.Public | BindingFlags.Static);
-            MethodInfo getPrefabAsync = prefabDatabaseType.GetMethod("GetPrefabAsync", BindingFlags.Public | BindingFlags.Static);
+            var prefabDatabaseType = typeof(PrefabDatabase);
+            var loadPrefabDatabase = prefabDatabaseType.GetMethod("LoadPrefabDatabase", BindingFlags.Public | BindingFlags.Static);
+            var getPrefabForFilename = prefabDatabaseType.GetMethod("GetPrefabForFilename", BindingFlags.Public | BindingFlags.Static);
+            var getPrefabAsync = prefabDatabaseType.GetMethod("GetPrefabAsync", BindingFlags.Public | BindingFlags.Static);
 
             harmony.Patch(loadPrefabDatabase, null,
                 new HarmonyMethod(typeof(PrefabDatabasePatcher).GetMethod("LoadPrefabDatabase_Postfix", BindingFlags.NonPublic | BindingFlags.Static)));

@@ -60,7 +60,7 @@
 
         private static bool HasRoomFor_XY_Prefix(Inventory __instance, int width, int height, ref bool __result, ref Vector2int __state)
         {
-            Vector2int itemSize = new Vector2int(width, height);
+            var itemSize = new Vector2int(width, height);
 
             return CheckInventoryCache(itemSize, ref __result, ref __state);
         }

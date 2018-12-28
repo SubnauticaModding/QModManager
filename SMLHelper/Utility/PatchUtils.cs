@@ -13,8 +13,8 @@
 
         public static void PatchDictionary(Type type, string name, IDictionary dictionary, BindingFlags flags)
         {
-            FieldInfo dictionaryField = type.GetField(name, flags);
-            IDictionary dict = dictionaryField.GetValue(null) as IDictionary;
+            var dictionaryField = type.GetField(name, flags);
+            var dict = dictionaryField.GetValue(null) as IDictionary;
 
             foreach(DictionaryEntry entry in dictionary)
             {
@@ -29,10 +29,10 @@
 
         public static void PatchList(Type type, string name, IList list, BindingFlags flags)
         {
-            FieldInfo listField = type.GetField(name, flags);
-            IList craftDataList = listField.GetValue(null) as IList;
+            var listField = type.GetField(name, flags);
+            var craftDataList = listField.GetValue(null) as IList;
 
-            foreach (object obj in list)
+            foreach (var obj in list)
             {
                 craftDataList.Add(obj);
             }

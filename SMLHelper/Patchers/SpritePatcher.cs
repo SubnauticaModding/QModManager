@@ -10,7 +10,7 @@
         {
             FieldInfo groupsField = typeof(SpriteManager).GetField("groups", BindingFlags.Static | BindingFlags.NonPublic);
 
-            Dictionary<SpriteManager.Group, Dictionary<string, Atlas.Sprite>> groups = (Dictionary<SpriteManager.Group, Dictionary<string, Atlas.Sprite>>)groupsField.GetValue(null);
+            var groups = (Dictionary<SpriteManager.Group, Dictionary<string, Atlas.Sprite>>)groupsField.GetValue(null);
 
             foreach (SpriteManager.Group moddedGroup in ModSprite.ModSprites.Keys)
             {

@@ -51,7 +51,7 @@ namespace SMLHelper
 
         internal ModSprite GetModSprite()
         {
-            ModSprite customSprite = new ModSprite(TechType, Sprite);
+            var customSprite = new ModSprite(TechType, Sprite);
             customSprite.Id = Id;
             customSprite.Group = Group;
 

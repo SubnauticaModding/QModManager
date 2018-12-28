@@ -22,15 +22,15 @@ namespace SMLHelper
 
         public static void AddBasicComponents(ref GameObject _object, string classId)
         {
-            Rigidbody rb = _object.AddComponent<Rigidbody>();
+            var rb = _object.AddComponent<Rigidbody>();
             _object.AddComponent<PrefabIdentifier>().ClassId = classId;
             _object.AddComponent<LargeWorldEntity>().cellLevel = LargeWorldEntity.CellLevel.Near;
-            Renderer rend = _object.GetComponentInChildren<Renderer>();
+            var rend = _object.GetComponentInChildren<Renderer>();
             rend.material.shader = Shader.Find("MarmosetUBER");
-            SkyApplier applier = _object.AddComponent<SkyApplier>();
+            var applier = _object.AddComponent<SkyApplier>();
             applier.renderers = new Renderer[] { rend };
             applier.anchorSky = Skies.Auto;
-            WorldForces forces = _object.AddComponent<WorldForces>();
+            var forces = _object.AddComponent<WorldForces>();
             forces.useRigidbody = rb;
         }
 
@@ -46,8 +46,8 @@ namespace SMLHelper
 
         public static void PatchDictionary(Type type, string name, IDictionary dictionary, BindingFlags flags)
         {
-            FieldInfo dictionaryField = type.GetField(name, flags);
-            IDictionary craftDataDict = dictionaryField.GetValue(null) as IDictionary;
+            var dictionaryField = type.GetField(name, flags);
+            var craftDataDict = dictionaryField.GetValue(null) as IDictionary;
 
             PatchDictionaryInternal(craftDataDict, dictionary);
         }
@@ -91,11 +91,11 @@ namespace SMLHelper
 
         private static void PatchListInternal(IList orig, IList additions)
         {
-            foreach (object addition in additions)
+            foreach (var addition in additions)
             {
                 if (addition is IList)
                 {
-                    foreach (object origEntry in orig)
+                    foreach (var origEntry in orig)
                     {
                         if (origEntry.GetType() == addition.GetType())
                             PatchListInternal((IList)origEntry, (IList)addition);
@@ -112,10 +112,10 @@ namespace SMLHelper
 
         public static void PatchList(Type type, string name, IList list, BindingFlags flags)
         {
-            FieldInfo listField = type.GetField(name, flags);
-            IList craftDataList = listField.GetValue(null) as IList;
+            var listField = type.GetField(name, flags);
+            var craftDataList = listField.GetValue(null) as IList;
 
-            foreach (object obj in list)
+            foreach (var obj in list)
             {
                 craftDataList.Add(obj);
             }

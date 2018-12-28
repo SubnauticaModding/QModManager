@@ -28,7 +28,7 @@
 
         internal static TechType AddTechType(string name)
         {
-            EnumTypeCache cache = cacheManager.GetCacheForTypeName(name);
+            var cache = cacheManager.GetCacheForTypeName(name);
 
             if (cache == null)
             {
@@ -42,26 +42,26 @@
             if (cacheManager.IsIndexValid(cache.Index))
                 cache.Index = cacheManager.GetNextFreeIndex();
 
-            TechType techType = (TechType)cache.Index;
+            var techType = (TechType)cache.Index;
 
             cacheManager.Add(techType, cache);
 
-            Type techTypeExtensions = typeof(TechTypeExtensions);
-            Traverse traverse = Traverse.Create(techTypeExtensions);
+            var techTypeExtensions = typeof(TechTypeExtensions);
+            var traverse = Traverse.Create(techTypeExtensions);
 
-            Dictionary<TechType, string> stringsNormal = traverse.Field("stringsNormal").GetValue<Dictionary<TechType, string>>();
-            Dictionary<TechType, string> stringsLowercase = traverse.Field("stringsLowercase").GetValue<Dictionary<TechType, string>>();
-            Dictionary<string, TechType> techTypesNormal = traverse.Field("techTypesNormal").GetValue<Dictionary<string, TechType>>();
-            Dictionary<string, TechType> techTypesIgnoreCase = traverse.Field("techTypesIgnoreCase").GetValue<Dictionary<string, TechType>>();
-            Dictionary<TechType, string> techTypeKeys = traverse.Field("techTypeKeys").GetValue<Dictionary<TechType, string>>();
-            Dictionary<string, TechType> keyTechTypes = traverse.Field("keyTechTypes").GetValue<Dictionary<string, TechType>>();
+            var stringsNormal = traverse.Field("stringsNormal").GetValue<Dictionary<TechType, string>>();
+            var stringsLowercase = traverse.Field("stringsLowercase").GetValue<Dictionary<TechType, string>>();
+            var techTypesNormal = traverse.Field("techTypesNormal").GetValue<Dictionary<string, TechType>>();
+            var techTypesIgnoreCase = traverse.Field("techTypesIgnoreCase").GetValue<Dictionary<string, TechType>>();
+            var techTypeKeys = traverse.Field("techTypeKeys").GetValue<Dictionary<TechType, string>>();
+            var keyTechTypes = traverse.Field("keyTechTypes").GetValue<Dictionary<string, TechType>>();
 
             stringsNormal[techType] = name;
             stringsLowercase[techType] = name.ToLowerInvariant();
             techTypesNormal[name] = techType;
             techTypesIgnoreCase[name] = techType;
 
-            string intKey = cache.Index.ToString();
+            var intKey = cache.Index.ToString();
             techTypeKeys[techType] = intKey;
             keyTechTypes[intKey] = techType;
 
@@ -78,10 +78,10 @@
             // Any mod that patches after this one will not be picked up by this method.
             // For those cases, there are additional ways of excluding these IDs.
 
-            List<int> bannedIndices = new List<int>();
+            var bannedIndices = new List<int>();
 
             FieldInfo keyTechTypesField = typeof(TechTypeExtensions).GetField("keyTechTypes", BindingFlags.NonPublic | BindingFlags.Static);
-            Dictionary<string, TechType> knownTechTypes = keyTechTypesField.GetValue(null) as Dictionary<string, TechType>;
+            var knownTechTypes = keyTechTypesField.GetValue(null) as Dictionary<string, TechType>;
             foreach (TechType knownTechType in knownTechTypes.Values)
             {
                 int currentTechTypeKey = (int)knownTechType;
@@ -105,9 +105,9 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            Type enumType = typeof(Enum);
-            Type thisType = typeof(TechTypePatcher);
-            Type techTypeType = typeof(TechType);
+            var enumType = typeof(Enum);
+            var thisType = typeof(TechTypePatcher);
+            var techTypeType = typeof(TechType);
 
             harmony.Patch(enumType.GetMethod("GetValues", BindingFlags.Public | BindingFlags.Static), null,
                 new HarmonyMethod(thisType.GetMethod("Postfix_GetValues", BindingFlags.NonPublic | BindingFlags.Static)));
@@ -128,7 +128,7 @@
         {
             if (enumType.Equals(typeof(TechType)))
             {
-                List<TechType> listArray = new List<TechType>();
+                var listArray = new List<TechType>();
                 foreach (object obj in __result)
                 {
                     listArray.Add((TechType)obj);

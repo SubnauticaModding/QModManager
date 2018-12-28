@@ -11,7 +11,7 @@
         /// <seealso cref="ModPrefab"/>
         public static void RegisterPrefab(ModPrefab prefab)
         {
-            foreach(ModPrefab modPrefab in ModPrefab.Prefabs)
+            foreach(var modPrefab in ModPrefab.Prefabs)
             {
                 if (modPrefab.TechType == prefab.TechType || modPrefab.ClassID == prefab.ClassID || modPrefab.PrefabFileName == prefab.PrefabFileName)
                     return;

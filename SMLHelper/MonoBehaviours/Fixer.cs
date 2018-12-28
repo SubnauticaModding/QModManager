@@ -25,7 +25,7 @@ namespace SMLHelper.V2.MonoBehaviours
                 initalized = true;
             }
 
-            GameObject prefab = (GameObject)BuilderPrefab.GetValue(null);
+            var prefab = (GameObject)BuilderPrefab.GetValue(null);
 
             if (transform.position == new Vector3(-5000, -5000, -5000) && gameObject != prefab && Time.time > time)
             {
@@ -40,13 +40,13 @@ namespace SMLHelper.V2.MonoBehaviours
 
         public void OnProtoDeserialize(ProtobufSerializer serializer)
         {
-            Constructable constructable = GetComponent<Constructable>();
+            var constructable = GetComponent<Constructable>();
             if (constructable != null)
             {
                 constructable.techType = techType;
             }
 
-            TechTag techTag = GetComponent<TechTag>();
+            var techTag = GetComponent<TechTag>();
             if (techTag != null)
             {
                 techTag.type = techType;

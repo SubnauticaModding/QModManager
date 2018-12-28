@@ -12,9 +12,9 @@
 
         public static void Patch(HarmonyInstance harmony)
         {
-            Type devConsoleType = typeof(DevConsole);
-            Type thisType = typeof(DevConsolePatcher);
-            MethodInfo submitMethod = devConsoleType.GetMethod("Submit", BindingFlags.Instance | BindingFlags.NonPublic);
+            var devConsoleType = typeof(DevConsole);
+            var thisType = typeof(DevConsolePatcher);
+            var submitMethod = devConsoleType.GetMethod("Submit", BindingFlags.Instance | BindingFlags.NonPublic);
 
             harmony.Patch(submitMethod, null, new HarmonyMethod(thisType.GetMethod("Postfix", BindingFlags.Static | BindingFlags.NonPublic)));
             Logger.Log("DevConsolePatcher is done.");
@@ -22,24 +22,24 @@
 
         internal static void Postfix(bool __result, string value)
         {
-            char[] separator = new char[]
+            var separator = new char[]
             {
                 ' ',
                 '\t'
             };
 
-            string text = value.Trim();
-            string[] args = text.Split(separator, StringSplitOptions.RemoveEmptyEntries);
+            var text = value.Trim();
+            var args = text.Split(separator, StringSplitOptions.RemoveEmptyEntries);
 
             if (args.Length != 0)
             {
-                foreach (CommandInfo command in commands)
+                foreach (var command in commands)
                 {
                     if (command.Name.Contains(args[0]))
                     {
-                        List<string> argsList = args.ToList();
+                        var argsList = args.ToList();
                         argsList.RemoveAt(0);
-                        string[] newArgs = argsList.ToArray();
+                        var newArgs = argsList.ToArray();
                         command.CommandHandler.Invoke(null, new object[] { newArgs });
                         __result = true;
                         return;

@@ -62,7 +62,7 @@
         /// <param name="ingredients">The ingredients.</param>
         public TechData(params Ingredient[] ingredients)
         {
-            foreach(Ingredient ingredient in ingredients)
+            foreach(var ingredient in ingredients)
             {
                 Ingredients.Add(ingredient); 
             }

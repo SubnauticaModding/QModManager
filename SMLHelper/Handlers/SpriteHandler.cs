@@ -62,7 +62,7 @@
         /// <seealso cref="ImageUtils.LoadTextureFromFile(string, TextureFormat)" />
         public static void RegisterSprite(TechType type, string filePathToImage, TextureFormat format = TextureFormat.BC7)
         {
-            Atlas.Sprite sprite = ImageUtils.LoadSpriteFromFile(filePathToImage, format);
+            var sprite = ImageUtils.LoadSpriteFromFile(filePathToImage, format);
 
             RegisterSprite(type, sprite);
         }
@@ -79,7 +79,7 @@
         /// <seealso cref="ImageUtils.LoadTextureFromFile(string, TextureFormat)" />
         public static void RegisterSprite(SpriteManager.Group group, string id, string filePathToImage, TextureFormat format = TextureFormat.BC7)
         {
-            Atlas.Sprite sprite = ImageUtils.LoadSpriteFromFile(filePathToImage, format);
+            var sprite = ImageUtils.LoadSpriteFromFile(filePathToImage, format);
 
             RegisterSprite(group, id, sprite);
         }
