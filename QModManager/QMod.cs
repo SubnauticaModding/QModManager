@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace QModManager
 {
-    public class QMod
+    public class QMod : IComparable<QMod>
     {
         public string Id = "Mod.ID";
         public string DisplayName = "Mod display name";
@@ -15,7 +15,8 @@ namespace QModManager
         public bool Enable = true;
         public string AssemblyName = "Filename.dll";
         public string EntryMethod = "Namespace.Class.Method";
-        public string Priority = "First or Last";
+        public string Priority = "obsolete. use NewPriority Instead";
+        public int NewPriority = 0;
         //public Dictionary<string, object> Config = new Dictionary<string, object>();
 
         [JsonIgnore]
@@ -48,5 +49,7 @@ namespace QModManager
                 return null;
             }
         }
+
+        public int CompareTo(QMod other) => NewPriority.CompareTo(other.NewPriority);
     }
 }
