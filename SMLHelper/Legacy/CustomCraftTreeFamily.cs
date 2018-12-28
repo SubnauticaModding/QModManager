@@ -61,7 +61,7 @@
         /// <param name="sprite">The custom sprite to display on this tab node.</param>
         public CustomCraftTreeTab AddTabNode(string nameID, string displayText, Atlas.Sprite sprite)
         {
-            var tabNode = new CustomCraftTreeTab(nameID, displayText, sprite);
+            CustomCraftTreeTab tabNode = new CustomCraftTreeTab(nameID, displayText, sprite);
             tabNode.LinkToParent(this);
             return tabNode;
         }
@@ -74,7 +74,7 @@
         /// <param name="sprite">The custom sprite to display on this tab node.</param>
         public CustomCraftTreeTab AddTabNode(string nameID, string displayText, Sprite sprite)
         {
-            var tabNode = new CustomCraftTreeTab(nameID, displayText, sprite);
+            CustomCraftTreeTab tabNode = new CustomCraftTreeTab(nameID, displayText, sprite);
             tabNode.LinkToParent(this);
             return tabNode;
         }
@@ -85,7 +85,7 @@
         /// <param name="techType">The TechType to be crafted.</param>
         public void AddCraftingNode(TechType techType)
         {
-            var craftNode = new CustomCraftTreeCraft(techType);
+            CustomCraftTreeCraft craftNode = new CustomCraftTreeCraft(techType);
             craftNode.LinkToParent(this);
         }
 
@@ -95,7 +95,7 @@
         /// <param name="techTypes">The TechTypes to be crafted.</param>
         public void AddCraftingNode(params TechType[] techTypes)
         {
-            foreach (var tType in techTypes)
+            foreach (TechType tType in techTypes)
             {
                 this.AddCraftingNode(tType);
             }
@@ -112,8 +112,8 @@
 
             if (cache != null)
             {
-                var techType = (TechType)cache.Index;
-                var craftNode = new CustomCraftTreeCraft(techType);
+                TechType techType = (TechType)cache.Index;
+                CustomCraftTreeCraft craftNode = new CustomCraftTreeCraft(techType);
                 craftNode.LinkToParent(this);
             }
         }
@@ -149,9 +149,9 @@
 
         internal CustomCraftTreeRoot2 GetV2RootNode()
         {
-            var node = new CustomCraftTreeRoot2(Scheme, SchemeAsString);
             node.CraftNode = CraftNode;
 
+            CustomCraftTreeRoot2 node = new CustomCraftTreeRoot2(Scheme, SchemeAsString)
             return node;
         }
     }

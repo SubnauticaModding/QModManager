@@ -16,8 +16,8 @@
 
         public static void Patch(HarmonyInstance harmony)
         {
-            var initMethod = typeof(KnownTech).GetMethod("Initialize", BindingFlags.Public | BindingFlags.Static);
-            var postfix = typeof(KnownTechPatcher).GetMethod("InitializePostfix", BindingFlags.NonPublic | BindingFlags.Static);
+            MethodInfo initMethod = typeof(KnownTech).GetMethod("Initialize", BindingFlags.Public | BindingFlags.Static);
+            MethodInfo postfix = typeof(KnownTechPatcher).GetMethod("InitializePostfix", BindingFlags.NonPublic | BindingFlags.Static);
 
             harmony.Patch(initMethod, null, new HarmonyMethod(postfix));
         }
@@ -29,15 +29,15 @@
 
             UnlockedAtStart.ForEach(x => KnownTech.Add(x, false));
 
-            var analysisTech = (List<KnownTech.AnalysisTech>)typeof(KnownTech).GetField("analysisTech", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
-            var techToAdd = AnalysisTech.Where(a => !analysisTech.Any(a2 => a.techType == a2.techType));
+            List<KnownTech.AnalysisTech> analysisTech = (List<KnownTech.AnalysisTech>)typeof(KnownTech).GetField("analysisTech", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
+            IEnumerable<KnownTech.AnalysisTech> techToAdd = AnalysisTech.Where(a => !analysisTech.Any(a2 => a.techType == a2.techType));
 
-            foreach (var tech in analysisTech)
+            foreach (KnownTech.AnalysisTech tech in analysisTech)
             {
                 if (tech.unlockSound != null && tech.techType == TechType.BloodOil)
                     UnlockSound = tech.unlockSound;
 
-                foreach(var customTech in AnalysisTech)
+                foreach(KnownTech.AnalysisTech customTech in AnalysisTech)
                 {
                     if(tech.techType == customTech.techType)
                     {
@@ -56,7 +56,7 @@
                 }
             }
 
-            foreach(var tech in techToAdd)
+            foreach(KnownTech.AnalysisTech tech in techToAdd)
             {
                 if (tech == null) continue;
                 if (tech.unlockSound == null) tech.unlockSound = UnlockSound;

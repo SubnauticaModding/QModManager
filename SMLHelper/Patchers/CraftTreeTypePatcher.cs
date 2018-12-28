@@ -21,7 +21,7 @@
 
         internal static ModCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
         {
-            var cache = cacheManager.GetCacheForTypeName(name);
+            EnumTypeCache cache = cacheManager.GetCacheForTypeName(name);
 
             if (cache == null)
             {
@@ -43,7 +43,7 @@
 
             Logger.Log($"Successfully added CraftTree Type: '{name}' to Index: '{cache.Index}'");
 
-            var customTreeRoot = new ModCraftTreeRoot(craftTreeType, name);
+            ModCraftTreeRoot customTreeRoot = new ModCraftTreeRoot(craftTreeType, name);
 
             CraftTreePatcher.CustomTrees[craftTreeType] = customTreeRoot;
 
@@ -57,11 +57,11 @@
             // Any mod that patches after this one will not be picked up by this method.
             // For those cases, there are additional ways of excluding these IDs.
 
-            var bannedIndices = new List<int>();
+            List<int> bannedIndices = new List<int>();
 
-            var enumValues = Enum.GetValues(typeof(CraftTree.Type));
+            Array enumValues = Enum.GetValues(typeof(CraftTree.Type));
 
-            foreach (var enumValue in enumValues)
+            foreach (object enumValue in enumValues)
             {
                 if (enumValue == null)
                     continue; // Saftey check
@@ -88,9 +88,9 @@
         internal static void Patch(HarmonyInstance harmony)
         {
 
-            var enumType = typeof(Enum);
-            var thisType = typeof(CraftTreeTypePatcher);
-            var techTypeType = typeof(CraftTree.Type);
+            Type enumType = typeof(Enum);
+            Type thisType = typeof(CraftTreeTypePatcher);
+            Type techTypeType = typeof(CraftTree.Type);
 
             harmony.Patch(enumType.GetMethod("GetValues", BindingFlags.Public | BindingFlags.Static), null,
                 new HarmonyMethod(thisType.GetMethod("Postfix_GetValues", BindingFlags.NonPublic | BindingFlags.Static)));
@@ -111,8 +111,8 @@
         {
             if (enumType.Equals(typeof(CraftTree.Type)))
             {
-                var listArray = new List<CraftTree.Type>();
-                foreach (var obj in __result)
+                List<CraftTree.Type> listArray = new List<CraftTree.Type>();
+                foreach (object obj in __result)
                 {
                     listArray.Add((CraftTree.Type)obj);
                 }

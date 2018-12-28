@@ -25,12 +25,12 @@
         public static TechType AddTechType(string internalName, string displayName, string tooltip, bool unlockAtStart = true)
         {
             // Register the TechType.
-            var techType = TechTypePatcher.AddTechType(internalName);
+            TechType techType = TechTypePatcher.AddTechType(internalName);
 
             // Register Language lines.
             LanguagePatcher.customLines[internalName] = displayName;
             LanguagePatcher.customLines["Tooltip_" + internalName] = tooltip;
-            var valueToString = CachedEnumString_valueToString.GetValue(TooltipFactory.techTypeTooltipStrings) as Dictionary<TechType, string>;
+            Dictionary<TechType, string> valueToString = CachedEnumString_valueToString.GetValue(TooltipFactory.techTypeTooltipStrings) as Dictionary<TechType, string>;
             valueToString[techType] = "Tooltip_" + internalName;
 
             // Unlock the TechType on start
@@ -53,7 +53,7 @@
         public static TechType AddTechType(string internalName, string displayName, string tooltip, Atlas.Sprite sprite, bool unlockAtStart = true)
         {
             // Register the TechType using overload.
-            var techType = AddTechType(internalName, displayName, tooltip, unlockAtStart);
+            TechType techType = AddTechType(internalName, displayName, tooltip, unlockAtStart);
 
             // Register the Sprite
             if(sprite != null)
@@ -75,7 +75,7 @@
         public static TechType AddTechType(string internalName, string displayName, string tooltip, UnityEngine.Sprite sprite, bool unlockAtStart = true)
         {
             // Register the TechType using overload.
-            var techType = AddTechType(internalName, displayName, tooltip, unlockAtStart);
+            TechType techType = AddTechType(internalName, displayName, tooltip, unlockAtStart);
 
             // Register the Sprite
             if (sprite != null)

@@ -10,10 +10,10 @@ namespace SMLHelper.Patchers
         [System.Obsolete("Use SMLHelper.V2 instead.")]
         public static CustomCraftTreeRoot CreateCustomCraftTreeAndType(string name, out CraftTree.Type craftTreeType)
         {
-            var customCraftTreeRoot2 = CraftTreeTypePatcher2.CreateCustomCraftTreeAndType(name, out craftTreeType);
+            CustomCraftTreeRoot2 customCraftTreeRoot2 = CraftTreeTypePatcher2.CreateCustomCraftTreeAndType(name, out craftTreeType);
             CraftTreePatcher2.CustomTrees.Remove(craftTreeType);
 
-            var customCraftTreeRoot = new CustomCraftTreeRoot(craftTreeType, name);
+            CustomCraftTreeRoot customCraftTreeRoot = new CustomCraftTreeRoot(craftTreeType, name);
 
             CraftTreePatcher.CustomTrees.Add(craftTreeType, customCraftTreeRoot);
 

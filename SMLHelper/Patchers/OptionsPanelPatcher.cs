@@ -1,5 +1,6 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
+    using System;
     using System.Collections.Generic;
     using System.Reflection;
     using Harmony;
@@ -11,17 +12,19 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            var uGUI_OptionsPanelType = typeof(uGUI_OptionsPanel);
-            var thisType = typeof(OptionsPanelPatcher);
-            var startMethod = uGUI_OptionsPanelType.GetMethod("AddTabs", BindingFlags.NonPublic | BindingFlags.Instance);
+            Type uGUI_OptionsPanelType = typeof(uGUI_OptionsPanel);
+            Type thisType = typeof(OptionsPanelPatcher);
+            MethodInfo startMethod = uGUI_OptionsPanelType.GetMethod("AddTabs", BindingFlags.NonPublic | BindingFlags.Instance);
 
             harmony.Patch(startMethod, null, new HarmonyMethod(thisType.GetMethod("AddTabs_Postfix", BindingFlags.NonPublic | BindingFlags.Static)));
         }
 
         internal static void AddTabs_Postfix(uGUI_OptionsPanel __instance)
         {
-            var optionsPanel = __instance;
-            var modsTab = optionsPanel.AddTab("Mods");
+            uGUI_OptionsPanel optionsPanel = __instance;
+            int modsTab = optionsPanel.AddTab("Mods");
+
+            if (modOptions.Count <= 0) optionsPanel.AddHeading(modsTab, "No options here...");
 
             foreach (ModOptions modOption in modOptions)
             {
@@ -31,7 +34,7 @@
                 {
                     if (option.Type == ModOptionType.Slider)
                     {
-                        var slider = (ModSliderOption)option;
+                        ModSliderOption slider = (ModSliderOption)option;
 
                         optionsPanel.AddSliderOption(modsTab, slider.Label, slider.Value, slider.MinValue, slider.MaxValue, slider.Value,
                             callback: new UnityEngine.Events.UnityAction<float>((float sliderVal) =>
@@ -39,7 +42,7 @@
                     }
                     else if (option.Type == ModOptionType.Toggle)
                     {
-                        var toggle = (ModToggleOption)option;
+                        ModToggleOption toggle = (ModToggleOption)option;
 
                         optionsPanel.AddToggleOption(modsTab, toggle.Label, toggle.Value,
                             callback: new UnityEngine.Events.UnityAction<bool>((bool toggleVal) =>
@@ -47,7 +50,7 @@
                     }
                     else if (option.Type == ModOptionType.Choice)
                     {
-                        var choice = (ModChoiceOption)option;
+                        ModChoiceOption choice = (ModChoiceOption)option;
 
                         optionsPanel.AddChoiceOption(modsTab, choice.Label, choice.Options, choice.Index,
                             callback: new UnityEngine.Events.UnityAction<int>((int index) =>

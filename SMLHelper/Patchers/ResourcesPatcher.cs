@@ -3,6 +3,7 @@
     using Harmony;
     using System.Reflection;
     using Assets;
+    using System;
 
     internal class ResourcesPatcher
     {
@@ -44,10 +45,10 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            var resourcesType = typeof(UnityEngine.Resources);
-            var methods = resourcesType.GetMethods();
+            Type resourcesType = typeof(UnityEngine.Resources);
+            MethodInfo[] methods = resourcesType.GetMethods();
 
-            foreach (var method in methods)
+            foreach (MethodInfo method in methods)
             {
                 if (method.Name == "Load")
                 {
@@ -55,7 +56,7 @@
                     {
                         if (method.IsGenericMethod)
                         {
-                            var genericMethod = method.MakeGenericMethod(typeof(UnityEngine.Object));
+                            MethodInfo genericMethod = method.MakeGenericMethod(typeof(UnityEngine.Object));
 
                             harmony.Patch(genericMethod,
                                 new HarmonyMethod(typeof(ResourcesPatcher).GetMethod("Prefix", BindingFlags.Static | BindingFlags.NonPublic)), null);
@@ -74,7 +75,7 @@
                     {
                         if (method.IsGenericMethod)
                         {
-                            var genericMethod = method.MakeGenericMethod(typeof(UnityEngine.Object));
+                            MethodInfo genericMethod = method.MakeGenericMethod(typeof(UnityEngine.Object));
 
                             harmony.Patch(genericMethod,
                                 new HarmonyMethod(typeof(ResourcesPatcher).GetMethod("Prefix_Async", BindingFlags.Static | BindingFlags.NonPublic)), null);
