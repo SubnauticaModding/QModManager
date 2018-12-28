@@ -91,11 +91,11 @@ namespace SMLHelper
 
         private static void PatchListInternal(IList orig, IList additions)
         {
-            foreach (var addition in additions)
+            foreach (object addition in additions)
             {
                 if (addition is IList)
                 {
-                    foreach (var origEntry in orig)
+                    foreach (object origEntry in orig)
                     {
                         if (origEntry.GetType() == addition.GetType())
                             PatchListInternal((IList)origEntry, (IList)addition);
@@ -112,10 +112,10 @@ namespace SMLHelper
 
         public static void PatchList(Type type, string name, IList list, BindingFlags flags)
         {
-            var listField = type.GetField(name, flags);
             var craftDataList = listField.GetValue(null) as IList;
+            FieldInfo listField = type.GetField(name, flags);
 
-            foreach (var obj in list)
+            foreach (object obj in list)
             {
                 craftDataList.Add(obj);
             }
