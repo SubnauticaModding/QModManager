@@ -14,9 +14,19 @@
             LanguagePatcher.customLines[lineId] = text;
         }
         
+        /// <summary>
+        /// Allows you to set the display name of a specific <see cref="TechType"/>.
+        /// </summary>
+        /// <param name="techType">The <see cref="TechType"/> whose display name that is to be changed.</param>
+        /// <param name="text">The new display name for the chosen <see cref="TechType"/>.</param>
         public static void SetTechTypeName(TechType techType, string text)
             => SetLanguageLine(techType.AsString(), text);
-        
+
+        /// <summary>
+        /// Allows you to set the tooltip of a specific <see cref="TechType"/>.
+        /// </summary>
+        /// <param name="techType">The <see cref="TechType"/> whose tooltip that is to be changed.</param>
+        /// <param name="text">The new tooltip for the chosen <see cref="TechType"/>.</param>
         public static void SetTechTypeTooltip(TechType techType, string text)
             => SetLanguageLine($"Tooltip_{techType.AsString()}", text);
     }
