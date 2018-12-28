@@ -43,8 +43,7 @@ namespace QModManager
             catch (Exception e)
             {
                 Console.WriteLine("ERROR! mod.json deserialization failed!");
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
+                Console.WriteLine(e.ToString());
 
                 return null;
             }

@@ -22,13 +22,7 @@ namespace QModManager
             catch (Exception e)
             {
                 Console.WriteLine("EXCEPTION CAUGHT!");
-                Console.WriteLine(e.Message);
-                Console.WriteLine(e.StackTrace);
-                if (e.InnerException != null)
-                {
-                    Console.WriteLine(e.InnerException.Message);
-                    Console.WriteLine(e.InnerException.StackTrace);
-                }
+                Console.WriteLine(e.ToString());
             }
         }
         internal static void LoadMods()
@@ -67,14 +61,7 @@ namespace QModManager
                 catch (Exception e)
                 {
                     Console.WriteLine("EXCEPTION CAUGHT!");
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine(e.StackTrace);
-                    if (e.InnerException != null)
-                    {
-                        Console.WriteLine("INNER EXCEPTION:");
-                        Console.WriteLine(e.InnerException.Message);
-                        Console.WriteLine(e.InnerException.StackTrace);
-                    }
+                    Console.WriteLine(e.ToString());
                 }
                 return;
             }
@@ -164,37 +151,19 @@ namespace QModManager
                 catch (ArgumentNullException e)
                 {
                     Console.WriteLine($"ERROR! Could not parse entry method {mod.AssemblyName} for mod {mod.DisplayName}");
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine(e.StackTrace);
-                    if (e.InnerException != null)
-                    {
-                        Console.WriteLine(e.InnerException.Message);
-                        Console.WriteLine(e.InnerException.StackTrace);
-                    }
+                    Console.WriteLine(e.ToString());
                     return null;
                 }
                 catch (TargetInvocationException e)
                 {
                     Console.WriteLine($"ERROR! Invoking the specified entry method {mod.EntryMethod} failed for mod {mod.Id}");
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine(e.StackTrace);
-                    if (e.InnerException != null)
-                    {
-                        Console.WriteLine(e.InnerException.Message);
-                        Console.WriteLine(e.InnerException.StackTrace);
-                    }
+                    Console.WriteLine(e.ToString());
                     return null;
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine("ERROR! An unexpected error occurred!");
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine(e.StackTrace);
-                    if (e.InnerException != null)
-                    {
-                        Console.WriteLine(e.InnerException.Message);
-                        Console.WriteLine(e.InnerException.StackTrace);
-                    }
+                    Console.WriteLine(e.ToString());
                     return null;
                 }
             }

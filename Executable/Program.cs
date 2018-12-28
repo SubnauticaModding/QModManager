@@ -1,5 +1,4 @@
 ﻿using QModManager;
-using QModManager.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -140,7 +139,7 @@ namespace QModManager
             }
             catch (Exception e)
             {
-                ExceptionUtils.ParseException(e);
+                Console.WriteLine(e.ToString());
                 Environment.Exit(2);
             }
         }

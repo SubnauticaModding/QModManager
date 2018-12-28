@@ -1,6 +1,5 @@
 ﻿using Mono.Cecil;
 using Mono.Cecil.Cil;
-using QModManager.Utility;
 using System;
 using System.IO;
 using System.Linq;
@@ -73,7 +72,8 @@ namespace QModManager
             }
             catch (Exception e)
             {
-                ExceptionUtils.ParseException(e);
+                Console.WriteLine("EXCEPTION CAUGHT!");
+                Console.WriteLine(e.ToString());
                 Environment.Exit(1);
             }
         }
@@ -117,7 +117,8 @@ namespace QModManager
             }
             catch (Exception e)
             {
-                ExceptionUtils.ParseException(e);
+                Console.WriteLine("EXCEPTION CAUGHT!");
+                Console.WriteLine(e.ToString());
             }
         }
 
