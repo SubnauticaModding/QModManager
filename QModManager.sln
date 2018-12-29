@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QModInstaller", "QModInstaller\QModInstaller.csproj", "{E00B7FE8-0F1D-4AE6-9E47-4BFD81537F14}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Executable", "Executable\Executable.csproj", "{E00B7FE8-0F1D-4AE6-9E47-4BFD81537F14}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QModManager", "QModManager\QModManager.csproj", "{DA63F59D-4676-4726-AFEC-BD9D3682733F}"
 EndProject
