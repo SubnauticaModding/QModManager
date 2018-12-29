@@ -5,6 +5,8 @@
     using System.Reflection;
     using Harmony;
     using Options;
+    using UnityEngine;
+    using Utility;
 
     internal class OptionsPanelPatcher
     {
@@ -22,9 +24,26 @@
         internal static void AddTabs_Postfix(uGUI_OptionsPanel __instance)
         {
             uGUI_OptionsPanel optionsPanel = __instance;
+
+            bool found = false;
+
+            var tabs = optionsPanel.GetInstanceField("tabs") as List<object>;
+            foreach (object tab in tabs)
+            {
+                Type type = tab.GetType();
+                FieldInfo field = type.GetField("tab", BindingFlags.NonPublic | BindingFlags.Instance);
+                GameObject tabObject = field.GetValue(tab) as GameObject;
+                string name = tabObject.GetComponentInChildren<TranslationLiveUpdate>().translationKey;
+                if (name == "Mods")
+                {
+                    found = true;
+                    break;
+                }
+            }
+
             int modsTab = optionsPanel.AddTab("Mods");
 
-            if (modOptions.Count <= 0) optionsPanel.AddHeading(modsTab, "No options here...");
+            if (found == false && modOptions.Count <= 0) optionsPanel.AddHeading(modsTab, "No options here...");
 
             foreach (ModOptions modOption in modOptions)
             {
