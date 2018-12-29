@@ -5,14 +5,15 @@ using System.Reflection;
 
 namespace QModManager
 {
-    public class QMod : IComparable<QMod>
+    public class QMod : IComparable<QMod>, IEquatable<QMod>
     {
         public string Id = "Mod.ID";
         public string DisplayName = "Mod display name";
         public string Author = "Author name";
         public string Version = "0.0.0";
-        //public string[] Requires = new string[] { };
         public bool Enable = true;
+        public string[] LoadBefore = new string[0];
+        public string[] LoadAfter = new string[0];
         public string AssemblyName = "Filename.dll";
         public string EntryMethod = "Namespace.Class.Method";
         public string Priority = "obsolete. use NewPriority Instead";
@@ -23,8 +24,8 @@ namespace QModManager
         public Assembly LoadedAssembly;
         [JsonIgnore]
         public string ModAssemblyPath;
-
-        //public QMod() { }
+        [JsonIgnore]
+        public bool Loaded;
 
         public static QMod FromJsonFile(string file)
         {
@@ -50,5 +51,7 @@ namespace QModManager
         }
 
         public int CompareTo(QMod other) => NewPriority.CompareTo(other.NewPriority);
+
+        public bool Equals(QMod other) => other.Id == Id;
     }
 }
