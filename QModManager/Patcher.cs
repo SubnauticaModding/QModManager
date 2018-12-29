@@ -117,17 +117,18 @@ namespace QModManager
 
             Mods.Sort(); // The mods are sorted in the order of their priorities
 
-            Console.WriteLine(" ");
-            Console.WriteLine("Installed mods:");
+            string toWrite = "\nInstalled mods:\n";
 
             foreach (QMod mod in Mods)
             {
                 if (mod != null)
                 {
                     loadedMods.Add(LoadMod(mod));
-                    Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");
+                    toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
                 }
             }
+
+            Console.WriteLine(toWrite);
         }
 
         internal static QMod LoadMod(QMod mod)
