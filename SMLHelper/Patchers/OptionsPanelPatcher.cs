@@ -32,7 +32,7 @@
             {
                 Type type = tab.GetType();
                 FieldInfo field = type.GetField("tab", BindingFlags.NonPublic | BindingFlags.Instance);
-                GameObject tabObject = field.GetValue(tab) as GameObject;
+                var tabObject = field.GetValue(tab) as GameObject;
                 string name = tabObject.GetComponentInChildren<TranslationLiveUpdate>().translationKey;
                 if (name == "Mods")
                 {
