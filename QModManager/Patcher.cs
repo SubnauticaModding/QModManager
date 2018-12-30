@@ -10,9 +10,9 @@ namespace QModManager
     public class QModPatcher
     {
         internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? "ERR" : Path.Combine(Environment.CurrentDirectory, "QMods");
-        internal static List<QMod> loadedMods = new List<QMod>();
-        internal static List<QMod> foundMods = new List<QMod>();
-        internal static LinkedList<QMod> linkedMods = new LinkedList<QMod>();
+        internal static List<QMod> loadedMods;
+        internal static List<QMod> foundMods;
+        internal static List<QMod> sortedMods;
         internal static bool patched = false;
 
         public static void Patch()
@@ -118,20 +118,26 @@ namespace QModManager
 
             foundMods.Sort(); // The mods are sorted in the order of their priorities
 
-            linkedMods = new LinkedList<QMod>(foundMods);
+            // TODO: Remove old priority system, if load-before/after work perfectly.
+
+            sortedMods = new List<QMod>(foundMods);
 
             for(int i = 0; i < foundMods.Count; i++)
             {
+                // Clear the chain from our main loop.
                 modSortingChain.Clear();
 
+                // Sort the current loop mod, recursively.
                 QMod mod = foundMods[i];
                 bool success = SortMod(mod);
 
+                // If it wasn't a success (that is, something messed up with the order, print it out)
                 if (!success)
                 {
                     Console.WriteLine("\nQMOD ERROR: There was an error while sorting mods!");
                     Console.WriteLine("Please check the 'LoadBefore' and 'LoadAfter' properties of the following mods:\n");
 
+                    // Last element of the list will always be a duplicate, so no point to include it
                     for (int y = 0; y < modSortingChain.Count - 1 ; y++)
                     {
                         Console.WriteLine(modSortingChain[y].DisplayName);
@@ -144,8 +150,9 @@ namespace QModManager
             }
 
             string toWrite = "\nInstalled mods:\n";
+            loadedMods = new List<QMod>();
 
-            foreach (QMod mod in linkedMods)
+            foreach (QMod mod in sortedMods)
             {
                 if (mod != null && !mod.Loaded)
                 {
@@ -159,48 +166,108 @@ namespace QModManager
 
         internal static List<QMod> modSortingChain = new List<QMod>();
 
-        internal static bool SortMod(QMod mod)
+        internal static bool SortMod(QMod mod, bool force = false)
         {
+            // Add the mod passed into this method to the chain
             modSortingChain.Add(mod);
 
-            List<QMod> duplicateKeys = modSortingChain.GroupBy(x => x)
-                            .Where(group => group.Count() > 1)
-                            .Select(group => group.Key)
-                            .ToList();
+            // Get all the duplicates present in the chain
+            var duplicates = modSortingChain.GroupBy(s => s)
+                .SelectMany(grp => grp.Skip(1))
+                .ToList();
 
-            if(duplicateKeys.Count > 0)
+            // If there is any duplicate, that means something is going wrong, so exit out
+            if (duplicates.Count > 0)
             {
-                // There's an error!
-                // BIG BIG ERROR!
-                // DO SOMETHING AHHHHHHHHHHHH
                 return false;
             }
 
-            LinkedListNode<QMod> current = linkedMods.Find(mod);
+            // The index of the mod passed into this method
+            int currentIndex = sortedMods.IndexOf(mod);
 
-            List<QMod> loadBefore = GetModsToLoadBefore(mod);
+            Console.WriteLine("Mod id: " + mod.Id + " Index: " + currentIndex);
 
-            foreach(QMod loadBeforeMod in loadBefore)
+            // This is a list of mods that need to be loaded after the mod that is passed into this method
+            // I say it like this: load this (where this is the mod that is passed in) after these
+            // Thus the variable name.
+            // If anyone else can come up with better variable names, I'll be all for it
+            List<QMod> loadThisAfterThese = GetModsToLoadAfter(mod);
+
+            // Loop through this list
+            foreach (QMod loadModAfterThis in loadThisAfterThese)
             {
-                LinkedListNode<QMod> node = linkedMods.Find(loadBeforeMod);
-                linkedMods.Remove(node);
-                linkedMods.AddAfter(current, node);
+                // Get the index of the current mod we're looping through.
+                int index = sortedMods.IndexOf(loadModAfterThis);
+                Console.WriteLine("Load This After This Mod: " + loadModAfterThis.Id + " Index: " + index);
 
-                bool success = SortMod(loadBeforeMod);
+                // If our current mod index (that is, the index of the mod that is passed into this function)
+                // is greater than the index of the current mod which we're looping through's index, skip it
+                // This means that the mod that is passed in is already positioned after this mod that we're looping through.
+                if (currentIndex > index) continue;
+
+                // If we reached this point, that means that the index of the mod that is passed into this function is smaller than the one we're looping through currently
+                // This means that the mod that is passed in is positioned before this mod
+
+                // Remove the mod at the index to be able to move it
+                sortedMods.RemoveAt(index);
+
+                // Position the new index right before the index of the mod that is passed in
+                int newIndex = currentIndex - 1;
+                if (newIndex < 0)
+                    newIndex = 0;
+
+                Console.WriteLine("Load This After This Mod: " + loadModAfterThis.Id + " NewIndex: " + newIndex);
+
+                // Insert the mod we're looping through at the new index
+                sortedMods.Insert(newIndex, loadModAfterThis);
+
+                int indexNow = sortedMods.IndexOf(loadModAfterThis);
+
+                Console.WriteLine("Load This After This Mod: " + loadModAfterThis.Id + " IndexNow: " + indexNow);
+
+                // As a safety measure, sort the mod that we just updated, so that it's loadafters and loadbefores dont get messed up.
+                bool success = SortMod(loadModAfterThis, true);
 
                 if (!success)
                     return false;
             }
 
-            List<QMod> loadAfter = GetModsToLoadAfter(mod);
+            // This is a list of mods that need to be loaded before the mod that is passed into this method
+            // I say it like this: load this (where this is the mod that is passed in) before these
+            // Thus the variable name.
+            // If anyone else can come up with better variable names, I'll be all for it
+            List<QMod> loadThisBeforeThese = GetModsToLoadBefore(mod);
 
-            foreach(QMod loadAfterMod in loadAfter)
+            // Loop through this list
+            foreach (QMod loadAfter in loadThisBeforeThese)
             {
-                LinkedListNode<QMod> node = linkedMods.Find(loadAfterMod);
-                linkedMods.Remove(node);
-                linkedMods.AddBefore(current, node);
+                // Get the current index
+                int index = sortedMods.IndexOf(loadAfter);
+                Console.WriteLine("Load This Before This Mod: " + loadAfter.Id + " Index: " + index);
 
-                bool success = SortMod(loadAfterMod);
+                // If the index of the mod that is passed in is smaller than the current loop mod, skip it.
+                // This means that the mod that is passed in is already positioned before the current loop mod.
+                if (currentIndex < index) continue;
+
+                // Remove the mod from the list at this index
+                sortedMods.RemoveAt(index);
+
+                // Position the new index right after the index of the mod that is passed in
+                int newIndex = currentIndex + 1;
+                if (newIndex > sortedMods.Count - 1)
+                    newIndex = sortedMods.Count - 1;
+
+                Console.WriteLine("Load This Before This Mod: " + loadAfter.Id + " NewIndex: " + newIndex);
+
+                // Insert the current loop mod into the new index
+                sortedMods.Insert(newIndex, loadAfter);
+
+                int indexNow = sortedMods.IndexOf(loadAfter);
+
+                Console.WriteLine("Load This Before This Mod: " + loadAfter.Id + " IndexNow: " + indexNow);
+                
+                // As a safety measure, sort the mod that we just updated, so that it's loadafters and loadbefores dont get messed up.
+                bool success = SortMod(loadAfter, true);
 
                 if (!success)
                     return false;
@@ -259,9 +326,9 @@ namespace QModManager
 
             List<QMod> mods = new List<QMod>();
 
-            foreach(string loadBeforeId in mod.LoadBefore)
+            foreach (string loadBeforeId in mod.LoadBefore)
             {
-                foreach(QMod loadBeforeMod in foundMods)
+                foreach (QMod loadBeforeMod in foundMods)
                 {
                     if (loadBeforeId == loadBeforeMod.Id)
                         mods.Add(loadBeforeMod);
