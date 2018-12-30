@@ -11,6 +11,8 @@ namespace QModManager
     {
         internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? "ERR" : Path.Combine(Environment.CurrentDirectory, "QMods");
         internal static List<QMod> loadedMods = new List<QMod>();
+        internal static List<QMod> foundMods = new List<QMod>();
+        internal static LinkedList<QMod> linkedMods = new LinkedList<QMod>();
         internal static bool patched = false;
 
         public static void Patch()
@@ -32,7 +34,6 @@ namespace QModManager
                 FileInfo[] allDlls = new DirectoryInfo(QModBaseDir).GetFiles("*.dll", SearchOption.AllDirectories);
                 foreach (FileInfo dll in allDlls)
                 {
-                    Console.WriteLine(Path.GetFileNameWithoutExtension(dll.Name) + " " + args.Name);
                     if (args.Name.Contains(Path.GetFileNameWithoutExtension(dll.Name)))
                     {
                         return Assembly.LoadFrom(dll.FullName);
@@ -67,7 +68,7 @@ namespace QModManager
             }
 
             string[] subDirs = Directory.GetDirectories(QModBaseDir);
-            List<QMod> Mods = new List<QMod>();
+            foundMods = new List<QMod>();
 
             foreach (string subDir in subDirs)
             {
@@ -112,28 +113,105 @@ namespace QModManager
                     mod.NewPriority = -1000;
                 }
 
-                Mods.Add(mod);
+                foundMods.Add(mod);
             }
 
-            Mods.Sort(); // The mods are sorted in the order of their priorities
+            foundMods.Sort(); // The mods are sorted in the order of their priorities
+
+            linkedMods = new LinkedList<QMod>(foundMods);
+
+            for(int i = 0; i < foundMods.Count; i++)
+            {
+                modSortingChain.Clear();
+
+                QMod mod = foundMods[i];
+                bool success = SortMod(mod);
+
+                if (!success)
+                {
+                    Console.WriteLine("\nQMOD ERROR: There was an error while sorting mods!");
+                    Console.WriteLine("Please check the 'LoadBefore' and 'LoadAfter' properties of the following mods:\n");
+
+                    for (int y = 0; y < modSortingChain.Count - 1 ; y++)
+                    {
+                        Console.WriteLine(modSortingChain[y].DisplayName);
+                    }
+
+                    Console.WriteLine("");
+
+                    return;
+                }
+            }
 
             string toWrite = "\nInstalled mods:\n";
 
-            foreach (QMod mod in Mods)
+            foreach (QMod mod in linkedMods)
             {
-                if (mod != null)
+                if (mod != null && !mod.Loaded)
                 {
-                    loadedMods.Add(LoadMod(mod));
                     toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
+                    loadedMods.Add(LoadMod(mod));
                 }
             }
 
             Console.WriteLine(toWrite);
         }
 
+        internal static List<QMod> modSortingChain = new List<QMod>();
+
+        internal static bool SortMod(QMod mod)
+        {
+            modSortingChain.Add(mod);
+
+            List<QMod> duplicateKeys = modSortingChain.GroupBy(x => x)
+                            .Where(group => group.Count() > 1)
+                            .Select(group => group.Key)
+                            .ToList();
+
+            if(duplicateKeys.Count > 0)
+            {
+                // There's an error!
+                // BIG BIG ERROR!
+                // DO SOMETHING AHHHHHHHHHHHH
+                return false;
+            }
+
+            LinkedListNode<QMod> current = linkedMods.Find(mod);
+
+            List<QMod> loadBefore = GetModsToLoadBefore(mod);
+
+            foreach(QMod loadBeforeMod in loadBefore)
+            {
+                LinkedListNode<QMod> node = linkedMods.Find(loadBeforeMod);
+                linkedMods.Remove(node);
+                linkedMods.AddAfter(current, node);
+
+                bool success = SortMod(loadBeforeMod);
+
+                if (!success)
+                    return false;
+            }
+
+            List<QMod> loadAfter = GetModsToLoadAfter(mod);
+
+            foreach(QMod loadAfterMod in loadAfter)
+            {
+                LinkedListNode<QMod> node = linkedMods.Find(loadAfterMod);
+                linkedMods.Remove(node);
+                linkedMods.AddBefore(current, node);
+
+                bool success = SortMod(loadAfterMod);
+
+                if (!success)
+                    return false;
+            }
+
+            return true;
+        }
+
         internal static QMod LoadMod(QMod mod)
         {
-            if (mod == null) return null;
+            if (mod == null || mod.Loaded) return null;
 
             if (string.IsNullOrEmpty(mod.EntryMethod))
             {
@@ -170,7 +248,45 @@ namespace QModManager
                 }
             }
 
+            mod.Loaded = true;
+
             return mod;
+        }
+
+        internal static List<QMod> GetModsToLoadBefore(QMod mod)
+        {
+            if (mod == null) return null;
+
+            List<QMod> mods = new List<QMod>();
+
+            foreach(string loadBeforeId in mod.LoadBefore)
+            {
+                foreach(QMod loadBeforeMod in foundMods)
+                {
+                    if (loadBeforeId == loadBeforeMod.Id)
+                        mods.Add(loadBeforeMod);
+                }
+            }
+
+            return mods;
+        }
+
+        internal static List<QMod> GetModsToLoadAfter(QMod mod)
+        {
+            if (mod == null) return null;
+
+            List<QMod> mods = new List<QMod>();
+
+            foreach (string loadAfterId in mod.LoadAfter)
+            {
+                foreach (QMod loadAfterMod in foundMods)
+                {
+                    if (loadAfterId == loadAfterMod.Id)
+                        mods.Add(loadAfterMod);
+                }
+            }
+
+            return mods;
         }
     }
 }

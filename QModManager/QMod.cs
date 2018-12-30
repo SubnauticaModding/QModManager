@@ -11,7 +11,8 @@ namespace QModManager
         public string DisplayName = "Mod display name";
         public string Author = "Author name";
         public string Version = "0.0.0";
-        //public string[] Requires = new string[] { };
+        public string[] LoadBefore = new string[] { };
+        public string[] LoadAfter = new string[] { };
         public bool Enable = true;
         public string AssemblyName = "Filename.dll";
         public string EntryMethod = "Namespace.Class.Method";
@@ -23,6 +24,8 @@ namespace QModManager
         public Assembly LoadedAssembly;
         [JsonIgnore]
         public string ModAssemblyPath;
+        [JsonIgnore]
+        public bool Loaded;
 
         //public QMod() { }
 
