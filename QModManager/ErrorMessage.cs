@@ -2,9 +2,9 @@
 
 namespace QModManager
 {
-    public static class ErrorMessage
+    internal static class ErrorMessage
     {
-        public static void ShowError(string error, Action<bool> function, string leftButtonText = "Yes", string rightButtonText = "No")
+        internal static void ShowError(string error, Action<bool> function, string leftButtonText = "Yes", string rightButtonText = "No")
         {
             // Still need to implement leftButtonText and rightButtonText
             uGUI_SceneConfirmation confirmation = uGUI.main.confirmation;
@@ -20,7 +20,7 @@ namespace QModManager
             });
         }
 
-        public static void ShowError(string error, Action onLeftButton, Action onRightButton, string leftButtonText = "Yes", string rightButtonText = "No")
+        internal static void ShowError(string error, Action onLeftButton, Action onRightButton, string leftButtonText = "Yes", string rightButtonText = "No")
             => ShowError(error, leftButtonClicked =>
             {
                 if (leftButtonClicked) if (onLeftButton != null) onLeftButton.Invoke();

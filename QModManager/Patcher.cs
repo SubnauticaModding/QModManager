@@ -7,13 +7,13 @@ using System.Reflection;
 
 namespace QModManager
 {
-    public class QModPatcher
+    internal class QModPatcher
     {
         internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? "ERR" : Path.Combine(Environment.CurrentDirectory, "QMods");
         internal static List<QMod> loadedMods = new List<QMod>();
         internal static bool patched = false;
 
-        public static void Patch()
+        internal static void Patch()
         {
             try
             {

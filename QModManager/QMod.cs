@@ -20,13 +20,13 @@ namespace QModManager
         //public Dictionary<string, object> Config = new Dictionary<string, object>();
 
         [JsonIgnore]
-        public Assembly LoadedAssembly;
+        internal Assembly LoadedAssembly;
         [JsonIgnore]
-        public string ModAssemblyPath;
+        internal string ModAssemblyPath;
 
         //public QMod() { }
 
-        public static QMod FromJsonFile(string file)
+        internal static QMod FromJsonFile(string file)
         {
             try
             {
