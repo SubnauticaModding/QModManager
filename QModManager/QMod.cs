@@ -16,8 +16,8 @@ namespace QModManager
         public bool Enable = true;
         public string AssemblyName = "Filename.dll";
         public string EntryMethod = "Namespace.Class.Method";
-        public string Priority = "obsolete. use NewPriority Instead";
-        public int NewPriority = 0;
+        //public string Priority = "obsolete. use NewPriority Instead";
+        //public int NewPriority = 0;
         //public Dictionary<string, object> Config = new Dictionary<string, object>();
 
         [JsonIgnore]

@@ -104,22 +104,8 @@ namespace QModManager
                 mod.LoadedAssembly = Assembly.LoadFrom(modAssemblyPath);
                 mod.ModAssemblyPath = modAssemblyPath;
 
-                // Backward compatibility for Priority
-                if (mod.Priority == "Last" && mod.NewPriority == 0)
-                {
-                    mod.NewPriority = 1000;
-                }
-                else if (mod.Priority == "First" && mod.NewPriority == 0)
-                {
-                    mod.NewPriority = -1000;
-                }
-
                 foundMods.Add(mod);
             }
-
-            foundMods.Sort(); // The mods are sorted in the order of their priorities
-
-            // TODO: Remove old priority system, if load-before/after work perfectly.
 
             sortedMods = new List<QMod>(foundMods);
 
@@ -153,14 +139,23 @@ namespace QModManager
             string toWrite = "\nInstalled mods:\n";
             loadedMods = new List<QMod>();
 
+            QMod smlHelper = null;
+
             foreach (QMod mod in sortedMods)
             {
-                if (mod != null && !mod.Loaded)
+                if (mod != null && !mod.Loaded && mod.Id != "SMLHelper")
                 {
                     toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
                     loadedMods.Add(LoadMod(mod));
                 }
+                else if(mod.Id == "SMLHelper")
+                {
+                    smlHelper = mod;
+                }
             }
+
+            toWrite += $"- {smlHelper.DisplayName} ({smlHelper.Id})\n";
+            loadedMods.Add(LoadMod(smlHelper));
 
             Console.WriteLine(toWrite);
         }
