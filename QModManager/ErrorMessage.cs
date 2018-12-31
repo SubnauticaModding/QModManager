@@ -4,15 +4,18 @@ namespace QModManager
 {
     public static class ErrorMessage
     {
-        public static void ShowError(string error, Action<bool> function, string leftButtonText = "Yes", bool disableRightButton = false, string rightButtonText = "No")
+        public static void ShowError(string error, Action<bool> function, string leftButtonText = "Yes", string rightButtonText = "No")
         {
             // Still need to implement leftButtonText and rightButtonText
             uGUI_SceneConfirmation confirmation = uGUI.main.confirmation;
-            if (disableRightButton) confirmation.no.gameObject.SetActive(false);
+
+            if (leftButtonText == "" || leftButtonText == null) confirmation.no.gameObject.SetActive(false);
+            if (rightButtonText == "" || rightButtonText == null) confirmation.no.gameObject.SetActive(false);
             confirmation.Show(error, delegate (bool confirmed) 
             {
                 function.Invoke(confirmed);
-                if (disableRightButton) confirmation.no.gameObject.SetActive(true);
+                confirmation.no.gameObject.SetActive(true);
+                confirmation.yes.gameObject.SetActive(true);
             });
         }
     }
