@@ -11,6 +11,7 @@ namespace QModManager
 
             if (string.IsNullOrEmpty(leftButtonText)) confirmation.yes.gameObject.SetActive(false);
             if (string.IsNullOrEmpty(rightButtonText)) confirmation.no.gameObject.SetActive(false);
+
             confirmation.Show(error, delegate (bool leftButtonClicked)
             {
                 function.Invoke(leftButtonClicked);
