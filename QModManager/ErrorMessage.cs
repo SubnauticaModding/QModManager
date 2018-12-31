@@ -14,7 +14,7 @@ namespace QModManager
 
             confirmation.Show(error, delegate (bool leftButtonClicked)
             {
-                function.Invoke(leftButtonClicked);
+                if (function != null) function.Invoke(leftButtonClicked);
                 confirmation.no.gameObject.SetActive(true);
                 confirmation.yes.gameObject.SetActive(true);
             });
@@ -23,8 +23,8 @@ namespace QModManager
         public static void ShowError(string error, Action onLeftButton, Action onRightButton, string leftButtonText = "Yes", string rightButtonText = "No")
             => ShowError(error, leftButtonClicked =>
             {
-                if (leftButtonClicked) onLeftButton.Invoke();
-                else onRightButton.Invoke();
+                if (leftButtonClicked) if (onLeftButton != null) onLeftButton.Invoke();
+                else if (onRightButton != null) onRightButton.Invoke();
             }, leftButtonText, rightButtonText);
     }
 }
