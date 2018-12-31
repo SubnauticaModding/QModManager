@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using UnityEngine.SceneManagement;
 
 namespace QModManager
 {
@@ -18,6 +19,7 @@ namespace QModManager
             try
             {
                 LoadMods();
+                SceneManager.sceneLoaded += SceneManager_sceneLoaded;
             }
             catch (Exception e)
             {
@@ -25,6 +27,13 @@ namespace QModManager
                 Console.WriteLine(e.ToString());
             }
         }
+
+        internal static void SceneManager_sceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
+        {
+            if (scene.name != "XMenu") return;
+            Error.ShowError("test error", () => ErrorMessage.AddDebug("YES"), () => global::ErrorMessage.AddDebug("NO"));
+        }
+
         internal static void LoadMods()
         {
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
