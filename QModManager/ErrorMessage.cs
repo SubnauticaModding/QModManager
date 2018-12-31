@@ -9,9 +9,9 @@ namespace QModManager
             // Still need to implement leftButtonText and rightButtonText
             uGUI_SceneConfirmation confirmation = uGUI.main.confirmation;
 
-            if (leftButtonText == "" || leftButtonText == null) confirmation.no.gameObject.SetActive(false);
-            if (rightButtonText == "" || rightButtonText == null) confirmation.no.gameObject.SetActive(false);
-            confirmation.Show(error, delegate (bool confirmed) 
+            if (string.IsNullOrEmpty(leftButtonText)) confirmation.yes.gameObject.SetActive(false);
+            if (string.IsNullOrEmpty(rightButtonText)) confirmation.no.gameObject.SetActive(false);
+            confirmation.Show(error, delegate (bool confirmed)
             {
                 function.Invoke(confirmed);
                 confirmation.no.gameObject.SetActive(true);
