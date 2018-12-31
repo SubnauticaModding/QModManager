@@ -27,6 +27,7 @@ namespace QModManager
                 Console.WriteLine(e.ToString());
             }
         }
+
         internal static void LoadMods()
         {
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
