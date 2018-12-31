@@ -122,7 +122,7 @@ namespace QModManager
 
             sortedMods = new List<QMod>(foundMods);
 
-            for(int i = 0; i < foundMods.Count; i++)
+            for (int i = 0; i < foundMods.Count; i++)
             {
                 // Clear the chain from our main loop.
                 modSortingChain.Clear();
@@ -138,7 +138,7 @@ namespace QModManager
                     Console.WriteLine("Please check the 'LoadBefore' and 'LoadAfter' properties of the following mods:\n");
 
                     // Last element of the list will always be a duplicate, so no point to include it
-                    for (int y = 0; y < modSortingChain.Count - 1 ; y++)
+                    for (int y = 0; y < modSortingChain.Count - 1; y++)
                     {
                         Console.WriteLine(modSortingChain[y].DisplayName);
                     }
@@ -185,7 +185,7 @@ namespace QModManager
             // The index of the mod passed into this method
             int currentIndex = sortedMods.IndexOf(mod);
 
-            Console.WriteLine("Mod id: " + mod.Id + " Index: " + currentIndex);
+            //Console.WriteLine("Mod id: " + mod.Id + " Index: " + currentIndex);
 
             // This is a list of mods that need to be loaded after the mod that is passed into this method
             // I say it like this: load this (where this is the mod that is passed in) after these
@@ -198,7 +198,8 @@ namespace QModManager
             {
                 // Get the index of the current mod we're looping through.
                 int index = sortedMods.IndexOf(loadModAfterThis);
-                Console.WriteLine("Load This After This Mod: " + loadModAfterThis.Id + " Index: " + index);
+
+                //Console.WriteLine("Load This After This Mod: " + loadModAfterThis.Id + " Index: " + index);
 
                 // If our current mod index (that is, the index of the mod that is passed into this function)
                 // is greater than the index of the current mod which we're looping through's index, skip it
@@ -211,19 +212,26 @@ namespace QModManager
                 // Remove the mod at the index to be able to move it
                 sortedMods.RemoveAt(index);
 
-                // Position the new index right before the index of the mod that is passed in
-                int newIndex = currentIndex - 1;
-                if (newIndex < 0)
-                    newIndex = 0;
+                // Position the new index right at our current index.
+                // Why, you ask?
+                // This is because of 2 things: 
+                // Number 1: Its because of how the Insert method works.
+                // If I Insert something at index 2, that something would now take the place of index 2 
+                // And what was previously at index 2 would be shifted down to index 3.
+                // Number 2: When we remove the element above, everything below it shifts up. 
+                // The mod that was passed in (which is currentIndex in this case) is below the element that was removed.
+                int newIndex = currentIndex;
 
-                Console.WriteLine("Load This After This Mod: " + loadModAfterThis.Id + " NewIndex: " + newIndex);
+                //Console.WriteLine("Load This After This Mod: " + loadModAfterThis.Id + " NewIndex: " + newIndex);
 
                 // Insert the mod we're looping through at the new index
                 sortedMods.Insert(newIndex, loadModAfterThis);
 
-                int indexNow = sortedMods.IndexOf(loadModAfterThis);
+                // Update the index as it may have updated
+                currentIndex = sortedMods.IndexOf(mod);
 
-                Console.WriteLine("Load This After This Mod: " + loadModAfterThis.Id + " IndexNow: " + indexNow);
+                //int indexNow = sortedMods.IndexOf(loadModAfterThis);
+                //Console.WriteLine("Load This After This Mod: " + loadModAfterThis.Id + " IndexNow: " + indexNow);
 
                 // As a safety measure, sort the mod that we just updated, so that it's loadafters and loadbefores dont get messed up.
                 bool success = SortMod(loadModAfterThis, true);
@@ -243,7 +251,7 @@ namespace QModManager
             {
                 // Get the current index
                 int index = sortedMods.IndexOf(loadAfter);
-                Console.WriteLine("Load This Before This Mod: " + loadAfter.Id + " Index: " + index);
+                //Console.WriteLine("Load This Before This Mod: " + loadAfter.Id + " Index: " + index);
 
                 // If the index of the mod that is passed in is smaller than the current loop mod, skip it.
                 // This means that the mod that is passed in is already positioned before the current loop mod.
@@ -252,19 +260,24 @@ namespace QModManager
                 // Remove the mod from the list at this index
                 sortedMods.RemoveAt(index);
 
-                // Position the new index right after the index of the mod that is passed in
-                int newIndex = currentIndex + 1;
-                if (newIndex > sortedMods.Count - 1)
-                    newIndex = sortedMods.Count - 1;
+                // Position the new index right at the current index
+                // "Why aren't you adding 1 to currentIndex to put it after currentIndex?", you ask
+                // This is because of the RemoveAt method call right above. It shifts the entire list back by 1, for every element after the index we assigned it to
+                // So if we remove the element at 2 (0-based), element 3 would become element 2, element 4 would become element 3, so on
+                // So when we remove the element at the index, everything shifts up (at least, for the context of currentIndex, since currentIndex > index we're removing)
+                // That is why we don't add 1.
+                int newIndex = currentIndex;
 
-                Console.WriteLine("Load This Before This Mod: " + loadAfter.Id + " NewIndex: " + newIndex);
+                //Console.WriteLine("Load This Before This Mod: " + loadAfter.Id + " NewIndex: " + newIndex);
 
                 // Insert the current loop mod into the new index
                 sortedMods.Insert(newIndex, loadAfter);
 
-                int indexNow = sortedMods.IndexOf(loadAfter);
+                // Update the index of the mod that is passed in, since it may have shifted.
+                currentIndex = sortedMods.IndexOf(mod);
 
-                Console.WriteLine("Load This Before This Mod: " + loadAfter.Id + " IndexNow: " + indexNow);
+                //int indexNow = sortedMods.IndexOf(loadAfter);
+                //Console.WriteLine("Load This Before This Mod: " + loadAfter.Id + " IndexNow: " + indexNow);
                 
                 // As a safety measure, sort the mod that we just updated, so that it's loadafters and loadbefores dont get messed up.
                 bool success = SortMod(loadAfter, true);
