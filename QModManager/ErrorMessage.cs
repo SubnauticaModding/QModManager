@@ -11,12 +11,19 @@ namespace QModManager
 
             if (string.IsNullOrEmpty(leftButtonText)) confirmation.yes.gameObject.SetActive(false);
             if (string.IsNullOrEmpty(rightButtonText)) confirmation.no.gameObject.SetActive(false);
-            confirmation.Show(error, delegate (bool confirmed)
+            confirmation.Show(error, delegate (bool leftButtonClicked)
             {
-                function.Invoke(confirmed);
+                function.Invoke(leftButtonClicked);
                 confirmation.no.gameObject.SetActive(true);
                 confirmation.yes.gameObject.SetActive(true);
             });
         }
+
+        public static void ShowError(string error, Action onLeftButton, Action onRightButton, string leftButtonText = "Yes", string rightButtonText = "No")
+            => ShowError(error, leftButtonClicked =>
+            {
+                if (leftButtonClicked) onLeftButton.Invoke();
+                else onRightButton.Invoke();
+            }, leftButtonText, rightButtonText);
     }
 }
