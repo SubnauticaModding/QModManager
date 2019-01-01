@@ -23,6 +23,8 @@ namespace QModManager
                     return;
                 }
                 patched = true;
+
+                Hooks.Patch();
                 LoadMods();
             }
             catch (Exception e)
