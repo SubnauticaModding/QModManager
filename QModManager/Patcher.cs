@@ -10,9 +10,9 @@ namespace QModManager
     public class QModPatcher
     {
         internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? "ERR" : Path.Combine(Environment.CurrentDirectory, "QMods");
-        internal static List<QMod> loadedMods;
-        internal static List<QMod> foundMods;
-        internal static List<QMod> sortedMods;
+        internal static List<QMod> loadedMods = new List<QMod>();
+        internal static List<QMod> foundMods = new List<QMod>();
+        internal static List<QMod> sortedMods = new List<QMod>();
         internal static bool patched = false;
 
         public static void Patch()
@@ -69,7 +69,6 @@ namespace QModManager
             }
 
             string[] subDirs = Directory.GetDirectories(QModBaseDir);
-            foundMods = new List<QMod>();
 
             foreach (string subDir in subDirs)
             {
@@ -107,7 +106,7 @@ namespace QModManager
                 foundMods.Add(mod);
             }
 
-            sortedMods = new List<QMod>(foundMods);
+            sortedMods.AddRange(foundMods);
 
             for (int i = 0; i < foundMods.Count; i++)
             {
@@ -137,7 +136,6 @@ namespace QModManager
             }
 
             string toWrite = "\nInstalled mods:\n";
-            loadedMods = new List<QMod>();
 
             QMod smlHelper = null;
 
@@ -148,7 +146,7 @@ namespace QModManager
                     toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
                     loadedMods.Add(LoadMod(mod));
                 }
-                else if(mod.Id == "SMLHelper")
+                else if(mod != null && !mod.Loaded && mod.Id == "SMLHelper")
                 {
                     smlHelper = mod;
                 }
@@ -162,7 +160,7 @@ namespace QModManager
 
         internal static List<QMod> modSortingChain = new List<QMod>();
 
-        internal static bool SortMod(QMod mod, bool force = false)
+        internal static bool SortMod(QMod mod)
         {
             // Add the mod passed into this method to the chain
             modSortingChain.Add(mod);
