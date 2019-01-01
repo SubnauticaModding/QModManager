@@ -6,13 +6,15 @@ namespace QModManager
 {
     public class Hooks
     {
-        public static Delegates.OnLoadEnd OnLoadEnd;
-        public static Delegates.SceneLoaded SceneLoaded;
         public static Delegates.Start Start;
         public static Delegates.FixedUpdate FixedUpdate;
         public static Delegates.Update Update;
         public static Delegates.LateUpdate LateUpdate;
         public static Delegates.OnApplicationQuit OnApplicationQuit;
+
+        public static Delegates.SceneLoaded SceneLoaded;
+
+        public static Delegates.OnLoadEnd OnLoadEnd;
 
         internal static void Patch()
         {
@@ -41,14 +43,15 @@ namespace QModManager
 
         public class Delegates
         {
-            public delegate void Awake();
-            public delegate void OnLoadEnd();
-            public delegate void SceneLoaded(Scene scene, LoadSceneMode loadSceneMode);
             public delegate void Start();
             public delegate void FixedUpdate();
             public delegate void Update();
             public delegate void LateUpdate();
             public delegate void OnApplicationQuit();
+
+            public delegate void SceneLoaded(Scene scene, LoadSceneMode loadSceneMode);
+
+            public delegate void OnLoadEnd();
         }
     }
 }
