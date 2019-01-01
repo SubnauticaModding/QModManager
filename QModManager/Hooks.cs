@@ -1,11 +1,11 @@
 ﻿using Harmony;
+using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace QModManager
 {
     public class Hooks
     {
-        public static Delegates.Awake Awake;
         public static Delegates.OnLoadEnd OnLoadEnd;
         public static Delegates.SceneLoaded SceneLoaded;
         public static Delegates.Start Start;
@@ -20,67 +20,23 @@ namespace QModManager
             SceneManager.sceneLoaded += (scene, loadSceneMode) => SceneLoaded(scene, loadSceneMode);
         }
 
-        internal static class Patches
+        [HarmonyPatch(typeof(GameInput), "Start")]
+        internal static class AddComponentPatch
         {
-            [HarmonyPatch(typeof(GameInput), "Awake")]
-            internal static class Awake
+            [HarmonyPostfix]
+            internal static void Postfix(GameInput __instance)
             {
-                [HarmonyPostfix]
-                internal static void Postfix()
-                {
-                    Awake();
-                }
+                __instance.gameObject.AddComponent<QMMHooks>();
             }
+        }
 
-            [HarmonyPatch(typeof(), "Start")]
-            internal static class Start
-            {
-                [HarmonyPostfix]
-                internal static void Postfix()
-                {
-                    Start();
-                }
-            }
-
-            [HarmonyPatch(typeof(), "FixedUpdate")]
-            internal static class FixedUpdate
-            {
-                [HarmonyPostfix]
-                internal static void Postfix()
-                {
-                    FixedUpdate();
-                }
-            }
-
-            [HarmonyPatch(typeof(GameInput), "Update")]
-            internal static class Update
-            {
-                [HarmonyPostfix]
-                internal static void Postfix()
-                {
-                    Update();
-                }
-            }
-
-            [HarmonyPatch(typeof(), "LateUpdate")]
-            internal static class LateUpdate
-            {
-                [HarmonyPostfix]
-                internal static void Postfix()
-                {
-                    LateUpdate();
-                }
-            }
-
-            [HarmonyPatch(typeof(), "OnApplicationQuit")]
-            internal static class OnApplicationQuit
-            {
-                [HarmonyPostfix]
-                internal static void Postfix()
-                {
-                    OnApplicationQuit();
-                }
-            }
+        internal class QMMHooks : MonoBehaviour
+        {
+            public void Start() => Hooks.Start();
+            public void FixedUpdate() => Hooks.FixedUpdate();
+            public void Update() => Hooks.Update();
+            public void LateUpdate() => Hooks.LateUpdate();
+            public void OnApplicationQuit() => Hooks.OnApplicationQuit();
         }
 
         public class Delegates
