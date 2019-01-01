@@ -8,14 +8,13 @@ namespace QModManager
 {
     public class QModInjector
     {
-        private string gameDirectory;
-        private string managedDirectory;
-        private string installerFilename = "QModInstaller.dll";
-        private string mainFilename = "Assembly-CSharp.dll";
-        private string backupFilename = "Assembly-CSharp.qoriginal.dll";
+        internal string gameDirectory;
+        internal string managedDirectory;
+        internal string installerFilename = "QModInstaller.dll";
+        internal string mainFilename = "Assembly-CSharp.dll";
+        internal string backupFilename = "Assembly-CSharp.qoriginal.dll";
 
-
-        public QModInjector(string dir, string managedDir = null)
+        internal QModInjector(string dir, string managedDir = null)
         {
             gameDirectory = dir;
 			if (managedDir == null)
@@ -31,7 +30,7 @@ namespace QModManager
         }
 
 #warning TODO: Implement installer rollback in Inno Setup
-        public void Inject()
+        internal void Inject()
         {
             try
             {
@@ -80,8 +79,7 @@ namespace QModManager
             }
         }
 
-
-        public void Remove()
+        internal void Remove()
         {
             try
             {
@@ -124,8 +122,7 @@ namespace QModManager
             }
         }
 
-
-        public bool IsInjected()
+        internal bool IsInjected()
         {
             try
             {
