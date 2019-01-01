@@ -107,8 +107,25 @@ namespace QModManager
                 foundMods.Add(mod); 
             }
 
+            // Add the found mods into the sortedMods list
             sortedMods.AddRange(foundMods);
 
+            // Sort the mods based on their LoadBefore and LoadAfter properties
+            // If any mods break (i.e., a loop is found), they are removed from the list so that they aren't loaded
+            // And are outputted into the log.
+            SortMods();
+
+            // Check if all the mods' dependencies are present
+            // If a mod's dependecies aren't present, that mods isn't loaded and it is outputted in the log.
+            CheckForDependencies();
+
+            // Finally, load all the mods after sorting and checking for dependencies. 
+            // If anything goes wrong during loading, it is outputted in the log.
+            LoadAllMods();
+        }
+
+        internal static void SortMods()
+        {
             // Contains all the mods that errored out during the sorting process.
             List<List<QMod>> sortingErrorLoops = new List<List<QMod>>();
 
@@ -129,7 +146,7 @@ namespace QModManager
 
                     List<QMod> loop = new List<QMod>();
 
-                    for(int j = 0; j < modSortingChain.Count; j++)
+                    for (int j = 0; j < modSortingChain.Count; j++)
                     {
                         if (j >= firstIndex)
                         {
@@ -137,7 +154,7 @@ namespace QModManager
 
                             // Add this mod to the list of errored mods
                             // Reason we check if its already in the list is because there is going to be at least 1 duplicate
-                            if(!erroredMods.Contains(modSortingChain[j]))
+                            if (!erroredMods.Contains(modSortingChain[j]))
                                 erroredMods.Add(modSortingChain[j]);
                         }
                     }
@@ -170,11 +187,14 @@ namespace QModManager
 
                 Console.WriteLine("");
             }
+        }
 
+        internal static void CheckForDependencies()
+        {
             // Check if all mods have dependencies present
             Dictionary<QMod, List<string>> missingDependenciesByMod = new Dictionary<QMod, List<string>>();
-        
-            foreach(QMod mod in foundMods)
+
+            foreach (QMod mod in foundMods)
             {
                 List<QMod> presentDependencies = GetPresentDependencies(mod);
                 List<string> missingDependencies = GetMissingDependencies(mod, presentDependencies);
@@ -190,20 +210,20 @@ namespace QModManager
             }
 
             // There are missing dependencies! Output them!
-            if(missingDependenciesByMod.Count != 0)
+            if (missingDependenciesByMod.Count != 0)
             {
                 Console.WriteLine("QMOD ERROR: The following mods were not loaded due to missing dependencies!\n");
 
-                foreach(var entry in missingDependenciesByMod)
+                foreach (var entry in missingDependenciesByMod)
                 {
                     // Remove the mod from the sortedMods list to stop it from loading
-                    if(sortedMods.Contains(entry.Key))
+                    if (sortedMods.Contains(entry.Key))
                         sortedMods.Remove(entry.Key);
 
                     // Build the string to be displayed for this mod
                     string str = entry.Key.DisplayName + " (missing: ";
 
-                    foreach(string missingDependencyId in entry.Value)
+                    foreach (string missingDependencyId in entry.Value)
                     {
                         str += missingDependencyId + ", ";
                     }
@@ -217,7 +237,10 @@ namespace QModManager
 
                 Console.WriteLine("");
             }
+        }
 
+        internal static void LoadAllMods()
+        {
             string toWrite = "\nLoaded mods:\n";
 
             List<QMod> loadingErrorMods = new List<QMod>();
@@ -228,7 +251,7 @@ namespace QModManager
             {
                 if (mod != null && !mod.Loaded)
                 {
-                    if(mod.Id != "SMLHelper")
+                    if (mod.Id != "SMLHelper")
                     {
                         toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
 
@@ -252,7 +275,7 @@ namespace QModManager
                 }
             }
 
-            if(smlHelper != null)
+            if (smlHelper != null)
             {
                 toWrite += $"- {smlHelper.DisplayName} ({smlHelper.Id})\n";
 
@@ -270,7 +293,7 @@ namespace QModManager
                 }
             }
 
-            if(loadingErrorMods.Count != 0)
+            if (loadingErrorMods.Count != 0)
             {
                 Console.WriteLine("QMOD ERROR: The following mods could not be loaded:\n");
 
