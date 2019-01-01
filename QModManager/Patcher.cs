@@ -226,7 +226,7 @@ namespace QModManager
 
             foreach (QMod mod in sortedMods)
             {
-                if (mod != null && !mod.Loaded && mod.Id != "SMLHelper")
+                if (mod != null && !mod.Loaded)
                 {
                     if(mod.Id != "SMLHelper")
                     {
