@@ -32,7 +32,7 @@ namespace QModManager
                 }
             }
 
-            [HarmonyPatch(typeof(GameInput), "Start")]
+            [HarmonyPatch(typeof(), "Start")]
             internal static class Start
             {
                 [HarmonyPostfix]
@@ -42,7 +42,7 @@ namespace QModManager
                 }
             }
 
-            [HarmonyPatch(typeof(GameInput), "FixedUpdate")]
+            [HarmonyPatch(typeof(), "FixedUpdate")]
             internal static class FixedUpdate
             {
                 [HarmonyPostfix]
@@ -62,7 +62,7 @@ namespace QModManager
                 }
             }
 
-            [HarmonyPatch(typeof(GameInput), "LateUpdate")]
+            [HarmonyPatch(typeof(), "LateUpdate")]
             internal static class LateUpdate
             {
                 [HarmonyPostfix]
