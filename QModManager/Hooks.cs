@@ -1,29 +1,21 @@
 ﻿using Harmony;
-using System;
 using UnityEngine.SceneManagement;
 
 namespace QModManager
 {
     public class Hooks
     {
-        public static event EventHandler<SceneLoadedEventArgs> SceneLoaded;
-        public static event EventHandler Awake;
-        public static event EventHandler Start;
-        public static event EventHandler FixedUpdate;
-        public static event EventHandler Update;
-        public static event EventHandler LateUpdate;
+        public static Delegates.Awake Awake;
+        public static Delegates.SceneLoaded SceneLoaded;
+        public static Delegates.Start Start;
+        public static Delegates.FixedUpdate FixedUpdate;
+        public static Delegates.Update Update;
+        public static Delegates.LateUpdate LateUpdate;
 
         internal static void Patch()
         {
             HarmonyInstance.Create("qmodmanager.subnautica").PatchAll();
-            SceneManager.sceneLoaded += (scene, loadSceneMode) => 
-            {
-                SceneLoaded(null, new SceneLoadedEventArgs()
-                {
-                    scene = scene,
-                    loadSceneMode = loadSceneMode
-                });
-            };
+            SceneManager.sceneLoaded += (scene, loadSceneMode) => SceneLoaded(scene, loadSceneMode);
         }
 
         internal static class Patches
@@ -34,7 +26,7 @@ namespace QModManager
                 [HarmonyPostfix]
                 internal static void Postfix()
                 {
-                    Awake(null, null);
+                    Awake();
                 }
             }
 
@@ -44,7 +36,7 @@ namespace QModManager
                 [HarmonyPostfix]
                 internal static void Postfix()
                 {
-                    Start(null, null);
+                    Start();
                 }
             }
 
@@ -54,7 +46,7 @@ namespace QModManager
                 [HarmonyPostfix]
                 internal static void Postfix()
                 {
-                    FixedUpdate(null, null);
+                    FixedUpdate();
                 }
             }
 
@@ -64,7 +56,7 @@ namespace QModManager
                 [HarmonyPostfix]
                 internal static void Postfix()
                 {
-                    Update(null, null);
+                    Update();
                 }
             }
 
@@ -74,15 +66,19 @@ namespace QModManager
                 [HarmonyPostfix]
                 internal static void Postfix()
                 {
-                    LateUpdate(null, null);
+                    LateUpdate();
                 }
             }
         }
 
-        public class SceneLoadedEventArgs : EventArgs
+        public class Delegates
         {
-            public Scene scene;
-            public LoadSceneMode loadSceneMode;
+            public delegate void Awake();
+            public delegate void SceneLoaded(Scene scene, LoadSceneMode loadSceneMode);
+            public delegate void Start();
+            public delegate void FixedUpdate();
+            public delegate void Update();
+            public delegate void LateUpdate();
         }
     }
 }
