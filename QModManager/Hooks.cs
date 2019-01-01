@@ -68,7 +68,7 @@ namespace QModManager
                 }
             }
 
-            [HarmonyPatch(typeof(GameInput), "Start")]
+            [HarmonyPatch(typeof(GameInput), "LateUpdate")]
             internal static class GameInput_LateUpdate_Patch
             {
                 [HarmonyPostfix]
