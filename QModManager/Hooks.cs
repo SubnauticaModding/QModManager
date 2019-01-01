@@ -6,13 +6,13 @@ namespace QModManager
     public class Hooks
     {
         public static Delegates.Awake Awake;
+        public static Delegates.OnLoadEnd OnLoadEnd;
         public static Delegates.SceneLoaded SceneLoaded;
         public static Delegates.Start Start;
         public static Delegates.FixedUpdate FixedUpdate;
         public static Delegates.Update Update;
         public static Delegates.LateUpdate LateUpdate;
-
-        public static Delegates.OnLoadEnd OnLoadEnd;
+        public static Delegates.OnApplicationQuit OnApplicationQuit;
 
         internal static void Patch()
         {
@@ -23,7 +23,7 @@ namespace QModManager
         internal static class Patches
         {
             [HarmonyPatch(typeof(GameInput), "Awake")]
-            internal static class GameInput_Awake_Patch
+            internal static class Awake
             {
                 [HarmonyPostfix]
                 internal static void Postfix()
@@ -33,7 +33,7 @@ namespace QModManager
             }
 
             [HarmonyPatch(typeof(GameInput), "Start")]
-            internal static class GameInput_Start_Patch
+            internal static class Start
             {
                 [HarmonyPostfix]
                 internal static void Postfix()
@@ -43,7 +43,7 @@ namespace QModManager
             }
 
             [HarmonyPatch(typeof(GameInput), "FixedUpdate")]
-            internal static class GameInput_FixedUpdate_Patch
+            internal static class FixedUpdate
             {
                 [HarmonyPostfix]
                 internal static void Postfix()
@@ -53,7 +53,7 @@ namespace QModManager
             }
 
             [HarmonyPatch(typeof(GameInput), "Update")]
-            internal static class GameInput_Update_Patch
+            internal static class Update
             {
                 [HarmonyPostfix]
                 internal static void Postfix()
@@ -63,7 +63,7 @@ namespace QModManager
             }
 
             [HarmonyPatch(typeof(GameInput), "LateUpdate")]
-            internal static class GameInput_LateUpdate_Patch
+            internal static class LateUpdate
             {
                 [HarmonyPostfix]
                 internal static void Postfix()
@@ -71,18 +71,28 @@ namespace QModManager
                     LateUpdate();
                 }
             }
+
+            [HarmonyPatch(typeof(), "OnApplicationQuit")]
+            internal static class OnApplicationQuit
+            {
+                [HarmonyPostfix]
+                internal static void Postfix()
+                {
+                    OnApplicationQuit();
+                }
+            }
         }
 
         public class Delegates
         {
             public delegate void Awake();
+            public delegate void OnLoadEnd();
             public delegate void SceneLoaded(Scene scene, LoadSceneMode loadSceneMode);
             public delegate void Start();
             public delegate void FixedUpdate();
             public delegate void Update();
             public delegate void LateUpdate();
-
-            public delegate void OnLoadEnd();
+            public delegate void OnApplicationQuit();
         }
     }
 }
