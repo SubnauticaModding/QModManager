@@ -146,7 +146,7 @@ namespace QModManager
                 }
             }
 
-            if(sortingErrorLoops.Count != 0)
+            if (sortingErrorLoops.Count != 0)
             {
                 Console.WriteLine("QMOD ERROR: There was en error while sorting the following mods!");
                 Console.WriteLine("Please check the 'LoadAfter' and 'LoadBefore' properties of these mods!\n");
@@ -155,10 +155,10 @@ namespace QModManager
                 {
                     string outputStr = "";
 
-                    foreach(QMod mod in list)
+                    foreach (QMod mod in list)
                     {
                         // Remove it from list to prevent it from being loaded
-                        if(sortedMods.Contains(mod))
+                        if (sortedMods.Contains(mod))
                             sortedMods.Remove(mod);
 
                         outputStr += mod.Id + " -> ";
@@ -167,6 +167,8 @@ namespace QModManager
                     outputStr = outputStr.Substring(0, outputStr.Length - 4);
                     Console.WriteLine(outputStr);
                 }
+
+                Console.WriteLine("");
             }
 
             // Check if all mods have dependencies present
@@ -174,8 +176,8 @@ namespace QModManager
         
             foreach(QMod mod in foundMods)
             {
-                List<QMod> presentDependencies = GetDependenciesPresent(mod);
-                List<string> missingDependencies = GetDependenciesMissing(mod, presentDependencies);
+                List<QMod> presentDependencies = GetPresentDependencies(mod);
+                List<string> missingDependencies = GetMissingDependencies(mod, presentDependencies);
 
                 if (missingDependencies.Count != 0)
                 {
@@ -199,7 +201,7 @@ namespace QModManager
                         sortedMods.Remove(entry.Key);
 
                     // Build the string to be displayed for this mod
-                    string str = entry.Key.DisplayName + ": Missing ";
+                    string str = entry.Key.DisplayName + " (missing: ";
 
                     foreach(string missingDependencyId in entry.Value)
                     {
@@ -208,9 +210,12 @@ namespace QModManager
 
                     // Remove the ", " characters at the end of the string
                     str = str.Substring(0, str.Length - 2);
+                    str += ")";
 
                     Console.WriteLine(str);
                 }
+
+                Console.WriteLine("");
             }
 
             string toWrite = "\nLoaded mods:\n";
@@ -223,53 +228,57 @@ namespace QModManager
             {
                 if (mod != null && !mod.Loaded && mod.Id != "SMLHelper")
                 {
-                    toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
-
-                    if(!LoadMod(mod))
+                    if(mod.Id != "SMLHelper")
                     {
-                        if (!erroredMods.Contains(mod))
-                            erroredMods.Add(mod);
+                        toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
 
-                        if (!loadingErrorMods.Contains(mod))
-                            loadingErrorMods.Add(mod);
+                        if (!LoadMod(mod))
+                        {
+                            if (!erroredMods.Contains(mod))
+                                erroredMods.Add(mod);
 
-                        continue;
+                            if (!loadingErrorMods.Contains(mod))
+                                loadingErrorMods.Add(mod);
+
+                            continue;
+                        }
+
+                        loadedMods.Add(mod);
                     }
-
-                    loadedMods.Add(mod);
+                    else
+                    {
+                        smlHelper = mod;
+                    }
                 }
-                else if(mod != null && !mod.Loaded && mod.Id == "SMLHelper")
+            }
+
+            if(smlHelper != null)
+            {
+                toWrite += $"- {smlHelper.DisplayName} ({smlHelper.Id})\n";
+
+                if (!LoadMod(smlHelper))
                 {
-                    smlHelper = mod;
+                    if (!erroredMods.Contains(smlHelper))
+                        erroredMods.Add(smlHelper);
+
+                    if (!loadingErrorMods.Contains(smlHelper))
+                        loadingErrorMods.Add(smlHelper);
                 }
-            }
-
-            toWrite += $"- {smlHelper.DisplayName} ({smlHelper.Id})\n";
-
-            if (!LoadMod(smlHelper))
-            {
-                if (!erroredMods.Contains(smlHelper))
-                    erroredMods.Add(smlHelper);
-
-                if (!loadingErrorMods.Contains(smlHelper))
-                    loadingErrorMods.Add(smlHelper);
-            }
-            else
-            {
-                loadedMods.Add(smlHelper);
+                else
+                {
+                    loadedMods.Add(smlHelper);
+                }
             }
 
             if(loadingErrorMods.Count != 0)
             {
-                Console.WriteLine("QMOD ERROR: The following mods failed to load:\n");
+                Console.WriteLine("QMOD ERROR: The following mods could not be loaded:\n");
 
                 foreach (QMod mod in loadingErrorMods)
                 {
                     Console.WriteLine(mod.Id);
                 }
             }
-
-            Console.WriteLine("");
 
             Console.WriteLine(toWrite);
         }
@@ -299,7 +308,7 @@ namespace QModManager
             // I say it like this: load this (where this is the mod that is passed in) after these
             // Thus the variable name.
             // If anyone else can come up with better variable names, I'll be all for it
-            List<QMod> loadThisAfterThese = GetModsToLoadAfter(mod);
+            List<QMod> loadThisAfterThese = GetLoadAfter(mod);
 
             // Loop through this list
             foreach (QMod loadModAfterThis in loadThisAfterThese)
@@ -345,7 +354,7 @@ namespace QModManager
             // I say it like this: load this (where this is the mod that is passed in) before these
             // Thus the variable name.
             // If anyone else can come up with better variable names, I'll be all for it
-            List<QMod> loadThisBeforeThese = GetModsToLoadBefore(mod);
+            List<QMod> loadThisBeforeThese = GetLoadBefore(mod);
 
             // Loop through this list
             foreach (QMod loadAfter in loadThisBeforeThese)
@@ -428,7 +437,7 @@ namespace QModManager
             return true;
         }
 
-        internal static List<QMod> GetDependenciesPresent(QMod mod)
+        internal static List<QMod> GetPresentDependencies(QMod mod)
         {
             if (mod == null) return null;
 
@@ -446,7 +455,7 @@ namespace QModManager
             return dependencies;
         }
 
-        internal static List<string> GetDependenciesMissing(QMod mod, IEnumerable<QMod> presentDependencies)
+        internal static List<string> GetMissingDependencies(QMod mod, IEnumerable<QMod> presentDependencies)
         {
             if (mod == null) return null;
             if (presentDependencies == null || presentDependencies.Count() == 0) return mod.Dependencies.ToList();
@@ -465,7 +474,7 @@ namespace QModManager
             return dependenciesMissing;
         }
 
-        internal static List<QMod> GetModsToLoadBefore(QMod mod)
+        internal static List<QMod> GetLoadBefore(QMod mod)
         {
             if (mod == null) return null;
 
@@ -483,7 +492,7 @@ namespace QModManager
             return mods;
         }
 
-        internal static List<QMod> GetModsToLoadAfter(QMod mod)
+        internal static List<QMod> GetLoadAfter(QMod mod)
         {
             if (mod == null) return null;
 
