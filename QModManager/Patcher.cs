@@ -17,6 +17,12 @@ namespace QModManager
         {
             try
             {
+                if (patched)
+                {
+                    Console.WriteLine("QMOD WARN: Patch method was called multiple times!");
+                    return;
+                }
+                patched = true;
                 LoadMods();
             }
             catch (Exception e)
@@ -25,6 +31,7 @@ namespace QModManager
                 Console.WriteLine(e.ToString());
             }
         }
+
         internal static void LoadMods()
         {
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
@@ -41,9 +48,6 @@ namespace QModManager
 
                 return null;
             };
-
-            if (patched) return;
-            patched = true;
 
             if (!Directory.Exists(QModBaseDir))
             {
