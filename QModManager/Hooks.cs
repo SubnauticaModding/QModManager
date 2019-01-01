@@ -12,6 +12,8 @@ namespace QModManager
         public static Delegates.Update Update;
         public static Delegates.LateUpdate LateUpdate;
 
+        public static Delegates.OnLoadEnd OnLoadEnd;
+
         internal static void Patch()
         {
             HarmonyInstance.Create("qmodmanager.subnautica").PatchAll();
@@ -79,6 +81,8 @@ namespace QModManager
             public delegate void FixedUpdate();
             public delegate void Update();
             public delegate void LateUpdate();
+
+            public delegate void OnLoadEnd();
         }
     }
 }

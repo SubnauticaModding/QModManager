@@ -26,6 +26,7 @@ namespace QModManager
 
                 Hooks.Patch();
                 LoadMods();
+                Hooks.OnLoadEnd();
             }
             catch (Exception e)
             {
