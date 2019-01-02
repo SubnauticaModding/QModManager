@@ -416,6 +416,15 @@ namespace QModManager
             return true;
         }
 
+        internal static void ClearModLists()
+        {
+            // For unit testing
+            loadedMods.Clear();
+            foundMods.Clear();
+            sortedMods.Clear();
+            erroredMods.Clear();
+        }
+
         internal static bool LoadMod(QMod mod)
         {
             if (mod == null || mod.Loaded) return false;
