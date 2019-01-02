@@ -7,17 +7,17 @@ using System.Runtime.InteropServices;
 namespace QModManager
 {
     internal enum Action
-        {
-            Install,
-            Uninstall,
-            RunByUser
-        }
+    {
+        Install,
+        Uninstall,
+        RunByUser
+    }
 
-    public static class ConsoleExecutable
+    internal static class ConsoleExecutable
     {
         internal static Action action = Action.RunByUser;
 
-        public static void Main(string[] args)
+        internal static void Main(string[] args)
         {
             try
             {
@@ -152,11 +152,11 @@ namespace QModManager
             Console.TreatControlCAsInput = true;
         }
 
-        internal static void DisableExitButton() => EnableMenuItem(GetSystemMenu(GetConsoleWindow(), false), 0xF060, 0x1);
-        internal static void CancelKeyPress(object sender, ConsoleCancelEventArgs e) => e.Cancel = true;
-        [DllImport("user32.dll")] internal static extern int EnableMenuItem(IntPtr tMenu, int targetItem, int targetStatus);
-        [DllImport("user32.dll")] internal static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
-        [DllImport("kernel32.dll", ExactSpelling = true)] internal static extern IntPtr GetConsoleWindow();
+        private static void DisableExitButton() => EnableMenuItem(GetSystemMenu(GetConsoleWindow(), false), 0xF060, 0x1);
+        private static void CancelKeyPress(object sender, ConsoleCancelEventArgs e) => e.Cancel = true;
+        [DllImport("user32.dll")] private static extern int EnableMenuItem(IntPtr tMenu, int targetItem, int targetStatus);
+        [DllImport("user32.dll")] private static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+        [DllImport("kernel32.dll", ExactSpelling = true)] private static extern IntPtr GetConsoleWindow();
 
         #endregion
     }

@@ -21,20 +21,23 @@ namespace QModManager
         {
             try
             {
+                if (patched)
+                {
+                    Console.WriteLine("QMOD WARN: Patch method was called multiple times!");
+                    return;
+                }
+                patched = true;
+
+                Hooks.Patch();
                 LoadMods();
-                SceneManager.sceneLoaded += SceneManager_sceneLoaded;
+                
+                Hooks.OnLoadEnd();
             }
             catch (Exception e)
             {
                 Console.WriteLine("EXCEPTION CAUGHT!");
                 Console.WriteLine(e.ToString());
             }
-        }
-
-        internal static void SceneManager_sceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
-        {
-            if (scene.name != "XMenu") return;
-            ErrorDialog.Show("test error");
         }
 
         internal static void LoadMods()
@@ -52,9 +55,6 @@ namespace QModManager
 
                 return null;
             };
-
-            if (patched) return;
-            patched = true;
 
             if (!Directory.Exists(QModBaseDir))
             {
