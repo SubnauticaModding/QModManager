@@ -23,7 +23,7 @@ namespace QModManager
             {
                 onRightButtonPressed = () => 
                 {
-                    Console.Write("");
+                    
                 };
             }
 
@@ -48,8 +48,6 @@ namespace QModManager
             {
                 if (leftButtonClicked) onLeftButtonPressed.Invoke();
                 else onRightButtonPressed.Invoke();
-
-                Console.Write("");
 
                 confirmation.yes.gameObject.SetActive(true);
                 confirmation.no.gameObject.SetActive(true);
