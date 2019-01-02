@@ -31,7 +31,7 @@ namespace QModManager
         internal static void SceneManager_sceneLoaded(Scene scene, LoadSceneMode loadSceneMode)
         {
             if (scene.name != "XMenu") return;
-            Error.ShowError("test error");
+            ErrorDialog.Show("test error");
         }
 
         internal static void LoadMods()
