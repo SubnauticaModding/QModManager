@@ -5,24 +5,25 @@ using System.Reflection;
 
 namespace QModManager
 {
-    public class QMod : IComparable<QMod>
+    public class QMod
     {
         public string Id = "Mod.ID";
         public string DisplayName = "Mod display name";
         public string Author = "Author name";
         public string Version = "0.0.0";
-        //public string[] Requires = new string[] { };
+        public string[] Dependencies = new string[] { };
+        public string[] LoadBefore = new string[] { };
+        public string[] LoadAfter = new string[] { };
         public bool Enable = true;
         public string AssemblyName = "Filename.dll";
         public string EntryMethod = "Namespace.Class.Method";
-        public string Priority = "obsolete. use NewPriority Instead";
-        public int NewPriority = 0;
-        //public Dictionary<string, object> Config = new Dictionary<string, object>();
 
         [JsonIgnore]
         public Assembly LoadedAssembly;
         [JsonIgnore]
         public string ModAssemblyPath;
+        [JsonIgnore]
+        public bool Loaded;
 
         //public QMod() { }
 
@@ -48,7 +49,5 @@ namespace QModManager
                 return null;
             }
         }
-
-        public int CompareTo(QMod other) => NewPriority.CompareTo(other.NewPriority);
     }
 }
