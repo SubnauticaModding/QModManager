@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using UnityEngine.SceneManagement;
 
 namespace QModManager
 {
@@ -30,7 +29,9 @@ namespace QModManager
 
                 Hooks.Patch();
                 LoadMods();
-                
+
+                ShowErroredMods();
+
                 Hooks.OnLoadEnd();
             }
             catch (Exception e)
@@ -422,6 +423,20 @@ namespace QModManager
             }
 
             return true;
+        }
+
+        internal static string erroredModsPrefix = "The following mods could not be loaded: ";
+
+        internal static void ShowErroredMods()
+        {
+            if (erroredMods.Count <= 0) return;
+            string display = erroredModsPrefix;
+            for (int i = 0; i < erroredMods.Count; i++)
+            {
+                display += erroredMods[i].DisplayName;
+                if (i + 1 != erroredMods.Count) display += ", ";
+            }
+            ErrorDialog.Show(display);
         }
 
         internal static void ClearModLists()
