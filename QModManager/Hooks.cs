@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 namespace QModManager
 {
-    public class Hooks
+    public static class Hooks
     {
         public static Delegates.Start Start;
         public static Delegates.FixedUpdate FixedUpdate;
