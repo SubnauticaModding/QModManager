@@ -7,6 +7,8 @@ namespace QModManager
 {
     public class QMod
     {
+        public static readonly Version QModManagerVersion = new Version(1, 4);
+
         public string Id = "Mod.ID";
         public string DisplayName = "Mod display name";
         public string Author = "Author name";
@@ -19,15 +21,14 @@ namespace QModManager
         public string EntryMethod = "Namespace.Class.Method";
 
         [JsonIgnore]
-        public Assembly LoadedAssembly;
+        internal Assembly LoadedAssembly;
         [JsonIgnore]
-        public string ModAssemblyPath;
+        internal string ModAssemblyPath;
+      
         [JsonIgnore]
-        public bool Loaded;
+        internal bool Loaded;
 
-        //public QMod() { }
-
-        public static QMod FromJsonFile(string file)
+        internal static QMod FromJsonFile(string file)
         {
             try
             {

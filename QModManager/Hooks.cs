@@ -18,27 +18,27 @@ namespace QModManager
 
         internal static void Patch()
         {
+            SceneManager.sceneLoaded += (scene, loadSceneMode) => SceneLoaded?.Invoke(scene, loadSceneMode);
             HarmonyInstance.Create("qmodmanager.subnautica").PatchAll();
-            SceneManager.sceneLoaded += (scene, loadSceneMode) => SceneLoaded(scene, loadSceneMode);
         }
 
-        [HarmonyPatch(typeof(GameInput), "Start")]
+        [HarmonyPatch(typeof(DevConsole), "Start")]
         internal static class AddComponentPatch
         {
             [HarmonyPostfix]
-            internal static void Postfix(GameInput __instance)
+            internal static void Postfix(DevConsole __instance)
             {
                 __instance.gameObject.AddComponent<QMMHooks>();
+                Start?.Invoke();
             }
         }
 
         internal class QMMHooks : MonoBehaviour
         {
-            public void Start() => Hooks.Start();
-            public void FixedUpdate() => Hooks.FixedUpdate();
-            public void Update() => Hooks.Update();
-            public void LateUpdate() => Hooks.LateUpdate();
-            public void OnApplicationQuit() => Hooks.OnApplicationQuit();
+            public void FixedUpdate() => Hooks.FixedUpdate?.Invoke();
+            public void Update() => Hooks.Update?.Invoke();
+            public void LateUpdate() => Hooks.LateUpdate?.Invoke();
+            public void OnApplicationQuit() => Hooks.OnApplicationQuit?.Invoke();
         }
 
         public class Delegates
