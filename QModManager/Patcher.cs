@@ -573,16 +573,18 @@ namespace QModManager
             if (erroredMods.Count == 0)
             {
                 Dialog.Show(LanguageLines.Patcher.NewVersionDisplayPrefix + dialogversion.ToString() + LanguageLines.Patcher.NewVersionDisplayCurrent + QMod.QModManagerVersion.ToString() + LanguageLines.Patcher.NewVersionDisplaySuffix, () => Process.Start(nexusmodsURL), leftButtonText: "Download", blue: true);
-                return;
             }
-            string display = LanguageLines.Patcher.ErroredModsDisplayPrefix;
-            for (int i = 0; i < erroredMods.Count; i++)
+            else
             {
-                display += erroredMods[i].DisplayName;
-                if (i + 1 != erroredMods.Count) display += LanguageLines.Patcher.ErroredModsDisplaySeparator;
+                string display = LanguageLines.Patcher.ErroredModsDisplayPrefix;
+                for (int i = 0; i < erroredMods.Count; i++)
+                {
+                    display += erroredMods[i].DisplayName;
+                    if (i + 1 != erroredMods.Count) display += LanguageLines.Patcher.ErroredModsDisplaySeparator;
+                }
+                display += LanguageLines.Patcher.ErroredModsDisplaySuffix;
+                Dialog.Show(display);
             }
-            display += LanguageLines.Patcher.ErroredModsDisplaySuffix;
-            Dialog.Show(display);
             Hooks.Update -= ShowDialog;
         }
 
