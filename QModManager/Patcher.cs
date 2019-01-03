@@ -557,7 +557,8 @@ namespace QModManager
 
         #region Errored mods
 
-        internal static string erroredModsPrefix = "The following mods could not be loaded: ";
+        internal const string erroredModsDisplayPrefix = "The following mods could not be loaded: ";
+        internal const string erroredModsDisplaySuffix = ". Check the log for details.";
 
         internal static float timer = 0f;
 
@@ -566,13 +567,13 @@ namespace QModManager
             timer += Time.deltaTime;
             if (timer < 1) return;
             if (erroredMods.Count <= 0) return;
-            string display = erroredModsPrefix;
+            string display = erroredModsDisplayPrefix;
             for (int i = 0; i < erroredMods.Count; i++)
             {
                 display += erroredMods[i].DisplayName;
                 if (i + 1 != erroredMods.Count) display += ", ";
             }
-            display += ". Check the log for details.";
+            display += erroredModsDisplaySuffix;
             Dialog.Show(display);
             Hooks.Update -= ShowErroredMods;
         }
