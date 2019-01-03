@@ -23,6 +23,8 @@ namespace QModManager
         {
             try
             {
+                LanguageHelper.Init();
+
                 if (patched)
                 {
                     Console.WriteLine(LanguageLines.Patcher.CalledMultipleTimes);
