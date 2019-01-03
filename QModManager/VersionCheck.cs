@@ -19,9 +19,23 @@ namespace QModManager
         internal static void Check()
         {
             string versionStr = Get();
-            if (versionStr == null) return;
+            if (versionStr == null)
+            {
+                UnityEngine.Debug.Log("Could not get latest version! (string is null)");
+                return;
+            }
             VersionWrapper wrapper = JsonConvert.DeserializeObject<VersionWrapper>(versionStr);
+            if (wrapper == null)
+            {
+                UnityEngine.Debug.Log("Could not get latest version! (VersionWrapper is null)");
+                return;
+            }
             Version version = new Version(wrapper.version);
+            if (version == null)
+            {
+                UnityEngine.Debug.Log("Could not get latest version! (Version is null)");
+                return;
+            }
             if (!version.Equals(QMod.QModManagerVersion) && QModPatcher.erroredMods.Count <= 0) Dialog.Show(newVersionDisplayPrefix + version.ToString() + newVersionDisplaySuffix + QMod.QModManagerVersion.ToString() + newVersionDisplaySuffix2, () => Process.Start(nexusmodsURL), leftButtonText: "Download", blue: true);
             // Longest line ever - will change in the next pr (trust me)
         }
