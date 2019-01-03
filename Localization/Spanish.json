@@ -1,8 +1,8 @@
 {
     "PressAnyKeyToExit": "Presione cualquier tecla para salir...",
     "ExceptionCaught": "EXCEPCIÓN!",
-    "AssemblyMissing": "No pudimos encontrar el archivo del ensamblado.\nPor favor asegúrese de instalar a QModManager en la carpeta correcta.\nSi el error no se resuelve, puede reportarlo en NexusMods o GitHub.",
-    "ExecutableMissing": "No pudimos encontrar ningún video juego a parchear!\nEncontramos el DLL pero no pudimos detectar el ejecutable.\nPor favor de confirmar que QModManager tiene la carpeta de instalación correcta.\nSi el error no se resuelve, puede reportarlo en NexusMods o GitHub.",
+    "AssemblyMissing": "No pudimos encontrar el archivo del ensamblado.\nPor favor asegúrese de instalar a QModManager en la carpeta correcta.",
+    "ExecutableMissing": "No pudimos encontrar ningún video juego a parchear!\nEncontramos el DLL pero no pudimos detectar el ejecutable.\nPor favor de confirmar que QModManager tiene la carpeta de instalación correcta.",
     "Installing": "Instalando QModManager...",
     "Uninstalling": "Desinstalando QModManager...",
     "AlreadyUninstalled": "QModManager no está instalado!\nCancelando la desinstalación",
@@ -32,5 +32,6 @@
     "LoadLanguage": "Cargando archivo de idioma {0}...",
     "AlreadyInstalled": "QModManager ya estaba instalado!\nCancelando la instalación",
     "Yes": "Yes",
-    "No": "No"
+    "No": "No",
+    "IfTheProblemPersists": "If the problem persists, open a bug report on NexusMods or an issue on GitHub"
 }
