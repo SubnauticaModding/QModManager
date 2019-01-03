@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace QModManager
 {
-    internal static class ErrorDialog
+    internal static class Dialog
     {
         internal static void Show(string error, Action onLeftButtonPressed = null, Action onRightButtonPressed = null, string leftButtonText = "See Log", string rightButtonText = "Close", bool blue = false)
         {

@@ -267,7 +267,7 @@ namespace QModManager
                 if (i + 1 != erroredMods.Count) display += ", ";
             }
             display += ". Check the log for details.";
-            ErrorDialog.Show(display);
+            Dialog.Show(display);
             Hooks.Update -= ShowErroredMods;
         }
 
