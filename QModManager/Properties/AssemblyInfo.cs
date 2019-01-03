@@ -10,7 +10,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: InternalsVisibleTo("QMMTests")]
 
 [assembly: ComVisible(false)]
 
@@ -19,4 +18,5 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.4.0.0")]
 [assembly: AssemblyFileVersion("1.4.0.0")]
 
+[assembly: InternalsVisibleTo("QMMTests")]
 [assembly: InternalsVisibleTo("QModManager")]
