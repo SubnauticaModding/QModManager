@@ -25,7 +25,7 @@
 	"Patcher_SortingLoopError": "There was en error while sorting the following mods!\nPlease check the 'LoadAfter' and 'LoadBefore' properties of these mods:",
 	"Patcher_MissingDependencies": "The following mods were not loaded due to missing dependencies:",
 	"Patcher_MissingDependenciesMod": "(missing: {0})",
-	"Dialog_ErroredMods": "The following mods could not be loaded: ",
+	"Dialog_ErroredMods": "The following mods could not be loaded:",
 	"Dialog_ErroredModsSuffix": "Check the log for details.",
 	"Dialog_NewVersion": "There is a newer version of QModManager available: {0} (current version: {1})",
 	"QMod_DeserializationFailed": "mod.json deserialization failed!",
