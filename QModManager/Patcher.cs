@@ -30,7 +30,7 @@ namespace QModManager
                 patched = true;
 
                 Hooks.Patch();
-                LoadMods();
+                StartLoadingMods();
                 Hooks.Update += ShowErroredMods;
 
                 Hooks.OnLoadEnd();
@@ -44,7 +44,7 @@ namespace QModManager
 
         #region Mod loading
 
-        internal static void LoadMods()
+        internal static void StartLoadingMods()
         {
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {
