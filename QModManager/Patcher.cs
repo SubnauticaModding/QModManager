@@ -33,6 +33,8 @@ namespace QModManager
                 StartLoadingMods();
                 Hooks.Update += ShowErroredMods;
 
+                VersionCheck.Check();
+
                 Hooks.OnLoadEnd();
             }
             catch (Exception e)
