@@ -12,7 +12,6 @@ namespace QModManager
         internal string managedDirectory;
         internal string installerFilename = "QModInstaller.dll";
         internal string mainFilename = "Assembly-CSharp.dll";
-        internal string backupFilename = "Assembly-CSharp.qoriginal.dll";
 
         internal QModInjector(string dir, string managedDir = null)
         {
@@ -26,7 +25,6 @@ namespace QModManager
 				managedDirectory = managedDir;
 			}
             mainFilename = Path.Combine(managedDirectory, mainFilename);
-            backupFilename = Path.Combine(managedDirectory, backupFilename);
         }
 
 #warning TODO: Implement installer rollback in Inno Setup
@@ -40,11 +38,12 @@ namespace QModManager
                     Console.WriteLine(LanguageLines.General.PressAnyKey);
                 }
 
+                // Remove backup file if it exists
+                string backupFilePath = Path.Combine(managedDirectory, "Assembly-CSharp.qoriginal.dll");
+                if (File.Exists(backupFilePath))
+                    File.Delete(backupFilePath);
+
                 AssemblyDefinition game = AssemblyDefinition.ReadAssembly(mainFilename);
-
-                if (File.Exists(backupFilename)) File.Delete(backupFilename);
-
-                game.Write(backupFilename);
 
                 AssemblyDefinition installer = AssemblyDefinition.ReadAssembly(installerFilename);
                 MethodDefinition patchMethod = installer.MainModule.GetType("QModInstaller.QModPatcher").Methods.First(x => x.Name == "Patch");
@@ -85,22 +84,46 @@ namespace QModManager
                     Environment.Exit(0);
                 }
 
-                if (File.Exists(backupFilename))
+                // Remove backup file if it exists
+                string backupFilePath = Path.Combine(managedDirectory, "Assembly-CSharp.qoriginal.dll");
+                if (File.Exists(backupFilePath))
+                    File.Delete(backupFilePath);
+
+                AssemblyDefinition game = AssemblyDefinition.ReadAssembly(mainFilename);
+
+                TypeDefinition gameInputDef = game.MainModule.GetType("GameInput");
+                MethodDefinition awakeMethod = gameInputDef.Methods.First(x => x.Name == "Awake");
+
+                Instruction patchMethodCall = null;
+
+                foreach (Instruction instruction in awakeMethod.Body.Instructions)
                 {
-                    File.Delete(mainFilename);
-
-                    File.Move(backupFilename, mainFilename);
-
-                    Console.WriteLine(LanguageLines.Injector.Uninstalled);
-                    Console.WriteLine(LanguageLines.General.PressAnyKey);
-                    Console.ReadKey();
-                    Environment.Exit(0);
+                    if (instruction.OpCode == OpCodes.Call && instruction.Operand.ToString().Equals("System.Void QModInstaller.QModPatcher::Patch()"))
+                    {
+                        patchMethodCall = instruction;
+                    }
                 }
 
-                Console.WriteLine(LanguageLines.Injector.BackupMissing);
-                Console.WriteLine(LanguageLines.General.PressAnyKey);
+                if (patchMethodCall != null)
+                {
+                    awakeMethod.Body.GetILProcessor().Remove(patchMethodCall);
+                }
+                else
+                {
+                    Console.WriteLine("An unexpected error has occurred.");
+                    Console.WriteLine();
+                    Console.WriteLine("Press any key to exit");
+                    Console.ReadKey();
+                    Environment.Exit(3);
+                }
+
+                game.Write(mainFilename);
+
+                Console.WriteLine("QModManager was uninstalled successfully");
+                Console.WriteLine();
+                Console.WriteLine("Press any key to exit...");
                 Console.ReadKey();
-                Environment.Exit(1);
+                Environment.Exit(0);
             }
             catch (Exception e)
             {
@@ -114,9 +137,6 @@ namespace QModManager
             try
             {
                 AssemblyDefinition game = AssemblyDefinition.ReadAssembly(mainFilename);
-
-                AssemblyDefinition installer = AssemblyDefinition.ReadAssembly(installerFilename);
-                MethodDefinition patchMethod = installer.MainModule.GetType("QModInstaller.QModPatcher").Methods.Single(x => x.Name == "Patch");
 
                 TypeDefinition type = game.MainModule.GetType("GameInput");
                 MethodDefinition method = type.Methods.First(x => x.Name == "Awake");
