@@ -29,7 +29,7 @@ namespace QModManager
         internal static string Get()
         {
             string result = null;
-            ServicePointManager.ServerCertificateValidationCallback = MyRemoteCertificateValidationCallback;
+            ServicePointManager.ServerCertificateValidationCallback = CustomRemoteCertificateValidationCallback;
 
             using (WebClient client = new WebClient())
             {
@@ -57,7 +57,7 @@ namespace QModManager
             internal string version = null;
         }
 
-        private static bool MyRemoteCertificateValidationCallback(object sender,
+        private static bool CustomRemoteCertificateValidationCallback(object sender,
     X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
             bool isOk = true;
