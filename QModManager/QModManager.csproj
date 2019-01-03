@@ -67,7 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EntryPoint.cs" />
-    <Compile Include="ErrorDialog.cs" />
+    <Compile Include="Dialog.cs" />
     <Compile Include="Hooks.cs" />
     <Compile Include="QMod.cs" />
     <Compile Include="Injector.cs" />
