@@ -35,7 +35,7 @@ namespace QModManager
 
                 VersionCheck.Check();
 
-                Hooks.OnLoadEnd();
+                Hooks.OnLoadEnd?.Invoke();
             }
             catch (Exception e)
             {
