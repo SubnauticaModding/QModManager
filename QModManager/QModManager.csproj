@@ -69,6 +69,7 @@
     <Compile Include="EntryPoint.cs" />
     <Compile Include="ErrorDialog.cs" />
     <Compile Include="Hooks.cs" />
+    <Compile Include="NUnit.cs" />
     <Compile Include="QMod.cs" />
     <Compile Include="Injector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
