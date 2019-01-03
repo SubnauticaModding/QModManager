@@ -22,11 +22,11 @@ namespace QModManager
             SceneManager.sceneLoaded += (scene, loadSceneMode) => SceneLoaded(scene, loadSceneMode);
         }
 
-        [HarmonyPatch(typeof(GameInput), "Start")]
+        [HarmonyPatch(typeof(?), "Start")]
         internal static class AddComponentPatch
         {
             [HarmonyPostfix]
-            internal static void Postfix(GameInput __instance)
+            internal static void Postfix(? __instance)
             {
                 Start();
                 __instance.gameObject.AddComponent<QMMHooks>();
