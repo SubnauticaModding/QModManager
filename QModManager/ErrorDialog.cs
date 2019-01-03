@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace QModManager
 {
     internal static class ErrorDialog
     {
-        internal static void Show(string error, Action onLeftButtonPressed = null, Action onRightButtonPressed = null, string leftButtonText = "See Log", string rightButtonText = "Close")
+        internal static void Show(string error, Action onLeftButtonPressed = null, Action onRightButtonPressed = null, string leftButtonText = "See Log", string rightButtonText = "Close", bool blue = false)
         {
             uGUI_SceneConfirmation confirmation = uGUI.main.confirmation;
 
@@ -21,10 +22,7 @@ namespace QModManager
 
             if (onRightButtonPressed == null)
             {
-                onRightButtonPressed = () => 
-                {
-                    
-                };
+                onRightButtonPressed = () => { };
             }
 
             if (string.IsNullOrEmpty(leftButtonText))
@@ -44,6 +42,13 @@ namespace QModManager
                 confirmation.no.gameObject.GetComponentInChildren<Text>().text = rightButtonText;
             }
 
+            Sprite sprite = confirmation.gameObject.GetComponentInChildren<Image>().sprite;
+
+            if (blue)
+            {
+                confirmation.gameObject.GetComponentInChildren<Image>().sprite = confirmation.gameObject.GetComponentsInChildren<Image>()[1].sprite;
+            }
+
             confirmation.Show(error, delegate (bool leftButtonClicked)
             {
                 if (leftButtonClicked) onLeftButtonPressed.Invoke();
@@ -54,6 +59,8 @@ namespace QModManager
 
                 confirmation.yes.gameObject.GetComponentInChildren<Text>().text = "Yes";
                 confirmation.no.gameObject.GetComponentInChildren<Text>().text = "No";
+
+                confirmation.gameObject.GetComponentInChildren<Image>().sprite = sprite;
             });
         }
     }
