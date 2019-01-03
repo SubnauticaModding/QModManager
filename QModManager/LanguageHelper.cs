@@ -21,6 +21,10 @@ namespace QModManager
         public static string Get(string key)
         {
             if (string.IsNullOrEmpty(key)) return null;
+            if (strings == null && backupStrings == null)
+            {
+
+            }
             if (strings.ContainsKey(key)) return strings[key];
             if (backupStrings.ContainsKey(key)) return backupStrings[key];
             return null;
