@@ -1,4 +1,5 @@
 {
   "PressAnyKey": "Press any key to exit...",
   "ExceptionCaught": "EXCEPTION CAUGHT!",
+  "AssemblyMissing": "Could not find the assembly file.\nPlease make sure you have installed QModManager in the right folder.\nIf the problem persists, open a bug report on NexusMods or an issue on GitHub"
 }
