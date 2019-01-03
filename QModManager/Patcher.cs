@@ -32,8 +32,7 @@ namespace QModManager
 
                 Hooks.Patch();
                 LoadMods();
-
-                ShowErroredMods();
+                Hooks.Start += ShowErroredMods;
 
                 Hooks.OnLoadEnd();
             }
