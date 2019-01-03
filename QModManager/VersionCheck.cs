@@ -10,8 +10,9 @@ namespace QModManager
 {
     internal static class VersionCheck
     {
-        internal const string newVersionDisplayPrefix = "There is a newer version available: ";
-        internal const string newVersionDisplaySuffix = "";
+        internal const string newVersionDisplayPrefix = "There is a newer version of QModManager available: ";
+        internal const string newVersionDisplaySuffix = " (current version: ";
+        internal const string newVersionDisplaySuffix2 = ")";
 
         internal const string nexusmodsURL = "https://nexusmods.com/subnautica/mods/16";
 
@@ -21,7 +22,8 @@ namespace QModManager
             if (versionStr == null) return;
             VersionWrapper wrapper = JsonConvert.DeserializeObject<VersionWrapper>(versionStr);
             Version version = new Version(wrapper.version);
-            if (!version.Equals(QMod.QModManagerVersion) && QModPatcher.erroredMods.Count <= 0) Dialog.Show(newVersionDisplayPrefix + version.ToString() + newVersionDisplaySuffix, () => Process.Start(nexusmodsURL), leftButtonText: "Download", blue: true);
+            if (!version.Equals(QMod.QModManagerVersion) && QModPatcher.erroredMods.Count <= 0) Dialog.Show(newVersionDisplayPrefix + version.ToString() + newVersionDisplaySuffix + QMod.QModManagerVersion.ToString() + newVersionDisplaySuffix2, () => Process.Start(nexusmodsURL), leftButtonText: "Download", blue: true);
+            // Longest line ever - will change in the next pr (trust me)
         }
 
         internal const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/version-check/version.json";
@@ -38,12 +40,12 @@ namespace QModManager
                 {
                     if (e.Cancelled)
                     {
-                        Debug.Log("CANCELLED");
+                        UnityEngine.Debug.Log("CANCELLED");
                         return;
                     }
                     if (e.Error != null)
                     {
-                        Debug.LogException(e.Error);
+                        UnityEngine.Debug.LogException(e.Error);
                         return;
                     }
                     result = e.Result;
