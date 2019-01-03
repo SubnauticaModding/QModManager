@@ -5,10 +5,12 @@
     "Installer_ExecutableMissing": "Could not find any game to patch!\nAn assembly file was found, but no executable was detected.\nPlease make sure you have installed QModManager in the right folder.\nIf the problem persists, open a bug report on NexusMods or an issue on GitHub",
     "Installer_Installing": "Se instalează QModManager...",
     "Installer_Uninstalling": "Se dezinstalează QModManager...",
-    "Installer_AlreadyUninstalled": "QModManager nu este instalat!\n",
+    "Installer_AlreadyUninstalled": "Nu se poate dezinstala:\nQModManager nu este instalat!",
     "Installer_AskInstall": "No patch detected, install?",
     "Installer_AskUninstall": "Patch installed, remove?",
-    "Installer_AskSuffix": "D/N",
+    "Patch not detected. Install? [Y/N] >": {
+        "Installer_AskSuffix": "Da/Nu"
+    },
     "Dialog_DefaultLeft": "Consolă",
     "Dialog_DefaultRight": "Inchide",
     "Injector_AlreadyInjected": "Tried to install, but it was already injected\nSkipping installation",
@@ -17,8 +19,8 @@
     "Injector_Uninstalled": "QModManager a fost dezinstalat cu succes",
     "Patcher_CalledMultipleTimes": "Patch method was called multiple times!",
     "Patcher_LoadedMods": "Mod-uri încărcate:",
-    "Patcher_ErroredMods": "The following mods could not be loaded:",
-    "Patcher_EntryMethodMissing": "No EntryMethod specified for mod '{0}'",
+    "Patcher_ErroredMods": "Următoarele moduri nu au putut fi încărcate:",
+    "Patcher_EntryMethodMissing": "Niciun punct de intrare (EntryMethod) definit pentru mod-ul '{0}'",
     "Patcher_EntryMethodUnparseable": "Could not parse entry method '{0}' for mod '{1}'",
     "Patcher_EntryMethodInvokeFailed": "Invoking the specified entry method '{0}' failed for mod '{1}'",
     "Patcher_UnexpectedError": "An unexpected error occurred while trying to load mod '{0}'",
@@ -30,5 +32,6 @@
     "Dialog_NewVersion": "There is a newer version of QModManager available: {0} (current version: {1})",
     "QMod_DeserializationFailed": "mod.json deserialization failed!",
     "VersionCheck_Error": "Could not get latest version! ({0})",
-    "LanguageHelper_Load": "Se incarcă limba {0}..."
+    "LanguageHelper_Load": "Se incarcă limba {0}...",
+    "Installer_AskSuffix": ""
 }
