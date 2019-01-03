@@ -103,16 +103,26 @@ namespace QModManager
 
                 Instruction patchMethodCall = null;
 
-                foreach(Instruction instruction in awakeMethod.Body.Instructions)
+                foreach (Instruction instruction in awakeMethod.Body.Instructions)
                 {
-                    if(instruction.OpCode == OpCodes.Call && instruction.Operand.ToString().Equals("System.Void QModInstaller.QModPatcher::Patch()"))
+                    if (instruction.OpCode == OpCodes.Call && instruction.Operand.ToString().Equals("System.Void QModInstaller.QModPatcher::Patch()"))
                     {
                         patchMethodCall = instruction;
                     }
                 }
 
-                if(patchMethodCall != null)
+                if (patchMethodCall != null)
+                {
                     awakeMethod.Body.GetILProcessor().Remove(patchMethodCall);
+                }
+                else
+                {
+                    Console.WriteLine("An unexpected error has occurred.");
+                    Console.WriteLine();
+                    Console.WriteLine("Press any key to exit");
+                    Console.ReadKey();
+                    Environment.Exit(3);
+                }
 
                 game.Write(mainFilename);
 
@@ -134,9 +144,6 @@ namespace QModManager
             try
             {
                 AssemblyDefinition game = AssemblyDefinition.ReadAssembly(mainFilename);
-
-                AssemblyDefinition installer = AssemblyDefinition.ReadAssembly(installerFilename);
-                MethodDefinition patchMethod = installer.MainModule.GetType("QModInstaller.QModPatcher").Methods.Single(x => x.Name == "Patch");
 
                 TypeDefinition type = game.MainModule.GetType("GameInput");
                 MethodDefinition method = type.Methods.First(x => x.Name == "Awake");
