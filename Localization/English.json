@@ -11,5 +11,8 @@
   "Dialog_DefaultLeft": "See Log",
   "Dialog_DefaultRight": "Close",
   "Injector_AlreadyInjected": "Tried to install, but it was already injected\nSkipping installation",
-  "Injector_Installed": "QModManager was installed successfully"
+  "Injector_Installed": "QModManager was installed successfully",
+  "Injector_NotInjected": "Tried to uninstall, but patch was not present\nSkipping uninstallation",
+  "Injector_Uninstalled": "QModManager was uninstalled successfully",
+  "Injector_BackupMissing"
 }
