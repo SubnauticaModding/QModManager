@@ -70,7 +70,6 @@
     <Compile Include="Dialog.cs" />
     <Compile Include="Hooks.cs" />
     <Compile Include="LanguageHelper.cs" />
-    <Compile Include="LanguageLines.cs" />
     <Compile Include="QMod.cs" />
     <Compile Include="Injector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

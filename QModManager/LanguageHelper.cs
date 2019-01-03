@@ -69,7 +69,7 @@ namespace QModManager
                     strings = dictionary;
                     LanguageHelper.language = language;
                 }
-                Console.WriteLine($"[QModManager] {Get("loading")} {language}...");
+                Console.WriteLine($"[QModManager] {Get("LanguageHelper_Load")} {language}...");
                 return true;
             }
             catch (Exception e)
