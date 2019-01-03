@@ -2,13 +2,12 @@
     "General_PressAnyKey": "Presione cualquier tecla para salir...",
     "General_ExceptionCaught": "EXCEPCIÓN!",
     "Installer_AssemblyMissing": "No pudimos encontrar el archivo del ensamblado.\nPor favor asegúrese de instalar a QModManager en la carpeta correcta.\nSi el error no se resuelve, puede reportarlo en NexusMods o GitHub.",
-    "Installer_ExecutableMissing": "Could not find any game to patch!\nAn assembly file was found, but no executable was detected.\nPlease make sure you have installed QModManager in the right folder.\nIf the problem persists, open a bug report on NexusMods or an issue on GitHub",
+    "Installer_ExecutableMissing": "No pudimos encontrar ningún video juego a parchear!\nEncontramos el DLL pero no pudimos detectar el ejecutable.\nPor favor de confirmar que QModManager tiene la carpeta de instalación correcta.\nSi el error no se resuelve, puede reportarlo en NexusMods o GitHub.",
     "Installer_Installing": "Instalando QModManager...",
     "Installer_Uninstalling": "Desinstalando QModManager...",
     "Installer_AlreadyUninstalled": "QModManager no está instalado!\nCancelando la desinstalación",
     "Installer_AskInstall": "El parche para mods no fue detectado, desea instalarlo?",
     "Installer_AskUninstall": "Se ha detectado el parche para mods, desea removerlo?",
-    "Installer_AskSuffix": "Yes/No",
     "Dialog_DefaultLeft": "Ver el log",
     "Dialog_DefaultRight": "Cerrar",
     "Injector_AlreadyInjected": "Intentamos instalar el parche, pero ya existe\nCancelando la instalación",
@@ -28,7 +27,10 @@
     "Dialog_ErroredMods": "Los siguientes mods no pudieron ser iniciados:",
     "Dialog_ErroredModsSuffix": "Revise el log para más detalles.",
     "Dialog_NewVersion": "Hay una nueva versión de QModManager: {0} (versión instalada: {1})",
-    "QMod_DeserializationFailed": "Error en el análisis del mod.json",
+    "QMod_DeserializationFailed": "Hubo error analizando el archivo mod.json del mod: {0}",
     "VersionCheck_Error": "No pudimos descargar la última versión ({0})",
-    "LanguageHelper_Load": "Cargando archivo de idioma {0}..."
+    "LanguageHelper_Load": "Cargando archivo de idioma {0}...",
+    "Installer_AlreadyInstalled": "QModManager ya estaba instalado!\nCancelando la instalación",
+    "Yes": "Yes",
+    "No": "No"
 }
