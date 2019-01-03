@@ -73,6 +73,7 @@
     <Compile Include="Injector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Patcher.cs" />
+    <Compile Include="VersionCheck.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
