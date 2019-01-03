@@ -28,8 +28,8 @@ namespace QModManager
             [HarmonyPostfix]
             internal static void Postfix(DevConsole __instance)
             {
-                Start();
                 __instance.gameObject.AddComponent<QMMHooks>();
+                Start();
             }
         }
 
