@@ -12,7 +12,6 @@ namespace QModManager
         internal string managedDirectory;
         internal string installerFilename = "QModInstaller.dll";
         internal string mainFilename = "Assembly-CSharp.dll";
-        internal string backupFilename = "Assembly-CSharp.qoriginal.dll";
 
         internal QModInjector(string dir, string managedDir = null)
         {
@@ -26,7 +25,6 @@ namespace QModManager
 				managedDirectory = managedDir;
 			}
             mainFilename = Path.Combine(managedDirectory, mainFilename);
-            backupFilename = Path.Combine(managedDirectory, backupFilename);
         }
 
 #warning TODO: Implement installer rollback in Inno Setup
@@ -44,11 +42,12 @@ namespace QModManager
                     Environment.Exit(0);
                 }
 
+                // Remove backup file if it exists
+                string backupFilePath = Path.Combine(managedDirectory, "Assembly-CSharp.qoriginal.dll");
+                if (File.Exists(backupFilePath))
+                    File.Delete(backupFilePath);
+
                 AssemblyDefinition game = AssemblyDefinition.ReadAssembly(mainFilename);
-
-                if (File.Exists(backupFilename)) File.Delete(backupFilename);
-
-                game.Write(backupFilename);
 
                 AssemblyDefinition installer = AssemblyDefinition.ReadAssembly(installerFilename);
                 MethodDefinition patchMethod = installer.MainModule.GetType("QModInstaller.QModPatcher").Methods.First(x => x.Name == "Patch");
@@ -64,7 +63,6 @@ namespace QModManager
 
                 if (!Directory.Exists(qmodsDirectory)) Directory.CreateDirectory(qmodsDirectory);
 
-                Console.WriteLine();
                 Console.WriteLine("QModManager installed successfully");
                 Console.WriteLine();
                 Console.WriteLine("Press any key to exit...");
@@ -93,27 +91,35 @@ namespace QModManager
                     Environment.Exit(0);
                 }
 
-                if (File.Exists(backupFilename))
+                // Remove backup file if it exists
+                string backupFilePath = Path.Combine(managedDirectory, "Assembly-CSharp.qoriginal.dll");
+                if (File.Exists(backupFilePath))
+                    File.Delete(backupFilePath);
+
+                AssemblyDefinition game = AssemblyDefinition.ReadAssembly(mainFilename);
+
+                TypeDefinition gameInputDef = game.MainModule.GetType("GameInput");
+                MethodDefinition awakeMethod = gameInputDef.Methods.First(x => x.Name == "Awake");
+
+                Instruction patchMethodCall = null;
+
+                foreach(Instruction instruction in awakeMethod.Body.Instructions)
                 {
-                    File.Delete(mainFilename);
-
-                    File.Move(backupFilename, mainFilename);
-
-                    Console.WriteLine();
-                    Console.WriteLine("QModManager was uninstalled successfully");
-                    Console.WriteLine();
-                    Console.WriteLine("Press any key to exit...");
-                    Console.ReadKey();
-                    Environment.Exit(0);
+                    if(instruction.OpCode == OpCodes.Call && instruction.Operand.ToString().Equals("System.Void QModInstaller.QModPatcher::Patch()"))
+                    {
+                        patchMethodCall = instruction;
+                    }
                 }
 
-                Console.WriteLine();
-                Console.WriteLine("Cannot uninstall, file 'Assembly-CSharp-qoriginal.dll' is missing");
-                Console.WriteLine("To uninstall, you will need to verify game contents ons steam");
+                awakeMethod.Body.GetILProcessor().Remove(patchMethodCall);
+
+                game.Write(mainFilename);
+
+                Console.WriteLine("QModManager was uninstalled successfully");
                 Console.WriteLine();
                 Console.WriteLine("Press any key to exit...");
                 Console.ReadKey();
-                Environment.Exit(1);
+                Environment.Exit(0);
             }
             catch (Exception e)
             {
