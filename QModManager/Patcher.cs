@@ -7,14 +7,17 @@ using System.Reflection;
 
 namespace QModManager
 {
-    internal class QModPatcher
+    internal partial class QModPatcher
     {
         internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? "ERR" : Path.Combine(Environment.CurrentDirectory, "QMods");
+        internal static bool patched = false;
+
+        #region Lists
         internal static List<QMod> loadedMods = new List<QMod>();
         internal static List<QMod> foundMods = new List<QMod>();
         internal static List<QMod> sortedMods = new List<QMod>();
         internal static List<QMod> erroredMods = new List<QMod>();
-        internal static bool patched = false;
+        #endregion
 
         internal static void Patch()
         {
@@ -40,6 +43,26 @@ namespace QModManager
                 Console.WriteLine(e.ToString());
             }
         }
+
+        #region Errored mods
+
+        internal static string erroredModsPrefix = "The following mods could not be loaded: ";
+
+        internal static void ShowErroredMods()
+        {
+            if (erroredMods.Count <= 0) return;
+            string display = erroredModsPrefix;
+            for (int i = 0; i < erroredMods.Count; i++)
+            {
+                display += erroredMods[i].DisplayName;
+                if (i + 1 != erroredMods.Count) display += ", ";
+            }
+            ErrorDialog.Show(display);
+        }
+
+        #endregion
+
+        #region Mod loading
 
         internal static void LoadMods()
         {
@@ -133,121 +156,6 @@ namespace QModManager
             LoadAllMods();
         }
 
-        internal static void SortMods()
-        {
-            // Contains all the mods that errored out during the sorting process.
-            List<List<QMod>> sortingErrorLoops = new List<List<QMod>>();
-
-            for (int i = 0; i < foundMods.Count; i++)
-            {
-                // Clear the chain from our main loop.
-                modSortingChain.Clear();
-
-                // Sort the current loop mod, recursively.
-                QMod mod = foundMods[i];
-                bool success = SortMod(mod);
-
-                // If it wasn't a success (that is, something messed up with the order, print it out)
-                if (!success)
-                {
-                    QMod duplicateMod = modSortingChain[modSortingChain.Count - 1];
-                    int firstIndex = modSortingChain.IndexOf(duplicateMod);
-
-                    List<QMod> loop = new List<QMod>();
-
-                    for (int j = 0; j < modSortingChain.Count; j++)
-                    {
-                        if (j >= firstIndex)
-                        {
-                            loop.Add(modSortingChain[j]);
-
-                            // Add this mod to the list of errored mods
-                            // Reason we check if its already in the list is because there is going to be at least 1 duplicate
-                            if (!erroredMods.Contains(modSortingChain[j]))
-                                erroredMods.Add(modSortingChain[j]);
-                        }
-                    }
-
-                    sortingErrorLoops.Add(loop);
-                }
-            }
-
-            if (sortingErrorLoops.Count != 0)
-            {
-                Console.WriteLine("QMOD ERROR: There was en error while sorting the following mods!");
-                Console.WriteLine("Please check the 'LoadAfter' and 'LoadBefore' properties of these mods!\n");
-
-                foreach (List<QMod> list in sortingErrorLoops)
-                {
-                    string outputStr = "";
-
-                    foreach (QMod mod in list)
-                    {
-                        // Remove it from list to prevent it from being loaded
-                        if (sortedMods.Contains(mod))
-                            sortedMods.Remove(mod);
-
-                        outputStr += mod.Id + " -> ";
-                    }
-
-                    outputStr = outputStr.Substring(0, outputStr.Length - 4);
-                    Console.WriteLine(outputStr);
-                }
-
-                Console.WriteLine("");
-            }
-        }
-
-        internal static void CheckForDependencies()
-        {
-            // Check if all mods have dependencies present
-            Dictionary<QMod, List<string>> missingDependenciesByMod = new Dictionary<QMod, List<string>>();
-
-            foreach (QMod mod in foundMods)
-            {
-                List<QMod> presentDependencies = GetPresentDependencies(mod);
-                List<string> missingDependencies = GetMissingDependencies(mod, presentDependencies);
-
-                if (missingDependencies.Count != 0)
-                {
-                    missingDependenciesByMod.Add(mod, missingDependencies);
-
-                    // Add this mod to the list of errored mods
-                    if (!erroredMods.Contains(mod))
-                        erroredMods.Add(mod);
-                }
-            }
-
-            // There are missing dependencies! Output them!
-            if (missingDependenciesByMod.Count != 0)
-            {
-                Console.WriteLine("QMOD ERROR: The following mods were not loaded due to missing dependencies!\n");
-
-                foreach (var entry in missingDependenciesByMod)
-                {
-                    // Remove the mod from the sortedMods list to stop it from loading
-                    if (sortedMods.Contains(entry.Key))
-                        sortedMods.Remove(entry.Key);
-
-                    // Build the string to be displayed for this mod
-                    string str = entry.Key.DisplayName + " (missing: ";
-
-                    foreach (string missingDependencyId in entry.Value)
-                    {
-                        str += missingDependencyId + ", ";
-                    }
-
-                    // Remove the ", " characters at the end of the string
-                    str = str.Substring(0, str.Length - 2);
-                    str += ")";
-
-                    Console.WriteLine(str);
-                }
-
-                Console.WriteLine("");
-            }
-        }
-
         internal static void LoadAllMods()
         {
             string toWrite = "\nLoaded mods:\n";
@@ -315,7 +223,120 @@ namespace QModManager
             Console.WriteLine(toWrite);
         }
 
+        internal static bool LoadMod(QMod mod)
+        {
+            if (mod == null || mod.Loaded) return false;
+
+            if (string.IsNullOrEmpty(mod.EntryMethod))
+            {
+                Console.WriteLine($"ERROR! No EntryMethod specified for mod {mod.DisplayName}");
+            }
+            else
+            {
+                try
+                {
+                    string[] entryMethodSig = mod.EntryMethod.Split('.');
+                    string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
+                    string entryMethod = entryMethodSig[entryMethodSig.Length - 1];
+
+                    MethodInfo qPatchMethod = mod.LoadedAssembly.GetType(entryType).GetMethod(entryMethod);
+                    qPatchMethod.Invoke(mod.LoadedAssembly, new object[] { });
+                }
+                catch (ArgumentNullException e)
+                {
+                    Console.WriteLine($"ERROR! Could not parse entry method {mod.AssemblyName} for mod {mod.DisplayName}");
+                    Console.WriteLine(e.ToString());
+                    return false;
+                }
+                catch (TargetInvocationException e)
+                {
+                    Console.WriteLine($"ERROR! Invoking the specified entry method {mod.EntryMethod} failed for mod {mod.Id}");
+                    Console.WriteLine(e.ToString());
+                    return false;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("ERROR! An unexpected error occurred!");
+                    Console.WriteLine(e.ToString());
+                    return false;
+                }
+            }
+
+            mod.Loaded = true;
+
+            return true;
+        }
+
+        #endregion
+
+        #region LoadBefore / LoadAfter
+
         internal static List<QMod> modSortingChain = new List<QMod>();
+
+        internal static void SortMods()
+        {
+            // Contains all the mods that errored out during the sorting process.
+            List<List<QMod>> sortingErrorLoops = new List<List<QMod>>();
+
+            for (int i = 0; i < foundMods.Count; i++)
+            {
+                // Clear the chain from our main loop.
+                modSortingChain.Clear();
+
+                // Sort the current loop mod, recursively.
+                QMod mod = foundMods[i];
+                bool success = SortMod(mod);
+
+                // If it wasn't a success (that is, something messed up with the order, print it out)
+                if (!success)
+                {
+                    QMod duplicateMod = modSortingChain[modSortingChain.Count - 1];
+                    int firstIndex = modSortingChain.IndexOf(duplicateMod);
+
+                    List<QMod> loop = new List<QMod>();
+
+                    for (int j = 0; j < modSortingChain.Count; j++)
+                    {
+                        if (j >= firstIndex)
+                        {
+                            loop.Add(modSortingChain[j]);
+
+                            // Add this mod to the list of errored mods
+                            // Reason we check if its already in the list is because there is going to be at least 1 duplicate
+                            if (!erroredMods.Contains(modSortingChain[j]))
+                                erroredMods.Add(modSortingChain[j]);
+                        }
+                    }
+
+                    sortingErrorLoops.Add(loop);
+                }
+            }
+
+            if (sortingErrorLoops.Count != 0)
+            {
+                Console.WriteLine("QMOD ERROR: There was en error while sorting the following mods!");
+                Console.WriteLine("Please check the 'LoadAfter' and 'LoadBefore' properties of these mods!\n");
+
+                foreach (List<QMod> list in sortingErrorLoops)
+                {
+                    string outputStr = "";
+
+                    foreach (QMod mod in list)
+                    {
+                        // Remove it from list to prevent it from being loaded
+                        if (sortedMods.Contains(mod))
+                            sortedMods.Remove(mod);
+
+                        outputStr += mod.Id + " -> ";
+                    }
+
+                    outputStr = outputStr.Substring(0, outputStr.Length - 4);
+                    Console.WriteLine(outputStr);
+                }
+
+                Console.WriteLine("");
+            }
+        }
 
         internal static bool SortMod(QMod mod)
         {
@@ -425,71 +446,94 @@ namespace QModManager
             return true;
         }
 
-        internal static string erroredModsPrefix = "The following mods could not be loaded: ";
-
-        internal static void ShowErroredMods()
+        internal static List<QMod> GetLoadBefore(QMod mod)
         {
-            if (erroredMods.Count <= 0) return;
-            string display = erroredModsPrefix;
-            for (int i = 0; i < erroredMods.Count; i++)
+            if (mod == null) return null;
+
+            List<QMod> mods = new List<QMod>();
+
+            foreach (string loadBeforeId in mod.LoadBefore)
             {
-                display += erroredMods[i].DisplayName;
-                if (i + 1 != erroredMods.Count) display += ", ";
+                foreach (QMod loadBeforeMod in foundMods)
+                {
+                    if (loadBeforeId == loadBeforeMod.Id)
+                        mods.Add(loadBeforeMod);
+                }
             }
-            ErrorDialog.Show(display);
+
+            return mods;
         }
 
-        internal static void ClearModLists()
+        internal static List<QMod> GetLoadAfter(QMod mod)
         {
-            // For unit testing
-            loadedMods.Clear();
-            foundMods.Clear();
-            sortedMods.Clear();
-            erroredMods.Clear();
+            if (mod == null) return null;
+
+            List<QMod> mods = new List<QMod>();
+
+            foreach (string loadAfterId in mod.LoadAfter)
+            {
+                foreach (QMod loadAfterMod in foundMods)
+                {
+                    if (loadAfterId == loadAfterMod.Id)
+                        mods.Add(loadAfterMod);
+                }
+            }
+
+            return mods;
         }
 
-        internal static bool LoadMod(QMod mod)
+        #endregion
+
+        #region Dependencies
+
+        internal static void CheckForDependencies()
         {
-            if (mod == null || mod.Loaded) return false;
+            // Check if all mods have dependencies present
+            Dictionary<QMod, List<string>> missingDependenciesByMod = new Dictionary<QMod, List<string>>();
 
-            if (string.IsNullOrEmpty(mod.EntryMethod))
+            foreach (QMod mod in foundMods)
             {
-                Console.WriteLine($"ERROR! No EntryMethod specified for mod {mod.DisplayName}");
-            }
-            else
-            {
-                try
-                {
-                    string[] entryMethodSig = mod.EntryMethod.Split('.');
-                    string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
-                    string entryMethod = entryMethodSig[entryMethodSig.Length - 1];
+                List<QMod> presentDependencies = GetPresentDependencies(mod);
+                List<string> missingDependencies = GetMissingDependencies(mod, presentDependencies);
 
-                    MethodInfo qPatchMethod = mod.LoadedAssembly.GetType(entryType).GetMethod(entryMethod);
-                    qPatchMethod.Invoke(mod.LoadedAssembly, new object[] { });
-                }
-                catch (ArgumentNullException e)
+                if (missingDependencies.Count != 0)
                 {
-                    Console.WriteLine($"ERROR! Could not parse entry method {mod.AssemblyName} for mod {mod.DisplayName}");
-                    Console.WriteLine(e.ToString());
-                    return false;
-                }
-                catch (TargetInvocationException e)
-                {
-                    Console.WriteLine($"ERROR! Invoking the specified entry method {mod.EntryMethod} failed for mod {mod.Id}");
-                    Console.WriteLine(e.ToString());
-                    return false;
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("ERROR! An unexpected error occurred!");
-                    Console.WriteLine(e.ToString());
-                    return false;
+                    missingDependenciesByMod.Add(mod, missingDependencies);
+
+                    // Add this mod to the list of errored mods
+                    if (!erroredMods.Contains(mod))
+                        erroredMods.Add(mod);
                 }
             }
 
-            mod.Loaded = true;
+            // There are missing dependencies! Output them!
+            if (missingDependenciesByMod.Count != 0)
+            {
+                Console.WriteLine("QMOD ERROR: The following mods were not loaded due to missing dependencies!\n");
 
-            return true;
+                foreach (var entry in missingDependenciesByMod)
+                {
+                    // Remove the mod from the sortedMods list to stop it from loading
+                    if (sortedMods.Contains(entry.Key))
+                        sortedMods.Remove(entry.Key);
+
+                    // Build the string to be displayed for this mod
+                    string str = entry.Key.DisplayName + " (missing: ";
+
+                    foreach (string missingDependencyId in entry.Value)
+                    {
+                        str += missingDependencyId + ", ";
+                    }
+
+                    // Remove the ", " characters at the end of the string
+                    str = str.Substring(0, str.Length - 2);
+                    str += ")";
+
+                    Console.WriteLine(str);
+                }
+
+                Console.WriteLine("");
+            }
         }
 
         internal static List<QMod> GetPresentDependencies(QMod mod)
@@ -529,40 +573,6 @@ namespace QModManager
             return dependenciesMissing;
         }
 
-        internal static List<QMod> GetLoadBefore(QMod mod)
-        {
-            if (mod == null) return null;
-
-            List<QMod> mods = new List<QMod>();
-
-            foreach (string loadBeforeId in mod.LoadBefore)
-            {
-                foreach (QMod loadBeforeMod in foundMods)
-                {
-                    if (loadBeforeId == loadBeforeMod.Id)
-                        mods.Add(loadBeforeMod);
-                }
-            }
-
-            return mods;
-        }
-
-        internal static List<QMod> GetLoadAfter(QMod mod)
-        {
-            if (mod == null) return null;
-
-            List<QMod> mods = new List<QMod>();
-
-            foreach (string loadAfterId in mod.LoadAfter)
-            {
-                foreach (QMod loadAfterMod in foundMods)
-                {
-                    if (loadAfterId == loadAfterMod.Id)
-                        mods.Add(loadAfterMod);
-                }
-            }
-
-            return mods;
-        }
+        #endregion
     }
 }
