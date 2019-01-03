@@ -1,8 +1,8 @@
 {
     "PressAnyKeyToExit": "Press any key to exit...",
     "ExceptionCaught": "EXCEPTION CAUGHT!",
-    "AssemblyMissing": "Could not find the assembly file.\nPlease make sure you have installed QModManager in the right folder.\nIf the problem persists, open a bug report on NexusMods or an issue on GitHub",
-    "ExecutableMissing": "Could not find any game to patch!\nAn assembly file was found, but no executable was detected.\nPlease make sure you have installed QModManager in the right folder.\nIf the problem persists, open a bug report on NexusMods or an issue on GitHub",
+    "AssemblyMissing": "Could not find the assembly file.\nPlease make sure you have installed QModManager in the right folder.",
+    "ExecutableMissing": "Could not find any game to patch!\nAn assembly file was found, but no executable was detected.\nPlease make sure you have installed QModManager in the right folder.",
     "Installing": "Installing QModManager...",
     "Uninstalling": "Uninstalling QModManager...",
     "AlreadyUninstalled": "QModManager is not installed!\nSkipping uninstallation",
@@ -32,5 +32,6 @@
     "LoadLanguage": "Loading language {0}...",
     "AlreadyInstalled": "QModManager is already installed!\nSkipping installation",
     "Yes": "Yes",
-    "No": "No"
+    "No": "No",
+    "IfTheProblemPersists": "If the problem persists, open a bug report on NexusMods or an issue on GitHub"
 }
