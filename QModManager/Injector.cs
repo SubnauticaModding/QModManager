@@ -111,7 +111,8 @@ namespace QModManager
                     }
                 }
 
-                awakeMethod.Body.GetILProcessor().Remove(patchMethodCall);
+                if(patchMethodCall != null)
+                    awakeMethod.Body.GetILProcessor().Remove(patchMethodCall);
 
                 game.Write(mainFilename);
 
