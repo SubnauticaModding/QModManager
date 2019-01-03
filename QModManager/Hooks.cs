@@ -28,13 +28,13 @@ namespace QModManager
             [HarmonyPostfix]
             internal static void Postfix(GameInput __instance)
             {
+                Start();
                 __instance.gameObject.AddComponent<QMMHooks>();
             }
         }
 
         internal class QMMHooks : MonoBehaviour
         {
-            public void Start() => Hooks.Start();
             public void FixedUpdate() => Hooks.FixedUpdate();
             public void Update() => Hooks.Update();
             public void LateUpdate() => Hooks.LateUpdate();
