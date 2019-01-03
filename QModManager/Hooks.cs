@@ -18,8 +18,16 @@ namespace QModManager
 
         internal static void Patch()
         {
-            HarmonyInstance.Create("qmodmanager.subnautica").PatchAll();
+            Start += () => { };
+            FixedUpdate += () => { };
+            Update += () => { };
+            LateUpdate += () => { };
+            OnApplicationQuit += () => { };
+            SceneLoaded += (_, __) => { };
+            OnLoadEnd += () => { };
+
             SceneManager.sceneLoaded += (scene, loadSceneMode) => SceneLoaded(scene, loadSceneMode);
+            HarmonyInstance.Create("qmodmanager.subnautica").PatchAll();
         }
 
         [HarmonyPatch(typeof(DevConsole), "Start")]
