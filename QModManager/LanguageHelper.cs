@@ -44,13 +44,13 @@ namespace QModManager
             }
             if (strings.ContainsKey(key)) return strings[key];
             if (backupStrings.ContainsKey(key)) return backupStrings[key];
-            return null;
+            return key;
         }
         public static string GetFormatted(string key, params object[] args)
         {
             if (string.IsNullOrEmpty(key)) return null;
             string value = Get(key);
-            if (value == null) return null;
+            if (value == null) return key;
             if (args == null) return value;
             if (args.Length <= 0) return value;
             try
