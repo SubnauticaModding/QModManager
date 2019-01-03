@@ -36,12 +36,8 @@ namespace QModManager
             {
                 if (IsInjected())
                 {
-                    Console.WriteLine("Tried to install, but it was already injected");
-                    Console.WriteLine("Skipping installation");
-                    Console.WriteLine();
-                    Console.WriteLine("Press any key to exit...");
-                    Console.ReadKey();
-                    Environment.Exit(0);
+                    Console.WriteLine(LanguageLines.Injector.AlreadyInjected);
+                    Console.WriteLine(LanguageLines.General.PressAnyKey);
                 }
 
                 AssemblyDefinition game = AssemblyDefinition.ReadAssembly(mainFilename);
@@ -64,16 +60,14 @@ namespace QModManager
 
                 if (!Directory.Exists(qmodsDirectory)) Directory.CreateDirectory(qmodsDirectory);
 
-                Console.WriteLine();
-                Console.WriteLine("QModManager installed successfully");
-                Console.WriteLine();
-                Console.WriteLine("Press any key to exit...");
+                Console.WriteLine(LanguageLines.Injector.Installed);
+                Console.WriteLine(LanguageLines.General.PressAnyKey);
                 Console.ReadKey();
                 Environment.Exit(0);
             }
             catch (Exception e)
             {
-                Console.WriteLine("EXCEPTION CAUGHT!");
+                Console.WriteLine(LanguageLines.General.ExceptionCaught);
                 Console.WriteLine(e.ToString());
                 Environment.Exit(1);
             }
@@ -85,10 +79,8 @@ namespace QModManager
             {
                 if (!IsInjected())
                 {
-                    Console.WriteLine("Tried to uninstall, but patch was not present");
-                    Console.WriteLine("Skipping uninstallation");
-                    Console.WriteLine();
-                    Console.WriteLine("Press any key to exit...");
+                    Console.WriteLine(LanguageLines.Injector.NotInjected);
+                    Console.WriteLine(LanguageLines.General.PressAnyKey);
                     Console.ReadKey();
                     Environment.Exit(0);
                 }
@@ -99,25 +91,20 @@ namespace QModManager
 
                     File.Move(backupFilename, mainFilename);
 
-                    Console.WriteLine();
-                    Console.WriteLine("QModManager was uninstalled successfully");
-                    Console.WriteLine();
-                    Console.WriteLine("Press any key to exit...");
+                    Console.WriteLine(LanguageLines.Injector.Uninstalled);
+                    Console.WriteLine(LanguageLines.General.PressAnyKey);
                     Console.ReadKey();
                     Environment.Exit(0);
                 }
 
-                Console.WriteLine();
-                Console.WriteLine("Cannot uninstall, file 'Assembly-CSharp-qoriginal.dll' is missing");
-                Console.WriteLine("To uninstall, you will need to verify game contents ons steam");
-                Console.WriteLine();
-                Console.WriteLine("Press any key to exit...");
+                Console.WriteLine(LanguageLines.Injector.BackupMissing);
+                Console.WriteLine(LanguageLines.General.PressAnyKey);
                 Console.ReadKey();
                 Environment.Exit(1);
             }
             catch (Exception e)
             {
-                Console.WriteLine("EXCEPTION CAUGHT!");
+                Console.WriteLine(LanguageLines.General.ExceptionCaught);
                 Console.WriteLine(e.ToString());
             }
         }

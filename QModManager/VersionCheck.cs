@@ -1,48 +1,16 @@
 ﻿using Oculus.Newtonsoft.Json;
 using System;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
-using UnityEngine;
 
 namespace QModManager
 {
     internal static class VersionCheck
     {
-        internal const string newVersionDisplayPrefix = "There is a newer version of QModManager available: ";
-        internal const string newVersionDisplaySuffix = " (current version: ";
-        internal const string newVersionDisplaySuffix2 = ")";
-
-        internal const string nexusmodsURL = "https://nexusmods.com/subnautica/mods/16";
-
-        internal static void Check()
-        {
-            string versionStr = Get();
-            if (versionStr == null)
-            {
-                UnityEngine.Debug.Log("Could not get latest version! (string is null)");
-                return;
-            }
-            VersionWrapper wrapper = JsonConvert.DeserializeObject<VersionWrapper>(versionStr);
-            if (wrapper == null)
-            {
-                UnityEngine.Debug.Log("Could not get latest version! (VersionWrapper is null)");
-                return;
-            }
-            Version version = new Version(wrapper.version);
-            if (version == null)
-            {
-                UnityEngine.Debug.Log("Could not get latest version! (Version is null)");
-                return;
-            }
-            if (!version.Equals(QMod.QModManagerVersion) && QModPatcher.erroredMods.Count <= 0) Dialog.Show(newVersionDisplayPrefix + version.ToString() + newVersionDisplaySuffix + QMod.QModManagerVersion.ToString() + newVersionDisplaySuffix2, () => Process.Start(nexusmodsURL), leftButtonText: "Download", blue: true);
-            // Longest line ever - will change in the next pr (trust me)
-        }
-
         internal const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/version-check/version.json";
 
-        internal static string Get()
+        internal static void Check()
         {
             string result = null;
             ServicePointManager.ServerCertificateValidationCallback = CustomRemoteCertificateValidationCallback;
@@ -54,7 +22,7 @@ namespace QModManager
                 {
                     if (e.Cancelled)
                     {
-                        UnityEngine.Debug.Log("CANCELLED");
+                        Console.WriteLine(LanguageLines.VersionCheck.Cancelled);
                         return;
                     }
                     if (e.Error != null)
@@ -63,13 +31,46 @@ namespace QModManager
                         return;
                     }
                     result = e.Result;
+                    UnityEngine.Debug.Log(result);
+                    Parse(result);
                 };
             }
-            return result;
+        }
+
+        internal static void Parse(string versionStr)
+        {
+            if (versionStr == null)
+            {
+                Console.WriteLine(LanguageLines.VersionCheck.ErrorStringNull);
+                return;
+            }
+            VersionWrapper wrapper = JsonConvert.DeserializeObject<VersionWrapper>(versionStr);
+            if (wrapper == null)
+            {
+                Console.WriteLine(LanguageLines.VersionCheck.ErrorWrapperNull);
+                return;
+            }
+            if (wrapper.version == null)
+            {
+                Console.WriteLine(LanguageLines.VersionCheck.ErrorWrapperVersionNull);
+                return;
+            }
+            Version version = new Version(wrapper.version);
+            if (version == null)
+            {
+                Console.WriteLine(LanguageLines.VersionCheck.ErrorVersionNull);
+                return;
+            }
+            if (!version.Equals(QMod.QModManagerVersion) && QModPatcher.erroredMods.Count <= 0)
+            {
+                QModPatcher.dialogversion = version;
+                QModPatcher.ShowDialog();
+            }
         }
 
         internal class VersionWrapper
         {
+            [JsonRequired]
             internal string version = null;
         }
 

@@ -38,23 +38,16 @@ namespace QModManager
 
                 if (!File.Exists(managedDirectory + "/Assembly-CSharp.dll"))
                 {
-                    Console.WriteLine("Could not find the assembly file.");
-                    Console.WriteLine("Please make sure you have installed QModManager in the right folder.");
-                    Console.WriteLine("If the problem persists, open a bug report on NexusMods or an issue on GitHub");
-                    Console.WriteLine();
-                    Console.WriteLine("Press any key to exit...");
+                    Console.WriteLine(LanguageLines.Executable.AssemblyMissing);
+                    Console.WriteLine(LanguageLines.General.PressAnyKey);
                     Console.ReadKey();
                     Environment.Exit(1);
                 }
 
                 if (Directory.GetFiles(directory, "*Subnautica*.exe", SearchOption.TopDirectoryOnly).Length <= 0)
                 {
-                    Console.WriteLine("Could not find any game to patch!");
-                    Console.WriteLine("An assembly file was found, but no executable was detected.");
-                    Console.WriteLine("Please make sure you have installed QModManager in the right folder.");
-                    Console.WriteLine("If the problem persists, open a bug report on NexusMods or an issue on GitHub");
-                    Console.WriteLine();
-                    Console.WriteLine("Press any key to exit...");
+                    Console.WriteLine(LanguageLines.Executable.ExeMissing);
+                    Console.WriteLine(LanguageLines.General.PressAnyKey);
                     Console.ReadKey();
                     Environment.Exit(1);
                 }
@@ -68,15 +61,13 @@ namespace QModManager
                 {
                     if (!isInjected)
                     {
-                        Console.WriteLine("Installing QModManager...");
+                        Console.WriteLine(LanguageLines.Executable.Installing);
                         injector.Inject();
                     }
                     else
                     {
-                        Console.WriteLine("QModManager is already installed!");
-                        Console.WriteLine("Skipping installation");
-                        Console.WriteLine();
-                        Console.WriteLine("Press any key to exit...");
+                        Console.WriteLine(LanguageLines.Executable.AlreadyInstalled);
+                        Console.WriteLine(LanguageLines.General.PressAnyKey);
                         Console.ReadKey();
                         Environment.Exit(0);
                     }
@@ -85,15 +76,13 @@ namespace QModManager
                 {
                     if (isInjected)
                     {
-                        Console.WriteLine("Uninstalling QModManager...");
+                        Console.WriteLine(LanguageLines.Executable.Uninstalling);
                         injector.Remove();
                     }
                     else
                     {
-                        Console.WriteLine("QModManager is already uninstalled!");
-                        Console.WriteLine("Skipping uninstallation");
-                        Console.WriteLine();
-                        Console.WriteLine("Press any key to exit...");
+                        Console.WriteLine(LanguageLines.Executable.AlreadyUninstalled);
+                        Console.WriteLine(LanguageLines.General.PressAnyKey);
                         Console.ReadKey();
                         Environment.Exit(0);
                     }
@@ -102,34 +91,34 @@ namespace QModManager
                 {
                     if (!isInjected)
                     {
-                        Console.Write("No patch detected, install? [Y/N] > ");
+                        Console.Write(LanguageLines.Executable.AskInstall);
                         ConsoleKey key = Console.ReadKey().Key;
                         Console.WriteLine();
                         if (key == ConsoleKey.Y)
                         {
-                            Console.WriteLine("Installing QModManager...");
+                            Console.WriteLine(LanguageLines.Executable.Installing);
                             injector.Inject();
                         }
                         else if (key == ConsoleKey.N)
                         {
-                            Console.WriteLine("Press any key to exit...");
+                            Console.WriteLine(LanguageLines.Executable.Installing);
                             Console.ReadKey();
                             Environment.Exit(0);
                         }
                     }
                     else
                     {
-                        Console.Write("Patch installed, remove? [Y/N] > ");
+                        Console.Write(LanguageLines.Executable.AskUninstall);
                         ConsoleKey key = Console.ReadKey().Key;
                         Console.WriteLine();
                         if (key == ConsoleKey.Y)
                         {
-                            Console.Write("Uninstalling QModManager...");
+                            Console.WriteLine(LanguageLines.Executable.Uninstalling);
                             injector.Remove();
                         }
                         else if (key == ConsoleKey.N)
                         {
-                            Console.WriteLine("Press any key to exit...");
+                            Console.WriteLine(LanguageLines.General.PressAnyKey);
                             Console.ReadKey();
                             Environment.Exit(0);
                         }
@@ -138,6 +127,7 @@ namespace QModManager
             }
             catch (Exception e)
             {
+                Console.WriteLine(LanguageLines.General.ExceptionCaught);
                 Console.WriteLine(e.ToString());
                 Environment.Exit(2);
             }

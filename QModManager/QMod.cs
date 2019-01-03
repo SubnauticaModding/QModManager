@@ -7,7 +7,7 @@ namespace QModManager
 {
     public class QMod
     {
-        public static readonly Version QModManagerVersion = new Version(1, 4);
+        public static readonly Version QModManagerVersion = new Version(1, 2, 1);
 
         public string Id = "Mod.ID";
         public string DisplayName = "Mod display name";
@@ -44,7 +44,7 @@ namespace QModManager
             }
             catch (Exception e)
             {
-                Console.WriteLine("ERROR! mod.json deserialization failed!");
+                Console.WriteLine(LanguageLines.QMod.DeserializationFailed);
                 Console.WriteLine(e.ToString());
 
                 return null;
