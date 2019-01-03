@@ -23,7 +23,24 @@ namespace QModManager
             if (string.IsNullOrEmpty(key)) return null;
             if (strings == null && backupStrings == null)
             {
-                // Get language from config
+                string path = Path.Combine(QModPatcher.QModBaseDir, "../QModManager/installer_language.txt");
+                if (!File.Exists(path))
+                {
+                    if (LoadLanguageFile("English", silent: true)) return Get(key);
+                    return key;
+                }
+                try
+                {
+                    string text = File.ReadAllText(path);
+                    if (LoadLanguageFile(text, silent: true)) return Get(key);
+                    if (LoadLanguageFile("English", silent: true)) return Get(key);
+                    return key;
+                }
+                catch
+                {
+                    if (LoadLanguageFile("English", silent: true)) return Get(key);
+                    return key;
+                }
             }
             if (strings.ContainsKey(key)) return strings[key];
             if (backupStrings.ContainsKey(key)) return backupStrings[key];
@@ -58,7 +75,7 @@ namespace QModManager
         {
             if (!LoadLanguageFile(PlayerPrefs.GetString("language"))) LoadLanguageFile("English");
         }
-        internal static bool LoadLanguageFile(string language, bool backup = false)
+        internal static bool LoadLanguageFile(string language, bool backup = false, bool silent = false)
         {
             try
             {
@@ -73,7 +90,7 @@ namespace QModManager
                     strings = dictionary;
                     LanguageHelper.language = language;
                 }
-                Console.WriteLine($"[QModManager] {Get("LanguageHelper_Load")} {language}...");
+                if (!silent) Console.WriteLine($"[QModManager] {Get("LanguageHelper_Load")} {language}...");
                 return true;
             }
             catch (Exception e)
