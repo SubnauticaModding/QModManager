@@ -23,7 +23,7 @@ namespace QModManager
             if (string.IsNullOrEmpty(key)) return null;
             if (strings == null && backupStrings == null)
             {
-
+                // Get language from config
             }
             if (strings.ContainsKey(key)) return strings[key];
             if (backupStrings.ContainsKey(key)) return backupStrings[key];
