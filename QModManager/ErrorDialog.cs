@@ -12,35 +12,15 @@ namespace QModManager
         {
             uGUI_SceneConfirmation confirmation = uGUI.main.confirmation;
 
-            if (onLeftButtonPressed == null)
-            {
-                onLeftButtonPressed = () => 
-                {
-                    Process.Start(Path.Combine(QModPatcher.QModBaseDir, "../Subnautica_Data/output_log.txt"));
-                };
-            }
+            if (onLeftButtonPressed == null) onLeftButtonPressed = () 
+                    => Process.Start(Path.Combine(QModPatcher.QModBaseDir, "../Subnautica_Data/output_log.txt"));
+            if (onRightButtonPressed == null) onRightButtonPressed = () => { };
 
-            if (onRightButtonPressed == null)
-            {
-                onRightButtonPressed = () => { };
-            }
+            if (string.IsNullOrEmpty(leftButtonText)) confirmation.yes.gameObject.SetActive(false);
+            else confirmation.yes.gameObject.GetComponentInChildren<Text>().text = leftButtonText;
 
-            if (string.IsNullOrEmpty(leftButtonText))
-            {
-                confirmation.yes.gameObject.SetActive(false);
-            }
-            else
-            {
-                confirmation.yes.gameObject.GetComponentInChildren<Text>().text = leftButtonText;
-            }
-            if (string.IsNullOrEmpty(rightButtonText))
-            {
-                confirmation.no.gameObject.SetActive(false);
-            }
-            else
-            {
-                confirmation.no.gameObject.GetComponentInChildren<Text>().text = rightButtonText;
-            }
+            if (string.IsNullOrEmpty(rightButtonText)) confirmation.no.gameObject.SetActive(false);
+            else confirmation.no.gameObject.GetComponentInChildren<Text>().text = rightButtonText;
 
             Sprite sprite = confirmation.gameObject.GetComponentInChildren<Image>().sprite;
 
