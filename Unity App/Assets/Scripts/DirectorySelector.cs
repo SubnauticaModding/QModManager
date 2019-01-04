@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Crosstales.FB;
+using Harmony;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,11 +44,27 @@ public class DirectorySelector : MonoBehaviour
         {
             label.text = currentSelectedInstallFolder;
             icon.overrideSprite = hasFolderIcon;
+            Toggle[] toggles = FindObjectsOfType<Toggle>();
+            toggles.Do(t =>
+            {
+                t.interactable = true;
+                t.GetComponentsInChildren<Image>(true)[3].color = new Color(1, 1, 1, 0.4980392f);
+                t.GetComponentsInChildren<TextMeshProUGUI>(true)[1].color = new Color(1, 1, 1, 0.4980392f);
+            });
         }
         else
         {
-            label.text = "Select Subnautica Install Directory...";
+            label.text = string.IsNullOrEmpty(currentSelectedInstallFolder) ? "currentSelectedInstallFolder" : currentSelectedInstallFolder;
             icon.overrideSprite = noFolderIcon;
+            Toggle[] toggles = FindObjectsOfType<Toggle>();
+            toggles.Do(t =>
+            {
+                t.interactable = false;
+                t.GetComponentsInChildren<Image>(true)[3].color = new Color(1, 1, 1, 0.1176471f);
+                t.GetComponentsInChildren<TextMeshProUGUI>(true)[1].color = new Color(1, 1, 1, 0.1176471f);
+            });
+            toggles[0].interactable = true;
+            toggles[0].isOn = true;
         }
 
         RefreshStatusLabel(currentSelectedInstallFolder);
@@ -55,12 +72,6 @@ public class DirectorySelector : MonoBehaviour
 
     public void RefreshStatusLabel(string installFolder)
     {
-        if (string.IsNullOrEmpty(installFolder))
-        {
-            statusLabel.text = "";
-            return;
-        }
-
         bool isSubnauticaInstalled = CheckSubnauticaInstalled(installFolder);
         bool isQModsPatched = false;
         bool failed = false;

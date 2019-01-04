@@ -8,7 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{6135AF68-2FF0-1825-8243-F5848AC2D412}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -65,7 +66,9 @@
     <Compile Include="Assets\Plugins\crosstales\Common\Scripts\Util\BaseConstants.cs" />
     <Compile Include="Assets\Plugins\crosstales\Common\Scripts\Util\BaseHelper.cs" />
     <Compile Include="Assets\Plugins\crosstales\Common\Scripts\Util\CTPlayerPrefs.cs" />
-    <Compile Include="Assets\Plugins\crosstales\Common\Scripts\Util\CTWebClient.cs" />
+    <Compile Include="Assets\Plugins\crosstales\Common\Scripts\Util\CTWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Assets\Plugins\crosstales\Common\Scripts\Util\PlatformController.cs" />
     <Compile Include="Assets\Plugins\crosstales\Common\Scripts\Util\RandomColor.cs" />
     <Compile Include="Assets\Plugins\crosstales\Common\Scripts\Util\RandomRotator.cs" />
@@ -326,6 +329,9 @@
     </Reference>
     <Reference Include="Mono.Cecil">
       <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Assets/Plugins/Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="0Harmony-1.2.0.1">
+      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Assets/Plugins/0Harmony-1.2.0.1.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>D:/Unity/Installs/2019.1.0a12/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
