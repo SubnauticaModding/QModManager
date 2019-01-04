@@ -14,6 +14,11 @@ public class ModList : MonoBehaviour
     [ReadOnly]
     public List<ModListEntry> modEntries = new List<ModListEntry>();
 
+    public void Awake()
+    {
+        modEntryTemplate.gameObject.SetActive(false);
+    }
+
     public void OnEnable()
     {
         Initialize();
@@ -25,8 +30,6 @@ public class ModList : MonoBehaviour
 
     public void Initialize()
     {
-        modEntryTemplate.gameObject.SetActive(false);
-
         DestroyAllEntries();
 
         var modList = GetModList();
@@ -49,7 +52,7 @@ public class ModList : MonoBehaviour
 
     public List<QMod> GetModList()
     {
-        string QModsDir = Path.Combine(PlayerPrefs.GetString(DirectorySelector.singleton.FolderPref), "QMods");
+        string QModsDir = Path.Combine(DirectorySelector.singleton.GetInstallFolderPref(), "QMods");
         List<QMod> mods = new List<QMod>();
         if (!Directory.Exists(QModsDir))
         {

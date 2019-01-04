@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Crosstales.FB;
 using TMPro;
 using UnityEngine;
@@ -61,17 +62,25 @@ public class DirectorySelector : MonoBehaviour
         }
 
         bool isSubnauticaInstalled = CheckSubnauticaInstalled(installFolder);
-        bool isQModsPatched = CheckQModsPatched(installFolder);
+        bool isQModsPatched = false;
+        bool failed = false;
+        try
+        {
+            isQModsPatched = CheckQModsPatched(installFolder);
+        }
+        catch
+        {
+            failed = true;
+        }
 
         string snInstalledColor = ColorUtility.ToHtmlStringRGBA(isSubnauticaInstalled ? green : red);
         string snInstalledText = isSubnauticaInstalled ? "INSTALLED" : "NOT INSTALLED";
 
         statusLabel.text = $"Subnautica <color=#{snInstalledColor}>{snInstalledText}</color> ";
 
-        //string qmodsPatchedColor = ColorUtility.ToHtmlStringRGBA(isQModsPatched ? green : red);
-        //string qmodsPatchedText = isQModsPatched ? "PATCHED" : "NOT PATCHED";
-        string qmodsPatchedColor = "AAAAAA";
-        string qmodsPatchedText = "[TODO]";
+        string qmodsPatchedColor = ColorUtility.ToHtmlStringRGBA(isQModsPatched && !failed ? green : red);
+        string qmodsPatchedText = failed ? "ERROR" : isQModsPatched ? "PATCHED" : "NOT PATCHED";
+
         statusLabel.text += $" - QModManager <color=#{qmodsPatchedColor}>{qmodsPatchedText}</color> ";
     }
 
@@ -84,8 +93,14 @@ public class DirectorySelector : MonoBehaviour
 
     public static bool CheckQModsPatched(string installFolder)
     {
-        // TODO
-        return false;
+        try
+        {
+            return Injector.IsInjected(Path.Combine(singleton.GetInstallFolderPref(), "Subnautica_Data/Managed/Assembly-CSharp.dll"));
+        }
+        catch (Exception e)
+        {
+            throw e;
+        }
     }
 
     public static bool InstallFolderIsValid(string currentSelectedInstallFolder)

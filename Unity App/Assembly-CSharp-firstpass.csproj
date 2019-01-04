@@ -8,8 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{6135AF68-2FF0-1825-8243-F5848AC2D412}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -66,9 +65,7 @@
     <Compile Include="Assets\Plugins\crosstales\Common\Scripts\Util\BaseConstants.cs" />
     <Compile Include="Assets\Plugins\crosstales\Common\Scripts\Util\BaseHelper.cs" />
     <Compile Include="Assets\Plugins\crosstales\Common\Scripts\Util\CTPlayerPrefs.cs" />
-    <Compile Include="Assets\Plugins\crosstales\Common\Scripts\Util\CTWebClient.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Assets\Plugins\crosstales\Common\Scripts\Util\CTWebClient.cs" />
     <Compile Include="Assets\Plugins\crosstales\Common\Scripts\Util\PlatformController.cs" />
     <Compile Include="Assets\Plugins\crosstales\Common\Scripts\Util\RandomColor.cs" />
     <Compile Include="Assets\Plugins\crosstales\Common\Scripts\Util\RandomRotator.cs" />
@@ -129,8 +126,11 @@
     <Reference Include="Unity.TextMeshPro">
       <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Analytics.DataPrivacy">
-      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
+    <Reference Include="UnityEngine.XR.LegacyInputHelpers">
+      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Library/ScriptAssemblies/UnityEngine.XR.LegacyInputHelpers.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.XR.LegacyInputHelpers">
+      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Library/ScriptAssemblies/UnityEditor.XR.LegacyInputHelpers.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>D:/Unity/Installs/2019.1.0a12/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -321,23 +321,11 @@
     <Reference Include="System.Windows.Forms">
       <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Assets/Plugins/crosstales/FileBrowser/Native/Windows/System.Windows.Forms.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Advertisements">
-      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Library/PackageCache/com.unity.ads@2.3.1/Runtime/UnityEngine.Advertisements.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Advertisements.Editor">
-      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Library/PackageCache/com.unity.ads@2.3.1/Runtime/UnityEngine.Advertisements.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Analytics.Editor">
-      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Analytics.StandardEvents">
-      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Analytics.Tracker">
-      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Assets/Plugins/Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Mono.Cecil">
+      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Assets/Plugins/Mono.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>D:/Unity/Installs/2019.1.0a12/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
