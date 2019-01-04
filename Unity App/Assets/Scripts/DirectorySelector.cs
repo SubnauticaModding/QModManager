@@ -63,30 +63,30 @@ public class DirectorySelector : MonoBehaviour
         bool isSubnauticaInstalled = CheckSubnauticaInstalled(installFolder);
         bool isQModsPatched = CheckQModsPatched(installFolder);
 
-        Color snInstalledColor = isSubnauticaInstalled ? green : red;
+        string snInstalledColor = ColorUtility.ToHtmlStringRGBA(isSubnauticaInstalled ? green : red);
         string snInstalledText = isSubnauticaInstalled ? "INSTALLED" : "NOT INSTALLED";
 
-        statusLabel.text = $"Subnautica <color={snInstalledColor}>{snInstalledText}</color> ";
+        statusLabel.text = $"Subnautica <color=#{snInstalledColor}>{snInstalledText}</color> ";
 
-        var qmodsPatchedColor = isQModsPatched ? green : red;
-        var qmodsPatchedText = isQModsPatched ? "PATCHED" : "NOT PATCHED";
-        statusLabel.text += $" - QMods <color={qmodsPatchedColor}>{qmodsPatchedText} (TODO)</color> ";
+        string qmodsPatchedColor = ColorUtility.ToHtmlStringRGBA(isQModsPatched ? green : red);
+        string qmodsPatchedText = isQModsPatched ? "PATCHED" : "NOT PATCHED";
+        statusLabel.text += $" - QMods <color=#{qmodsPatchedColor}>{qmodsPatchedText}</color> ";
     }
 
-    private static bool CheckSubnauticaInstalled(string installFolder)
+    public static bool CheckSubnauticaInstalled(string installFolder)
     {
         var managedFolder = Path.Combine(installFolder, "Subnautica_Data", "Managed");
         var assemblyFile = Path.Combine(managedFolder, "Assembly-CSharp.dll");
         return Directory.Exists(managedFolder) && File.Exists(assemblyFile);
     }
 
-    private static bool CheckQModsPatched(string installFolder)
+    public static bool CheckQModsPatched(string installFolder)
     {
         // TODO
         return false;
     }
 
-    private static bool InstallFolderIsValid(string currentSelectedInstallFolder)
+    public static bool InstallFolderIsValid(string currentSelectedInstallFolder)
     {
         return !string.IsNullOrEmpty(currentSelectedInstallFolder);
     }
