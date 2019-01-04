@@ -17,7 +17,7 @@ public class TestModInfo : IModInfo
     public string Author => "Author";
     public string Version => "1.0.0";
     public string[] Dependencies => new string[] { "SMLHelper" };
-    public string[] LoadBefore => null;
-    public string[] LoadAfter => null;
+    public string[] LoadBefore => new string[] { "OneMod" };
+    public string[] LoadAfter => new string[] { "AnotherMod" };
     public bool Enabled => true;
 }
