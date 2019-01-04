@@ -1,4 +1,8 @@
-﻿using TMPro;
+﻿using Oculus.Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using TMPro;
 using UnityEngine;
 
 public class ModListEntry : MonoBehaviour
@@ -43,6 +47,30 @@ public class ModListEntry : MonoBehaviour
         Refresh();
     }
 
+    public bool UpdateModJSON()
+    {
+        try
+        {
+            if (!File.Exists(modJSON)) return false;
+            string text;
+            text = File.ReadAllText(modJSON);
+            Dictionary<string, object> dict = JsonConvert.DeserializeObject<Dictionary<string, object>>(text);
+            if (dict == null) return false;
+            if (!dict.ContainsKey("Enable")) return false;
+            bool enable;
+            enable = (bool)dict["Enable"];
+            enable = !enable;
+            dict["Enable"] = enable;
+            text = JsonConvert.SerializeObject(dict, new JsonSerializerSettings { Formatting = Formatting.Indented });
+            File.WriteAllText(modJSON, text);
+            return true;
+        }
+        catch (Exception e)
+        {
+            Debug.LogException(e);
+            return false;
+        }
+    }
     public void ToggleEntryExpanded()
     {
         expanded = !expanded;
@@ -84,6 +112,11 @@ public class ModListEntry : MonoBehaviour
     }
     public void RefreshEnabledState()
     {
+        if (!UpdateModJSON())
+        {
+            Debug.LogError("Could not modify mod.json file for mod: " + titleLabel.text + ", path: " + modJSON);
+            return;
+        }
         enabledBadge.SetActive(_enabled);
         disabledBadge.SetActive(!_enabled);
         enableButton.SetActive(!_enabled);
