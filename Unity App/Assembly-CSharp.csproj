@@ -60,9 +60,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\GameManager.cs" />
     <Compile Include="Assets\Scripts\Attributes\ReadOnlyAttribute.cs" />
     <Compile Include="Assets\Scripts\DirectorySelector.cs" />
+    <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\ModList.cs" />
     <Compile Include="Assets\Scripts\ModListEntry.cs" />
     <Compile Include="Assets\Scripts\QMod.cs" />
