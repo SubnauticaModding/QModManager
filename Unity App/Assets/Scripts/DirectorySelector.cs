@@ -93,9 +93,10 @@ public class DirectorySelector : MonoBehaviour
 
     public static bool CheckQModsPatched(string installFolder)
     {
+        if (!CheckSubnauticaInstalled(installFolder)) return false;
         try
         {
-            return Injector.IsInjected(Path.Combine(singleton.GetInstallFolderPref(), "Subnautica_Data/Managed/Assembly-CSharp.dll"));
+            return Injector.IsInjected(Path.Combine(installFolder, "Subnautica_Data/Managed/Assembly-CSharp.dll"));
         }
         catch (Exception e)
         {
@@ -105,7 +106,9 @@ public class DirectorySelector : MonoBehaviour
 
     public static bool InstallFolderIsValid(string currentSelectedInstallFolder)
     {
-        return !string.IsNullOrEmpty(currentSelectedInstallFolder);
+        if (string.IsNullOrEmpty(currentSelectedInstallFolder)) return false;
+        if (!CheckSubnauticaInstalled(currentSelectedInstallFolder)) return false;
+        return true;
     }
 
     public void SelectInstallFolder()
