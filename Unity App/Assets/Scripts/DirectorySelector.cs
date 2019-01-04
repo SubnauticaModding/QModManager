@@ -68,9 +68,11 @@ public class DirectorySelector : MonoBehaviour
 
         statusLabel.text = $"Subnautica <color=#{snInstalledColor}>{snInstalledText}</color> ";
 
-        string qmodsPatchedColor = ColorUtility.ToHtmlStringRGBA(isQModsPatched ? green : red);
-        string qmodsPatchedText = isQModsPatched ? "PATCHED" : "NOT PATCHED";
-        statusLabel.text += $" - QMods <color=#{qmodsPatchedColor}>{qmodsPatchedText}</color> ";
+        //string qmodsPatchedColor = ColorUtility.ToHtmlStringRGBA(isQModsPatched ? green : red);
+        //string qmodsPatchedText = isQModsPatched ? "PATCHED" : "NOT PATCHED";
+        string qmodsPatchedColor = "AAAAAA";
+        string qmodsPatchedText = "[TODO]";
+        statusLabel.text += $" - QModManager <color=#{qmodsPatchedColor}>{qmodsPatchedText}</color> ";
     }
 
     public static bool CheckSubnauticaInstalled(string installFolder)
