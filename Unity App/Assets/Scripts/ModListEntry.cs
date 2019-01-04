@@ -77,9 +77,15 @@ public class ModListEntry : MonoBehaviour
     }
     public void RefreshExpandedState()
     {
-        content.SetActive(expanded);
+        //content.SetActive(expanded);
         expandIcon.SetActive(!expanded);
-        LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)transform.parent);
+        //LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)transform.parent);
+        if (gameObject.activeSelf)
+        {
+            Animator anim = GetComponent<Animator>();
+            anim.ResetTrigger(expanded ? "collapse" : "expand");
+            anim.SetTrigger(expanded ? "expand" : "collapse");
+        }
     }
     public void RefreshEnabledState()
     {
