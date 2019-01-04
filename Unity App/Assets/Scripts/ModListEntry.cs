@@ -78,8 +78,6 @@ public class ModListEntry : MonoBehaviour
     public void RefreshExpandedState()
     {
         //content.SetActive(expanded);
-        expandIcon.SetActive(!expanded);
-        //LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)transform.parent);
         if (gameObject.activeSelf)
         {
             Animator anim = GetComponent<Animator>();
