@@ -1,0 +1,47 @@
+﻿# FileBrowser - Release notes
+
+## 2018.4.0 - 01..11.2018
+* Async-methods currently disabled (due too many issues)
+* Updated to Common 2018.4.0
+
+## 2018.3.1 - 18.10.2018
+* GetFiles and GetDirectories added
+* Fixes for WSA
+* Updated to Common 2018.3.1
+
+## 2018.3.0 - 08.10.2018
+* SetApiLevel improved for Unity 2018
+* Minimum Unity version is now 5.6
+* Common 2018.3.0 added
+* Tested with Unity 2018.3
+
+## 2018.2.1 - 20.09.2018
+* macOS: 32bit support removed (to use it, extract "FileBrowser.bundle_x86.zip" under "Assets/Plugins/crosstales/FileBrowser/Native/MacOS")
+* UpdateCheck: runs in a separate thread
+* Common 2018.2.1 added
+
+## 2018.2.0 - 23.08.2018
+* macOS: 32 and 64bit support
+* Common 2018.2.0 added
+* Discord channel added
+
+## 1.2.2 - 07.06.2018
+* Editor integration improved
+* Official support for Unity 2018.1 & 2018.2
+
+## 1.2.1 - 18.04.2018
+* macOS: library is now 64bit to be compatible with the "Mac App Store"
+* macOS: handling of spaces improved
+
+## 1.2.0 - 25.03.2018
+* Interface "IFileBrowser" for file browsers added
+* ReminderCT added
+* Warnings for multiple extensions in Editor added
+
+## 1.1.0 - 21.02.2018
+* Warnings for multiselect in Editor added
+* Official support for Unity 2018
+* Common 1.2.5 added
+
+## 1.0.0 - 28.12.2017
+* Production release
