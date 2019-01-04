@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -61,10 +62,12 @@ public class ModList : MonoBehaviour
         modEntries.Add(newModEntry);
     }
 
-    public void FixHeight()
+    public IEnumerator FixHeight()
     {
-        ContentSizeFitter fitter = GetComponentInChildren<ContentSizeFitter>();
-        fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
-        fitter.verticalFit = ContentSizeFitter.FitMode.MinSize;
+        ScrollRect group = GetComponent<ScrollRect>();
+        group.vertical = false;
+        yield return new WaitForEndOfFrame();
+        group.vertical = true;
+        yield return null;
     }
 }

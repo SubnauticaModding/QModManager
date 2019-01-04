@@ -30,5 +30,9 @@ public class SidebarMenuItem : MonoBehaviour
 		active?.SetActive(toggled);
 		inactive?.SetActive(!toggled);
 		content?.SetActive(toggled);
+        if (content.gameObject.GetComponent<ModList>() is ModList list)
+        {
+            StartCoroutine(list.FixHeight());
+        }
 	}
 }
