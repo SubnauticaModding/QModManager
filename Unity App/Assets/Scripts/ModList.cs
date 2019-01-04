@@ -99,6 +99,7 @@ public class ModList : MonoBehaviour
 
             mods.Add(mod);
         }
+        mods.Sort();
         return mods;
     }
 

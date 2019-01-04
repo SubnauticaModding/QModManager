@@ -1,7 +1,7 @@
 ﻿using System;
 
 [Serializable]
-public class QMod
+public class QMod : IComparable<QMod>
 {
     public QMod() { }
 
@@ -14,4 +14,6 @@ public class QMod
     public string LoadAfter { get; set; }
     public bool Enabled { get; set; }
     public string ModJSON { get; set; }
+
+    public int CompareTo(QMod other) => DisplayName.CompareTo(other.DisplayName);
 }
