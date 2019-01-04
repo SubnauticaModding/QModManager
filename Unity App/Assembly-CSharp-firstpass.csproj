@@ -333,6 +333,9 @@
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Assets/Plugins/Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="netstandard">
       <HintPath>D:/Unity/Installs/2019.1.0a12/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
     </Reference>

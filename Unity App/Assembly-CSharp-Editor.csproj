@@ -60,7 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\Util\Editor\ReadOnlyPropertyDrawer.cs" />
+    <Compile Include="Assets\Scripts\Attributes\Editor\ReadOnlyPropertyDrawer.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
@@ -318,6 +318,9 @@
     </Reference>
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Library/PackageCache/com.unity.purchasing@2.0.3/Editor/UnityEditor.Purchasing.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Assets/Plugins/Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>D:/Unity/Installs/2019.1.0a12/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class ModListEntry : MonoBehaviour
 {
+    public static string fieldColor = "CCCCCC";
+
     public GameObject content;
     public GameObject expandIcon;
     public GameObject enabledBadge;
@@ -13,32 +15,31 @@ public class ModListEntry : MonoBehaviour
     public TextMeshProUGUI titleLabel;
     public TextMeshProUGUI descriptionLabel;
 
-    public static string fieldColor = "CCCCCC";
+    [Header("Mod details")]
 
     [ReadOnly]
     public bool _enabled;
     [ReadOnly]
     public bool expanded;
+    public string modJSON;
 
     public void Awake()
     {
         Refresh();
     }
 
-    public void Initialize(IModInfo modInfo)
+    public void Initialize(QMod modInfo)
     {
         titleLabel.text = modInfo.DisplayName;
         descriptionLabel.Empty()
             .Populate("ID", modInfo.Id)
             .Populate("Author", modInfo.Author)
-            .Populate("Version", modInfo.Version);
-        if (modInfo.LoadBefore != null && modInfo.LoadBefore.Length > 0)
-            descriptionLabel.Populate("Loads Before", string.Join(", ", modInfo.LoadBefore));
-        if (modInfo.LoadAfter != null && modInfo.LoadAfter.Length > 0)
-            descriptionLabel.Populate("Loads After", string.Join(", ", modInfo.LoadAfter));
-        if (modInfo.Dependencies != null && modInfo.Dependencies.Length > 0)
-            descriptionLabel.Populate("Dependencies", string.Join(", ", modInfo.Dependencies));
+            .Populate("Version", modInfo.Version)
+            .Populate("Loads Before", modInfo.LoadBefore)
+            .Populate("Loads After", modInfo.Id == "SMLHelper" ? "All" : modInfo.LoadAfter)
+            .Populate("Dependencies", modInfo.Dependencies);
         enabled = modInfo.Enabled;
+        modJSON = modInfo.ModJSON;
         Refresh();
     }
 

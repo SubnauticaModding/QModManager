@@ -60,12 +60,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Attributes\ReadOnlyAttribute.cs" />
     <Compile Include="Assets\Scripts\DirectorySelector.cs" />
-    <Compile Include="Assets\Scripts\IModInfo.cs" />
     <Compile Include="Assets\Scripts\ModList.cs" />
     <Compile Include="Assets\Scripts\ModListEntry.cs" />
+    <Compile Include="Assets\Scripts\QMod.cs" />
     <Compile Include="Assets\Scripts\SidebarMenuItem.cs" />
-    <Compile Include="Assets\Scripts\Util\ReadOnlyAttribute.cs" />
+    <Compile Include="Assets\SidebarFooter.cs" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
@@ -313,6 +315,9 @@
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
       <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Assets/Plugins/Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>D:/Unity/Installs/2019.1.0a12/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
