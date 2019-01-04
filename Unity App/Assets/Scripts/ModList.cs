@@ -18,6 +18,10 @@ public class ModList : MonoBehaviour
     {
         Initialize();
     }
+    public void OnDisable()
+    {
+        DestroyAllEntries();
+    }
 
     public void Initialize()
     {
@@ -105,9 +109,10 @@ public class ModList : MonoBehaviour
 
     public void CreateModEntry(QMod modInfo)
     {
-        var newModEntry = Instantiate(modEntryTemplate, contentContainer, false);
+        ModListEntry newModEntry = Instantiate(modEntryTemplate, contentContainer, false);
         newModEntry.Initialize(modInfo);
         newModEntry.gameObject.SetActive(true);
+        newModEntry.gameObject.name = "Mod (" + modInfo.Id + ")";
         modEntries.Add(newModEntry);
     }
 
