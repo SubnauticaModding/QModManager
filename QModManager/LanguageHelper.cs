@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using UnityEngine;
 
 namespace QModManager
@@ -21,24 +22,42 @@ namespace QModManager
         public static string Get(string key)
         {
             if (string.IsNullOrEmpty(key)) return null;
-            if (strings == null && backupStrings == null)
+            if (!Application.isPlaying && Assembly.GetCallingAssembly().GetName().Name == "QModManager" && strings == null && backupStrings == null)
             {
-                string path = Path.Combine(QModPatcher.QModBaseDir, "../QModManager/installer_language.txt");
-                if (!File.Exists(path))
+                if (!Environment.CurrentDirectory.Contains("Subnautica_Data") || !Environment.CurrentDirectory.Contains("Managed"))
                 {
-                    if (LoadLanguageFile("English", silent: true)) return Get(key);
+                    Console.WriteLine("There was an error initializing the dictionaries from the console app");
+                    Console.WriteLine("Please make sure you have installed QModManager in the right folder");
+                    return "key";
+                }
+                string QMMDir = Path.Combine(Environment.CurrentDirectory, "../../QModManager");
+                if (!Directory.Exists(QMMDir))
+                {
+                    Console.WriteLine("There was an error initializing the dictionaries from the console app");
+                    Console.WriteLine("The QModManager directory is missing");
+                    return key;
+                }
+                string languageFile = Path.Combine(QMMDir, "installer_language.txt");
+                string overridePath = Path.Combine(QMMDir, "../QMods");
+                if (!File.Exists(languageFile))
+                {
+                    Console.WriteLine("There was an error initializing the dictionaries from the console app");
+                    Console.WriteLine("The installer_language.txt file is missing!");
+                    Console.WriteLine("Loading English...");
+                    if (LoadLanguageFile("English", silent: true, path: overridePath)) return Get(key);
+                    Console.WriteLine("Error loading English!");
                     return key;
                 }
                 try
                 {
-                    string text = File.ReadAllText(path);
-                    if (LoadLanguageFile(text, silent: true)) return Get(key);
-                    if (LoadLanguageFile("English", silent: true)) return Get(key);
+                    string text = File.ReadAllText(languageFile);
+                    if (LoadLanguageFile(text, silent: true, path: overridePath)) return Get(key);
+                    if (LoadLanguageFile("English", silent: true, path: overridePath)) return Get(key);
                     return key;
                 }
                 catch
                 {
-                    if (LoadLanguageFile("English", silent: true)) return Get(key);
+                    if (LoadLanguageFile("English", silent: true, path: overridePath)) return Get(key);
                     return key;
                 }
             }
@@ -75,11 +94,12 @@ namespace QModManager
         {
             if (!LoadLanguageFile(PlayerPrefs.GetString("language"))) LoadLanguageFile("English");
         }
-        internal static bool LoadLanguageFile(string language, bool backup = false, bool silent = false)
+        internal static bool LoadLanguageFile(string language, bool backup = false, bool silent = false, string path = null)
         {
             try
             {
-                string path = Path.Combine(QModPatcher.QModBaseDir, "../QModManager/Localization/" + language + ".json");
+                if (path == null) path = Path.Combine(QModPatcher.QModBaseDir, "../QModManager/Localization/" + language + ".json");
+                else path = Path.Combine(path, "../QModManager/Localization/" + language + ".json");
                 if (!File.Exists(path)) return false;
                 string text = File.ReadAllText(path);
                 Dictionary<string, string> dictionary = JsonConvert.DeserializeObject<Dictionary<string, string>>(text);
