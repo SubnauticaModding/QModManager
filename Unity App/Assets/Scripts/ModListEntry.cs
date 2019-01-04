@@ -84,17 +84,11 @@ public class ModListEntry : MonoBehaviour
     }
     public void RefreshEnabledState()
     {
-        if (gameObject.activeSelf)
-        {
-            Animator anim = GetComponent<Animator>();
-            anim.ResetTrigger(_enabled ? "disable" : "enable");
-            anim.SetTrigger(_enabled ? "enable" : "disable");
-        }
-        //enabledBadge.SetActive(enabled);
-        //disabledBadge.SetActive(!enabled);
-        //enableButton.SetActive(!enabled);
-        //disableButton.SetActive(enabled);
-        //titleLabel.color = enabled ? enabledColor : disabledColor;
+        enabledBadge.SetActive(enabled);
+        disabledBadge.SetActive(!enabled);
+        enableButton.SetActive(!enabled);
+        disableButton.SetActive(enabled);
+        titleLabel.color = enabled ? enabledColor : disabledColor;
     }
 }
 
