@@ -16,7 +16,7 @@ namespace QModManager
         public string[] Dependencies = new string[] { };
         public string[] LoadBefore = new string[] { };
         public string[] LoadAfter = new string[] { };
-        public bool Enable = true;
+        public bool Enable = false;
         public string AssemblyName = "Filename.dll";
         public string EntryMethod = "Namespace.Class.Method";
 
