@@ -14,6 +14,8 @@ public class ModListEntry : MonoBehaviour
     public GameObject disableButton;
     public TextMeshProUGUI titleLabel;
     public TextMeshProUGUI descriptionLabel;
+    public Color enabledColor;
+    public Color disabledColor;
 
     [Header("Mod details")]
 
@@ -85,6 +87,7 @@ public class ModListEntry : MonoBehaviour
         disabledBadge.SetActive(!enabled);
         enableButton.SetActive(!enabled);
         disableButton.SetActive(enabled);
+        titleLabel.color = enabled ? enabledColor : disabledColor;
     }
 }
 
