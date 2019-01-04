@@ -1,38 +1,25 @@
 ﻿using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Toggle))]
 public class SidebarMenuItem : MonoBehaviour
 {
-	[SerializeField]
-	private GameObject _active;
-	[SerializeField]
-	private GameObject _inactive;
-	[SerializeField]
-	private GameObject _content;
+    public GameObject active;
+    public GameObject inactive;
+    public GameObject content;
 
-	private void Awake()
+	public void Awake()
 	{
 		var toggle = GetComponent<Toggle>();
 		toggle.onValueChanged.AddListener(OnToggleChanged);
 
-		if (_active != null)
-		{
-			_active.SetActive(toggle.isOn);
-		}
-
-		if (_inactive != null)
-		{
-			_inactive.SetActive(!toggle.isOn);
-		}
-
-		if (_content != null)
-		{
-			_content.SetActive(toggle.isOn);
-		}
+		active?.SetActive(toggle.isOn);
+		inactive?.SetActive(!toggle.isOn);
+	    content?.SetActive(toggle.isOn);
 	}
 
-	private void OnDestroy()
+    public void OnDestroy()
 	{
 		var toggle = GetComponent<Toggle>();
 		toggle.onValueChanged.RemoveAllListeners();
@@ -40,19 +27,8 @@ public class SidebarMenuItem : MonoBehaviour
 
 	public void OnToggleChanged(bool toggled)
 	{
-		if (_active != null)
-		{
-			_active.SetActive(toggled);
-		}
-
-		if (_inactive != null)
-		{
-			_inactive.SetActive(!toggled);
-		}
-
-		if (_content != null)
-		{
-			_content.SetActive(toggled);
-		}
+		active?.SetActive(toggled);
+		inactive?.SetActive(!toggled);
+		content?.SetActive(toggled);
 	}
 }

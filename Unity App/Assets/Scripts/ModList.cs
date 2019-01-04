@@ -4,21 +4,20 @@ using UnityEngine.UI;
 
 public class ModList : MonoBehaviour
 {
-    [SerializeField]
-    private ModListEntry _modEntryTemplate;
-    [SerializeField]
-    private Transform _contentContainer;
+    public ModListEntry modEntryTemplate;
+    public Transform contentContainer;
 
-    private readonly List<ModListEntry> _modEntries = new List<ModListEntry>();
+    [ReadOnly]
+    public List<ModListEntry> modEntries = new List<ModListEntry>();
 
-    private void OnEnable()
+    public void OnEnable()
     {
         Initialize();
     }
 
     public void Initialize()
     {
-        _modEntryTemplate.gameObject.SetActive(false);
+        modEntryTemplate.gameObject.SetActive(false);
 
         DestroyAllEntries();
 
@@ -31,16 +30,16 @@ public class ModList : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)transform);
     }
 
-    private void DestroyAllEntries()
+    public void DestroyAllEntries()
     {
-        foreach (var entry in _modEntries)
+        foreach (var entry in modEntries)
         {
-            DestroyImmediate(entry.gameObject);
+            Destroy(entry.gameObject);
         }
-        _modEntries.Clear();
+        modEntries.Clear();
     }
 
-    private IList<IModInfo> GetModList()
+    public IList<IModInfo> GetModList()
     {
         return new List<IModInfo>
         {
@@ -54,11 +53,18 @@ public class ModList : MonoBehaviour
         };
     }
 
-    private void CreateModEntry(IModInfo modInfo)
+    public void CreateModEntry(IModInfo modInfo)
     {
-        var newModEntry = Instantiate(_modEntryTemplate, _contentContainer, false);
+        var newModEntry = Instantiate(modEntryTemplate, contentContainer, false);
         newModEntry.Initialize(modInfo);
         newModEntry.gameObject.SetActive(true);
-        _modEntries.Add(newModEntry);
+        modEntries.Add(newModEntry);
+    }
+
+    public void FixHeight()
+    {
+        ContentSizeFitter fitter = GetComponentInChildren<ContentSizeFitter>();
+        fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+        fitter.verticalFit = ContentSizeFitter.FitMode.MinSize;
     }
 }

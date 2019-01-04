@@ -1,17 +1,23 @@
 ﻿public interface IModInfo
 {
     string DisplayName { get; }
-    string Description { get; }
-    string AuthorName { get; }
+    string Id { get; }
+    string Author { get; }
     string Version { get; }
+    string[] Dependencies { get; }
+    string[] LoadBefore { get; }
+    string[] LoadAfter { get; }
     bool Enabled { get; }
 }
 
 public class TestModInfo : IModInfo
 {
-    public string DisplayName => "TestDisplayName";
-    public string Description => "TestDescription Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet fringilla magna.";
-    public string AuthorName => "TestAuthorName";
-    public string Version => "Test 1.0.0";
+    public string DisplayName => "Test Mod";
+    public string Id => "TestMod";
+    public string Author => "Author";
+    public string Version => "1.0.0";
+    public string[] Dependencies => new string[] { "SMLHelper" };
+    public string[] LoadBefore => null;
+    public string[] LoadAfter => null;
     public bool Enabled => true;
 }

@@ -1,92 +1,86 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ModListEntry : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject _content;
-    [SerializeField]
-    private GameObject _expandIcon;
-    [SerializeField]
-    private GameObject _enabledBadge;
-    [SerializeField]
-    private GameObject _disabledBadge;
-    [SerializeField]
-    private GameObject _enableButton;
-    [SerializeField]
-    private GameObject _disableButton;
-    [SerializeField]
-    private TextMeshProUGUI _titleLabel;
-    [SerializeField]
-    private TextMeshProUGUI _descriptionLabel;
+    public GameObject content;
+    public GameObject expandIcon;
+    public GameObject enabledBadge;
+    public GameObject disabledBadge;
+    public GameObject enableButton;
+    public GameObject disableButton;
+    public TextMeshProUGUI titleLabel;
+    public TextMeshProUGUI descriptionLabel;
+    public Color fieldColor;
 
-    private bool _enabled;
-    private bool _expanded;
+    [ReadOnly]
+    public bool _enabled;
+    [ReadOnly]
+    public bool expanded;
 
-    private void Awake()
+    public void Awake()
     {
         Refresh();
     }
 
     public void Initialize(IModInfo modInfo)
     {
-        _titleLabel.text = modInfo.DisplayName;
-        _descriptionLabel.text = $"{modInfo.Description}\n<color=#CCC>Author:</color> {modInfo.AuthorName}\n<color=#CCC>Version:</color> {modInfo.Version}";
-        _enabled = modInfo.Enabled;
+        string color = ColorUtility.ToHtmlStringRGBA(fieldColor);
+        titleLabel.text = modInfo.DisplayName;
+        descriptionLabel.text = $"<color=#{color}>Author:</color> {modInfo.Author}\n<color=#{color}>Version:</color> {modInfo.Version}";
+        enabled = modInfo.Enabled;
         Refresh();
     }
 
     public void ToggleEntryExpanded()
     {
-        _expanded = !_expanded;
+        expanded = !expanded;
         RefreshExpandedState();
     }
 
     public void ExpandEntry()
     {
-        _expanded = true;
+        expanded = true;
         RefreshExpandedState();
     }
 
     public void CollapseEntry()
     {
-        _expanded = false;
+        expanded = false;
         RefreshExpandedState();
     }
 
     public void EnableMod()
     {
-        _enabled = true;
+        enabled = true;
         RefreshEnabledState();
     }
 
     public void DisableMod()
     {
-        _enabled = false;
+        enabled = false;
         RefreshEnabledState();
     }
 
-    private void Refresh()
+    public void Refresh()
     {
         RefreshExpandedState();
         RefreshEnabledState();
     }
 
-    private void RefreshExpandedState()
+    public void RefreshExpandedState()
     {
-        _content.SetActive(_expanded);
-        _expandIcon.SetActive(!_expanded);
+        content.SetActive(expanded);
+        expandIcon.SetActive(!expanded);
         LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)transform.parent);
     }
 
-    private void RefreshEnabledState()
+    public void RefreshEnabledState()
     {
-        _enabledBadge.SetActive(_enabled);
-        _disabledBadge.SetActive(!_enabled);
-        _enableButton.SetActive(!_enabled);
-        _disableButton.SetActive(_enabled);
+        enabledBadge.SetActive(enabled);
+        disabledBadge.SetActive(!enabled);
+        enableButton.SetActive(!enabled);
+        disableButton.SetActive(enabled);
     }
 }
