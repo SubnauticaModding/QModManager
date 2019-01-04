@@ -1,11 +1,8 @@
 ﻿using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ModListEntry : MonoBehaviour
 {
-    public static string fieldColor = "CCCCCC";
-
     public GameObject content;
     public GameObject expandIcon;
     public GameObject enabledBadge;
@@ -23,6 +20,7 @@ public class ModListEntry : MonoBehaviour
     public bool _enabled;
     [ReadOnly]
     public bool expanded;
+    [ReadOnly]
     public string modJSON;
 
     public void Awake()
@@ -62,12 +60,12 @@ public class ModListEntry : MonoBehaviour
     }
     public void EnableMod()
     {
-        enabled = true;
+        _enabled = true;
         RefreshEnabledState();
     }
     public void DisableMod()
     {
-        enabled = false;
+        _enabled = false;
         RefreshEnabledState();
     }
     public void Refresh()
@@ -77,7 +75,6 @@ public class ModListEntry : MonoBehaviour
     }
     public void RefreshExpandedState()
     {
-        //content.SetActive(expanded);
         if (gameObject.activeSelf)
         {
             Animator anim = GetComponent<Animator>();
@@ -87,11 +84,17 @@ public class ModListEntry : MonoBehaviour
     }
     public void RefreshEnabledState()
     {
-        enabledBadge.SetActive(enabled);
-        disabledBadge.SetActive(!enabled);
-        enableButton.SetActive(!enabled);
-        disableButton.SetActive(enabled);
-        titleLabel.color = enabled ? enabledColor : disabledColor;
+        if (gameObject.activeSelf)
+        {
+            Animator anim = GetComponent<Animator>();
+            anim.ResetTrigger(_enabled ? "disable" : "enable");
+            anim.SetTrigger(_enabled ? "enable" : "disable");
+        }
+        //enabledBadge.SetActive(enabled);
+        //disabledBadge.SetActive(!enabled);
+        //enableButton.SetActive(!enabled);
+        //disableButton.SetActive(enabled);
+        //titleLabel.color = enabled ? enabledColor : disabledColor;
     }
 }
 
@@ -100,7 +103,7 @@ public static class ModListEntryExtensions
     public static TextMeshProUGUI Populate(this TextMeshProUGUI tmpro, string key, string value)
     {
         if (tmpro.text != "") tmpro.text += "\n";
-        tmpro.text += "<color=#" + ModListEntry.fieldColor + ">" + key + ":</color> " + value;
+        tmpro.text += "<color=#CCCCCC>" + key + ":</color> " + value;
         return tmpro;
     }
     public static TextMeshProUGUI Empty(this TextMeshProUGUI tmpro)
