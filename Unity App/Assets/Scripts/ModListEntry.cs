@@ -38,7 +38,7 @@ public class ModListEntry : MonoBehaviour
             .Populate("Loads Before", modInfo.LoadBefore)
             .Populate("Loads After", modInfo.Id == "SMLHelper" ? "All" : modInfo.LoadAfter)
             .Populate("Dependencies", modInfo.Dependencies);
-        enabled = modInfo.Enabled;
+        _enabled = modInfo.Enabled;
         modJSON = modInfo.ModJSON;
         Refresh();
     }
