@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Crosstales.FB;
 using Harmony;
 using TMPro;
@@ -44,28 +46,16 @@ public class DirectorySelector : MonoBehaviour
         {
             label.text = currentSelectedInstallFolder;
             icon.overrideSprite = hasFolderIcon;
-            Toggle[] toggles = FindObjectsOfType<Toggle>();
-            toggles.Do(t =>
-            {
-                t.interactable = true;
-                t.GetComponentsInChildren<Image>(true)[3].color = new Color(1, 1, 1, 0.4980392f);
-                t.GetComponentsInChildren<TextMeshProUGUI>(true)[1].color = new Color(1, 1, 1, 0.4980392f);
-            });
+            UnlockPages();
         }
         else
         {
             label.text = string.IsNullOrEmpty(currentSelectedInstallFolder) ? "currentSelectedInstallFolder" : currentSelectedInstallFolder;
             icon.overrideSprite = noFolderIcon;
-            Toggle[] toggles = FindObjectsOfType<Toggle>();
-            toggles.Do(t =>
-            {
-                t.interactable = false;
-                t.GetComponentsInChildren<Image>(true)[3].color = new Color(1, 1, 1, 0.1176471f);
-                t.GetComponentsInChildren<TextMeshProUGUI>(true)[1].color = new Color(1, 1, 1, 0.1176471f);
-            });
-            toggles[0].interactable = true;
-            toggles[0].isOn = true;
+            LockPages();
         }
+
+        if (!CheckQModsPatched(currentSelectedInstallFolder)) LockPages();
 
         RefreshStatusLabel(currentSelectedInstallFolder);
     }
@@ -130,5 +120,28 @@ public class DirectorySelector : MonoBehaviour
         PlayerPrefs.Save();
 
         Refresh();
+    }
+
+    public static void UnlockPages()
+    {
+        List<Toggle> toggles = FindObjectsOfType<SidebarMenuItem>().Select(m => m.GetComponent<Toggle>()).ToList();
+        toggles.Do(t =>
+        {
+            t.interactable = true;
+            t.GetComponentsInChildren<Image>(true)[3].color = new Color(1, 1, 1, 0.4980392f);
+            t.GetComponentsInChildren<TextMeshProUGUI>(true)[1].color = new Color(1, 1, 1, 0.4980392f);
+        });
+    }
+    public static void LockPages()
+    {
+        Toggle[] toggles = FindObjectsOfType<Toggle>();
+        toggles.Do(t =>
+        {
+            t.interactable = false;
+            t.GetComponentsInChildren<Image>(true)[3].color = new Color(1, 1, 1, 0.1176471f);
+            t.GetComponentsInChildren<TextMeshProUGUI>(true)[1].color = new Color(1, 1, 1, 0.1176471f);
+        });
+        toggles[0].interactable = true;
+        toggles[0].isOn = true;
     }
 }
