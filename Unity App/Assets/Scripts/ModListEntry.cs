@@ -84,11 +84,11 @@ public class ModListEntry : MonoBehaviour
     }
     public void RefreshEnabledState()
     {
-        enabledBadge.SetActive(enabled);
-        disabledBadge.SetActive(!enabled);
-        enableButton.SetActive(!enabled);
-        disableButton.SetActive(enabled);
-        titleLabel.color = enabled ? enabledColor : disabledColor;
+        enabledBadge.SetActive(_enabled);
+        disabledBadge.SetActive(!_enabled);
+        enableButton.SetActive(!_enabled);
+        disableButton.SetActive(_enabled);
+        titleLabel.color = _enabled ? enabledColor : disabledColor;
     }
 }
 
