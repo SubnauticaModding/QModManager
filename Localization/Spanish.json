@@ -8,7 +8,7 @@
     "AlreadyUninstalled": "QModManager no está instalado!\nCancelando la desinstalación",
     "AskInstall": "El parche para mods no fue detectado, desea instalarlo?",
     "AskUninstall": "Se ha detectado el parche para mods, desea removerlo?",
-    "Dialog_SeeLog": "Ver el log",
+    "Dialog_SeeLog": "Ver log",
     "Dialog_Close": "Cerrar",
     "AlreadyInstalled_Forced": "Intentamos instalar el parche, pero ya existe\nCancelando la instalación",
     "Installed": "QModManager fue instalado exitosamente",
@@ -31,7 +31,7 @@
     "VersionCheckError": "No pudimos descargar la última versión ({0})",
     "LoadLanguage": "Cargando archivo de idioma {0}...",
     "AlreadyInstalled": "QModManager ya estaba instalado!\nCancelando la instalación",
-    "Yes": "Yes",
+    "Yes": "Sí",
     "No": "No",
-    "IfTheProblemPersists": "If the problem persists, open a bug report on NexusMods or an issue on GitHub"
+    "IfTheProblemPersists": "Si el problema no se resuelve, por favor de reportarlo por NexusMods o GitHub."
 }
