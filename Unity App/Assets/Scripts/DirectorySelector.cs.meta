@@ -9,7 +9,7 @@ MonoImporter:
   - icon: {instanceID: 0}
   - noFolderIcon: {fileID: 21300000, guid: 92762c3dbe836964d9ae563025abd8fb, type: 3}
   - hasFolderIcon: {fileID: 21300000, guid: c7d4f4cee7b45ca4d9168a6c0e931826, type: 3}
-  executionOrder: 0
+  executionOrder: -20
   icon: {instanceID: 0}
   userData: 
   assetBundleName: 

@@ -70,8 +70,9 @@
     <Compile Include="Assets\Scripts\ModList.cs" />
     <Compile Include="Assets\Scripts\ModListEntry.cs" />
     <Compile Include="Assets\Scripts\QMod.cs" />
+    <Compile Include="Assets\Scripts\Refresh.cs" />
+    <Compile Include="Assets\Scripts\SidebarFooter.cs" />
     <Compile Include="Assets\Scripts\SidebarMenuItem.cs" />
-    <Compile Include="Assets\SidebarFooter.cs" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />

@@ -3,11 +3,13 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Toggle))]
+[DisallowMultipleComponent]
 public class SidebarMenuItem : MonoBehaviour
 {
     public GameObject active;
     public GameObject inactive;
     public GameObject content;
+    public UnityEvent onRefresh;
 
 	public void Awake()
 	{
