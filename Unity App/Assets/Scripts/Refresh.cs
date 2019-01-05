@@ -18,7 +18,7 @@ public class Refresh : MonoBehaviour
     {
         worksIn.Do(s =>
         {
-            if (s.gameObject.activeInHierarchy)
+            if (s.content.gameObject.activeInHierarchy)
             {
                 gameObject.SetActive(true);
                 currentItem = s;
