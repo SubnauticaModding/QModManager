@@ -64,6 +64,7 @@
     <Compile Include="Assets\Discordity\Scripts\DiscordRpc.cs" />
     <Compile Include="Assets\Scripts\Attributes\ReadOnlyAttribute.cs" />
     <Compile Include="Assets\Scripts\DirectorySelector.cs" />
+    <Compile Include="Assets\Scripts\EnablerDisablerController.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Injector.cs" />
     <Compile Include="Assets\Scripts\Install.cs" />

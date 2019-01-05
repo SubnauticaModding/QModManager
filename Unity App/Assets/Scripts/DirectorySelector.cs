@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Crosstales.FB;
+using Harmony;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Crosstales.FB;
-using Harmony;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -59,7 +59,6 @@ public class DirectorySelector : MonoBehaviour
 
         RefreshStatusLabel(currentSelectedInstallFolder);
     }
-
     public void RefreshStatusLabel(string installFolder)
     {
         bool isSubnauticaInstalled = CheckSubnauticaInstalled(installFolder);
@@ -91,7 +90,6 @@ public class DirectorySelector : MonoBehaviour
         string assemblyFile = Path.Combine(managedFolder, "Assembly-CSharp.dll");
         return Directory.Exists(managedFolder) && File.Exists(assemblyFile);
     }
-
     public static bool CheckQModsPatched(string installFolder)
     {
         if (!CheckSubnauticaInstalled(installFolder)) return false;
@@ -111,7 +109,6 @@ public class DirectorySelector : MonoBehaviour
         if (!CheckSubnauticaInstalled(currentSelectedInstallFolder)) return false;
         return true;
     }
-
     public void SelectInstallFolder()
     {
         string currentSelectedInstallFolder = GetInstallFolderPref();
@@ -148,4 +145,21 @@ public class DirectorySelector : MonoBehaviour
         toggles[0].interactable = true;
         toggles[0].isOn = true;
     }
+
+#if UNITY_EDITOR
+    [UnityEditor.MenuItem("Tools/Set Default Path")]
+    public static void SetDefaultPath()
+    {
+        if (!Application.isPlaying)
+        {
+            Debug.LogError("Cannot do this while not in playmode!");
+            return;
+        }
+
+        PlayerPrefs.SetString(singleton.FolderPref, "D:/Program Files (x86)/Steam/steamapps/common/Subnautica");
+        PlayerPrefs.Save();
+
+        singleton.Refresh();
+    }
+#endif
 }
