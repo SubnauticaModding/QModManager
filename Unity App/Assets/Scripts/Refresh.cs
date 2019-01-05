@@ -1,41 +1,47 @@
-﻿using Harmony;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class Refresh : MonoBehaviour
 {
-    public SidebarMenuItem[] worksIn;
+    //public SidebarMenuItem[] worksIn;
 
-    [ReadOnly]
-    public SidebarMenuItem currentItem;
+    //[ReadOnly]
+    //public SidebarMenuItem currentItem;
+
+    //public void Awake()
+    //{
+    //    gameObject.SetActive(false);
+    //}
+
+    //public void Update()
+    //{
+    //    worksIn.Do(s =>
+    //    {
+    //        if (s.content.gameObject.activeInHierarchy)
+    //        {
+    //            gameObject.SetActive(true);
+    //            currentItem = s;
+    //        }
+    //    });
+    //}
 
     public void Awake()
     {
         gameObject.SetActive(false);
     }
 
-    public void Update()
-    {
-        worksIn.Do(s =>
-        {
-            if (s.content.gameObject.activeInHierarchy)
-            {
-                gameObject.SetActive(true);
-                currentItem = s;
-            }
-        });
-    }
-
     public void OnClick()
     {
         GetComponent<Animator>().Play("Refresh");
-        currentItem.onRefresh?.Invoke();
-    }
-
-    public void OnModListClick()
-    {
+        //currentItem.onRefresh?.Invoke();
         StartCoroutine(RefreshModList());
     }
+
+    //public void OnModListClick()
+    //{
+    //    StartCoroutine(RefreshModList());
+    //}
 
     public IEnumerator RefreshModList()
     {

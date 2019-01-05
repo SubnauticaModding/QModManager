@@ -32,8 +32,8 @@ public class ModList : MonoBehaviour
     {
         DestroyAllEntries();
 
-        var modList = GetModList();
-        foreach (var modInfo in modList)
+        List<QMod> modList = GetModList();
+        foreach (QMod modInfo in modList)
         {
             CreateModEntry(modInfo);
         }
@@ -43,7 +43,7 @@ public class ModList : MonoBehaviour
 
     public void DestroyAllEntries()
     {
-        foreach (var entry in modEntries)
+        foreach (ModListEntry entry in modEntries)
         {
             Destroy(entry.gameObject);
         }

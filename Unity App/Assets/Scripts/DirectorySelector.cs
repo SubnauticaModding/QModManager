@@ -87,8 +87,8 @@ public class DirectorySelector : MonoBehaviour
 
     public static bool CheckSubnauticaInstalled(string installFolder)
     {
-        var managedFolder = Path.Combine(installFolder, "Subnautica_Data", "Managed");
-        var assemblyFile = Path.Combine(managedFolder, "Assembly-CSharp.dll");
+        string managedFolder = Path.Combine(installFolder, "Subnautica_Data", "Managed");
+        string assemblyFile = Path.Combine(managedFolder, "Assembly-CSharp.dll");
         return Directory.Exists(managedFolder) && File.Exists(assemblyFile);
     }
 
@@ -114,10 +114,14 @@ public class DirectorySelector : MonoBehaviour
 
     public void SelectInstallFolder()
     {
-        var currentSelectedInstallFolder = GetInstallFolderPref();
-        var newInstallFolder = FileBrowser.OpenSingleFolder("Subnautica Install Directory", currentSelectedInstallFolder);
-        PlayerPrefs.SetString(FolderPref, newInstallFolder);
-        PlayerPrefs.Save();
+        string currentSelectedInstallFolder = GetInstallFolderPref();
+        string newInstallFolder = FileBrowser.OpenSingleFolder("Subnautica Install Directory", currentSelectedInstallFolder);
+
+        if (!string.IsNullOrEmpty(newInstallFolder.Trim()))
+        {
+            PlayerPrefs.SetString(FolderPref, newInstallFolder);
+            PlayerPrefs.Save();
+        }
 
         Refresh();
     }

@@ -22,7 +22,7 @@ namespace Crosstales.Common.EditorTask
                         System.IO.Directory.CreateDirectory(targetFolder);
                     }
 
-                    var dirSource = new System.IO.DirectoryInfo(sourceFolder);
+                    System.IO.DirectoryInfo dirSource = new System.IO.DirectoryInfo(sourceFolder);
 
                     foreach (System.IO.FileInfo file in dirSource.GetFiles("*"))
                     {

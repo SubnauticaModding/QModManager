@@ -13,7 +13,7 @@ public class SidebarMenuItem : MonoBehaviour
 
 	public void Awake()
 	{
-		var toggle = GetComponent<Toggle>();
+		Toggle toggle = GetComponent<Toggle>();
 		toggle.onValueChanged.AddListener(OnToggleChanged);
 
 		active?.SetActive(toggle.isOn);
@@ -23,7 +23,7 @@ public class SidebarMenuItem : MonoBehaviour
 
     public void OnDestroy()
 	{
-		var toggle = GetComponent<Toggle>();
+		Toggle toggle = GetComponent<Toggle>();
 		toggle.onValueChanged.RemoveAllListeners();
 	}
 
