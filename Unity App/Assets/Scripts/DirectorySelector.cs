@@ -50,7 +50,7 @@ public class DirectorySelector : MonoBehaviour
         }
         else
         {
-            label.text = string.IsNullOrEmpty(currentSelectedInstallFolder) ? "currentSelectedInstallFolder" : currentSelectedInstallFolder;
+            label.text = string.IsNullOrEmpty(currentSelectedInstallFolder) ? "Select Subnautica Install Directory..." : currentSelectedInstallFolder;
             icon.overrideSprite = noFolderIcon;
             LockPages();
         }

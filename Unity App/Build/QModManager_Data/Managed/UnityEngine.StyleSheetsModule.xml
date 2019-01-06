@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<doc>
+  <members>
+    <assembly>
+      <name>UnityEngine.StyleSheetsModule</name>
+    </assembly>
+    <member name="T:UnityEngine.UIElements.StyleSheet">
+      <summary>
+        <para>Style sheets are applied to visual elements in order to control the layout and visual appearance of the user interface.</para>
+      </summary>
+    </member>
+  </members>
+</doc>
