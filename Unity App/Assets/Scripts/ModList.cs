@@ -39,6 +39,8 @@ public class ModList : MonoBehaviour
         }
 
         LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)transform);
+
+        StartCoroutine(FixHeight());
     }
 
     public void DestroyAllEntries()
