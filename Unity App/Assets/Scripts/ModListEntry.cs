@@ -112,11 +112,19 @@ public class ModListEntry : MonoBehaviour
     }
     public void RefreshEnabledState()
     {
+        if (string.IsNullOrEmpty(modJSON.Trim())) return;
         if (!UpdateModJSON())
         {
             Debug.LogError("Could not modify mod.json file for mod: " + titleLabel.text + ", path: " + modJSON);
             return;
         }
+
+        //if (gameObject.activeSelf)
+        //{
+        //    Animator anim = GetComponent<Animator>();
+        //    anim.Play(_enabled ? "EnableMod" : "DisableMod");
+        //}
+
         enabledBadge.SetActive(_enabled);
         disabledBadge.SetActive(!_enabled);
         enableButton.SetActive(!_enabled);
