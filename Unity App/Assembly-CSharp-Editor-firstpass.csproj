@@ -76,6 +76,10 @@
     <Compile Include="Assets\Plugins\crosstales\FileBrowser\Editor\Util\EditorConfig.cs" />
     <Compile Include="Assets\Plugins\crosstales\FileBrowser\Editor\Util\EditorConstants.cs" />
     <Compile Include="Assets\Plugins\crosstales\FileBrowser\Editor\Util\GAApi.cs" />
+    <Compile Include="Assets\Plugins\GitHub\Editor\ExtensionLoader.cs" />
+    <Compile Include="Assets\Plugins\GitHub\Editor\UnityAPIWrapper.cs" />
+    <None Include="Assets\Plugins\GitHub\Editor\credits.txt" />
+    <None Include="Assets\Plugins\GitHub\Editor\eula.txt" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
@@ -333,6 +337,21 @@
     </Reference>
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Library/PackageCache/com.unity.purchasing@2.0.1/Editor/UnityEditor.Purchasing.dll</HintPath>
+    </Reference>
+    <Reference Include="GitHub.Api.45">
+      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Assets/Plugins/GitHub/Editor/GitHub.Api.45.dll</HintPath>
+    </Reference>
+    <Reference Include="GitHub.Unity.45">
+      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Assets/Plugins/GitHub/Editor/GitHub.Unity.45.dll</HintPath>
+    </Reference>
+    <Reference Include="sfw.net">
+      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Assets/Plugins/GitHub/Editor/sfw.net.dll</HintPath>
+    </Reference>
+    <Reference Include="GitHub.Logging">
+      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Assets/Plugins/GitHub/Editor/GitHub.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="GitHub.UnityShim">
+      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Assets/Plugins/GitHub/Editor/GitHub.UnityShim.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>D:/Unity/Installs/2019.1.0a12/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
