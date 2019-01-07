@@ -60,6 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Database Control Free\Demos\C#\Scripts\DCF_DemoScene_ManagerScript_CSharp.cs" />
     <Compile Include="Assets\Scripts\Attributes\ReadOnlyAttribute.cs" />
     <Compile Include="Assets\Scripts\DirectorySelector.cs" />
     <Compile Include="Assets\Scripts\EnablerDisablerController.cs" />
@@ -74,12 +75,15 @@
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne.json" />
+    <None Include="Assets\Database Control Free\Demos\UnityScript\Readme.txt" />
+    <None Include="Assets\Editor Default Resources\Database Control Free\DCF_EditorData.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Custom-Atlas.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Following Characters.txt" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Masking.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_Bitmap-Mobile.shader" />
+    <None Include="Assets\Database Control Free\Resources\DCF_RuntimeData.txt" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF Overlay.shader" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Surface.cginc" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
@@ -319,6 +323,9 @@
     </Reference>
     <Reference Include="UnityEngine.Purchasing">
       <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Library/PackageCache/com.unity.purchasing@2.0.1/UnityEngine.Purchasing.dll</HintPath>
+    </Reference>
+    <Reference Include="DatabaseControl">
+      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Assets/Database Control Free/Scripts/DatabaseControl.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>D:/Unity/Installs/2019.1.0a12/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>

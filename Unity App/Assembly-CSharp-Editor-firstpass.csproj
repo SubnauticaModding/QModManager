@@ -334,6 +334,12 @@
     <Reference Include="UnityEditor.Purchasing">
       <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Library/PackageCache/com.unity.purchasing@2.0.1/Editor/UnityEditor.Purchasing.dll</HintPath>
     </Reference>
+    <Reference Include="DatabaseControl">
+      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Assets/Database Control Free/Scripts/DatabaseControl.dll</HintPath>
+    </Reference>
+    <Reference Include="DatabaseControlEditor">
+      <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Assets/Database Control Free/Scripts/Editor/DatabaseControlEditor.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib">
       <HintPath>D:/Unity/Installs/2019.1.0a12/Editor/Data/MonoBleedingEdge/lib/mono/4.7.1-api/mscorlib.dll</HintPath>
     </Reference>
