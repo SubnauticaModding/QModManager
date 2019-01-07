@@ -41,6 +41,8 @@ Assets/StreamingAssets/crashlytics-build.properties
 # Packages
 packages/
 
-# Subnautica files
+# Other ignored files
 Dependencies/Assembly-CSharp.dll
 Dependencies/Assembly-CSharp-firstpass.dll
+Unity App/Assets/Database Control Free/Resources/DCF_RuntimeData.txt
+Unity App/Assets/Editor Default Resources/Database Control Free/DCF_EditorData.txt
