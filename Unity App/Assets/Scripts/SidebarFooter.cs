@@ -1,7 +1,7 @@
 ﻿using TMPro;
-using UnityEditor;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class SidebarFooter : MonoBehaviour
 {
     public string Prefix;

@@ -8,6 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+[DisallowMultipleComponent]
 public class DirectorySelector : MonoBehaviour
 {
     public static DirectorySelector singleton;

@@ -2,7 +2,9 @@
 using Mono.Cecil.Cil;
 using System;
 using System.Linq;
+using UnityEngine;
 
+[DisallowMultipleComponent]
 public static class Injector
 {
     public static bool IsInjected(string mainFilename)

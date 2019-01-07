@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
+[DisallowMultipleComponent]
 public class GameManager : MonoBehaviour
 {
     public static GameManager singleton;

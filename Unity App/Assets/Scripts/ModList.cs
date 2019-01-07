@@ -6,6 +6,7 @@ using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
+[DisallowMultipleComponent]
 public class ModList : MonoBehaviour
 {
     public ModListEntry modEntryTemplate;

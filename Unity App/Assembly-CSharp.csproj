@@ -65,7 +65,6 @@
     <Compile Include="Assets\Scripts\EnablerDisablerController.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Injector.cs" />
-    <Compile Include="Assets\Scripts\Install.cs" />
     <Compile Include="Assets\Scripts\ModList.cs" />
     <Compile Include="Assets\Scripts\ModListEntry.cs" />
     <Compile Include="Assets\Scripts\QMod.cs" />

@@ -5,6 +5,7 @@ using System.IO;
 using TMPro;
 using UnityEngine;
 
+[DisallowMultipleComponent]
 public class ModListEntry : MonoBehaviour
 {
     public GameObject content;
