@@ -42,10 +42,15 @@ public class GitHubController : EditorWindow
             {
                 File.WriteAllText(Path.Combine(Application.dataPath, "Data/version.txt"), Version);
                 client.AddAndCommit(new List<string>() { "./Assets/Data/version.txt", "./Assets/Data/version.txt.meta" }, "UPDATE VERSION - " + DateTime.Now.ToString(CultureInfo.InvariantCulture), null)
-                    .Then(() => client.Push("git@github.com:QModManager/QModManager.git", "unity-app")
-                    .Then(() => Debug.Log("Commited version.txt and files!"))
-                    .Catch(e => Debug.LogException(e))
-                    .Start())
+                    .Then(() => 
+                        client.Push("git@github.com:QModManager/QModManager.git", "unity-app")
+                        .Then(() => 
+                            client.Pull("https://github.com/QModManager/QModManager.git", "unity-app")
+                            .Then(() => Debug.Log("Commited version.txt and files!"))
+                            .Catch(e => Debug.LogException(e))
+                            .Start())
+                        .Catch(e => Debug.LogException(e))
+                        .Start())
                     .Catch(e => Debug.LogException(e))
                     .Start();
             }
