@@ -6594,7 +6594,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialog: {fileID: 1627799730}
-  Version: 1.4-1
+  Version: 1.4-beta2
   VersionURL: https://raw.githubusercontent.com/QModManager/QModManager/unity-app/Unity%20App/Assets/Data/version.txt
   LatestVersion: 
 --- !u!1 &1508643992
@@ -6881,7 +6881,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1627799731
 RectTransform:
   m_ObjectHideFlags: 0
