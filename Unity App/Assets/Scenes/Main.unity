@@ -1440,10 +1440,10 @@ RectTransform:
   m_Father: {fileID: 603749642}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -312, y: 0}
-  m_SizeDelta: {x: 58.1, y: 58.1}
+  m_AnchorMin: {x: 0, y: 0.5}
+  m_AnchorMax: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 50, y: 0}
+  m_SizeDelta: {x: 58.100006, y: 58.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &325079434
 MonoBehaviour:
@@ -6679,9 +6679,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialog: {fileID: 1627799730}
-  Version: 1.4-beta2
+  Version: 1.4-beta4
   VersionURL: https://raw.githubusercontent.com/QModManager/QModManager/unity-app/Unity%20App/Assets/Data/version.txt
   LatestVersion: 
+  lastWidth: 0
+  lastHeight: 0
 --- !u!1 &1508643992
 GameObject:
   m_ObjectHideFlags: 0
