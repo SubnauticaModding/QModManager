@@ -52,11 +52,12 @@ public class GameManager : MonoBehaviour
             {
                 if (e.Cancelled)
                 {
-                    Console.WriteLine("CANCELLED VERSION CHECK...?");
+                    Debug.LogError("Version check cancelled...?");
                     return;
                 }
                 if (e.Error != null)
                 {
+                    Debug.LogError("Could not get latest version. Probably the internet is turned off.");
                     Debug.LogException(e.Error);
                     return;
                 }
