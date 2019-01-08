@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
 
     public void Awake()
     {
+        Screen.SetResolution(1024, 768, false);
         if (singleton != null)
         {
             Debug.LogError("GameManager should be singleton but isn't!");
@@ -27,6 +28,32 @@ public class GameManager : MonoBehaviour
         }
         singleton = this;
         CheckVersion();
+    }
+
+    [ReadOnly] public int lastWidth = 0;
+    [ReadOnly] public int lastHeight = 0;
+    
+
+    public void Update()
+    {
+        int width = Screen.width;
+        int height = Screen.height;
+
+        if (lastWidth != width) // if the user is changing the width
+        {
+            // update the height
+            var heightAccordingToWidth = width / 4f * 3f;
+            Screen.SetResolution(width, Mathf.RoundToInt(heightAccordingToWidth), false, 0);
+        }
+        else if (lastHeight != height) // if the user is changing the height
+        {
+            // update the width
+            var widthAccordingToHeight = height / 3f * 4f;
+            Screen.SetResolution(Mathf.RoundToInt(widthAccordingToHeight), height, false, 0);
+        }
+
+        lastWidth = width;
+        lastHeight = height;
     }
 
     public void OpenLink(string link)
