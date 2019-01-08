@@ -45,7 +45,7 @@ public class GitHubController : EditorWindow
                     .Then(() => 
                         client.Push("git@github.com:QModManager/QModManager.git", "unity-app")
                         .Then(() => 
-                            client.Pull("https://github.com/QModManager/QModManager.git", "unity-app")
+                            client.Push("https://github.com/QModManager/QModManager.git", "unity-app")
                             .Then(() => Debug.Log("Commited version.txt and files!"))
                             .Catch(e => Debug.LogException(e))
                             .Start())
