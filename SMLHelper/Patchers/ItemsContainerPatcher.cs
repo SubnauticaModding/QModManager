@@ -21,15 +21,15 @@
             Type itemsContainerType = typeof(ItemsContainer);
             MethodInfo HasRoomFor_Pickupable_Method = itemsContainerType.GetMethod("HasRoomFor", new Type[] { typeof(Pickupable) });
             MethodInfo HasRoomFor_XY_Method = itemsContainerType.GetMethod("HasRoomFor", new Type[] { typeof(int), typeof(int) });
-            MethodInfo OnAddItem_Method = itemsContainerType.GetMethod("OnAddItem", BindingFlags.NonPublic | BindingFlags.Instance);
-            MethodInfo OnRemoveItem_Method = itemsContainerType.GetMethod("OnRemoveItem", BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo NotifyAddItem_Method = itemsContainerType.GetMethod("NotifyAddItem", BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo NotifyRemoveItem_Method = itemsContainerType.GetMethod("NotifyRemoveItem", BindingFlags.NonPublic | BindingFlags.Instance);
 
             // Patcher methods
             Type patcherType = typeof(ItemsContainerPatcher);
             MethodInfo HasRoomFor_Pickupable_Prefix_Method = patcherType.GetMethod("HasRoomFor_Pickupable_Prefix", BindingFlags.NonPublic | BindingFlags.Static);
             MethodInfo HasRoomFor_XY_Prefix_Method = patcherType.GetMethod("HasRoomFor_XY_Prefix", BindingFlags.NonPublic | BindingFlags.Static);
             MethodInfo HasRoomFor_Postfix_Method = patcherType.GetMethod("HasRoomFor_Postfix", BindingFlags.NonPublic | BindingFlags.Static);
-            MethodInfo AddRemoveItem_Postfix_Method = patcherType.GetMethod("AddRemoveItem_Postfix", BindingFlags.NonPublic | BindingFlags.Static);
+            MethodInfo NotifyRemoveItem_Postfix_Method = patcherType.GetMethod("NotifyRemoveItem_Postfix", BindingFlags.NonPublic | BindingFlags.Static);
 
             // Harmony methods
             harmony.Patch(
@@ -43,21 +43,21 @@
                 postfix: new HarmonyMethod(HasRoomFor_Postfix_Method)); // Both HasRoomFor methods share the same Postfix method
 
             harmony.Patch(
-                original: OnAddItem_Method,
+                original: NotifyAddItem_Method,
                 prefix: null, // No prefix call
-                postfix: new HarmonyMethod(AddRemoveItem_Postfix_Method)); // OnAddItem and OnRemoveItem share the same Postfix method
+                postfix: new HarmonyMethod(NotifyRemoveItem_Postfix_Method)); // NotifyAddItem and NotifyRemoveItem share the same Postfix method
 
             harmony.Patch(
-                original: OnRemoveItem_Method,
+                original: NotifyRemoveItem_Method,
                 prefix: null, // No prefix call
-                postfix: new HarmonyMethod(AddRemoveItem_Postfix_Method)); // OnAddItem and OnRemoveItem share the same Postfix method
+                postfix: new HarmonyMethod(NotifyRemoveItem_Postfix_Method)); // NotifyAddItem and NotifyRemoveItem share the same Postfix method
 
             Logger.Log($"ItemsContainerPatcher is done.");
         }
 
-        private static bool HasRoomFor_Pickupable_Prefix(ItemsContainer __instance, Pickupable item, ref bool __result, ref Vector2int __state)
+        private static bool HasRoomFor_Pickupable_Prefix(ItemsContainer __instance, Pickupable pickupable, ref bool __result, ref Vector2int __state)
         {
-            Vector2int itemSize = CraftData.GetItemSize(item.overrideTechUsed ? item.overrideTechType : item.GetTechType());
+            Vector2int itemSize = CraftData.GetItemSize(pickupable.overrideTechUsed ? pickupable.overrideTechType : pickupable.GetTechType());
 
             return CheckInventoryCache(__instance, itemSize, ref __result, ref __state);
         }
@@ -86,6 +86,7 @@
             }
             else
             {
+                // This is a new container we haven't seen before, save it to the cache collection.
                 HasRoomCacheCollection.Add(container, new StorageCache());
             }
 
@@ -107,16 +108,17 @@
             HasRoomCacheCollection[__instance].Add(__state, __result);
         }
 
-        private static void AddRemoveItem_Postfix(IItemsContainer container)
+        private static void NotifyRemoveItem_Postfix(ItemsContainer __instance, InventoryItem item)
         {
             // Items in the inventory have changed. Clear out the cache.
-            if (HasRoomCacheCollection.TryGetValue(container, out StorageCache cache))
+            if (HasRoomCacheCollection.TryGetValue(__instance as IItemsContainer, out StorageCache cache))
             {
                 cache.Clear();
             }
             else
             {
-                HasRoomCacheCollection.Add(container, new StorageCache());
+                // This is a new container we haven't seen before, save it to the cache collection.
+                HasRoomCacheCollection.Add(__instance as IItemsContainer, new StorageCache());
             }
         }
     }
