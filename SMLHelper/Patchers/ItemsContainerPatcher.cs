@@ -105,7 +105,7 @@
 
             // The large calculation won't have to be done again until something is added or removed from the inventory.
             // How does the base game get away with calculating this mess on every frame???
-            HasRoomCacheCollection[__instance].Add(__state, __result);
+            HasRoomCacheCollection[__instance][__state] = __result;
         }
 
         private static void NotifyRemoveItem_Postfix(ItemsContainer __instance, InventoryItem item)
