@@ -7,21 +7,25 @@
 
     // This entire patcher is only here for performance reasons.
     // This is not intended to be exposed by the public API.
-    internal static class InventoryPatcher
+    internal static class ItemsContainerPatcher
     {
-        private static Dictionary<Vector2int, bool> HasRoomCache = new Dictionary<Vector2int, bool>();
+        private class StorageCache : Dictionary<Vector2int, bool>
+        {
+        }
+
+        private static Dictionary<IItemsContainer, StorageCache> HasRoomCacheCollection = new Dictionary<IItemsContainer, StorageCache>();
 
         internal static void Patch(HarmonyInstance harmony)
         {
             // Original methods
-            Type inventoryType = typeof(Inventory);
-            MethodInfo HasRoomFor_Pickupable_Method = inventoryType.GetMethod("HasRoomFor", new Type[] { typeof(Pickupable) });
-            MethodInfo HasRoomFor_XY_Method = inventoryType.GetMethod("HasRoomFor", new Type[] { typeof(int), typeof(int) });
-            MethodInfo OnAddItem_Method = inventoryType.GetMethod("OnAddItem", BindingFlags.NonPublic | BindingFlags.Instance);
-            MethodInfo OnRemoveItem_Method = inventoryType.GetMethod("OnRemoveItem", BindingFlags.NonPublic | BindingFlags.Instance);
+            Type itemsContainerType = typeof(ItemsContainer);
+            MethodInfo HasRoomFor_Pickupable_Method = itemsContainerType.GetMethod("HasRoomFor", new Type[] { typeof(Pickupable) });
+            MethodInfo HasRoomFor_XY_Method = itemsContainerType.GetMethod("HasRoomFor", new Type[] { typeof(int), typeof(int) });
+            MethodInfo OnAddItem_Method = itemsContainerType.GetMethod("OnAddItem", BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo OnRemoveItem_Method = itemsContainerType.GetMethod("OnRemoveItem", BindingFlags.NonPublic | BindingFlags.Instance);
 
             // Patcher methods
-            Type patcherType = typeof(InventoryPatcher);
+            Type patcherType = typeof(ItemsContainerPatcher);
             MethodInfo HasRoomFor_Pickupable_Prefix_Method = patcherType.GetMethod("HasRoomFor_Pickupable_Prefix", BindingFlags.NonPublic | BindingFlags.Static);
             MethodInfo HasRoomFor_XY_Prefix_Method = patcherType.GetMethod("HasRoomFor_XY_Prefix", BindingFlags.NonPublic | BindingFlags.Static);
             MethodInfo HasRoomFor_Postfix_Method = patcherType.GetMethod("HasRoomFor_Postfix", BindingFlags.NonPublic | BindingFlags.Static);
@@ -48,34 +52,41 @@
                 prefix: null, // No prefix call
                 postfix: new HarmonyMethod(AddRemoveItem_Postfix_Method)); // OnAddItem and OnRemoveItem share the same Postfix method
 
-            Logger.Log($"InventoryPatcher is done.");
+            Logger.Log($"ItemsContainerPatcher is done.");
         }
 
-        private static bool HasRoomFor_Pickupable_Prefix(Inventory __instance, Pickupable item, ref bool __result, ref Vector2int __state)
+        private static bool HasRoomFor_Pickupable_Prefix(ItemsContainer __instance, Pickupable item, ref bool __result, ref Vector2int __state)
         {
             Vector2int itemSize = CraftData.GetItemSize(item.overrideTechUsed ? item.overrideTechType : item.GetTechType());
 
-            return CheckInventoryCache(itemSize, ref __result, ref __state);
+            return CheckInventoryCache(__instance, itemSize, ref __result, ref __state);
         }
 
-        private static bool HasRoomFor_XY_Prefix(Inventory __instance, int width, int height, ref bool __result, ref Vector2int __state)
+        private static bool HasRoomFor_XY_Prefix(ItemsContainer __instance, int width, int height, ref bool __result, ref Vector2int __state)
         {
             var itemSize = new Vector2int(width, height);
 
-            return CheckInventoryCache(itemSize, ref __result, ref __state);
+            return CheckInventoryCache(__instance, itemSize, ref __result, ref __state);
         }
 
-        private static bool CheckInventoryCache(Vector2int itemSize, ref bool __result, ref Vector2int __state)
+        private static bool CheckInventoryCache(IItemsContainer container, Vector2int itemSize, ref bool __result, ref Vector2int __state)
         {
             // Minimum size should always be 1,1
             itemSize.x = itemSize.x == 0 ? 1 : itemSize.x;
             itemSize.y = itemSize.y == 0 ? 1 : itemSize.y;
 
-            if (HasRoomCache.TryGetValue(itemSize, out bool cachedResult))
+            if (HasRoomCacheCollection.TryGetValue(container, out StorageCache cache))
             {
-                // We've seen this size before.
-                __result = cachedResult;
-                return false; // Override the result and avoid the heavy calculation.
+                if (cache.TryGetValue(itemSize, out bool cachedResult))
+                {
+                    // We've seen this size before.
+                    __result = cachedResult;
+                    return false; // Override the result and avoid the heavy calculation.
+                }
+            }
+            else
+            {
+                HasRoomCacheCollection.Add(container, new StorageCache());
             }
 
             // The result wasn't in the cache. Let the original code run to make the calculation.
@@ -84,7 +95,7 @@
             return true;
         }
 
-        private static void HasRoomFor_Postfix(Inventory __instance, bool __result, ref Vector2int __state)
+        private static void HasRoomFor_Postfix(ItemsContainer __instance, bool __result, ref Vector2int __state)
         {
             // We should only enter this method if the Prefix didn't have a cached value to use.
             // Catch the result and map it to the size provided by the Prefix.
@@ -93,13 +104,20 @@
 
             // The large calculation won't have to be done again until something is added or removed from the inventory.
             // How does the base game get away with calculating this mess on every frame???
-            HasRoomCache.Add(__state, __result);
+            HasRoomCacheCollection[__instance].Add(__state, __result);
         }
 
-        private static void AddRemoveItem_Postfix()
+        private static void AddRemoveItem_Postfix(IItemsContainer container)
         {
             // Items in the inventory have changed. Clear out the cache.
-            HasRoomCache.Clear();
+            if (HasRoomCacheCollection.TryGetValue(container, out StorageCache cache))
+            {
+                cache.Clear();
+            }
+            else
+            {
+                HasRoomCacheCollection.Add(container, new StorageCache());
+            }
         }
     }
 }
