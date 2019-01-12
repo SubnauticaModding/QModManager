@@ -9,11 +9,7 @@
     // This is not intended to be exposed by the public API.
     internal static class ItemsContainerPatcher
     {
-        private class StorageCache : Dictionary<Vector2int, bool>
-        {
-        }
-
-        private static Dictionary<IItemsContainer, StorageCache> HasRoomCacheCollection = new Dictionary<IItemsContainer, StorageCache>();
+        private static Dictionary<IItemsContainer, Dictionary<Vector2int, bool>> HasRoomCacheCollection = new Dictionary<IItemsContainer, Dictionary<Vector2int, bool>>();
 
         internal static void Patch(HarmonyInstance harmony)
         {
@@ -61,7 +57,7 @@
             itemSize.x = itemSize.x == 0 ? 1 : itemSize.x;
             itemSize.y = itemSize.y == 0 ? 1 : itemSize.y;
 
-            if (HasRoomCacheCollection.TryGetValue(container, out StorageCache cache))
+            if (HasRoomCacheCollection.TryGetValue(container, out Dictionary<Vector2int, bool> cache))
             {
                 if (cache.TryGetValue(itemSize, out bool cachedResult))
                 {
@@ -73,7 +69,7 @@
             else
             {
                 // This is a new container we haven't seen before, save it to the cache collection.
-                HasRoomCacheCollection.Add(container, new StorageCache());
+                HasRoomCacheCollection.Add(container, new Dictionary<Vector2int, bool>());
             }
 
             // The result wasn't in the cache. Let the original code run to make the calculation.
@@ -97,15 +93,17 @@
         private static void NotifyChangeItem_Postfix(ItemsContainer __instance, InventoryItem item)
         {
             // Items in the inventory have changed. Clear out the cache.
-            if (HasRoomCacheCollection.TryGetValue(__instance as IItemsContainer, out StorageCache cache))
+            if (HasRoomCacheCollection.TryGetValue(__instance as IItemsContainer, out Dictionary<Vector2int, bool> cache))
             {
                 cache.Clear();
             }
             else
             {
                 // This is a new container we haven't seen before, save it to the cache collection.
-                HasRoomCacheCollection.Add(__instance as IItemsContainer, new StorageCache());
+                HasRoomCacheCollection.Add(__instance as IItemsContainer, new Dictionary<Vector2int, bool>());
             }
         }
+
+
     }
 }
