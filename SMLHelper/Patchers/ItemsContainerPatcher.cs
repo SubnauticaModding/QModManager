@@ -85,9 +85,22 @@
             if (__state.x == 0 || __state.y == 0)
                 return; // Somehow, this can still happen. Don't store 0,0 in the cache. It breaks the game.
 
+            SaveSizeCalculationToCache(__instance, __result, __state);
+        }
+
+        private static void SaveSizeCalculationToCache(IItemsContainer container, bool hasRoom, Vector2int itemSize)
+        {
             // The large calculation won't have to be done again until something is added or removed from the inventory.
             // How does the base game get away with calculating this mess on every frame???
-            HasRoomCacheCollection[__instance][__state] = __result;
+            HasRoomCacheCollection[container][itemSize] = hasRoom;
+
+            if (hasRoom && // True means there is space for an item of this size
+                (itemSize.x > 1 || itemSize.y > 1)) // If there is room for an item of a size larger than a 1x1
+            {
+                // Then we can preemptively add all item sizes that are smaller.
+                foreach (Vector2int smallerItem in AllSmallerThan(itemSize))
+                    HasRoomCacheCollection[container][smallerItem] = true;
+            }
         }
 
         private static void NotifyChangeItem_Postfix(ItemsContainer __instance, InventoryItem item)
@@ -104,6 +117,58 @@
             }
         }
 
+        private static readonly IEnumerable<Vector2int> SmallerThan3x3 = new Vector2int[]
+        {
+            new Vector2int(2,3),
+            new Vector2int(3,2),
+            new Vector2int(2,2),
+            new Vector2int(1,2),
+            new Vector2int(2,1),
+            new Vector2int(1,1)
+        };
 
+        private static readonly IEnumerable<Vector2int> SmallerThan2x3 = new Vector2int[]
+        {
+            new Vector2int(2,2),
+            new Vector2int(1,2),
+            new Vector2int(2,1),
+            new Vector2int(1,1)
+        };
+
+        private static readonly IEnumerable<Vector2int> SmallerThan2x2 = new Vector2int[]
+        {
+            new Vector2int(1,2),
+            new Vector2int(2,1),
+            new Vector2int(1,1)
+        };
+
+        private static readonly IEnumerable<Vector2int> Just1x1 = new Vector2int[]
+        {
+            new Vector2int(1,1)
+        };
+
+        private static IEnumerable<Vector2int> AllSmallerThan(Vector2int original)
+        {
+            // This might not be pretty but it's simple enough to keep fast
+
+            if (original.x == 3 && original.y == 3) // Size of Mobile Vehicle Bay
+            {
+                return SmallerThan3x3;
+            }
+
+            if (original.x == 2 && original.y == 3) // Size of the Seaglide
+            {
+                return SmallerThan2x3;
+            }
+
+            if (original.x == 2 && original.y == 2) // Size of many things bigger than 1x1
+            {
+                return SmallerThan2x2;
+            }
+
+            // 1x2 is the size of a Creature Decoy
+
+            return Just1x1;
+        }
     }
 }
