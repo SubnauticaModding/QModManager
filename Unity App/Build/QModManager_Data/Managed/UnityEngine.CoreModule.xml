@@ -3752,6 +3752,12 @@ Note: Every time you call the method with tolerance specified, a new instance of
         <para>Camera's half-size when in orthographic mode.</para>
       </summary>
     </member>
+    <member name="P:UnityEngine.Camera.overrideSceneCullingMask">
+      <summary>
+        <para>Sets the culling maks used to determine which objects from which Scenes to draw.
+See EditorSceneManager.SetSceneCullingMask.</para>
+      </summary>
+    </member>
     <member name="P:UnityEngine.Camera.pixelHeight">
       <summary>
         <para>How tall is the camera in pixels (not accounting for dynamic resolution scaling) (Read Only).</para>
@@ -12113,6 +12119,13 @@ All of the commands within the buffer are guaranteed to be executed on the same 
       <param name="inHash">Hash to append.</param>
       <param name="outHash">Hash that will be updated.</param>
     </member>
+    <member name="M:UnityEngine.HashUtilities.ComputeHash128(System.Byte[],UnityEngine.Hash128&amp;)">
+      <summary>
+        <para>Compute a 128 bit hash based on a value. the type of the value must be a value type.</para>
+      </summary>
+      <param name="value">A reference to the value to hash.</param>
+      <param name="hash">A reference to the Hash128 to updated with the computed hash.</param>
+    </member>
     <member name="M:UnityEngine.HashUtilities.ComputeHash128(T&amp;,UnityEngine.Hash128&amp;)">
       <summary>
         <para>Compute a 128 bit hash based on a value. the type of the value must be a value type.</para>
@@ -15943,6 +15956,28 @@ Only usable on Android, Windows Phone or Windows Tablets.</para>
       <summary>
         <para>LogType used for Warnings.</para>
       </summary>
+    </member>
+    <member name="T:UnityEngine.Lumin.UsesLuminPlatformLevelAttribute">
+      <summary>
+        <para>This attribute provides a way to declaratively define a Lumin platform level requirement that is automatically added to the manifest at build time.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Lumin.UsesLuminPlatformLevelAttribute.#ctor(System.UInt32)">
+      <summary>
+        <para>Minimum platform level that is required.</para>
+      </summary>
+      <param name="platformLevel"></param>
+    </member>
+    <member name="T:UnityEngine.Lumin.UsesLuminPrivilegeAttribute">
+      <summary>
+        <para>This attribute provides a way to declaratively define a Lumin privilege requirement that is automatically added to the manifest at build time.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Lumin.UsesLuminPrivilegeAttribute.#ctor(System.String)">
+      <summary>
+        <para>Privilege identifer to request</para>
+      </summary>
+      <param name="privilege"></param>
     </member>
     <member name="T:UnityEngine.Material">
       <summary>
@@ -23111,6 +23146,132 @@ See Also: ReflectionProbeTimeSlicingMode.</para>
       <param name="fmt">The format of this attachment.</param>
       <param name="format"></param>
     </member>
+    <member name="T:UnityEngine.Rendering.BatchCullingContext">
+      <summary>
+        <para>Culling context for a batch.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Rendering.BatchCullingContext.batchVisibility">
+      <summary>
+        <para>Visibility information for the batch.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Rendering.BatchCullingContext.cullingPlanes">
+      <summary>
+        <para>Planes to cull against.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Rendering.BatchCullingContext.lodParameters">
+      <summary>
+        <para>See Also: LODParameters.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Rendering.BatchCullingContext.visibleIndices">
+      <summary>
+        <para>Array of visible indices for all the batches in the group.</para>
+      </summary>
+    </member>
+    <member name="T:UnityEngine.Rendering.BatchRendererGroup">
+      <summary>
+        <para>A group of batches.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Rendering.BatchRendererGroup.AddBatch(UnityEngine.Mesh,System.Int32,UnityEngine.Material,System.Int32,UnityEngine.Rendering.ShadowCastingMode,System.Boolean,System.Boolean,UnityEngine.Bounds,System.Int32,UnityEngine.MaterialPropertyBlock,UnityEngine.GameObject)">
+      <summary>
+        <para>Adds a new batch to the group.</para>
+      </summary>
+      <param name="associatedSceneObject">The GameObject to select when you pick an object that the batch renders.</param>
+      <param name="mesh">The Mesh to draw.</param>
+      <param name="subMeshIndex">Specifies which subset of the mesh to draw. This applies only to meshes that are composed of several materials.</param>
+      <param name="material">Material to use.</param>
+      <param name="layer"> to use.</param>
+      <param name="castShadows">Whether the meshes cast shadows.</param>
+      <param name="receiveShadows">Whether the meshes receive shadows.</param>
+      <param name="invertCulling">Whether to invert culling for rendering.</param>
+      <param name="bounds">Bounds to use. Should specify the combined bounds of all the instances.</param>
+      <param name="instanceCount">The number of instances to draw.</param>
+      <param name="customProps">Additional material properties to apply. See MaterialPropertyBlock.</param>
+      <returns>
+        <para>The batch's index in the BatchedRendererGroup.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Rendering.BatchRendererGroup.#ctor(UnityEngine.Rendering.BatchRendererGroup/OnPerformCulling)">
+      <summary>
+        <para>Creates a new Rendering.BatchRendererGroup.</para>
+      </summary>
+      <param name="cullingCallback">The delegate to call for performing culling.
+See Also: BatchRendererGroup.OnPerformCulling.</param>
+    </member>
+    <member name="M:UnityEngine.Rendering.BatchRendererGroup.Dispose">
+      <summary>
+        <para>Deletes a group.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Rendering.BatchRendererGroup.GetBatchMatrices(System.Int32)">
+      <summary>
+        <para>Retrieves the matrices associated with one batch.</para>
+      </summary>
+      <param name="batchIndex">Batch index.</param>
+      <returns>
+        <para>Matrices associated with the batch specified by batchIndex.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.Rendering.BatchRendererGroup.GetNumBatches">
+      <summary>
+        <para>Retrieves the number of batches added to the group.</para>
+      </summary>
+      <returns>
+        <para>Number of batches inside the group.</para>
+      </returns>
+    </member>
+    <member name="T:UnityEngine.Rendering.BatchRendererGroup.OnPerformCulling">
+      <summary>
+        <para>Culling callback function.</para>
+      </summary>
+      <param name="rendererGroup">Group to cull.</param>
+      <param name="cullingContext">Culling context.</param>
+    </member>
+    <member name="M:UnityEngine.Rendering.BatchRendererGroup.RemoveBatch(System.Int32)">
+      <summary>
+        <para>Removes a batch from the group.</para>
+      </summary>
+      <param name="index">Batch index.</param>
+    </member>
+    <member name="M:UnityEngine.Rendering.BatchRendererGroup.SetBatchBounds(System.Int32,UnityEngine.Bounds)">
+      <summary>
+        <para>Sets the bounding box of the batch.</para>
+      </summary>
+      <param name="batchIndex">Batch index.</param>
+      <param name="bounds">The new bounds for the batch specified by batchIndex.</param>
+    </member>
+    <member name="M:UnityEngine.Rendering.BatchRendererGroup.SetInstancingData(System.Int32,System.Int32,UnityEngine.MaterialPropertyBlock)">
+      <summary>
+        <para>Updates a batch.</para>
+      </summary>
+      <param name="batchIndex">Batch index.</param>
+      <param name="instanceCount">New number of instances in the batch.</param>
+      <param name="customProps">Additional material properties to apply. See MaterialPropertyBlock.</param>
+    </member>
+    <member name="T:UnityEngine.Rendering.BatchVisibility">
+      <summary>
+        <para>Describes the visibility for a batch.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Rendering.BatchVisibility.instancesCount">
+      <summary>
+        <para>The total number of instances in the batch.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Rendering.BatchVisibility.offset">
+      <summary>
+        <para>Offset into the BatchCullingContext.visibleIndices where the batch starts.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.Rendering.BatchVisibility.visibleCount">
+      <summary>
+        <para>The number of visible instances in the batch.</para>
+      </summary>
+    </member>
     <member name="T:UnityEngine.Rendering.BlendMode">
       <summary>
         <para>Blend mode for controlling the blending.</para>
@@ -26057,7 +26218,7 @@ If an element of the array is set to -1, the reflection probe corresponding to t
       <param name="renderQueueRange">Render objects whose material render queue in inside this range.</param>
       <param name="layerMask">Only render objects in the given layer mask.</param>
       <param name="renderingLayerMask">The rendering layer mask to use when filtering available renderers for drawing.</param>
-      <param name="excludeMotionVectorObjects">Set to true to exclude objects that are currently in motion from rendering. The default value is false.</param>
+      <param name="excludeMotionVectorObjects">Objects that have a motion pass enabled, or have it disabled but have moved since the last frame are excluded when this is set to true. The default value is false.</param>
     </member>
     <member name="T:UnityEngine.Rendering.GizmoSubset">
       <summary>
@@ -28584,6 +28745,11 @@ All of the commands within the buffer are guaranteed to be executed on the same 
         <para>This is the fallback mode if the mode the user had previously selected is no longer available. See SupportedRenderingFeatures.mixedLightingModes.</para>
       </summary>
     </member>
+    <member name="P:UnityEngine.Rendering.SupportedRenderingFeatures.editableMaterialRenderQueue">
+      <summary>
+        <para>Determines whether the Scriptable Render Pipeline will override the default Material’s Render Queue settings and, if true, hides the Render Queue property in the Inspector.</para>
+      </summary>
+    </member>
     <member name="P:UnityEngine.Rendering.SupportedRenderingFeatures.lightmapBakeTypes">
       <summary>
         <para>What baking types are supported. The unsupported ones will be hidden from the UI. See LightmapBakeType.</para>
@@ -30444,7 +30610,8 @@ A Scene may be invalid if, for example, you tried to open a Scene that does not 
     </member>
     <member name="M:UnityEngine.SceneManagement.SceneManager.LoadScene(System.Int32,UnityEngine.SceneManagement.LoadSceneParameters)">
       <summary>
-        <para>Loads the Scene by its name or index in Build Settings.</para>
+        <para>Loads the Scene by its name or index in Build Settings.
+</para>
       </summary>
       <param name="sceneName">Name or path of the Scene to load.</param>
       <param name="sceneBuildIndex">Index of the Scene in the Build Settings to load.</param>
@@ -30455,7 +30622,8 @@ A Scene may be invalid if, for example, you tried to open a Scene that does not 
     </member>
     <member name="M:UnityEngine.SceneManagement.SceneManager.LoadScene(System.String,UnityEngine.SceneManagement.LoadSceneParameters)">
       <summary>
-        <para>Loads the Scene by its name or index in Build Settings.</para>
+        <para>Loads the Scene by its name or index in Build Settings.
+</para>
       </summary>
       <param name="sceneName">Name or path of the Scene to load.</param>
       <param name="sceneBuildIndex">Index of the Scene in the Build Settings to load.</param>
@@ -30575,6 +30743,7 @@ A Scene may be invalid if, for example, you tried to open a Scene that does not 
       <param name="sceneBuildIndex">Index of the Scene in BuildSettings.</param>
       <param name="sceneName">Name or path of the Scene to unload.</param>
       <param name="scene">Scene to unload.</param>
+      <param name="options">Scene unloading options.</param>
       <returns>
         <para>Use the AsyncOperation to determine if the operation has completed.</para>
       </returns>
@@ -30586,6 +30755,7 @@ A Scene may be invalid if, for example, you tried to open a Scene that does not 
       <param name="sceneBuildIndex">Index of the Scene in BuildSettings.</param>
       <param name="sceneName">Name or path of the Scene to unload.</param>
       <param name="scene">Scene to unload.</param>
+      <param name="options">Scene unloading options.</param>
       <returns>
         <para>Use the AsyncOperation to determine if the operation has completed.</para>
       </returns>
@@ -30597,6 +30767,43 @@ A Scene may be invalid if, for example, you tried to open a Scene that does not 
       <param name="sceneBuildIndex">Index of the Scene in BuildSettings.</param>
       <param name="sceneName">Name or path of the Scene to unload.</param>
       <param name="scene">Scene to unload.</param>
+      <param name="options">Scene unloading options.</param>
+      <returns>
+        <para>Use the AsyncOperation to determine if the operation has completed.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(System.Int32,UnityEngine.SceneManagement.UnloadSceneOptions)">
+      <summary>
+        <para>Destroys all GameObjects associated with the given Scene and removes the Scene from the SceneManager.</para>
+      </summary>
+      <param name="sceneBuildIndex">Index of the Scene in BuildSettings.</param>
+      <param name="sceneName">Name or path of the Scene to unload.</param>
+      <param name="scene">Scene to unload.</param>
+      <param name="options">Scene unloading options.</param>
+      <returns>
+        <para>Use the AsyncOperation to determine if the operation has completed.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(System.String,UnityEngine.SceneManagement.UnloadSceneOptions)">
+      <summary>
+        <para>Destroys all GameObjects associated with the given Scene and removes the Scene from the SceneManager.</para>
+      </summary>
+      <param name="sceneBuildIndex">Index of the Scene in BuildSettings.</param>
+      <param name="sceneName">Name or path of the Scene to unload.</param>
+      <param name="scene">Scene to unload.</param>
+      <param name="options">Scene unloading options.</param>
+      <returns>
+        <para>Use the AsyncOperation to determine if the operation has completed.</para>
+      </returns>
+    </member>
+    <member name="M:UnityEngine.SceneManagement.SceneManager.UnloadSceneAsync(UnityEngine.SceneManagement.Scene,UnityEngine.SceneManagement.UnloadSceneOptions)">
+      <summary>
+        <para>Destroys all GameObjects associated with the given Scene and removes the Scene from the SceneManager.</para>
+      </summary>
+      <param name="sceneBuildIndex">Index of the Scene in BuildSettings.</param>
+      <param name="sceneName">Name or path of the Scene to unload.</param>
+      <param name="scene">Scene to unload.</param>
+      <param name="options">Scene unloading options.</param>
       <returns>
         <para>Use the AsyncOperation to determine if the operation has completed.</para>
       </returns>
@@ -30623,6 +30830,24 @@ A Scene may be invalid if, for example, you tried to open a Scene that does not 
       <returns>
         <para>Scene path (e.g "AssetsScenesScene1.unity").</para>
       </returns>
+    </member>
+    <member name="T:UnityEngine.SceneManagement.UnloadSceneOptions">
+      <summary>
+        <para>Scene unloading options passed to SceneManager.UnloadScene.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.SceneManagement.UnloadSceneOptions.None">
+      <summary>
+        <para>Unload the scene without any special options.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.SceneManagement.UnloadSceneOptions.UnloadAllEmbeddedSceneObjects">
+      <summary>
+        <para>Unloads all objects that are loaded from the scene's serialized file. Without this flag, only GameObject and Components within the scene's hierarchy are unloaded.
+
+Note: Objects that are dynamically created during the build process can be embedded in the scene's serialized file. This can occur when asset types are created and referenced inside the scene's post-processor callback. Some examples of these types are textures, meshes, and scriptable objects. Assets from your assets folder are not embedded in the scene's serialized file.
+Note: This flag does not unload assets which can be referenced by other scenes.</para>
+      </summary>
     </member>
     <member name="T:UnityEngine.Screen">
       <summary>
@@ -35506,6 +35731,15 @@ Useful for restarting a trail from a new position.</para>
       <param name="ptr">Memory pointer.</param>
       <param name="input">Struct.</param>
     </member>
+    <member name="M:Unity.Collections.LowLevel.Unsafe.UnsafeUtility.EnumToInt(T)">
+      <summary>
+        <para>Return integer representation of enum value without boxing.</para>
+      </summary>
+      <param name="enumValue">Enum value to convert.</param>
+      <returns>
+        <para>Returns the integer representation of the enum value.</para>
+      </returns>
+    </member>
     <member name="M:Unity.Collections.LowLevel.Unsafe.UnsafeUtility.Free(System.Void*,Unity.Collections.Allocator)">
       <summary>
         <para>Free memory.</para>
@@ -36489,6 +36723,11 @@ See Also: JobHandle.CombineDependencies.</para>
       <returns>
         <para>Returns true if successful.</para>
       </returns>
+    </member>
+    <member name="P:Unity.Jobs.LowLevel.Unsafe.JobsUtility.IsExecutingJob">
+      <summary>
+        <para>Returns true if we this is called from inside of a C# job.</para>
+      </summary>
     </member>
     <member name="P:Unity.Jobs.LowLevel.Unsafe.JobsUtility.JobCompilerEnabled">
       <summary>

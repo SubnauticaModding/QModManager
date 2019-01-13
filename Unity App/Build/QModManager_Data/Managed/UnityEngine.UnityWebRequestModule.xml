@@ -83,6 +83,12 @@
       </summary>
       <param name="contentLength">The value of the received Content-Length header.</param>
     </member>
+    <member name="M:UnityEngine.Networking.DownloadHandler.ReceiveContentLengthHeader(System.UInt64)">
+      <summary>
+        <para>Callback, invoked with a Content-Length header is received.</para>
+      </summary>
+      <param name="contentLength">The value of the received Content-Length header.</param>
+    </member>
     <member name="M:UnityEngine.Networking.DownloadHandler.ReceiveData(System.Byte[],System.Int32)">
       <summary>
         <para>Callback, invoked as data is received from the remote server.</para>

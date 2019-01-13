@@ -34,7 +34,7 @@
     </member>
     <member name="P:UnityEngine.Experimental.IntegratedSubsystemDescriptor.disablesLegacyVr">
       <summary>
-        <para>Indicates whether legacy VR settings must be disabled for the subsystem. true if the Editor must disable the legacy VR settings  disabled; otherwise false.</para>
+        <para>Indicates whether legacy VR settings must be disabled for the subsystem. Set to true if the Editor must disable the legacy VR settings  disabled; otherwise false.</para>
       </summary>
     </member>
     <member name="P:UnityEngine.Experimental.IntegratedSubsystemDescriptor.id">
@@ -71,8 +71,21 @@
     </member>
     <member name="P:UnityEngine.Experimental.ISubsystemDescriptor.disablesLegacyVr">
       <summary>
-        <para>Indicates whether legacy VR settings must be disabled for the subsystem. true if the Editor must disable the legacy VR settings  disabled; otherwise false.</para>
+        <para>Indicates whether legacy VR settings must be disabled for the subsystem. Set to true if the Editor must disable the legacy VR settings  disabled; otherwise false.</para>
       </summary>
+    </member>
+    <member name="P:UnityEngine.Experimental.ISubsystemDescriptor.id">
+      <summary>
+        <para>A unique string that identifies the subsystem that this Descriptor can create.</para>
+      </summary>
+    </member>
+    <member name="M:UnityEngine.Experimental.ISubsystemDescriptor.Create">
+      <summary>
+        <para>Creates an ISubsystem from this descriptor.</para>
+      </summary>
+      <returns>
+        <para>An instance of ISubsystem.</para>
+      </returns>
     </member>
     <member name="T:UnityEngine.Experimental.Subsystem">
       <summary>
@@ -104,7 +117,7 @@
     </member>
     <member name="P:UnityEngine.Experimental.SubsystemDescriptor.disablesLegacyVr">
       <summary>
-        <para>Indicates whether legacy VR settings must be disabled for the subsystem. Set to true if the Editor must disable the legacy VR settings  disabled; otherwise false.</para>
+        <para>Indicates whether legacy VR settings must be disabled for the subsystem. Set to true if the Editor must disable the legacy VR settings; otherwise false.</para>
       </summary>
     </member>
     <member name="P:UnityEngine.Experimental.SubsystemDescriptor.id">
@@ -1318,6 +1331,11 @@ Instance is used to enable and disable the inputs coming from a specific plugin.
         <para>Represents the thumb pressing any input or feature.</para>
       </summary>
     </member>
+    <member name="F:UnityEngine.XR.CommonUsages.trackingState">
+      <summary>
+        <para>Represents the values being tracked for this device.</para>
+      </summary>
+    </member>
     <member name="F:UnityEngine.XR.CommonUsages.trigger">
       <summary>
         <para>A trigger-like control, pressed with the index finger.</para>
@@ -1842,6 +1860,51 @@ Instance is used to enable and disable the inputs coming from a specific plugin.
       <returns>
         <para>True, if the requested statistic is available, false otherwise.</para>
       </returns>
+    </member>
+    <member name="T:UnityEngine.XR.TrackingState">
+      <summary>
+        <para>Represents the values being tracked for this device.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.XR.TrackingState.Acceleration">
+      <summary>
+        <para>Represents acceleration being tracked for this device.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.XR.TrackingState.All">
+      <summary>
+        <para>Represents all TrackingState values being tracked for this device.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.XR.TrackingState.AngularAcceleration">
+      <summary>
+        <para>Represents angular acceleration being tracked for this device.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.XR.TrackingState.AngularVelocity">
+      <summary>
+        <para>Represents no angular velocity being tracked for this device.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.XR.TrackingState.None">
+      <summary>
+        <para>Represents no values being tracked for this device.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.XR.TrackingState.Position">
+      <summary>
+        <para>Represents position being tracked for this device.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.XR.TrackingState.Rotation">
+      <summary>
+        <para>Represents rotation being tracked for this device.</para>
+      </summary>
+    </member>
+    <member name="F:UnityEngine.XR.TrackingState.Velocity">
+      <summary>
+        <para>Represents velocity being tracked for this device.</para>
+      </summary>
     </member>
     <member name="T:UnityEngine.XR.XRNode">
       <summary>

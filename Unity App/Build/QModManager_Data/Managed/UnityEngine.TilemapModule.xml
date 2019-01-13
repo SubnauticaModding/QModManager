@@ -872,6 +872,11 @@ Only one class at any one time should set defaultBrush to true.</para>
         <para>Collider for 2D physics representing shapes defined by the corresponding Tilemap.</para>
       </summary>
     </member>
+    <member name="P:UnityEngine.Tilemaps.TilemapCollider2D.maximumTileChangeCount">
+      <summary>
+        <para>Maximum number of Tile Changes accumulated before doing a full collider rebuild instead of an incremental rebuild.</para>
+      </summary>
+    </member>
     <member name="T:UnityEngine.Tilemaps.TilemapRenderer">
       <summary>
         <para>The tile map renderer is used to render the tile map marked out by a component.</para>

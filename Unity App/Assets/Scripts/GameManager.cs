@@ -32,10 +32,15 @@ public class GameManager : MonoBehaviour
 
     [ReadOnly] public int lastWidth = 0;
     [ReadOnly] public int lastHeight = 0;
-    
+
+    [ReadOnly] public float updateTimer = 0;
 
     public void Update()
     {
+        updateTimer += Time.deltaTime;
+        if (updateTimer < 0.1f) return;
+        updateTimer = 0;
+
         int width = Screen.width;
         int height = Screen.height;
 

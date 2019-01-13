@@ -605,7 +605,6 @@ PlayerSettings:
   luminVersion:
     m_VersionCode: 1
     m_VersionName: 
-  luminPrivilege: []
   facebookSdkVersion: 7.9.1
   facebookAppId: 
   facebookCookies: 1
