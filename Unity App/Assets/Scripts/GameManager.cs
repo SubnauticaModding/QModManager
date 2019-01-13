@@ -44,15 +44,13 @@ public class GameManager : MonoBehaviour
         int width = Screen.width;
         int height = Screen.height;
 
-        if (lastWidth != width) // if the user is changing the width
+        if (lastWidth != width)
         {
-            // update the height
             var heightAccordingToWidth = width / 4f * 3f;
             Screen.SetResolution(width, Mathf.RoundToInt(heightAccordingToWidth), false, 0);
         }
-        else if (lastHeight != height) // if the user is changing the height
+        else if (lastHeight != height)
         {
-            // update the width
             var widthAccordingToHeight = height / 3f * 4f;
             Screen.SetResolution(Mathf.RoundToInt(widthAccordingToHeight), height, false, 0);
         }
