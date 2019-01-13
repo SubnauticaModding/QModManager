@@ -83,19 +83,20 @@ public class GameManager : MonoBehaviour
                 if (e.Cancelled)
                 {
                     Debug.LogError("Version check cancelled...?");
-                    return;
                 }
-                if (e.Error != null)
+                else if (e.Error != null)
                 {
-                    Debug.LogError("Could not get latest version. Probably the internet is turned off.");
+                    Debug.LogError("Could not get latest version. Probably there is no connection");
                     Debug.LogException(e.Error);
-                    return;
                 }
-                result = e.Result;
-                Debug.Log(result);
-                if (!ValidateVersion(result)) LatestVersion = Version;
-                else LatestVersion = result;
-                ShowDialogIfNotLatest();
+                else
+                {
+                    result = e.Result;
+                    Debug.Log(result);
+                    if (!ValidateVersion(result)) LatestVersion = Version;
+                    else LatestVersion = result;
+                    ShowDialogIfNotLatest();
+                }
             };
         }
     }
