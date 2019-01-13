@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     public GameObject dialog;
 
     public string Version;
-    [ReadOnly] public string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/unity-app/Unity%20App/Assets/Data/version.txt";
+    [ReadOnly] public string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/unity-app/Unity%20App/Assets/Data/Editor/latestversion.txt";
     [ReadOnly] public string LatestVersion;
 
     public void Awake()

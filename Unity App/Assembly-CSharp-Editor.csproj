@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Attributes\Editor\ReadOnlyPropertyDrawer.cs" />
     <Compile Include="Assets\Scripts\Editor\GitHubController.cs" />
+    <None Include="Assets\Data\Editor\latestversion.txt" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>D:/Stuff/QModManager/QModManager/Unity App/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

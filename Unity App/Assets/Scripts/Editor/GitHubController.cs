@@ -29,7 +29,7 @@ public class GitHubController : EditorWindow
         GUILayout.Label("GitHub Utility Window", EditorStyles.boldLabel);
         try
         {
-            Version = EditorGUILayout.TextField("Version", Version) ?? File.ReadAllText(Path.Combine(Application.dataPath, "Data/version.txt"));
+            Version = EditorGUILayout.TextField("Version", Version) ?? File.ReadAllText(Path.Combine(Application.dataPath, "Data/Editor/latestversion.txt"));
         }
         catch (Exception e)
         {
@@ -40,8 +40,8 @@ public class GitHubController : EditorWindow
         {
             try
             {
-                File.WriteAllText(Path.Combine(Application.dataPath, "Data/version.txt"), Version);
-                client.AddAndCommit(new List<string>() { "./Assets/Data/version.txt", "./Assets/Data/version.txt.meta" }, "UPDATE VERSION - " + DateTime.Now.ToString(CultureInfo.InvariantCulture), null)
+                File.WriteAllText(Path.Combine(Application.dataPath, "Data/Editor/latestversion.txt"), Version);
+                client.AddAndCommit(new List<string>() { "./Assets/Data/Editor/latestversion.txt", "./Assets/Data/Editor/latestversion.txt.meta" }, "UPDATE VERSION - " + DateTime.Now.ToString(CultureInfo.InvariantCulture), null)
                 .Then(() => Debug.Log("Commited version.txt and meta file!"))
                 .Catch(e => Debug.LogException(e))
                 .Start();
