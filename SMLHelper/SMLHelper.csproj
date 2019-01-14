@@ -93,7 +93,7 @@
     <Compile Include="Legacy\Patchers\LanguagePatcher.cs" />
     <Compile Include="Options\ModOptions.cs" />
     <Compile Include="MonoBehaviours\Fixer.cs" />
-    <Compile Include="Patchers\InventoryPatcher.cs" />
+    <Compile Include="Patchers\ItemsContainerPatcher.cs" />
     <Compile Include="Patchers\OptionsPanelPatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Legacy\Patchers\TechTypePatcher.cs" />
