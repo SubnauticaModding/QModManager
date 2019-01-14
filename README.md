@@ -44,4 +44,4 @@ namespace YOURNAMESPACE
 
 ### Mac Users
 
-Refer to the README.md in the `QModManagerMac` folder for installation instructions.
+Refer to the README.md in the `Mac Installation` folder for installation instructions.
