@@ -26,7 +26,7 @@
 
         internal static void Patch()
         {
-            customTabs.ForEach(x => CraftTreePatcher2.TabNodes.Add(new TabNode(x.Path.Split('/'), x.Scheme, x.Sprite.Sprite, System.IO.Path.GetFileName(x.Path), x.Name)));
+            customTabs.ForEach(x => CraftTreePatcher2.TabNodes.Add(new TabNode(x.Path.Split('/'), x.Scheme, x.Sprite.Sprite, "SMLHelper", System.IO.Path.GetFileName(x.Path), x.Name)));
             customNodes.ForEach(x => CraftTreePatcher2.CraftingNodes.Add(new CraftingNode(x.Path.Split('/').Take(x.Path.Split('/').Length - 1).ToArray(), x.Scheme, x.TechType)));
             customCraftNodes.ForEach(x => CraftTreePatcher2.CraftingNodes.Add(new CraftingNode(x.Key.Split('/').Take(x.Key.Split('/').Length - 1).ToArray(), CraftTree.Type.Fabricator, x.Value)));
             nodesToRemove.ForEach(x => CraftTreePatcher2.NodesToRemove.Add(new Node(x.Path.Split('/'), x.Scheme)));

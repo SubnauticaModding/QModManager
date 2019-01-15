@@ -25,6 +25,8 @@
         internal static bool TryGetFromFileName(string classId, out ModPrefab prefab) => FileNameDictionary.TryGetValue(classId, out prefab);
         internal static bool TryGetFromClassId(string classId, out ModPrefab prefab) => ClassIdDictionary.TryGetValue(classId, out prefab);
 
+        internal readonly string ModName;
+
         /// <summary>
         /// The class identifier used for the <see cref="PrefabIdentifier" /> component whenever applicable.
         /// </summary>
@@ -54,6 +56,8 @@
             ClassID = classId;
             PrefabFileName = prefabFileName;
             TechType = techType;
+
+            ModName = this.GetType().Assembly.GetName().Name;
         }
 
         internal GameObject GetGameObjectInternal()

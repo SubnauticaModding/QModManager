@@ -1,4 +1,5 @@
-﻿using SMLHelper.V2.Patchers;
+﻿using System.Reflection;
+using SMLHelper.V2.Patchers;
 
 namespace SMLHelper
 {
@@ -33,7 +34,9 @@ namespace SMLHelper
             Scheme = scheme;
             Sprite = new CustomSprite(SpriteManager.Group.Category, SpriteId, sprite);
 
-            LanguagePatcher.customLines[LanguageId] = name;
+            string modName = Assembly.GetCallingAssembly().GetName().Name;
+
+            LanguagePatcher.AddCustomLanguageLine(modName, LanguageId, name);
             CustomSpriteHandler.customSprites.Add(Sprite);
         }
         
