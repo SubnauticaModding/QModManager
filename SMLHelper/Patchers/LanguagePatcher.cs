@@ -12,8 +12,8 @@
 
         internal static void Postfix(ref Language __instance)
         {
-            var strings = stringsField.GetValue(__instance) as Dictionary<string, string>;
             FieldInfo stringsField = languageType.GetField("strings", BindingFlags.NonPublic | BindingFlags.Instance);
+            var strings = stringsField.GetValue(__instance) as Dictionary<string, string>;
             foreach (KeyValuePair<string, string> a in customLines)
             {
                 strings[a.Key] = a.Value;
