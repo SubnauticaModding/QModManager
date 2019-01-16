@@ -13,8 +13,8 @@
 
         public static void PatchDictionary(Type type, string name, IDictionary dictionary, BindingFlags flags)
         {
-            var dict = dictionaryField.GetValue(null) as IDictionary;
             FieldInfo dictionaryField = type.GetField(name, flags);
+            var dict = dictionaryField.GetValue(null) as IDictionary;
 
             foreach(DictionaryEntry entry in dictionary)
             {
