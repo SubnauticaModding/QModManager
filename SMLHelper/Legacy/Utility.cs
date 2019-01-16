@@ -112,8 +112,8 @@ namespace SMLHelper
 
         public static void PatchList(Type type, string name, IList list, BindingFlags flags)
         {
-            var craftDataList = listField.GetValue(null) as IList;
             FieldInfo listField = type.GetField(name, flags);
+            var craftDataList = listField.GetValue(null) as IList;
 
             foreach (object obj in list)
             {
