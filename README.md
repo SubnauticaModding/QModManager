@@ -41,3 +41,7 @@ namespace YOURNAMESPACE
     }
 }
 ```
+
+### Mac Users
+
+Refer to the README.md in the `Mac Installation` folder for installation instructions.
