@@ -12,9 +12,9 @@
 
         internal static void Postfix(ref Language __instance)
         {
-            var stringsField = languageType.GetField("strings", BindingFlags.NonPublic | BindingFlags.Instance);
+            FieldInfo stringsField = languageType.GetField("strings", BindingFlags.NonPublic | BindingFlags.Instance);
             var strings = stringsField.GetValue(__instance) as Dictionary<string, string>;
-            foreach (var a in customLines)
+            foreach (KeyValuePair<string, string> a in customLines)
             {
                 strings[a.Key] = a.Value;
             }
@@ -22,7 +22,7 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            var method = languageType.GetMethod("LoadLanguageFile", BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo method = languageType.GetMethod("LoadLanguageFile", BindingFlags.NonPublic | BindingFlags.Instance);
 
             harmony.Patch(method, null,
                 new HarmonyMethod(typeof(LanguagePatcher).GetMethod("Postfix", BindingFlags.Static | BindingFlags.NonPublic)));

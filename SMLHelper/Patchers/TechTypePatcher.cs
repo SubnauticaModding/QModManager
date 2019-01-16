@@ -28,7 +28,7 @@
 
         internal static TechType AddTechType(string name)
         {
-            var cache = cacheManager.GetCacheForTypeName(name);
+            EnumTypeCache cache = cacheManager.GetCacheForTypeName(name);
 
             if (cache == null)
             {
@@ -46,8 +46,8 @@
 
             cacheManager.Add(techType, cache);
 
-            var techTypeExtensions = typeof(TechTypeExtensions);
-            var traverse = Traverse.Create(techTypeExtensions);
+            Type techTypeExtensions = typeof(TechTypeExtensions);
+            Traverse traverse = Traverse.Create(techTypeExtensions);
 
             var stringsNormal = traverse.Field("stringsNormal").GetValue<Dictionary<TechType, string>>();
             var stringsLowercase = traverse.Field("stringsLowercase").GetValue<Dictionary<TechType, string>>();
@@ -61,7 +61,7 @@
             techTypesNormal[name] = techType;
             techTypesIgnoreCase[name] = techType;
 
-            var intKey = cache.Index.ToString();
+            string intKey = cache.Index.ToString();
             techTypeKeys[techType] = intKey;
             keyTechTypes[intKey] = techType;
 
@@ -105,9 +105,9 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            var enumType = typeof(Enum);
-            var thisType = typeof(TechTypePatcher);
-            var techTypeType = typeof(TechType);
+            Type enumType = typeof(Enum);
+            Type thisType = typeof(TechTypePatcher);
+            Type techTypeType = typeof(TechType);
 
             harmony.Patch(enumType.GetMethod("GetValues", BindingFlags.Public | BindingFlags.Static), null,
                 new HarmonyMethod(thisType.GetMethod("Postfix_GetValues", BindingFlags.NonPublic | BindingFlags.Static)));

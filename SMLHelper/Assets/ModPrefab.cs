@@ -58,7 +58,7 @@
 
         internal GameObject GetGameObjectInternal()
         {
-            var go = GetGameObject();
+            GameObject go = GetGameObject();
 
             if (go == null)
             {
