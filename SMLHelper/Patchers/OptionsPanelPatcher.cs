@@ -24,8 +24,6 @@
         internal static void AddTabs_Postfix(uGUI_OptionsPanel __instance)
         {
             uGUI_OptionsPanel optionsPanel = __instance;
-
-            bool found = false;
             int modsTab = optionsPanel.AddTab("Mods");
 
             foreach (ModOptions modOption in modOptions)
