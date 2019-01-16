@@ -81,4 +81,4 @@ ___
 
 ### Mac Users
 
-Refer to the README.md in the [Mac Installation](Mac Installation) folder for installation instructions.
+Refer to the README.md in the [`Mac Installation`](Mac%20Installation) folder for installation instructions.
