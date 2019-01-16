@@ -37,7 +37,7 @@
             DisplayName = displayName;
             Name = name;
 
-            ModSprite.Add(new ModSprite(SpriteManager.Group.Category, $"{Scheme.ToString()}_{Name}", Sprite));            
+            ModSprite.Add(new ModSprite(SpriteManager.Group.Category, $"{Scheme.ToString()}_{Name}", Sprite));
             LanguagePatcher.AddCustomLanguageLine(modName, $"{Scheme.ToString()}Menu_{Name}", DisplayName);
         }
     }
