@@ -78,7 +78,7 @@
                 text.AppendLine($"{langLineKey}{KeyValueSeparator}{TextDelimiter}{value}{TextDelimiter}");
             }
 
-            File.WriteAllText($"{LanguageOrigDir}/{modKey}.txt", text.ToString());
+            File.WriteAllText($"{LanguageOrigDir}/{modKey}.txt", text.ToString(), Encoding.UTF8);
         }
 
         private static void ReadOverrideCustomLines()
@@ -103,7 +103,7 @@
                 if (!originalCustomLines.ContainsKey(modName))
                     continue; // Not for a mod we know about
 
-                string[] languageLines = File.ReadAllLines(file);
+                string[] languageLines = File.ReadAllLines(file, Encoding.UTF8);
 
                 Dictionary<string, string> originalLines = originalCustomLines[modName];
 
@@ -147,7 +147,7 @@
             if (!File.Exists(fileName))
                 return true; // File not found
 
-            string[] lines = File.ReadAllLines(fileName);
+            string[] lines = File.ReadAllLines(fileName, Encoding.UTF8);
 
             if (lines.Length != modCustomLines.Count)
                 return true; // Difference in line count
