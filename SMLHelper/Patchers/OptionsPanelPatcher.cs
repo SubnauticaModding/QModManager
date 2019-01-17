@@ -1,9 +1,12 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
+    using System;
     using System.Collections.Generic;
     using System.Reflection;
     using Harmony;
     using Options;
+    using UnityEngine;
+    using Utility;
 
     internal class OptionsPanelPatcher
     {
@@ -11,17 +14,17 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            var uGUI_OptionsPanelType = typeof(uGUI_OptionsPanel);
-            var thisType = typeof(OptionsPanelPatcher);
-            var startMethod = uGUI_OptionsPanelType.GetMethod("AddTabs", BindingFlags.NonPublic | BindingFlags.Instance);
+            Type uGUI_OptionsPanelType = typeof(uGUI_OptionsPanel);
+            Type thisType = typeof(OptionsPanelPatcher);
+            MethodInfo startMethod = uGUI_OptionsPanelType.GetMethod("AddTabs", BindingFlags.NonPublic | BindingFlags.Instance);
 
             harmony.Patch(startMethod, null, new HarmonyMethod(thisType.GetMethod("AddTabs_Postfix", BindingFlags.NonPublic | BindingFlags.Static)));
         }
 
         internal static void AddTabs_Postfix(uGUI_OptionsPanel __instance)
         {
-            var optionsPanel = __instance;
-            var modsTab = optionsPanel.AddTab("Mods");
+            uGUI_OptionsPanel optionsPanel = __instance;
+            int modsTab = optionsPanel.AddTab("Mods");
 
             foreach (ModOptions modOption in modOptions)
             {

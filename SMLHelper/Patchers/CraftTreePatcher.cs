@@ -7,6 +7,7 @@ namespace SMLHelper.V2.Patchers
     using Utility;
     using Crafting;
     using Assets;
+    using System;
 
     internal class CraftTreePatcher
     {
@@ -23,18 +24,18 @@ namespace SMLHelper.V2.Patchers
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            var type = typeof(CraftTree);
-            var patcherClass = typeof(CraftTreePatcher);
+            Type type = typeof(CraftTree);
+            Type patcherClass = typeof(CraftTreePatcher);
 
-            var craftTreeGetTree = type.GetMethod("GetTree", BindingFlags.Static | BindingFlags.Public);
-            var craftTreeInitialize = type.GetMethod("Initialize", BindingFlags.Static | BindingFlags.Public);
+            MethodInfo craftTreeGetTree = type.GetMethod("GetTree", BindingFlags.Static | BindingFlags.Public);
+            MethodInfo craftTreeInitialize = type.GetMethod("Initialize", BindingFlags.Static | BindingFlags.Public);
 
-            var fabricatorScheme = type.GetMethod("FabricatorScheme", BindingFlags.Static | BindingFlags.NonPublic);
-            var constructorScheme = type.GetMethod("ConstructorScheme", BindingFlags.Static | BindingFlags.NonPublic);
-            var workbenchScheme = type.GetMethod("WorkbenchScheme", BindingFlags.Static | BindingFlags.NonPublic);
-            var seamothUpgradesScheme = type.GetMethod("SeamothUpgradesScheme", BindingFlags.NonPublic | BindingFlags.Static);
-            var mapRoomSheme = type.GetMethod("MapRoomSheme", BindingFlags.Static | BindingFlags.NonPublic);
-            var cyclopsFabricatorScheme = type.GetMethod("CyclopsFabricatorScheme", BindingFlags.Static | BindingFlags.NonPublic);
+            MethodInfo fabricatorScheme = type.GetMethod("FabricatorScheme", BindingFlags.Static | BindingFlags.NonPublic);
+            MethodInfo constructorScheme = type.GetMethod("ConstructorScheme", BindingFlags.Static | BindingFlags.NonPublic);
+            MethodInfo workbenchScheme = type.GetMethod("WorkbenchScheme", BindingFlags.Static | BindingFlags.NonPublic);
+            MethodInfo seamothUpgradesScheme = type.GetMethod("SeamothUpgradesScheme", BindingFlags.NonPublic | BindingFlags.Static);
+            MethodInfo mapRoomSheme = type.GetMethod("MapRoomSheme", BindingFlags.Static | BindingFlags.NonPublic);
+            MethodInfo cyclopsFabricatorScheme = type.GetMethod("CyclopsFabricatorScheme", BindingFlags.Static | BindingFlags.NonPublic);
 
             harmony.Patch(craftTreeGetTree,
                 new HarmonyMethod(patcherClass.GetMethod("GetTreePreFix", BindingFlags.Static | BindingFlags.NonPublic)), null);
@@ -77,7 +78,7 @@ namespace SMLHelper.V2.Patchers
         private static void InitializePostFix()
         {
             var craftTreeInitialized = (bool)ReflectionHelper.GetStaticField<CraftTree>("initialized");
-            var craftTreeClass = typeof(CraftTree);
+            Type craftTreeClass = typeof(CraftTree);
         
             if (craftTreeInitialized && !ModCraftTreeNode.Initialized)
             {
@@ -140,21 +141,21 @@ namespace SMLHelper.V2.Patchers
 
         private static void AddCustomTabs(ref CraftNode nodes, List<TabNode> customTabs, CraftTree.Type scheme)
         {
-            foreach (var tab in customTabs)
+            foreach (TabNode tab in customTabs)
             {
                 // Wrong crafter, skip.
                 if (tab.Scheme != scheme) continue;
 
-                var currentNode = default(TreeNode);
+                TreeNode currentNode = default;
                 currentNode = nodes;
 
                 // Patch into game's CraftTree.
                 for (int i = 0; i < tab.Path.Length; i++)
                 {
-                    var currentPath = tab.Path[i];
+                    string currentPath = tab.Path[i];
                     Logger.Log("Tab Current Path: " + currentPath + " Tab: " + tab.Name + " Crafter: " + tab.Scheme.ToString());
 
-                    var node = currentNode[currentPath];
+                    TreeNode node = currentNode[currentPath];
 
                     // Reached the end of the line.
                     if (node != null)
@@ -174,21 +175,21 @@ namespace SMLHelper.V2.Patchers
 
         private static void PatchNodes(ref CraftNode nodes, List<CraftingNode> customNodes, CraftTree.Type scheme)
         {
-            foreach (var customNode in customNodes)
+            foreach (CraftingNode customNode in customNodes)
             {
                 // Wrong crafter, just skip the node.
                 if (customNode.Scheme != scheme) continue;
 
                 // Have to do this to make sure C# shuts up.
-                var node = default(TreeNode);
+                TreeNode node = default;
                 node = nodes;
 
                 // Loop through the path provided by the node.
                 // Get the node for the last path.
                 for (int i = 0; i < customNode.Path.Length; i++)
                 {
-                    var currentPath = customNode.Path[i];
-                    var currentNode = node[currentPath];
+                    string currentPath = customNode.Path[i];
+                    TreeNode currentNode = node[currentPath];
 
                     if (currentNode != null) node = currentNode;
                     else break;
@@ -207,13 +208,13 @@ namespace SMLHelper.V2.Patchers
             // This method can be used to both remove single child nodes, thus removing one recipe from the tree.
             // Or it can remove entire tabs at once, removing the tab and all the recipes it contained in one go.
 
-            foreach (var nodeToRemove in nodesToRemove)
+            foreach (Node nodeToRemove in nodesToRemove)
             {
                 // Not for this fabricator. Skip.
                 if (nodeToRemove.Scheme != scheme) continue;
 
                 // Get the names of each node in the path to traverse tree until we reach the node we want.
-                var currentNode = default(TreeNode);
+                TreeNode currentNode = default;
                 currentNode = nodes;
 
                 // Travel the path down the tree.
@@ -230,7 +231,7 @@ namespace SMLHelper.V2.Patchers
                 }
 
                 // Hold a reference to the parent node
-                var parentNode = currentNode.parent;
+                TreeNode parentNode = currentNode.parent;
 
                 // Safty checks.
                 if (currentNode != null && currentNode.id == currentPath)

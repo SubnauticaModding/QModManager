@@ -31,7 +31,7 @@
         internal static TechType AddTechType(string modName, string internalName, string displayName, string tooltip, bool unlockAtStart = true)
         {
             // Register the TechType.
-            var techType = TechTypePatcher.AddTechType(internalName);
+            TechType techType = TechTypePatcher.AddTechType(internalName);
 
             // Register Language lines.
             LanguagePatcher.AddCustomLanguageLine(modName, internalName, displayName);
@@ -62,7 +62,7 @@
             string modName = Assembly.GetCallingAssembly().GetName().Name;
 
             // Register the TechType using overload.
-            var techType = AddTechType(modName, internalName, displayName, tooltip, unlockAtStart);
+            TechType techType = AddTechType(internalName, displayName, tooltip, unlockAtStart);
 
             // Register the Sprite
             if(sprite != null)
@@ -86,7 +86,7 @@
             string modName = Assembly.GetCallingAssembly().GetName().Name;
 
             // Register the TechType using overload.
-            var techType = AddTechType(modName, internalName, displayName, tooltip, unlockAtStart);
+            TechType techType = AddTechType(internalName, displayName, tooltip, unlockAtStart);
 
             // Register the Sprite
             if (sprite != null)
