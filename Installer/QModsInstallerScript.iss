@@ -117,7 +117,6 @@ SelectComponentsLabel2=
 ExitSetupMessage=Setup is not complete. If you exit now, {#Name} will not be installed.%nExit Setup?
 
 [Code]
-
 function IsSubnautica(path: String): Boolean; // Checks if Subnautica is installed in the current folder
 begin
   if (FileExists(path + '\Subnautica.exe')) and (FileExists(path + '\Subnautica_Data\Managed\Assembly-CSharp.dll')) then // If Subnautica-specific files exist
@@ -205,4 +204,35 @@ begin
   #if PreRelease == true
     InitializeWizard_();
   #endif
+end;
+
+function IsAppRunning(const FileName : string): Boolean;
+var
+    FSWbemLocator: Variant;
+    FWMIService   : Variant;
+    FWbemObjectSet: Variant;
+begin
+    Result := false;
+    FSWbemLocator := CreateOleObject('WBEMScripting.SWBEMLocator');
+    FWMIService := FSWbemLocator.ConnectServer('', 'root\CIMV2', '', '');
+    FWbemObjectSet :=
+      FWMIService.ExecQuery(
+        Format('SELECT Name FROM Win32_Process Where Name="%s"', [FileName]));
+    Result := (FWbemObjectSet.Count > 0);
+    FWbemObjectSet := Unassigned;
+    FWMIService := Unassigned;
+    FSWbemLocator := Unassigned;
+end;
+
+function InitializeSetup(): Boolean;
+begin
+  if IsAppRunning('Subnautica.exe') then
+  begin
+    MsgBox('You need to close Subnautica before installing QModManager.' + #13#10 + 'If Subnautica is not running, a reboot should fix this.', mbError, MB_OK);
+    Result := false
+  end
+  else
+  begin
+    Result := true
+  end
 end;
