@@ -309,8 +309,8 @@
             {
                 if (node.action == TreeAction.Expand)
                 {
-                    var thing = (ModCraftTreeLinkingNode)tab;
                     ModCraftTreeTab tab = root.AddTabNode(node.id);
+                    var thing = (ModCraftTreeLinkingNode)tab;
                     CreateFromExistingTree(node, ref thing);
                 }
 
