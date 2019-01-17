@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using Assets;
     using Patchers;
     using UnityEngine;
@@ -29,7 +30,7 @@
         public readonly TechType TechType;
 
         /// <summary>
-        /// The name ID for this tab node.        
+        /// The name ID for this tab node.
         /// </summary>
         public readonly string Name;
 
@@ -107,7 +108,9 @@
         /// <returns>A new tab node linked to the root node and ready to use.</returns>
         public ModCraftTreeTab AddTabNode(string nameID, string displayText, Atlas.Sprite sprite)
         {
-            var tabNode = new ModCraftTreeTab(nameID, displayText, sprite);
+            string modName = Assembly.GetCallingAssembly().GetName().Name;
+
+            var tabNode = new ModCraftTreeTab(modName, nameID, displayText, sprite);
             tabNode.LinkToParent(this);
 
             ChildNodes.Add(tabNode);
@@ -124,7 +127,9 @@
         /// <returns>A new tab node linked to the root node and ready to use.</returns>
         public ModCraftTreeTab AddTabNode(string nameID, string displayText, Sprite sprite)
         {
-            var tabNode = new ModCraftTreeTab(nameID, displayText, sprite);
+            string modName = Assembly.GetCallingAssembly().GetName().Name;
+
+            var tabNode = new ModCraftTreeTab(modName, nameID, displayText, sprite);
             tabNode.LinkToParent(this);
 
             ChildNodes.Add(tabNode);
@@ -139,7 +144,9 @@
         /// <returns>A new tab node linked to the root node and ready to use.</returns>
         public ModCraftTreeTab AddTabNode(string nameID)
         {
-            var tabNode = new ModCraftTreeTab(nameID);
+            string modName = Assembly.GetCallingAssembly().GetName().Name;
+
+            var tabNode = new ModCraftTreeTab(modName, nameID);
             tabNode.LinkToParent(this);
 
             ChildNodes.Add(tabNode);
@@ -368,27 +375,31 @@
         private readonly Atlas.Sprite Asprite;
         private readonly Sprite Usprite;
         private readonly bool IsExistingTab;
+        private readonly string ModName;
 
-        internal ModCraftTreeTab(string nameID, string displayText, Atlas.Sprite sprite)
+        internal ModCraftTreeTab(string modName, string nameID, string displayText, Atlas.Sprite sprite)
             : base(nameID, TreeAction.Expand, TechType.None)
         {
             DisplayText = displayText;
             Asprite = sprite;
             Usprite = null;
+            ModName = modName;
         }
 
-        internal ModCraftTreeTab(string nameID, string displayText, Sprite sprite)
+        internal ModCraftTreeTab(string modName, string nameID, string displayText, Sprite sprite)
             : base(nameID, TreeAction.Expand, TechType.None)
         {
             DisplayText = displayText;
             Asprite = null;
             Usprite = sprite;
+            ModName = modName;
         }
 
-        internal ModCraftTreeTab(string nameID)
+        internal ModCraftTreeTab(string modName, string nameID)
             : base(nameID, TreeAction.Expand, TechType.None)
         {
             IsExistingTab = true;
+            ModName = modName;
         }
 
         internal override void LinkToParent(ModCraftTreeLinkingNode parent)
@@ -397,9 +408,7 @@
 
             if (IsExistingTab) return;
 
-            string tabLanguageID = $"{SchemeAsString}Menu_{Name}";
-
-            LanguagePatcher.customLines[tabLanguageID] = DisplayText;
+            LanguagePatcher.AddCustomLanguageLine(ModName, $"{base.SchemeAsString}Menu_{Name}", DisplayText);
 
             string spriteID = $"{SchemeAsString}_{Name}";
 

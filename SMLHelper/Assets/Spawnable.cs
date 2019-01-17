@@ -1,6 +1,7 @@
 ﻿namespace SMLHelper.V2.Assets
 {
     using System;
+    using System.Reflection;
     using Handlers;
 
     /// <summary>
@@ -98,7 +99,7 @@
 
             // Because invocation order isn't guaranteed by event handlers,
             // we make sure the TechType is patched first before anything else that might require it.
-            this.TechType = TechTypeHandler.AddTechType(this.ClassID, this.FriendlyName, this.Description, false);
+            this.TechType = TechTypeHandler.AddTechType(ModName, this.ClassID, this.FriendlyName, this.Description, false);
 
             CorePatchEvents.Invoke();
 

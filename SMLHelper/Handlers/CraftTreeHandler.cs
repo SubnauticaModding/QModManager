@@ -4,6 +4,7 @@
     using Patchers;
     using Utility;
     using UnityEngine.Assertions;
+    using System.Reflection;
 
     /// <summary>
     /// A handler class for creating and editing of crafting trees.
@@ -87,7 +88,9 @@
         public static void AddTabNode(CraftTree.Type craftTree, string name, string displayName, Atlas.Sprite sprite)
         {
             Assert.IsTrue(craftTree <= CraftTree.Type.Rocket, $"{nameof(AddTabNode)} is intended for use only with standard crafting trees, not custom ones.");
-            CraftTreePatcher.TabNodes.Add(new TabNode(new string[0], craftTree, sprite, name, displayName));
+            string modName = Assembly.GetCallingAssembly().GetName().Name;
+
+            CraftTreePatcher.TabNodes.Add(new TabNode(new string[0], craftTree, sprite, modName, name, displayName));
         }
 
         /// <summary>
@@ -101,7 +104,9 @@
         public static void AddTabNode(CraftTree.Type craftTree, string name, string displayName, UnityEngine.Sprite sprite)
         {
             Assert.IsTrue(craftTree <= CraftTree.Type.Rocket, $"{nameof(AddTabNode)} is intended for use only with standard crafting trees, not custom ones.");
-            CraftTreePatcher.TabNodes.Add(new TabNode(new string[0], craftTree, new Atlas.Sprite(sprite), name, displayName));
+            string modName = Assembly.GetCallingAssembly().GetName().Name;
+
+            CraftTreePatcher.TabNodes.Add(new TabNode(new string[0], craftTree, new Atlas.Sprite(sprite), modName, name, displayName));
         }
 
         /// <summary>
@@ -120,7 +125,9 @@
         public static void AddTabNode(CraftTree.Type craftTree, string name, string displayName, Atlas.Sprite sprite, params string[] stepsToTab)
         {
             Assert.IsTrue(craftTree <= CraftTree.Type.Rocket, $"{nameof(AddTabNode)} is intended for use only with standard crafting trees, not custom ones.");
-            CraftTreePatcher.TabNodes.Add(new TabNode(stepsToTab, craftTree, sprite, name, displayName));
+            string modName = Assembly.GetCallingAssembly().GetName().Name;
+
+            CraftTreePatcher.TabNodes.Add(new TabNode(stepsToTab, craftTree, sprite, modName, name, displayName));
         }
 
         /// <summary>
@@ -139,7 +146,9 @@
         public static void AddTabNode(CraftTree.Type craftTree, string name, string displayName, UnityEngine.Sprite sprite, params string[] stepsToTab)
         {
             Assert.IsTrue(craftTree <= CraftTree.Type.Rocket, $"{nameof(AddTabNode)} is intended for use only with standard crafting trees, not custom ones.");
-            CraftTreePatcher.TabNodes.Add(new TabNode(stepsToTab, craftTree, new Atlas.Sprite(sprite), name, displayName));
+            string modName = Assembly.GetCallingAssembly().GetName().Name;
+
+            CraftTreePatcher.TabNodes.Add(new TabNode(stepsToTab, craftTree, new Atlas.Sprite(sprite), modName, name, displayName));
         }
 
         /// <summary>
