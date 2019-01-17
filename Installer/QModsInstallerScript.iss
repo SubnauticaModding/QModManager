@@ -14,13 +14,12 @@
 #define Name "QModManager"
 #define Version "1.4"
 #define Author "the QModManager team"
-#define URL "https://github.com/Qwiso/QModManager"
+#define URL "https://github.com/QModManager/QModManager"
 #define SupportURL "https://discord.gg/UpWuWwq"
 #define UpdatesURL "https://nexusmods.com/subnautica/mods/16"
 
 ; Defines special flags that change the way the installer behaves
-#define PreRelease false ; If this is true, a window will appear, promting the user to agree to download even if this is a prerelease
-
+#define PreRelease false ; If this is true, a window will appear, promting the user to agree to install the program in this unstable pre-release state
 [Setup]
 AllowNetworkDrive=no
 AllowUNCPath=no
@@ -60,7 +59,7 @@ EnableDirDoesntExistWarning=yes
 OutputBaseFilename=QModManager_Setup
 ; The output directory
 OutputDir=.
-; The application might administrator access
+; The application might require administrator access
 PrivilegesRequired=admin
 ; Restarts closed applications after install
 RestartApplications=yes
@@ -109,7 +108,7 @@ PasswordEditLabel=Consent:
 ; The text that appears on the Select install location page
 WizardSelectDir=Select install location
 SelectDirLabel3=Please select the install folder of the game.
-SelectDirBrowseLabel=If you cannot click yes, it is because Subnautica is not installed in that folder.
+SelectDirBrowseLabel=If you cannot click next, please check your install path and make sure Subnautica is not running.
 ; The installer doesn't use components, but the feature is used for displaying the install type
 WizardSelectComponents=Review Install
 SelectComponentsDesc=
@@ -140,6 +139,10 @@ procedure DirEditOnChange(Sender: TObject);
 begin
   if not IsSubnautica(WizardForm.DirEdit.Text) then // If subnautica isnt installed in that path, disable the buttons
   begin
+    if (WizardForm.NextButton.Enabled = true) then
+    begin
+      MsgBox('Subnautica not detected. Please ensure you have selected the correct install folder.', mbError, MB_OK);
+    end;
     WizardForm.NextButton.Enabled := false
   end
   else // else enable them
