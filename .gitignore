@@ -297,3 +297,5 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
+Dependencies/Assembly-CSharp-firstpass.dll
+Dependencies/Assembly-CSharp.dll
