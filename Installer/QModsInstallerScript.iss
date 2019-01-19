@@ -14,13 +14,12 @@
 #define Name "QModManager"
 #define Version "1.4"
 #define Author "the QModManager team"
-#define URL "https://github.com/Qwiso/QModManager"
+#define URL "https://github.com/QModManager/QModManager"
 #define SupportURL "https://discord.gg/UpWuWwq"
 #define UpdatesURL "https://nexusmods.com/subnautica/mods/16"
 
 ; Defines special flags that change the way the installer behaves
-#define PreRelease false ; If this is true, a window will appear, promting the user to agree to download even if this is a prerelease
-
+#define PreRelease false ; If this is true, a window will appear, promting the user to agree to install the program in this unstable pre-release state
 [Setup]
 AllowNetworkDrive=no
 AllowUNCPath=no
@@ -60,7 +59,7 @@ EnableDirDoesntExistWarning=yes
 OutputBaseFilename=QModManager_Setup
 ; The output directory
 OutputDir=.
-; The application might administrator access
+; The application might require administrator access
 PrivilegesRequired=admin
 ; Restarts closed applications after install
 RestartApplications=yes
@@ -109,7 +108,7 @@ PasswordEditLabel=Consent:
 ; The text that appears on the Select install location page
 WizardSelectDir=Select install location
 SelectDirLabel3=Please select the install folder of the game.
-SelectDirBrowseLabel=If you cannot click yes, it is because Subnautica is not installed in that folder.
+SelectDirBrowseLabel=If you cannot click next, please check your install path and make sure Subnautica is not running.
 ; The installer doesn't use components, but the feature is used for displaying the install type
 WizardSelectComponents=Review Install
 SelectComponentsDesc=
@@ -118,7 +117,6 @@ SelectComponentsLabel2=
 ExitSetupMessage=Setup is not complete. If you exit now, {#Name} will not be installed.%nExit Setup?
 
 [Code]
-
 function IsSubnautica(path: String): Boolean; // Checks if Subnautica is installed in the current folder
 begin
   if (FileExists(path + '\Subnautica.exe')) and (FileExists(path + '\Subnautica_Data\Managed\Assembly-CSharp.dll')) then // If Subnautica-specific files exist
@@ -140,6 +138,10 @@ procedure DirEditOnChange(Sender: TObject);
 begin
   if not IsSubnautica(WizardForm.DirEdit.Text) then // If subnautica isnt installed in that path, disable the buttons
   begin
+    if (WizardForm.NextButton.Enabled = true) then
+    begin
+      MsgBox('Subnautica not detected. Please ensure you have selected the correct install folder.', mbError, MB_OK);
+    end;
     WizardForm.NextButton.Enabled := false
   end
   else // else enable them
@@ -202,4 +204,35 @@ begin
   #if PreRelease == true
     InitializeWizard_();
   #endif
+end;
+
+function IsAppRunning(const FileName : string): Boolean;
+var
+    FSWbemLocator: Variant;
+    FWMIService   : Variant;
+    FWbemObjectSet: Variant;
+begin
+    Result := false;
+    FSWbemLocator := CreateOleObject('WBEMScripting.SWBEMLocator');
+    FWMIService := FSWbemLocator.ConnectServer('', 'root\CIMV2', '', '');
+    FWbemObjectSet :=
+      FWMIService.ExecQuery(
+        Format('SELECT Name FROM Win32_Process Where Name="%s"', [FileName]));
+    Result := (FWbemObjectSet.Count > 0);
+    FWbemObjectSet := Unassigned;
+    FWMIService := Unassigned;
+    FSWbemLocator := Unassigned;
+end;
+
+function InitializeSetup(): Boolean;
+begin
+  if IsAppRunning('Subnautica.exe') then
+  begin
+    MsgBox('You need to close Subnautica before installing QModManager.' + #13#10 + 'If Subnautica is not running, a reboot should fix this.', mbError, MB_OK);
+    Result := false
+  end
+  else
+  begin
+    Result := true
+  end
 end;
