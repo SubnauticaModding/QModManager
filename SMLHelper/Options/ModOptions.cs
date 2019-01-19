@@ -94,6 +94,28 @@
     }
 
     /// <summary>
+    /// Contains all the information about a choice changed event.
+    /// </summary>
+    public class DropdownChangedEventArgs : EventArgs
+    {
+        /// <summary>
+        /// The ID of the <see cref="ModDropdownOption"/> that was changed.
+        /// </summary>
+        public string Id { get; }
+
+        /// <summary>
+        /// The new index for the <see cref="ModDropdownOption"/>.
+        /// </summary>
+        public int Index { get; }
+
+        public DropdownChangedEventArgs(string id, int index)
+        {
+            Id = id;
+            Index = index;
+        }
+    }
+
+    /// <summary>
     /// Indicates how the option is interacted with by the user.
     /// </summary>
     public enum ModOptionType
@@ -116,7 +138,12 @@
         /// <summary>
         /// The option uses a keybind field that can be changed to a certain keyt
         /// </summary>
-        Keybind
+        Keybind,
+
+        /// <summary>
+        /// The option uses a selection of one of a discrete number of possible values.
+        /// </summary>
+        Dropdown,
     }
 
     /// <summary>
@@ -150,6 +177,11 @@
         protected event EventHandler<KeybindChangedEventArgs> KeybindChanged;
 
         /// <summary>
+        /// The event that is called whenever a dropdown is changed. Subscribe to this in the constructor.
+        /// </summary>
+        protected event EventHandler<DropdownChangedEventArgs> DropdownChanged;
+
+        /// <summary>
         /// Builds and obtains the <see cref="ModOption"/>s that belong to this instance.
         /// </summary>
         public List<ModOption> Options
@@ -179,9 +211,9 @@
         /// <summary>
         /// <para>Builds up the configuration the options.</para>
         /// <para>This method should be composed of calls into the following methods: 
-        /// <seealso cref="AddSliderOption"/> | <seealso cref="AddToggleOption"/> | <seealso cref="AddChoiceOption"/> | <seealso cref="AddKeybindOption"/>.</para>
+        /// <seealso cref="AddSliderOption"/> | <seealso cref="AddToggleOption"/> | <seealso cref="AddChoiceOption"/> | <seealso cref="AddKeybindOption"/> | <seealso cref="AddDropdownOption"/>.</para>
         /// <para>Make sure you have subscribed to the events in the constructor to handle what happens when the value is changed:
-        /// <seealso cref="SliderChanged"/> | <seealso cref="ToggleChanged"/> | <seealso cref="ChoiceChanged"/> | <seealso cref="KeybindChanged"/>.</para>
+        /// <seealso cref="SliderChanged"/> | <seealso cref="ToggleChanged"/> | <seealso cref="ChoiceChanged"/> | <seealso cref="KeybindChanged"/> | <seealso cref="DropdownChanged"/>.</para>
         /// </summary>
         public abstract void BuildModOptions();
 
@@ -223,6 +255,16 @@
         internal void OnKeybindChange(string id, KeyCode key)
         {
             KeybindChanged(this, new KeybindChangedEventArgs(id, key));
+        }
+
+        /// <summary>
+        /// Notifies a choice change to all subscribed event handlers.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="indexValue"></param>
+        internal void OnDropdownChange(string id, int indexValue)
+        {
+            DropdownChanged(this, new DropdownChangedEventArgs(id, indexValue));
         }
 
         /// <summary>
@@ -272,6 +314,18 @@
         {
             _options.Add(id, new ModKeybindOption(id, label, device, key));
         }
+
+        /// <summary>
+        /// Adds a new <see cref="ModDropdownOption"/> to this instance.
+        /// </summary>
+        /// <param name="id">The internal ID for the dropdown option.</param>
+        /// <param name="label">The display text to use in the in-game menu.</param>
+        /// <param name="options">The collection of available values.</param>
+        /// <param name="index">The starting value.</param>
+        protected void AddDropdownOption(string id, string label, string[] options, int index)
+        {
+            _options.Add(id, new ModDropdownOption(id, label, options, index));
+        }
     }
 
     /// <summary>
@@ -320,7 +374,7 @@
         /// <summary>
         /// Instantiates a new <see cref="ModSliderOption"/> for handling an option that can have any floating point value between a minimum and maximum.
         /// </summary>
-        /// <param name="id">The internal ID if this option.</param>
+        /// <param name="id">The internal ID of this option.</param>
         /// <param name="label">The display text to show on the in-game menus.</param>
         /// <param name="minValue">The minimum value for the range.</param>
         /// <param name="maxValue">The maximum value for the range.</param>
@@ -343,7 +397,7 @@
         /// <summary>
         /// Instantiates a new <see cref="ModToggleOption"/> for handling an option that can be either ON or OFF.
         /// </summary>
-        /// <param name="id">The internal ID if this option.</param>
+        /// <param name="id">The internal ID of this option.</param>
         /// <param name="label">The display text to show on the in-game menus.</param>
         /// <param name="value">The starting value.</param>
         internal ModToggleOption(string id, string label, bool value) : base(ModOptionType.Toggle, label, id)
@@ -363,7 +417,7 @@
         /// <summary>
         /// Instantiates a new <see cref="ModChoiceOption"/> for handling an option that can select one item from a list of values.
         /// </summary>
-        /// <param name="id">The internal ID if this option.</param>
+        /// <param name="id">The internal ID of this option.</param>
         /// <param name="label">The display text to show on the in-game menus.</param>
         /// <param name="options">The collection of available values.</param>
         /// <param name="index">The starting value.</param>
@@ -385,7 +439,7 @@
         /// <summary>
         /// Instantiates a new <see cref="ModKeybindOption"/> for handling an option that is a keybind.
         /// </summary>
-        /// <param name="id">The internal ID if this option.</param>
+        /// <param name="id">The internal ID of this option.</param>
         /// <param name="label">The display text to show on the in-game menus.</param>
         /// <param name="device">The device name.</param>
         /// <param name="key">The starting keybind value.</param>
@@ -395,5 +449,26 @@
             Key = key;
         }
     }
-}
+
+    /// <summary>
+    /// A mod option class for handling an option that can select one item from a list of values.
+    /// </summary>
+    public class ModDropdownOption : ModOption
+    {
+        public string[] Options { get; }
+        public int Index { get; }
+
+        /// <summary>
+        /// Instantiates a new <see cref="ModDropdownOption"/> for handling an option that can select one item from a list of values.
+        /// </summary>
+        /// <param name="id">The internal ID of this option.</param>
+        /// <param name="label">The display text to show on the in-game menus.</param>
+        /// <param name="options">The collection of available values.</param>
+        /// <param name="index">The starting value.</param>
+        internal ModDropdownOption(string id, string label, string[] options, int index) : base(ModOptionType.Dropdown, label, id)
+        {
+            Options = options;
+            Index = index;
+        }
+    }
 }

@@ -47,21 +47,29 @@
                             var toggle = (ModToggleOption)option;
 
                             optionsPanel.AddToggleOption(modsTab, toggle.Label, toggle.Value,
-                                callback: new UnityAction<bool>((bool toggleVal) =>
+                                new UnityAction<bool>((bool toggleVal) =>
                                     modOption.OnToggleChange(toggle.Id, toggleVal)));
                             break;
                         case ModOptionType.Choice:
                             var choice = (ModChoiceOption)option;
 
                             optionsPanel.AddChoiceOption(modsTab, choice.Label, choice.Options, choice.Index,
-                                callback: new UnityAction<int>((int index) =>
+                                new UnityAction<int>((int index) =>
                                     modOption.OnChoiceChange(choice.Id, index)));
                             break;
                         case ModOptionType.Keybind:
                             var keybind = (ModKeybindOption)option;
 
                             AddBindingOptionWithCallback(optionsPanel, modsTab, keybind.Label, keybind.Key, keybind.Device,
-                                callback: new UnityAction<KeyCode>((KeyCode key) => modOption.OnKeybindChange(keybind.Id, key)));
+                                new UnityAction<KeyCode>((KeyCode key) => 
+                                    modOption.OnKeybindChange(keybind.Id, key)));
+                            break;
+                        case ModOptionType.Dropdown:
+                            var dropdown = (ModDropdownOption)option;
+
+                            optionsPanel.AddDropdownOption(modsTab, dropdown.Label, dropdown.Options, dropdown.Index,
+                                new UnityAction<int>((int index) =>
+                                    modOption.OnDropdownChange(dropdown.Id, index)));
                             break;
                         default:
                             V2.Logger.Log($"Invalid ModOptionType detected for option: {option.Id} ({option.Type.ToString()})");
