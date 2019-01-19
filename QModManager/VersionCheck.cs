@@ -38,11 +38,6 @@ namespace QModManager
                 client.DownloadStringAsync(new Uri(VersionURL));
                 client.DownloadStringCompleted += (sender, e) =>
                 {
-                    if (e.Cancelled)
-                    {
-                        UnityEngine.Debug.Log("CANCELLED");
-                        return;
-                    }
                     if (e.Error != null)
                     {
                         UnityEngine.Debug.LogException(e.Error);
