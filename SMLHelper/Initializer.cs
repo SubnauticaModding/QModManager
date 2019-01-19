@@ -31,7 +31,6 @@ namespace SMLHelper.V2
                     Console.WriteLine("Inner StackTrace: " + e.InnerException.StackTrace);
                 }
             }
-
         }
 
         internal static void InitializeOld()

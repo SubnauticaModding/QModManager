@@ -3,6 +3,51 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using UnityEngine;
+
+    /// <summary>
+    /// Contains all the information about a slider changed event.
+    /// </summary>
+    public class SliderChangedEventArgs : EventArgs
+    {        
+        /// <summary>
+        /// The ID of the <see cref="ModSliderOption"/> that was changed.
+        /// </summary>
+        public string Id { get; }
+
+        /// <summary>
+        /// The new value for the <see cref="ModSliderOption"/>.
+        /// </summary>
+        public float Value { get; }
+
+        public SliderChangedEventArgs(string id, float value)
+        {
+            Id = id;
+            Value = value;
+        }
+    }
+
+    /// <summary>
+    /// Contains all the information about a toggle changed event.
+    /// </summary>
+    public class ToggleChangedEventArgs : EventArgs
+    {        
+        /// <summary>
+        /// The ID of the <see cref="ModToggleOption"/> that was changed.
+        /// </summary>
+        public string Id { get; }
+
+        /// <summary>
+        /// The new value for the <see cref="ModToggleOption"/>.
+        /// </summary>
+        public bool Value { get; }
+
+        public ToggleChangedEventArgs(string id, bool value)
+        {
+            Id = id;
+            Value = value;
+        }
+    }
 
     /// <summary>
     /// Contains all the information about a choice changed event.
@@ -26,41 +71,25 @@
         }
     }
 
-    public class SliderChangedEventArgs : EventArgs
-    {        
+    /// <summary>
+    /// Contains all the information about a keybind changed event.
+    /// </summary>
+    public class KeybindChangedEventArgs : EventArgs
+    {
         /// <summary>
-        /// The ID of the <see cref="ModSliderOption"/> that was changed.
+        /// The ID of the <see cref="ModKeybindOption"/> that was changed.
         /// </summary>
         public string Id { get; }
 
         /// <summary>
-        /// The new value for the <see cref="ModSliderOption"/>.
+        /// The new value for the <see cref="ModKeybindOption"/>.
         /// </summary>
-        public float Value { get; }
+        public KeyCode Key { get; }
 
-        public SliderChangedEventArgs(string id, float value)
+        public KeybindChangedEventArgs(string id, KeyCode key)
         {
             Id = id;
-            Value = value;
-        }
-    }
-
-    public class ToggleChangedEventArgs : EventArgs
-    {        
-        /// <summary>
-        /// The ID of the <see cref="ModToggleOption"/> that was changed.
-        /// </summary>
-        public string Id { get; }
-
-        /// <summary>
-        /// The new value for the <see cref="ModToggleOption"/>.
-        /// </summary>
-        public bool Value { get; }
-
-        public ToggleChangedEventArgs(string id, bool value)
-        {
-            Id = id;
-            Value = value;
+            Key = key;
         }
     }
 
@@ -82,7 +111,12 @@
         /// <summary>
         /// The option uses a selection of one of a discrete number of possible values.
         /// </summary>
-        Choice
+        Choice,
+
+        /// <summary>
+        /// The option uses a keybind field that can be changed to a certain keyt
+        /// </summary>
+        Keybind
     }
 
     /// <summary>
@@ -109,6 +143,11 @@
         /// The event that is called whenever a choice is changed. Subscribe to this in the constructor.
         /// </summary>
         protected event EventHandler<ChoiceChangedEventArgs> ChoiceChanged;
+
+        /// <summary>
+        /// The event that is called whenever a keybind is changed. Subscribe to this in the constructor.
+        /// </summary>
+        protected event EventHandler<KeybindChangedEventArgs> KeybindChanged;
 
         /// <summary>
         /// Builds and obtains the <see cref="ModOption"/>s that belong to this instance.
@@ -140,9 +179,9 @@
         /// <summary>
         /// <para>Builds up the configuration the options.</para>
         /// <para>This method should be composed of calls into the following methods: 
-        /// <seealso cref="AddSliderOption"/> | <seealso cref="AddToggleOption"/> | <seealso cref="AddChoiceOption"/>.</para>
+        /// <seealso cref="AddSliderOption"/> | <seealso cref="AddToggleOption"/> | <seealso cref="AddChoiceOption"/> | <seealso cref="AddKeybindOption"/>.</para>
         /// <para>Make sure you have subscribed to the events in the constructor to handle what happens when the value is changed:
-        /// <seealso cref="SliderChanged"/> | <seealso cref="ToggleChanged"/> | <seealso cref="ChoiceChanged"/>.</para>
+        /// <seealso cref="SliderChanged"/> | <seealso cref="ToggleChanged"/> | <seealso cref="ChoiceChanged"/> | <seealso cref="KeybindChanged"/>.</para>
         /// </summary>
         public abstract void BuildModOptions();
 
@@ -174,6 +213,16 @@
         internal void OnChoiceChange(string id, int indexValue)
         {
             ChoiceChanged(this, new ChoiceChangedEventArgs(id, indexValue));
+        }
+
+        /// <summary>
+        /// Notifies a keybind change to all subscribed event handlers.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="key"></param>
+        internal void OnKeybindChange(string id, KeyCode key)
+        {
+            KeybindChanged(this, new KeybindChangedEventArgs(id, key));
         }
 
         /// <summary>
@@ -210,6 +259,18 @@
         protected void AddChoiceOption(string id, string label, string[] options, int index)
         {
             _options.Add(id, new ModChoiceOption(id, label, options, index));
+        }
+
+        /// <summary>
+        /// Adds a new <see cref="ModKeybindOption"/> to this instance.
+        /// </summary>
+        /// <param name="id">The internal ID for the toggle option.</param>
+        /// <param name="label">The display text to use in the in-game menu.</param>
+        /// <param name="device">The device name.</param>
+        /// <param name="key">The starting keybind value.</param>
+        protected void AddKeybindOption(string id, string label, GameInput.Device device, KeyCode key)
+        {
+            _options.Add(id, new ModKeybindOption(id, label, device, key));
         }
     }
 
@@ -312,4 +373,27 @@
             Index = index;
         }
     }
+
+    /// <summary>
+    /// A mod option class for handling an option that is a keybind.
+    /// </summary>
+    public class ModKeybindOption : ModOption
+    {
+        public KeyCode Key { get; }
+        public GameInput.Device Device { get; }
+
+        /// <summary>
+        /// Instantiates a new <see cref="ModKeybindOption"/> for handling an option that is a keybind.
+        /// </summary>
+        /// <param name="id">The internal ID if this option.</param>
+        /// <param name="label">The display text to show on the in-game menus.</param>
+        /// <param name="device">The device name.</param>
+        /// <param name="key">The starting keybind value.</param>
+        internal ModKeybindOption(string id, string label, GameInput.Device device, KeyCode key) : base(ModOptionType.Keybind, label, id)
+        {
+            Device = device;
+            Key = key;
+        }
+    }
+}
 }
