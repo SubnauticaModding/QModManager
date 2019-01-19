@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     public GameObject dialog;
 
     public string Version;
-    [ReadOnly] public string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/unity-app/Unity%20App/Assets/Data/Editor/latestversion.txt";
+    [ReadOnly] public string VersionURL = "http://raw.githubusercontent.com/QModManager/QModManager/unity-app/Unity%20App/Assets/Data/Editor/latestversion.txt";
     [ReadOnly] public string LatestVersion;
 
     public void Awake()
@@ -77,16 +77,15 @@ public class GameManager : MonoBehaviour
 
         using (WebClient client = new WebClient())
         {
-            client.DownloadStringAsync(new Uri(VersionURL));
+            //client.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:25.0) Gecko/20100101 Firefox/25.0");
+            //client.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+            Debug.Log("Trying to get latest version from url: " + VersionURL);
+
             client.DownloadStringCompleted += (sender, e) =>
             {
-                if (e.Cancelled)
+                if (e.Error != null)
                 {
-                    Debug.LogError("Version check cancelled...?");
-                }
-                else if (e.Error != null)
-                {
-                    Debug.LogError("Could not get latest version. Probably there is no connection");
+                    Debug.LogError("Could not get latest version. Probably there is no connection.");
                     Debug.LogException(e.Error);
                 }
                 else
@@ -98,6 +97,7 @@ public class GameManager : MonoBehaviour
                     ShowDialogIfNotLatest();
                 }
             };
+            client.DownloadStringAsync(new Uri(VersionURL));
         }
     }
     public bool ValidateVersion(string versionStr)
@@ -109,7 +109,8 @@ public class GameManager : MonoBehaviour
         }
         return true;
     }
-    private static bool CustomRemoteCertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+
+    public static bool CustomRemoteCertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
     {
         bool isOk = true;
         // If there are errors in the certificate chain,
