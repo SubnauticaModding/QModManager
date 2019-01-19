@@ -1,5 +1,5 @@
-﻿using Oculus.Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
@@ -8,11 +8,29 @@ namespace QModManager
 {
     internal static class VersionCheck
     {
-        internal const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/version-check/version.json";
+        internal const string nexusmodsURL = "https://nexusmods.com/subnautica/mods/16";
+
+        internal static void Parse(string versionStr)
+        {
+            if (versionStr == null)
+            {
+                UnityEngine.Debug.Log("Could not get latest version!");
+                return;
+            }
+            Version version = new Version(versionStr);
+            if (version == null)
+            {
+                UnityEngine.Debug.Log("Could not get latest version!");
+                return;
+            }
+            if (!version.Equals(QMod.QModManagerVersion) && QModPatcher.erroredMods.Count <= 0) Dialog.Show($"There is a newer version of QModManager available: {version.ToString()}  (current version: {QMod.QModManagerVersion.ToString()})", 
+                () => Process.Start(nexusmodsURL), leftButtonText: "Download", blue: true);
+        }
+
+        internal const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/version-check/latest-version.txt";
 
         internal static void Check()
         {
-            string result = null;
             ServicePointManager.ServerCertificateValidationCallback = CustomRemoteCertificateValidationCallback;
 
             using (WebClient client = new WebClient())
@@ -22,7 +40,7 @@ namespace QModManager
                 {
                     if (e.Cancelled)
                     {
-                        Console.WriteLine(LanguageLines.VersionCheck.Cancelled);
+                        UnityEngine.Debug.Log("CANCELLED");
                         return;
                     }
                     if (e.Error != null)
@@ -30,48 +48,9 @@ namespace QModManager
                         UnityEngine.Debug.LogException(e.Error);
                         return;
                     }
-                    result = e.Result;
-                    UnityEngine.Debug.Log(result);
-                    Parse(result);
+                    Parse(e.Result);
                 };
             }
-        }
-
-        internal static void Parse(string versionStr)
-        {
-            if (versionStr == null)
-            {
-                Console.WriteLine(LanguageLines.VersionCheck.ErrorStringNull);
-                return;
-            }
-            VersionWrapper wrapper = JsonConvert.DeserializeObject<VersionWrapper>(versionStr);
-            if (wrapper == null)
-            {
-                Console.WriteLine(LanguageLines.VersionCheck.ErrorWrapperNull);
-                return;
-            }
-            if (wrapper.version == null)
-            {
-                Console.WriteLine(LanguageLines.VersionCheck.ErrorWrapperVersionNull);
-                return;
-            }
-            Version version = new Version(wrapper.version);
-            if (version == null)
-            {
-                Console.WriteLine(LanguageLines.VersionCheck.ErrorVersionNull);
-                return;
-            }
-            if (!version.Equals(QMod.QModManagerVersion) && QModPatcher.erroredMods.Count <= 0)
-            {
-                QModPatcher.dialogversion = version;
-                QModPatcher.ShowDialog();
-            }
-        }
-
-        internal class VersionWrapper
-        {
-            [JsonRequired]
-            internal string version = null;
         }
 
         private static bool CustomRemoteCertificateValidationCallback(object sender,

@@ -8,16 +8,13 @@ namespace QModManager
 {
     internal static class Dialog
     {
-        internal static void Show(string error, Action onLeftButtonPressed = null, Action onRightButtonPressed = null, string leftButtonText = "defaultValueLeft", string rightButtonText = "defaultValueRight", bool blue = false)
+        internal static void Show(string error, Action onLeftButtonPressed = null, Action onRightButtonPressed = null, string leftButtonText = "See Log", string rightButtonText = "Close", bool blue = false)
         {
             uGUI_SceneConfirmation confirmation = uGUI.main.confirmation;
 
             if (onLeftButtonPressed == null) onLeftButtonPressed = () 
                     => Process.Start(Path.Combine(QModPatcher.QModBaseDir, "../Subnautica_Data/output_log.txt"));
             if (onRightButtonPressed == null) onRightButtonPressed = () => { };
-
-            if (leftButtonText == "defaultValueLeft") leftButtonText = LanguageLines.Dialog.DefaultLeft;
-            if (rightButtonText == "defaultValueRight") rightButtonText = LanguageLines.Dialog.DefaultRight;
 
             if (string.IsNullOrEmpty(leftButtonText)) confirmation.yes.gameObject.SetActive(false);
             else confirmation.yes.gameObject.GetComponentInChildren<Text>().text = leftButtonText;

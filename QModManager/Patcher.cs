@@ -1,7 +1,6 @@
 ﻿using Oculus.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -25,14 +24,14 @@ namespace QModManager
             {
                 if (patched)
                 {
-                    Console.WriteLine(LanguageLines.Patcher.CalledMultipleTimes);
+                    Console.WriteLine("\nQMOD WARN: Patch method was called multiple times!");
                     return;
                 }
                 patched = true;
 
                 Hooks.Patch();
                 StartLoadingMods();
-                Hooks.Update += ShowDialog;
+                Hooks.Update += ShowErroredMods;
 
                 VersionCheck.Check();
 
@@ -40,7 +39,7 @@ namespace QModManager
             }
             catch (Exception e)
             {
-                Console.WriteLine(LanguageLines.General.ExceptionCaught);
+                Console.WriteLine("EXCEPTION CAUGHT!");
                 Console.WriteLine(e.ToString());
             }
         }
@@ -136,12 +135,12 @@ namespace QModManager
 
             // Finally, load all the mods after sorting and checking for dependencies. 
             // If anything goes wrong during loading, it is outputted in the log.
-            LoadMods();
+            LoadAllMods();
         }
 
-        internal static void LoadMods()
+        internal static void LoadAllMods()
         {
-            string toWrite = LanguageLines.Patcher.LoadedMods;
+            string toWrite = "\nLoaded mods:\n";
 
             List<QMod> loadingErrorMods = new List<QMod>();
 
@@ -195,7 +194,7 @@ namespace QModManager
 
             if (loadingErrorMods.Count != 0)
             {
-                Console.WriteLine(LanguageLines.Patcher.CouldNotBeLoaded);
+                Console.WriteLine("\nQMOD ERROR: The following mods could not be loaded:\n");
 
                 foreach (QMod mod in loadingErrorMods)
                 {
@@ -212,7 +211,7 @@ namespace QModManager
 
             if (string.IsNullOrEmpty(mod.EntryMethod))
             {
-                Console.WriteLine(LanguageLines.Patcher.EntryMethodMissing + mod.DisplayName);
+                Console.WriteLine($"ERROR! No EntryMethod specified for mod {mod.DisplayName}");
             }
             else
             {
@@ -227,19 +226,19 @@ namespace QModManager
                 }
                 catch (ArgumentNullException e)
                 {
-                    Console.WriteLine(LanguageLines.Patcher.CannotParseEntryMethod1 + mod.EntryMethod + LanguageLines.Patcher.CannotParseEntryMethod2 + mod.Id);
+                    Console.WriteLine($"ERROR! Could not parse entry method {mod.AssemblyName} for mod {mod.DisplayName}");
                     Console.WriteLine(e.ToString());
                     return false;
                 }
                 catch (TargetInvocationException e)
                 {
-                    Console.WriteLine(LanguageLines.Patcher.InvokingEntryMethodFailed1 + mod.EntryMethod + LanguageLines.Patcher.InvokingEntryMethodFailed2 + mod.Id);
+                    Console.WriteLine($"ERROR! Invoking the specified entry method {mod.EntryMethod} failed for mod {mod.Id}");
                     Console.WriteLine(e.ToString());
                     return false;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(LanguageLines.Patcher.UnexpectedError + mod.Id);
+                    Console.WriteLine("ERROR! An unexpected error occurred!");
                     Console.WriteLine(e.ToString());
                     return false;
                 }
@@ -297,7 +296,8 @@ namespace QModManager
 
             if (sortingErrorLoops.Count != 0)
             {
-                Console.WriteLine(LanguageLines.Patcher.SortingErrorLoop);
+                Console.WriteLine("\nQMOD ERROR: There was en error while sorting the following mods!");
+                Console.WriteLine("Please check the 'LoadAfter' and 'LoadBefore' properties of these mods!\n");
 
                 foreach (List<QMod> list in sortingErrorLoops)
                 {
@@ -309,7 +309,7 @@ namespace QModManager
                         if (sortedMods.Contains(mod))
                             sortedMods.Remove(mod);
 
-                        outputStr += mod.Id + LanguageLines.Patcher.SortingErrorLoopSeparator;
+                        outputStr += mod.Id + " -> ";
                     }
 
                     outputStr = outputStr.Substring(0, outputStr.Length - 4);
@@ -491,7 +491,7 @@ namespace QModManager
             // There are missing dependencies! Output them!
             if (missingDependenciesByMod.Count != 0)
             {
-                Console.WriteLine(LanguageLines.Patcher.MissingDependencies);
+                Console.WriteLine("\nQMOD ERROR: The following mods were not loaded due to missing dependencies!\n");
 
                 foreach (var entry in missingDependenciesByMod)
                 {
@@ -500,16 +500,16 @@ namespace QModManager
                         sortedMods.Remove(entry.Key);
 
                     // Build the string to be displayed for this mod
-                    string str = entry.Key.DisplayName + LanguageLines.Patcher.MissingDependenciesPrefix;
+                    string str = entry.Key.DisplayName + " (missing: ";
 
                     foreach (string missingDependencyId in entry.Value)
                     {
-                        str += missingDependencyId + LanguageLines.Patcher.MissingDependenciesSeparator;
+                        str += missingDependencyId + ", ";
                     }
 
                     // Remove the ", " characters at the end of the string
                     str = str.Substring(0, str.Length - 2);
-                    str += LanguageLines.Patcher.MissingDependenciesSuffix;
+                    str += ")";
 
                     Console.WriteLine(str);
                 }
@@ -557,35 +557,24 @@ namespace QModManager
 
         #endregion
 
-        #region Dialog
-
-        internal static Version dialogversion = null;
-
-        internal const string nexusmodsURL = "https://nexusmods.com/subnautica/mods/16";
+        #region Errored mods
 
         internal static float timer = 0f;
 
-        internal static void ShowDialog()
+        internal static void ShowErroredMods()
         {
-            if (erroredMods.Count <= 0 && dialogversion == null) return;
             timer += Time.deltaTime;
             if (timer < 1) return;
-            if (erroredMods.Count == 0)
+            if (erroredMods.Count <= 0) return;
+            string display = "The following mods could not be loaded: ";
+            for (int i = 0; i < erroredMods.Count; i++)
             {
-                Dialog.Show(LanguageLines.Patcher.NewVersionDisplayPrefix + dialogversion.ToString() + LanguageLines.Patcher.NewVersionDisplayCurrent + QMod.QModManagerVersion.ToString() + LanguageLines.Patcher.NewVersionDisplaySuffix, () => Process.Start(nexusmodsURL), leftButtonText: "Download", blue: true);
+                display += erroredMods[i].DisplayName;
+                if (i + 1 != erroredMods.Count) display += ", ";
             }
-            else
-            {
-                string display = LanguageLines.Patcher.ErroredModsDisplayPrefix;
-                for (int i = 0; i < erroredMods.Count; i++)
-                {
-                    display += erroredMods[i].DisplayName;
-                    if (i + 1 != erroredMods.Count) display += LanguageLines.Patcher.ErroredModsDisplaySeparator;
-                }
-                display += LanguageLines.Patcher.ErroredModsDisplaySuffix;
-                Dialog.Show(display);
-            }
-            Hooks.Update -= ShowDialog;
+            display += ". Check the log for details.";
+            Dialog.Show(display);
+            Hooks.Update -= ShowErroredMods;
         }
 
         #endregion

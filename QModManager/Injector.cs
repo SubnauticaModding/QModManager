@@ -34,8 +34,12 @@ namespace QModManager
             {
                 if (IsInjected())
                 {
-                    Console.WriteLine(LanguageLines.Injector.AlreadyInjected);
-                    Console.WriteLine(LanguageLines.General.PressAnyKey);
+                    Console.WriteLine("Tried to install, but it was already injected");
+                    Console.WriteLine("Skipping installation");
+                    Console.WriteLine();
+                    Console.WriteLine("Press any key to exit...");
+                    Console.ReadKey();
+                    Environment.Exit(0);
                 }
 
                 // Remove backup file if it exists
@@ -59,14 +63,16 @@ namespace QModManager
 
                 if (!Directory.Exists(qmodsDirectory)) Directory.CreateDirectory(qmodsDirectory);
 
-                Console.WriteLine(LanguageLines.Injector.Installed);
-                Console.WriteLine(LanguageLines.General.PressAnyKey);
+                Console.WriteLine();
+                Console.WriteLine("QModManager installed successfully");
+                Console.WriteLine();
+                Console.WriteLine("Press any key to exit...");
                 Console.ReadKey();
                 Environment.Exit(0);
             }
             catch (Exception e)
             {
-                Console.WriteLine(LanguageLines.General.ExceptionCaught);
+                Console.WriteLine("EXCEPTION CAUGHT!");
                 Console.WriteLine(e.ToString());
                 Environment.Exit(1);
             }
@@ -78,8 +84,10 @@ namespace QModManager
             {
                 if (!IsInjected())
                 {
-                    Console.WriteLine(LanguageLines.Injector.NotInjected);
-                    Console.WriteLine(LanguageLines.General.PressAnyKey);
+                    Console.WriteLine("Tried to uninstall, but patch was not present");
+                    Console.WriteLine("Skipping uninstallation");
+                    Console.WriteLine();
+                    Console.WriteLine("Press any key to exit...");
                     Console.ReadKey();
                     Environment.Exit(0);
                 }
@@ -127,7 +135,7 @@ namespace QModManager
             }
             catch (Exception e)
             {
-                Console.WriteLine(LanguageLines.General.ExceptionCaught);
+                Console.WriteLine("EXCEPTION CAUGHT!");
                 Console.WriteLine(e.ToString());
             }
         }
