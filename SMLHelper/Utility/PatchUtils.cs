@@ -4,7 +4,7 @@
     using System.Collections;
     using System.Reflection;
 
-    public class PatchUtils
+    public static class PatchUtils
     {
         public static void PatchDictionary(Type type, string name, IDictionary dictionary)
         {

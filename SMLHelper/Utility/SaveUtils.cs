@@ -4,7 +4,7 @@
 
     /* TODO: Maybe add more saving related functions here,
        such as those related to serializing? */
-    public class SaveUtils
+    public static class SaveUtils
     {
         public static string GetCurrentSaveDataDir()
         {

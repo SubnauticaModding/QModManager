@@ -116,6 +116,7 @@
     <Compile Include="Utility\EnumCacheManager.cs" />
     <Compile Include="Utility\ExtBannedIdManager.cs" />
     <Compile Include="Utility\ImageUtils.cs" />
+    <Compile Include="Utility\KeyCodeUtils.cs" />
     <Compile Include="Utility\PrefabUtils.cs" />
     <Compile Include="Utility\ReflectionHelper.cs" />
     <Compile Include="Utility\PatchUtils.cs" />
