@@ -60,7 +60,6 @@
         {
             _options.Add(id, new ModKeybindOption(id, label, device, key));
         }
-
         /// <summary>
         /// Adds a new <see cref="ModKeybindOption"/> to this instance.
         /// </summary>
