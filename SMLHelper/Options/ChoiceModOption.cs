@@ -52,7 +52,7 @@
         /// <param name="index">The starting value.</param>
         protected void AddChoiceOption(string id, string label, string[] options, int index)
         {
-            if (!Validator.ValidateChoiceOption(id, label, options, index)) return;
+            if (!Validator.ValidateChoiceOrDropdownOption(id, label, options, index)) return;
             _options.Add(id, new ModChoiceOption(id, label, options, index));
         }
 

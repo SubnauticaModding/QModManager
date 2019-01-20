@@ -4,7 +4,7 @@
 
     internal static class Validator
     {
-        internal static bool ValidateChoiceOption(string id, string label, string[] options, int index)
+        internal static bool ValidateChoiceOrDropdownOption(string id, string label, string[] options, int index)
         {
             if (!ValidateID(id, out string result))
             {
