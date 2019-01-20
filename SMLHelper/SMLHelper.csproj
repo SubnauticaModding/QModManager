@@ -98,6 +98,7 @@
     <Compile Include="MonoBehaviours\Fixer.cs" />
     <Compile Include="Options\SliderModOption.cs" />
     <Compile Include="Options\ToggleModOption.cs" />
+    <Compile Include="Options\Utility\Validator.cs" />
     <Compile Include="Patchers\ItemsContainerPatcher.cs" />
     <Compile Include="Patchers\OptionsPanelPatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

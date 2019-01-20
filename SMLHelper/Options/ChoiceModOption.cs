@@ -1,5 +1,6 @@
 ﻿namespace SMLHelper.V2.Options
 {
+    using SMLHelper.V2.Options.Utility;
     using System;
     using System.Linq;
 
@@ -51,6 +52,7 @@
         /// <param name="index">The starting value.</param>
         protected void AddChoiceOption(string id, string label, string[] options, int index)
         {
+            if (!Validator.ValidateChoiceOption(id, label, options, index)) return;
             _options.Add(id, new ModChoiceOption(id, label, options, index));
         }
 
