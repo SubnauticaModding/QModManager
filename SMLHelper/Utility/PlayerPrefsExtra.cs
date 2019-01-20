@@ -50,7 +50,7 @@ namespace SMLHelper.V2.Utility
         /// <param name="key"></param>
         public static Color GetColor(string key)
         {
-            return GetColor(key, Color.white);
+            return GetColor(key, new Color(0, 0, 0, 0));
         }
         /// <summary>
         /// Get a <see cref="Color"/> value using <see cref="PlayerPrefs"/>
