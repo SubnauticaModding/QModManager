@@ -4,12 +4,9 @@
     using Options;
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using System.Reflection;
     using UnityEngine;
     using UnityEngine.Events;
-    using UnityEngine.UI;
-    using Utility;
 
     internal class OptionsPanelPatcher
     {
@@ -78,27 +75,6 @@
                     }
                 }
             }
-        }
-
-        internal static GameObject AddBindingOptionWithCallback(uGUI_OptionsPanel panel, int tab, string label, KeyCode key, GameInput.Device device, UnityAction<KeyCode> callback)
-        {
-            GameObject gameObject = panel.AddItem(tab, panel.bindingOptionPrefab);
-            Text text = gameObject.GetComponentInChildren<Text>();
-            if (text != null)
-            {
-                //gameObject.GetComponentInChildren<TranslationLiveUpdate>().translationKey = _label;
-                //text.text = Language.main.Get(_label);
-                text.text = label;
-            }
-            uGUI_Bindings bindings = gameObject.GetComponentInChildren<uGUI_Bindings>();
-            uGUI_Binding binding = bindings.bindings.First();
-            UnityEngine.Object.Destroy(bindings.bindings.Last().gameObject);
-            UnityEngine.Object.Destroy(bindings);
-            binding.device = device;
-            binding.value = KeyCodeUtils.KeyCodeToString(key);
-            binding.onValueChanged.RemoveAllListeners();
-            binding.onValueChanged.AddListener(new UnityAction<string>((string s) => callback?.Invoke(KeyCodeUtils.StringToKeyCode(s))));
-            return gameObject;
         }
     }
 }

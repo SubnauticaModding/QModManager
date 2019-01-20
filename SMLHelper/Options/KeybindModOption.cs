@@ -2,7 +2,10 @@
 {
     using SMLHelper.V2.Utility;
     using System;
+    using System.Linq;
     using UnityEngine;
+    using UnityEngine.Events;
+    using UnityEngine.UI;
 
     /// <summary>
     /// Contains all the information about a keybind changed event.
@@ -92,6 +95,37 @@
         {
             Device = device;
             Key = key;
+        }
+
+        internal static GameObject AddBindingOptionWithCallback(uGUI_OptionsPanel panel, int tab, string label, KeyCode key, GameInput.Device device, UnityAction<KeyCode> callback)
+        {
+            // Add item
+            GameObject gameObject = panel.AddItem(tab, panel.bindingOptionPrefab);
+
+            // Update text
+            Text text = gameObject.GetComponentInChildren<Text>();
+            if (text != null)
+            {
+                gameObject.GetComponentInChildren<TranslationLiveUpdate>().translationKey = label;
+                text.text = Language.main.Get(label);
+                //text.text = label;
+            }
+
+            // Create bindings
+            uGUI_Bindings bindings = gameObject.GetComponentInChildren<uGUI_Bindings>();
+            uGUI_Binding binding = bindings.bindings.First();
+
+            // Destroy secondary bindings
+            UnityEngine.Object.Destroy(bindings.bindings.Last().gameObject);
+            UnityEngine.Object.Destroy(bindings);
+
+            // Update bindings
+            binding.device = device;
+            binding.value = KeyCodeUtils.KeyCodeToString(key);
+            binding.onValueChanged.RemoveAllListeners();
+            binding.onValueChanged.AddListener(new UnityAction<string>((string s) => callback?.Invoke(KeyCodeUtils.StringToKeyCode(s))));
+
+            return gameObject;
         }
     }
 }
