@@ -58,7 +58,7 @@
                         case ModOptionType.Keybind:
                             var keybind = (ModKeybindOption)option;
 
-                            AddBindingOptionWithCallback(optionsPanel, modsTab, keybind.Label, keybind.Key, keybind.Device,
+                            ModKeybindOption.AddBindingOptionWithCallback(optionsPanel, modsTab, keybind.Label, keybind.Key, keybind.Device,
                                 new UnityAction<KeyCode>((KeyCode key) => 
                                     modOption.OnKeybindChange(keybind.Id, key)));
                             break;
