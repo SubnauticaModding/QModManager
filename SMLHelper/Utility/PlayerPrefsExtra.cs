@@ -59,10 +59,10 @@ namespace SMLHelper.V2.Utility
         /// <param name="defaultValue"></param>
         public static Color GetColor(string key, Color defaultValue)
         {
-            float r = PlayerPrefs.GetFloat($"{key}_color_r", defaultValue.r);
-            float g = PlayerPrefs.GetFloat($"{key}_color_g", defaultValue.g);
-            float b = PlayerPrefs.GetFloat($"{key}_color_b", defaultValue.b);
-            float a = PlayerPrefs.GetFloat($"{key}_color_a", defaultValue.a);
+            float r = PlayerPrefs.GetFloat($"{key}_x", defaultValue.r);
+            float g = PlayerPrefs.GetFloat($"{key}_y", defaultValue.g);
+            float b = PlayerPrefs.GetFloat($"{key}_z", defaultValue.b);
+            float a = PlayerPrefs.GetFloat($"{key}_w", defaultValue.a);
 
             return new Color(r, g, b, a);
         }
@@ -73,10 +73,10 @@ namespace SMLHelper.V2.Utility
         /// <param name="value"></param>
         public static void SetColor(string key, Color value)
         {
-            PlayerPrefs.SetFloat($"{key}_color_r", value.r);
-            PlayerPrefs.SetFloat($"{key}_color_g", value.g);
-            PlayerPrefs.SetFloat($"{key}_color_b", value.b);
-            PlayerPrefs.SetFloat($"{key}_color_a", value.a);
+            PlayerPrefs.SetFloat($"{key}_x", value.r);
+            PlayerPrefs.SetFloat($"{key}_y", value.g);
+            PlayerPrefs.SetFloat($"{key}_z", value.b);
+            PlayerPrefs.SetFloat($"{key}_w", value.a);
         }
 
         /// <summary>
@@ -96,8 +96,8 @@ namespace SMLHelper.V2.Utility
         /// <returns></returns>
         public static Vector2 GetVector2(string key, Vector2 defaultValue)
         {
-            float x = PlayerPrefs.GetFloat($"{key}_vector2_x", defaultValue.x);
-            float y = PlayerPrefs.GetFloat($"{key}_vector2_y", defaultValue.y);
+            float x = PlayerPrefs.GetFloat($"{key}_x", defaultValue.x);
+            float y = PlayerPrefs.GetFloat($"{key}_y", defaultValue.y);
 
             return new Vector2(x, y);
         }
@@ -108,8 +108,8 @@ namespace SMLHelper.V2.Utility
         /// <param name="value"></param>
         public static void SetVector2(string key, Vector2 value)
         {
-            PlayerPrefs.SetFloat($"{key}_vector2_x", value.x);
-            PlayerPrefs.SetFloat($"{key}_vector2_y", value.y);
+            PlayerPrefs.SetFloat($"{key}_x", value.x);
+            PlayerPrefs.SetFloat($"{key}_y", value.y);
         }
 
         /// <summary>
@@ -162,9 +162,9 @@ namespace SMLHelper.V2.Utility
         /// <returns></returns>
         public static Vector3 GetVector3(string key, Vector3 defaultValue)
         {
-            float x = PlayerPrefs.GetFloat($"{key}_vector3_x", defaultValue.x);
-            float y = PlayerPrefs.GetFloat($"{key}_vector3_y", defaultValue.y);
-            float z = PlayerPrefs.GetFloat($"{key}_vector3_z", defaultValue.z);
+            float x = PlayerPrefs.GetFloat($"{key}_x", defaultValue.x);
+            float y = PlayerPrefs.GetFloat($"{key}_y", defaultValue.y);
+            float z = PlayerPrefs.GetFloat($"{key}_z", defaultValue.z);
 
             return new Vector3(x, y, z);
         }
@@ -175,9 +175,9 @@ namespace SMLHelper.V2.Utility
         /// <param name="value"></param>
         public static void SetVector3(string key, Vector3 value)
         {
-            PlayerPrefs.SetFloat($"{key}_vector3_x", value.x);
-            PlayerPrefs.SetFloat($"{key}_vector3_y", value.y);
-            PlayerPrefs.SetFloat($"{key}_vector3_z", value.z);
+            PlayerPrefs.SetFloat($"{key}_x", value.x);
+            PlayerPrefs.SetFloat($"{key}_y", value.y);
+            PlayerPrefs.SetFloat($"{key}_z", value.z);
         }
 
         /// <summary>
@@ -197,10 +197,10 @@ namespace SMLHelper.V2.Utility
         /// <returns></returns>
         public static Vector4 GetVector4(string key, Vector4 defaultValue)
         {
-            float x = PlayerPrefs.GetFloat($"{key}_vector4_x", defaultValue.x);
-            float y = PlayerPrefs.GetFloat($"{key}_vector4_y", defaultValue.y);
-            float z = PlayerPrefs.GetFloat($"{key}_vector4_z", defaultValue.z);
-            float w = PlayerPrefs.GetFloat($"{key}_vector4_w", defaultValue.w);
+            float x = PlayerPrefs.GetFloat($"{key}_x", defaultValue.x);
+            float y = PlayerPrefs.GetFloat($"{key}_y", defaultValue.y);
+            float z = PlayerPrefs.GetFloat($"{key}_z", defaultValue.z);
+            float w = PlayerPrefs.GetFloat($"{key}_w", defaultValue.w);
 
             return new Vector4(x, y, z, w);
         }
@@ -211,10 +211,10 @@ namespace SMLHelper.V2.Utility
         /// <param name="value"></param>
         public static void SetVector4(string key, Vector4 value)
         {
-            PlayerPrefs.SetFloat($"{key}_vector4_x", value.x);
-            PlayerPrefs.SetFloat($"{key}_vector4_y", value.y);
-            PlayerPrefs.SetFloat($"{key}_vector4_z", value.z);
-            PlayerPrefs.SetFloat($"{key}_vector4_w", value.w);
+            PlayerPrefs.SetFloat($"{key}_x", value.x);
+            PlayerPrefs.SetFloat($"{key}_y", value.y);
+            PlayerPrefs.SetFloat($"{key}_z", value.z);
+            PlayerPrefs.SetFloat($"{key}_w", value.w);
         }
     }
 }
