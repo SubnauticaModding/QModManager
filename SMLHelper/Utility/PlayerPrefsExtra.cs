@@ -144,5 +144,42 @@ namespace SMLHelper.V2.Utility
             PlayerPrefs.SetFloat($"{key}_vector3_y", value.y);
             PlayerPrefs.SetFloat($"{key}_vector3_z", value.z);
         }
+
+        /// <summary>
+        /// Get a <see cref="Vector4"/> value using <see cref="PlayerPrefs"/>
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static Vector4 GetVector4(string key)
+        {
+            return GetVector4(key, Vector4.zero);
+        }
+        /// <summary>
+        /// Get a <see cref="Vector4"/> value using <see cref="PlayerPrefs"/>
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public static Vector4 GetVector4(string key, Vector4 defaultValue)
+        {
+            float x = PlayerPrefs.GetFloat($"{key}_vector4_x", defaultValue.x);
+            float y = PlayerPrefs.GetFloat($"{key}_vector4_y", defaultValue.y);
+            float z = PlayerPrefs.GetFloat($"{key}_vector4_z", defaultValue.z);
+            float w = PlayerPrefs.GetFloat($"{key}_vector4_w", defaultValue.w);
+
+            return new Vector4(x, y, z, w);
+        }
+        /// <summary>
+        /// Set a <see cref="Vector4"/> value using <see cref="PlayerPrefs"/>
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public static void SetVector4(string key, Vector4 value)
+        {
+            PlayerPrefs.SetFloat($"{key}_vector4_x", value.x);
+            PlayerPrefs.SetFloat($"{key}_vector4_y", value.y);
+            PlayerPrefs.SetFloat($"{key}_vector4_z", value.z);
+            PlayerPrefs.SetFloat($"{key}_vector4_w", value.w);
+        }
     }
 }
