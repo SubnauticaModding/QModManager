@@ -1,10 +1,7 @@
 ﻿namespace SMLHelper.V2.Options
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using UnityEngine;
-
     /// <summary>
     /// Indicates how the option is interacted with by the user.
     /// </summary>
