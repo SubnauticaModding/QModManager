@@ -1,6 +1,7 @@
 ﻿namespace SMLHelper.V2.Options
 {
     using System;
+    using System.Linq;
 
     /// <summary>
     /// Contains all the information about a choice changed event.
@@ -51,6 +52,59 @@
         protected void AddChoiceOption(string id, string label, string[] options, int index)
         {
             _options.Add(id, new ModChoiceOption(id, label, options, index));
+        }
+
+        /// <summary>
+        /// Adds a new <see cref="ModChoiceOption"/> to this instance.
+        /// </summary>
+        /// <param name="id">The internal ID for the choice option.</param>
+        /// <param name="label">The display text to use in the in-game menu.</param>
+        /// <param name="options">The collection of available values.</param>
+        /// <param name="value">The starting value.</param>
+        protected void AddChoiceOption(string id, string label, string[] options, string value)
+        {
+            int index = Array.IndexOf(options, value);
+            AddChoiceOption(id, label, options, index);
+        }
+
+        /// <summary>
+        /// Adds a new <see cref="ModChoiceOption"/> to this instance.
+        /// </summary>
+        /// <param name="id">The internal ID for the choice option.</param>
+        /// <param name="label">The display text to use in the in-game menu.</param>
+        /// <param name="options">The collection of available values.</param>
+        /// <param name="index">The starting value.</param>
+        protected void AddChoiceOption(string id, string label, object[] options, int index)
+        {
+            AddChoiceOption(id, label, options.Select(obj => obj.ToString()).ToArray(), index);
+        }
+
+        /// <summary>
+        /// Adds a new <see cref="ModChoiceOption"/> to this instance.
+        /// </summary>
+        /// <param name="id">The internal ID for the choice option.</param>
+        /// <param name="label">The display text to use in the in-game menu.</param>
+        /// <param name="options">The collection of available values.</param>
+        /// <param name="value">The starting value.</param>
+        protected void AddChoiceOption(string id, string label, object[] options, object value)
+        {
+            int index = Array.IndexOf(options, value);
+            AddChoiceOption(id, label, options, index);
+        }
+
+        /// <summary>
+        /// Adds a new <see cref="ModChoiceOption"/> to this instance, automatically using the values of an enum
+        /// </summary>
+        /// <typeparam name="T">The enum which will be used to populate the options</typeparam>
+        /// <param name="id">The internal ID for the choice option.</param>
+        /// <param name="label">The display text to use in the in-game menu.</param>
+        /// <param name="value">The starting value</param>
+        protected void AddChoiceOption<T>(string id, string label, T value) where T : Enum
+        {
+            string[] options = Enum.GetNames(typeof(T));
+            string valueString = value.ToString();
+
+            AddChoiceOption(id, label, options, valueString);
         }
     }
 
