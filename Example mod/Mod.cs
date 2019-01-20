@@ -3,7 +3,7 @@ using SMLHelper.V2.Options;
 using SMLHelper.V2.Utility;
 using UnityEngine;
 
-namespace SMLHelper.Examples
+namespace SMLHelper.V2.Examples
 {
     public static class ExampleMod
     {
@@ -28,7 +28,7 @@ namespace SMLHelper.Examples
             DropdownIndex = PlayerPrefs.GetInt("SMLHelperExampleModDropdown", 0);
             KeybindKey = KeyCodeUtils.StringToKeyCode(PlayerPrefs.GetString("SMLHelperExampleModKeybind", "X"));
             SliderValue = PlayerPrefs.GetFloat("SMLHelperExampleModSlider", 50f);
-            ToggleValue = PlayerPrefs.GetInt("SMLHelperExampleModToggle", 1) == 1 ? true : false;
+            ToggleValue = PlayerPrefsExtra.GetBool("SMLHelperExampleModToggle", true);
         }
     }
 
@@ -71,7 +71,7 @@ namespace SMLHelper.Examples
         {
             if (e.Id != "exampleToggle") return;
             Config.ToggleValue = e.Value;
-            PlayerPrefs.SetInt("SMLHelperExampleModToggle", e.Value == true ? 1 : 0);
+            PlayerPrefsExtra.SetBool("SMLHelperExampleModToggle", e.Value);
         }
 
         public override void BuildModOptions()
