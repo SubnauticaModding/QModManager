@@ -109,5 +109,40 @@ namespace SMLHelper.V2.Utility
             PlayerPrefs.SetInt($"{key}_vector2int_x", value.x);
             PlayerPrefs.SetInt($"{key}_vector2int_y", value.y);
         }
+
+        /// <summary>
+        /// Get a <see cref="Vector3"/> value using <see cref="PlayerPrefs"/>
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static Vector3 GetVector3(string key)
+        {
+            return GetVector3(key, Vector3.zero);
+        }
+        /// <summary>
+        /// Get a <see cref="Vector3"/> value using <see cref="PlayerPrefs"/>
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public static Vector3 GetVector3(string key, Vector3 defaultValue)
+        {
+            float x = PlayerPrefs.GetFloat($"{key}_vector3_x", defaultValue.x);
+            float y = PlayerPrefs.GetFloat($"{key}_vector3_y", defaultValue.y);
+            float z = PlayerPrefs.GetFloat($"{key}_vector3_z", defaultValue.z);
+
+            return new Vector3(x, y, z);
+        }
+        /// <summary>
+        /// Set a <see cref="Vector3"/> value using <see cref="PlayerPrefs"/>
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public static void SetVector3(string key, Vector3 value)
+        {
+            PlayerPrefs.SetFloat($"{key}_vector3_x", value.x);
+            PlayerPrefs.SetFloat($"{key}_vector3_y", value.y);
+            PlayerPrefs.SetFloat($"{key}_vector3_z", value.z);
+        }
     }
 }
