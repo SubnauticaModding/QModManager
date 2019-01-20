@@ -76,5 +76,38 @@ namespace SMLHelper.V2.Utility
             PlayerPrefs.SetFloat($"{key}_vector2_x", value.x);
             PlayerPrefs.SetFloat($"{key}_vector2_y", value.y);
         }
+
+        /// <summary>
+        /// Get a <see cref="Vector2int"/> value using <see cref="PlayerPrefs"/>
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static Vector2int GetVector2int(string key)
+        {
+            return GetVector2int(key, new Vector2int(0, 0));
+        }
+        /// <summary>
+        /// Get a <see cref="Vector2int"/> value using <see cref="PlayerPrefs"/>
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public static Vector2int GetVector2int(string key, Vector2int defaultValue)
+        {
+            int x = PlayerPrefs.GetInt($"{key}_vector2int_x", defaultValue.x);
+            int y = PlayerPrefs.GetInt($"{key}_vector2int_y", defaultValue.y);
+
+            return new Vector2int(x, y);
+        }
+        /// <summary>
+        /// Set a <see cref="Vector2int"/> value using <see cref="PlayerPrefs"/>
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public static void SetVector2int(string key, Vector2int value)
+        {
+            PlayerPrefs.SetInt($"{key}_vector2int_x", value.x);
+            PlayerPrefs.SetInt($"{key}_vector2int_y", value.y);
+        }
     }
 }
