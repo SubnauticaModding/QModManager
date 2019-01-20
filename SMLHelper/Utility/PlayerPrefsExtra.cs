@@ -216,5 +216,42 @@ namespace SMLHelper.V2.Utility
             PlayerPrefs.SetFloat($"{key}_z", value.z);
             PlayerPrefs.SetFloat($"{key}_w", value.w);
         }
+
+        /// <summary>
+        /// Get a <see cref="Quaternion"/> value using <see cref="PlayerPrefs"/>
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public static Quaternion GetQuaternion(string key)
+        {
+            return GetQuaternion(key, Quaternion.identity);
+        }
+        /// <summary>
+        /// Get a <see cref="Quaternion"/> value using <see cref="PlayerPrefs"/>
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public static Quaternion GetQuaternion(string key, Quaternion defaultValue)
+        {
+            float x = PlayerPrefs.GetFloat($"{key}_x", defaultValue.x);
+            float y = PlayerPrefs.GetFloat($"{key}_y", defaultValue.y);
+            float z = PlayerPrefs.GetFloat($"{key}_z", defaultValue.z);
+            float w = PlayerPrefs.GetFloat($"{key}_w", defaultValue.w);
+
+            return new Quaternion(x, y, z, w);
+        }
+        /// <summary>
+        /// Set a <see cref="Quaternion"/> value using <see cref="PlayerPrefs"/>
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public static void SetQuaternion(string key, Quaternion value)
+        {
+            PlayerPrefs.SetFloat($"{key}_x", value.x);
+            PlayerPrefs.SetFloat($"{key}_y", value.y);
+            PlayerPrefs.SetFloat($"{key}_z", value.z);
+            PlayerPrefs.SetFloat($"{key}_w", value.w);
+        }
     }
 }
