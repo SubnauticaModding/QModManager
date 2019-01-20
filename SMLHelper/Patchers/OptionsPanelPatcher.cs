@@ -62,13 +62,6 @@
                                 new UnityAction<KeyCode>((KeyCode key) => 
                                     modOption.OnKeybindChange(keybind.Id, key)));
                             break;
-                        case ModOptionType.Dropdown:
-                            var dropdown = (ModDropdownOption)option;
-
-                            optionsPanel.AddDropdownOption(modsTab, dropdown.Label, dropdown.Options, dropdown.Index,
-                                new UnityAction<int>((int index) =>
-                                    modOption.OnDropdownChange(dropdown.Id, index)));
-                            break;
                         default:
                             V2.Logger.Log($"Invalid ModOptionType detected for option: {option.Id} ({option.Type.ToString()})");
                             break;

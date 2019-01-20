@@ -28,11 +28,6 @@
         /// The option uses a keybind field that can be changed to a certain keyt
         /// </summary>
         Keybind,
-
-        /// <summary>
-        /// The option uses a selection of one of a discrete number of possible values.
-        /// </summary>
-        Dropdown,
     }
 
     /// <summary>

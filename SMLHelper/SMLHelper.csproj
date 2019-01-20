@@ -92,7 +92,6 @@
     <Compile Include="Legacy\Patchers\KnownTechPatcher.cs" />
     <Compile Include="Legacy\Patchers\LanguagePatcher.cs" />
     <Compile Include="Options\ChoiceModOption.cs" />
-    <Compile Include="Options\DropdownModOption.cs" />
     <Compile Include="Options\KeybindModOption.cs" />
     <Compile Include="Options\ModOptions.cs" />
     <Compile Include="MonoBehaviours\Fixer.cs" />
