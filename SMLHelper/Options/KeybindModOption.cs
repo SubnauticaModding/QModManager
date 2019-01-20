@@ -1,5 +1,6 @@
 ﻿namespace SMLHelper.V2.Options
 {
+    using SMLHelper.V2.Utility;
     using System;
     using UnityEngine;
 
@@ -18,10 +19,16 @@
         /// </summary>
         public KeyCode Key { get; }
 
+        /// <summary>
+        /// The new value for the <see cref="ModKeybindOption"/> parsed as a <see cref="string"/>
+        /// </summary>
+        public string KeyName { get; }
+
         public KeybindChangedEventArgs(string id, KeyCode key)
         {
             Id = id;
             Key = key;
+            KeyName = KeyCodeUtils.KeyCodeToString(key);
         }
     }
 
@@ -52,6 +59,18 @@
         protected void AddKeybindOption(string id, string label, GameInput.Device device, KeyCode key)
         {
             _options.Add(id, new ModKeybindOption(id, label, device, key));
+        }
+
+        /// <summary>
+        /// Adds a new <see cref="ModKeybindOption"/> to this instance.
+        /// </summary>
+        /// <param name="id">The internal ID for the toggle option.</param>
+        /// <param name="label">The display text to use in the in-game menu.</param>
+        /// <param name="device">The device name.</param>
+        /// <param name="key">The starting keybind value.</param>
+        protected void AddKeybindOption(string id, string label, GameInput.Device device, string key)
+        {
+            AddKeybindOption(id, label, device, KeyCodeUtils.StringToKeyCode(key));
         }
     }
 

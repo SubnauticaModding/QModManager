@@ -19,7 +19,7 @@
         public float Value { get; }
 
         /// <summary>
-        /// The new value for the <see cref="ModSliderOption"/> parsed as an integer.
+        /// The new value for the <see cref="ModSliderOption"/> parsed as an <see cref="int"/>
         /// </summary>
         public int IntegerValue { get; }
 
