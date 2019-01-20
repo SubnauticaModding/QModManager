@@ -1,0 +1,9 @@
+{
+  "Id": "SMLHelperExampleMod",
+  "DisplayName": "Example Mod for SMLHelper",
+  "Author": "AlexejheroYTB",
+  "Version": "Updated for the latest version of SMLHelper",
+  "Enable": true,
+  "AssemblyName": "Example mod.dll",
+  "EntryMethod": "SMLHelper.V2.Examples.ExampleMod.Patch"
+}
