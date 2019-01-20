@@ -1,6 +1,7 @@
 ﻿namespace SMLHelper.V2.Options
 {
     using System;
+    using UnityEngine;
 
     /// <summary>
     /// Contains all the information about a slider changed event.
@@ -17,10 +18,16 @@
         /// </summary>
         public float Value { get; }
 
+        /// <summary>
+        /// The new value for the <see cref="ModSliderOption"/> parsed as an integer.
+        /// </summary>
+        public int IntegerValue { get; }
+
         public SliderChangedEventArgs(string id, float value)
         {
             Id = id;
             Value = value;
+            IntegerValue = Mathf.RoundToInt(value);
         }
     }
 
