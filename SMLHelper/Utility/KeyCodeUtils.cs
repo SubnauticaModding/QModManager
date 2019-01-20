@@ -5,6 +5,11 @@
 
     public static class KeyCodeUtils
     {
+        /// <summary>
+        /// Turn a <seealso cref="KeyCode"/> into a <seealso cref="string"/>
+        /// </summary>
+        /// <param name="keyCode"></param>
+        /// <returns></returns>
         public static string KeyCodeToString(KeyCode keyCode)
         {
             switch (keyCode)
@@ -60,6 +65,11 @@
             }
         }
 
+        /// <summary>
+        /// Turn a <seealso cref="string"/> into a <seealso cref="KeyCode"/>
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
         public static KeyCode StringToKeyCode(string s)
         {
             switch (s)
