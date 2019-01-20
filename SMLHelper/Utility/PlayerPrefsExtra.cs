@@ -45,6 +45,41 @@ namespace SMLHelper.V2.Utility
         }
 
         /// <summary>
+        /// Get a <see cref="Color"/> value using <see cref="PlayerPrefs"/>
+        /// </summary>
+        /// <param name="key"></param>
+        public static Color GetColor(string key)
+        {
+            return GetColor(key, Color.white);
+        }
+        /// <summary>
+        /// Get a <see cref="Color"/> value using <see cref="PlayerPrefs"/>
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="defaultValue"></param>
+        public static Color GetColor(string key, Color defaultValue)
+        {
+            float r = PlayerPrefs.GetFloat($"{key}_color_r", defaultValue.r);
+            float g = PlayerPrefs.GetFloat($"{key}_color_g", defaultValue.g);
+            float b = PlayerPrefs.GetFloat($"{key}_color_b", defaultValue.b);
+            float a = PlayerPrefs.GetFloat($"{key}_color_a", defaultValue.a);
+
+            return new Color(r, g, b, a);
+        }
+        /// <summary>
+        /// Set a <see cref="Color"/> value using <see cref="PlayerPrefs"/>
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="value"></param>
+        public static void SetColor(string key, Color value)
+        {
+            PlayerPrefs.SetFloat($"{key}_color_r", value.r);
+            PlayerPrefs.SetFloat($"{key}_color_g", value.g);
+            PlayerPrefs.SetFloat($"{key}_color_b", value.b);
+            PlayerPrefs.SetFloat($"{key}_color_a", value.a);
+        }
+
+        /// <summary>
         /// Get a <see cref="Vector2"/> value using <see cref="PlayerPrefs"/>
         /// </summary>
         /// <param name="key"></param>
