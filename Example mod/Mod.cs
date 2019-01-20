@@ -17,7 +17,6 @@ namespace SMLHelper.V2.Examples
     public static class Config
     {
         public static int ChoiceIndex;
-        public static int DropdownIndex;
         public static KeyCode KeybindKey;
         public static float SliderValue;
         public static bool ToggleValue;
@@ -25,7 +24,6 @@ namespace SMLHelper.V2.Examples
         public static void Load()
         {
             ChoiceIndex = PlayerPrefs.GetInt("SMLHelperExampleModChoice", 0);
-            DropdownIndex = PlayerPrefs.GetInt("SMLHelperExampleModDropdown", 0);
             KeybindKey = PlayerPrefsExtra.GetKeyCode("SMLHelperExampleModKeybind", KeyCode.X);
             SliderValue = PlayerPrefs.GetFloat("SMLHelperExampleModSlider", 50f);
             ToggleValue = PlayerPrefsExtra.GetBool("SMLHelperExampleModToggle", true);
@@ -37,7 +35,6 @@ namespace SMLHelper.V2.Examples
         public Options() : base("SMLHelper Example Mod")
         {
             ChoiceChanged += Options_ChoiceChanged;
-            DropdownChanged += Options_DropdownChanged;
             KeybindChanged += Options_KeybindChanged;
             SliderChanged += Options_SliderChanged;
             ToggleChanged += Options_ToggleChanged;
@@ -48,12 +45,6 @@ namespace SMLHelper.V2.Examples
             if (e.Id != "exampleChoice") return;
             Config.ChoiceIndex = e.Index;
             PlayerPrefs.SetInt("SMLHelperExampleModChoice", e.Index);
-        }
-        public void Options_DropdownChanged(object sender, DropdownChangedEventArgs e)
-        {
-            if (e.Id != "exampleDropdown") return;
-            Config.DropdownIndex = e.Index;
-            PlayerPrefs.SetInt("SMLHelperExampleModDropdown", e.Index);
         }
         public void Options_KeybindChanged(object sender, KeybindChangedEventArgs e)
         {
@@ -77,7 +68,6 @@ namespace SMLHelper.V2.Examples
         public override void BuildModOptions()
         {
             AddChoiceOption("exampleChoice", "Choice", new string[] { "Choice 1", "Choice 2", "Choice 3" }, Config.ChoiceIndex);
-            AddDropdownOption("exampleDropdown", "Dropdown", new string[] { "Dropdown 1", "Dropdown 2", "Dropdown 3" }, Config.DropdownIndex);
             AddKeybindOption("exampleKeybind", "Keybind", GameInput.Device.Keyboard, Config.KeybindKey);
             AddSliderOption("exampleSlider", "Slider", 0, 100, Config.SliderValue);
             AddToggleOption("exampleToggle", "Toggle", Config.ToggleValue);
