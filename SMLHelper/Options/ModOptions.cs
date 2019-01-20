@@ -2,6 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using UnityEngine;
+
     /// <summary>
     /// Indicates how the option is interacted with by the user.
     /// </summary>
@@ -73,7 +75,7 @@
         /// <summary>
         /// <para>Builds up the configuration the options.</para>
         /// <para>This method should be composed of calls into the following methods: 
-        /// <seealso cref="AddSliderOption"/> | <seealso cref="AddToggleOption"/> | <seealso cref="AddChoiceOption"/> | <seealso cref="AddKeybindOption"/> | <seealso cref="AddDropdownOption"/>.</para>
+        /// <seealso cref="AddSliderOption"/> | <seealso cref="AddToggleOption"/> | <seealso cref="AddChoiceOption(string, string, string[], int)"/> | <seealso cref="AddKeybindOption(string, string, GameInput.Device, KeyCode)"/> | <seealso cref="AddDropdownOption(string, string, string[], int)"/>.</para>
         /// <para>Make sure you have subscribed to the events in the constructor to handle what happens when the value is changed:
         /// <seealso cref="SliderChanged"/> | <seealso cref="ToggleChanged"/> | <seealso cref="ChoiceChanged"/> | <seealso cref="KeybindChanged"/> | <seealso cref="DropdownChanged"/>.</para>
         /// </summary>
