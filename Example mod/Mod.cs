@@ -26,7 +26,7 @@ namespace SMLHelper.V2.Examples
         {
             ChoiceIndex = PlayerPrefs.GetInt("SMLHelperExampleModChoice", 0);
             DropdownIndex = PlayerPrefs.GetInt("SMLHelperExampleModDropdown", 0);
-            KeybindKey = KeyCodeUtils.StringToKeyCode(PlayerPrefs.GetString("SMLHelperExampleModKeybind", "X"));
+            KeybindKey = PlayerPrefsExtra.GetKeyCode("SMLHelperExampleModKeybind", KeyCode.X);
             SliderValue = PlayerPrefs.GetFloat("SMLHelperExampleModSlider", 50f);
             ToggleValue = PlayerPrefsExtra.GetBool("SMLHelperExampleModToggle", true);
         }
@@ -59,7 +59,7 @@ namespace SMLHelper.V2.Examples
         {
             if (e.Id != "exampleKeybind") return;
             Config.KeybindKey = e.Key;
-            PlayerPrefs.SetString("SMLHelperExampleModKeybind", KeyCodeUtils.KeyCodeToString(e.Key));
+            PlayerPrefsExtra.SetKeyCode("SMLHelperExampleModKeybind", e.Key);
         }
         public void Options_SliderChanged(object sender, SliderChangedEventArgs e)
         {
