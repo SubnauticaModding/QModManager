@@ -56,7 +56,7 @@
 
                             optionsPanel.AddChoiceOption(modsTab, choice.Label, choice.Options, choice.Index,
                                 new UnityAction<int>((int index) =>
-                                    modOption.OnChoiceChange(choice.Id, index)));
+                                    modOption.OnChoiceChange(choice.Id, index, choice.Options[index])));
                             break;
                         case ModOptionType.Keybind:
                             var keybind = (ModKeybindOption)option;

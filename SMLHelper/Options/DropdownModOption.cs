@@ -19,10 +19,21 @@
         /// </summary>
         public int Index { get; }
 
+        /// <summary>
+        /// The value of the <see cref="ModChoiceOption"/> as a string
+        /// </summary>
+        public string Value { get; }
+
         public DropdownChangedEventArgs(string id, int index)
         {
             Id = id;
             Index = index;
+        }
+        public DropdownChangedEventArgs(string id, int index, string value)
+        {
+            Id = id;
+            Index = index;
+            Value = value;
         }
     }
 
@@ -42,6 +53,16 @@
         {
             DropdownChanged(this, new DropdownChangedEventArgs(id, indexValue));
         }
+        /// <summary>
+        /// Notifies a choice change to all subscribed event handlers.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="indexValue"></param>
+        /// <param name="value"></param>
+        internal void OnDropdownChange(string id, int indexValue, string value)
+        {
+            DropdownChanged(this, new DropdownChangedEventArgs(id, indexValue, value));
+        }
 
         /// <summary>
         /// Adds a new <see cref="ModDropdownOption"/> to this instance.
@@ -55,7 +76,6 @@
             if (!Validator.ValidateChoiceOrDropdownOption(id, label, options, index)) return;
             _options.Add(id, new ModDropdownOption(id, label, options, index));
         }
-
         /// <summary>
         /// Adds a new <see cref="ModDropdownOption"/> to this instance.
         /// </summary>
@@ -68,7 +88,6 @@
             int index = Array.IndexOf(options, value);
             AddDropdownOption(id, label, options, index);
         }
-
         /// <summary>
         /// Adds a new <see cref="ModDropdownOption"/> to this instance.
         /// </summary>
@@ -80,7 +99,6 @@
         {
             AddDropdownOption(id, label, options.Select(obj => obj.ToString()).ToArray(), index);
         }
-
         /// <summary>
         /// Adds a new <see cref="ModDropdownOption"/> to this instance.
         /// </summary>
@@ -93,7 +111,6 @@
             int index = Array.IndexOf(options, value);
             AddDropdownOption(id, label, options, index);
         }
-
         /// <summary>
         /// Adds a new <see cref="ModDropdownOption"/> to this instance, automatically using the values of an enum
         /// </summary>
