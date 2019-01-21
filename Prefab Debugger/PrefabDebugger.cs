@@ -43,8 +43,7 @@ namespace BlueFire.Debugger
 
         public static void Main()
         {
-            HarmonyInstance harmony = HarmonyInstance.Create("bluefire.prefabdebugger");
-            harmony.PatchAll(Assembly.GetExecutingAssembly());
+            new GameObject("PrefabDebugger").AddComponent<PrefabDebugger>();
         }
 
         void Start()

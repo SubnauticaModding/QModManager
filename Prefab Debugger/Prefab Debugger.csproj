@@ -54,7 +54,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PrefabDebuggerPatch.cs" />
     <Compile Include="HierarchyItem.cs" />
     <Compile Include="LogMessage.cs" />
     <Compile Include="PrefabDebugger.cs" />

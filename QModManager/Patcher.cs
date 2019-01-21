@@ -30,8 +30,12 @@ namespace QModManager
                 patched = true;
 
                 Hooks.Patch();
+
                 StartLoadingMods();
+
                 Hooks.Update += ShowErroredMods;
+
+                Hooks.Start += PrefabDebugger.PrefabDebugger.Main;
 
                 Hooks.OnLoadEnd();
             }
