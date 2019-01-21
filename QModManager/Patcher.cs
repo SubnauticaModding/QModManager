@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using QModManager.PrefabDebugger;
+using QModManager.Debugger;
 
 namespace QModManager
 {
@@ -36,7 +36,7 @@ namespace QModManager
 
                 Hooks.Update += ShowErroredMods;
 
-                Hooks.Start += PrefabDebugger.PrefabDebugger.Main;
+                Hooks.Start += PrefabDebugger.Main;
 
                 Hooks.OnLoadEnd();
             }

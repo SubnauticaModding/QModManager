@@ -6,7 +6,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace QModManager.PrefabDebugger
+namespace QModManager.Debugger
 {
     public class PrefabDebugger : MonoBehaviour
     {

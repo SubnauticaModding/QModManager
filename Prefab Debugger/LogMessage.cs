@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace QModManager.PrefabDebugger
+namespace QModManager.Debugger
 {
     public class LogMessage
     {

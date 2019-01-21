@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace QModManager.PrefabDebugger
+namespace QModManager.Debugger
 {
     public class TreeNode<T>
     {
