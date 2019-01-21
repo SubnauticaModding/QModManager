@@ -29,17 +29,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="0Harmony">
-      <HintPath>..\Dependencies\0Harmony.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="0Harmony-1.2.0.1">
+      <HintPath>..\Installer\0Harmony-1.2.0.1.dll</HintPath>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\Dependencies\Assembly-CSharp.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\Dependencies\Assembly-CSharp-firstpass.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,17 +54,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Patcher\PrefabDebuggerPatch.cs" />
-    <Compile Include="Prefab Debugger\HierarchyItem.cs" />
-    <Compile Include="Prefab Debugger\LogMessage.cs" />
-    <Compile Include="Prefab Debugger\PrefabDebugger.cs" />
-    <Compile Include="Prefab Debugger\Tree.cs" />
+    <Compile Include="PrefabDebuggerPatch.cs" />
+    <Compile Include="HierarchyItem.cs" />
+    <Compile Include="LogMessage.cs" />
+    <Compile Include="PrefabDebugger.cs" />
+    <Compile Include="Tree.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="mod.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="PrefabDebugger.unity3d">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
