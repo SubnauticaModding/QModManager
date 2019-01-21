@@ -1,0 +1,3 @@
+[submodule "PrefabDebugger"]
+	path = PrefabDebugger
+	url = https://github.com/QModManager/PrefabDebugger
