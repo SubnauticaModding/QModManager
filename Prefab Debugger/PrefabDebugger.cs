@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using Harmony;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using System.Reflection;
-using System.IO;
 
-
-
-namespace BlueFire.Debugger
+namespace QModManager.PrefabDebugger
 {
     public class PrefabDebugger : MonoBehaviour
     {
