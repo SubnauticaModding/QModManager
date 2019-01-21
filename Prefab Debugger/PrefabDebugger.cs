@@ -224,7 +224,6 @@ namespace QModManager.Debugger
             }
         }
 
-
         private void DisplayComponentProperties(object comp)
         {
             foreach (var property in comp.GetType().GetProperties())
@@ -286,9 +285,9 @@ namespace QModManager.Debugger
                                         property.SetValue(comp, (int)(value) + 1, null);
                                     }
                                 }
-                                catch (Exception e)
+                                catch
                                 {
-                                    UnityEngine.Debug.Log("Kill me, expected error :D");
+                                    Debug.Log("Kill me, expected error :D");
                                 }
                             }
                         }
@@ -355,7 +354,7 @@ namespace QModManager.Debugger
 
                     GUILayout.EndHorizontal();
                 }
-                catch (Exception e)
+                catch
                 {
 
                 }
