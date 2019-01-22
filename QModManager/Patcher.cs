@@ -68,7 +68,7 @@ namespace QModManager
                     Console.WriteLine("There was an error creating the QMods directory");
                     Console.WriteLine("Please make sure that you ran Subnautica from Steam");
                 }
-                try
+                else try
                 {
                     Directory.CreateDirectory(QModBaseDir);
                     Console.WriteLine("QMods directory created successfully!");
