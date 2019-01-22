@@ -1,7 +1,7 @@
 {
   "Id": "SMLHelperExampleMod",
   "DisplayName": "Example Mod For SMLHelper",
-  "Author": "AlexejheroYTB",
+  "Author": "ahk1221 & PrimeSonic & AlexejheroYTB",
   "Version": "Updated for the latest version of SMLHelper",
   "Enable": true,
   "AssemblyName": "Example mod.dll",
