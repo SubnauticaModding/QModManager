@@ -47,7 +47,10 @@ namespace QModManager
                     Environment.Exit(1);
                 }
 
-                if (Directory.GetFiles(directory, "*Subnautica*.exe", SearchOption.TopDirectoryOnly).Length <= 0)
+                bool onWindows = Directory.GetFiles(directory, "*Subnautica*.exe", SearchOption.TopDirectoryOnly).Length > 0;
+                bool onMac = Directory.GetFiles(directory, "*Subnautica*.app", SearchOption.TopDirectoryOnly).Length > 0;
+
+                if (!onWindows && !onMac)
                 {
                     Console.WriteLine("Could not find any game to patch!");
                     Console.WriteLine("An assembly file was found, but no executable was detected.");
@@ -59,7 +62,7 @@ namespace QModManager
                     Environment.Exit(1);
                 }
 
-#warning TODO: Improve injector code. It's 2018 out there...
+#warning TODO: Improve injector code. It's 2019 out there...
                 QModInjector injector = new QModInjector(directory, managedDirectory);
 
                 bool isInjected = injector.IsInjected();
