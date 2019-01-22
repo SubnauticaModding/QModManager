@@ -33,7 +33,6 @@ namespace QModManager
                     else if (arg == "-u") action = Action.Uninstall;
                 }
 
-                string directory = Path.Combine(Environment.CurrentDirectory, @"..\..");
                 string managedDirectory = Environment.CurrentDirectory;
 
                 if (!File.Exists(managedDirectory + "/Assembly-CSharp.dll"))
@@ -47,8 +46,27 @@ namespace QModManager
                     Environment.Exit(1);
                 }
 
-                bool onWindows = Directory.GetFiles(directory, "*Subnautica*.exe", SearchOption.TopDirectoryOnly).Length > 0;
-                bool onMac = Directory.GetFiles(directory, "*Subnautica*.app", SearchOption.TopDirectoryOnly).Length > 0;
+                string windowsDirectory = Path.Combine(Environment.CurrentDirectory, "../..");
+                string macDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../..");
+
+                bool onWindows;
+                try
+                {
+                    onWindows = Directory.GetFiles(windowsDirectory, "*Subnautica*.exe", SearchOption.TopDirectoryOnly).Length > 0;
+                }
+                catch
+                {
+                    onWindows = false;
+                }
+                bool onMac;
+                try
+                {
+                    onMac = Directory.GetFiles(macDirectory, "*Subnautica*.app", SearchOption.TopDirectoryOnly).Length > 0 || Directory.GetDirectories(macDirectory, "*Subnautica*.app", SearchOption.TopDirectoryOnly).Length > 0;
+                }
+                catch
+                {
+                    onMac = false;
+                }
 
                 if (!onWindows && !onMac)
                 {
@@ -63,7 +81,9 @@ namespace QModManager
                 }
 
 #warning TODO: Improve injector code. It's 2019 out there...
-                QModInjector injector = new QModInjector(directory, managedDirectory);
+                QModInjector injector;
+                if (onWindows) injector = new QModInjector(windowsDirectory, managedDirectory);
+                else injector = new QModInjector(macDirectory, managedDirectory);
 
                 bool isInjected = injector.IsInjected();
 
