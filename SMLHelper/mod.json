@@ -7,5 +7,4 @@
   "Priority": "Last",
   "AssemblyName": "SMLHelper.dll",
   "EntryMethod": "SMLHelper.V2.Initializer.Patch",
-  "Config": { }
 }
