@@ -83,7 +83,16 @@ namespace QModManager
 #warning TODO: Improve injector code. It's 2019 out there...
                 QModInjector injector;
                 if (onWindows) injector = new QModInjector(windowsDirectory, managedDirectory);
-                else injector = new QModInjector(macDirectory, managedDirectory);
+                else if (onMac) injector = new QModInjector(macDirectory, managedDirectory);
+                else
+                {
+                    Console.WriteLine("An unknown error has occurred.");
+                    Console.WriteLine();
+                    Console.WriteLine("Press any key to exit...");
+                    Console.ReadKey();
+                    Environment.Exit(1);
+                    return;
+                }
 
                 bool isInjected = injector.IsInjected();
 
