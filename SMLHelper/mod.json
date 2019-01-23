@@ -1,12 +1,10 @@
 {
   "Id": "SMLHelper",
   "DisplayName": "Modding Helper",
-  "Author": "AHK1221-PrimeSonic-AlexejheroYTB",
+  "Author": "AHK1221 & PrimeSonic & AlexejheroYTB",
   "Version": "2.0.4",
   "Enable": true,
   "Priority": "Last",
   "AssemblyName": "SMLHelper.dll",
   "EntryMethod": "SMLHelper.V2.Initializer.Patch",
-  "Config": {
-  }
 }
