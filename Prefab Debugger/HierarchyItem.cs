@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 
-namespace BlueFire.Debugger
+namespace QModManager.Debugger
 {
 
     public class HierarchyItem

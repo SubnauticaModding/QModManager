@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BlueFire.Debugger
+namespace QModManager.Debugger
 {
     public class LogMessage
     {

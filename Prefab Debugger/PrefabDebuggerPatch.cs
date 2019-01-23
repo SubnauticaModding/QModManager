@@ -5,7 +5,7 @@ using System.Text;
 using Harmony;
 using UnityEngine;
 
-namespace BlueFire.Debugger
+namespace QModManager.Debugger
 {
     [HarmonyPatch(typeof(DevConsole), "Awake")]
     public static class DebugConsolePatch

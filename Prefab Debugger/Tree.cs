@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace BlueFire.Debugger
+namespace QModManager.Debugger
 {
     public class TreeNode<T>
     {

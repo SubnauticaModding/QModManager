@@ -11,7 +11,7 @@ using System.IO;
 
 
 
-namespace BlueFire.Debugger
+namespace QModManager.Debugger
 {
     public class PrefabDebugger : MonoBehaviour
     {
@@ -25,7 +25,7 @@ namespace BlueFire.Debugger
         //Add support for more components
         //Change key to be a single function key
         //Make the UI look much better (it sucks)
-        //Test if this works
+        //Change the width of a component's property labels to not be hardcoded
 
         private HierarchyItem selectedGameObject = null;
         public GUISkin skinUWE;
@@ -124,12 +124,12 @@ namespace BlueFire.Debugger
         private void ShowHierarchyWindow(int windowID)
         {
             //Ensure that the window can be dragged
-            GUI.DragWindow(new Rect(0, 0, 400, 40));
+            GUI.DragWindow(new Rect(0, 0, 500, 40));
 
             GUILayout.Label((numGameObjects) + " Root Transforms in the Scene");
 
             hierarchyScrollPos = GUILayout.BeginScrollView(
- hierarchyScrollPos, GUILayout.Width(400), GUILayout.Height(600));
+ hierarchyScrollPos, GUILayout.Width(490), GUILayout.Height(600));
             NavigateNodeRecursively(sceneTree);
             GUILayout.EndScrollView();
         }
@@ -137,11 +137,11 @@ namespace BlueFire.Debugger
         private void ShowComponentsWindow(int windowID)
         {
             //Ensure that the window can be dragged
-            GUI.DragWindow(new Rect(0, 0, 400, 40));
+            GUI.DragWindow(new Rect(0, 0, 500, 40));
 
             GUILayout.Label("Components");
             compScrollPos = GUILayout.BeginScrollView(
-         compScrollPos, GUILayout.Width(400), GUILayout.Height(600));
+         compScrollPos, GUILayout.Width(490), GUILayout.Height(600));
             ShowSelectedComponents();
             GUILayout.EndScrollView();
         }
@@ -201,29 +201,21 @@ namespace BlueFire.Debugger
                 GUILayout.Label("Transform");
                 Transform trans = selectedGameObject.source.GetComponent<Transform>();
                 GUILayout.BeginVertical();
-                //We have to store it here because you can't manually 
-                Vector3 newVector = new Vector3();
-                GUILayout.BeginHorizontal();
-                GUILayout.Label("   Position", GUILayout.Width(150));
-                GUILayout.Label("X", GUILayout.Width(10));
-                newVector.x = float.Parse(GUILayout.TextField(trans.position.x.ToString(), GUILayout.Width(100)));
-                GUILayout.Label("Y", GUILayout.Width(10));
-                newVector.y = float.Parse(GUILayout.TextField(trans.position.y.ToString(), GUILayout.Width(100)));
-                GUILayout.Label("Z", GUILayout.Width(10));
-                newVector.z = float.Parse(GUILayout.TextField(trans.position.z.ToString(), GUILayout.Width(100)));
-                trans.position = newVector;
 
-                GUILayout.EndHorizontal();
+                ShowVectorField(trans.position, "Position");
+                ShowVectorField(trans.eulerAngles, "Rotation");
+                ShowVectorField(trans.localScale, "Scale");
 
 
                 GUILayout.EndVertical();
 
-                //By calling GetComponents with the Behaviour class, we can get every component that can be disabled. 
+                //By calling GetComponents with the Behaviour class, we can get every component that can 100% be disabled. 
                 foreach (var comp in selectedGameObject.source.GetComponents<Behaviour>())
                 {
                     GUILayout.BeginVertical();
                     GUILayout.BeginHorizontal();
-                    comp.enabled = GUILayout.Toggle(comp.enabled, comp.GetType().ToString());
+                    GUILayout.Label(comp.GetType().ToString(), GUILayout.ExpandWidth(false));
+                    comp.enabled = GUILayout.Toggle(comp.enabled, "", "SmallToggle");
                     GUILayout.EndHorizontal();
                     DisplayComponentProperties(comp);
                     GUILayout.EndVertical();
@@ -246,7 +238,7 @@ namespace BlueFire.Debugger
                     if (attrs.OfType<ObsoleteAttribute>().Any() == false)
                     {
                         var value = property.GetValue(comp, null);
-                        GUILayout.Label("   " + property.Name, GUILayout.ExpandHeight(false), GUILayout.Width(150));
+                        GUILayout.Label(property.Name, "NormalLabel", GUILayout.ExpandHeight(false), GUILayout.Width(150));
 
                         if (value.GetType() == typeof(float) || value.GetType() == typeof(double))
                         {
@@ -268,7 +260,8 @@ namespace BlueFire.Debugger
                         }
                         else if (value.GetType() == typeof(Vector3))
                         {
-                            Vector3 val = (Vector3)value;
+                            Vector3 val
+                                = (Vector3)value;
                             GUILayout.Label("X", GUILayout.Width(10));
                             float x = float.Parse(GUILayout.TextField(val.x.ToString()));
                             GUILayout.Label("Y", GUILayout.Width(10));
@@ -278,9 +271,9 @@ namespace BlueFire.Debugger
                             Vector3 newVal = new Vector3(x, y, z);
                             property.SetValue(comp, newVal, null);
                         }
-                        else if (value.GetType() == typeof(Enum) && Enum.GetUnderlyingType(value.GetType()) == typeof(int))
+                        else if (value.GetType().IsEnum)
                         {
-                            if (GUILayout.Button(value.ToString()))
+                            if (GUILayout.Button(value.ToString(), "EnumButton"))
                             {
                                 try
                                 {
@@ -421,6 +414,44 @@ namespace BlueFire.Debugger
                 PopulateTreeRecursively(target.transform.GetChild(i).gameObject, child);
             }
         }
+
+        private Vector3 ShowVectorField(Vector3 value, string title)
+        {
+            GUILayout.BeginHorizontal();
+
+            GUILayout.Label(title, "NormalLabel", GUILayout.Width(150));
+
+            GUILayout.Label("X", "NormalLabel", GUILayout.Width(10));
+            value.x = float.Parse(GUILayout.TextField(value.x.ToString(), GUILayout.Width(50)));
+            GUILayout.Label("Y", "NormalLabel", GUILayout.Width(10));
+            value.y = float.Parse(GUILayout.TextField(value.y.ToString(), GUILayout.Width(50)));
+            GUILayout.Label("Z", "NormalLabel", GUILayout.Width(10));
+            value.z = float.Parse(GUILayout.TextField(value.z.ToString(), GUILayout.Width(50)));
+
+            GUILayout.EndHorizontal();
+
+            return value;
+        }
+
+        private bool ShowBoolField(bool value, string title)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(title, "NormalLabel", GUILayout.Width(150));
+            GUILayout.Toggle(value, "");
+            GUILayout.EndHorizontal();
+
+            return value;
+        }
+
+        private string ShowTextField(string value, string title)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(title, "NormalLabel", GUILayout.Width(150));
+            value = GUILayout.TextField(value);
+
+            return value;
+        }
+
 
         private Texture2D MakeTex(int width, int height, Color col)
         {
