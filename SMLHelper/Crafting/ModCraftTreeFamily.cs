@@ -348,6 +348,15 @@
             return tab;
         }
 
+        /// <summary>
+        /// Gets the node at the specified path from the root.
+        /// </summary>
+        /// <param name="stepsToNode">
+        /// <para>The steps to the target tab.</para>
+        /// <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
+        /// <para>Do not include "root" in this path.</para>
+        /// </param>
+        /// <returns>If the specified tab node is found, returns that <see cref="ModCraftTreeNode"/>; Otherwise, returns null.</returns>
         public ModCraftTreeNode GetNode(params string[] stepsToNode)
         {
             if (stepsToNode.Length == 1)
