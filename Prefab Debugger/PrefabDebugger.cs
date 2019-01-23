@@ -25,6 +25,7 @@ namespace BlueFire.Debugger
         //Add support for more components
         //Change key to be a single function key
         //Make the UI look much better (it sucks)
+        //Test if this works
 
         private HierarchyItem selectedGameObject = null;
         public GUISkin skinUWE;
