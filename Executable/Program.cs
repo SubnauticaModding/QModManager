@@ -50,18 +50,20 @@ namespace QModManager
                 string macDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../..");
 
                 bool onWindows;
-                try
+                if (!Directory.Exists(windowsDirectory)) onWindows = false;
+                else try
                 {
-                    onWindows = Directory.GetFiles(windowsDirectory, "*Subnautica*.exe", SearchOption.TopDirectoryOnly).Length > 0;
+                    onWindows = Directory.GetFiles(windowsDirectory, "Subnautica.exe", SearchOption.TopDirectoryOnly).Length > 0;
                 }
                 catch
                 {
                     onWindows = false;
                 }
                 bool onMac;
-                try
+                if (!Directory.Exists(macDirectory)) onMac = false;
+                else try
                 {
-                    onMac = Directory.GetFiles(macDirectory, "*Subnautica*.app", SearchOption.TopDirectoryOnly).Length > 0 || Directory.GetDirectories(macDirectory, "*Subnautica*.app", SearchOption.TopDirectoryOnly).Length > 0;
+                    onMac = Directory.GetFiles(macDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0 || Directory.GetDirectories(macDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0;
                 }
                 catch
                 {
