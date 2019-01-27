@@ -1,5 +1,6 @@
-﻿using Oculus.Newtonsoft.Json;
 using QModManager.Debugger;
+﻿using Harmony;
+using Oculus.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,9 +31,11 @@ namespace QModManager
                 }
                 patched = true;
 
-                Hooks.Patch();
+                Hooks.Load();
 
                 StartLoadingMods();
+
+                PatchHarmony();
 
                 Hooks.Update += ShowErroredMods;
                 Hooks.Update += VersionCheck.Check;
@@ -45,6 +48,11 @@ namespace QModManager
                 Console.WriteLine("EXCEPTION CAUGHT!");
                 Console.WriteLine(e.ToString());
             }
+        }
+
+        internal static void PatchHarmony()
+        {
+            HarmonyInstance.Create("qmodmanager.subnautica").PatchAll();
         }
 
         #region Mod loading
