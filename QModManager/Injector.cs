@@ -94,8 +94,7 @@ namespace QModManager
 
                 // Remove backup file if it exists
                 string backupFilePath = Path.Combine(managedDirectory, "Assembly-CSharp.qoriginal.dll");
-                if (File.Exists(backupFilePath))
-                    File.Delete(backupFilePath);
+                if (File.Exists(backupFilePath)) File.Delete(backupFilePath);
 
                 AssemblyDefinition game = AssemblyDefinition.ReadAssembly(mainFilename);
 

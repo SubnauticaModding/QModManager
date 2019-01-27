@@ -1,11 +1,11 @@
 ﻿using Oculus.Newtonsoft.Json;
+using QModManager.Debugger;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using QModManager.Debugger;
 
 namespace QModManager
 {
@@ -35,10 +35,8 @@ namespace QModManager
                 StartLoadingMods();
 
                 Hooks.Update += ShowErroredMods;
-                
+                Hooks.Update += VersionCheck.Check;
                 Hooks.Start += PrefabDebugger.Main;
-
-                VersionCheck.Check();
 
                 Hooks.OnLoadEnd?.Invoke();
             }
@@ -564,12 +562,14 @@ namespace QModManager
 
         #region Errored mods
 
-        internal static float timer = 0f;
+        private static float timer = 0f;
 
         internal static void ShowErroredMods()
         {
             timer += Time.deltaTime;
             if (timer < 1) return;
+            Hooks.Update -= ShowErroredMods;
+
             if (erroredMods.Count <= 0) return;
             string display = "The following mods could not be loaded: ";
             for (int i = 0; i < erroredMods.Count; i++)
@@ -579,7 +579,6 @@ namespace QModManager
             }
             display += ". Check the log for details.";
             Dialog.Show(display);
-            Hooks.Update -= ShowErroredMods;
         }
 
         #endregion
