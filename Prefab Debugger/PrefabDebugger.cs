@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using Harmony;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
-using System.Reflection;
-using System.IO;
 
-
-
-namespace BlueFire.Debugger
+namespace QModManager.Debugger
 {
     public class PrefabDebugger : MonoBehaviour
     {
@@ -43,8 +38,7 @@ namespace BlueFire.Debugger
 
         public static void Main()
         {
-            HarmonyInstance harmony = HarmonyInstance.Create("bluefire.prefabdebugger");
-            harmony.PatchAll(Assembly.GetExecutingAssembly());
+            new GameObject("PrefabDebugger").AddComponent<PrefabDebugger>();
         }
 
         void Start()
@@ -230,7 +224,6 @@ namespace BlueFire.Debugger
             }
         }
 
-
         private void DisplayComponentProperties(object comp)
         {
             foreach (var property in comp.GetType().GetProperties())
@@ -292,9 +285,9 @@ namespace BlueFire.Debugger
                                         property.SetValue(comp, (int)(value) + 1, null);
                                     }
                                 }
-                                catch (Exception e)
+                                catch
                                 {
-                                    UnityEngine.Debug.Log("Kill me, expected error :D");
+                                    Debug.Log("Kill me, expected error :D");
                                 }
                             }
                         }
@@ -361,7 +354,7 @@ namespace BlueFire.Debugger
 
                     GUILayout.EndHorizontal();
                 }
-                catch (Exception e)
+                catch
                 {
 
                 }
