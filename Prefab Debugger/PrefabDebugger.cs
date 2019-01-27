@@ -28,6 +28,7 @@ namespace QModManager.Debugger
         //Change the width of a component's property labels to not be hardcoded
 
         private HierarchyItem selectedGameObject = null;
+        private HierarchyItem draggedGameObject = null;
         public GUISkin skinUWE;
         private TreeNode<HierarchyItem> sceneTree;
         private Vector2 compScrollPos, hierarchyScrollPos, consoleScrollPos;
@@ -35,6 +36,7 @@ namespace QModManager.Debugger
         private Rect hierarchyRect = new Rect(100, 25, 500, 600);
         private Rect componentRect = new Rect(600, 25, 500, 600);
         private Rect consoleRect = new Rect(100, Screen.height - 300, 1000, 200);
+        private Rect dragRect = new Rect(0, 0, 200, 50);
         private Stack<LogMessage> debugMessages = new Stack<LogMessage>();
         private bool showDebugger = false;
         private bool showErrors, showLogs, showWarnings;
@@ -101,6 +103,16 @@ namespace QModManager.Debugger
                 componentRect = GUILayout.Window(1, componentRect, ShowComponentsWindow, "Component Window");
                 consoleRect = GUILayout.Window(2, consoleRect, ShowDebugWindow, "Debug Window");
             }
+            if (draggedGameObject != null)
+            {
+                dragRect = GUILayout.Window(3, dragRect, ShowChangeParentWindow, "");
+            }
+        }
+
+        private void ShowChangeParentWindow(int windowID)
+        {
+            GUI.DragWindow(new Rect(0, 0, 200, 50));
+            GUILayout.Label(draggedGameObject.source.name);
         }
 
         private void ShowHierarchyWindow(int windowID)
@@ -200,6 +212,11 @@ namespace QModManager.Debugger
                     comp.enabled = GUILayout.Toggle(comp.enabled, "", "SmallToggle");
                     GUILayout.EndHorizontal();
                     DisplayComponentProperties(comp);
+                    GUILayout.Space(50);
+                    if (GUILayout.Button("Add Component"))
+                    {
+                        //Open component add menu
+                    }
                     GUILayout.EndVertical();
                 }
             }
@@ -331,8 +348,12 @@ namespace QModManager.Debugger
 
                     if (GUILayout.Button(text, skin))
                     {
-                        node.Item.opened = !node.Item.opened;
-                        selectedGameObject = node.Item;
+                        if (Input.GetMouseButtonUp(0))
+                        {
+                            //Left
+                            node.Item.opened = !node.Item.opened;
+                            selectedGameObject = node.Item;
+                        }
                     }
 
                     GUILayout.EndHorizontal();
@@ -458,6 +479,12 @@ namespace QModManager.Debugger
                 debugMessages.Pop();
             }
             debugMessages.Push(new LogMessage(logString, stackTrace, type));
+        }
+
+        private static bool IsMouseOverLast()
+        {
+            return Event.current.type == EventType.Repaint &&
+                   GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition);
         }
     }
 
