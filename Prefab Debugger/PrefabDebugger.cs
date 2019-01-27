@@ -36,7 +36,7 @@ namespace QModManager.Debugger
         private Rect componentRect = new Rect(600, 25, 500, 600);
         private Rect consoleRect = new Rect(100, Screen.height - 300, 1000, 200);
         private Stack<LogMessage> debugMessages = new Stack<LogMessage>();
-        private bool showHierarchy = false, showComponents = false, showConsole = false;
+        private bool showDebugger = false;
         private bool showErrors, showLogs, showWarnings;
 
         public static string right_arrow = "▶";
@@ -76,27 +76,15 @@ namespace QModManager.Debugger
             sceneTree = new TreeNode<HierarchyItem>();
             foreach (GameObject go in scene.GetRootGameObjects())
             {
-                PopulateTreeRecursively(go, sceneTree);
+                RepopulateTreeRecursively(go, sceneTree);
             }
         }
 
         public void LateUpdate()
         {
-            //REFACTOR TO BE BASED ON A SINGLE FUNCTION KEY
-            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Alpha1))
+            if (Input.GetKeyUp(KeyCode.F9))
             {
-                showHierarchy = !showHierarchy;
-            }
-            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                showComponents = !showComponents;
-            }
-            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKeyDown(KeyCode.Alpha3))
-            {
-                showConsole = !showConsole;
-            }
-            if (showConsole || showComponents || showHierarchy)
-            {
+                showDebugger = !showDebugger;
                 UWE.Utils.alwaysLockCursor = false;
                 UWE.Utils.lockCursor = false;
             }
@@ -107,16 +95,10 @@ namespace QModManager.Debugger
             //Set the GUI's style
             GUI.skin = skinUWE;
 
-            if (showHierarchy)
+            if (showDebugger)
             {
                 hierarchyRect = GUILayout.Window(0, hierarchyRect, ShowHierarchyWindow, "Hierarchy Window");
-            }
-            if (showComponents)
-            {
                 componentRect = GUILayout.Window(1, componentRect, ShowComponentsWindow, "Component Window");
-            }
-            if (showConsole)
-            {
                 consoleRect = GUILayout.Window(2, consoleRect, ShowDebugWindow, "Debug Window");
             }
         }
@@ -242,17 +224,17 @@ namespace QModManager.Debugger
 
                         if (value.GetType() == typeof(float) || value.GetType() == typeof(double))
                         {
-                            float val = (float)Convert.ToDouble(GUILayout.TextField(value.ToString()));
+                            float val = (float)Convert.ToDouble(GUILayout.TextField(value.ToString(), GUILayout.Width(200)));
                             property.SetValue(comp, val, null);
                         }
                         else if (value.GetType() == typeof(int))
                         {
-                            int val = Convert.ToInt32(GUILayout.TextField(value.ToString()));
+                            int val = Convert.ToInt32(GUILayout.TextField(value.ToString(), GUILayout.Width(200)));
                             property.SetValue(comp, val, null);
                         }
                         else if (value.GetType() == typeof(string))
                         {
-                            property.SetValue(comp, GUILayout.TextField(value.ToString()), null);
+                            property.SetValue(comp, GUILayout.TextField(value.ToString(), GUILayout.Width(200)), null);
                         }
                         else if (value.GetType() == typeof(bool))
                         {
@@ -296,7 +278,7 @@ namespace QModManager.Debugger
                         {
                             //Exporting coming soon!
                             Sprite sprite = value as Sprite;
-                            GUILayout.TextField(sprite.texture.name);
+                            GUILayout.TextField(sprite.texture.name, GUILayout.Width(200));
                         }
                         else
                         {
@@ -387,20 +369,21 @@ namespace QModManager.Debugger
 
         public void RepopulateTreeRecursively(GameObject target, TreeNode<HierarchyItem> parent)
         {
-            HierarchyItem node = new HierarchyItem(target)
-            {
-                opened = false
-            };
+            //REMEMBER TO FIX THIS, IT'S NOT WORKING AS INTENDED AND RECREATES EVERY TIME
+
+            HierarchyItem node = new HierarchyItem(target);
 
             bool createNew = true;
             TreeNode<HierarchyItem> child = new TreeNode<HierarchyItem>();
 
             foreach (TreeNode<HierarchyItem> item in parent.Children)
             {
-                if (item.Item.source.Equals(target))
+                GameObject go = item.Item.source;
+                if (go.name.Equals(target.name) && go.transform.childCount == target.transform.childCount)
                 {
                     createNew = false;
                     node = item.Item;
+                    node.opened = item.Item.opened;
                     child = item;
                 }
             }
@@ -411,7 +394,7 @@ namespace QModManager.Debugger
             }
             for (int i = 0; i < target.transform.childCount; i++)
             {
-                PopulateTreeRecursively(target.transform.GetChild(i).gameObject, child);
+                RepopulateTreeRecursively(target.transform.GetChild(i).gameObject, child);
             }
         }
 
