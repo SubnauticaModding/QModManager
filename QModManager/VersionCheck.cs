@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
+using UnityEngine;
 
 namespace QModManager
 {
@@ -29,8 +30,14 @@ namespace QModManager
 
         internal const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/version-check/latest-version.txt";
 
+        private static float timer = 0f;
+
         internal static void Check()
         {
+            timer += Time.deltaTime;
+            if (timer < 1) return;
+            Hooks.Update -= Check;
+
             ServicePointManager.ServerCertificateValidationCallback = CustomRemoteCertificateValidationCallback;
 
             using (WebClient client = new WebClient())
