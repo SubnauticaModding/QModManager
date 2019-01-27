@@ -21,7 +21,21 @@
         internal static void AddTabs_Postfix(uGUI_OptionsPanel __instance)
         {
             var optionsPanel = __instance;
-            var modsTab = optionsPanel.AddTab("Mods");
+            
+            var modsTab = -1;
+            for (int i = 0; i < optionsPanel.tabsContainer.childCount; i++)
+            {
+                var text = optionsPanel.tabsContainer.GetChild(i).GetComponentInChildren<Text>(true);
+                if (text != null && text.text == "Mods")
+                {
+                    modsTab = i;
+                    break;
+                }
+            }
+            if (modsTab == -1)
+            {
+                modsTab = optionsPanel.AddTab("Mods");
+            }
 
             foreach (ModOptions modOption in modOptions)
             {
