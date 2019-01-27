@@ -82,7 +82,6 @@ namespace QModManager
                     Environment.Exit(1);
                 }
 
-#warning TODO: Improve injector code. It's 2019 out there...
                 QModInjector injector;
                 if (onWindows) injector = new QModInjector(windowsDirectory, managedDirectory);
                 else if (onMac) injector = new QModInjector(macDirectory, managedDirectory);
