@@ -1,68 +1,8 @@
 ﻿namespace SMLHelper.V2.Options
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    /// <summary>
-    /// Contains all the information about a choice changed event.
-    /// </summary>
-    public class ChoiceChangedEventArgs : EventArgs
-    {
-        /// <summary>
-        /// The ID of the <see cref="ModChoiceOption"/> that was changed.
-        /// </summary>
-        public string Id { get; }
-
-        /// <summary>
-        /// The new index for the <see cref="ModChoiceOption"/>.
-        /// </summary>
-        public int Index { get; }
-
-        public ChoiceChangedEventArgs(string id, int index)
-        {
-            Id = id;
-            Index = index;
-        }
-    }
-
-    public class SliderChangedEventArgs : EventArgs
-    {        
-        /// <summary>
-        /// The ID of the <see cref="ModSliderOption"/> that was changed.
-        /// </summary>
-        public string Id { get; }
-
-        /// <summary>
-        /// The new value for the <see cref="ModSliderOption"/>.
-        /// </summary>
-        public float Value { get; }
-
-        public SliderChangedEventArgs(string id, float value)
-        {
-            Id = id;
-            Value = value;
-        }
-    }
-
-    public class ToggleChangedEventArgs : EventArgs
-    {        
-        /// <summary>
-        /// The ID of the <see cref="ModToggleOption"/> that was changed.
-        /// </summary>
-        public string Id { get; }
-
-        /// <summary>
-        /// The new value for the <see cref="ModToggleOption"/>.
-        /// </summary>
-        public bool Value { get; }
-
-        public ToggleChangedEventArgs(string id, bool value)
-        {
-            Id = id;
-            Value = value;
-        }
-    }
+    using UnityEngine;
 
     /// <summary>
     /// Indicates how the option is interacted with by the user.
@@ -82,33 +22,23 @@
         /// <summary>
         /// The option uses a selection of one of a discrete number of possible values.
         /// </summary>
-        Choice
+        Choice,
+
+        /// <summary>
+        /// The option uses a keybind field that can be changed to a certain keyt
+        /// </summary>
+        Keybind,
     }
 
     /// <summary>
     /// Abstract class that provides the framework for your mod's in-game configuration options.
     /// </summary>
-    public abstract class ModOptions
+    public abstract partial class ModOptions
     {
         /// <summary>
         /// The name of this set of configuration options.
         /// </summary>
         public readonly string Name;
-
-        /// <summary>
-        /// The event that is called whenever a slider is changed. Subscribe to this in the constructor.
-        /// </summary>
-        protected event EventHandler<SliderChangedEventArgs> SliderChanged;
-
-        /// <summary>
-        /// The event that is called whenever a toggle is changed. Subscribe to this in the constructor.
-        /// </summary>
-        protected event EventHandler<ToggleChangedEventArgs> ToggleChanged;
-
-        /// <summary>
-        /// The event that is called whenever a choice is changed. Subscribe to this in the constructor.
-        /// </summary>
-        protected event EventHandler<ChoiceChangedEventArgs> ChoiceChanged;
 
         /// <summary>
         /// Builds and obtains the <see cref="ModOption"/>s that belong to this instance.
@@ -140,77 +70,11 @@
         /// <summary>
         /// <para>Builds up the configuration the options.</para>
         /// <para>This method should be composed of calls into the following methods: 
-        /// <seealso cref="AddSliderOption"/> | <seealso cref="AddToggleOption"/> | <seealso cref="AddChoiceOption"/>.</para>
+        /// <seealso cref="AddSliderOption"/> | <seealso cref="AddToggleOption"/> | <seealso cref="AddChoiceOption(string, string, string[], int)"/> | <seealso cref="AddKeybindOption(string, string, GameInput.Device, KeyCode)"/>.</para>
         /// <para>Make sure you have subscribed to the events in the constructor to handle what happens when the value is changed:
-        /// <seealso cref="SliderChanged"/> | <seealso cref="ToggleChanged"/> | <seealso cref="ChoiceChanged"/>.</para>
+        /// <seealso cref="SliderChanged"/> | <seealso cref="ToggleChanged"/> | <seealso cref="ChoiceChanged"/> | <seealso cref="KeybindChanged"/> | <seealso cref="DropdownChanged"/>.</para>
         /// </summary>
         public abstract void BuildModOptions();
-
-        /// <summary>
-        /// Notifies a slider change to all subsribed event handlers.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="value"></param>
-        internal void OnSliderChange(string id, float value)
-        {
-            SliderChanged(this, new SliderChangedEventArgs(id, value));
-        }
-
-        /// <summary>
-        /// Notifies a toggle change to all subscribed event handlers.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="value"></param>
-        internal void OnToggleChange(string id, bool value)
-        {
-            ToggleChanged(this, new ToggleChangedEventArgs(id, value));
-        }
-
-        /// <summary>
-        /// Notifies a choice change to all subscribed event handlers.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="indexValue"></param>
-        internal void OnChoiceChange(string id, int indexValue)
-        {
-            ChoiceChanged(this, new ChoiceChangedEventArgs(id, indexValue));
-        }
-
-        /// <summary>
-        /// Adds a new <see cref="ModSliderOption"/> to this instance.
-        /// </summary>
-        /// <param name="id">The internal ID for the slider option.</param>
-        /// <param name="label">The display text to use in the in-game menu.</param>
-        /// <param name="minValue">The minimum value for the range.</param>
-        /// <param name="maxValue">The maximum value for the range.</param>
-        /// <param name="value">The starting value.</param>
-        protected void AddSliderOption(string id, string label, float minValue, float maxValue, float value)
-        {
-            _options.Add(id, new ModSliderOption(id, label, minValue, maxValue, value));
-        }
-
-        /// <summary>
-        /// Adds a new <see cref="ModToggleOption"/> to this instance.
-        /// </summary>
-        /// <param name="id">The internal ID for the toggle option.</param>
-        /// <param name="label">The display text to use in the in-game menu.</param>
-        /// <param name="value">The starting value.</param>
-        protected void AddToggleOption(string id, string label, bool value)
-        {
-            _options.Add(id, new ModToggleOption(id, label, value));
-        }
-
-        /// <summary>
-        /// Adds a new <see cref="ModChoiceOption"/> to this instance.
-        /// </summary>
-        /// <param name="id">The internal ID for the choice option.</param>
-        /// <param name="label">The display text to use in the in-game menu.</param>
-        /// <param name="options">The collection of available values.</param>
-        /// <param name="index">The starting value.</param>
-        protected void AddChoiceOption(string id, string label, string[] options, int index)
-        {
-            _options.Add(id, new ModChoiceOption(id, label, options, index));
-        }
     }
 
     /// <summary>
@@ -244,72 +108,6 @@
             Type = type;
             Label = label;
             Id = id;
-        }
-    }
-
-    /// <summary>
-    /// A mod option class for handling an option that can have any floating point value between a minimum and maximum.
-    /// </summary>
-    public class ModSliderOption : ModOption
-    {
-        public float MinValue { get; }
-        public float MaxValue { get; }
-        public float Value { get; }
-
-        /// <summary>
-        /// Instantiates a new <see cref="ModSliderOption"/> for handling an option that can have any floating point value between a minimum and maximum.
-        /// </summary>
-        /// <param name="id">The internal ID if this option.</param>
-        /// <param name="label">The display text to show on the in-game menus.</param>
-        /// <param name="minValue">The minimum value for the range.</param>
-        /// <param name="maxValue">The maximum value for the range.</param>
-        /// <param name="value">The starting value.</param>
-        internal ModSliderOption(string id, string label, float minValue, float maxValue, float value) : base(ModOptionType.Slider, label, id)
-        {
-            MinValue = minValue;
-            MaxValue = maxValue;
-            Value = value;
-        }
-    }
-
-    /// <summary>
-    /// A mod option class for handling an option that can be either ON or OFF.
-    /// </summary>
-    public class ModToggleOption : ModOption
-    {
-        public bool Value { get; }
-
-        /// <summary>
-        /// Instantiates a new <see cref="ModToggleOption"/> for handling an option that can be either ON or OFF.
-        /// </summary>
-        /// <param name="id">The internal ID if this option.</param>
-        /// <param name="label">The display text to show on the in-game menus.</param>
-        /// <param name="value">The starting value.</param>
-        internal ModToggleOption(string id, string label, bool value) : base(ModOptionType.Toggle, label, id)
-        {
-            Value = value;
-        }
-    }
-
-    /// <summary>
-    /// A mod option class for handling an option that can select one item from a list of values.
-    /// </summary>
-    public class ModChoiceOption : ModOption
-    {
-        public string[] Options { get; }
-        public int Index { get; }
-
-        /// <summary>
-        /// Instantiates a new <see cref="ModChoiceOption"/> for handling an option that can select one item from a list of values.
-        /// </summary>
-        /// <param name="id">The internal ID if this option.</param>
-        /// <param name="label">The display text to show on the in-game menus.</param>
-        /// <param name="options">The collection of available values.</param>
-        /// <param name="index">The starting value.</param>
-        internal ModChoiceOption(string id, string label, string[] options, int index) : base(ModOptionType.Choice, label, id)
-        {
-            Options = options;
-            Index = index;
         }
     }
 }

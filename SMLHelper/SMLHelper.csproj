@@ -91,9 +91,14 @@
     <Compile Include="Initializer.cs" />
     <Compile Include="Legacy\Patchers\KnownTechPatcher.cs" />
     <Compile Include="Legacy\Patchers\LanguagePatcher.cs" />
+    <Compile Include="Options\ChoiceModOption.cs" />
+    <Compile Include="Options\KeybindModOption.cs" />
     <Compile Include="Options\ModOptions.cs" />
     <Compile Include="MonoBehaviours\Fixer.cs" />
-    <Compile Include="Patchers\InventoryPatcher.cs" />
+    <Compile Include="Options\SliderModOption.cs" />
+    <Compile Include="Options\ToggleModOption.cs" />
+    <Compile Include="Options\Utility\Validator.cs" />
+    <Compile Include="Patchers\ItemsContainerPatcher.cs" />
     <Compile Include="Patchers\OptionsPanelPatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Legacy\Patchers\TechTypePatcher.cs" />
@@ -116,6 +121,8 @@
     <Compile Include="Utility\EnumCacheManager.cs" />
     <Compile Include="Utility\ExtBannedIdManager.cs" />
     <Compile Include="Utility\ImageUtils.cs" />
+    <Compile Include="Utility\KeyCodeUtils.cs" />
+    <Compile Include="Utility\PlayerPrefsExtra.cs" />
     <Compile Include="Utility\PrefabUtils.cs" />
     <Compile Include="Utility\ReflectionHelper.cs" />
     <Compile Include="Utility\PatchUtils.cs" />

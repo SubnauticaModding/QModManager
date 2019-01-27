@@ -106,11 +106,11 @@ namespace SMLHelper.Patchers
 
         private object GetIngredientsObj()
         {
-            var ingredientsType = typeof(CraftData).GetNestedType("Ingredients", BindingFlags.NonPublic);
-            var ingredientsObj = Activator.CreateInstance(ingredientsType);
-            var addMethod = ingredientsType.GetMethod("Add", new Type[] { IngredientHelper.IngredientType });
+            Type ingredientsType = typeof(CraftData).GetNestedType("Ingredients", BindingFlags.NonPublic);
+            object ingredientsObj = Activator.CreateInstance(ingredientsType);
+            MethodInfo addMethod = ingredientsType.GetMethod("Add", new Type[] { IngredientHelper.IngredientType });
 
-            foreach (var ingredient in _ingredients)
+            foreach (IngredientHelper ingredient in _ingredients)
             {
                 addMethod.Invoke(ingredientsObj, new object[] { ingredient.GetIngredientObj() });
             }

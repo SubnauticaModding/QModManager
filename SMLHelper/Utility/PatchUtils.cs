@@ -4,16 +4,16 @@
     using System.Collections;
     using System.Reflection;
 
-    public class PatchUtils
+    internal class PatchUtils
     {
-        public static void PatchDictionary(Type type, string name, IDictionary dictionary)
+        internal static void PatchDictionary(Type type, string name, IDictionary dictionary)
         {
             PatchDictionary(type, name, dictionary, BindingFlags.NonPublic | BindingFlags.Static);
         }
 
-        public static void PatchDictionary(Type type, string name, IDictionary dictionary, BindingFlags flags)
+        internal static void PatchDictionary(Type type, string name, IDictionary dictionary, BindingFlags flags)
         {
-            var dictionaryField = type.GetField(name, flags);
+            FieldInfo dictionaryField = type.GetField(name, flags);
             var dict = dictionaryField.GetValue(null) as IDictionary;
 
             foreach(DictionaryEntry entry in dictionary)
@@ -22,17 +22,17 @@
             }
         }
 
-        public static void PatchList(Type type, string name, IList list)
+        internal static void PatchList(Type type, string name, IList list)
         {
             PatchList(type, name, list, BindingFlags.NonPublic | BindingFlags.Static);
         }
 
-        public static void PatchList(Type type, string name, IList list, BindingFlags flags)
+        internal static void PatchList(Type type, string name, IList list, BindingFlags flags)
         {
-            var listField = type.GetField(name, flags);
+            FieldInfo listField = type.GetField(name, flags);
             var craftDataList = listField.GetValue(null) as IList;
 
-            foreach (var obj in list)
+            foreach (object obj in list)
             {
                 craftDataList.Add(obj);
             }

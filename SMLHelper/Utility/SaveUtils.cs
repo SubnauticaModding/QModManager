@@ -4,8 +4,11 @@
 
     /* TODO: Maybe add more saving related functions here,
        such as those related to serializing? */
-    public class SaveUtils
+    public static class SaveUtils
     {
+        /// <summary>
+        /// Returns the path to the current save slot's directory.
+        /// </summary>
         public static string GetCurrentSaveDataDir()
         {
             return Path.Combine(SNUtils.savedGamesDir, Utils.GetSavegameDir());

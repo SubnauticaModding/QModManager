@@ -20,9 +20,11 @@
         protected readonly TechType TechType;
         protected readonly string Name;
 
+        protected readonly string ModName;
+
         protected CustomCraftTreeLinkingNode Parent = null;
 
-        protected virtual CraftTree.Type Scheme => this.Parent.Scheme;        
+        protected virtual CraftTree.Type Scheme => this.Parent.Scheme;
         protected virtual string SchemeAsString => this.Parent.SchemeAsString;
 
         protected CustomCraftTreeNode(string name, TreeAction action, TechType techType)
@@ -95,7 +97,7 @@
         /// <param name="techTypes">The TechTypes to be crafted.</param>
         public void AddCraftingNode(params TechType[] techTypes)
         {
-            foreach (var tType in techTypes)
+            foreach (TechType tType in techTypes)
             {
                 this.AddCraftingNode(tType);
             }
@@ -188,7 +190,8 @@
 
             string tabLanguageID = $"{SchemeAsString}Menu_{Name}";
 
-            LanguagePatcher.customLines[tabLanguageID] = DisplayText;
+            // Legacy Support
+            LanguagePatcher.AddCustomLanguageLine("SMLHelper", tabLanguageID, DisplayText);
 
             string spriteID = $"{SchemeAsString}_{Name}";
 

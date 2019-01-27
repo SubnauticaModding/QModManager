@@ -24,12 +24,19 @@
         /// <returns>The new <see cref="TechType"/> that is created.</returns>
         public static TechType AddTechType(string internalName, string displayName, string tooltip, bool unlockAtStart = true)
         {
+            string modName = Assembly.GetCallingAssembly().GetName().Name;
+            return AddTechType(modName, internalName, displayName, tooltip, unlockAtStart);
+        }
+
+        internal static TechType AddTechType(string modName, string internalName, string displayName, string tooltip, bool unlockAtStart = true)
+        {
             // Register the TechType.
-            var techType = TechTypePatcher.AddTechType(internalName);
+            TechType techType = TechTypePatcher.AddTechType(internalName);
 
             // Register Language lines.
-            LanguagePatcher.customLines[internalName] = displayName;
-            LanguagePatcher.customLines["Tooltip_" + internalName] = tooltip;
+            LanguagePatcher.AddCustomLanguageLine(modName, internalName, displayName);
+            LanguagePatcher.AddCustomLanguageLine(modName, "Tooltip_" + internalName, tooltip);
+
             var valueToString = CachedEnumString_valueToString.GetValue(TooltipFactory.techTypeTooltipStrings) as Dictionary<TechType, string>;
             valueToString[techType] = "Tooltip_" + internalName;
 
@@ -52,8 +59,10 @@
         /// <returns>The new <see cref="TechType"/> that is created.</returns>
         public static TechType AddTechType(string internalName, string displayName, string tooltip, Atlas.Sprite sprite, bool unlockAtStart = true)
         {
+            string modName = Assembly.GetCallingAssembly().GetName().Name;
+
             // Register the TechType using overload.
-            var techType = AddTechType(internalName, displayName, tooltip, unlockAtStart);
+            TechType techType = AddTechType(internalName, displayName, tooltip, unlockAtStart);
 
             // Register the Sprite
             if(sprite != null)
@@ -74,8 +83,10 @@
         /// <returns>The new <see cref="TechType"/> that is created.</returns>
         public static TechType AddTechType(string internalName, string displayName, string tooltip, UnityEngine.Sprite sprite, bool unlockAtStart = true)
         {
+            string modName = Assembly.GetCallingAssembly().GetName().Name;
+
             // Register the TechType using overload.
-            var techType = AddTechType(internalName, displayName, tooltip, unlockAtStart);
+            TechType techType = AddTechType(internalName, displayName, tooltip, unlockAtStart);
 
             // Register the Sprite
             if (sprite != null)

@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using Assets;
     using Patchers;
     using UnityEngine;
@@ -29,7 +30,7 @@
         public readonly TechType TechType;
 
         /// <summary>
-        /// The name ID for this tab node.        
+        /// The name ID for this tab node.
         /// </summary>
         public readonly string Name;
 
@@ -107,7 +108,9 @@
         /// <returns>A new tab node linked to the root node and ready to use.</returns>
         public ModCraftTreeTab AddTabNode(string nameID, string displayText, Atlas.Sprite sprite)
         {
-            var tabNode = new ModCraftTreeTab(nameID, displayText, sprite);
+            string modName = Assembly.GetCallingAssembly().GetName().Name;
+
+            var tabNode = new ModCraftTreeTab(modName, nameID, displayText, sprite);
             tabNode.LinkToParent(this);
 
             ChildNodes.Add(tabNode);
@@ -124,7 +127,9 @@
         /// <returns>A new tab node linked to the root node and ready to use.</returns>
         public ModCraftTreeTab AddTabNode(string nameID, string displayText, Sprite sprite)
         {
-            var tabNode = new ModCraftTreeTab(nameID, displayText, sprite);
+            string modName = Assembly.GetCallingAssembly().GetName().Name;
+
+            var tabNode = new ModCraftTreeTab(modName, nameID, displayText, sprite);
             tabNode.LinkToParent(this);
 
             ChildNodes.Add(tabNode);
@@ -139,7 +144,9 @@
         /// <returns>A new tab node linked to the root node and ready to use.</returns>
         public ModCraftTreeTab AddTabNode(string nameID)
         {
-            var tabNode = new ModCraftTreeTab(nameID);
+            string modName = Assembly.GetCallingAssembly().GetName().Name;
+
+            var tabNode = new ModCraftTreeTab(modName, nameID);
             tabNode.LinkToParent(this);
 
             ChildNodes.Add(tabNode);
@@ -154,7 +161,7 @@
         /// <returns></returns>
         public ModCraftTreeTab GetTabNode(string nameID)
         {
-            foreach (var node in ChildNodes)
+            foreach (ModCraftTreeTab node in ChildNodes)
             {
                 if (node == null) continue;
 
@@ -175,7 +182,7 @@
         /// <returns></returns>
         public ModCraftTreeCraft GetCraftingNode(TechType techType)
         {
-            foreach (var node in ChildNodes)
+            foreach (ModCraftTreeNode node in ChildNodes)
             {
                 if (node == null) continue;
 
@@ -196,7 +203,7 @@
         /// <returns></returns>
         public ModCraftTreeNode GetNode(string nameID)
         {
-            foreach (var node in ChildNodes)
+            foreach (ModCraftTreeNode node in ChildNodes)
             {
                 if (node == null) continue;
 
@@ -233,7 +240,7 @@
         /// <param name="techTypes">The TechTypes to be crafted.</param>
         public void AddCraftingNode(IEnumerable<TechType> techTypes)
         {
-            foreach (var tType in techTypes)
+            foreach (TechType tType in techTypes)
             {
                 Assert.AreNotEqual(TechType.None, tType, "Attempt to add TechType.None as a crafting node.");
                 this.AddCraftingNode(tType);
@@ -298,11 +305,11 @@
         /// <param name="root"></param>
         internal static void CreateFromExistingTree(CraftNode tree, ref ModCraftTreeLinkingNode root)
         {
-            foreach (var node in tree)
+            foreach (CraftNode node in tree)
             {
                 if (node.action == TreeAction.Expand)
                 {
-                    var tab = root.AddTabNode(node.id);
+                    ModCraftTreeTab tab = root.AddTabNode(node.id);
                     var thing = (ModCraftTreeLinkingNode)tab;
                     CreateFromExistingTree(node, ref thing);
                 }
@@ -341,6 +348,15 @@
             return tab;
         }
 
+        /// <summary>
+        /// Gets the node at the specified path from the root.
+        /// </summary>
+        /// <param name="stepsToNode">
+        /// <para>The steps to the target tab.</para>
+        /// <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
+        /// <para>Do not include "root" in this path.</para>
+        /// </param>
+        /// <returns>If the specified tab node is found, returns that <see cref="ModCraftTreeNode"/>; Otherwise, returns null.</returns>
         public ModCraftTreeNode GetNode(params string[] stepsToNode)
         {
             if (stepsToNode.Length == 1)
@@ -368,27 +384,31 @@
         private readonly Atlas.Sprite Asprite;
         private readonly Sprite Usprite;
         private readonly bool IsExistingTab;
+        private readonly string ModName;
 
-        internal ModCraftTreeTab(string nameID, string displayText, Atlas.Sprite sprite)
+        internal ModCraftTreeTab(string modName, string nameID, string displayText, Atlas.Sprite sprite)
             : base(nameID, TreeAction.Expand, TechType.None)
         {
             DisplayText = displayText;
             Asprite = sprite;
             Usprite = null;
+            ModName = modName;
         }
 
-        internal ModCraftTreeTab(string nameID, string displayText, Sprite sprite)
+        internal ModCraftTreeTab(string modName, string nameID, string displayText, Sprite sprite)
             : base(nameID, TreeAction.Expand, TechType.None)
         {
             DisplayText = displayText;
             Asprite = null;
             Usprite = sprite;
+            ModName = modName;
         }
 
-        internal ModCraftTreeTab(string nameID)
+        internal ModCraftTreeTab(string modName, string nameID)
             : base(nameID, TreeAction.Expand, TechType.None)
         {
             IsExistingTab = true;
+            ModName = modName;
         }
 
         internal override void LinkToParent(ModCraftTreeLinkingNode parent)
@@ -397,9 +417,7 @@
 
             if (IsExistingTab) return;
 
-            string tabLanguageID = $"{SchemeAsString}Menu_{Name}";
-
-            LanguagePatcher.customLines[tabLanguageID] = DisplayText;
+            LanguagePatcher.AddCustomLanguageLine(ModName, $"{base.SchemeAsString}Menu_{Name}", DisplayText);
 
             string spriteID = $"{SchemeAsString}_{Name}";
 

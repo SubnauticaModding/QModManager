@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMLHelper", "SMLHelper\SMLHelper.csproj", "{418502DD-372D-4EF9-8021-B262552DFEDE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example mod", "Example mod\Example mod.csproj", "{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,8 +17,15 @@ Global
 		{418502DD-372D-4EF9-8021-B262552DFEDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{418502DD-372D-4EF9-8021-B262552DFEDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{418502DD-372D-4EF9-8021-B262552DFEDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DA2C5D3D-5F61-4EA3-9399-FDEF43184299}
 	EndGlobalSection
 EndGlobal
