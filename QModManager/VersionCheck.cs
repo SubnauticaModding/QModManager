@@ -1,9 +1,11 @@
-﻿using System;
+﻿using Harmony;
+using System;
 using System.Diagnostics;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace QModManager
 {
@@ -37,6 +39,8 @@ namespace QModManager
             timer += Time.deltaTime;
             if (timer < 1) return;
             Hooks.Update -= Check;
+            if (PlayerPrefs.GetInt("QModManager_EnableUpdateCheck", 1) =
+= 0) return;
 
             ServicePointManager.ServerCertificateValidationCallback = CustomRemoteCertificateValidationCallback;
 
@@ -52,6 +56,20 @@ namespace QModManager
                     }
                     Parse(e.Result);
                 };
+            }
+        }
+
+        [HarmonyPatch(typeof(uGUI_OptionsPanel), "AddTabs")]
+        internal static class AddTabPatch
+        {
+            [HarmonyPostfix]
+            internal static void Postfix(uGUI_OptionsPanel __instance)
+            {
+                bool currentValue = PlayerPrefs.GetInt("QModManager_EnableUpdateCheck", 1) == 0 ? false : true;
+                int modsTab = __instance.AddTab("Mods");
+                __instance.AddHeading(modsTab, "QModManager");
+                __instance.AddToggleOption(modsTab, "Check for updates", currentValue,
+                    new UnityAction<bool>((bool toggleVal) => PlayerPrefs.SetInt("QModManager_EnableUpdateCheck", toggleVal == false ? 0 : 1)));
             }
         }
 
