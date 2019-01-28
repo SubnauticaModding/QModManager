@@ -112,7 +112,6 @@ SelectDirBrowseLabel=If you cannot click next, please check your install path an
 ; Anyone have a better formulation for this line? It doesn't sound so good.
 ReadyLabel2a=By installing, you agree to allow QModManager to periodically check for updates. You can disable this option at any time, in the Subnautica options, under the Mods tab.
 ReadyLabel2b=By installing, you agree to allow QModManager to periodically check for updates. You can disable this option at any time, in the Subnautica options, under the Mods tab.
-ReadyLabel2b=
 ; The message that appears when the user tries to cancel the install
 ExitSetupMessage=Setup is not complete. If you exit now, {#Name} will not be installed.%nExit Setup?
 
