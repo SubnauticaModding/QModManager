@@ -104,7 +104,9 @@ namespace QModManager
                 else
                 {
                     // This runs if both windows and mac files were detected, but it should NEVER happen.
-                    Console.WriteLine("An unknown error has occurred.");
+                    Console.WriteLine("An unexpected error has occurred.");
+                    Console.WriteLine("Both Subnautica.exe and Subnautica.app detected!");
+                    Console.WriteLine("Is this a Windows or a Mac environment?");
                     Console.WriteLine();
                     Console.WriteLine("Press any key to exit...");
                     Console.ReadKey();
