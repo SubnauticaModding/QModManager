@@ -63,6 +63,7 @@ namespace QModManager
 
                 if (!Directory.Exists(qmodsDirectory)) Directory.CreateDirectory(qmodsDirectory);
 
+                Console.WriteLine();
                 Console.WriteLine("QModManager installed successfully");
                 Console.WriteLine();
                 Console.WriteLine("Press any key to exit...");

@@ -1,11 +1,12 @@
-﻿using Oculus.Newtonsoft.Json;
+using QModManager.Debugger;
+﻿using Harmony;
+using Oculus.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using QModManager.Debugger;
 
 namespace QModManager
 {
@@ -30,21 +31,28 @@ namespace QModManager
                 }
                 patched = true;
 
-                Hooks.Patch();
+                Hooks.Load();
 
                 StartLoadingMods();
 
-                Hooks.Update += ShowErroredMods;
+                PatchHarmony();
 
+                Hooks.Update += ShowErroredMods;
+                Hooks.Update += VersionCheck.Check;
                 Hooks.Start += PrefabDebugger.Main;
 
-                Hooks.OnLoadEnd();
+                Hooks.OnLoadEnd?.Invoke();
             }
             catch (Exception e)
             {
                 Console.WriteLine("EXCEPTION CAUGHT!");
                 Console.WriteLine(e.ToString());
             }
+        }
+
+        internal static void PatchHarmony()
+        {
+            HarmonyInstance.Create("qmodmanager.subnautica").PatchAll();
         }
 
         #region Mod loading
@@ -562,16 +570,16 @@ namespace QModManager
 
         #region Errored mods
 
-        internal static string erroredModsPrefix = "The following mods could not be loaded: ";
-
-        internal static float timer = 0f;
+        private static float timer = 0f;
 
         internal static void ShowErroredMods()
         {
             timer += Time.deltaTime;
             if (timer < 1) return;
+            Hooks.Update -= ShowErroredMods;
+
             if (erroredMods.Count <= 0) return;
-            string display = erroredModsPrefix;
+            string display = "The following mods could not be loaded: ";
             for (int i = 0; i < erroredMods.Count; i++)
             {
                 display += erroredMods[i].DisplayName;
@@ -579,7 +587,6 @@ namespace QModManager
             }
             display += ". Check the log for details.";
             Dialog.Show(display);
-            Hooks.Update -= ShowErroredMods;
         }
 
         #endregion

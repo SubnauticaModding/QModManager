@@ -59,7 +59,7 @@ namespace QModManager
                     Environment.Exit(1);
                 }
 
-#warning TODO: Improve injector code. It's 2018 out there...
+#warning TODO: Improve injector code. It's 2019 out there...
                 QModInjector injector = new QModInjector(directory, managedDirectory);
 
                 bool isInjected = injector.IsInjected();
@@ -138,6 +138,7 @@ namespace QModManager
             }
             catch (Exception e)
             {
+                Console.WriteLine("EXCEPTION CAUGHT!");
                 Console.WriteLine(e.ToString());
                 Environment.Exit(2);
             }
