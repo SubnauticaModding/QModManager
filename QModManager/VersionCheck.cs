@@ -32,7 +32,7 @@ namespace QModManager
                 () => Process.Start(nexusmodsURL), leftButtonText: "Download", blue: true);
         }
 
-        internal const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/version-check/latest-version.txt";
+        internal const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/master/latest-version.txt";
 
         private static float timer = 0f;
 
