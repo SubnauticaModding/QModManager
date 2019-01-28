@@ -16,10 +16,9 @@ namespace QModManager
 
         public static Delegates.OnLoadEnd OnLoadEnd;
 
-        internal static void Patch()
+        internal static void Load()
         {
             SceneManager.sceneLoaded += (scene, loadSceneMode) => SceneLoaded?.Invoke(scene, loadSceneMode);
-            HarmonyInstance.Create("qmodmanager.subnautica").PatchAll();
         }
 
         [HarmonyPatch(typeof(DevConsole), "Start")]

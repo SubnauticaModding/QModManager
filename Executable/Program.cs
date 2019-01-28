@@ -190,6 +190,7 @@ namespace QModManager
             }
             catch (Exception e)
             {
+                Console.WriteLine("EXCEPTION CAUGHT!");
                 Console.WriteLine(e.ToString());
                 Environment.Exit(2);
             }
