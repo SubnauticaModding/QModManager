@@ -19,13 +19,11 @@ namespace QModManager.Debugger
         //THINGS I NEED TO ADD
 
         //Raycasting objects to view their components (in game highlighting of the object would be cool)
-        //Reordering parents of objects
         //Adding/Removing objects and their components
-        //Show selected in hierarchy DONE
-        //Add support for more components
-        //Change key to be a single function key
         //Make the UI look much better (it sucks)
         //Change the width of a component's property labels to not be hardcoded
+        //Fix the repopulate method so it works properly
+        //Refactor ShowSelectedComponents method to not be so bad
 
         private HierarchyItem selectedGameObject = null;
         private HierarchyItem draggedGameObject = null;
@@ -33,6 +31,7 @@ namespace QModManager.Debugger
         private TreeNode<HierarchyItem> sceneTree;
         private Vector2 compScrollPos, hierarchyScrollPos, consoleScrollPos;
         private int numGameObjects = 0;
+        private string[] propertyBlacklist = { "enabled", "transform", "gameObject", "tag", "name", "hideFlags" };
         private Rect hierarchyRect = new Rect(100, 25, 500, 600);
         private Rect componentRect = new Rect(600, 25, 500, 600);
         private Rect consoleRect = new Rect(100, Screen.height - 300, 1000, 200);
@@ -78,7 +77,7 @@ namespace QModManager.Debugger
             sceneTree = new TreeNode<HierarchyItem>();
             foreach (GameObject go in scene.GetRootGameObjects())
             {
-                RepopulateTreeRecursively(go, sceneTree);
+                PopulateTreeRecursively(go, sceneTree);
             }
         }
 
@@ -105,14 +104,15 @@ namespace QModManager.Debugger
             }
             if (draggedGameObject != null)
             {
-                dragRect = GUILayout.Window(3, dragRect, ShowChangeParentWindow, "");
+                var mousePos = Event.current.mousePosition;
+                dragRect = GUILayout.Window(3, new Rect(mousePos.x + 10, mousePos.y - 10, 200, 20), ShowChangeParentWindow, "", "Blank", GUILayout.ExpandWidth(true));
             }
         }
 
         private void ShowChangeParentWindow(int windowID)
         {
-            GUI.DragWindow(new Rect(0, 0, 200, 50));
-            GUILayout.Label(draggedGameObject.source.name);
+            GUI.FocusWindow(0);
+            GUILayout.Button(draggedGameObject.source.name, "TreeItemSelected");
         }
 
         private void ShowHierarchyWindow(int windowID)
@@ -120,7 +120,7 @@ namespace QModManager.Debugger
             //Ensure that the window can be dragged
             GUI.DragWindow(new Rect(0, 0, 500, 40));
 
-            GUILayout.Label((numGameObjects) + " Root Transforms in the Scene");
+            GUILayout.Label((numGameObjects) + " Root Transforms in the Scene (Right Click Nodes to Change Parent)");
 
             hierarchyScrollPos = GUILayout.BeginScrollView(
  hierarchyScrollPos, GUILayout.Width(490), GUILayout.Height(600));
@@ -203,21 +203,58 @@ namespace QModManager.Debugger
 
                 GUILayout.EndVertical();
 
+
+                //By calling GetComponents with the Behaviour class, we can get every component that can 100% be disabled. 
+                //Needs to be refactored because this code is super bad
+                //I'm not sure if there's a better way to do this, I'm thinking about an alternative. The reason I have to do this is 
+                //because while all of these inherit from component, components cannot be inherently enabled or disabled. 
+
+                if (selectedGameObject.source.GetComponent<MeshFilter>() != null)
+                {
+                    var mesh = selectedGameObject.source.GetComponent<MeshFilter>();
+                    GUILayout.BeginVertical();
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label("Mesh Filter", GUILayout.ExpandWidth(false));
+                    GUILayout.EndHorizontal();
+                    DisplayComponentProperties(mesh);
+                    GUILayout.EndVertical();
+                }
+
                 //By calling GetComponents with the Behaviour class, we can get every component that can 100% be disabled. 
                 foreach (var comp in selectedGameObject.source.GetComponents<Behaviour>())
                 {
                     GUILayout.BeginVertical();
                     GUILayout.BeginHorizontal();
-                    GUILayout.Label(comp.GetType().ToString(), GUILayout.ExpandWidth(false));
+                    GUILayout.Label(comp.GetType().Name, GUILayout.ExpandWidth(false));
                     comp.enabled = GUILayout.Toggle(comp.enabled, "", "SmallToggle");
                     GUILayout.EndHorizontal();
                     DisplayComponentProperties(comp);
-                    GUILayout.Space(50);
-                    if (GUILayout.Button("Add Component"))
-                    {
-                        //Open component add menu
-                    }
                     GUILayout.EndVertical();
+                }
+                //Temporary Band-Aid fix, check for different component subtypes
+                foreach (var comp in selectedGameObject.source.GetComponents<Collider>())
+                {
+                    GUILayout.BeginVertical();
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label(comp.GetType().Name, GUILayout.ExpandWidth(false));
+                    comp.enabled = GUILayout.Toggle(comp.enabled, "", "SmallToggle");
+                    GUILayout.EndHorizontal();
+                    DisplayComponentProperties(comp);
+                    GUILayout.EndVertical();
+                }
+                foreach (var comp in selectedGameObject.source.GetComponents<Renderer>())
+                {
+                    GUILayout.BeginVertical();
+                    GUILayout.BeginHorizontal();
+                    GUILayout.Label(comp.GetType().Name, GUILayout.ExpandWidth(false));
+                    comp.enabled = GUILayout.Toggle(comp.enabled, "", "SmallToggle");
+                    GUILayout.EndHorizontal();
+                    DisplayComponentProperties(comp);
+                    GUILayout.EndVertical();
+                }
+                if (GUILayout.Button("Add Component"))
+                {
+                    //Open component add menu
                 }
             }
         }
@@ -233,8 +270,7 @@ namespace QModManager.Debugger
                     //Use reflection to get the Attributes (i.e [Obsolete "yadda yadda"] and other things like that) of this property
                     object[] attrs = property.GetCustomAttributes(true);
                     //Checks if the parameter has a set method (we don't want readonly) and if the parameter is marked Obsolete
-                    //if (property.GetSetMethod() != null || property.GetSetMethod().IsPublic || !attrs.OfType<ObsoleteAttribute>().Any())
-                    if (attrs.OfType<ObsoleteAttribute>().Any() == false)
+                    if (attrs.OfType<ObsoleteAttribute>().Any() == false && property.GetSetMethod() != null && property.GetSetMethod().IsPublic && Array.IndexOf(propertyBlacklist, property.Name) == -1)
                     {
                         var value = property.GetValue(comp, null);
                         GUILayout.Label(property.Name, "NormalLabel", GUILayout.ExpandHeight(false), GUILayout.Width(150));
@@ -259,16 +295,14 @@ namespace QModManager.Debugger
                         }
                         else if (value.GetType() == typeof(Vector3))
                         {
-                            Vector3 val
-                                = (Vector3)value;
-                            GUILayout.Label("X", GUILayout.Width(10));
-                            float x = float.Parse(GUILayout.TextField(val.x.ToString()));
-                            GUILayout.Label("Y", GUILayout.Width(10));
-                            float y = float.Parse(GUILayout.TextField(val.y.ToString()));
-                            GUILayout.Label("Z", GUILayout.Width(10));
-                            float z = float.Parse(GUILayout.TextField(val.z.ToString()));
-                            Vector3 newVal = new Vector3(x, y, z);
-                            property.SetValue(comp, newVal, null);
+                            Vector3 val = (Vector3)value;
+                            GUILayout.Label("X", "NormalLabel", GUILayout.Width(10));
+                            val.x = float.Parse(GUILayout.TextField(val.x.ToString(), GUILayout.Width(50)));
+                            GUILayout.Label("Y", "NormalLabel", GUILayout.Width(10));
+                            val.y = float.Parse(GUILayout.TextField(val.y.ToString(), GUILayout.Width(50)));
+                            GUILayout.Label("Z", "NormalLabel", GUILayout.Width(10));
+                            val.z = float.Parse(GUILayout.TextField(val.z.ToString(), GUILayout.Width(50)));
+                            property.SetValue(comp, val, null);
                         }
                         else if (value.GetType().IsEnum)
                         {
@@ -297,6 +331,11 @@ namespace QModManager.Debugger
                             Sprite sprite = value as Sprite;
                             GUILayout.TextField(sprite.texture.name, GUILayout.Width(200));
                         }
+                        else if (value.GetType() == typeof(Color))
+                        {
+                            var val = (Color)value;
+                            GUILayout.Label(MakeTex(200, 20, val));
+                        }
                         else
                         {
                             GUILayout.Label(value.ToString());
@@ -306,7 +345,7 @@ namespace QModManager.Debugger
                 }
                 catch (Exception e)
                 {
-                    GUILayout.Label(e.Message);
+                    GUILayout.Label("DBG ERR:" + e.Message);
                     //UnityEngine.Debug.Log("msg:" + e.Message + "err" + e.Source);
                 }
                 GUILayout.EndHorizontal();
@@ -354,6 +393,21 @@ namespace QModManager.Debugger
                             node.Item.opened = !node.Item.opened;
                             selectedGameObject = node.Item;
                         }
+                        else if (Input.GetMouseButtonUp(1))
+                        {
+                            if (draggedGameObject != null)
+                            {
+                                Debug.Log("Release");
+                                draggedGameObject.source.transform.SetParent(node.Item.source.transform);
+                                draggedGameObject = null;
+                                //Replace the load with a more computationally efficient reload (todo)
+                                LoadSceneObjects();
+                            }
+                            else if (draggedGameObject == null)
+                            {
+                                draggedGameObject = node.Item;
+                            }
+                        }
                     }
 
                     GUILayout.EndHorizontal();
@@ -388,35 +442,41 @@ namespace QModManager.Debugger
             }
         }
 
-        public void RepopulateTreeRecursively(GameObject target, TreeNode<HierarchyItem> parent)
+        //This is broken and in the process of being fixed
+        //Current issue: Doesn't remove gameobjects that aren't present in reload
+        //Working: Adds new gameobjects and children seen in reload
+        public void RepopulateTreeRecursively()
         {
-            //REMEMBER TO FIX THIS, IT'S NOT WORKING AS INTENDED AND RECREATES EVERY TIME
+            var updatedSceneTree = new TreeNode<HierarchyItem>();
 
-            HierarchyItem node = new HierarchyItem(target);
-
-            bool createNew = true;
-            TreeNode<HierarchyItem> child = new TreeNode<HierarchyItem>();
-
-            foreach (TreeNode<HierarchyItem> item in parent.Children)
+            Scene scene = SceneManager.GetActiveScene();
+            //Get an updated version of the Scene to merge with
+            foreach (GameObject go in scene.GetRootGameObjects())
             {
-                GameObject go = item.Item.source;
-                if (go.name.Equals(target.name) && go.transform.childCount == target.transform.childCount)
+                PopulateTreeRecursively(go, updatedSceneTree);
+            }
+
+            sceneTree = MergeTrees(updatedSceneTree, sceneTree);
+        }
+
+        //Wow this was actually a pain in the ass to write
+        private TreeNode<HierarchyItem> MergeTrees(TreeNode<HierarchyItem> source, TreeNode<HierarchyItem> target)
+        {
+            foreach (TreeNode<HierarchyItem> item in source.Children)
+            {
+                var match = target.Children.Find(x => x.Item.source = item.Item.source);
+                if (match == null)
                 {
-                    createNew = false;
-                    node = item.Item;
-                    node.opened = item.Item.opened;
-                    child = item;
+                    target.Children.Add(item);
                 }
-            }
+                else
+                {
+                    MergeTrees(item, match);
+                }
 
-            if (createNew)
-            {
-                child = parent.AddChild(node);
             }
-            for (int i = 0; i < target.transform.childCount; i++)
-            {
-                RepopulateTreeRecursively(target.transform.GetChild(i).gameObject, child);
-            }
+            return target;
+
         }
 
         private Vector3 ShowVectorField(Vector3 value, string title)
@@ -479,12 +539,6 @@ namespace QModManager.Debugger
                 debugMessages.Pop();
             }
             debugMessages.Push(new LogMessage(logString, stackTrace, type));
-        }
-
-        private static bool IsMouseOverLast()
-        {
-            return Event.current.type == EventType.Repaint &&
-                   GUILayoutUtility.GetLastRect().Contains(Event.current.mousePosition);
         }
     }
 
