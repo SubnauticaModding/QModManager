@@ -33,7 +33,6 @@ namespace QModManager
                     else if (arg == "-u") action = Action.Uninstall;
                 }
 
-                string directory = Path.Combine(Environment.CurrentDirectory, @"..\..");
                 string managedDirectory = Environment.CurrentDirectory;
 
                 if (!File.Exists(managedDirectory + "/Assembly-CSharp.dll"))
@@ -47,7 +46,47 @@ namespace QModManager
                     Environment.Exit(1);
                 }
 
-                if (Directory.GetFiles(directory, "*Subnautica*.exe", SearchOption.TopDirectoryOnly).Length <= 0)
+                string windowsDirectory = Path.Combine(Environment.CurrentDirectory, "../..");
+                string macDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../..");
+
+                // Check if the device is running Windows OS
+                bool onWindows;
+                if (!Directory.Exists(windowsDirectory)) onWindows = false;
+                else
+                {
+                    try
+                    {
+                        // Try to get the Subnautica executable
+                        // This method throws a lot of exceptions
+                        onWindows = Directory.GetFiles(windowsDirectory, "Subnautica.exe", SearchOption.TopDirectoryOnly).Length > 0;
+                    }
+                    catch
+                    {
+                        // If an exception was thrown, the file probably isn't there
+                        onWindows = false;
+                    }
+                }
+
+                // Check if the device is running Mac OS
+                bool onMac;
+                if (!Directory.Exists(macDirectory)) onMac = false;
+                else
+                {
+                    try
+                    {
+                        // Try to get the Subnautica executable
+                        // This method throws a lot of exceptions
+                        // On mac, .app files act as files and folders at the same time, thus both file and directory checks
+                        onMac = Directory.GetFiles(macDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0 || Directory.GetDirectories(macDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0;
+                    }
+                    catch
+                    {
+                        // If an exception was thrown, the file probably isn't there
+                        onMac = false;
+                    }
+                }
+
+                if (!onWindows && !onMac)
                 {
                     Console.WriteLine("Could not find any game to patch!");
                     Console.WriteLine("An assembly file was found, but no executable was detected.");
@@ -59,8 +98,21 @@ namespace QModManager
                     Environment.Exit(1);
                 }
 
-#warning TODO: Improve injector code. It's 2019 out there...
-                QModInjector injector = new QModInjector(directory, managedDirectory);
+                QModInjector injector;
+                if (onWindows && !onMac) injector = new QModInjector(windowsDirectory, managedDirectory);
+                else if (onMac && !onWindows) injector = new QModInjector(macDirectory, managedDirectory);
+                else
+                {
+                    // This runs if both windows and mac files were detected, but it should NEVER happen.
+                    Console.WriteLine("An unexpected error has occurred.");
+                    Console.WriteLine("Both Subnautica.exe and Subnautica.app detected!");
+                    Console.WriteLine("Is this a Windows or a Mac environment?");
+                    Console.WriteLine();
+                    Console.WriteLine("Press any key to exit...");
+                    Console.ReadKey();
+                    Environment.Exit(1);
+                    return;
+                }
 
                 bool isInjected = injector.IsInjected();
 
