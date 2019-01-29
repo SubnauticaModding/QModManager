@@ -1,6 +1,6 @@
+using QModManager.Debugger;
 ﻿using Harmony;
 using Oculus.Newtonsoft.Json;
-//using QModManager.Debugger;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,9 +37,9 @@ namespace QModManager
 
                 PatchHarmony();
 
-                //Hooks.Start += PrefabDebugger.Main;
                 Hooks.Update += ShowErroredMods;
                 Hooks.Update += VersionCheck.Check;
+                Hooks.Start += PrefabDebugger.Main;
 
                 Hooks.OnLoadEnd?.Invoke();
             }
