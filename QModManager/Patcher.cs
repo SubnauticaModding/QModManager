@@ -62,47 +62,6 @@ namespace QModManager
             HarmonyInstance.Create("qmodmanager.subnautica").PatchAll();
         }
 
-        #region Game detection
-
-        internal enum Game
-        {
-            Subnautica,
-            BelowZero,
-        }
-
-        internal static Game game;
-
-        internal static bool DetectGame()
-        {
-            bool sn = Directory.GetFiles(Environment.CurrentDirectory, "Subnautica.exe", SearchOption.TopDirectoryOnly).Length > 0 
-                || Directory.GetFiles(Environment.CurrentDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0 
-                || Directory.GetDirectories(Environment.CurrentDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0;
-            bool bz = Directory.GetFiles(Environment.CurrentDirectory, "SubnauticaZero.exe", SearchOption.TopDirectoryOnly).Length > 0 
-                || Directory.GetFiles(Environment.CurrentDirectory, "SubnauticaZero.app", SearchOption.TopDirectoryOnly).Length > 0 
-                || Directory.GetDirectories(Environment.CurrentDirectory, "SubnauticaZero.app", SearchOption.TopDirectoryOnly).Length > 0;
-
-            if (sn && !bz) game = Game.Subnautica;
-            else if (bz && !sn) game = Game.BelowZero;
-            else if (sn && bz)
-            {
-                Console.WriteLine("[QModManager] A fatal error has occurred.");
-                Console.WriteLine("Both Windows and Mac files detected!");
-                Console.WriteLine("Is this a Windows or a Mac environment?");
-                Console.WriteLine();
-                return false;
-            }
-            else
-            {
-                Console.WriteLine("[QModManager] A fatal error has occurred.");
-                Console.WriteLine("No Subnautica executable was found!");
-                Console.WriteLine();
-                return false;
-            }
-            return true;
-        }
-
-        #endregion
-
         #region Mod loading
 
         internal static void StartLoadingMods()
@@ -169,6 +128,10 @@ namespace QModManager
             // Add the found mods into the sortedMods list
             sortedMods.AddRange(foundMods);
 
+            // Disable mods that are not for the detected game
+            // (Disable Subnautica mods if Below Zero is detected and disable Below Zero mods if Subnautica is detected)
+            // 
+            DisableModsThatAreNotForTheDetectedGame();
 
             // Check if all the mods' dependencies are present
             // If a mod's dependecies aren't present, that mods isn't loaded and it is outputted in the log.
@@ -293,6 +256,52 @@ namespace QModManager
             mod.Loaded = true;
 
             return true;
+        }
+
+        #endregion
+
+        #region Game detection
+
+        internal enum Game
+        {
+            Subnautica,
+            BelowZero,
+        }
+
+        internal static Game game;
+
+        internal static bool DetectGame()
+        {
+            bool sn = Directory.GetFiles(Environment.CurrentDirectory, "Subnautica.exe", SearchOption.TopDirectoryOnly).Length > 0
+                || Directory.GetFiles(Environment.CurrentDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0
+                || Directory.GetDirectories(Environment.CurrentDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0;
+            bool bz = Directory.GetFiles(Environment.CurrentDirectory, "SubnauticaZero.exe", SearchOption.TopDirectoryOnly).Length > 0
+                || Directory.GetFiles(Environment.CurrentDirectory, "SubnauticaZero.app", SearchOption.TopDirectoryOnly).Length > 0
+                || Directory.GetDirectories(Environment.CurrentDirectory, "SubnauticaZero.app", SearchOption.TopDirectoryOnly).Length > 0;
+
+            if (sn && !bz) game = Game.Subnautica;
+            else if (bz && !sn) game = Game.BelowZero;
+            else if (sn && bz)
+            {
+                Console.WriteLine("[QModManager] A fatal error has occurred.");
+                Console.WriteLine("Both Windows and Mac files detected!");
+                Console.WriteLine("Is this a Windows or a Mac environment?");
+                Console.WriteLine();
+                return false;
+            }
+            else
+            {
+                Console.WriteLine("[QModManager] A fatal error has occurred.");
+                Console.WriteLine("No Subnautica executable was found!");
+                Console.WriteLine();
+                return false;
+            }
+            return true;
+        }
+
+        internal static void DisableModsThatAreNotForTheDetectedGame()
+        {
+
         }
 
         #endregion
