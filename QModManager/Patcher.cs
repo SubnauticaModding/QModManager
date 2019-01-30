@@ -301,6 +301,16 @@ namespace QModManager
 
         internal static void DisableNonApplicableMods()
         {
+            sortedMods = sortedMods.Where(mod =>
+            {
+                if (mod.Game == game) return true;
+
+                if (!erroredMods.Contains(mod)) erroredMods.Add(mod);
+                return false;
+
+            }).ToList();
+
+            Console.WriteLine($"\nQMOD ERROR: The following {GetOtherGame()} mods were not loaded because {game.ToString()} was detected:");
 
         }
 
