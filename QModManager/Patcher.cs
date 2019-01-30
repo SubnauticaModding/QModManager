@@ -301,10 +301,12 @@ namespace QModManager
 
         internal static void DisableNonApplicableMods()
         {
+            List<QMod> nonApplicableMods = new List<QMod>();
             sortedMods = sortedMods.Where(mod =>
             {
                 if (mod.Game == game) return true;
 
+                if (!nonApplicableMods.Contains(mod)) nonApplicableMods.Add(mod);
                 if (!erroredMods.Contains(mod)) erroredMods.Add(mod);
                 return false;
 
@@ -312,6 +314,16 @@ namespace QModManager
 
             Console.WriteLine($"\nQMOD ERROR: The following {GetOtherGame()} mods were not loaded because {game.ToString()} was detected:");
 
+            foreach (QMod mod in nonApplicableMods)
+            {
+                Console.WriteLine(mod.DisplayName);
+            }
+        }
+
+        internal static string GetOtherGame()
+        {
+            if (game == Game.Subnautica) return "BelowZero";
+            else return "Subnautica";
         }
 
         #endregion
