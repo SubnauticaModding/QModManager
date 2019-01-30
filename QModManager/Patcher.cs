@@ -10,6 +10,14 @@ using UnityEngine;
 
 namespace QModManager
 {
+    internal enum Game
+    {
+        Subnautica,
+        BelowZero,
+        Both,
+        None,
+    }
+
     internal static class QModPatcher
     {
         internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? "ERR" : Path.Combine(Environment.CurrentDirectory, "QMods");
@@ -32,9 +40,8 @@ namespace QModManager
                 patched = true;
 
                 Hooks.Load();
-
+                DetectGame();
                 StartLoadingMods();
-
                 PatchHarmony();
 
                 Hooks.Update += ShowErroredMods;

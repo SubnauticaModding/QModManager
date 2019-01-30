@@ -23,7 +23,6 @@ namespace QModManager
     internal static class ConsoleExecutable
     {
         internal static Action action = Action.RunByUser;
-        internal static Game game;
         internal static OS os;
 
         internal static void Main(string[] args)
@@ -55,7 +54,7 @@ namespace QModManager
                     Environment.Exit(1);
                 }
 
-                GetInfo(out os, out game, out string windowsDirectory, out string macDirectory);
+                GetInfo(out os, out string windowsDirectory, out string macDirectory);
 
                 QModInjector injector;
 
@@ -73,17 +72,11 @@ namespace QModManager
                 }
                 else if (os == OS.Windows)
                 {
-                    injector = new QModInjector(windowsDirectory, managedDirectory)
-                    {
-                        game = game
-                    };
+                    injector = new QModInjector(windowsDirectory, managedDirectory);
                 }
                 else if (os == OS.Mac)
                 {
-                    injector = new QModInjector(macDirectory, managedDirectory)
-                    {
-                        game = game
-                    };
+                    injector = new QModInjector(macDirectory, managedDirectory);
                 }
                 else
                 {
@@ -180,7 +173,7 @@ namespace QModManager
             }
         }
 
-        internal static void GetInfo(out OS os, out Game game, out string windowsDirectory, out string macDirectory)
+        internal static void GetInfo(out OS os, out string windowsDirectory, out string macDirectory)
         {
             windowsDirectory = Path.Combine(Environment.CurrentDirectory, "../..");
             macDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../..");
@@ -226,40 +219,6 @@ namespace QModManager
                     // If an exception was thrown, the file probably isn't there
                     onMac = false;
                 }
-            }
-
-            if (onWindows && !onMac) os = OS.Windows;
-            else if (onMac && !onWindows) os = OS.Mac;
-            else if (onWindows && onMac)
-            {
-                os = OS.Both;
-                game = Game.None;
-                return;
-            }
-            else
-            {
-                os = OS.None;
-                game = Game.None;
-                return;
-            }
-
-            if (os == OS.Windows)
-            {
-                if (onWindowsSN && !onWindowsBZ) game = Game.Subnautica;
-                else if (onWindowsBZ && !onWindowsSN) game = Game.BelowZero;
-                else if (onWindowsSN && onWindowsBZ) game = Game.Both;
-                else game = Game.None;
-            }
-            else if (os == OS.Mac)
-            {
-                if (onMacSN && !onMacBZ) game = Game.Subnautica;
-                else if (onMacBZ && !onMacSN) game = Game.BelowZero;
-                else if (onMacSN && onMacBZ) game = Game.Both;
-                else game = Game.None;
-            }
-            else
-            {
-                game = Game.None;
             }
         }
 
