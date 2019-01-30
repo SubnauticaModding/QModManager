@@ -1,12 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using System;
+﻿using UnityEngine;
 
 namespace QModManager.Debugger
 {
-
     public class HierarchyItem
     {
         public GameObject source;

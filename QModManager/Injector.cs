@@ -13,17 +13,10 @@ namespace QModManager
         internal string installerFilename = "QModInstaller.dll";
         internal string mainFilename = "Assembly-CSharp.dll";
 
-        internal QModInjector(string dir, string managedDir = null)
+        internal QModInjector(string dir, string managedDir)
         {
             gameDirectory = dir;
-			if (managedDir == null)
-			{
-				managedDirectory = Path.Combine(gameDirectory, @"Subnautica_Data\Managed");
-			}
-			else
-			{
-				managedDirectory = managedDir;
-			}
+			managedDirectory = managedDir;
             mainFilename = Path.Combine(managedDirectory, mainFilename);
         }
 
@@ -63,6 +56,7 @@ namespace QModManager
 
                 if (!Directory.Exists(qmodsDirectory)) Directory.CreateDirectory(qmodsDirectory);
 
+                Console.WriteLine();
                 Console.WriteLine("QModManager installed successfully");
                 Console.WriteLine();
                 Console.WriteLine("Press any key to exit...");

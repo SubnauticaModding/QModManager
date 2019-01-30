@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Harmony;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,6 +32,10 @@ namespace QModManager
                 confirmation.gameObject.GetComponentInChildren<Image>().sprite = confirmation.gameObject.GetComponentsInChildren<Image>()[1].sprite;
             }
 
+            List<Text> texts = confirmation.gameObject.GetComponentsInChildren<Text>().ToList();
+            texts.RemoveAt(0);
+            texts.Do(t => t.fontSize = t.fontSize - 2);
+
             confirmation.Show(error, delegate (bool leftButtonClicked)
             {
                 if (leftButtonClicked) onLeftButtonPressed.Invoke();
@@ -41,6 +48,8 @@ namespace QModManager
                 confirmation.no.gameObject.GetComponentInChildren<Text>().text = "No";
 
                 confirmation.gameObject.GetComponentInChildren<Image>().sprite = sprite;
+
+                texts.Do(t => t.fontSize = t.fontSize + 2);
             });
         }
     }

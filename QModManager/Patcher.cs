@@ -1,4 +1,6 @@
-﻿using Oculus.Newtonsoft.Json;
+using QModManager.Debugger;
+﻿using Harmony;
+using Oculus.Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -29,17 +31,28 @@ namespace QModManager
                 }
                 patched = true;
 
-                Hooks.Patch();
-                StartLoadingMods();
-                Hooks.Update += ShowErroredMods;
+                Hooks.Load();
 
-                Hooks.OnLoadEnd();
+                StartLoadingMods();
+
+                PatchHarmony();
+
+                Hooks.Update += ShowErroredMods;
+                Hooks.Update += VersionCheck.Check;
+                Hooks.Start += PrefabDebugger.Main;
+
+                Hooks.OnLoadEnd?.Invoke();
             }
             catch (Exception e)
             {
                 Console.WriteLine("EXCEPTION CAUGHT!");
                 Console.WriteLine(e.ToString());
             }
+        }
+
+        internal static void PatchHarmony()
+        {
+            HarmonyInstance.Create("qmodmanager.subnautica").PatchAll();
         }
 
         #region Mod loading
@@ -68,16 +81,20 @@ namespace QModManager
                     Console.WriteLine("There was an error creating the QMods directory");
                     Console.WriteLine("Please make sure that you ran Subnautica from Steam");
                 }
-                try
+                else
                 {
-                    Directory.CreateDirectory(QModBaseDir);
-                    Console.WriteLine("QMods directory created successfully!");
+                    try
+                    {
+                        Directory.CreateDirectory(QModBaseDir);
+                        Console.WriteLine("QMods directory created successfully!");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("EXCEPTION CAUGHT!");
+                        Console.WriteLine(e.ToString());
+                    }
                 }
-                catch (Exception e)
-                {
-                    Console.WriteLine("EXCEPTION CAUGHT!");
-                    Console.WriteLine(e.ToString());
-                }
+
                 return;
             }
 
@@ -557,16 +574,16 @@ namespace QModManager
 
         #region Errored mods
 
-        internal static string erroredModsPrefix = "The following mods could not be loaded: ";
-
-        internal static float timer = 0f;
+        private static float timer = 0f;
 
         internal static void ShowErroredMods()
         {
             timer += Time.deltaTime;
             if (timer < 1) return;
+            Hooks.Update -= ShowErroredMods;
+
             if (erroredMods.Count <= 0) return;
-            string display = erroredModsPrefix;
+            string display = "The following mods could not be loaded: ";
             for (int i = 0; i < erroredMods.Count; i++)
             {
                 display += erroredMods[i].DisplayName;
@@ -574,7 +591,6 @@ namespace QModManager
             }
             display += ". Check the log for details.";
             Dialog.Show(display);
-            Hooks.Update -= ShowErroredMods;
         }
 
         #endregion
