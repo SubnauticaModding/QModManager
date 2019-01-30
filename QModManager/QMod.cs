@@ -17,16 +17,14 @@ namespace QModManager
         public string[] LoadBefore = new string[] { };
         public string[] LoadAfter = new string[] { };
         public bool Enable = true;
+        public bool ForBelowZero = false;
         public string AssemblyName = "Filename.dll";
         public string EntryMethod = "Namespace.Class.Method";
 
-        [JsonIgnore]
-        internal Assembly LoadedAssembly;
-        [JsonIgnore]
-        internal string ModAssemblyPath;
-      
-        [JsonIgnore]
-        internal bool Loaded;
+        [JsonIgnore] internal Assembly LoadedAssembly;
+        [JsonIgnore] internal string ModAssemblyPath;
+        [JsonIgnore] internal bool Loaded;
+        [JsonIgnore] internal QModPatcher.Game Game;
 
         internal static QMod FromJsonFile(string file)
         {
@@ -39,6 +37,11 @@ namespace QModManager
 
                 string json = File.ReadAllText(file);
                 QMod mod = JsonConvert.DeserializeObject<QMod>(json);
+
+                if (mod == null) return null;
+
+                if (mod.ForBelowZero == true) mod.Game = QModPatcher.Game.BelowZero;
+                else mod.Game = QModPatcher.Game.Subnautica;
 
                 return mod;
             }
