@@ -220,6 +220,11 @@ namespace QModManager
                     onMac = false;
                 }
             }
+
+            if (onWindows && !onMac) os = OS.Windows;
+            else if (!onMac && onWindows) os = OS.Mac;
+            else if (onWindows && onMac) os = OS.Both;
+            else os = OS.None;
         }
 
         #region Disable exit
