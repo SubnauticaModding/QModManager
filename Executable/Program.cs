@@ -19,13 +19,6 @@ namespace QModManager
         Both,
         None,
     }
-    internal enum Game
-    {
-        Subnautica,
-        BelowZero,
-        Both,
-        None,
-    }
 
     internal static class ConsoleExecutable
     {

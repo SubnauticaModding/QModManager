@@ -6,6 +6,14 @@ using System.Linq;
 
 namespace QModManager
 {
+    internal enum Game
+    {
+        Subnautica,
+        BelowZero,
+        Both,
+        None,
+    }
+
     public class QModInjector
     {
         internal string gameDirectory;
