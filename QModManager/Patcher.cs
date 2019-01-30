@@ -15,9 +15,9 @@ namespace QModManager
         internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? null : Path.Combine(Environment.CurrentDirectory, "QMods");
         internal static bool patched = false;
 
-        internal static List<QMod> loadedMods = new List<QMod>();
         internal static List<QMod> foundMods = new List<QMod>();
         internal static List<QMod> sortedMods = new List<QMod>();
+        internal static List<QMod> loadedMods = new List<QMod>();
         internal static List<QMod> erroredMods = new List<QMod>();
 
         internal static void Patch()
@@ -131,16 +131,16 @@ namespace QModManager
             // Disable mods that are not for the detected game
             // (Disable Subnautica mods if Below Zero is detected and disable Below Zero mods if Subnautica is detected)
             // 
-            DisableModsThatAreNotForTheDetectedGame();
-
-            // Check if all the mods' dependencies are present
-            // If a mod's dependecies aren't present, that mods isn't loaded and it is outputted in the log.
-            CheckForDependencies();
+            DisableNonApplicableMods();
 
             // Sort the mods based on their LoadBefore and LoadAfter properties
             // If any mods break (i.e., a loop is found), they are removed from the list so that they aren't loaded
             // And are outputted into the log.
             SortMods();
+
+            // Check if all the mods' dependencies are present
+            // If a mod's dependecies aren't present, that mods isn't loaded and it is outputted in the log.
+            CheckForDependencies();
 
             // Finally, load all the mods after sorting and checking for dependencies. 
             // If anything goes wrong during loading, it is outputted in the log.
@@ -299,7 +299,7 @@ namespace QModManager
             return true;
         }
 
-        internal static void DisableModsThatAreNotForTheDetectedGame()
+        internal static void DisableNonApplicableMods()
         {
 
         }
