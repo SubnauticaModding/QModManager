@@ -73,11 +73,17 @@ namespace QModManager
                 }
                 else if (os == OS.Windows)
                 {
-                    injector = new QModInjector(windowsDirectory, managedDirectory);
+                    injector = new QModInjector(windowsDirectory, managedDirectory)
+                    {
+                        game = game
+                    };
                 }
                 else if (os == OS.Mac)
                 {
-                    injector = new QModInjector(macDirectory, managedDirectory);
+                    injector = new QModInjector(macDirectory, managedDirectory)
+                    {
+                        game = game
+                    };
                 }
                 else
                 {

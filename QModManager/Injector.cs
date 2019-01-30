@@ -21,6 +21,8 @@ namespace QModManager
         internal string installerFilename = "QModInstaller.dll";
         internal string mainFilename = "Assembly-CSharp.dll";
 
+        internal Game game;
+
         internal QModInjector(string dir, string managedDir)
         {
             gameDirectory = dir;
