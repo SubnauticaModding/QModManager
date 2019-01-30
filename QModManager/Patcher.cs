@@ -312,7 +312,7 @@ namespace QModManager
 
             }).ToList();
 
-            Console.WriteLine($"\nQMOD ERROR: The following {GetOtherGame()} mods were not loaded because {game.ToString()} was detected:");
+            Console.WriteLine($"\nQMOD WARN: The following {GetOtherGame()} mods were not loaded because {game.ToString()} was detected:");
 
             foreach (QMod mod in nonApplicableMods)
             {
