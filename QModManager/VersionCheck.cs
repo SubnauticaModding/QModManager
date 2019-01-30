@@ -41,8 +41,7 @@ namespace QModManager
             timer += Time.deltaTime;
             if (timer < 1) return;
             Hooks.Update -= Check;
-            if (PlayerPrefs.GetInt("QModManager_EnableUpdateCheck", 1) =
-= 0) return;
+            if (PlayerPrefs.GetInt("QModManager_EnableUpdateCheck", 1) == 0) return;
 
             ServicePointManager.ServerCertificateValidationCallback = CustomRemoteCertificateValidationCallback;
 
