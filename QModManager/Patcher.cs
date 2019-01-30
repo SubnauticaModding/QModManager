@@ -33,7 +33,7 @@ namespace QModManager
 
                 if (QModBaseDir == null)
                 {
-                    Console.WriteLine("[QModManager] A fatal error has occurred.")
+                    Console.WriteLine("[QModManager] A fatal error has occurred.");
                     Console.WriteLine("There was an error with the QMods directory");
                     Console.WriteLine("Please make sure that you ran Subnautica from Steam/Epic/Discord, and not from the .exe file!");
                     return;
