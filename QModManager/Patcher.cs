@@ -169,14 +169,15 @@ namespace QModManager
             // Add the found mods into the sortedMods list
             sortedMods.AddRange(foundMods);
 
-            // Sort the mods based on their LoadBefore and LoadAfter properties
-            // If any mods break (i.e., a loop is found), they are removed from the list so that they aren't loaded
-            // And are outputted into the log.
-            SortMods();
 
             // Check if all the mods' dependencies are present
             // If a mod's dependecies aren't present, that mods isn't loaded and it is outputted in the log.
             CheckForDependencies();
+
+            // Sort the mods based on their LoadBefore and LoadAfter properties
+            // If any mods break (i.e., a loop is found), they are removed from the list so that they aren't loaded
+            // And are outputted into the log.
+            SortMods();
 
             // Finally, load all the mods after sorting and checking for dependencies. 
             // If anything goes wrong during loading, it is outputted in the log.
