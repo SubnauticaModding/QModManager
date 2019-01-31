@@ -6,14 +6,14 @@ using System.Linq;
 
 namespace QModManager
 {
-    public class QModInjector
+    public class Injector
     {
         internal string gameDirectory;
         internal string managedDirectory;
         internal string installerFilename = "QModInstaller.dll";
         internal string mainFilename = "Assembly-CSharp.dll";
 
-        internal QModInjector(string dir, string managedDir)
+        internal Injector(string dir, string managedDir)
         {
             gameDirectory = dir;
 			managedDirectory = managedDir;
