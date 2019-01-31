@@ -71,7 +71,7 @@ namespace QModManager
             });
         }
 
-        internal static void Show(string error, Dialog.Button leftButton, Dialog.Button rightButton, bool blue)
+        internal static void Show(string error, Button leftButton, Button rightButton, bool blue)
             => Show(error, leftButton.action, rightButton.action, leftButton.text, rightButton.text, blue);
     }
 }

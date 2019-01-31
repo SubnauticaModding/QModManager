@@ -19,25 +19,29 @@ namespace QModManager
         internal static void Load()
         {
             SceneManager.sceneLoaded += (scene, loadSceneMode) => SceneLoaded?.Invoke(scene, loadSceneMode);
+            Logger.Debug("Loaded 'SceneLoaded' hook");
         }
 
         [HarmonyPatch(typeof(DevConsole), "Start")]
-        internal static class AddComponentPatch
+        private static class AddComponentPatch
         {
             [HarmonyPostfix]
-            internal static void Postfix(DevConsole __instance)
+            private static void Postfix(DevConsole __instance)
             {
                 __instance.gameObject.AddComponent<QMMHooks>();
+
+                Logger.Debug("Loaded the rest of the hooks");
+
                 Start?.Invoke();
             }
         }
 
-        internal class QMMHooks : MonoBehaviour
+        private class QMMHooks : MonoBehaviour
         {
-            public void FixedUpdate() => Hooks.FixedUpdate?.Invoke();
-            public void Update() => Hooks.Update?.Invoke();
-            public void LateUpdate() => Hooks.LateUpdate?.Invoke();
-            public void OnApplicationQuit() => Hooks.OnApplicationQuit?.Invoke();
+            private void FixedUpdate() => Hooks.FixedUpdate?.Invoke();
+            private void Update() => Hooks.Update?.Invoke();
+            private void LateUpdate() => Hooks.LateUpdate?.Invoke();
+            private void OnApplicationQuit() => Hooks.OnApplicationQuit?.Invoke();
         }
 
         public class Delegates
