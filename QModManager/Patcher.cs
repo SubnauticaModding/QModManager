@@ -13,7 +13,7 @@ namespace QModManager
     internal static class Patcher
     {
         internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? null : Path.Combine(Environment.CurrentDirectory, "QMods");
-        internal static bool patched = false;
+        private static bool patched = false;
 
         internal static List<QMod> foundMods = new List<QMod>();
         internal static List<QMod> sortedMods = new List<QMod>();
@@ -63,7 +63,7 @@ namespace QModManager
 
         #region Mod loading
 
-        internal static void StartLoadingMods()
+        private static void StartLoadingMods()
         {
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {
@@ -158,7 +158,7 @@ namespace QModManager
             LoadAllMods();
         }
 
-        internal static void LoadAllMods()
+        private static void LoadAllMods()
         {
             string toWrite = "Loaded mods:\n";
 
@@ -225,7 +225,7 @@ namespace QModManager
             Logger.Info(toWrite);
         }
 
-        internal static bool LoadMod(QMod mod)
+        private static bool LoadMod(QMod mod)
         {
             if (mod == null || mod.Loaded) return false;
 
@@ -282,7 +282,7 @@ namespace QModManager
 
         internal static Game game;
 
-        internal static bool DetectGame()
+        private static bool DetectGame()
         {
             bool sn = Directory.GetFiles(Environment.CurrentDirectory, "Subnautica.exe", SearchOption.TopDirectoryOnly).Length > 0
                 || Directory.GetFiles(Environment.CurrentDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0
@@ -319,7 +319,7 @@ namespace QModManager
             return false;
         }
 
-        internal static void DisableNonApplicableMods()
+        private static void DisableNonApplicableMods()
         {
             List<QMod> nonApplicableMods = new List<QMod>();
             sortedMods = sortedMods.Where(mod =>
@@ -344,7 +344,7 @@ namespace QModManager
             }
         }
 
-        internal static string GetOtherGame()
+        private static string GetOtherGame()
         {
             if (game == Game.Subnautica) return "BelowZero";
             else return "Subnautica";
@@ -356,7 +356,7 @@ namespace QModManager
 
         internal static List<QMod> modSortingChain = new List<QMod>();
 
-        internal static void SortMods()
+        private static void SortMods()
         {
             // Contains all the mods that errored out during the sorting process.
             List<List<QMod>> sortingErrorLoops = new List<List<QMod>>();
@@ -397,12 +397,11 @@ namespace QModManager
 
             if (sortingErrorLoops.Count != 0)
             {
-                Console.WriteLine("\nQMOD ERROR: There was en error while sorting the following mods!");
-                Console.WriteLine("Please check the 'LoadAfter' and 'LoadBefore' properties of these mods!\n");
+                Logger.Error("There was en error while sorting some mods!\nPlease check the 'LoadAfter' and 'LoadBefore' properties of these mods:\n");
 
                 foreach (List<QMod> list in sortingErrorLoops)
                 {
-                    string outputStr = "";
+                    string outputStr = "- ";
 
                     foreach (QMod mod in list)
                     {
@@ -529,7 +528,7 @@ namespace QModManager
             return true;
         }
 
-        internal static List<QMod> GetLoadBefore(QMod mod)
+        private static List<QMod> GetLoadBefore(QMod mod)
         {
             if (mod == null) return null;
 
@@ -547,7 +546,7 @@ namespace QModManager
             return mods;
         }
 
-        internal static List<QMod> GetLoadAfter(QMod mod)
+        private static List<QMod> GetLoadAfter(QMod mod)
         {
             if (mod == null) return null;
 
@@ -569,7 +568,7 @@ namespace QModManager
 
         #region Dependencies
 
-        internal static void CheckForDependencies()
+        private static void CheckForDependencies()
         {
             // Check if all mods have dependencies present
             Dictionary<QMod, List<string>> missingDependenciesByMod = new Dictionary<QMod, List<string>>();
@@ -589,10 +588,10 @@ namespace QModManager
                 }
             }
 
-            // There are missing dependencies! Output them!
             if (missingDependenciesByMod.Count != 0)
             {
-                Console.WriteLine("\nQMOD ERROR: The following mods were not loaded due to missing dependencies!\n");
+                // There are missing dependencies! Output them!
+                Logger.Error("The following mods were not loaded due to missing dependencies:");
 
                 foreach (var entry in missingDependenciesByMod)
                 {
@@ -601,7 +600,7 @@ namespace QModManager
                         sortedMods.Remove(entry.Key);
 
                     // Build the string to be displayed for this mod
-                    string str = entry.Key.DisplayName + " (missing: ";
+                    string str = $"- {entry.Key.DisplayName}  (missing: ";
 
                     foreach (string missingDependencyId in entry.Value)
                     {
@@ -615,11 +614,10 @@ namespace QModManager
                     Console.WriteLine(str);
                 }
 
-                Console.WriteLine("");
             }
         }
 
-        internal static List<QMod> GetPresentDependencies(QMod mod)
+        private static List<QMod> GetPresentDependencies(QMod mod)
         {
             if (mod == null) return null;
 
@@ -637,7 +635,7 @@ namespace QModManager
             return dependencies;
         }
 
-        internal static List<string> GetMissingDependencies(QMod mod, IEnumerable<QMod> presentDependencies)
+        private static List<string> GetMissingDependencies(QMod mod, IEnumerable<QMod> presentDependencies)
         {
             if (mod == null) return null;
             if (presentDependencies == null || presentDependencies.Count() == 0) return mod.Dependencies.ToList();
@@ -662,7 +660,7 @@ namespace QModManager
 
         private static float timer = 0f;
 
-        internal static void ShowErroredMods()
+        private static void ShowErroredMods()
         {
             timer += Time.deltaTime;
             if (timer < 1) return;
