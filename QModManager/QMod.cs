@@ -2,6 +2,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace QModManager
 {
@@ -9,10 +10,10 @@ namespace QModManager
     {
         public static readonly Version QModManagerVersion = new Version(1, 4);
 
-        public string Id = "Mod.ID";
+        public string Id = "ModID";
         public string DisplayName = "Mod display name";
         public string Author = "Author name";
-        public string Version = "0.0.0";
+        public string Version = "!.0.0";
         public string[] Dependencies = new string[] { };
         public string[] LoadBefore = new string[] { };
         public string[] LoadAfter = new string[] { };
@@ -52,6 +53,24 @@ namespace QModManager
 
                 return null;
             }
+        }
+    }
+
+    internal class FakeQMod : QMod
+    {
+        internal FakeQMod(string name)
+        {
+            Id = Regex.Replace(Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase);
+            DisplayName = name;
+            Author = "None";
+            Version = "0.0.0";
+            Dependencies = new string[] { };
+            LoadBefore = new string[] { };
+            LoadAfter = new string[] { };
+            Enable = false;
+            ForBelowZero = false;
+            AssemblyName = "mod.json missing";
+            EntryMethod = "mod.json missing";
         }
     }
 }
