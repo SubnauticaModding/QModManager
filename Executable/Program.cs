@@ -20,7 +20,7 @@ namespace QModManager
         None,
     }
 
-    internal static class ConsoleExecutable
+    internal static class Executable
     {
         internal static Action action = Action.RunByUser;
         internal static OS os;
