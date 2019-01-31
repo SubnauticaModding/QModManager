@@ -11,7 +11,10 @@
         [Test]
         public void FourModTest()
         {
-            Patcher.ClearModLists();
+            Patcher.loadedMods.Clear();
+            Patcher.foundMods.Clear();
+            Patcher.sortedMods.Clear();
+            Patcher.erroredMods.Clear();
 
             var mod1 = new QMod
             {
@@ -83,7 +86,10 @@
         [Test]
         public void TwoModTest_BothOrdersDefined_GetExpectedOrder()
         {
-            Patcher.ClearModLists();
+            Patcher.loadedMods.Clear();
+            Patcher.foundMods.Clear();
+            Patcher.sortedMods.Clear();
+            Patcher.erroredMods.Clear();
 
             var mod1 = new QMod
             {
@@ -132,7 +138,10 @@
         [Test]
         public void TwoModTest_OrdersDefinedForOne_GetExpectedOrder()
         {
-            Patcher.ClearModLists();
+            Patcher.loadedMods.Clear();
+            Patcher.foundMods.Clear();
+            Patcher.sortedMods.Clear();
+            Patcher.erroredMods.Clear();
 
             var mod1 = new QMod
             {
@@ -177,7 +186,10 @@
         [Test]
         public void TwoModTest_OrdersDefinedForOther_GetExpectedOrder()
         {
-            Patcher.ClearModLists();
+            Patcher.loadedMods.Clear();
+            Patcher.foundMods.Clear();
+            Patcher.sortedMods.Clear();
+            Patcher.erroredMods.Clear();
 
             var mod1 = new QMod
             {
@@ -222,7 +234,10 @@
         [Test]
         public void TwoModTest_CircularDependency_SortModReturnsFalse()
         {
-            Patcher.ClearModLists();
+            Patcher.loadedMods.Clear();
+            Patcher.foundMods.Clear();
+            Patcher.sortedMods.Clear();
+            Patcher.erroredMods.Clear();
 
             var mod1 = new QMod
             {

@@ -680,17 +680,5 @@ namespace QModManager
         }
 
         #endregion
-
-        #region Unit tests
-
-        internal static void ClearModLists()
-        {
-            loadedMods.Clear();
-            foundMods.Clear();
-            sortedMods.Clear();
-            erroredMods.Clear();
-        }
-
-        #endregion
     }
 }
