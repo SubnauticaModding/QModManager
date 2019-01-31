@@ -1,6 +1,6 @@
-using QModManager.Debugger;
-﻿using Harmony;
+using Harmony;
 using Oculus.Newtonsoft.Json;
+using QModManager.Debugger;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,18 +24,20 @@ namespace QModManager
         {
             try
             {
+                Logger.Info("Started loading QModManager");
+
                 if (patched)
                 {
-                    Console.WriteLine("\nQMOD WARN: Patch method was called multiple times!");
+                    Logger.Warn("Patch method was called multiple times!");
                     return;
                 }
                 patched = true;
 
                 if (QModBaseDir == null)
                 {
-                    Console.WriteLine("[QModManager] A fatal error has occurred.");
-                    Console.WriteLine("There was an error with the QMods directory");
-                    Console.WriteLine("Please make sure that you ran Subnautica from Steam/Epic/Discord, and not from the .exe file!");
+                    Logger.Fatal("A fatal error has occurred.");
+                    Logger.Fatal("There was an error with the QMods directory");
+                    Logger.Fatal("Please make sure that you ran Subnautica from Steam/Epic/Discord, and not from the .exe file!");
                     return;
                 }
 
@@ -49,10 +51,12 @@ namespace QModManager
                 Hooks.Start += PrefabDebugger.Main;
 
                 Hooks.OnLoadEnd?.Invoke();
+
+                Logger.Info($"Finished loading QModManager. Loaded {loadedMods.Count} mods");
             }
             catch (Exception e)
             {
-                Console.WriteLine("EXCEPTION CAUGHT!");
+                Logger.Error("An exception has been caught:");
                 Console.WriteLine(e.ToString());
             }
         }
@@ -77,7 +81,7 @@ namespace QModManager
 
             if (!Directory.Exists(QModBaseDir))
             {
-                Console.WriteLine("QMods directory was not found! Creating...");
+                Logger.Info("QMods directory was not found! Creating...");
 
                 return;
             }
@@ -90,9 +94,10 @@ namespace QModManager
 
                 if (!File.Exists(jsonFile))
                 {
-                    Console.WriteLine($"ERROR! No \"mod.json\" file found in folder \"{subDir}\"");
+                    Logger.Warn($"No \"mod.json\" file found for mod located in folder \"{subDir}\"");
+                    Logger.Warn("A template file will be created");
                     File.WriteAllText(jsonFile, JsonConvert.SerializeObject(new QMod()));
-                    Console.WriteLine("A template file was created");
+                    erroredMods.Add(new FakeQMod(subDir));
                     continue;
                 }
 
