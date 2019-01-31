@@ -63,14 +63,14 @@ namespace QModManager
             Id = Regex.Replace(Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase);
             DisplayName = name;
             Author = "None";
-            Version = "0.0.0";
+            Version = "None";
             Dependencies = new string[] { };
             LoadBefore = new string[] { };
             LoadAfter = new string[] { };
             Enable = false;
             ForBelowZero = false;
-            AssemblyName = "mod.json missing";
-            EntryMethod = "mod.json missing";
+            AssemblyName = "None";
+            EntryMethod = "None";
         }
     }
 }
