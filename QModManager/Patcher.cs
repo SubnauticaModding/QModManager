@@ -79,6 +79,8 @@ namespace QModManager
                 return null;
             };
 
+            Logger.Debug("Added AssemblyResolve event");
+
             if (!Directory.Exists(QModBaseDir))
             {
                 Logger.Info("QMods directory was not found! Creating...");
@@ -94,8 +96,8 @@ namespace QModManager
 
                 if (!File.Exists(jsonFile))
                 {
-                    Logger.Warn($"No \"mod.json\" file found for mod located in folder \"{subDir}\"");
-                    Logger.Warn("A template file will be created");
+                    Logger.Error($"No \"mod.json\" file found for mod located in folder \"{subDir}\"");
+                    Logger.Error("A template file will be created");
                     File.WriteAllText(jsonFile, JsonConvert.SerializeObject(new QMod()));
                     erroredMods.Add(new FakeQMod(subDir));
                     continue;
@@ -103,11 +105,18 @@ namespace QModManager
 
                 QMod mod = QMod.FromJsonFile(Path.Combine(subDir, "mod.json"));
 
-                if (mod == null) continue;
+                if (mod == null)
+                {
+                    Logger.Error($"Skipped a null mod found in folder \"{subDir}\"");
+                    erroredMods.Add(new FakeQMod(subDir));
+
+                    continue;
+                }
 
                 if (mod.Enable == false)
                 {
-                    Console.WriteLine($"{mod.DisplayName} is disabled via config, skipping");
+                    Logger.Info($"{mod.DisplayName} is disabled via config, skipping");
+
                     continue;
                 }
 
@@ -115,7 +124,9 @@ namespace QModManager
 
                 if (!File.Exists(modAssemblyPath))
                 {
-                    Console.WriteLine($"ERROR! No matching dll found at \"{modAssemblyPath}\" for mod \"{mod.DisplayName}\"");
+                    Logger.Error($"No matching dll found at \"{modAssemblyPath}\" for mod \"{mod.DisplayName}\"");
+                    erroredMods.Add(mod);
+
                     continue;
                 }
 
@@ -149,10 +160,9 @@ namespace QModManager
 
         internal static void LoadAllMods()
         {
-            string toWrite = "\nLoaded mods:\n";
+            string toWrite = "Loaded mods:\n";
 
             List<QMod> loadingErrorMods = new List<QMod>();
-
             QMod smlHelper = null;
 
             foreach (QMod mod in sortedMods)
@@ -182,7 +192,6 @@ namespace QModManager
                     }
                 }
             }
-
             if (smlHelper != null)
             {
                 toWrite += $"- {smlHelper.DisplayName} ({smlHelper.Id})\n";
@@ -203,15 +212,17 @@ namespace QModManager
 
             if (loadingErrorMods.Count != 0)
             {
-                Console.WriteLine("\nQMOD ERROR: The following mods could not be loaded:\n");
+                string write = "The following mods could not be loaded:\n";
 
                 foreach (QMod mod in loadingErrorMods)
                 {
-                    Console.WriteLine(mod.Id);
+                    write += $"- {mod.DisplayName} ({mod.Id})\n";
                 }
+
+                Logger.Error(write);
             }
 
-            Console.WriteLine(toWrite);
+            Logger.Info(toWrite);
         }
 
         internal static bool LoadMod(QMod mod)
@@ -220,7 +231,7 @@ namespace QModManager
 
             if (string.IsNullOrEmpty(mod.EntryMethod))
             {
-                Console.WriteLine($"ERROR! No EntryMethod specified for mod {mod.DisplayName}");
+                Logger.Error($"No EntryMethod specified for mod {mod.DisplayName}");
             }
             else
             {
@@ -230,30 +241,31 @@ namespace QModManager
                     string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
                     string entryMethod = entryMethodSig[entryMethodSig.Length - 1];
 
-                    MethodInfo qPatchMethod = mod.LoadedAssembly.GetType(entryType).GetMethod(entryMethod);
-                    qPatchMethod.Invoke(mod.LoadedAssembly, new object[] { });
+                    MethodInfo patchMethod = mod.LoadedAssembly.GetType(entryType).GetMethod(entryMethod);
+                    patchMethod.Invoke(mod.LoadedAssembly, new object[] { });
                 }
                 catch (ArgumentNullException e)
                 {
-                    Console.WriteLine($"ERROR! Could not parse entry method {mod.AssemblyName} for mod {mod.DisplayName}");
+                    Logger.Error($"Could not parse entry method \"{mod.AssemblyName}\" for mod \"{mod.Id}\"");
                     Console.WriteLine(e.ToString());
                     return false;
                 }
                 catch (TargetInvocationException e)
                 {
-                    Console.WriteLine($"ERROR! Invoking the specified entry method {mod.EntryMethod} failed for mod {mod.Id}");
+                    Logger.Error($"Invoking the specified entry method \"{mod.EntryMethod}\" failed for mod \"{mod.Id}\"");
                     Console.WriteLine(e.ToString());
                     return false;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("ERROR! An unexpected error occurred!");
+                    Logger.Error($"An unexpected error occurred whilst trying to load mod \"{mod.Id}\"");
                     Console.WriteLine(e.ToString());
                     return false;
                 }
             }
 
             mod.Loaded = true;
+            Logger.Debug($"Loaded mod \"{mod.Id}\"");
 
             return true;
         }
@@ -279,24 +291,32 @@ namespace QModManager
                 || Directory.GetFiles(Environment.CurrentDirectory, "SubnauticaZero.app", SearchOption.TopDirectoryOnly).Length > 0
                 || Directory.GetDirectories(Environment.CurrentDirectory, "SubnauticaZero.app", SearchOption.TopDirectoryOnly).Length > 0;
 
-            if (sn && !bz) game = Game.Subnautica;
-            else if (bz && !sn) game = Game.BelowZero;
+            if (sn && !bz)
+            {
+                Logger.Info("Detected game: Subnautica");
+                game = Game.Subnautica;
+
+                return true;
+            }
+            else if (bz && !sn)
+            {
+                Logger.Info("Detected game: BelowZero");
+                game = Game.BelowZero;
+
+                return true;
+            }
             else if (sn && bz)
             {
-                Console.WriteLine("[QModManager] A fatal error has occurred.");
-                Console.WriteLine("Both Windows and Mac files detected!");
-                Console.WriteLine("Is this a Windows or a Mac environment?");
-                Console.WriteLine();
-                return false;
+                Logger.Fatal("A fatal error has occurred.");
+                Logger.Fatal("Both Windows and Mac files detected!");
+                Logger.Fatal("Is this a Windows or a Mac environment?");
             }
             else
             {
-                Console.WriteLine("[QModManager] A fatal error has occurred.");
-                Console.WriteLine("No Subnautica executable was found!");
-                Console.WriteLine();
-                return false;
+                Logger.Fatal("A fatal error has occurred.");
+                Logger.Fatal("No Subnautica executable was found!");
             }
-            return true;
+            return false;
         }
 
         internal static void DisableNonApplicableMods()
@@ -312,11 +332,15 @@ namespace QModManager
 
             }).ToList();
 
-            Console.WriteLine($"\nQMOD WARN: The following {GetOtherGame()} mods were not loaded because {game.ToString()} was detected:");
-
-            foreach (QMod mod in nonApplicableMods)
+            if (nonApplicableMods.Count > 0)
             {
-                Console.WriteLine(mod.DisplayName);
+                string toWrite = $"The following {GetOtherGame()} mods were not loaded because {game.ToString()} was detected:\n";
+                foreach (QMod mod in nonApplicableMods)
+                {
+                    toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
+                }
+
+                Logger.Warn(toWrite);
             }
         }
 
