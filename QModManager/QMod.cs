@@ -24,7 +24,7 @@ namespace QModManager
         [JsonIgnore] internal Assembly LoadedAssembly;
         [JsonIgnore] internal string ModAssemblyPath;
         [JsonIgnore] internal bool Loaded;
-        [JsonIgnore] internal QModPatcher.Game Game;
+        [JsonIgnore] internal Patcher.Game Game;
 
         internal static QMod FromJsonFile(string file)
         {
@@ -40,8 +40,8 @@ namespace QModManager
 
                 if (mod == null) return null;
 
-                if (mod.ForBelowZero == true) mod.Game = QModPatcher.Game.BelowZero;
-                else mod.Game = QModPatcher.Game.Subnautica;
+                if (mod.ForBelowZero == true) mod.Game = Patcher.Game.BelowZero;
+                else mod.Game = Patcher.Game.Subnautica;
 
                 return mod;
             }

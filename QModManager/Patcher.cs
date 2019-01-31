@@ -10,7 +10,7 @@ using UnityEngine;
 
 namespace QModManager
 {
-    internal static class QModPatcher
+    internal static class Patcher
     {
         internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? null : Path.Combine(Environment.CurrentDirectory, "QMods");
         internal static bool patched = false;

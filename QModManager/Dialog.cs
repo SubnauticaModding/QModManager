@@ -17,7 +17,7 @@ namespace QModManager
             internal Action action = null;
 
             internal static readonly Button disabled = new Button();
-            internal static readonly Button seeLog = new Button("See Log", () => Process.Start(Path.Combine(QModPatcher.QModBaseDir, "../Subnautica_Data/output_log.txt")));
+            internal static readonly Button seeLog = new Button("See Log", () => Process.Start(Path.Combine(Patcher.QModBaseDir, "../Subnautica_Data/output_log.txt")));
             internal static readonly Button close = new Button("Close", () => { });
             internal static readonly Button download = new Button("Download", () => Process.Start(VersionCheck.nexusmodsURL));
 
@@ -34,7 +34,7 @@ namespace QModManager
             uGUI_SceneConfirmation confirmation = uGUI.main.confirmation;
 
             if (onLeftButtonPressed == null) onLeftButtonPressed = () 
-                    => Process.Start(Path.Combine(QModPatcher.QModBaseDir, "../Subnautica_Data/output_log.txt"));
+                    => Process.Start(Path.Combine(Patcher.QModBaseDir, "../Subnautica_Data/output_log.txt"));
             if (onRightButtonPressed == null) onRightButtonPressed = () => { };
 
             if (string.IsNullOrEmpty(leftButtonText)) confirmation.yes.gameObject.SetActive(false);

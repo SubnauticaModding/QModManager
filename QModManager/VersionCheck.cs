@@ -51,7 +51,7 @@ namespace QModManager
                 UnityEngine.Debug.Log("Could not get latest version!");
                 return;
             }
-            if (!version.Equals(QMod.QModManagerVersion) && QModPatcher.erroredMods.Count <= 0)
+            if (!version.Equals(QMod.QModManagerVersion) && Patcher.erroredMods.Count <= 0)
                 Dialog.Show($"There is a newer version of QModManager available: {version.ToString()} " +
                     "(current version: {QMod.QModManagerVersion.ToString()})", Dialog.Button.download, Dialog.Button.close, true);
         }
