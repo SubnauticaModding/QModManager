@@ -16,7 +16,7 @@ namespace QModManager
             uGUI_SceneConfirmation confirmation = uGUI.main.confirmation;
 
             if (onLeftButtonPressed == null) onLeftButtonPressed = () 
-                    => Process.Start(Path.Combine(QModPatcher.QModBaseDir, "../Subnautica_Data/output_log.txt"));
+                    => Process.Start(Path.Combine(QModPatcher.QModBaseDir, "%userprofile%/appdata/locallow/Unknown Worlds/Subnautica_Below Zero/output_log.txt"));
             if (onRightButtonPressed == null) onRightButtonPressed = () => { };
 
             if (string.IsNullOrEmpty(leftButtonText)) confirmation.yes.gameObject.SetActive(false);

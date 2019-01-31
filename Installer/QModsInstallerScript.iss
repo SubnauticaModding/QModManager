@@ -12,7 +12,7 @@
 
 ; Defines some variables
 #define Name "QModManager"
-#define Version "1.4"
+#define Version "2.0"
 #define Author "the QModManager team"
 #define URL "https://github.com/QModManager/QModManager"
 #define SupportURL "https://discord.gg/UpWuWwq"
@@ -44,7 +44,7 @@ AppVersion={#Version}
 ; How the installer compresses the required files
 Compression=lzma
 ; The default directory name
-DefaultDirName=C:\Program Files (x86)\Steam\steamapps\common\Subnautica
+DefaultDirName=C:\Program Files (x86)\Steam\steamapps\common\SubnauticaZero
 ; Disables directory exists warnings
 DirExistsWarning=no
 ; Forces the choose install path page to appear
@@ -84,18 +84,18 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 ; Required files
 [Files]
-Source: "0Harmony.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion
-Source: "0Harmony-1.2.0.1.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion
-Source: "Mono.Cecil.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion
-Source: "QModInstaller.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion
-Source: "QModManager.exe"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion
+Source: "0Harmony.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion
+Source: "0Harmony-1.2.0.1.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion
+Source: "Mono.Cecil.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion
+Source: "QModInstaller.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion
+Source: "QModManager.exe"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion
 
 ; On install and uninstall, run executable based on condition
 [Run]
-Filename: "{app}\Subnautica_Data\Managed\QModManager.exe"; Parameters: "-i"
+Filename: "{app}\SubnauticaZero_Data\Managed\QModManager.exe"; Parameters: "-i"
 
 [UninstallRun]
-Filename: "{app}\Subnautica_Data\Managed\QModManager.exe"; Parameters: "-u"
+Filename: "{app}\SubnauticaZero_Data\Managed\QModManager.exe"; Parameters: "-u"
 
 [Messages]
 ; The text that appears in the bottom-left, on the line of the box
@@ -118,7 +118,7 @@ ExitSetupMessage=Setup is not complete. If you exit now, {#Name} will not be ins
 [Code]
 function IsSubnautica(path: String): Boolean; // Checks if Subnautica is installed in the current folder
 begin
-  if (FileExists(path + '\Subnautica.exe')) and (FileExists(path + '\Subnautica_Data\Managed\Assembly-CSharp.dll')) then // If Subnautica-specific files exist
+  if (FileExists(path + '\SubnauticaZero.exe')) and (FileExists(path + '\SubnauticaZero_Data\Managed\Assembly-CSharp.dll')) then // If Subnautica-specific files exist
   begin
     Result := true // Returns true
     Exit

@@ -39,7 +39,7 @@ namespace QModManager
 
                 Hooks.Update += ShowErroredMods;
                 Hooks.Update += VersionCheck.Check;
-                Hooks.Start += PrefabDebugger.Main;
+                //Hooks.Start += PrefabDebugger.Main;
 
                 Hooks.OnLoadEnd?.Invoke();
             }

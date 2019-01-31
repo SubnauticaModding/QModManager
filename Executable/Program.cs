@@ -58,7 +58,7 @@ namespace QModManager
                     {
                         // Try to get the Subnautica executable
                         // This method throws a lot of exceptions
-                        onWindows = Directory.GetFiles(windowsDirectory, "Subnautica.exe", SearchOption.TopDirectoryOnly).Length > 0;
+                        onWindows = Directory.GetFiles(windowsDirectory, "SubnauticaZero.exe", SearchOption.TopDirectoryOnly).Length > 0;
                     }
                     catch
                     {
@@ -77,7 +77,7 @@ namespace QModManager
                         // Try to get the Subnautica executable
                         // This method throws a lot of exceptions
                         // On mac, .app files act as files and folders at the same time, thus both file and directory checks
-                        onMac = Directory.GetFiles(macDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0 || Directory.GetDirectories(macDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0;
+                        onMac = Directory.GetFiles(macDirectory, "SubnauticaZero.app", SearchOption.TopDirectoryOnly).Length > 0 || Directory.GetDirectories(macDirectory, "SubnauticaZero.app", SearchOption.TopDirectoryOnly).Length > 0;
                     }
                     catch
                     {
@@ -105,7 +105,7 @@ namespace QModManager
                 {
                     // This runs if both windows and mac files were detected, but it should NEVER happen.
                     Console.WriteLine("An unexpected error has occurred.");
-                    Console.WriteLine("Both Subnautica.exe and Subnautica.app detected!");
+                    Console.WriteLine("Both SubnauticaZero.exe and SubnauticaZero.app detected!");
                     Console.WriteLine("Is this a Windows or a Mac environment?");
                     Console.WriteLine();
                     Console.WriteLine("Press any key to exit...");

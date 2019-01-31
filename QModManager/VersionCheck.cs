@@ -11,7 +11,7 @@ namespace QModManager
 {
     internal static class VersionCheck
     {
-        internal const string nexusmodsURL = "https://nexusmods.com/subnautica/mods/16";
+        internal const string nexusmodsURL = "https://nexusmods.com/subnautica/mods/16"; // ???
 
         internal static void Parse(string versionStr)
         {
@@ -32,7 +32,7 @@ namespace QModManager
                 () => Process.Start(nexusmodsURL), leftButtonText: "Download", blue: true);
         }
 
-        internal const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/master/latest-version.txt";
+        internal const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/2.0/latest-version.txt";
 
         private static float timer = 0f;
 
@@ -41,8 +41,7 @@ namespace QModManager
             timer += Time.deltaTime;
             if (timer < 1) return;
             Hooks.Update -= Check;
-            if (PlayerPrefs.GetInt("QModManager_EnableUpdateCheck", 1) =
-= 0) return;
+            if (PlayerPrefs.GetInt("QModManager_EnableUpdateCheck", 1) == 0) return;
 
             ServicePointManager.ServerCertificateValidationCallback = CustomRemoteCertificateValidationCallback;
 
