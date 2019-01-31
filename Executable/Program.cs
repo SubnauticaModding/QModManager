@@ -54,7 +54,7 @@ namespace QModManager
                     Environment.Exit(1);
                 }
 
-                GetInfo(out os, out string windowsDirectory, out string macDirectory);
+                GetInfo(out os, out string directory);
 
                 QModInjector injector;
 
@@ -70,13 +70,9 @@ namespace QModManager
                     Environment.Exit(1);
                     return;
                 }
-                else if (os == OS.Windows)
+                else if (os == OS.Windows || os == OS.Mac)
                 {
-                    injector = new QModInjector(windowsDirectory, managedDirectory);
-                }
-                else if (os == OS.Mac)
-                {
-                    injector = new QModInjector(macDirectory, managedDirectory);
+                    injector = new QModInjector(directory, managedDirectory);
                 }
                 else
                 {
@@ -173,10 +169,10 @@ namespace QModManager
             }
         }
 
-        internal static void GetInfo(out OS os, out string windowsDirectory, out string macDirectory)
+        internal static void GetInfo(out OS os, out string directory)
         {
-            windowsDirectory = Path.Combine(Environment.CurrentDirectory, "../..");
-            macDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../..");
+            string windowsDirectory = Path.Combine(Environment.CurrentDirectory, "../..");
+            string macDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../..");
 
             // Check if the device is running Windows OS
             bool onWindows = false, onWindowsSN = false, onWindowsBZ = false;
@@ -221,10 +217,26 @@ namespace QModManager
                 }
             }
 
-            if (onWindows && !onMac) os = OS.Windows;
-            else if (!onMac && onWindows) os = OS.Mac;
-            else if (onWindows && onMac) os = OS.Both;
-            else os = OS.None;
+            if (onWindows && !onMac)
+            {
+                directory = windowsDirectory;
+                os = OS.Windows;
+            }
+            else if (!onMac && onWindows)
+            {
+                directory = macDirectory;
+                os = OS.Mac;
+            }
+            else if (onWindows && onMac)
+            {
+                directory = null;
+                os = OS.Both;
+            }
+            else
+            {
+                directory = null;
+                os = OS.None;
+            }
         }
 
         #region Disable exit
