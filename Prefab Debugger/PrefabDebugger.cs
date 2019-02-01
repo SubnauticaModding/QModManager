@@ -10,7 +10,6 @@ namespace QModManager.Debugger
 {
     public class PrefabDebugger : MonoBehaviour
     {
-
         //THINGS I NEED TO ADD
 
         //Raycasting objects to view their components (in game highlighting of the object would be cool)
@@ -22,7 +21,7 @@ namespace QModManager.Debugger
 
         private HierarchyItem selectedGameObject = null;
         private HierarchyItem draggedGameObject = null;
-        public GUISkin skinUWE;
+        private GUISkin skinUWE;
         private TreeNode<HierarchyItem> sceneTree;
         private Vector2 compScrollPos, hierarchyScrollPos, consoleScrollPos;
         private int numGameObjects = 0;
@@ -35,15 +34,15 @@ namespace QModManager.Debugger
         private bool showDebugger = false;
         private bool showErrors, showLogs, showWarnings;
 
-        public static string right_arrow = "▶";
-        public static string down_arrow = "▼";
+        private const string right_arrow = "▶";
+        private const string down_arrow = "▼";
 
-        public static void Main()
+        internal static void Main()
         {
             new GameObject("PrefabDebugger").AddComponent<PrefabDebugger>();
         }
 
-        void Start()
+        private void Start()
         {
             Scene scene = SceneManager.GetActiveScene();
             numGameObjects = scene.rootCount;
@@ -60,11 +59,9 @@ namespace QModManager.Debugger
                 }
             }
             LoadSceneObjects();
-
-
         }
 
-        public void LoadSceneObjects()
+        private void LoadSceneObjects()
         {
             Scene scene = SceneManager.GetActiveScene();
             numGameObjects = scene.rootCount;
@@ -75,7 +72,7 @@ namespace QModManager.Debugger
             }
         }
 
-        public void LateUpdate()
+        private void LateUpdate()
         {
             if (Input.GetKeyUp(KeyCode.F9))
             {
@@ -85,7 +82,7 @@ namespace QModManager.Debugger
             }
         }
 
-        public void OnGUI()
+        private void OnGUI()
         {
             //Set the GUI's style
             GUI.skin = skinUWE;
@@ -182,7 +179,7 @@ namespace QModManager.Debugger
             GUILayout.EndScrollView();
         }
 
-        public void ShowSelectedComponents()
+        private void ShowSelectedComponents()
         {
             if (selectedGameObject != null)
             {
@@ -345,7 +342,7 @@ namespace QModManager.Debugger
             }
         }
 
-        public void NavigateNodeRecursively(TreeNode<HierarchyItem> node, int depth = 0)
+        private void NavigateNodeRecursively(TreeNode<HierarchyItem> node, int depth = 0)
         {
             if (node.Item != null)
             {
@@ -421,7 +418,7 @@ namespace QModManager.Debugger
             }
         }
 
-        public void PopulateTreeRecursively(GameObject target, TreeNode<HierarchyItem> parent)
+        private void PopulateTreeRecursively(GameObject target, TreeNode<HierarchyItem> parent)
         {
             HierarchyItem node = new HierarchyItem(target)
             {
@@ -438,7 +435,7 @@ namespace QModManager.Debugger
         //This is broken and in the process of being fixed
         //Current issue: Doesn't remove gameobjects that aren't present in reload
         //Working: Adds new gameobjects and children seen in reload
-        public void RepopulateTreeRecursively()
+        private void RepopulateTreeRecursively()
         {
             var updatedSceneTree = new TreeNode<HierarchyItem>();
 
@@ -452,7 +449,6 @@ namespace QModManager.Debugger
             sceneTree = MergeTrees(updatedSceneTree, sceneTree);
         }
 
-        //Wow this was actually a pain in the ass to write
         private TreeNode<HierarchyItem> MergeTrees(TreeNode<HierarchyItem> source, TreeNode<HierarchyItem> target)
         {
             foreach (TreeNode<HierarchyItem> item in source.Children)
@@ -466,10 +462,8 @@ namespace QModManager.Debugger
                 {
                     MergeTrees(item, match);
                 }
-
             }
             return target;
-
         }
 
         private Vector3 ShowVectorField(Vector3 value, string title)
@@ -508,7 +502,6 @@ namespace QModManager.Debugger
 
             return value;
         }
-
 
         private Texture2D MakeTex(int width, int height, Color col)
         {
