@@ -672,7 +672,7 @@ namespace QModManager
                 if (i + 1 != erroredMods.Count) display += ", ";
             }
             display += ". Check the log for details.";
-            Dialog.Show(display, Dialog.Button.seeLog, Dialog.Button.close, true);
+            Dialog.Show(display, Dialog.Button.seeLog, Dialog.Button.close, false);
         }
 
         #endregion
