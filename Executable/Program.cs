@@ -20,7 +20,7 @@ namespace QModManager
         None,
     }
 
-    internal static class ConsoleExecutable
+    internal static class Executable
     {
         internal static Action action = Action.RunByUser;
         internal static OS os;
@@ -56,7 +56,7 @@ namespace QModManager
 
                 GetInfo(out os, out string directory);
 
-                QModInjector injector;
+                Injector injector;
 
                 if (os == OS.Both)
                 {
@@ -72,7 +72,7 @@ namespace QModManager
                 }
                 else if (os == OS.Windows || os == OS.Mac)
                 {
-                    injector = new QModInjector(directory, managedDirectory);
+                    injector = new Injector(directory, managedDirectory);
                 }
                 else
                 {
