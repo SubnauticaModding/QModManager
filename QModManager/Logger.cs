@@ -2,7 +2,7 @@
 
 namespace QModManager
 {
-    internal class Logger
+    internal static class Logger
     {
         private static void Log(string prefix, string text) => Console.WriteLine($"[QModManager/{prefix}] {text}");
         internal static void Debug(string text) => Log("DEBUG", text);
