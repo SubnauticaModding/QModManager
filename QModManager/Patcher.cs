@@ -56,7 +56,7 @@ namespace QModManager
             }
             catch (Exception e)
             {
-                Logger.Error("An exception has been caught:");
+                Logger.Error("EXCEPTION CAUGHT!");
                 Debug.LogException(e);
             }
         }
