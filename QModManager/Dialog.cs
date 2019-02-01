@@ -11,12 +11,30 @@ namespace QModManager
 {
     internal static class Dialog
     {
-        internal static void Show(string error, Action onLeftButtonPressed = null, Action onRightButtonPressed = null, string leftButtonText = "See Log", string rightButtonText = "Close", bool blue = false)
+        internal class Button
+        {
+            internal string text = null;
+            internal Action action = null;
+
+            internal static readonly Button disabled = new Button();
+            internal static readonly Button seeLog = new Button("See Log", () => Process.Start(Path.Combine(Patcher.QModBaseDir, "../Subnautica_Data/output_log.txt")));
+            internal static readonly Button close = new Button("Close", () => { });
+            internal static readonly Button download = new Button("Download", () => Process.Start(VersionCheck.nexusmodsURL));
+
+            private Button() { }
+            internal Button(string text, Action action)
+            {
+                this.text = text;
+                this.action = action;
+            }
+        }
+
+        private static void Show(string error, Action onLeftButtonPressed = null, Action onRightButtonPressed = null, string leftButtonText = "See Log", string rightButtonText = "Close", bool blue = false)
         {
             uGUI_SceneConfirmation confirmation = uGUI.main.confirmation;
 
             if (onLeftButtonPressed == null) onLeftButtonPressed = () 
-                    => Process.Start(Path.Combine(QModPatcher.QModBaseDir, "../Subnautica_Data/output_log.txt"));
+                    => Process.Start(Path.Combine(Patcher.QModBaseDir, "../Subnautica_Data/output_log.txt"));
             if (onRightButtonPressed == null) onRightButtonPressed = () => { };
 
             if (string.IsNullOrEmpty(leftButtonText)) confirmation.yes.gameObject.SetActive(false);
@@ -52,5 +70,8 @@ namespace QModManager
                 texts.Do(t => t.fontSize = t.fontSize + 2);
             });
         }
+
+        internal static void Show(string error, Button leftButton, Button rightButton, bool blue)
+            => Show(error, leftButton.action, rightButton.action, leftButton.text, rightButton.text, blue);
     }
 }

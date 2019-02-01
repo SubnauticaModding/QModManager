@@ -6,21 +6,20 @@ using System.Linq;
 
 namespace QModManager
 {
-    public class QModInjector
+    public class Injector
     {
-        internal string gameDirectory;
-        internal string managedDirectory;
-        internal string installerFilename = "QModInstaller.dll";
-        internal string mainFilename = "Assembly-CSharp.dll";
+        private readonly string gameDirectory;
+        private readonly string managedDirectory;
+        private readonly string mainFilename = "Assembly-CSharp.dll";
+        private const string installerFilename = "QModInstaller.dll";
 
-        internal QModInjector(string dir, string managedDir)
+        internal Injector(string dir, string managedDir)
         {
             gameDirectory = dir;
 			managedDirectory = managedDir;
             mainFilename = Path.Combine(managedDirectory, mainFilename);
         }
 
-#warning TODO: Implement installer rollback in Inno Setup
         internal void Inject()
         {
             try
@@ -70,7 +69,6 @@ namespace QModManager
                 Environment.Exit(1);
             }
         }
-
         internal void Remove()
         {
             try
@@ -159,3 +157,5 @@ namespace QModManager
         }
     }
 }
+
+#warning TODO: Implement installer rollback in Inno Setup
