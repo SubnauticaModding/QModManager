@@ -1,4 +1,4 @@
-using QModManager.Debugger;
+//using QModManager.Debugger;
 ﻿using Harmony;
 using Oculus.Newtonsoft.Json;
 using System;
@@ -12,12 +12,12 @@ namespace QModManager
 {
     internal static class QModPatcher
     {
-        internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? "ERR" : Path.Combine(Environment.CurrentDirectory, "QMods");
+        internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? null : Path.Combine(Environment.CurrentDirectory, "QMods");
         internal static bool patched = false;
 
-        internal static List<QMod> loadedMods = new List<QMod>();
         internal static List<QMod> foundMods = new List<QMod>();
         internal static List<QMod> sortedMods = new List<QMod>();
+        internal static List<QMod> loadedMods = new List<QMod>();
         internal static List<QMod> erroredMods = new List<QMod>();
 
         internal static void Patch()
@@ -31,15 +31,22 @@ namespace QModManager
                 }
                 patched = true;
 
+                if (QModBaseDir == null)
+                {
+                    Console.WriteLine("[QModManager] A fatal error has occurred.");
+                    Console.WriteLine("There was an error with the QMods directory");
+                    Console.WriteLine("Please make sure that you ran Subnautica from Steam/Epic/Discord, and not from the .exe file!");
+                    return;
+                }
+
                 Hooks.Load();
-
+                if (!DetectGame()) return;
                 StartLoadingMods();
-
                 PatchHarmony();
 
                 Hooks.Update += ShowErroredMods;
                 Hooks.Update += VersionCheck.Check;
-                Hooks.Start += PrefabDebugger.Main;
+                //Hooks.Start += PrefabDebugger.Main;
 
                 Hooks.OnLoadEnd?.Invoke();
             }
@@ -76,24 +83,6 @@ namespace QModManager
             if (!Directory.Exists(QModBaseDir))
             {
                 Console.WriteLine("QMods directory was not found! Creating...");
-                if (QModBaseDir == "ERR")
-                {
-                    Console.WriteLine("There was an error creating the QMods directory");
-                    Console.WriteLine("Please make sure that you ran Subnautica from Steam");
-                }
-                else
-                {
-                    try
-                    {
-                        Directory.CreateDirectory(QModBaseDir);
-                        Console.WriteLine("QMods directory created successfully!");
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("EXCEPTION CAUGHT!");
-                        Console.WriteLine(e.ToString());
-                    }
-                }
 
                 return;
             }
@@ -138,6 +127,11 @@ namespace QModManager
 
             // Add the found mods into the sortedMods list
             sortedMods.AddRange(foundMods);
+
+            // Disable mods that are not for the detected game
+            // (Disable Subnautica mods if Below Zero is detected and disable Below Zero mods if Subnautica is detected)
+            // 
+            DisableNonApplicableMods();
 
             // Sort the mods based on their LoadBefore and LoadAfter properties
             // If any mods break (i.e., a loop is found), they are removed from the list so that they aren't loaded
@@ -266,7 +260,75 @@ namespace QModManager
 
         #endregion
 
-        #region LoadOrder
+        #region Game detection
+
+        internal enum Game
+        {
+            Subnautica,
+            BelowZero,
+        }
+
+        internal static Game game;
+
+        internal static bool DetectGame()
+        {
+            bool sn = Directory.GetFiles(Environment.CurrentDirectory, "Subnautica.exe", SearchOption.TopDirectoryOnly).Length > 0
+                || Directory.GetFiles(Environment.CurrentDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0
+                || Directory.GetDirectories(Environment.CurrentDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0;
+            bool bz = Directory.GetFiles(Environment.CurrentDirectory, "SubnauticaZero.exe", SearchOption.TopDirectoryOnly).Length > 0
+                || Directory.GetFiles(Environment.CurrentDirectory, "SubnauticaZero.app", SearchOption.TopDirectoryOnly).Length > 0
+                || Directory.GetDirectories(Environment.CurrentDirectory, "SubnauticaZero.app", SearchOption.TopDirectoryOnly).Length > 0;
+
+            if (sn && !bz) game = Game.Subnautica;
+            else if (bz && !sn) game = Game.BelowZero;
+            else if (sn && bz)
+            {
+                Console.WriteLine("[QModManager] A fatal error has occurred.");
+                Console.WriteLine("Both Windows and Mac files detected!");
+                Console.WriteLine("Is this a Windows or a Mac environment?");
+                Console.WriteLine();
+                return false;
+            }
+            else
+            {
+                Console.WriteLine("[QModManager] A fatal error has occurred.");
+                Console.WriteLine("No Subnautica executable was found!");
+                Console.WriteLine();
+                return false;
+            }
+            return true;
+        }
+
+        internal static void DisableNonApplicableMods()
+        {
+            List<QMod> nonApplicableMods = new List<QMod>();
+            sortedMods = sortedMods.Where(mod =>
+            {
+                if (mod.Game == game) return true;
+
+                if (!nonApplicableMods.Contains(mod)) nonApplicableMods.Add(mod);
+                if (!erroredMods.Contains(mod)) erroredMods.Add(mod);
+                return false;
+
+            }).ToList();
+
+            Console.WriteLine($"\nQMOD WARN: The following {GetOtherGame()} mods were not loaded because {game.ToString()} was detected:");
+
+            foreach (QMod mod in nonApplicableMods)
+            {
+                Console.WriteLine(mod.DisplayName);
+            }
+        }
+
+        internal static string GetOtherGame()
+        {
+            if (game == Game.Subnautica) return "BelowZero";
+            else return "Subnautica";
+        }
+
+        #endregion
+
+        #region Load order
 
         internal static List<QMod> modSortingChain = new List<QMod>();
 
@@ -595,7 +657,7 @@ namespace QModManager
 
         #endregion
 
-        #region NUnit tests
+        #region Unit tests
 
         internal static void ClearModLists()
         {
