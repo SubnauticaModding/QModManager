@@ -99,7 +99,7 @@ namespace QModManager
                     Logger.Error($"No \"mod.json\" file found for mod located in folder \"{subDir}\"");
                     Logger.Error("A template file will be created");
                     File.WriteAllText(jsonFile, JsonConvert.SerializeObject(new QMod()));
-                    erroredMods.Add(new FakeQMod(subDir));
+                    erroredMods.Add(QMod.CreateFakeQMod(subDir));
                     continue;
                 }
 
@@ -108,7 +108,7 @@ namespace QModManager
                 if (mod == null)
                 {
                     Logger.Error($"Skipped a null mod found in folder \"{subDir}\"");
-                    erroredMods.Add(new FakeQMod(subDir));
+                    erroredMods.Add(QMod.CreateFakeQMod(subDir));
 
                     continue;
                 }
