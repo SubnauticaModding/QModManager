@@ -89,6 +89,8 @@ Source: "0Harmony-1.2.0.1.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags:
 Source: "Mono.Cecil.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion
 Source: "QModInstaller.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion
 Source: "QModManager.exe"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion
+Source: "PrefabDebugger.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion
+Source: "PrefabDebugger.unity3d"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion
 
 ; On install and uninstall, run executable based on condition
 [Run]

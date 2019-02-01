@@ -223,6 +223,8 @@ namespace QModManager
             }
 
             Logger.Info(toWrite);
+
+            CheckOldHarmony();
         }
 
         private static bool LoadMod(QMod mod)
@@ -650,6 +652,26 @@ namespace QModManager
             }
 
             return dependenciesMissing;
+        }
+
+        #endregion
+
+        #region Old harmony detection
+
+        private static void CheckOldHarmony()
+        {
+            foreach (QMod mod in loadedMods)
+            {
+                AssemblyName[] references = mod.LoadedAssembly.GetReferencedAssemblies();
+                foreach (AssemblyName reference in references)
+                {
+                    if (reference.FullName == "0Harmony, Version=1.0.9.1, Culture=neutral, PublicKeyToken=null")
+                    {
+                        Logger.Warn($"Mod \"{mod.Id}\" is using an old version of harmony! Tell the author to update.");
+                        break;
+                    }
+                }
+            }   
         }
 
         #endregion
