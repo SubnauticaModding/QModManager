@@ -24,14 +24,14 @@ namespace QModManager
         {
             try
             {
-                Logger.Info("Started loading QModManager");
-
                 if (patched)
                 {
                     Logger.Warn("Patch method was called multiple times!");
                     return;
                 }
                 patched = true;
+
+                Logger.Info($"Loading QModManager v{QMod.QModManagerVersion.ToString()}...");
 
                 if (QModBaseDir == null)
                 {
@@ -57,7 +57,7 @@ namespace QModManager
             catch (Exception e)
             {
                 Logger.Error("An exception has been caught:");
-                Console.WriteLine(e.ToString());
+                Debug.LogException(e);
             }
         }
 
@@ -247,19 +247,19 @@ namespace QModManager
                 catch (ArgumentNullException e)
                 {
                     Logger.Error($"Could not parse entry method \"{mod.AssemblyName}\" for mod \"{mod.Id}\"");
-                    Console.WriteLine(e.ToString());
+                    Debug.LogException(e);
                     return false;
                 }
                 catch (TargetInvocationException e)
                 {
                     Logger.Error($"Invoking the specified entry method \"{mod.EntryMethod}\" failed for mod \"{mod.Id}\"");
-                    Console.WriteLine(e.ToString());
+                    Debug.LogException(e);
                     return false;
                 }
                 catch (Exception e)
                 {
                     Logger.Error($"An unexpected error occurred whilst trying to load mod \"{mod.Id}\"");
-                    Console.WriteLine(e.ToString());
+                    Debug.LogException(e);
                     return false;
                 }
             }
@@ -415,8 +415,6 @@ namespace QModManager
                     outputStr = outputStr.Substring(0, outputStr.Length - 4);
                     Console.WriteLine(outputStr);
                 }
-
-                Console.WriteLine("");
             }
         }
 

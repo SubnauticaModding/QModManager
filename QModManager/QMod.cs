@@ -3,6 +3,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using UnityEngine;
 
 namespace QModManager
 {
@@ -48,14 +49,14 @@ namespace QModManager
             }
             catch (Exception e)
             {
-                Console.WriteLine("ERROR! mod.json deserialization failed!");
-                Console.WriteLine(e.ToString());
+                Logger.Error($"\"mod.json\" deserialization failed for file \"{file}\"!");
+                Debug.LogException(e);
 
                 return null;
             }
         }
     }
-
+    
     internal class FakeQMod : QMod
     {
         internal FakeQMod(string name)

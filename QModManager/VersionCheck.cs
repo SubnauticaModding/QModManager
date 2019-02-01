@@ -20,40 +20,54 @@ namespace QModManager
             timer += Time.deltaTime;
             if (timer < 1) return;
             Hooks.Update -= Check;
-            if (PlayerPrefs.GetInt("QModManager_EnableUpdateCheck", 1) == 0) return;
+            if (PlayerPrefs.GetInt("QModManager_EnableUpdateCheck", 1) == 0)
+            {
+                Logger.Info("Update check disabled");
+                return;
+            }
 
             ServicePointManager.ServerCertificateValidationCallback = CustomRemoteCertificateValidationCallback;
 
             using (WebClient client = new WebClient())
             {
-                client.DownloadStringAsync(new Uri(VersionURL));
                 client.DownloadStringCompleted += (sender, e) =>
                 {
                     if (e.Error != null)
                     {
-                        UnityEngine.Debug.LogException(e.Error);
+                        Logger.Error("There was an error retrieving the latest version from GitHub!");
+                        Debug.LogException(e.Error);
                         return;
                     }
                     Parse(e.Result);
                 };
+
+                Logger.Debug("Getting the latest version...");
+                client.DownloadStringAsync(new Uri(VersionURL));
             }
         }
         private static void Parse(string versionStr)
         {
             if (versionStr == null)
             {
-                UnityEngine.Debug.Log("Could not get latest version!");
+                Logger.Error("There was an error retrieving the latest version from GitHub!");
                 return;
             }
             Version version = new Version(versionStr);
             if (version == null)
             {
-                UnityEngine.Debug.Log("Could not get latest version!");
+                Logger.Error("There was an error retrieving the latest version from GitHub!");
                 return;
             }
-            if (!version.Equals(QMod.QModManagerVersion) && Patcher.erroredMods.Count <= 0)
-                Dialog.Show($"There is a newer version of QModManager available: {version.ToString()} " +
-                    "(current version: {QMod.QModManagerVersion.ToString()})", Dialog.Button.download, Dialog.Button.close, true);
+            if (!version.Equals(QMod.QModManagerVersion))
+            {
+                Logger.Info($"Newer version found: {version.ToString()} (current version: {QMod.QModManagerVersion.ToString()}");
+                if (Patcher.erroredMods.Count <= 0)
+                {
+                    Dialog.Show(
+                        $"There is a newer version of QModManager available: {version.ToString()} (current version: {QMod.QModManagerVersion.ToString()})",
+                        Dialog.Button.download, Dialog.Button.close, true);
+                }
+            }
         }
 
         [HarmonyPatch(typeof(uGUI_OptionsPanel), "AddTabs")]
