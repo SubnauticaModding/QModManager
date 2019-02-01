@@ -654,6 +654,25 @@ namespace QModManager
 
         #endregion
 
+        #region Old harmony detection
+
+        private static void CheckOldHarmony()
+        {
+            foreach (QMod mod in loadedMods)
+            {
+                AssemblyName[] references = mod.LoadedAssembly.GetReferencedAssemblies();
+                foreach (AssemblyName reference in references)
+                {
+                    if (reference.FullName == "0Harmony, Version=1.0.9.1, Culture=neutral, PublicKeyToken=null")
+                    {
+                        Logger.Warn($"Mod \"{mod.Id}\" is an old version of harmony! Please tell the author to update.");
+                    }
+                }
+            }   
+        }
+
+        #endregion
+
         #region Errored mods
 
         private static float timer = 0f;
