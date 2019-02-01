@@ -10,8 +10,8 @@ namespace QModManager
     {
         private readonly string gameDirectory;
         private readonly string managedDirectory;
+        private readonly string mainFilename = "Assembly-CSharp.dll";
         private const string installerFilename = "QModInstaller.dll";
-        private const string mainFilename = "Assembly-CSharp.dll";
 
         internal Injector(string dir, string managedDir)
         {
