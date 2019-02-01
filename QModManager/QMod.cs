@@ -55,23 +55,22 @@ namespace QModManager
                 return null;
             }
         }
-    }
-    
-    internal class FakeQMod : QMod
-    {
-        internal FakeQMod(string name)
+        internal static QMod CreateFakeQMod(string name)
         {
-            Id = Regex.Replace(Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase);
-            DisplayName = name;
-            Author = "None";
-            Version = "None";
-            Dependencies = new string[] { };
-            LoadBefore = new string[] { };
-            LoadAfter = new string[] { };
-            Enable = false;
-            ForBelowZero = false;
-            AssemblyName = "None";
-            EntryMethod = "None";
+            return new QMod()
+            {
+                Id = Regex.Replace(name, "[^0-9a-z_]", "", RegexOptions.IgnoreCase),
+                DisplayName = name,
+                Author = "None",
+                Version = "None",
+                Dependencies = new string[] { },
+                LoadBefore = new string[] { },
+                LoadAfter = new string[] { },
+                Enable = false,
+                ForBelowZero = false,
+                AssemblyName = "None",
+                EntryMethod = "None",
+            };
         }
     }
 }
