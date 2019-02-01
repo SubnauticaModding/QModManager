@@ -223,6 +223,8 @@ namespace QModManager
             }
 
             Logger.Info(toWrite);
+
+            CheckOldHarmony();
         }
 
         private static bool LoadMod(QMod mod)
