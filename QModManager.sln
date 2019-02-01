@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Executable", "Executable\Ex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QModManager", "QModManager\QModManager.csproj", "{DA63F59D-4676-4726-AFEC-BD9D3682733F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit Tests", "NUnit Tests\Unit Tests.csproj", "{D433A819-73DB-4E6C-AE73-D3DED793BD4E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit Tests", "Unit Tests\Unit Tests.csproj", "{D433A819-73DB-4E6C-AE73-D3DED793BD4E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prefab Debugger", "Prefab Debugger\Prefab Debugger.csproj", "{5BCB97C2-F049-4580-96D7-41CE6F2AE5BA}"
 EndProject
