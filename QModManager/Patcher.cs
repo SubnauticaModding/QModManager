@@ -667,7 +667,7 @@ namespace QModManager
                 {
                     if (reference.FullName == "0Harmony, Version=1.0.9.1, Culture=neutral, PublicKeyToken=null")
                     {
-                        Logger.Warn($"Mod \"{mod.Id}\" is an old version of harmony! Please tell the author to update.");
+                        Logger.Warn($"Mod \"{mod.Id}\" is using an old version of harmony! Tell the author to update.");
                     }
                 }
             }   
