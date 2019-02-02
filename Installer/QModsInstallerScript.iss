@@ -369,24 +369,36 @@ var DirEditOnChangePrev: TNotifyEvent;
 
 procedure DirEditOnChange(Sender: TObject);
 begin
-  if LowerCase(WizardForm.DirEdit.Text) = LowerCase(GetDir('Subnautica', 'Subnautica')) then // If the Subnautica path is typed manually
+  if not Pos('Subnautica', WizardForm.DirEdit.Text) = 0 then
   begin
-    if not SubnauticaButton.Checked then
+    if LowerCase(WizardForm.DirEdit.Text) = LowerCase(GetDir('Subnautica', 'Subnautica')) then // If the Subnautica path is typed manually
     begin
-      SubnauticaButton.Checked := true // Check the button
-    end;
-  end
-  else if LowerCase(WizardForm.DirEdit.Text) = LowerCase(GetDir('SubnauticaZero', 'SubnauticaZero')) then // If the Below Zerop path is typed manually
+      if not SubnauticaButton.Checked then
+      begin
+        SubnauticaButton.Checked := true // Check the button
+      end;
+    end
+  end;
+  if not Pos('SubnauticaZero', WizardForm.DirEdit.Text) = 0 then
   begin
-    if not BelowZeroButton.Checked then
+    if LowerCase(WizardForm.DirEdit.Text) = LowerCase(GetDir('SubnauticaZero', 'SubnauticaZero')) then // If the Below Zero path is typed manually
     begin
-      BelowZeroButton.Checked := true
-    end;
+      if not BelowZeroButton.Checked then
+      begin
+        BelowZeroButton.Checked := true // Check the button
+      end;
+    end
   end
-  else // If the path doesn't match any of the known ones, disable buttons
+  else // If the path doesn't match any of the known ones, disable the buttons
   begin
-    SubnauticaButton.Checked := false;
-    BelowZeroButton.Checked := false;
+    if SubnauticaButton.Checked then
+    begin
+      SubnauticaButton.Checked := false;
+    end;
+    if BelowZeroButton.Checked then
+    begin
+      BelowZeroButton.Checked := false;
+    end
   end 
 end;
 
