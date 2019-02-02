@@ -165,6 +165,8 @@ namespace QModManager
             {
                 Console.WriteLine("EXCEPTION CAUGHT!");
                 Console.WriteLine(e.ToString());
+                Console.WriteLine();
+                Console.ReadKey();
                 Environment.Exit(2);
             }
         }

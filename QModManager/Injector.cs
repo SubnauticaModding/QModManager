@@ -66,6 +66,8 @@ namespace QModManager
             {
                 Console.WriteLine("EXCEPTION CAUGHT!");
                 Console.WriteLine(e.ToString());
+                Console.WriteLine();
+                Console.ReadKey();
                 Environment.Exit(1);
             }
         }
@@ -128,6 +130,8 @@ namespace QModManager
             {
                 Console.WriteLine("EXCEPTION CAUGHT!");
                 Console.WriteLine(e.ToString());
+                Console.WriteLine();
+                Console.ReadKey();
             }
         }
 
