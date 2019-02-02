@@ -99,10 +99,12 @@ Source: "PrefabDebugger.unity3d"; DestDir: "{app}\SubnauticaZero_Data\Managed"; 
 
 ; On install and uninstall, run executable based on condition
 [Run]
-Filename: "{app}\Subnautica_Data\Managed\QModManager.exe"; Parameters: "-i"
+Filename: "{app}\Subnautica_Data\Managed\QModManager.exe"; Parameters: "-i"; Check: IsSubnauticaApp
+Filename: "{app}\SubnauticaZero_Data\Managed\QModManager.exe"; Parameters: "-i"; Check: IsBelowZeroApp
 
 [UninstallRun]
-Filename: "{app}\Subnautica_Data\Managed\QModManager.exe"; Parameters: "-u"
+Filename: "{app}\Subnautica_Data\Managed\QModManager.exe"; Parameters: "-u"; Check: IsSubnauticaApp
+Filename: "{app}\SubnauticaZero_Data\Managed\QModManager.exe"; Parameters: "-u"; Check: IsBelowZeroApp
 
 [Messages]
 ; The text that appears in the bottom-left, on the line of the box
