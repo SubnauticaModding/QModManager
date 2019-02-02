@@ -115,7 +115,6 @@ PasswordEditLabel=Consent:
 ; The text that appears on the Select install location page
 WizardSelectDir=Select install location
 SelectDirLabel3=Please select the install folder of the game.
-SelectDirBrowseLabel=If you cannot click next, please check your install path and make sure Subnautica is not running.
 ; Anyone have a better formulation for this line? It doesn't sound so good.
 ReadyLabel2a=By installing, you agree to allow QModManager to periodically check for updates. You can disable this option at any time, in the Subnautica options, under the Mods tab.
 ReadyLabel2b=By installing, you agree to allow QModManager to periodically check for updates. You can disable this option at any time, in the Subnautica options, under the Mods tab.
@@ -404,7 +403,7 @@ begin
     begin
       BelowZeroButton.Checked := false;
     end
-  end 
+  end
 end;
 
 function InitializeWizard_DirOnChange(): Boolean; // Overrides the DirEdit.OnChange event
