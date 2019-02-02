@@ -300,11 +300,13 @@ var BelowZeroButton: TNewRadioButton;
 procedure SubnauticaButtonOnClick(Sender: TObject);
 begin
   WizardForm.DirEdit.Text := GetDir('Subnautica', 'Subnautica')
+  SubnauticaButton.Checked := true
 end;
 
 procedure BelowZeroButtonOnClick(Sender: TObject);
 begin
   WizardForm.DirEdit.Text := GetDir('SubnauticaZero', 'SubnauticaZero')
+  BelowZeroButton.Checked := true
 end;
 
 function InitializeWizard_AddButtons(): Boolean; // Is called when the wizard gets initialized
