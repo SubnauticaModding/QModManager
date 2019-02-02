@@ -68,6 +68,10 @@ namespace QModManager
                         Dialog.Button.download, Dialog.Button.close, true);
                 }
             }
+            else 
+            {
+                Logger.Info($"Recieved latest version from GitHub. We are up to date!");
+            }
         }
 
         [HarmonyPatch(typeof(uGUI_OptionsPanel), "AddTabs")]
