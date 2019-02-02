@@ -101,8 +101,8 @@ namespace QModManager
                         Console.WriteLine("QModManager is already installed!");
                         Console.WriteLine("Skipping installation");
                         Console.WriteLine();
-                        Console.WriteLine("Press any key to exit...");
-                        Console.ReadKey();
+                        //Console.WriteLine("Press any key to exit...");
+                        //Console.ReadKey();
                         Environment.Exit(0);
                     }
                 }
@@ -118,8 +118,8 @@ namespace QModManager
                         Console.WriteLine("QModManager is already uninstalled!");
                         Console.WriteLine("Skipping uninstallation");
                         Console.WriteLine();
-                        Console.WriteLine("Press any key to exit...");
-                        Console.ReadKey();
+                        //Console.WriteLine("Press any key to exit...");
+                        //Console.ReadKey();
                         Environment.Exit(0);
                     }
                 }
