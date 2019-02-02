@@ -22,7 +22,7 @@ AlwaysShowDirOnReadyPage=yes
 ; Fixes an issue with the previous version where 'not found' would appear at the end of the path
 AppendDefaultDirName=no
 ; The GUID of the app
-AppId=StringToGUID({code:GetGUID})
+AppId={code:GetGUID}
 ; The app name
 AppName={#Name}
 ; The authors of the app
