@@ -341,8 +341,6 @@ begin
 end;
 
 function CurPageChanged_AddButtons(CurPageID: Integer): Boolean; // Is called whenever the page is changed
-var
-  LastPage: Boolean;
 begin
   if CurPageID = wpSelectDir then // If the page is select install path
   begin
@@ -366,14 +364,6 @@ begin
       WizardForm.DirEdit.Text := GetDir('SubnauticaZero', 'SubnauticaZero') // Sets path to Below Zero install location
       BelowZeroButton.Checked := true
     end;
-    LastPage := true // LastPage is a boolean variable which is used just to stop the Page changed message to appear multiple times
-  end
-  else
-  begin
-    if LastPage = true then
-    begin
-      LastPage := false
-    end
   end;
   SubnauticaButton.Visible := CurPageID = wpSelectDir // Enables or disables the buttons
   BelowZeroButton.Visible := CurPageID = wpSelectDir
