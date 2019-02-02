@@ -1,10 +1,10 @@
 ﻿#pragma warning disable CS0618 // Type or member is obsolete
 namespace SMLHelper.V2
 {
+    using System;
     using System.Reflection;
     using Harmony;
     using Patchers;
-    using System;
 
     public class Initializer
     {
@@ -23,11 +23,11 @@ namespace SMLHelper.V2
             }
             catch (Exception e)
             {
-                Console.WriteLine("Exception caught" + (!String.IsNullOrEmpty(e.Message) ? ", Message: " + e.Message : ""));
+                Console.WriteLine("Exception caught" + (!string.IsNullOrEmpty(e.Message) ? ", Message: " + e.Message : ""));
                 Console.WriteLine("StackTrace: " + e.StackTrace);
                 if (e.InnerException != null)
                 {
-                    Console.WriteLine("Inner exception caught" + (!String.IsNullOrEmpty(e.InnerException.Message) ? ", Message: " + e.InnerException.Message : ""));
+                    Console.WriteLine("Inner exception caught" + (!string.IsNullOrEmpty(e.InnerException.Message) ? ", Message: " + e.InnerException.Message : ""));
                     Console.WriteLine("Inner StackTrace: " + e.InnerException.StackTrace);
                 }
             }
