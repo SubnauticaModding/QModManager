@@ -10,7 +10,7 @@
 #define Author "the QModManager dev team"
 #define URL "https://github.com/QModManager/QModManager"
 #define SupportURL "https://discord.gg/UpWuWwq"
-#define UpdatesURL "https://nexusmods.com/" ; The link to the mod will be added after it
+#define UpdatesURL "https://nexusmods.com" ; The link to the mod will be added after it
 
 ; Defines special flags that change the way the installer behaves
 #define PreRelease false ; If this is true, a window will appear, promting the user to agree to install the program in this unstable pre-release state
@@ -30,7 +30,7 @@ AppPublisher={#Author}
 ; URLs that will appear on the information page of the app in the Add or Remove Programs page
 AppPublisherURL={#URL}
 AppSupportURL={#SupportURL}
-AppUpdatesURL={#UpdatesURL}
+AppUpdatesURL={code:GetURL}
 ; Display name of the app in the Add or Remove Programs page
 AppVerName={#Name} {#Version}
 ; Sets the version of the app
@@ -173,7 +173,6 @@ begin
   Result := IsBelowZero(ExpandConstant('{app}'));
 end;
 
-
 function GetName(def: string): String;
 begin
   if (IsSubnauticaApp()) then
@@ -183,6 +182,22 @@ begin
   else if (IsBelowZeroApp()) then
   begin
     Result := '{#Name} (Below zero)'
+  end
+  else
+  begin
+    Result := ExpandConstant('{app}')
+  end
+end;
+
+function GetURL(def: string): String;
+begin
+  if (IsSubnauticaApp()) then
+  begin
+    Result := '{#UpdatesURL}/subnautica/mods/16'
+  end
+  else if (IsBelowZeroApp()) then
+  begin
+    Result := '{#UpdatesURL}/subnauticabelowzero/mods/1'
   end
   else
   begin
