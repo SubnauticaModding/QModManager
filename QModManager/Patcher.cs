@@ -31,7 +31,7 @@ namespace QModManager
                 }
                 patched = true;
 
-                Logger.Info($"Loading QModManager v{QMod.QModManagerVersion.ToString()}...");
+                Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}...");
 
                 if (QModBaseDir == null)
                 {
