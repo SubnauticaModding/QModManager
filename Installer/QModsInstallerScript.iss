@@ -317,8 +317,8 @@ begin
   begin
     Parent := WizardForm
     Caption := 'Auto-complete path for: (Steam)'
-    Left := WizardForm.BackButton.Left - 360
-    Top := WizardForm.BackButton.Top - 8
+    Left := WizardForm.SelectDirLabel.Left / 3
+    Top := WizardForm.BackButton.Top - WizardForm.BackButton.Top / 90
   end;
 
   SubnauticaButton := TNewRadioButton.Create(WizardForm)
@@ -327,7 +327,7 @@ begin
     Parent := WizardForm
     Caption := 'Subnautica'
     OnClick := @SubnauticaButtonOnClick
-    Left := WizardForm.BackButton.Left - 244
+    Left := WizardForm.SelectDirLabel.Left + WizardForm.SelectDirLabel.Left / 30
     Top := WizardForm.BackButton.Top + 10
     Height := WizardForm.BackButton.Height
   end;
@@ -338,7 +338,7 @@ begin
     Parent := WizardForm
     Caption := 'Below Zero'
     OnClick := @BelowZeroButtonOnClick
-    Left := WizardForm.BackButton.Left - 122
+    Left := SubnauticaButton.Left * 3
     Top := WizardForm.BackButton.Top + 10
     Height := WizardForm.BackButton.Height
   end;
