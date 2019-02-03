@@ -23,8 +23,12 @@ namespace QModManager
                 if (Patcher.game == Patcher.Game.Subnautica)
                     logPath = Path.Combine(Patcher.QModBaseDir, "../Subnautica_Data/output_log.txt");
                 else
-                    logPath = Path.Combine(Application.persistentDataPath, "../../../../LocalLow/Unknown Worlds/Subnautica_ Below Zero/output_log.txt");
-                Process.Start(logPath);
+                    logPath = Path.Combine(Application.persistentDataPath, "output_log.txt");
+                Logger.Debug($"Opening log file located in: \"{logPath}\"");
+                if (File.Exists(logPath))
+                    Process.Start(logPath);
+                else
+                    Logger.Error("Log file was not found!");
             });
             internal static readonly Button close = new Button("Close", () => { });
             internal static readonly Button download = new Button("Download", () => Process.Start(VersionCheck.nexusmodsURL));
