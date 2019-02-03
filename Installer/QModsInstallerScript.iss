@@ -117,12 +117,13 @@ PasswordEditLabel=Consent:
 ; The text that appears on the Select install location page
 WizardSelectDir=Select install location
 SelectDirLabel3=Please select the install folder of the game.
-; Anyone have a better formulation for this line? It doesn't sound so good.
-ReadyLabel2a=By installing, you agree to allow QModManager to periodically check for updates. You can disable this option at any time, in the Subnautica options, under the Mods tab.
-ReadyLabel2b=By installing, you agree to allow QModManager to periodically check for updates. You can disable this option at any time, in the Subnautica options, under the Mods tab.
+SelectDirBrowseLabel=To continue, click Next. If you would like to select a different folder, click Browse. You can also use the buttons on the bottom left to auto-complete the install path for the chosen game. (Only works for Steam)
+; Update checks are enabled by default
+ReadyLabel2a=By installing, you agree to allow QModManager to periodically check for updates. You can disable this option at any time in the Mods tab of the Subnautica options menu.
+ReadyLabel2b=By installing, you agree to allow QModManager to periodically check for updates. You can disable this option at any time in the Mods tab of the Subnautica options menu.
 ; The message that appears when the user tries to cancel the install
 ExitSetupMessage=Setup is not complete. If you exit now, {#Name} will not be installed.%nExit Setup?
-; The installer doesn't use components, but the feature is needed for differentiating between Subnautica and Below Zero, and it's nice to have it 
+; The installer doesn't use components, but the feature is used for letting the user know what game he is about to install QModManager for, or if the folder doesn't contain any valid games.
 WizardSelectComponents=Review Install
 SelectComponentsDesc=
 SelectComponentsLabel2=
