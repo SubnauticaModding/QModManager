@@ -77,6 +77,7 @@ namespace QModManager.Debugger
         internal static void Main()
         {
             new GameObject("PrefabDebugger").AddComponent<PrefabDebugger>();
+            Logger.Debug("Debugger initialized");
         }
 
         private void Start()
@@ -207,7 +208,7 @@ namespace QModManager.Debugger
                     }
                     catch (Exception e)
                     {
-                        Debug.Log("Failure to load scene:" + e.StackTrace);
+                        Debug.Log("Failed to load scene:" + e.StackTrace);
                     }
                 }
 
