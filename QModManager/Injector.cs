@@ -29,8 +29,8 @@ namespace QModManager
                     Console.WriteLine("Tried to install, but it was already injected");
                     Console.WriteLine("Skipping installation");
                     Console.WriteLine();
-                    Console.WriteLine("Press any key to exit...");
-                    Console.ReadKey();
+                    //Console.WriteLine("Press any key to exit...");
+                    //Console.ReadKey();
                     Environment.Exit(0);
                 }
 
@@ -55,17 +55,18 @@ namespace QModManager
 
                 if (!Directory.Exists(qmodsDirectory)) Directory.CreateDirectory(qmodsDirectory);
 
-                Console.WriteLine();
                 Console.WriteLine("QModManager installed successfully");
                 Console.WriteLine();
-                Console.WriteLine("Press any key to exit...");
-                Console.ReadKey();
+                //Console.WriteLine("Press any key to exit...");
+                //Console.ReadKey();
                 Environment.Exit(0);
             }
             catch (Exception e)
             {
                 Console.WriteLine("EXCEPTION CAUGHT!");
                 Console.WriteLine(e.ToString());
+                Console.WriteLine();
+                Console.ReadKey();
                 Environment.Exit(1);
             }
         }
@@ -78,8 +79,8 @@ namespace QModManager
                     Console.WriteLine("Tried to uninstall, but patch was not present");
                     Console.WriteLine("Skipping uninstallation");
                     Console.WriteLine();
-                    Console.WriteLine("Press any key to exit...");
-                    Console.ReadKey();
+                    //Console.WriteLine("Press any key to exit...");
+                    //Console.ReadKey();
                     Environment.Exit(0);
                 }
 
@@ -110,6 +111,7 @@ namespace QModManager
                 else
                 {
                     Console.WriteLine("An unexpected error has occurred.");
+                    Console.WriteLine("The patch method couldn't be found. Was it even injected?");
                     Console.WriteLine();
                     Console.WriteLine("Press any key to exit");
                     Console.ReadKey();
@@ -120,14 +122,17 @@ namespace QModManager
 
                 Console.WriteLine("QModManager was uninstalled successfully");
                 Console.WriteLine();
-                Console.WriteLine("Press any key to exit...");
-                Console.ReadKey();
+                //Console.WriteLine("Press any key to exit...");
+                //Console.ReadKey();
                 Environment.Exit(0);
             }
             catch (Exception e)
             {
                 Console.WriteLine("EXCEPTION CAUGHT!");
                 Console.WriteLine(e.ToString());
+                Console.WriteLine();
+                Console.ReadKey();
+                Environment.Exit(2);
             }
         }
 

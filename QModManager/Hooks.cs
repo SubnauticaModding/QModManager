@@ -19,7 +19,6 @@ namespace QModManager
         internal static void Load()
         {
             SceneManager.sceneLoaded += (scene, loadSceneMode) => SceneLoaded?.Invoke(scene, loadSceneMode);
-            Logger.Debug("Loaded 'SceneLoaded' hook");
         }
 
         [HarmonyPatch(typeof(DevConsole), "Start")]
@@ -30,7 +29,7 @@ namespace QModManager
             {
                 __instance.gameObject.AddComponent<QMMHooks>();
 
-                Logger.Debug("Loaded the rest of the hooks");
+                Logger.Debug("Hooks loaded");
 
                 Start?.Invoke();
             }

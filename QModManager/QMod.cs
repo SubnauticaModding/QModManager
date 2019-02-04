@@ -9,8 +9,6 @@ namespace QModManager
 {
     public class QMod
     {
-        public static readonly Version QModManagerVersion = new Version(1, 4);
-
         public string Id = "ModID";
         public string DisplayName = "Mod display name";
         public string Author = "Author name";

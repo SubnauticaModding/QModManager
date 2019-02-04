@@ -2,6 +2,7 @@
 using System;
 using System.Net;
 using System.Net.Security;
+using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using UnityEngine.Events;
@@ -47,24 +48,25 @@ namespace QModManager
         }
         private static void Parse(string versionStr)
         {
+            Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
             if (versionStr == null)
             {
                 Logger.Error("There was an error retrieving the latest version from GitHub!");
                 return;
             }
-            Version version = new Version(versionStr);
-            if (version == null)
+            Version latestVersion = new Version(versionStr);
+            if (latestVersion == null)
             {
                 Logger.Error("There was an error retrieving the latest version from GitHub!");
                 return;
             }
-            if (!version.Equals(QMod.QModManagerVersion))
+            if (latestVersion > currentVersion)
             {
-                Logger.Info($"Newer version found: {version.ToString()} (current version: {QMod.QModManagerVersion.ToString()}");
+                Logger.Info($"Newer version found: {latestVersion.ToString()} (current version: {currentVersion.ToString()}");
                 if (Patcher.erroredMods.Count <= 0)
                 {
                     Dialog.Show(
-                        $"There is a newer version of QModManager available: {version.ToString()} (current version: {QMod.QModManagerVersion.ToString()})",
+                        $"There is a newer version of QModManager available: {latestVersion.ToString()} (current version: {currentVersion.ToString()})",
                         Dialog.Button.download, Dialog.Button.close, true);
                 }
             }

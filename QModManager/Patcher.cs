@@ -31,20 +31,20 @@ namespace QModManager
                 }
                 patched = true;
 
-                Logger.Info($"Loading QModManager v{QMod.QModManagerVersion.ToString()}...");
+                Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}...");
 
                 if (QModBaseDir == null)
                 {
                     Logger.Fatal("A fatal error has occurred.");
                     Logger.Fatal("There was an error with the QMods directory");
-                    Logger.Fatal("Please make sure that you ran Subnautica from Steam/Epic/Discord, and not from the .exe file!");
+                    Logger.Fatal("Please make sure that you ran Subnautica from Steam/Epic/Discord, and not from the executable file!");
                     return;
                 }
 
                 Hooks.Load();
                 if (!DetectGame()) return;
                 StartLoadingMods();
-                HarmonyInstance.Create("qmodmanager.subnautica").PatchAll();
+                PatchHarmony();
 
                 Hooks.Update += ShowErroredMods;
                 Hooks.Update += VersionCheck.Check;
@@ -61,10 +61,18 @@ namespace QModManager
             }
         }
 
+        private static void PatchHarmony()
+        {
+            HarmonyInstance.Create("qmodmanager.subnautica").PatchAll();
+            Logger.Debug("Patched!");
+        }
+
         #region Mod loading
 
         private static void StartLoadingMods()
         {
+            Logger.Info("Started loading mods");
+
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {
                 FileInfo[] allDlls = new DirectoryInfo(QModBaseDir).GetFiles("*.dll", SearchOption.AllDirectories);
@@ -267,7 +275,7 @@ namespace QModManager
             }
 
             mod.Loaded = true;
-            Logger.Debug($"Loaded mod \"{mod.Id}\"");
+            Logger.Info($"Loaded mod \"{mod.Id}\"");
 
             return true;
         }
