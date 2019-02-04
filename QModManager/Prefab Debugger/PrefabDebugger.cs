@@ -132,7 +132,7 @@ namespace QModManager.Debugger
 
         private void LateUpdate()
         {
-            if (Input.GetKeyUp(KeyCode.F9))
+            if ((Input.GetKeyDown(KeyCode.F9)) || (showDebugger && Input.GetKeyDown(KeyCode.Escape)))
             {
                 showDebugger = !showDebugger;
                 UWE.Utils.alwaysLockCursor = !showDebugger;
