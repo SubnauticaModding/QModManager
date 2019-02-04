@@ -76,7 +76,9 @@ namespace QModManager.Debugger
 
         internal static void Main()
         {
-            new GameObject("PrefabDebugger").AddComponent<PrefabDebugger>();
+            GameObject debugger = new GameObject("PrefabDebugger");
+            debugger.AddComponent<PrefabDebugger>();
+            debugger.AddComponent<uGUI_InputGroup>();
         }
 
         private void Start()
@@ -133,8 +135,10 @@ namespace QModManager.Debugger
             if (Input.GetKeyUp(KeyCode.F9))
             {
                 showDebugger = !showDebugger;
-                UWE.Utils.alwaysLockCursor = false;
-                UWE.Utils.lockCursor = false;
+                UWE.Utils.alwaysLockCursor = !showDebugger;
+                UWE.Utils.lockCursor = !showDebugger;
+                if (showDebugger) FPSInputModule.SelectGroup(GetComponent<uGUI_InputGroup>(), true);
+                else FPSInputModule.DeselectGroup(GetComponent<uGUI_InputGroup>());
             }
 
             if (screenResolution != new Vector2(Screen.width, Screen.height))
