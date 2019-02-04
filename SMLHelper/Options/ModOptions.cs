@@ -34,7 +34,7 @@
     /// <summary>
     /// Abstract class that provides the framework for your mod's in-game configuration options.
     /// </summary>
-    public abstract partial class ModOptions : IComparable
+    public abstract partial class ModOptions
     {
         /// <summary>
         /// The name of this set of configuration options.
@@ -76,16 +76,6 @@
         /// <seealso cref="SliderChanged"/> | <seealso cref="ToggleChanged"/> | <seealso cref="ChoiceChanged"/> | <seealso cref="KeybindChanged"/>.</para>
         /// </summary>
         public abstract void BuildModOptions();
-
-        /// <summary>
-        /// Compares one <see cref="ModOptions"/> object to another, based on their <see cref="Name"/>
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public int CompareTo(object obj)
-        {
-            return Name.CompareTo(obj);
-        }
     }
 
     /// <summary>

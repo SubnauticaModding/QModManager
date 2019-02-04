@@ -11,7 +11,7 @@
 
     internal class OptionsPanelPatcher
     {
-        internal static List<ModOptions> modOptions = new List<ModOptions>();
+        internal static SortedList<string, ModOptions> modOptions = new SortedList<string, ModOptions>();
 
         internal static void Patch(HarmonyInstance harmony)
         {
@@ -46,7 +46,7 @@
                 modsTab = optionsPanel.AddTab("Mods");
             }
 
-            foreach (ModOptions modOption in modOptions)
+            foreach (ModOptions modOption in modOptions.Values)
             {
                 optionsPanel.AddHeading(modsTab, modOption.Name);
 
