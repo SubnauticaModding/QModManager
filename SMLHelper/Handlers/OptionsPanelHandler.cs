@@ -16,6 +16,7 @@
         public static void RegisterModOptions(ModOptions options)
         {
             OptionsPanelPatcher.modOptions.Add(options);
+            OptionsPanelPatcher.modOptions.Sort();
         }
     }
 }

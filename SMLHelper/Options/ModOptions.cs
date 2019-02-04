@@ -1,5 +1,6 @@
 ﻿namespace SMLHelper.V2.Options
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using UnityEngine;
@@ -33,7 +34,7 @@
     /// <summary>
     /// Abstract class that provides the framework for your mod's in-game configuration options.
     /// </summary>
-    public abstract partial class ModOptions
+    public abstract partial class ModOptions : IComparable
     {
         /// <summary>
         /// The name of this set of configuration options.
@@ -72,9 +73,19 @@
         /// <para>This method should be composed of calls into the following methods: 
         /// <seealso cref="AddSliderOption"/> | <seealso cref="AddToggleOption"/> | <seealso cref="AddChoiceOption(string, string, string[], int)"/> | <seealso cref="AddKeybindOption(string, string, GameInput.Device, KeyCode)"/>.</para>
         /// <para>Make sure you have subscribed to the events in the constructor to handle what happens when the value is changed:
-        /// <seealso cref="SliderChanged"/> | <seealso cref="ToggleChanged"/> | <seealso cref="ChoiceChanged"/> | <seealso cref="KeybindChanged"/> | <seealso cref="DropdownChanged"/>.</para>
+        /// <seealso cref="SliderChanged"/> | <seealso cref="ToggleChanged"/> | <seealso cref="ChoiceChanged"/> | <seealso cref="KeybindChanged"/>.</para>
         /// </summary>
         public abstract void BuildModOptions();
+
+        /// <summary>
+        /// Compares one <see cref="ModOptions"/> object to another, based on their <see cref="Name"/>
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public int CompareTo(object obj)
+        {
+            return Name.CompareTo(obj);
+        }
     }
 
     /// <summary>
