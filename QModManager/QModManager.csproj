@@ -70,6 +70,7 @@
     <Compile Include="Dialog.cs" />
     <Compile Include="Hooks.cs" />
     <Compile Include="Logger.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="Prefab Debugger\HierarchyItem.cs" />
     <Compile Include="Prefab Debugger\LogMessage.cs" />
     <Compile Include="Prefab Debugger\PrefabDebugger.cs" />

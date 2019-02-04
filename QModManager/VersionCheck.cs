@@ -1,11 +1,9 @@
-﻿using Harmony;
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Security;
 using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace QModManager
 {
@@ -73,20 +71,6 @@ namespace QModManager
             else 
             {
                 Logger.Info($"Recieved latest version from GitHub. We are up to date!");
-            }
-        }
-
-        [HarmonyPatch(typeof(uGUI_OptionsPanel), "AddTabs")]
-        private static class AddTabPatch
-        {
-            [HarmonyPostfix]
-            private static void Postfix(uGUI_OptionsPanel __instance)
-            {
-                bool currentValue = PlayerPrefs.GetInt("QModManager_EnableUpdateCheck", 1) == 0 ? false : true;
-                int modsTab = __instance.AddTab("Mods");
-                __instance.AddHeading(modsTab, "QModManager");
-                __instance.AddToggleOption(modsTab, "Check for updates", currentValue,
-                    new UnityAction<bool>((bool toggleVal) => PlayerPrefs.SetInt("QModManager_EnableUpdateCheck", toggleVal ? 1 : 0)));
             }
         }
 
