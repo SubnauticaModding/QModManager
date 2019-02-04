@@ -86,7 +86,7 @@ namespace QModManager
                 int modsTab = __instance.AddTab("Mods");
                 __instance.AddHeading(modsTab, "QModManager");
                 __instance.AddToggleOption(modsTab, "Check for updates", currentValue,
-                    new UnityAction<bool>((bool toggleVal) => PlayerPrefs.SetInt("QModManager_EnableUpdateCheck", toggleVal == false ? 0 : 1)));
+                    new UnityAction<bool>((bool toggleVal) => PlayerPrefs.SetInt("QModManager_EnableUpdateCheck", toggleVal ? 1 : 0)));
             }
         }
 

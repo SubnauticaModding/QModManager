@@ -9,17 +9,8 @@ using UnityEngine.UI;
 
 namespace QModManager.Debugger
 {
-    public class PrefabDebugger : MonoBehaviour
+    internal class PrefabDebugger : MonoBehaviour
     {
-        //THINGS I NEED TO ADD
-
-        //Raycasting objects to view their components (in game highlighting of the object would be cool)
-        //Adding/Removing objects and their components
-        //Make the UI look much better (it sucks)
-        //Change the width of a component's property labels to not be hardcoded
-        //Fix the repopulate method so it works properly
-        //Refactor ShowSelectedComponents method to not be so bad
-
         private HierarchyItem selectedGameObject = null;
         private HierarchyItem draggedGameObject = null;
         private PropertyInfo colorProperty;
@@ -39,8 +30,7 @@ namespace QModManager.Debugger
             {"Scene", true },
         };
 
-
-        public GUISkin skinUWE;
+        private GUISkin skinUWE;
         private TreeNode<HierarchyItem> sceneTree;
         private Vector2 compScrollPos, hierarchyScrollPos, consoleScrollPos, addComponentScrollPos, sceneScrollPos;
         private int numGameObjects = 0;
@@ -76,7 +66,7 @@ namespace QModManager.Debugger
 
         private const string right_arrow = "▶";
         private const string down_arrow = "▼";
-        public Texture2D stop_symbol, warning_symbol, log_symbol;
+        private Texture2D stop_symbol, warning_symbol, log_symbol;
 
         //User options that are saved and loaded
         private bool showReadonlyProperties = false;
@@ -84,8 +74,7 @@ namespace QModManager.Debugger
         private int windowMargin = 50;
         private int viewMargin = 10;
 
-
-        public static void Main()
+        internal static void Main()
         {
             new GameObject("PrefabDebugger").AddComponent<PrefabDebugger>();
         }
@@ -99,10 +88,10 @@ namespace QModManager.Debugger
             DontDestroyOnLoad(this);
 
             //Load Player Settings
-            windowMargin = PlayerPrefs.GetInt("windowMargin", 50);
-            viewMargin = PlayerPrefs.GetInt("viewMargin", 10);
-            showReadonlyProperties = PlayerPrefs.GetInt("showReadonlyProperties", 0) == 1 ? true : false;
-            showBlacklistedProperties = PlayerPrefs.GetInt("showBlacklistedProperties", 0) == 1 ? true : false;
+            windowMargin = PlayerPrefs.GetInt("QModManager_PrefabDebugger_WindowMargin", 50);
+            viewMargin = PlayerPrefs.GetInt("QModManager_PrefabDebugger_ViewMargin", 10);
+            showReadonlyProperties = PlayerPrefs.GetInt("QModManager_PrefabDebugger_ShowReadonlyProperties", 0) == 1 ? true : false;
+            showBlacklistedProperties = PlayerPrefs.GetInt("QModManager_PrefabDebugger_ShowBlacklistedProperties", 0) == 1 ? true : false;
 
             if (skinUWE == null)
             {
@@ -114,6 +103,10 @@ namespace QModManager.Debugger
                     stop_symbol = (Texture2D)assets.LoadAsset("stop");
                     warning_symbol = (Texture2D)assets.LoadAsset("warning");
                     log_symbol = (Texture2D)assets.LoadAsset("speech");
+                }
+                else
+                {
+                    Logger.Error("Could not load assets from \"PrefabDebugger.unity3d\"");
                 }
             }
             LoadSceneObjects();
@@ -334,11 +327,10 @@ namespace QModManager.Debugger
 
                 if (GUILayout.Button("Save Settings", GUILayout.Width(200)))
                 {
-                    PlayerPrefs.SetInt("windowMargin", windowMargin);
-                    PlayerPrefs.SetInt("viewMargin", viewMargin);
-                    PlayerPrefs.SetInt("showReadonlyProperties", showReadonlyProperties ? 1 : 0);
-                    PlayerPrefs.SetInt("showBlacklistedProperties", showBlacklistedProperties ? 1 : 0);
-                    //Save Settings, JSON?
+                    PlayerPrefs.SetInt("QModManager_PrefabDebugger_WindowMargin", windowMargin);
+                    PlayerPrefs.SetInt("QModManager_PrefabDebugger_ViewMargin", viewMargin);
+                    PlayerPrefs.SetInt("QModManager_PrefabDebugger_ShowReadonlyProperties", showReadonlyProperties ? 1 : 0);
+                    PlayerPrefs.SetInt("QModManager_PrefabDebugger_ShowBlacklistedProperties", showBlacklistedProperties ? 1 : 0);
                 }
 
                 GUILayout.EndVertical();
@@ -792,6 +784,7 @@ namespace QModManager.Debugger
         //This is broken and in the process of being fixed
         //Current issue: Doesn't remove gameobjects that aren't present in reload
         //Working: Adds new gameobjects and children seen in reload
+        [Obsolete("Broken", true)]
         private void RepopulateTreeRecursively()
         {
             var updatedSceneTree = new TreeNode<HierarchyItem>();
@@ -896,5 +889,4 @@ namespace QModManager.Debugger
             }
         }
     }
-
 }

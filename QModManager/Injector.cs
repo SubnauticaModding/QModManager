@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace QModManager
 {
-    public class Injector
+    internal class Injector
     {
         private readonly string gameDirectory;
         private readonly string managedDirectory;

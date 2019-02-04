@@ -1,5 +1,5 @@
-# SubnauticaPrefabDebugger
- Prefab debugger for Subnautica that allows modders the ability to view in-game prefab hierarchies and their respective components, as well as real time editable values for each component. Still a work in progress, but it does work in game currently, and most of the features function perfectly.
+# Prefab Debugger
+A prefab debugger for Subnautica that allows modders the ability to view in-game prefab hierarchies and their respective components, as well as real time editable values for each component. Still a work in progress, but it does work in game currently, and most of the features function perfectly.
 
 **Upcoming Features**
 
