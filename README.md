@@ -48,6 +48,11 @@ _(optional, defaults to `true`)_
 Type: `bool`  
 Example: `true`
 
+- `ForBelowZero`: Whether or not your mod is for Below Zero.  
+_(optional, defaults to `false`)_  
+Type: `bool`  
+Example: `false`
+
 - `AssemblyName`: The name of the DLL file which contains the mod.
 _(required)_  
 Type: `string`  
@@ -70,6 +75,7 @@ Example: `"BestMod.QMod.Patch"`
   "LoadBefore": [ "AModID", "SomeOtherModID" ],
   "LoadAfter": [ "AnotherModID" ],
   "Enable": true,
+  "ForBelowZero": false,
   "AssemblyName": "BestMod.dll",
   "EntryMethod": "BestMod.QMod.Patch"
 }
