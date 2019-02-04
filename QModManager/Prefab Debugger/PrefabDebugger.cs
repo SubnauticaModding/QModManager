@@ -20,14 +20,14 @@ namespace QModManager.Debugger
         private bool addComponent = false;
         private readonly Dictionary<string, bool> componentTabs = new Dictionary<string, bool>
         {
-            {"UnityEngine", true },
-            {"UnityEngine.UI", true },
-            {"Subnautica", true },
+            { "Subnautica", true },
+            { "UnityEngine", true },
+            { "UnityEngine.UI", true },
         };
         private readonly Dictionary<string, bool> prefabTabs = new Dictionary<string, bool>
         {
-            {"Assets", true },
-            {"Scene", true },
+            { "Assets", true },
+            { "Scene", true },
         };
 
         private GUISkin skinUWE;
@@ -76,9 +76,7 @@ namespace QModManager.Debugger
 
         internal static void Main()
         {
-            GameObject debugger = new GameObject("PrefabDebugger");
-            debugger.AddComponent<PrefabDebugger>();
-            debugger.AddComponent<uGUI_InputGroup>();
+            new GameObject("PrefabDebugger").AddComponent<PrefabDebugger>();
         }
 
         private void Start()
@@ -135,10 +133,8 @@ namespace QModManager.Debugger
             if ((Input.GetKeyDown(KeyCode.F9) && PlayerPrefs.GetInt("QModManager_PrefabDebugger_Enable") == 1) || (showDebugger && Input.GetKeyDown(KeyCode.Escape)))
             {
                 showDebugger = !showDebugger;
-                UWE.Utils.alwaysLockCursor = !showDebugger;
-                UWE.Utils.lockCursor = !showDebugger;
-                if (showDebugger) FPSInputModule.SelectGroup(GetComponent<uGUI_InputGroup>(), true);
-                else FPSInputModule.DeselectGroup(GetComponent<uGUI_InputGroup>());
+                UWE.Utils.alwaysLockCursor = false;
+                UWE.Utils.lockCursor = false;
             }
 
             if (screenResolution != new Vector2(Screen.width, Screen.height))
