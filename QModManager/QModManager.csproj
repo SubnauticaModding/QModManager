@@ -69,10 +69,21 @@
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Dialog.cs" />
     <Compile Include="Hooks.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Prefab Debugger\HierarchyItem.cs" />
+    <Compile Include="Prefab Debugger\LogMessage.cs" />
+    <Compile Include="Prefab Debugger\PrefabDebugger.cs" />
+    <Compile Include="Prefab Debugger\Tree.cs" />
     <Compile Include="QMod.cs" />
     <Compile Include="Injector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Patcher.cs" />
+    <Compile Include="VersionCheck.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Prefab Debugger\PrefabDebugger.unity3d">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

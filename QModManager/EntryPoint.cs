@@ -2,6 +2,6 @@
 {
     public class QModPatcher
     {
-        public static void Patch() => QModManager.QModPatcher.Patch();
+        public static void Patch() => QModManager.Patcher.Patch();
     }
 }

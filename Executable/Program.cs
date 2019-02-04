@@ -10,12 +10,20 @@ namespace QModManager
     {
         Install,
         Uninstall,
-        RunByUser
+        RunByUser,
+    }
+    internal enum OS
+    {
+        Windows,
+        Mac,
+        Both,
+        None,
     }
 
-    internal static class ConsoleExecutable
+    internal static class Executable
     {
         internal static Action action = Action.RunByUser;
+        internal static OS os;
 
         internal static void Main(string[] args)
         {
@@ -33,7 +41,6 @@ namespace QModManager
                     else if (arg == "-u") action = Action.Uninstall;
                 }
 
-                string directory = Path.Combine(Environment.CurrentDirectory, @"..\..");
                 string managedDirectory = Environment.CurrentDirectory;
 
                 if (!File.Exists(managedDirectory + "/Assembly-CSharp.dll"))
@@ -47,7 +54,27 @@ namespace QModManager
                     Environment.Exit(1);
                 }
 
-                if (Directory.GetFiles(directory, "*Subnautica*.exe", SearchOption.TopDirectoryOnly).Length <= 0)
+                GetInfo(out os, out string directory);
+
+                Injector injector;
+
+                if (os == OS.Both)
+                {
+                    // This runs if both windows and mac files were detected, but it should NEVER happen.
+                    Console.WriteLine("An unexpected error has occurred.");
+                    Console.WriteLine("Both Windows and Mac files detected!");
+                    Console.WriteLine("Is this a Windows or a Mac environment?");
+                    Console.WriteLine();
+                    Console.WriteLine("Press any key to exit...");
+                    Console.ReadKey();
+                    Environment.Exit(1);
+                    return;
+                }
+                else if (os == OS.Windows || os == OS.Mac)
+                {
+                    injector = new Injector(directory, managedDirectory);
+                }
+                else
                 {
                     Console.WriteLine("Could not find any game to patch!");
                     Console.WriteLine("An assembly file was found, but no executable was detected.");
@@ -57,10 +84,8 @@ namespace QModManager
                     Console.WriteLine("Press any key to exit...");
                     Console.ReadKey();
                     Environment.Exit(1);
+                    return;
                 }
-
-#warning TODO: Improve injector code. It's 2018 out there...
-                QModInjector injector = new QModInjector(directory, managedDirectory);
 
                 bool isInjected = injector.IsInjected();
 
@@ -76,8 +101,8 @@ namespace QModManager
                         Console.WriteLine("QModManager is already installed!");
                         Console.WriteLine("Skipping installation");
                         Console.WriteLine();
-                        Console.WriteLine("Press any key to exit...");
-                        Console.ReadKey();
+                        //Console.WriteLine("Press any key to exit...");
+                        //Console.ReadKey();
                         Environment.Exit(0);
                     }
                 }
@@ -93,8 +118,8 @@ namespace QModManager
                         Console.WriteLine("QModManager is already uninstalled!");
                         Console.WriteLine("Skipping uninstallation");
                         Console.WriteLine();
-                        Console.WriteLine("Press any key to exit...");
-                        Console.ReadKey();
+                        //Console.WriteLine("Press any key to exit...");
+                        //Console.ReadKey();
                         Environment.Exit(0);
                     }
                 }
@@ -138,8 +163,81 @@ namespace QModManager
             }
             catch (Exception e)
             {
+                Console.WriteLine("EXCEPTION CAUGHT!");
                 Console.WriteLine(e.ToString());
+                Console.WriteLine();
+                Console.ReadKey();
                 Environment.Exit(2);
+            }
+        }
+
+        internal static void GetInfo(out OS os, out string directory)
+        {
+            string windowsDirectory = Path.Combine(Environment.CurrentDirectory, "../..");
+            string macDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../..");
+
+            // Check if the device is running Windows OS
+            bool onWindows = false, onWindowsSN = false, onWindowsBZ = false;
+            if (!Directory.Exists(windowsDirectory)) onWindows = false;
+            else
+            {
+                try
+                {
+                    // Try to get the Subnautica executable
+                    // This method throws a lot of exceptions
+                    onWindowsSN = Directory.GetFiles(windowsDirectory, "Subnautica.exe", SearchOption.TopDirectoryOnly).Length > 0;
+                    onWindowsBZ = Directory.GetFiles(windowsDirectory, "SubnauticaZero.exe", SearchOption.TopDirectoryOnly).Length > 0;
+
+                    onWindows = onWindowsSN || onWindowsBZ;
+                }
+                catch
+                {
+                    // If an exception was thrown, the file probably isn't there
+                    onWindows = false;
+                }
+            }
+
+            // Check if the device is running Mac OS
+            bool onMac = false, onMacSN = false, onMacBZ = false;
+            if (!Directory.Exists(macDirectory)) onMac = false;
+            else
+            {
+                try
+                {
+                    // Try to get the Subnautica executable
+                    // This method throws a lot of exceptions
+                    // On mac, .app files act as files and folders at the same time, thus both file and directory checks
+                    onMacSN = Directory.GetFiles(macDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0 || Directory.GetDirectories(macDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0;
+                    onMacBZ = Directory.GetFiles(macDirectory, "SubnauticaZero.app", SearchOption.TopDirectoryOnly).Length > 0 || Directory.GetDirectories(macDirectory, "SubnauticaZero.app", SearchOption.TopDirectoryOnly).Length > 0;
+
+                    onMac = onMacSN || onMacBZ;
+                }
+                catch
+                {
+                    // If an exception was thrown, the file probably isn't there
+                    onMac = false;
+                }
+            }
+
+            if (onWindows && !onMac)
+            {
+                directory = windowsDirectory;
+                os = OS.Windows;
+            }
+            else if (!onMac && onWindows)
+            {
+                directory = macDirectory;
+                os = OS.Mac;
+            }
+            else if (onWindows && onMac)
+            {
+                directory = null;
+                os = OS.Both;
+            }
+            else
+            {
+                directory = null;
+                os = OS.None;
             }
         }
 
