@@ -99,11 +99,15 @@ Source: "PrefabDebugger.unity3d"; DestDir: "{app}\SubnauticaZero_Data\Managed"; 
 
 ; On install and uninstall, run executable based on condition
 [Run]
+; Subnautica
 Filename: "{app}\Subnautica_Data\Managed\QModManager.exe"; Parameters: "-i"; Check: IsSubnauticaApp
+; Below Zero
 Filename: "{app}\SubnauticaZero_Data\Managed\QModManager.exe"; Parameters: "-i"; Check: IsBelowZeroApp
 
 [UninstallRun]
+; Subnautica
 Filename: "{app}\Subnautica_Data\Managed\QModManager.exe"; Parameters: "-u"; Check: IsSubnauticaApp
+; Below Zero
 Filename: "{app}\SubnauticaZero_Data\Managed\QModManager.exe"; Parameters: "-u"; Check: IsBelowZeroApp
 
 [Messages]
@@ -203,7 +207,7 @@ begin
   end
   else
   begin
-    Result := ExpandConstant('{app}')
+    Result := '{#UpdatesURL}'
   end
 end;
 
