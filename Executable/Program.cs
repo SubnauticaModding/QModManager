@@ -205,8 +205,8 @@ namespace QModManager
                     // Try to get the Subnautica executable
                     // This method throws a lot of exceptions
                     // On mac, .app files act as files and folders at the same time, thus both file and directory checks
-                    onMacSN = Directory.GetFiles(macDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0 || Directory.GetDirectories(macDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0;
-                    onMacBZ = Directory.GetFiles(macDirectory, "SubnauticaZero.app", SearchOption.TopDirectoryOnly).Length > 0 || Directory.GetDirectories(macDirectory, "SubnauticaZero.app", SearchOption.TopDirectoryOnly).Length > 0;
+                    onMacSN = Directory.GetDirectories(macDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0;
+                    onMacBZ = Directory.GetDirectories(macDirectory, "SubnauticaZero.app", SearchOption.TopDirectoryOnly).Length > 0;
 
                     onMac = onMacSN || onMacBZ;
                 }
