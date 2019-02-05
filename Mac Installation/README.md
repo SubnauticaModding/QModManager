@@ -1,4 +1,11 @@
-# How to install Mods on Mac:
+# How to install QMods on Mac using the Installer:
+
+## Installation
+1. Run the file in PkgInstaller/build
+1. Follow the installation setup
+1. Place all mods you wish to use in ~/"Library/Application Support/Steam/steamapps/common/Subnautica/QMods"
+
+# How to install QMods on Mac Manually:
 
 ## Prerequisites
 
@@ -7,7 +14,7 @@ Download and install [Mono Project](https://www.mono-project.com/download/stable
 ## Installation
 
 From a terminal run:
-1. `cp QmodManagerMac/* ~/"Library/Application Support/Steam/steamapps/common/Subnautica/Subnautica.app/Contents/Resources/Data/Managed"`
+1. `cp Mac\ Installation/* ~/"Library/Application Support/Steam/steamapps/common/Subnautica/Subnautica.app/Contents/Resources/Data/Managed"`
 1. `cd ~/"Library/Application Support/Steam/steamapps/common/Subnautica/Subnautica.app/Contents/Resources/Data/Managed"`
 1. `mono QModManager.exe` - Note: You may receive an error stating that the Presentation Framework is missing, don’t worry about this error because this is not a Windows OS that requires the Presentation Framework.
 1. `mkdir ~/"Library/Application Support/Steam/steamapps/common/Subnautica/QMods"`
