@@ -176,8 +176,6 @@ namespace QModManager
             string windowsDirectory = Path.Combine(Environment.CurrentDirectory, "../..");
             string macDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../..");
 
-            Console.WriteLine("Path: " + Environment.CurrentDirectory);
-
             // Check if the device is running Windows OS
             bool onWindows = false, onWindowsSN = false, onWindowsBZ = false;
             if (Directory.Exists(windowsDirectory))
@@ -195,11 +193,8 @@ namespace QModManager
                 {
                     // If an exception was thrown, the file probably isn't there
                     onWindows = false;
-
-                    Console.WriteLine("Windows exception: " + e.ToString());
                 }
             }
-            Console.WriteLine($"WS: {onWindowsSN} | WB: {onWindowsBZ} | W: {onWindows}");
 
             // Check if the device is running Mac OS
             bool onMac = false, onMacSN = false, onMacBZ = false;
@@ -219,18 +214,15 @@ namespace QModManager
                 {
                     // If an exception was thrown, the file probably isn't there
                     onMac = false;
-
-                    Console.WriteLine("Mac exception: " + e.ToString());
                 }
             }
-            Console.WriteLine($"MS: {onMacSN} | MB: {onMacBZ} | M: {onMac}");
 
             if (onWindows && !onMac)
             {
                 directory = windowsDirectory;
                 os = OS.Windows;
             }
-            else if (!onMac && onWindows)
+            else if (onMac && !onWindows)
             {
                 directory = macDirectory;
                 os = OS.Mac;
