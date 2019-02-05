@@ -34,4 +34,4 @@ To test your installation, try the [Custom Load Screen](https://www.nexusmods.co
 
 # Developers
 
-These files were created by cloning the existing DLL files, editing them in VisualStudio, and changing the built in path directories to be Mac specific.
+These files were created by cloning the existing DLL files, editing them in VisualStudio, and changing the built in path directories to be Mac specific. This has been merged into the main code and no longer requires separate mac installation files.
