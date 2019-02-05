@@ -1,6 +1,6 @@
 Welcome to the QModManager Installer!
 
-This will install QModManager version 1.4 on your computer.
+This will install QModManager 1.4 on your computer.
 
 Please close Subnautica and/or Below Zero before installing.
 
