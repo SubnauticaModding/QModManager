@@ -1,7 +1,7 @@
 # How to install QModManager on Mac using the Installer:
 
 ## Installation
-1. Run QModsInstaller.pkg in /build
+1. Run QModsInstaller.pkg
 1. Follow the installation setup
 1. Place all mods you wish to use in ~/"Library/Application Support/Steam/steamapps/common/Subnautica/QMods"
 
