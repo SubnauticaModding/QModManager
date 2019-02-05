@@ -176,8 +176,7 @@ namespace QModManager
             string windowsDirectory = Path.Combine(Environment.CurrentDirectory, "../..");
             string macDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../..");
 
-            Console.WriteLine("Windows path: " + windowsDirectory);
-            Console.WriteLine("Mac path: " + macDirectory);
+            Console.WriteLine("Path: " + Environment.CurrentDirectory);
 
             // Check if the device is running Windows OS
             bool onWindows = false, onWindowsSN = false, onWindowsBZ = false;
@@ -200,6 +199,7 @@ namespace QModManager
                     Console.WriteLine("Windows exception: " + e.ToString());
                 }
             }
+            Console.WriteLine($"WS: {onWindowsSN} | WB: {onWindowsBZ} | W: {onWindows}");
 
             // Check if the device is running Mac OS
             bool onMac = false, onMacSN = false, onMacBZ = false;
@@ -223,6 +223,7 @@ namespace QModManager
                     Console.WriteLine("Mac exception: " + e.ToString());
                 }
             }
+            Console.WriteLine($"MS: {onMacSN} | MB: {onMacBZ} | M: {onMac}");
 
             if (onWindows && !onMac)
             {
