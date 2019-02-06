@@ -5,7 +5,7 @@
     /// <summary>
     /// A handler class for various scanner related data.
     /// </summary>
-    public static class PdaHandler
+    public static class PDAHandler
     {
 
         /// <summary>
@@ -20,7 +20,7 @@
                 fragmentCount = 1;
             }
 
-            PdaPatcher.FragmentCount[techType] = fragmentCount;
+            PDAPatcher.FragmentCount[techType] = fragmentCount;
         }
 
         /// <summary>
@@ -35,7 +35,7 @@
                 scanTime = 1f;
             }
 
-            PdaPatcher.FragmentScanTime[techType] = scanTime;
+            PDAPatcher.FragmentScanTime[techType] = scanTime;
         }
     }
 }

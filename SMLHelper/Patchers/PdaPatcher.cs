@@ -6,7 +6,7 @@
 
     // Special thanks to Gorillazilla9 for sharing this method of fragment count patching
     // https://github.com/Gorillazilla9/SubnauticaFragReqBoost/blob/master/PDAScannerPatcher.cs
-    internal class PdaPatcher
+    internal class PDAPatcher
     {
         internal static Dictionary<TechType, int> FragmentCount = new Dictionary<TechType, int>();
         internal static Dictionary<TechType, float> FragmentScanTime = new Dictionary<TechType, float>();
@@ -16,7 +16,7 @@
         internal static void Patch(HarmonyInstance harmony)
         {
             MethodInfo initializeInfo = typeof(PDAScanner).GetMethod("Initialize", BindingFlags.Public | BindingFlags.Static);
-            MethodInfo postfixInfo = typeof(PdaPatcher).GetMethod("InitializePostfix", BindingFlags.NonPublic | BindingFlags.Static);
+            MethodInfo postfixInfo = typeof(PDAPatcher).GetMethod("InitializePostfix", BindingFlags.NonPublic | BindingFlags.Static);
 
             harmony.Patch(initializeInfo, null, new HarmonyMethod(postfixInfo));
         }

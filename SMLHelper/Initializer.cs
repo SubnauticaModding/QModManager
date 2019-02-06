@@ -62,7 +62,7 @@ namespace SMLHelper.V2
             BioReactorPatcher.Patch(harmony);
             OptionsPanelPatcher.Patch(harmony);
             ItemsContainerPatcher.Patch(harmony);
-            PdaPatcher.Patch(harmony);
+            PDAPatcher.Patch(harmony);
         }
     }
 }
