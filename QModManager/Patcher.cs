@@ -42,6 +42,14 @@ namespace QModManager
                 }
 
                 Hooks.Load();
+
+                if (PirateCheck.IsPirate(Environment.CurrentDirectory))
+                {
+                    PirateCheck.PirateDetected();
+                    Hooks.Update += PirateCheck.Log;
+                    //return;
+                }
+
                 if (!DetectGame()) return;
                 PatchHarmony();
                 StartLoadingMods();
