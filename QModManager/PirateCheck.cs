@@ -1,4 +1,5 @@
-﻿using FMODUnity;
+﻿using FMOD.Studio;
+using FMODUnity;
 using Harmony;
 using Oculus.Newtonsoft.Json;
 using System;
@@ -32,6 +33,7 @@ namespace QModManager
 
             private void Update()
             {
+                RuntimeManager.GetBus("bus:/master").setMute(true);
                 //UWE.Utils.alwaysLockCursor = true;
                 //UWE.Utils.lockCursor = true;
                 SceneManager.GetActiveScene().GetRootGameObjects().Do(go =>
