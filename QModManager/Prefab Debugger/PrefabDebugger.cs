@@ -30,7 +30,8 @@ namespace QModManager.Debugger
             { "Scene", true },
         };
 
-        private GUISkin skinUWE;
+        private static AssetBundle guiBundle;
+        private static GUISkin skinUWE;
         private TreeNode<HierarchyItem> sceneTree;
         private Vector2 compScrollPos, hierarchyScrollPos, consoleScrollPos, addComponentScrollPos, sceneScrollPos;
         private int numGameObjects = 0;
@@ -55,18 +56,19 @@ namespace QModManager.Debugger
         private Rect colorRect = new Rect(0, 0, 200, 400);
         private Rect addComponentRect = new Rect(0, 0, 350, 400);
         private Rect debuggerRect;
+        private static RectTransform debuggerRectTransform;
+        private static uGUI_InputGroup inputGroup;
         private int selectedTab;
         private Stack<LogMessage> debugMessages = new Stack<LogMessage>();
         private bool showDebugger = false;
         private bool showErrors, showLogs, showWarnings;
-        private string newScene;
         private Vector2 screenResolution;
 
         private readonly string[] tabs = { "Scenes", "Hierarchy", "Options" };
 
         private const string right_arrow = "▶";
         private const string down_arrow = "▼";
-        private Texture2D stop_symbol, warning_symbol, log_symbol;
+        private static Texture2D stop_symbol, warning_symbol, log_symbol;
 
         //User options that are saved and loaded
         private bool showReadonlyProperties = false;
@@ -76,7 +78,13 @@ namespace QModManager.Debugger
 
         internal static void Main()
         {
-            new GameObject("PrefabDebugger").AddComponent<PrefabDebugger>();
+            var debugger = new GameObject("PrefabDebugger");
+            debugger.AddComponent<PrefabDebugger>();
+            debuggerRectTransform = debugger.AddComponent<RectTransform>();
+            inputGroup = debugger.AddComponent<uGUI_InputGroup>();
+            var canvas = debugger.AddComponent<CanvasGroup>();
+            canvas.interactable = false;
+            canvas.blocksRaycasts = true;
             Logger.Debug("Debugger initialized");
         }
 
@@ -96,14 +104,14 @@ namespace QModManager.Debugger
 
             if (skinUWE == null)
             {
-                var assets = AssetBundle.LoadFromFile(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Replace('\\', '/') + "/PrefabDebugger.unity3d");
-                if (assets.LoadAsset("SubnauticaGUI") != null)
+                guiBundle = AssetBundle.LoadFromFile(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Replace('\\', '/') + "/PrefabDebugger.unity3d");
+                if (guiBundle.LoadAsset("SubnauticaGUI") != null)
                 {
-                    skinUWE = (GUISkin)assets.LoadAsset("SubnauticaGUI");
+                    skinUWE = (GUISkin)guiBundle.LoadAsset("SubnauticaGUI");
 
-                    stop_symbol = (Texture2D)assets.LoadAsset("stop");
-                    warning_symbol = (Texture2D)assets.LoadAsset("warning");
-                    log_symbol = (Texture2D)assets.LoadAsset("speech");
+                    stop_symbol = (Texture2D)guiBundle.LoadAsset("stop");
+                    warning_symbol = (Texture2D)guiBundle.LoadAsset("warning");
+                    log_symbol = (Texture2D)guiBundle.LoadAsset("speech");
                 }
                 else
                 {
@@ -131,17 +139,26 @@ namespace QModManager.Debugger
 
         private void LateUpdate()
         {
-            if ((Input.GetKeyDown(KeyCode.F9) && PlayerPrefs.GetInt("QModManager_PrefabDebugger_Enable", 1) == 1) || (showDebugger && Input.GetKeyDown(KeyCode.Escape)))
+            if (Input.GetKeyDown(KeyCode.F9) && PlayerPrefs.GetInt("QModManager_PrefabDebugger_Enable", 1) == 1 || showDebugger && Input.GetKeyDown(KeyCode.Escape))
             {
                 showDebugger = !showDebugger;
                 UWE.Utils.alwaysLockCursor = false;
                 UWE.Utils.lockCursor = false;
+                if (showDebugger)
+                {
+                    inputGroup.OnSelect(true);
+                }
+                else
+                {
+                    inputGroup.OnDeselect();
+                }
             }
 
             if (screenResolution != new Vector2(Screen.width, Screen.height))
             {
                 debuggerRect = new Rect(windowMargin, windowMargin, Screen.width - (windowMargin * 2), Screen.height - (windowMargin * 2));
                 screenResolution = new Vector2(Screen.width, Screen.height);
+                debuggerRectTransform.sizeDelta = debuggerRect.size;
             }
         }
 
@@ -271,7 +288,7 @@ namespace QModManager.Debugger
                 showErrors = GUILayout.Toggle(showErrors, "Show Errors", GUILayout.Width(100), GUILayout.ExpandWidth(false));
                 GUILayout.EndHorizontal();
 
-                consoleScrollPos = GUILayout.BeginScrollView(consoleScrollPos, GUILayout.Width(900), GUILayout.MinHeight(200));
+                consoleScrollPos = GUILayout.BeginScrollView(consoleScrollPos, GUILayout.MinHeight(200));
                 foreach (LogMessage message in debugMessages)
                 {
                     //Inefficient, I know
@@ -453,8 +470,7 @@ namespace QModManager.Debugger
         {
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            bool closed;
-            closed = GUILayout.Button("", "CloseWindow");
+            bool closed = GUILayout.Button("", "CloseWindow"); 
             GUILayout.EndHorizontal();
             GUILayout.Space(30);
 

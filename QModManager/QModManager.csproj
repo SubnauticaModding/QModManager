@@ -86,12 +86,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Prefab Debugger\Prefab Debugger.csproj">
-      <Project>{5bcb97c2-f049-4580-96d7-41ce6f2ae5ba}</Project>
-      <Name>Prefab Debugger</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
