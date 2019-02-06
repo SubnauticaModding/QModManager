@@ -43,8 +43,8 @@ namespace QModManager
 
                 Hooks.Load();
                 if (!DetectGame()) return;
-                StartLoadingMods();
                 PatchHarmony();
+                StartLoadingMods();
 
                 Hooks.Update += ShowErroredMods;
                 Hooks.Update += VersionCheck.Check;
