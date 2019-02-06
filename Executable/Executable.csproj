@@ -37,7 +37,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>QModManager.ConsoleExecutable</StartupObject>
+    <StartupObject>QModManager.Executable</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
@@ -67,8 +67,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y "$(TargetDir)Mono.Cecil.dll" "$(SolutionDir)Installer\Mono.Cecil.dll"
-copy /y "$(TargetDir)QModInstaller.dll" "$(SolutionDir)Installer\QModInstaller.dll"
-copy /y "$(TargetDir)QModManager.exe" "$(SolutionDir)Installer\QModManager.exe"</PostBuildEvent>
+    <PostBuildEvent>copy /y "$(TargetDir)QModInstaller.dll" "$(SolutionDir)Installer\QModInstaller.dll"
+copy /y "$(TargetDir)QModManager.exe" "$(SolutionDir)Installer\QModManager.exe"
+copy /y "$(TargetDir)Prefab Debugger\PrefabDebugger.unity3d" "$(SolutionDir)Installer\PrefabDebugger.unity3d"</PostBuildEvent>
   </PropertyGroup>
 </Project>

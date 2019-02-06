@@ -7,9 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Executable", "Executable\Ex
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QModManager", "QModManager\QModManager.csproj", "{DA63F59D-4676-4726-AFEC-BD9D3682733F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NUnit Tests", "NUnit Tests\NUnit Tests.csproj", "{D433A819-73DB-4E6C-AE73-D3DED793BD4E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Prefab Debugger", "Prefab Debugger\Prefab Debugger.csproj", "{5BCB97C2-F049-4580-96D7-41CE6F2AE5BA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit Tests", "Unit Tests\Unit Tests.csproj", "{D433A819-73DB-4E6C-AE73-D3DED793BD4E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +27,6 @@ Global
 		{D433A819-73DB-4E6C-AE73-D3DED793BD4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D433A819-73DB-4E6C-AE73-D3DED793BD4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D433A819-73DB-4E6C-AE73-D3DED793BD4E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5BCB97C2-F049-4580-96D7-41CE6F2AE5BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5BCB97C2-F049-4580-96D7-41CE6F2AE5BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5BCB97C2-F049-4580-96D7-41CE6F2AE5BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5BCB97C2-F049-4580-96D7-41CE6F2AE5BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

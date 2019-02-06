@@ -1,22 +1,23 @@
-﻿using Oculus.Newtonsoft.Json;
+using Harmony;
+using Oculus.Newtonsoft.Json;
+using QModManager.Debugger;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
-using QModManager.Debugger;
 
 namespace QModManager
 {
-    internal static class QModPatcher
+    internal static class Patcher
     {
-        internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? "ERR" : Path.Combine(Environment.CurrentDirectory, "QMods");
-        internal static bool patched = false;
+        internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? null : Path.Combine(Environment.CurrentDirectory, "QMods");
+        private static bool patched = false;
 
-        internal static List<QMod> loadedMods = new List<QMod>();
         internal static List<QMod> foundMods = new List<QMod>();
         internal static List<QMod> sortedMods = new List<QMod>();
+        internal static List<QMod> loadedMods = new List<QMod>();
         internal static List<QMod> erroredMods = new List<QMod>();
 
         internal static void Patch()
@@ -25,32 +26,53 @@ namespace QModManager
             {
                 if (patched)
                 {
-                    Console.WriteLine("\nQMOD WARN: Patch method was called multiple times!");
+                    Logger.Warn("Patch method was called multiple times!");
                     return;
                 }
                 patched = true;
 
-                Hooks.Patch();
+                Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}...");
 
+                if (QModBaseDir == null)
+                {
+                    Logger.Fatal("A fatal error has occurred.");
+                    Logger.Fatal("There was an error with the QMods directory");
+                    Logger.Fatal("Please make sure that you ran Subnautica from Steam/Epic/Discord, and not from the executable file!");
+                    return;
+                }
+
+                Hooks.Load();
+                if (!DetectGame()) return;
+                PatchHarmony();
                 StartLoadingMods();
 
                 Hooks.Update += ShowErroredMods;
-
+                Hooks.Update += VersionCheck.Check;
                 Hooks.Start += PrefabDebugger.Main;
 
-                Hooks.OnLoadEnd();
+                Hooks.OnLoadEnd?.Invoke();
+
+                Logger.Info($"Finished loading QModManager. Loaded {loadedMods.Count} mods");
             }
             catch (Exception e)
             {
-                Console.WriteLine("EXCEPTION CAUGHT!");
-                Console.WriteLine(e.ToString());
+                Logger.Error("EXCEPTION CAUGHT!");
+                Debug.LogException(e);
             }
+        }
+
+        private static void PatchHarmony()
+        {
+            HarmonyInstance.Create("qmodmanager.subnautica").PatchAll();
+            Logger.Debug("Patched!");
         }
 
         #region Mod loading
 
-        internal static void StartLoadingMods()
+        private static void StartLoadingMods()
         {
+            Logger.Info("Started loading mods");
+
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {
                 FileInfo[] allDlls = new DirectoryInfo(QModBaseDir).GetFiles("*.dll", SearchOption.AllDirectories);
@@ -65,24 +87,12 @@ namespace QModManager
                 return null;
             };
 
+            Logger.Debug("Added AssemblyResolve event");
+
             if (!Directory.Exists(QModBaseDir))
             {
-                Console.WriteLine("QMods directory was not found! Creating...");
-                if (QModBaseDir == "ERR")
-                {
-                    Console.WriteLine("There was an error creating the QMods directory");
-                    Console.WriteLine("Please make sure that you ran Subnautica from Steam");
-                }
-                try
-                {
-                    Directory.CreateDirectory(QModBaseDir);
-                    Console.WriteLine("QMods directory created successfully!");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("EXCEPTION CAUGHT!");
-                    Console.WriteLine(e.ToString());
-                }
+                Logger.Info("QMods directory was not found! Creating...");
+
                 return;
             }
 
@@ -94,19 +104,27 @@ namespace QModManager
 
                 if (!File.Exists(jsonFile))
                 {
-                    Console.WriteLine($"ERROR! No \"mod.json\" file found in folder \"{subDir}\"");
+                    Logger.Error($"No \"mod.json\" file found for mod located in folder \"{subDir}\"");
+                    Logger.Error("A template file will be created");
                     File.WriteAllText(jsonFile, JsonConvert.SerializeObject(new QMod()));
-                    Console.WriteLine("A template file was created");
+                    erroredMods.Add(QMod.CreateFakeQMod(subDir));
                     continue;
                 }
 
                 QMod mod = QMod.FromJsonFile(Path.Combine(subDir, "mod.json"));
 
-                if (mod == null) continue;
+                if (mod == null)
+                {
+                    Logger.Error($"Skipped a null mod found in folder \"{subDir}\"");
+                    erroredMods.Add(QMod.CreateFakeQMod(subDir));
+
+                    continue;
+                }
 
                 if (mod.Enable == false)
                 {
-                    Console.WriteLine($"{mod.DisplayName} is disabled via config, skipping");
+                    Logger.Info($"{mod.DisplayName} is disabled via config, skipping");
+
                     continue;
                 }
 
@@ -114,7 +132,9 @@ namespace QModManager
 
                 if (!File.Exists(modAssemblyPath))
                 {
-                    Console.WriteLine($"ERROR! No matching dll found at \"{modAssemblyPath}\" for mod \"{mod.DisplayName}\"");
+                    Logger.Error($"No matching dll found at \"{modAssemblyPath}\" for mod \"{mod.DisplayName}\"");
+                    erroredMods.Add(mod);
+
                     continue;
                 }
 
@@ -126,6 +146,11 @@ namespace QModManager
 
             // Add the found mods into the sortedMods list
             sortedMods.AddRange(foundMods);
+
+            // Disable mods that are not for the detected game
+            // (Disable Subnautica mods if Below Zero is detected and disable Below Zero mods if Subnautica is detected)
+            // 
+            DisableNonApplicableMods();
 
             // Sort the mods based on their LoadBefore and LoadAfter properties
             // If any mods break (i.e., a loop is found), they are removed from the list so that they aren't loaded
@@ -141,12 +166,11 @@ namespace QModManager
             LoadAllMods();
         }
 
-        internal static void LoadAllMods()
+        private static void LoadAllMods()
         {
-            string toWrite = "\nLoaded mods:\n";
+            string toWrite = "Loaded mods:\n";
 
             List<QMod> loadingErrorMods = new List<QMod>();
-
             QMod smlHelper = null;
 
             foreach (QMod mod in sortedMods)
@@ -176,7 +200,6 @@ namespace QModManager
                     }
                 }
             }
-
             if (smlHelper != null)
             {
                 toWrite += $"- {smlHelper.DisplayName} ({smlHelper.Id})\n";
@@ -197,24 +220,28 @@ namespace QModManager
 
             if (loadingErrorMods.Count != 0)
             {
-                Console.WriteLine("\nQMOD ERROR: The following mods could not be loaded:\n");
+                string write = "The following mods could not be loaded:\n";
 
                 foreach (QMod mod in loadingErrorMods)
                 {
-                    Console.WriteLine(mod.Id);
+                    write += $"- {mod.DisplayName} ({mod.Id})\n";
                 }
+
+                Logger.Error(write);
             }
 
-            Console.WriteLine(toWrite);
+            Logger.Info(toWrite);
+
+            CheckOldHarmony();
         }
 
-        internal static bool LoadMod(QMod mod)
+        private static bool LoadMod(QMod mod)
         {
             if (mod == null || mod.Loaded) return false;
 
             if (string.IsNullOrEmpty(mod.EntryMethod))
             {
-                Console.WriteLine($"ERROR! No EntryMethod specified for mod {mod.DisplayName}");
+                Logger.Error($"No EntryMethod specified for mod {mod.DisplayName}");
             }
             else
             {
@@ -224,41 +251,122 @@ namespace QModManager
                     string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
                     string entryMethod = entryMethodSig[entryMethodSig.Length - 1];
 
-                    MethodInfo qPatchMethod = mod.LoadedAssembly.GetType(entryType).GetMethod(entryMethod);
-                    qPatchMethod.Invoke(mod.LoadedAssembly, new object[] { });
+                    MethodInfo patchMethod = mod.LoadedAssembly.GetType(entryType).GetMethod(entryMethod);
+                    patchMethod.Invoke(mod.LoadedAssembly, new object[] { });
                 }
                 catch (ArgumentNullException e)
                 {
-                    Console.WriteLine($"ERROR! Could not parse entry method {mod.AssemblyName} for mod {mod.DisplayName}");
-                    Console.WriteLine(e.ToString());
+                    Logger.Error($"Could not parse entry method \"{mod.AssemblyName}\" for mod \"{mod.Id}\"");
+                    Debug.LogException(e);
                     return false;
                 }
                 catch (TargetInvocationException e)
                 {
-                    Console.WriteLine($"ERROR! Invoking the specified entry method {mod.EntryMethod} failed for mod {mod.Id}");
-                    Console.WriteLine(e.ToString());
+                    Logger.Error($"Invoking the specified entry method \"{mod.EntryMethod}\" failed for mod \"{mod.Id}\"");
+                    Debug.LogException(e);
                     return false;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("ERROR! An unexpected error occurred!");
-                    Console.WriteLine(e.ToString());
+                    Logger.Error($"An unexpected error occurred whilst trying to load mod \"{mod.Id}\"");
+                    Debug.LogException(e);
                     return false;
                 }
             }
 
             mod.Loaded = true;
+            Logger.Info($"Loaded mod \"{mod.Id}\"");
 
             return true;
         }
 
         #endregion
 
-        #region LoadOrder
+        #region Game detection
+
+        internal enum Game
+        {
+            Subnautica,
+            BelowZero,
+        }
+
+        internal static Game game;
+
+        private static bool DetectGame()
+        {
+            bool sn = Directory.GetFiles(Environment.CurrentDirectory, "Subnautica.exe", SearchOption.TopDirectoryOnly).Length > 0
+                || Directory.GetFiles(Environment.CurrentDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0
+                || Directory.GetDirectories(Environment.CurrentDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0;
+            bool bz = Directory.GetFiles(Environment.CurrentDirectory, "SubnauticaZero.exe", SearchOption.TopDirectoryOnly).Length > 0
+                || Directory.GetFiles(Environment.CurrentDirectory, "SubnauticaZero.app", SearchOption.TopDirectoryOnly).Length > 0
+                || Directory.GetDirectories(Environment.CurrentDirectory, "SubnauticaZero.app", SearchOption.TopDirectoryOnly).Length > 0;
+
+            if (sn && !bz)
+            {
+                Logger.Info("Detected game: Subnautica");
+                game = Game.Subnautica;
+
+                return true;
+            }
+            else if (bz && !sn)
+            {
+                Logger.Info("Detected game: BelowZero");
+                game = Game.BelowZero;
+
+                return true;
+            }
+            else if (sn && bz)
+            {
+                Logger.Fatal("A fatal error has occurred.");
+                Logger.Fatal("Both Windows and Mac files detected!");
+                Logger.Fatal("Is this a Windows or a Mac environment?");
+            }
+            else
+            {
+                Logger.Fatal("A fatal error has occurred.");
+                Logger.Fatal("No Subnautica executable was found!");
+            }
+            return false;
+        }
+
+        private static void DisableNonApplicableMods()
+        {
+            List<QMod> nonApplicableMods = new List<QMod>();
+            sortedMods = sortedMods.Where(mod =>
+            {
+                if (mod.Game == game) return true;
+
+                if (!nonApplicableMods.Contains(mod)) nonApplicableMods.Add(mod);
+                if (!erroredMods.Contains(mod)) erroredMods.Add(mod);
+                return false;
+
+            }).ToList();
+
+            if (nonApplicableMods.Count > 0)
+            {
+                string toWrite = $"The following {GetOtherGame()} mods were not loaded because {game.ToString()} was detected:\n";
+                foreach (QMod mod in nonApplicableMods)
+                {
+                    toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
+                }
+
+                Logger.Warn(toWrite);
+            }
+        }
+
+        private static string GetOtherGame()
+        {
+            if (game == Game.Subnautica) return "BelowZero";
+            else return "Subnautica";
+        }
+
+        #endregion
+
+        #region Load order
 
         internal static List<QMod> modSortingChain = new List<QMod>();
 
-        internal static void SortMods()
+        private static void SortMods()
         {
             // Contains all the mods that errored out during the sorting process.
             List<List<QMod>> sortingErrorLoops = new List<List<QMod>>();
@@ -299,12 +407,11 @@ namespace QModManager
 
             if (sortingErrorLoops.Count != 0)
             {
-                Console.WriteLine("\nQMOD ERROR: There was en error while sorting the following mods!");
-                Console.WriteLine("Please check the 'LoadAfter' and 'LoadBefore' properties of these mods!\n");
+                Logger.Error("There was en error while sorting some mods!\nPlease check the 'LoadAfter' and 'LoadBefore' properties of these mods:\n");
 
                 foreach (List<QMod> list in sortingErrorLoops)
                 {
-                    string outputStr = "";
+                    string outputStr = "- ";
 
                     foreach (QMod mod in list)
                     {
@@ -318,8 +425,6 @@ namespace QModManager
                     outputStr = outputStr.Substring(0, outputStr.Length - 4);
                     Console.WriteLine(outputStr);
                 }
-
-                Console.WriteLine("");
             }
         }
 
@@ -431,7 +536,7 @@ namespace QModManager
             return true;
         }
 
-        internal static List<QMod> GetLoadBefore(QMod mod)
+        private static List<QMod> GetLoadBefore(QMod mod)
         {
             if (mod == null) return null;
 
@@ -449,7 +554,7 @@ namespace QModManager
             return mods;
         }
 
-        internal static List<QMod> GetLoadAfter(QMod mod)
+        private static List<QMod> GetLoadAfter(QMod mod)
         {
             if (mod == null) return null;
 
@@ -471,7 +576,7 @@ namespace QModManager
 
         #region Dependencies
 
-        internal static void CheckForDependencies()
+        private static void CheckForDependencies()
         {
             // Check if all mods have dependencies present
             Dictionary<QMod, List<string>> missingDependenciesByMod = new Dictionary<QMod, List<string>>();
@@ -491,10 +596,10 @@ namespace QModManager
                 }
             }
 
-            // There are missing dependencies! Output them!
             if (missingDependenciesByMod.Count != 0)
             {
-                Console.WriteLine("\nQMOD ERROR: The following mods were not loaded due to missing dependencies!\n");
+                // There are missing dependencies! Output them!
+                Logger.Error("The following mods were not loaded due to missing dependencies:");
 
                 foreach (var entry in missingDependenciesByMod)
                 {
@@ -503,7 +608,7 @@ namespace QModManager
                         sortedMods.Remove(entry.Key);
 
                     // Build the string to be displayed for this mod
-                    string str = entry.Key.DisplayName + " (missing: ";
+                    string str = $"- {entry.Key.DisplayName}  (missing: ";
 
                     foreach (string missingDependencyId in entry.Value)
                     {
@@ -517,11 +622,10 @@ namespace QModManager
                     Console.WriteLine(str);
                 }
 
-                Console.WriteLine("");
             }
         }
 
-        internal static List<QMod> GetPresentDependencies(QMod mod)
+        private static List<QMod> GetPresentDependencies(QMod mod)
         {
             if (mod == null) return null;
 
@@ -539,7 +643,7 @@ namespace QModManager
             return dependencies;
         }
 
-        internal static List<string> GetMissingDependencies(QMod mod, IEnumerable<QMod> presentDependencies)
+        private static List<string> GetMissingDependencies(QMod mod, IEnumerable<QMod> presentDependencies)
         {
             if (mod == null) return null;
             if (presentDependencies == null || presentDependencies.Count() == 0) return mod.Dependencies.ToList();
@@ -560,38 +664,45 @@ namespace QModManager
 
         #endregion
 
+        #region Old harmony detection
+
+        private static void CheckOldHarmony()
+        {
+            foreach (QMod mod in loadedMods)
+            {
+                AssemblyName[] references = mod.LoadedAssembly.GetReferencedAssemblies();
+                foreach (AssemblyName reference in references)
+                {
+                    if (reference.FullName == "0Harmony, Version=1.0.9.1, Culture=neutral, PublicKeyToken=null")
+                    {
+                        Logger.Warn($"Mod \"{mod.Id}\" is using an old version of harmony! Tell the author to update.");
+                        break;
+                    }
+                }
+            }   
+        }
+
+        #endregion
+
         #region Errored mods
 
-        internal static string erroredModsPrefix = "The following mods could not be loaded: ";
+        private static float timer = 0f;
 
-        internal static float timer = 0f;
-
-        internal static void ShowErroredMods()
+        private static void ShowErroredMods()
         {
             timer += Time.deltaTime;
             if (timer < 1) return;
+            Hooks.Update -= ShowErroredMods;
+
             if (erroredMods.Count <= 0) return;
-            string display = erroredModsPrefix;
+            string display = "The following mods could not be loaded: ";
             for (int i = 0; i < erroredMods.Count; i++)
             {
                 display += erroredMods[i].DisplayName;
                 if (i + 1 != erroredMods.Count) display += ", ";
             }
             display += ". Check the log for details.";
-            Dialog.Show(display);
-            Hooks.Update -= ShowErroredMods;
-        }
-
-        #endregion
-
-        #region NUnit tests
-
-        internal static void ClearModLists()
-        {
-            loadedMods.Clear();
-            foundMods.Clear();
-            sortedMods.Clear();
-            erroredMods.Clear();
+            Dialog.Show(display, Dialog.Button.seeLog, Dialog.Button.close, false);
         }
 
         #endregion

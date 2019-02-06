@@ -6,28 +6,20 @@ using System.Linq;
 
 namespace QModManager
 {
-    public class QModInjector
+    internal class Injector
     {
-        internal string gameDirectory;
-        internal string managedDirectory;
-        internal string installerFilename = "QModInstaller.dll";
-        internal string mainFilename = "Assembly-CSharp.dll";
+        private readonly string gameDirectory;
+        private readonly string managedDirectory;
+        private readonly string mainFilename = "Assembly-CSharp.dll";
+        private const string installerFilename = "QModInstaller.dll";
 
-        internal QModInjector(string dir, string managedDir = null)
+        internal Injector(string dir, string managedDir)
         {
             gameDirectory = dir;
-			if (managedDir == null)
-			{
-				managedDirectory = Path.Combine(gameDirectory, @"Subnautica_Data\Managed");
-			}
-			else
-			{
-				managedDirectory = managedDir;
-			}
+			managedDirectory = managedDir;
             mainFilename = Path.Combine(managedDirectory, mainFilename);
         }
 
-#warning TODO: Implement installer rollback in Inno Setup
         internal void Inject()
         {
             try
@@ -37,8 +29,8 @@ namespace QModManager
                     Console.WriteLine("Tried to install, but it was already injected");
                     Console.WriteLine("Skipping installation");
                     Console.WriteLine();
-                    Console.WriteLine("Press any key to exit...");
-                    Console.ReadKey();
+                    //Console.WriteLine("Press any key to exit...");
+                    //Console.ReadKey();
                     Environment.Exit(0);
                 }
 
@@ -65,18 +57,19 @@ namespace QModManager
 
                 Console.WriteLine("QModManager installed successfully");
                 Console.WriteLine();
-                Console.WriteLine("Press any key to exit...");
-                Console.ReadKey();
+                //Console.WriteLine("Press any key to exit...");
+                //Console.ReadKey();
                 Environment.Exit(0);
             }
             catch (Exception e)
             {
                 Console.WriteLine("EXCEPTION CAUGHT!");
                 Console.WriteLine(e.ToString());
+                Console.WriteLine();
+                Console.ReadKey();
                 Environment.Exit(1);
             }
         }
-
         internal void Remove()
         {
             try
@@ -86,8 +79,8 @@ namespace QModManager
                     Console.WriteLine("Tried to uninstall, but patch was not present");
                     Console.WriteLine("Skipping uninstallation");
                     Console.WriteLine();
-                    Console.WriteLine("Press any key to exit...");
-                    Console.ReadKey();
+                    //Console.WriteLine("Press any key to exit...");
+                    //Console.ReadKey();
                     Environment.Exit(0);
                 }
 
@@ -118,6 +111,7 @@ namespace QModManager
                 else
                 {
                     Console.WriteLine("An unexpected error has occurred.");
+                    Console.WriteLine("The patch method couldn't be found. Was it even injected?");
                     Console.WriteLine();
                     Console.WriteLine("Press any key to exit");
                     Console.ReadKey();
@@ -128,14 +122,17 @@ namespace QModManager
 
                 Console.WriteLine("QModManager was uninstalled successfully");
                 Console.WriteLine();
-                Console.WriteLine("Press any key to exit...");
-                Console.ReadKey();
+                //Console.WriteLine("Press any key to exit...");
+                //Console.ReadKey();
                 Environment.Exit(0);
             }
             catch (Exception e)
             {
                 Console.WriteLine("EXCEPTION CAUGHT!");
                 Console.WriteLine(e.ToString());
+                Console.WriteLine();
+                Console.ReadKey();
+                Environment.Exit(2);
             }
         }
 
@@ -165,3 +162,5 @@ namespace QModManager
         }
     }
 }
+
+#warning TODO: Implement installer rollback in Inno Setup
