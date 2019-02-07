@@ -103,7 +103,7 @@ namespace QModManager.Debugger
 
             if (skinUWE == null)
             {
-                guiBundle = AssetBundle.LoadFromFile(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Replace('\\', '/') + "/PrefabDebugger.unity3d");
+                guiBundle = AssetBundle.LoadFromFile(Path.Combine(Application.dataPath, "Managed/QModManagerAssets.unity3d"));
                 if (guiBundle.LoadAsset("SubnauticaGUI") != null)
                 {
                     skinUWE = (GUISkin)guiBundle.LoadAsset("SubnauticaGUI");
@@ -114,7 +114,7 @@ namespace QModManager.Debugger
                 }
                 else
                 {
-                    Logger.Error("Could not load assets from \"PrefabDebugger.unity3d\"");
+                    Logger.Error("Could not load assets from \"QModManagerAssets.unity3d\"");
                 }
             }
             LoadSceneObjects();

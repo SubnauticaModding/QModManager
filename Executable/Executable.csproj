@@ -69,6 +69,6 @@
   <PropertyGroup>
     <PostBuildEvent>copy /y "$(TargetDir)QModInstaller.dll" "$(SolutionDir)Installer\QModInstaller.dll"
 copy /y "$(TargetDir)QModManager.exe" "$(SolutionDir)Installer\QModManager.exe"
-copy /y "$(TargetDir)Prefab Debugger\PrefabDebugger.unity3d" "$(SolutionDir)Installer\PrefabDebugger.unity3d"</PostBuildEvent>
+copy /y "$(TargetDir)QModManagerAssets.unity3d" "$(SolutionDir)Installer\QModManagerAssets.unity3d"</PostBuildEvent>
   </PropertyGroup>
 </Project>
