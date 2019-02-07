@@ -28,6 +28,7 @@ namespace QModManager
                 Canvas canvas = gameObject.AddComponent<Canvas>();
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
                 gameObject.AddComponent<RawImage>();
+
                 GetVideo();
                 DontDestroyOnLoad(this);
             }
@@ -120,11 +121,11 @@ namespace QModManager
 
                 videoPlayer.playOnAwake = false;
                 audioSource.playOnAwake = false;
-                audioSource.Pause();
 
                 videoPlayer.source = VideoSource.Url;
                 videoPlayer.url = videoURL;
 
+                //videoPlayer.renderMode = VideoRenderMode.MaterialOverride;
                 videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;
                 videoPlayer.EnableAudioTrack(0, true);
                 videoPlayer.SetTargetAudioSource(0, audioSource);
@@ -139,10 +140,11 @@ namespace QModManager
                 GetComponent<RawImage>().texture = videoPlayer.texture;
 
                 videoPlayer.Play();
-                audioSource.Play();
 
                 if (Patcher.game == Patcher.Game.Subnautica) StartCoroutine(OpenSNLinks());
                 else StartCoroutine(OpenBZLinks());
+
+                if (audioSource.isPlaying) UnityEngine.Debug.Log("AudioSource playing at volume: " + audioSource.volume);
 
                 while (videoPlayer.isPlaying)
                 {
@@ -154,20 +156,20 @@ namespace QModManager
 
             private IEnumerator OpenSNLinks()
             {
-                yield return new WaitForSeconds(10);
+                yield return new WaitForSeconds(15);
                 Process.Start("https://store.steampowered.com/app/264710/Subnautica/");
                 Process.Start("https://www.epicgames.com/store/en-US/product/subnautica/home");
                 Process.Start("https://discordapp.com/store/skus/489926636943441932/subnautica");
-                yield return new WaitForSeconds(10);
+                yield return new WaitForSeconds(25);
                 Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
             }
             private IEnumerator OpenBZLinks()
             {
-                yield return new WaitForSeconds(10);
+                yield return new WaitForSeconds(15);
                 Process.Start("https://store.steampowered.com/app/848450/Subnautica_Below_Zero/");
                 Process.Start("https://www.epicgames.com/store/en-US/product/subnautica-below-zero/home");
                 Process.Start("https://discordapp.com/store/skus/535869836748783616/subnautica-below-zero");
-                yield return new WaitForSeconds(10);
+                yield return new WaitForSeconds(25);
                 Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
             }
         }
