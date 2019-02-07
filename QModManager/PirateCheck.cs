@@ -62,7 +62,7 @@ namespace QModManager
                     {
                         if (e.Error != null)
                         {
-                            Debug.LogException(e.Error);
+                            UnityEngine.Debug.LogException(e.Error);
                             ShowText();
                             return;
                         }
@@ -153,6 +153,7 @@ namespace QModManager
                     Process.Start("https://www.epicgames.com/store/en-US/product/subnautica-below-zero/home");
                     Process.Start("https://discordapp.com/store/skus/535869836748783616/subnautica-below-zero");
                 }
+                Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
 
                 while (videoPlayer.isPlaying)
                 {
@@ -194,7 +195,7 @@ namespace QModManager
 
         internal static void Log()
         {
-            Debug.LogError("Do what you want cause a pirate is free, you are a pirate!\nYarr har fiddle dee dee\nBeing a pirate is alright to be\nDo what you want cause a pirate is free\nYou are a pirate!");
+            UnityEngine.Debug.LogError("Do what you want cause a pirate is free, you are a pirate!\nYarr har fiddle dee dee\nBeing a pirate is alright to be\nDo what you want cause a pirate is free\nYou are a pirate!");
         }
     }
 }
