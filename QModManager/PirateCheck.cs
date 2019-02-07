@@ -27,13 +27,12 @@ namespace QModManager
                 Canvas canvas = gameObject.AddComponent<Canvas>();
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
                 gameObject.AddComponent<RawImage>();
-                Camera.main.gameObject.AddComponent<AudioListener>().enabled = true;
                 GetVideo();
+                DontDestroyOnLoad(this);
             }
-
             private void Update()
             {
-                RuntimeManager.GetBus("bus:/master").setMute(true);
+                //RuntimeManager.GetBus("bus:/master").setMute(true);
                 //UWE.Utils.alwaysLockCursor = true;
                 //UWE.Utils.lockCursor = true;
                 SceneManager.GetActiveScene().GetRootGameObjects().Do(go =>
@@ -62,23 +61,21 @@ namespace QModManager
                     {
                         if (e.Error != null)
                         {
-                            Logger.Error("There was an error retrieving the video from YouTube!");
                             Debug.LogException(e.Error);
+                            ShowText();
                             return;
                         }
-                        ParseVideo(e.Result);
+                        if (!ParseVideo(e.Result)) ShowText();
                     };
 
-                    Logger.Debug("Getting the latest version...");
                     client.DownloadStringAsync(new Uri(VideoURLObtainer));
                 }
             }
-            private void ParseVideo(string result)
+            private bool ParseVideo(string result)
             {
                 if (result == null)
                 {
-                    Logger.Error("There was an error retrieving the video from YouTube!");
-                    return;
+                    return false;
                 }
                 Dictionary<string, string>[] parsed;
                 try
@@ -87,24 +84,32 @@ namespace QModManager
                 }
                 catch
                 {
-                    Logger.Error("There was an error retrieving the video from YouTube!");
-                    return;
+                    return false;
                 }
                 if (parsed == null || parsed[0] == null)
                 {
-                    Logger.Error("There was an error retrieving the video from YouTube!");
-                    return;
+                    return false;
                 }
                 Dictionary<string, string> firstLink = parsed[0];
                 if (!firstLink.TryGetValue("url", out string url))
                 {
-                    Logger.Error("There was an error retrieving the video from YouTube!");
-                    return;
+                    return false;
                 }
                 videoURL = url;
-                Logger.Info($"Obtained video URL, playing video...");
 
                 StartCoroutine(PlayVideo());
+
+                return true;
+            }
+            private void ShowText()
+            {
+                DestroyImmediate(gameObject.GetComponent<RawImage>());
+                Text text = gameObject.AddComponent<Text>();
+                text.text = $"Oopsie poopsie, your game is pirated!\nQModManager couldn't be initialized.\nTo fix this issue, turn on your internet connection,\nthen restart {(Patcher.game == Patcher.Game.Subnautica ? "Subnautica" : "Below Zero")}.";
+                text.color = new Color(1, 0, 0);
+                text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+                text.fontStyle = FontStyle.BoldAndItalic;
+                text.fontSize = 40;
             }
 
             private IEnumerator PlayVideo()
@@ -133,7 +138,7 @@ namespace QModManager
                 GetComponent<RawImage>().texture = videoPlayer.texture;
 
                 videoPlayer.Play();
-                //audioSource.Play();
+                audioSource.Play();
 
                 while (videoPlayer.isPlaying)
                 {
