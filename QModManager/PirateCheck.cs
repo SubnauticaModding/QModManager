@@ -29,6 +29,9 @@ namespace QModManager
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
                 gameObject.AddComponent<RawImage>();
 
+                FindObjectsOfType<AudioListener>().Do(l => DestroyImmediate(l));
+                gameObject.AddComponent<AudioListener>().enabled = true;
+
                 GetVideo();
                 //DontDestroyOnLoad(this);
             }
@@ -118,6 +121,9 @@ namespace QModManager
                 VideoPlayer videoPlayer = gameObject.GetComponent<VideoPlayer>() ?? gameObject.AddComponent<VideoPlayer>();
                 AudioSource audioSource = gameObject.GetComponent<AudioSource>() ?? gameObject.AddComponent<AudioSource>();
 
+                videoPlayer.enabled = true;
+                audioSource.enabled = true;
+
                 videoPlayer.playOnAwake = false;
                 audioSource.playOnAwake = false;
 
@@ -125,9 +131,10 @@ namespace QModManager
                 videoPlayer.url = videoURL;
 
                 videoPlayer.controlledAudioTrackCount = 1;
+                videoPlayer.waitForFirstFrame = false;
                 videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;
-                videoPlayer.EnableAudioTrack(0, true);
                 videoPlayer.SetTargetAudioSource(0, audioSource);
+                videoPlayer.EnableAudioTrack(0, true);
 
                 videoPlayer.Prepare();
 
@@ -139,6 +146,10 @@ namespace QModManager
                 GetComponent<RawImage>().texture = videoPlayer.texture;
 
                 videoPlayer.Play();
+
+                UnityEngine.Debug.Log(videoPlayer.GetAudioChannelCount(0));
+                UnityEngine.Debug.Log(videoPlayer.GetTargetAudioSource(0) == null);
+                UnityEngine.Debug.Log(audioSource.isPlaying);
 
                 /*
                 yield return new WaitForSeconds(25);
