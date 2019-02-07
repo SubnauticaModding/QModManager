@@ -46,7 +46,6 @@ namespace QModManager
                         "Default Notification Center",
                         "InputHandlerStack",
                         "SelectorCanvas",
-                        "InputDummy",
                         "Clip Camera"
                     };
                     if (Array.IndexOf(bannedGOs, go.name) != -1) DestroyImmediate(go);
