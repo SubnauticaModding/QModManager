@@ -51,7 +51,7 @@ namespace QModManager
                         "SelectorCanvas",
                         "Clip Camera"
                     };
-                    if (Array.IndexOf(bannedGOs, go.name) != -1) DestroyImmediate(go);
+                    //if (Array.IndexOf(bannedGOs, go.name) != -1) DestroyImmediate(go);
                 });
             }
 
@@ -127,7 +127,7 @@ namespace QModManager
                 videoPlayer.playOnAwake = false;
                 audioSource.playOnAwake = false;
 
-                audioSource.spatialBlend = 0;
+                videoPlayer.errorReceived += (VideoPlayer source, string message) => UnityEngine.Debug.LogError(message);
 
                 videoPlayer.source = VideoSource.Url;
                 videoPlayer.url = videoURL;
@@ -136,9 +136,6 @@ namespace QModManager
                 videoPlayer.controlledAudioTrackCount = 1;
                 videoPlayer.EnableAudioTrack(0, true);
                 videoPlayer.SetTargetAudioSource(0, audioSource);
-
-                videoPlayer.renderMode = VideoRenderMode.CameraNearPlane;
-                videoPlayer.aspectRatio = VideoAspectRatio.FitInside;
 
                 videoPlayer.Prepare();
 
@@ -150,10 +147,6 @@ namespace QModManager
                 GetComponent<RawImage>().texture = videoPlayer.texture;
 
                 videoPlayer.Play();
-
-                UnityEngine.Debug.Log(videoPlayer.GetAudioChannelCount(0));
-                UnityEngine.Debug.Log(videoPlayer.GetTargetAudioSource(0) == null);
-                UnityEngine.Debug.Log(audioSource.isPlaying);
 
                 /*
                 yield return new WaitForSeconds(25);
@@ -173,8 +166,6 @@ namespace QModManager
                 Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
                 */
 
-                if (audioSource.isPlaying) UnityEngine.Debug.Log("AudioSource playing at volume: " + audioSource.volume);
-
                 while (videoPlayer.isPlaying)
                 {
                     yield return null;
@@ -193,7 +184,7 @@ namespace QModManager
 
         internal static bool IsPirate(string folder)
         {
-            return true;
+            //return true;
 
             string steamDll = Path.Combine(folder, "steam_api64.dll");
 
