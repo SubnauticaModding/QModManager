@@ -41,7 +41,7 @@ namespace QModManager.Debugger
          * Navigating and debugging each component more difficult and lack any actual usage in debugging scenarios
          */
         private readonly string[] propertyBlacklist = { "enabled", "transform", "gameObject", "tag", "name",
-            "hideFlags", "sortingLayerName", "sortingLayerID", "sortingOrder", "sharedMaterial",
+            "hideFlags", "sortingLayerName", "sortingLayerID", "sharedMaterial",
             "sharedMaterials", "additionalVertexStreams","sharedMesh", "lightmapScaleOffset", "useGUILayout",
             "runInEditMode", "alphaHitTestMinimumThreshold", "onCullStateChanged", "maskable", "overrideSprite",
             "worldCamera", "planeDistance", "overridePixelPerfect", "normalizedSortingGridSize", "lightmapBakeType",
@@ -73,6 +73,7 @@ namespace QModManager.Debugger
         //User options that are saved and loaded
         private bool showReadonlyProperties = false;
         private bool showBlacklistedProperties = false;
+        private bool pauseWhenWindowOpen = false;
         private int windowMargin = 50;
         private int viewMargin = 10;
 
@@ -82,9 +83,6 @@ namespace QModManager.Debugger
             debugger.AddComponent<PrefabDebugger>();
             debuggerRectTransform = debugger.AddComponent<RectTransform>();
             inputGroup = debugger.AddComponent<uGUI_InputGroup>();
-            var canvas = debugger.AddComponent<CanvasGroup>();
-            canvas.interactable = false;
-            canvas.blocksRaycasts = true;
             Logger.Debug("Debugger initialized");
         }
 
@@ -101,6 +99,7 @@ namespace QModManager.Debugger
             viewMargin = PlayerPrefs.GetInt("QModManager_PrefabDebugger_ViewMargin", 10);
             showReadonlyProperties = PlayerPrefs.GetInt("QModManager_PrefabDebugger_ShowReadonlyProperties", 0) == 1 ? true : false;
             showBlacklistedProperties = PlayerPrefs.GetInt("QModManager_PrefabDebugger_ShowBlacklistedProperties", 0) == 1 ? true : false;
+            pauseWhenWindowOpen = PlayerPrefs.GetInt("QModManager_PrefabDebugger_PauseWhenWindowOpen", 0) == 1 ? true : false;
 
             if (skinUWE == null)
             {
@@ -146,12 +145,23 @@ namespace QModManager.Debugger
                 UWE.Utils.lockCursor = false;
                 if (showDebugger)
                 {
-                    inputGroup.OnSelect(true);
+                    if (pauseWhenWindowOpen)
+                    {
+                        UWE.FreezeTime.Begin("PrefabDebugger", true);
+                    }
+
+                    inputGroup.Select(true);
                 }
                 else
                 {
-                    inputGroup.OnDeselect();
+                    if (pauseWhenWindowOpen)
+                    {
+                        UWE.FreezeTime.End("PrefabDebugger");
+                    }
+
+                    inputGroup.Deselect();
                 }
+                GamepadInputModule.current.SetCurrentGrid(null);
             }
 
             if (screenResolution != new Vector2(Screen.width, Screen.height))
@@ -281,6 +291,10 @@ namespace QModManager.Debugger
                 }
                 if (GUILayout.Button("Reload Hierarchy", GUILayout.Width(120), GUILayout.ExpandWidth(false)))
                 {
+                    foreach (var emitter in UnityEngine.Object.FindObjectsOfType<FMODUnity.StudioEventEmitter>())
+                    {
+                        emitter.enabled = false;
+                    }
                     LoadSceneObjects();
                 }
                 showLogs = GUILayout.Toggle(showLogs, "Show Logs", GUILayout.Width(100), GUILayout.ExpandWidth(false));
@@ -322,7 +336,7 @@ namespace QModManager.Debugger
             {
                 GUILayout.BeginVertical("AreaBackground");
 
-                GUILayout.Label("Margin Settings", "HeaderLabel");
+                GUILayout.Label("Window Settings", "HeaderLabel");
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("Window Margin", "NormalLabel", GUILayout.Width(100));
@@ -337,6 +351,9 @@ namespace QModManager.Debugger
 
                 GUILayout.EndHorizontal();
 
+                pauseWhenWindowOpen = GUILayout.Toggle(pauseWhenWindowOpen, "Pause When Prefab Debugger is Open");
+
+
                 GUILayout.Label("Property Settings", "HeaderLabel");
 
                 showReadonlyProperties = GUILayout.Toggle(showReadonlyProperties, "Show Readonly Properties");
@@ -349,6 +366,7 @@ namespace QModManager.Debugger
                     PlayerPrefs.SetInt("QModManager_PrefabDebugger_ViewMargin", viewMargin);
                     PlayerPrefs.SetInt("QModManager_PrefabDebugger_ShowReadonlyProperties", showReadonlyProperties ? 1 : 0);
                     PlayerPrefs.SetInt("QModManager_PrefabDebugger_ShowBlacklistedProperties", showBlacklistedProperties ? 1 : 0);
+                    PlayerPrefs.SetInt("QModManager_PrefabDebugger_PauseWhenWindowOpen", pauseWhenWindowOpen ? 1 : 0);
                 }
 
                 GUILayout.EndVertical();
