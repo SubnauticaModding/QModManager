@@ -291,6 +291,10 @@ namespace QModManager.Debugger
                 }
                 if (GUILayout.Button("Reload Hierarchy", GUILayout.Width(120), GUILayout.ExpandWidth(false)))
                 {
+                    foreach (var emitter in UnityEngine.Object.FindObjectsOfType<FMODUnity.StudioEventEmitter>())
+                    {
+                        emitter.enabled = false;
+                    }
                     LoadSceneObjects();
                 }
                 showLogs = GUILayout.Toggle(showLogs, "Show Logs", GUILayout.Width(100), GUILayout.ExpandWidth(false));
