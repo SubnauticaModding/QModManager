@@ -82,7 +82,7 @@
     <Compile Include="VersionCheck.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Prefab Debugger\PrefabDebugger.unity3d">
+    <None Include="QModManagerAssets.unity3d">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
