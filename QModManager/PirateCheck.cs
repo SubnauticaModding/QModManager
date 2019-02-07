@@ -109,7 +109,7 @@ namespace QModManager
             {
                 DestroyImmediate(gameObject.GetComponent<RawImage>());
                 Text text = gameObject.AddComponent<Text>();
-                text.text = $"Oopsie poopsie, your game is pirated!\nQModManager couldn't be initialized.\nTo fix this issue, turn on your internet connection,\nthen restart {(Patcher.game == Patcher.Game.Subnautica ? "Subnautica" : "Below Zero")}.";
+                text.text = $"Oopsie poopsie, an error has occured!\nQModManager couldn't be initialized.\nTo fix this issue, turn on your internet connection,\nthen restart {(Patcher.game == Patcher.Game.Subnautica ? "Subnautica" : "Below Zero")}.\n(Is the game pirated?)";
                 text.color = new Color(1, 0, 0);
                 text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
                 text.fontStyle = FontStyle.BoldAndItalic;
@@ -127,14 +127,18 @@ namespace QModManager
                 videoPlayer.playOnAwake = false;
                 audioSource.playOnAwake = false;
 
+                audioSource.spatialBlend = 0;
+
                 videoPlayer.source = VideoSource.Url;
                 videoPlayer.url = videoURL;
 
-                videoPlayer.controlledAudioTrackCount = 1;
-                videoPlayer.waitForFirstFrame = false;
                 videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;
-                videoPlayer.SetTargetAudioSource(0, audioSource);
+                videoPlayer.controlledAudioTrackCount = 1;
                 videoPlayer.EnableAudioTrack(0, true);
+                videoPlayer.SetTargetAudioSource(0, audioSource);
+
+                videoPlayer.renderMode = VideoRenderMode.CameraNearPlane;
+                videoPlayer.aspectRatio = VideoAspectRatio.FitInside;
 
                 videoPlayer.Prepare();
 
