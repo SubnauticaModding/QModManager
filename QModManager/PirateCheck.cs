@@ -141,19 +141,8 @@ namespace QModManager
                 videoPlayer.Play();
                 audioSource.Play();
 
-                if (Patcher.game == Patcher.Game.Subnautica)
-                {
-                    Process.Start("https://store.steampowered.com/app/264710/Subnautica/");
-                    Process.Start("https://www.epicgames.com/store/en-US/product/subnautica/home");
-                    Process.Start("https://discordapp.com/store/skus/489926636943441932/subnautica");
-                }
-                else
-                {
-                    Process.Start("https://store.steampowered.com/app/848450/Subnautica_Below_Zero/");
-                    Process.Start("https://www.epicgames.com/store/en-US/product/subnautica-below-zero/home");
-                    Process.Start("https://discordapp.com/store/skus/535869836748783616/subnautica-below-zero");
-                }
-                Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+                if (Patcher.game == Patcher.Game.Subnautica) StartCoroutine(OpenSNLinks());
+                else StartCoroutine(OpenBZLinks());
 
                 while (videoPlayer.isPlaying)
                 {
@@ -161,6 +150,25 @@ namespace QModManager
                 }
 
                 yield return StartCoroutine(PlayVideo());
+            }
+
+            private IEnumerator OpenSNLinks()
+            {
+                yield return new WaitForSeconds(10);
+                Process.Start("https://store.steampowered.com/app/264710/Subnautica/");
+                Process.Start("https://www.epicgames.com/store/en-US/product/subnautica/home");
+                Process.Start("https://discordapp.com/store/skus/489926636943441932/subnautica");
+                yield return new WaitForSeconds(10);
+                Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+            }
+            private IEnumerator OpenBZLinks()
+            {
+                yield return new WaitForSeconds(10);
+                Process.Start("https://store.steampowered.com/app/848450/Subnautica_Below_Zero/");
+                Process.Start("https://www.epicgames.com/store/en-US/product/subnautica-below-zero/home");
+                Process.Start("https://discordapp.com/store/skus/535869836748783616/subnautica-below-zero");
+                yield return new WaitForSeconds(10);
+                Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
             }
         }
 
