@@ -187,8 +187,11 @@ namespace QModManager
             // Check for ini files in the root
             FileInfo[] iniFiles = new DirectoryInfo(folder).GetFiles("*.ini");
             FileInfo[] cdxFiles = new DirectoryInfo(folder).GetFiles("*.cdx");
+            int e = 0;
 
-            if (iniFiles.Length + cdxFiles.Length > 0) return true;
+            if (File.Exists(Path.Combine(folder, "desktop.ini"))) e--;
+
+            if (iniFiles.Length + cdxFiles.Length + e > 0) return true;
 
             return false;
         }
