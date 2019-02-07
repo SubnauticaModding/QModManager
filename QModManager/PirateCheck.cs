@@ -30,7 +30,7 @@ namespace QModManager
                 gameObject.AddComponent<RawImage>();
 
                 GetVideo();
-                DontDestroyOnLoad(this);
+                //DontDestroyOnLoad(this);
             }
             private void Update()
             {
@@ -124,6 +124,7 @@ namespace QModManager
                 videoPlayer.source = VideoSource.Url;
                 videoPlayer.url = videoURL;
 
+                videoPlayer.controlledAudioTrackCount = 1;
                 videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;
                 videoPlayer.EnableAudioTrack(0, true);
                 videoPlayer.SetTargetAudioSource(0, audioSource);
@@ -139,8 +140,23 @@ namespace QModManager
 
                 videoPlayer.Play();
 
-                if (Patcher.game == Patcher.Game.Subnautica) StartCoroutine(OpenSNLinks());
-                else StartCoroutine(OpenBZLinks());
+                /*
+                yield return new WaitForSeconds(25);
+                if (Patcher.game == Patcher.Game.Subnautica)
+                {
+                    Process.Start("https://store.steampowered.com/app/264710/Subnautica/");
+                    Process.Start("https://www.epicgames.com/store/en-US/product/subnautica/home");
+                    Process.Start("https://discordapp.com/store/skus/489926636943441932/subnautica");
+                }
+                else
+                {
+                    Process.Start("https://store.steampowered.com/app/848450/Subnautica_Below_Zero/");
+                    Process.Start("https://www.epicgames.com/store/en-US/product/subnautica-below-zero/home");
+                    Process.Start("https://discordapp.com/store/skus/535869836748783616/subnautica-below-zero");
+                }
+                yield return new WaitForSeconds(35);
+                Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+                */
 
                 if (audioSource.isPlaying) UnityEngine.Debug.Log("AudioSource playing at volume: " + audioSource.volume);
 
@@ -151,29 +167,11 @@ namespace QModManager
 
                 yield return StartCoroutine(PlayVideo());
             }
-
-            private IEnumerator OpenSNLinks()
-            {
-                yield return new WaitForSeconds(15);
-                Process.Start("https://store.steampowered.com/app/264710/Subnautica/");
-                Process.Start("https://www.epicgames.com/store/en-US/product/subnautica/home");
-                Process.Start("https://discordapp.com/store/skus/489926636943441932/subnautica");
-                yield return new WaitForSeconds(25);
-                Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-            }
-            private IEnumerator OpenBZLinks()
-            {
-                yield return new WaitForSeconds(15);
-                Process.Start("https://store.steampowered.com/app/848450/Subnautica_Below_Zero/");
-                Process.Start("https://www.epicgames.com/store/en-US/product/subnautica-below-zero/home");
-                Process.Start("https://discordapp.com/store/skus/535869836748783616/subnautica-below-zero");
-                yield return new WaitForSeconds(25);
-                Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-            }
         }
 
         internal static void PirateDetected()
         {
+            //Hooks.Update += Log;
             GameObject obj = new GameObject("YOU ARE A PIRATE");
             obj.AddComponent<Pirate>();
         }
