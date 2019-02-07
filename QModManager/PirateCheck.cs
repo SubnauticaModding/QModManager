@@ -125,7 +125,6 @@ namespace QModManager
                 videoPlayer.source = VideoSource.Url;
                 videoPlayer.url = videoURL;
 
-                //videoPlayer.renderMode = VideoRenderMode.MaterialOverride;
                 videoPlayer.audioOutputMode = VideoAudioOutputMode.AudioSource;
                 videoPlayer.EnableAudioTrack(0, true);
                 videoPlayer.SetTargetAudioSource(0, audioSource);
