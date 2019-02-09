@@ -46,7 +46,7 @@ namespace QModManager
                 if (PirateCheck.IsPirate(Environment.CurrentDirectory))
                 {
                     PirateCheck.PirateDetected();
-                    //return;
+                    return;
                 }
 
                 if (!DetectGame()) return;

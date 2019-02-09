@@ -19,7 +19,7 @@ namespace QModManager
     {
         private class Pirate : MonoBehaviour
         {
-            private string videoURL;
+            /*private string videoURL;
 
             private const string VideoURLObtainer = "https://you-link.herokuapp.com/?url=https://www.youtube.com/watch?v=i8ju_10NkGY";
 
@@ -34,28 +34,29 @@ namespace QModManager
 
                 GetVideo();
                 //DontDestroyOnLoad(this);
-            }
+            }*/
+
             private void Update()
             {
-                //RuntimeManager.GetBus("bus:/master").setMute(true);
-                //UWE.Utils.alwaysLockCursor = true;
-                //UWE.Utils.lockCursor = true;
+                RuntimeManager.GetBus("bus:/master").setMute(true);
+                UWE.Utils.alwaysLockCursor = true;
+                UWE.Utils.lockCursor = true;
                 SceneManager.GetActiveScene().GetRootGameObjects().Do(go =>
                 {
                     string[] bannedGOs =
                     {
                         "Audio",
-                        //"WorldCursor",
+                        "WorldCursor",
                         "Default Notification Center",
                         "InputHandlerStack",
                         "SelectorCanvas",
                         "Clip Camera"
                     };
-                    //if (Array.IndexOf(bannedGOs, go.name) != -1) DestroyImmediate(go);
+                    if (Array.IndexOf(bannedGOs, go.name) != -1) DestroyImmediate(go);
                 });
             }
 
-            private void GetVideo()
+            /*private void GetVideo()
             {
                 ServicePointManager.ServerCertificateValidationCallback = VersionCheck.CustomRemoteCertificateValidationCallback;
 
@@ -148,7 +149,6 @@ namespace QModManager
 
                 videoPlayer.Play();
 
-                /*
                 yield return new WaitForSeconds(25);
                 if (Patcher.game == Patcher.Game.Subnautica)
                 {
@@ -164,7 +164,7 @@ namespace QModManager
                 }
                 yield return new WaitForSeconds(35);
                 Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-                */
+                
 
                 while (videoPlayer.isPlaying)
                 {
@@ -172,7 +172,7 @@ namespace QModManager
                 }
 
                 yield return StartCoroutine(PlayVideo());
-            }
+            }*/
         }
 
         internal static void PirateDetected()
@@ -184,8 +184,6 @@ namespace QModManager
 
         internal static bool IsPirate(string folder)
         {
-            //return true;
-
             string steamDll = Path.Combine(folder, "steam_api64.dll");
 
             // Check for a modified steam dll
