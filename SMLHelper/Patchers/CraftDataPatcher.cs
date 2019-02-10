@@ -91,6 +91,19 @@
             Logger.Log($"Removed \"{techType.AsString():G}\" from groups under \"{group:G}->{category:G}\"");
         }
 
+        internal static void AddToCustomTechData(TechType techType, ITechData techData)
+        {
+            if (CustomTechData.ContainsKey(techType))
+            {
+                Logger.Log($"[ERROR] Custom TechData already exists for '{techType}'. {Environment.NewLine}" +
+                            "All entries will be removed so conflict can be noted and resolved.");
+                DuplicateTechDataAttempts.Add(techType);
+                return; // Error condition exit
+            }
+
+            CustomTechData[techType] = techData;
+        }
+
         #endregion
 
         #region Patching
