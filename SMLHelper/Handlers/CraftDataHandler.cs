@@ -1,6 +1,5 @@
 ﻿namespace SMLHelper.V2.Handlers
 {
-    using System;
     using Crafting;
     using Patchers;
 

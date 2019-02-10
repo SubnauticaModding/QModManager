@@ -9,11 +9,11 @@
     // https://github.com/Gorillazilla9/SubnauticaFragReqBoost/blob/master/PDAScannerPatcher.cs
     internal class PDAPatcher
     {
-        internal static Dictionary<TechType, int> FragmentCount = new Dictionary<TechType, int>();
-        internal static Dictionary<TechType, float> FragmentScanTime = new Dictionary<TechType, float>();
+        internal static readonly Dictionary<TechType, int> FragmentCount = new Dictionary<TechType, int>();
+        internal static readonly Dictionary<TechType, float> FragmentScanTime = new Dictionary<TechType, float>();
 
-        private static Type pdaScannerType = typeof(PDAScanner);
-        private static Dictionary<TechType, PDAScanner.EntryData> BlueprintToFragment = new Dictionary<TechType, PDAScanner.EntryData>();
+        private static readonly Type pdaScannerType = typeof(PDAScanner);
+        private static readonly Dictionary<TechType, PDAScanner.EntryData> BlueprintToFragment = new Dictionary<TechType, PDAScanner.EntryData>();
 
         internal static void Patch(HarmonyInstance harmony)
         {
