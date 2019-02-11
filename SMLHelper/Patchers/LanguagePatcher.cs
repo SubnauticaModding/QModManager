@@ -12,7 +12,8 @@
         private const string LanguageDir = "./QMods/Modding Helper/Language";
         private const string LanguageOrigDir = LanguageDir + "/Originals";
         private const string LanguageOverDir = LanguageDir + "/Overrides";
-        private const char TextDelimiter = '\'';
+        private const char TextDelimiterOpen = '{';
+        private const char TextDelimiterClose = '}';
         private const char KeyValueSeparator = ':';
 
         private static readonly Dictionary<string, Dictionary<string, string>> originalCustomLines = new Dictionary<string, Dictionary<string, string>>();
@@ -54,18 +55,20 @@
             if (!Directory.Exists(LanguageOrigDir))
                 Directory.CreateDirectory(LanguageOrigDir);
 
-            int fileWritten = 0;
+            if (originalCustomLines.Count == 0)
+                return;
+
+            int filesWritten = 0;
             foreach (string modKey in originalCustomLines.Keys)
             {
                 if (!FileNeedsRewrite(modKey))
                     continue; // File is identical to captured lines. No need to rewrite it.
 
                 WriteOriginalLinesFile(modKey);
-                fileWritten++;
+                filesWritten++;
             }
 
-            Logger.Log($"{fileWritten} original language files saved.");
-            Logger.Log($"{originalCustomLines.Count - fileWritten} original language files skipped.");
+            Logger.Log($"Updated {filesWritten} of {originalCustomLines.Count} original language files.");
         }
 
         private static void WriteOriginalLinesFile(string modKey)
@@ -75,7 +78,7 @@
             foreach (string langLineKey in modCustomLines.Keys)
             {
                 string value = modCustomLines[langLineKey];
-                text.AppendLine($"{langLineKey}{KeyValueSeparator}{TextDelimiter}{value}{TextDelimiter}");
+                text.AppendLine($"{langLineKey}{KeyValueSeparator}{TextDelimiterOpen}{value}{TextDelimiterClose}");
             }
 
             File.WriteAllText($"{LanguageOrigDir}/{modKey}.txt", text.ToString(), Encoding.UTF8);
@@ -89,12 +92,9 @@
             string[] files = Directory.GetFiles(LanguageOverDir);
 
             if (files.Length == 0)
-            {
-                Logger.Log("No language override files detected.");
                 return;
-            }
 
-            Logger.Log("Checking language override files.");
+            Logger.Log($"{files.Length} language override files found.");
 
             foreach (string file in files)
             {
@@ -108,9 +108,9 @@
                 Dictionary<string, string> originalLines = originalCustomLines[modName];
 
                 int overridesApplied = 0;
-
-                foreach (string line in languageLines)
+                for (int lineIndex = 0; lineIndex < languageLines.Length; lineIndex++)
                 {
+                    string line = languageLines[lineIndex];
                     if (string.IsNullOrEmpty(line))
                         continue; // Skip empty lines
 
@@ -118,20 +118,19 @@
 
                     if (split.Length != 2)
                     {
-                        Logger.Log($"Text in Language override file was malformatted. Value: {line}");
-                        continue; // Not correctly formatted
+                        Logger.Log($"Line '{lineIndex}' in language override file for '{modName}' was not correctly formatted.");
+                        continue; // Not correctly formatter
                     }
+
                     string key = split[0];
 
                     if (!originalLines.ContainsKey(key))
                     {
-                        Logger.Log($"Key in language override line did not match an original key. Value: {key}");
+                        Logger.Log($"Key '{key}' on line '{lineIndex}' in language override file for '{modName}' did not match an original key.");
                         continue; // Skip keys we don't recognize.
                     }
 
-                    string value = split[1];
-
-                    customLines[key] = value.Trim(TextDelimiter);
+                    customLines[key] = TrimTextDelimiters(split[1]);
                     overridesApplied++;
                 }
 
@@ -161,10 +160,19 @@
                     return true; // Malformatted, likely externally edited
 
                 string lineKey = split[0];
-                string lineValue = split[1];
+                string lineValue = TrimTextDelimiters(split[1]);
 
-                if (!modCustomLines.ContainsKey(lineKey) || modCustomLines[lineKey] != lineValue)
-                    return true; // Difference in line content
+                if (modCustomLines.TryGetValue(lineKey, out string origValue))
+                {
+                    if (origValue != lineValue)
+                    {
+                        return true; // Difference in line content
+                    }
+                }
+                else
+                {
+                    return true; // Key not found
+                }
             }
 
             return false; // All lines matched and valid
@@ -178,5 +186,7 @@
             originalCustomLines[modAssemblyName][lineId] = text;
             customLines[lineId] = text;
         }
+
+        internal static string TrimTextDelimiters(string value) => value.Trim(TextDelimiterOpen, TextDelimiterClose);
     }
 }
