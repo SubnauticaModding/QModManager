@@ -48,7 +48,7 @@ _(optional, defaults to `true`)_
 Type: `bool`  
 Example: `true`
 
-- `Game`: The game that this mod is for. Can be `"Subnautica"`, `"BelowZero"`, or `"Both"`
+- `Game`: The game that this mod is for. Can be `"Subnautica"`, `"BelowZero"`, or `"Both"`  
 _(optional, defaults to `"Subnautica"`)_  
 Type: `string`  
 Example: `"Subnautica"`
