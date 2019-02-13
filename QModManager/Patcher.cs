@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using UnityEngine;
 
 namespace QModManager
@@ -125,6 +126,62 @@ namespace QModManager
                 if (mod == null)
                 {
                     Logger.Error($"Skipped a null mod found in folder \"{subDir}\"");
+                    erroredMods.Add(QMod.CreateFakeQMod(subDir));
+
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(mod.DisplayName))
+                {
+                    Logger.Error($"Mod found in folder \"{subDir}\" is missing a display name!");
+                    erroredMods.Add(QMod.CreateFakeQMod(subDir));
+
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(mod.Id))
+                {
+                    Logger.Error($"Mod found in folder \"{subDir}\" is missing an ID!");
+                    erroredMods.Add(QMod.CreateFakeQMod(subDir));
+
+                    continue;
+                }
+
+                if (mod.Id != Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase))
+                {
+                    Logger.Error($"Mod found in folder \"{subDir}\" has an invalid ID! IDs can only contain alphanumeric characters and underscores (0-9, A-Z, a-z, _)");
+                    erroredMods.Add(QMod.CreateFakeQMod(subDir));
+
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(mod.Author))
+                {
+                    Logger.Error($"Mod found in folder \"{subDir}\" is missing an author!");
+                    erroredMods.Add(QMod.CreateFakeQMod(subDir));
+
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(mod.Version))
+                {
+                    Logger.Error($"Mod found in folder \"{subDir}\" is missing a version!");
+                    erroredMods.Add(QMod.CreateFakeQMod(subDir));
+
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(mod.AssemblyName))
+                {
+                    Logger.Error($"Mod found in folder \"{subDir}\" is missing an assembly name!");
+                    erroredMods.Add(QMod.CreateFakeQMod(subDir));
+
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(mod.EntryMethod))
+                {
+                    Logger.Error($"Mod found in folder \"{subDir}\" is missing an entry point!");
                     erroredMods.Add(QMod.CreateFakeQMod(subDir));
 
                     continue;
