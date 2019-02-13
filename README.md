@@ -53,7 +53,7 @@ _(optional, defaults to `false`)_
 Type: `bool`  
 Example: `false`
 
-- `AssemblyName`: The name of the DLL file which contains the mod.
+- `AssemblyName`: The name of the DLL file which contains the mod.  
 _(required)_  
 Type: `string`  
 Example: `"BestMod.dll"`
