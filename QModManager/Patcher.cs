@@ -107,6 +107,8 @@ namespace QModManager
 
             foreach (string subDir in subDirs)
             {
+                if (Directory.GetFiles(subDir).Length < 1) continue;
+
                 string jsonFile = Path.Combine(subDir, "mod.json");
 
                 if (!File.Exists(jsonFile))
