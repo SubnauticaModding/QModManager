@@ -48,10 +48,10 @@ _(optional, defaults to `true`)_
 Type: `bool`  
 Example: `true`
 
-- `ForBelowZero`: Whether or not your mod is for Below Zero.  
-_(optional, defaults to `false`)_  
-Type: `bool`  
-Example: `false`
+- `Game`: The game that this mod is for. Can be `"Subnautica"`, `"BelowZero"`, or `"Both"`  
+_(optional, defaults to `"Subnautica"`)_  
+Type: `string`  
+Example: `"Subnautica"`
 
 - `AssemblyName`: The name of the DLL file which contains the mod.  
 _(required)_  
@@ -75,7 +75,7 @@ Example: `"BestMod.QMod.Patch"`
   "LoadBefore": [ "AModID", "SomeOtherModID" ],
   "LoadAfter": [ "AnotherModID" ],
   "Enable": true,
-  "ForBelowZero": false,
+  "Game": "Subnautica",
   "AssemblyName": "BestMod.dll",
   "EntryMethod": "BestMod.QMod.Patch"
 }
