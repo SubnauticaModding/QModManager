@@ -1,7 +1,5 @@
-﻿using Harmony;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using CraftDataPatcher2 = SMLHelper.V2.Patchers.CraftDataPatcher;
 
@@ -42,7 +40,7 @@ namespace SMLHelper.Patchers
 
         internal static void Patch()
         {
-            customTechData.ForEach(x => CraftDataPatcher2.CustomTechData.Add(x.Key, x.Value));
+            customTechData.ForEach(x => CraftDataPatcher2.AddToCustomTechData(x.Key, x.Value));
 
             customHarvestOutputList.ForEach(x => CraftDataPatcher2.CustomHarvestOutputList.Add(x.Key, x.Value));
             customHarvestTypeList.ForEach(x => CraftDataPatcher2.CustomHarvestTypeList.Add(x.Key, x.Value));
