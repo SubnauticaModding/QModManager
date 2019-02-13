@@ -904,7 +904,7 @@ namespace QModManager.Debugger
 
         private void HandleLog(string logString, string stackTrace, LogType type)
         {
-            //Cap the debug messages saved at 500 to prevent lag
+            //Cap the debug messages saved at 100 to prevent lag
             if (debugMessages.Count > 100)
             {
                 debugMessages.Pop();
