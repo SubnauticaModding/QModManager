@@ -17,14 +17,14 @@ namespace QModManager
         public string[] LoadBefore = new string[] { };
         public string[] LoadAfter = new string[] { };
         public bool Enable = true;
-        public bool ForBelowZero = false;
+        public string Game = "Subnautica";
         public string AssemblyName = "";
         public string EntryMethod = "";
 
         [JsonIgnore] internal Assembly LoadedAssembly;
         [JsonIgnore] internal string ModAssemblyPath;
         [JsonIgnore] internal bool Loaded;
-        [JsonIgnore] internal Patcher.Game Game;
+        [JsonIgnore] internal Patcher.Game ParsedGame;
 
         internal static QMod FromJsonFile(string file)
         {
@@ -40,8 +40,9 @@ namespace QModManager
 
                 if (mod == null) return null;
 
-                if (mod.ForBelowZero == true) mod.Game = Patcher.Game.BelowZero;
-                else mod.Game = Patcher.Game.Subnautica;
+                if (mod.Game == "BelowZero") mod.ParsedGame = Patcher.Game.BelowZero;
+                else if (mod.Game == "Both") mod.ParsedGame = Patcher.Game.Both;
+                else mod.ParsedGame = Patcher.Game.Subnautica;
 
                 return mod;
             }
@@ -65,7 +66,7 @@ namespace QModManager
                 LoadBefore = new string[] { },
                 LoadAfter = new string[] { },
                 Enable = false,
-                ForBelowZero = false,
+                Game = "",
                 AssemblyName = "None",
                 EntryMethod = "None",
             };

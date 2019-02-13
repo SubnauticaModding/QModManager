@@ -354,6 +354,7 @@ namespace QModManager
         {
             Subnautica,
             BelowZero,
+            Both,
         }
 
         internal static Game game;
@@ -400,7 +401,7 @@ namespace QModManager
             List<QMod> nonApplicableMods = new List<QMod>();
             sortedMods = sortedMods.Where(mod =>
             {
-                if (mod.Game == game) return true;
+                if (mod.ParsedGame == Game.Both || mod.ParsedGame == game) return true;
 
                 if (!nonApplicableMods.Contains(mod)) nonApplicableMods.Add(mod);
                 if (!erroredMods.Contains(mod)) erroredMods.Add(mod);
