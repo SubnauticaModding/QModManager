@@ -1,6 +1,7 @@
 File and details available at 
 
-https://www.nexusmods.com/subnautica/mods/16/
+https://www.nexusmods.com/subnautica/mods/201/
+https://www.nexusmods.com/subnauticabelowzero/mods/1/
 
 ___
 
@@ -87,4 +88,4 @@ ___
 
 ### Mac Users
 
-Refer to the README.md in the [`Mac Installation`](Mac%20Installation) folder for installation instructions.
+Refer to the `README.md` file in the [`Mac Installation`](Mac%20Installation) folder for installation instructions.
