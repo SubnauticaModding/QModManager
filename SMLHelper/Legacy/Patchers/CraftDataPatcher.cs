@@ -1,7 +1,5 @@
-﻿using Harmony;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Reflection;
 using CraftDataPatcher2 = SMLHelper.V2.Patchers.CraftDataPatcher;
 
@@ -42,7 +40,7 @@ namespace SMLHelper.Patchers
 
         internal static void Patch()
         {
-            customTechData.ForEach(x => CraftDataPatcher2.CustomTechData.Add(x.Key, x.Value));
+            customTechData.ForEach(x => CraftDataPatcher2.AddToCustomTechData(x.Key, x.Value));
 
             customHarvestOutputList.ForEach(x => CraftDataPatcher2.CustomHarvestOutputList.Add(x.Key, x.Value));
             customHarvestTypeList.ForEach(x => CraftDataPatcher2.CustomHarvestTypeList.Add(x.Key, x.Value));
@@ -106,11 +104,11 @@ namespace SMLHelper.Patchers
 
         private object GetIngredientsObj()
         {
-            var ingredientsType = typeof(CraftData).GetNestedType("Ingredients", BindingFlags.NonPublic);
-            var ingredientsObj = Activator.CreateInstance(ingredientsType);
-            var addMethod = ingredientsType.GetMethod("Add", new Type[] { IngredientHelper.IngredientType });
+            Type ingredientsType = typeof(CraftData).GetNestedType("Ingredients", BindingFlags.NonPublic);
+            object ingredientsObj = Activator.CreateInstance(ingredientsType);
+            MethodInfo addMethod = ingredientsType.GetMethod("Add", new Type[] { IngredientHelper.IngredientType });
 
-            foreach (var ingredient in _ingredients)
+            foreach (IngredientHelper ingredient in _ingredients)
             {
                 addMethod.Invoke(ingredientsObj, new object[] { ingredient.GetIngredientObj() });
             }

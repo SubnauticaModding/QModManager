@@ -4,7 +4,7 @@
     using UnityEngine;
     using Logger = V2.Logger;
 
-    public class ImageUtils
+    public static class ImageUtils
     {
         /// <summary>
         /// Creates a new <see cref="Texture2D" /> from an image file.
@@ -54,7 +54,7 @@
         /// <returns>Will return a new <see cref="Atlas.Sprite"/> instance if the file exists; Otherwise returns null.</returns>
         public static Atlas.Sprite LoadSpriteFromFile(string filePathToImage, TextureFormat format = TextureFormat.BC7)
         {
-            var texture2D = LoadTextureFromFile(filePathToImage, TextureFormat.BC7);
+            Texture2D texture2D = LoadTextureFromFile(filePathToImage, TextureFormat.BC7);
 
             return new Atlas.Sprite(texture2D);
         }

@@ -15,7 +15,7 @@
         /// <seealso cref="ModOptions"/>
         public static void RegisterModOptions(ModOptions options)
         {
-            OptionsPanelPatcher.modOptions.Add(options);
+            OptionsPanelPatcher.modOptions.Add(options.Name, options);
         }
     }
 }

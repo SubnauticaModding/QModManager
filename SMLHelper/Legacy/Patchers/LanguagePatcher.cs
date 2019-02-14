@@ -11,7 +11,8 @@ namespace SMLHelper.Patchers
 
         internal static void Patch()
         {
-            customLines.ForEach(x => LanguagePatcher2.customLines.Add(x.Key, x.Value));
+            foreach (KeyValuePair<string, string> kvPair in customLines)
+                LanguagePatcher2.AddCustomLanguageLine("SMLHelperLegacy", kvPair.Key, kvPair.Value);
 
             V2.Logger.Log("Old LanguagePatcher is done.");
         }

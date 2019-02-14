@@ -3,7 +3,7 @@
     using UnityEngine;
 
     // TODO: Maybe more Prefab-related functions here?
-    class PrefabUtils
+    public static class PrefabUtils
     {
         public static void AddBasicComponents(ref GameObject _object, string classId)
         {

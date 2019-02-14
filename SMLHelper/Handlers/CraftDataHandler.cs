@@ -1,6 +1,5 @@
 ﻿namespace SMLHelper.V2.Handlers
 {
-    using System;
     using Crafting;
     using Patchers;
 
@@ -16,17 +15,21 @@
         /// <param name="techType">The TechType whose TechData you want to edit.</param>
         /// <param name="techData">The TechData for that TechType.</param>
         /// <seealso cref="TechData"/>
+        public static void SetTechData(TechType techType, ITechData techData)
+        {
+            CraftDataPatcher.AddToCustomTechData(techType, techData);
+        }
+
+        /// <summary>
+        /// <para>Allows you to edit recipes, i.e. TechData for TechTypes.</para>
+        /// <para>Can be used for existing TechTypes too.</para>
+        /// </summary>
+        /// <param name="techType">The TechType whose TechData you want to edit.</param>
+        /// <param name="techData">The TechData for that TechType.</param>
+        /// <seealso cref="TechData"/>
         public static void SetTechData(TechType techType, TechData techData)
         {
-            if (CraftDataPatcher.CustomTechData.ContainsKey(techType))
-            {
-                Logger.Log($"[ERROR] Custom TechData already exists for '{techType}'. {Environment.NewLine}" +
-                            "All entries will be removed so conflict can be noted and resolved.");
-                CraftDataPatcher.DuplicateTechDataAttempts.Add(techType);
-                return; // Error condition exit
-            }
-
-            CraftDataPatcher.CustomTechData[techType] = techData;
+            CraftDataPatcher.AddToCustomTechData(techType, techData);
         }
 
         /// <summary>
@@ -183,6 +186,23 @@
         public static void RemoveFromGroup(TechGroup group, TechCategory category, TechType techType)
         {
             CraftDataPatcher.RemoveFromCustomGroup(group, category, techType);
+        }
+
+        /// <summary>
+        /// Safely accesses the crafting data from a modded item.<para/>
+        /// WARNING: This method is highly dependent on mod load order. 
+        /// Make sure your mod is loading after the mod whose TechData you are trying to access.
+        /// </summary>
+        /// <param name="techType">The TechType whose TechData you want to access.</param>
+        /// <returns>The ITechData from the modded item if it exists; Otherwise, returns <c>null</c>.</returns>
+        public static ITechData GetModdedTechData(TechType techType)
+        {
+            if (CraftDataPatcher.CustomTechData.TryGetValue(techType, out ITechData moddedTechData))
+            {
+                return moddedTechData;
+            }
+
+            return null;
         }
     }
 }

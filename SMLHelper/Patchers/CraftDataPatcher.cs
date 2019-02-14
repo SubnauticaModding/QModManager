@@ -38,7 +38,7 @@
         internal static void AddToCustomGroup(TechGroup group, TechCategory category, TechType techType, TechType after)
         {
             var groups = GroupsField.GetValue(null) as Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>;
-            var techGroup = groups[group];
+            Dictionary<TechCategory, List<TechType>> techGroup = groups[group];
             if (techGroup == null)
             {
                 // Should never happen, but doesn't hurt to add it.
@@ -46,7 +46,7 @@
                 return;
             }
 
-            var techCategory = techGroup[category];
+            List<TechType> techCategory = techGroup[category];
             if (techCategory == null)
             {
                 Logger.Log($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}");
@@ -71,7 +71,7 @@
         internal static void RemoveFromCustomGroup(TechGroup group, TechCategory category, TechType techType)
         {
             var groups = GroupsField.GetValue(null) as Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>;
-            var techGroup = groups[group];
+            Dictionary<TechCategory, List<TechType>> techGroup = groups[group];
             if (techGroup == null)
             {
                 // Should never happen, but doesn't hurt to add it.
@@ -79,7 +79,7 @@
                 return;
             }
 
-            var techCategory = techGroup[category];
+            List<TechType> techCategory = techGroup[category];
             if (techCategory == null)
             {
                 Logger.Log($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}");
@@ -89,6 +89,19 @@
             techCategory.Remove(techType);
 
             Logger.Log($"Removed \"{techType.AsString():G}\" from groups under \"{group:G}->{category:G}\"");
+        }
+
+        internal static void AddToCustomTechData(TechType techType, ITechData techData)
+        {
+            if (CustomTechData.ContainsKey(techType))
+            {
+                Logger.Log($"[ERROR] Custom TechData already exists for '{techType}'. {Environment.NewLine}" +
+                            "All entries will be removed so conflict can be noted and resolved.");
+                DuplicateTechDataAttempts.Add(techType);
+                return; // Error condition exit
+            }
+
+            CustomTechData[techType] = techData;
         }
 
         #endregion
@@ -108,7 +121,7 @@
             PatchUtils.PatchDictionary(CraftDataType, "backgroundTypes", CustomBackgroundTypes);
             PatchUtils.PatchList(CraftDataType, "buildables", CustomBuildables);
 
-            var preparePrefabIDCache = CraftDataType.GetMethod("PreparePrefabIDCache", BindingFlags.Public | BindingFlags.Static);
+            MethodInfo preparePrefabIDCache = CraftDataType.GetMethod("PreparePrefabIDCache", BindingFlags.Public | BindingFlags.Static);
 
             harmony.Patch(preparePrefabIDCache, null,
                 new HarmonyMethod(typeof(CraftDataPatcher).GetMethod("PreparePrefabIDCachePostfix", BindingFlags.NonPublic | BindingFlags.Static)));
@@ -123,7 +136,7 @@
             var techMapping = CraftDataType.GetField("techMapping", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as Dictionary<TechType, string>;
             var entClassTechTable = CraftDataType.GetField("entClassTechTable", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as Dictionary<string, TechType>;
 
-            foreach (var prefab in ModPrefab.Prefabs)
+            foreach (ModPrefab prefab in ModPrefab.Prefabs)
             {
                 techMapping[prefab.TechType] = prefab.ClassID;
                 entClassTechTable[prefab.ClassID] = prefab.TechType;
