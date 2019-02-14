@@ -29,8 +29,6 @@ namespace QModManager
                     Console.WriteLine("Tried to install, but it was already injected");
                     Console.WriteLine("Skipping installation");
                     Console.WriteLine();
-                    //Console.WriteLine("Press any key to exit...");
-                    //Console.ReadKey();
                     Environment.Exit(0);
                 }
 
@@ -57,8 +55,11 @@ namespace QModManager
 
                 Console.WriteLine("QModManager installed successfully");
                 Console.WriteLine();
-                //Console.WriteLine("Press any key to exit...");
-                //Console.ReadKey();
+                Console.WriteLine("Trying to enable Unity sound...");
+
+                AudioFixer.ChangeDisableUnityAudio(managedDirectory, false);
+
+                Console.WriteLine("Unity sound enabled successfully");
                 Environment.Exit(0);
             }
             catch (Exception e)
@@ -79,8 +80,6 @@ namespace QModManager
                     Console.WriteLine("Tried to uninstall, but patch was not present");
                     Console.WriteLine("Skipping uninstallation");
                     Console.WriteLine();
-                    //Console.WriteLine("Press any key to exit...");
-                    //Console.ReadKey();
                     Environment.Exit(0);
                 }
 
@@ -122,8 +121,11 @@ namespace QModManager
 
                 Console.WriteLine("QModManager was uninstalled successfully");
                 Console.WriteLine();
-                //Console.WriteLine("Press any key to exit...");
-                //Console.ReadKey();
+                Console.WriteLine("Trying to disable Unity sound...");
+
+                AudioFixer.ChangeDisableUnityAudio(managedDirectory, true);
+
+                Console.WriteLine("Unity sound disabled successfully");
                 Environment.Exit(0);
             }
             catch (Exception e)

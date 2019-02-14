@@ -15,7 +15,7 @@ namespace QModManager
             AssetFileInfoEx audioInfo = afi.table.getAssetInfo(4);
             AssetTypeInstance audioAti = am.GetATI(afi.file, audioInfo);
             AssetTypeValueField audioBaseField = audioAti.GetBaseField();
-            audioBaseField.Get("m_DisableAudio").GetValue().Set(false);
+            audioBaseField.Get("m_DisableAudio").GetValue().Set(newValue);
             byte[] audioAsset;
             using (MemoryStream memStream = new MemoryStream())
             using (AssetsFileWriter writer = new AssetsFileWriter(memStream))
