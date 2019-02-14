@@ -215,8 +215,10 @@ namespace QModManager
 
             // Disable mods that are not for the detected game
             // (Disable Subnautica mods if Below Zero is detected and disable Below Zero mods if Subnautica is detected)
-            // 
             DisableNonApplicableMods();
+
+            // Remove mods with duplicate mod ids if any are found
+            RemoveDuplicateModIDs();
 
             // Sort the mods based on their LoadBefore and LoadAfter properties
             // If any mods break (i.e., a loop is found), they are removed from the list so that they aren't loaded
@@ -344,6 +346,35 @@ namespace QModManager
             Logger.Info($"Loaded mod \"{mod.Id}\"");
 
             return true;
+        }
+
+        private static void RemoveDuplicateModIDs()
+        {
+            List<QMod> duplicateModIDs = new List<QMod>();
+
+            foreach (QMod mod in sortedMods)
+            {
+                List<QMod> matchingMods = sortedMods.Where((QMod qmod) => qmod.Id == mod.Id).ToList();
+                if (matchingMods.Count > 1)
+                {
+                    matchingMods.Do((QMod qmod) =>
+                    {
+                        if (!duplicateModIDs.Contains(qmod)) duplicateModIDs.Add(qmod);
+                        if (!erroredMods.Contains(qmod)) erroredMods.Add(qmod);
+                    });
+                }
+            }
+
+            if (duplicateModIDs.Count > 0)
+            {
+                string toWrite = $"Multiple mods with the same ID found:\n";
+                foreach (QMod mod in duplicateModIDs)
+                {
+                    toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
+                }
+
+                Logger.Error(toWrite);
+            }
         }
 
         #endregion

@@ -671,7 +671,7 @@ namespace QModManager.Debugger
                     }
                     //GUILayout.Label("val:" + property.GetValue(comp, null));
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     //GUILayout.Label("DBG ERR:" + e.StackTrace);
                     //UnityEngine.Debug.Log("msg:" + e.Message + "err" + e.Source);
