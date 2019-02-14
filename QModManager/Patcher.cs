@@ -71,7 +71,7 @@ namespace QModManager
 
         private static void PatchHarmony()
         {
-            HarmonyInstance.Create("qmodmanager.subnautica").PatchAll();
+            HarmonyInstance.Create("qmodmanager").PatchAll();
             Logger.Debug("Patched!");
         }
 
