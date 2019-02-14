@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-**Describe the proble**
+**Describe the problem**
 <!-- A clear and concise description of what the problem is. -->
 
 **Screenshots**
