@@ -110,7 +110,7 @@ namespace QModManager
             {
                 DestroyImmediate(gameObject.GetComponent<RawImage>());
                 Text text = gameObject.AddComponent<Text>();
-                text.text = $"Oopsie poopsie, an error has occured!\nQModManager couldn't be initialized.\nTo fix this issue, turn on your internet connection,\nthen restart {(Patcher.game == Patcher.Game.Subnautica ? "Subnautica" : "Below Zero")}.\n(Is the game pirated?)";
+                text.text = $"Oopsie poopsie, an error has occured!\nQModManager couldn't be initialized.\nPlease turn on your internet connection,\nthen restart {(Patcher.game == Patcher.Game.Subnautica ? "Subnautica" : "Below Zero")}.";
                 text.color = new Color(1, 0, 0);
                 text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
                 text.fontStyle = FontStyle.BoldAndItalic;
@@ -149,8 +149,7 @@ namespace QModManager
 
                 videoPlayer.Play();
 
-                /*
-                yield return new WaitForSeconds(25);
+                yield return new WaitForSeconds(15);
                 if (Patcher.game == Patcher.Game.Subnautica)
                 {
                     Process.Start("https://store.steampowered.com/app/264710/Subnautica/");
@@ -163,9 +162,8 @@ namespace QModManager
                     Process.Start("https://www.epicgames.com/store/en-US/product/subnautica-below-zero/home");
                     Process.Start("https://discordapp.com/store/skus/535869836748783616/subnautica-below-zero");
                 }
-                yield return new WaitForSeconds(35);
-                Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-                */
+                //yield return new WaitForSeconds(35);
+                //Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
 
                 while (videoPlayer.isPlaying)
                 {
@@ -178,14 +176,14 @@ namespace QModManager
 
         internal static void PirateDetected()
         {
-            //Hooks.Update += Log;
+            Hooks.Update += Log;
             GameObject obj = new GameObject("YOU ARE A PIRATE");
             obj.AddComponent<Pirate>();
         }
 
         internal static bool IsPirate(string folder)
         {
-            return true;
+            //return true;
 
             string steamDll = Path.Combine(folder, "steam_api64.dll");
 
