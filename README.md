@@ -1,11 +1,47 @@
-File and details available at 
+### QModManager
+
+#### Config based patch management for Subnautica and Subnautica: Below Zero
 
 https://www.nexusmods.com/subnautica/mods/201/  
 https://www.nexusmods.com/subnauticabelowzero/mods/1/
 
 ___
 
-### Creating mods
+#### This file will not provide a step-by-step tutorial for creating mods!
+
+While creating a mod, you can use the [`0Harmony-1.2.0.1.dll`](https://github.com/pardeike/Harmony) found in the `Managed` folder to patch methods at runtime and change their code.
+
+Your mod must have a `static` method with **no parameters** that must be in a class which **needs to be in a namespace**. That method will be called when the game loads to load the mod. This is usually where you want to make your calls to [SMLHelper](https://nexusmods.com/subnautica/mods/113) or patch methods using [Harmony](https://github.com/pardeike/Harmony).
+
+The patch method and the build DLL file name will be specified in the `mod.json` file.
+
+Example:
+
+`Mod.cs`
+```cs
+using Harmony;
+
+namespace MyNamespace
+{
+    class MyClass
+    {
+        static void PatchMethod()
+        {
+            HarmonyInstance.Create("AwesomeMod").PatchAll();
+        }
+    }
+}
+```
+
+`mod.json`
+```json
+{
+  ...
+  "AssemblyName": "MyMod.dll",
+  "EntryMethod": "MyNamespace.MyClass.PatchMethod",
+  ...
+}
+```
 
 #### To support your mod for the QMods system, you need to learn how the `mod.json` file works. It contains informations about a mod, and it can have the folling keys:
 
