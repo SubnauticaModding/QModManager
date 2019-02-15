@@ -359,6 +359,7 @@ namespace QModManager
                 {
                     foreach (QMod duplicateMod in matchingMods)
                     {
+                        if (sortedMods.Contains(duplicateMod)) sortedMods.Remove(duplicateMod);
                         if (!duplicateModIDs.Contains(duplicateMod)) duplicateModIDs.Add(duplicateMod);
                         if (!erroredMods.Contains(duplicateMod)) erroredMods.Add(duplicateMod);
                     }
