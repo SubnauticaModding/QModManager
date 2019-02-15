@@ -42,6 +42,7 @@ namespace QModManager
                 }
 
                 string managedDirectory = Environment.CurrentDirectory;
+                string globalgamemanagers = Path.Combine(managedDirectory, "../globalgamemanagers");
 
                 if (!File.Exists(managedDirectory + "/Assembly-CSharp.dll"))
                 {
@@ -103,7 +104,7 @@ namespace QModManager
                         Console.WriteLine();
                         Console.WriteLine("Trying to enable Unity sound...");
 
-                        AudioFixer.ChangeDisableUnityAudio(managedDirectory, false);
+                        AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false);
 
                         Console.WriteLine("Unity sound enabled successfully");
                         Environment.Exit(0);
@@ -123,7 +124,7 @@ namespace QModManager
                         Console.WriteLine();
                         Console.WriteLine("Trying to disable Unity sound...");
 
-                        AudioFixer.ChangeDisableUnityAudio(managedDirectory, true);
+                        AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true);
 
                         Console.WriteLine("Unity sound disabled successfully");
                         Environment.Exit(0);

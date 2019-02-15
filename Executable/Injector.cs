@@ -10,6 +10,7 @@ namespace QModManager
     {
         private readonly string gameDirectory;
         private readonly string managedDirectory;
+        private readonly string globalgamemanagers;
         private readonly string mainFilename = "Assembly-CSharp.dll";
         private const string installerFilename = "QModInstaller.dll";
 
@@ -18,6 +19,7 @@ namespace QModManager
             gameDirectory = dir;
 			managedDirectory = managedDir;
             mainFilename = Path.Combine(managedDirectory, mainFilename);
+            globalgamemanagers = Path.Combine(managedDirectory, "../globalgamemanagers");
         }
 
         internal void Inject()
@@ -31,7 +33,7 @@ namespace QModManager
                     Console.WriteLine();
                     Console.WriteLine("Trying to enable Unity sound...");
 
-                    AudioFixer.ChangeDisableUnityAudio(managedDirectory, false);
+                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false);
 
                     Console.WriteLine("Unity sound enabled successfully");
                     Environment.Exit(0);
@@ -62,7 +64,7 @@ namespace QModManager
                 Console.WriteLine();
                 Console.WriteLine("Trying to enable Unity sound...");
 
-                AudioFixer.ChangeDisableUnityAudio(managedDirectory, false);
+                AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false);
 
                 Console.WriteLine("Unity sound enabled successfully");
                 Environment.Exit(0);
@@ -87,14 +89,14 @@ namespace QModManager
                     Console.WriteLine();
                     Console.WriteLine("Trying to disable Unity sound...");
 
-                    AudioFixer.ChangeDisableUnityAudio(managedDirectory, true);
+                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true);
 
                     Console.WriteLine("Unity sound disabled successfully");
                     Environment.Exit(0);
                 }
 
                 // Remove backup file if it exists
-                string backupFilePath = Path.Combine(managedDirectory, "Assembly-CSharp.qoriginal.dll");
+                string backupFilePath = Path.Combine(globalgamemanagers, "Assembly-CSharp.qoriginal.dll");
                 if (File.Exists(backupFilePath))
                     File.Delete(backupFilePath);
 
