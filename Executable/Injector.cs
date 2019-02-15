@@ -96,7 +96,7 @@ namespace QModManager
                 }
 
                 // Remove backup file if it exists
-                string backupFilePath = Path.Combine(globalgamemanagers, "Assembly-CSharp.qoriginal.dll");
+                string backupFilePath = Path.Combine(managedDirectory, "Assembly-CSharp.qoriginal.dll");
                 if (File.Exists(backupFilePath))
                     File.Delete(backupFilePath);
 
@@ -135,7 +135,7 @@ namespace QModManager
                 Console.WriteLine();
                 Console.WriteLine("Trying to disable Unity sound...");
 
-                AudioFixer.ChangeDisableUnityAudio(managedDirectory, true);
+                AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true);
 
                 Console.WriteLine("Unity sound disabled successfully");
                 Environment.Exit(0);
