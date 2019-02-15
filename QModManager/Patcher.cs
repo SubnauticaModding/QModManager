@@ -357,11 +357,12 @@ namespace QModManager
                 List<QMod> matchingMods = sortedMods.Where((QMod qmod) => qmod.Id == mod.Id).ToList();
                 if (matchingMods.Count > 1)
                 {
-                    matchingMods.Do((QMod qmod) =>
+                    foreach (QMod duplicateMod in matchingMods)
                     {
-                        if (!duplicateModIDs.Contains(qmod)) duplicateModIDs.Add(qmod);
-                        if (!erroredMods.Contains(qmod)) erroredMods.Add(qmod);
-                    });
+                        if (sortedMods.Contains(duplicateMod)) sortedMods.Remove(duplicateMod);
+                        if (!duplicateModIDs.Contains(duplicateMod)) duplicateModIDs.Add(duplicateMod);
+                        if (!erroredMods.Contains(duplicateMod)) erroredMods.Add(duplicateMod);
+                    }
                 }
             }
 
