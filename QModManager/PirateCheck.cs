@@ -41,19 +41,19 @@ namespace QModManager
                 RuntimeManager.GetBus("bus:/master").setMute(true);
                 UWE.Utils.alwaysLockCursor = true;
                 UWE.Utils.lockCursor = true;
-                SceneManager.GetActiveScene().GetRootGameObjects().Do(go =>
+                string[] bannedGOs =
                 {
-                    string[] bannedGOs =
-                    {
-                        "Audio",
-                        "WorldCursor",
-                        "Default Notification Center",
-                        "InputHandlerStack",
-                        "SelectorCanvas",
-                        "Clip Camera"
-                    };
+                    "Audio",
+                    "WorldCursor",
+                    "Default Notification Center",
+                    "InputHandlerStack",
+                    "SelectorCanvas",
+                    "Clip Camera"
+                };
+                foreach (GameObject go in SceneManager.GetActiveScene().GetRootGameObjects())
+                {
                     if (Array.IndexOf(bannedGOs, go.name) != -1) DestroyImmediate(go);
-                });
+                }
             }
 
             private void GetVideo()
