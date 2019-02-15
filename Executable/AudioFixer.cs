@@ -29,6 +29,7 @@ namespace QModManager
             using (AssetsFileWriter writer = new AssetsFileWriter(memStream))
             {
                 afi.file.Write(writer, 0, rep.ToArray(), 0);
+                afi.stream.Close();
                 File.WriteAllBytes(path, memStream.ToArray());
             }
         }
