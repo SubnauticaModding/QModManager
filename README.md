@@ -34,7 +34,7 @@ namespace MyNamespace
 ```
 
 `mod.json`
-```json
+```
 {
   ...
   "AssemblyName": "MyMod.dll",
