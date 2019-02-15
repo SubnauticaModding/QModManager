@@ -189,7 +189,7 @@ namespace QModManager
 
                     onWindows = onWindowsSN || onWindowsBZ;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     // If an exception was thrown, the file probably isn't there
                     onWindows = false;
@@ -210,7 +210,7 @@ namespace QModManager
 
                     onMac = onMacSN || onMacBZ;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     // If an exception was thrown, the file probably isn't there
                     onMac = false;
