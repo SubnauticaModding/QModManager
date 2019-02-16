@@ -58,22 +58,35 @@ namespace QModManager
 
             private void GetVideo()
             {
-                ServicePointManager.ServerCertificateValidationCallback = VersionCheck.CustomRemoteCertificateValidationCallback;
-
-                using (WebClient client = new WebClient())
+                if (!CheckConnection())
                 {
-                    client.DownloadStringCompleted += (sender, e) =>
-                    {
-                        if (e.Error != null)
-                        {
-                            UnityEngine.Debug.LogException(e.Error);
-                            ShowText();
-                            return;
-                        }
-                        if (!ParseVideo(e.Result)) ShowText();
-                    };
+                    ShowText();
+                    return;
+                }
+                try
+                {
+                    ServicePointManager.ServerCertificateValidationCallback = VersionCheck.CustomRemoteCertificateValidationCallback;
 
-                    client.DownloadStringAsync(new Uri(VideoURLObtainer));
+                    using (WebClient client = new WebClient())
+                    {
+                        client.DownloadStringCompleted += (sender, e) =>
+                        {
+                            if (e.Error != null)
+                            {
+                                UnityEngine.Debug.LogException(e.Error);
+                                ShowText();
+                                return;
+                            }
+                            if (!ParseVideo(e.Result)) ShowText();
+                        };
+
+                        client.DownloadStringAsync(new Uri(VideoURLObtainer));
+                    }
+                }
+                catch (Exception e)
+                {
+                    UnityEngine.Debug.LogException(e);
+                    ShowText();
                 }
             }
             private bool ParseVideo(string result)
@@ -110,7 +123,7 @@ namespace QModManager
             {
                 DestroyImmediate(gameObject.GetComponent<RawImage>());
                 Text text = gameObject.AddComponent<Text>();
-                text.text = $"Oopsie poopsie, an error has occured!\nQModManager couldn't be initialized.\nPlease turn on your internet connection,\nthen restart {(Patcher.game == Patcher.Game.Subnautica ? "Subnautica" : "Below Zero")}.";
+                text.text = $"An error has occured!\nQModManager couldn't be initialized.\nPlease turn on your internet connection,\nthen restart {(Patcher.game == Patcher.Game.Subnautica ? "Subnautica" : "Below Zero")}.";
                 text.color = new Color(1, 0, 0);
                 text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
                 text.fontStyle = FontStyle.BoldAndItalic;
@@ -171,6 +184,51 @@ namespace QModManager
                 }
 
                 yield return StartCoroutine(PlayVideo());
+            }
+
+            private static bool CheckConnection(string hostedURL = "http://www.google.com")
+            {
+                try
+                {
+                    string HtmlText = GetHtmlFromUri(hostedURL);
+                    if (HtmlText == "")
+                        return false;
+                    else
+                        return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+            private static string GetHtmlFromUri(string resource)
+            {
+                string html = string.Empty;
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(resource);
+                try
+                {
+                    using (HttpWebResponse resp = (HttpWebResponse)req.GetResponse())
+                    {
+                        bool isSuccess = (int)resp.StatusCode < 299 && (int)resp.StatusCode >= 200;
+                        if (isSuccess)
+                        {
+                            using (StreamReader reader = new StreamReader(resp.GetResponseStream()))
+                            {
+                                char[] cs = new char[80];
+                                reader.Read(cs, 0, cs.Length);
+                                foreach (char ch in cs)
+                                {
+                                    html += ch;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    return "";
+                }
+                return html;
             }
         }
 
