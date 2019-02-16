@@ -1,5 +1,4 @@
-﻿using FMOD.Studio;
-using FMODUnity;
+﻿using FMODUnity;
 using Harmony;
 using Oculus.Newtonsoft.Json;
 using System;
