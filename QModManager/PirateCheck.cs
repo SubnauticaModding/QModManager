@@ -20,8 +20,17 @@ namespace QModManager
         private class Pirate : MonoBehaviour
         {
             private string videoURL;
-
             private const string VideoURLObtainer = "https://you-link.herokuapp.com/?url=https://www.youtube.com/watch?v=i8ju_10NkGY";
+
+            private static readonly HashSet<string> BannedGameObjectNames = new HashSet<string>()
+            {
+                "Audio",
+                "WorldCursor",
+                "Default Notification Center",
+                "InputHandlerStack",
+                "SelectorCanvas",
+                "Clip Camera"
+            };
 
             private void Start()
             {
@@ -41,18 +50,9 @@ namespace QModManager
                 RuntimeManager.GetBus("bus:/master").setMute(true);
                 UWE.Utils.alwaysLockCursor = true;
                 UWE.Utils.lockCursor = true;
-                string[] bannedGOs =
-                {
-                    "Audio",
-                    "WorldCursor",
-                    "Default Notification Center",
-                    "InputHandlerStack",
-                    "SelectorCanvas",
-                    "Clip Camera"
-                };
                 foreach (GameObject go in SceneManager.GetActiveScene().GetRootGameObjects())
                 {
-                    if (Array.IndexOf(bannedGOs, go.name) != -1) DestroyImmediate(go);
+                    if (BannedGameObjectNames.Contains(go.name)) DestroyImmediate(go);
                 }
             }
 
@@ -191,12 +191,12 @@ namespace QModManager
                 try
                 {
                     string HtmlText = GetHtmlFromUri(hostedURL);
-                    if (HtmlText == "")
+                    if (string.IsNullOrEmpty(HtmlText))
                         return false;
                     else
                         return true;
                 }
-                catch (Exception)
+                catch
                 {
                     return false;
                 }
