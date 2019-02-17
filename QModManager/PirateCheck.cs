@@ -208,7 +208,7 @@ namespace QModManager
                 {
                     using (HttpWebResponse resp = (HttpWebResponse)req.GetResponse())
                     {
-                        bool isSuccess = (int)resp.StatusCode < 299 && (int)resp.StatusCode >= 200;
+                        bool isSuccess = resp.StatusCode >= HttpStatusCode.OK && resp.StatusCode < HttpStatusCode.Ambiguous;
                         if (isSuccess)
                         {
                             using (StreamReader reader = new StreamReader(resp.GetResponseStream()))
