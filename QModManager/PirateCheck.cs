@@ -225,7 +225,7 @@ namespace QModManager
                 }
                 catch
                 {
-                    return "";
+                    return null;
                 }
                 return html;
             }
