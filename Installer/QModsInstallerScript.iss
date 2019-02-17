@@ -60,19 +60,19 @@ PrivilegesRequired=admin
 ; Restarts closed applications after install
 RestartApplications=yes
 ; Icon file
-SetupIconFile=..\Assets\QModsIcon.ico
+SetupIconFile=QModsIcon.ico
 ; Changes compression, smaller size
 SolidCompression=yes
 ; Uninstall icon file
-UninstallDisplayIcon=..\Assets\QModsIcon.ico
+UninstallDisplayIcon=QModsIcon.ico
 ; Uninstall app name
 UninstallDisplayName={code:GetName}
 ; Disables the usage of previous settings (when updating) because the GUID is generated too late for them to work
 UsePreviousAppDir=no
 UsePreviousLanguage=no
 ; Images that appear in the installer
-WizardImageFile=..\Assets\WizardImage.bmp
-WizardSmallImageFile=..\Assets\WizardSmallImage.bmp
+WizardImageFile=WizardImage.bmp
+WizardSmallImageFile=WizardSmallImage.bmp
 
 ; Uses default messages when not overriden
 [Languages]
