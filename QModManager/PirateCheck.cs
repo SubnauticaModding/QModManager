@@ -1,5 +1,4 @@
-﻿using FMOD.Studio;
-using FMODUnity;
+﻿using FMODUnity;
 using Harmony;
 using Oculus.Newtonsoft.Json;
 using System;
@@ -19,9 +18,18 @@ namespace QModManager
     {
         private class Pirate : MonoBehaviour
         {
-            /*private string videoURL;
-
+            private string videoURL;
             private const string VideoURLObtainer = "https://you-link.herokuapp.com/?url=https://www.youtube.com/watch?v=i8ju_10NkGY";
+
+            private static readonly HashSet<string> BannedGameObjectNames = new HashSet<string>()
+            {
+                "Audio",
+                "WorldCursor",
+                "Default Notification Center",
+                "InputHandlerStack",
+                "SelectorCanvas",
+                "Clip Camera"
+            };
 
             private void Start()
             {
@@ -34,46 +42,50 @@ namespace QModManager
 
                 GetVideo();
                 //DontDestroyOnLoad(this);
-            }*/
+            }
 
             private void Update()
             {
                 RuntimeManager.GetBus("bus:/master").setMute(true);
                 UWE.Utils.alwaysLockCursor = true;
                 UWE.Utils.lockCursor = true;
-                SceneManager.GetActiveScene().GetRootGameObjects().Do(go =>
+                foreach (GameObject go in SceneManager.GetActiveScene().GetRootGameObjects())
                 {
-                    string[] bannedGOs =
-                    {
-                        "Audio",
-                        "WorldCursor",
-                        "Default Notification Center",
-                        "InputHandlerStack",
-                        "SelectorCanvas",
-                        "Clip Camera"
-                    };
-                    if (Array.IndexOf(bannedGOs, go.name) != -1) DestroyImmediate(go);
-                });
+                    if (BannedGameObjectNames.Contains(go.name)) DestroyImmediate(go);
+                }
             }
 
-            /*private void GetVideo()
+            private void GetVideo()
             {
-                ServicePointManager.ServerCertificateValidationCallback = VersionCheck.CustomRemoteCertificateValidationCallback;
-
-                using (WebClient client = new WebClient())
+                if (!CheckConnection())
                 {
-                    client.DownloadStringCompleted += (sender, e) =>
-                    {
-                        if (e.Error != null)
-                        {
-                            UnityEngine.Debug.LogException(e.Error);
-                            ShowText();
-                            return;
-                        }
-                        if (!ParseVideo(e.Result)) ShowText();
-                    };
+                    ShowText();
+                    return;
+                }
+                try
+                {
+                    ServicePointManager.ServerCertificateValidationCallback = VersionCheck.CustomRemoteCertificateValidationCallback;
 
-                    client.DownloadStringAsync(new Uri(VideoURLObtainer));
+                    using (WebClient client = new WebClient())
+                    {
+                        client.DownloadStringCompleted += (sender, e) =>
+                        {
+                            if (e.Error != null)
+                            {
+                                UnityEngine.Debug.LogException(e.Error);
+                                ShowText();
+                                return;
+                            }
+                            if (!ParseVideo(e.Result)) ShowText();
+                        };
+
+                        client.DownloadStringAsync(new Uri(VideoURLObtainer));
+                    }
+                }
+                catch (Exception e)
+                {
+                    UnityEngine.Debug.LogException(e);
+                    ShowText();
                 }
             }
             private bool ParseVideo(string result)
@@ -110,7 +122,7 @@ namespace QModManager
             {
                 DestroyImmediate(gameObject.GetComponent<RawImage>());
                 Text text = gameObject.AddComponent<Text>();
-                text.text = $"Oopsie poopsie, an error has occured!\nQModManager couldn't be initialized.\nTo fix this issue, turn on your internet connection,\nthen restart {(Patcher.game == Patcher.Game.Subnautica ? "Subnautica" : "Below Zero")}.\n(Is the game pirated?)";
+                text.text = $"An error has occured!\nQModManager couldn't be initialized.\nPlease turn on your internet connection,\nthen restart {(Patcher.game == Patcher.Game.Subnautica ? "Subnautica" : "Below Zero")}.";
                 text.color = new Color(1, 0, 0);
                 text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
                 text.fontStyle = FontStyle.BoldAndItalic;
@@ -149,7 +161,7 @@ namespace QModManager
 
                 videoPlayer.Play();
 
-                yield return new WaitForSeconds(25);
+                yield return new WaitForSeconds(15);
                 if (Patcher.game == Patcher.Game.Subnautica)
                 {
                     Process.Start("https://store.steampowered.com/app/264710/Subnautica/");
@@ -162,28 +174,74 @@ namespace QModManager
                     Process.Start("https://www.epicgames.com/store/en-US/product/subnautica-below-zero/home");
                     Process.Start("https://discordapp.com/store/skus/535869836748783616/subnautica-below-zero");
                 }
-                yield return new WaitForSeconds(35);
-                Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-                
 
                 while (videoPlayer.isPlaying)
                 {
                     yield return null;
                 }
 
+                Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");                
+
                 yield return StartCoroutine(PlayVideo());
-            }*/
+            }
+
+            private static bool CheckConnection(string hostedURL = "http://www.google.com")
+            {
+                try
+                {
+                    string HtmlText = GetHtmlFromUri(hostedURL);
+                    if (string.IsNullOrEmpty(HtmlText))
+                        return false;
+                    else
+                        return true;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            private static string GetHtmlFromUri(string resource)
+            {
+                string html = string.Empty;
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(resource);
+                try
+                {
+                    using (HttpWebResponse resp = (HttpWebResponse)req.GetResponse())
+                    {
+                        bool isSuccess = resp.StatusCode >= HttpStatusCode.OK && resp.StatusCode < HttpStatusCode.Ambiguous;
+                        if (isSuccess)
+                        {
+                            using (StreamReader reader = new StreamReader(resp.GetResponseStream()))
+                            {
+                                char[] cs = new char[80];
+                                reader.Read(cs, 0, cs.Length);
+                                foreach (char ch in cs)
+                                {
+                                    html += ch;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+                    return null;
+                }
+                return html;
+            }
         }
 
         internal static void PirateDetected()
         {
-            //Hooks.Update += Log;
+            Hooks.Update += Log;
             GameObject obj = new GameObject("YOU ARE A PIRATE");
             obj.AddComponent<Pirate>();
         }
 
         internal static bool IsPirate(string folder)
         {
+            //return true;
+
             string steamDll = Path.Combine(folder, "steam_api64.dll");
 
             // Check for a modified steam dll
@@ -191,17 +249,14 @@ namespace QModManager
             {
                 FileInfo fileInfo = new FileInfo(steamDll);
 
-                if (fileInfo.Length > 209000) return true;
+                if (fileInfo.Length > 220000) return true;
             }
 
-            // Check for ini files in the root
-            FileInfo[] iniFiles = new DirectoryInfo(folder).GetFiles("*.ini");
-            FileInfo[] cdxFiles = new DirectoryInfo(folder).GetFiles("*.cdx");
-            int e = 0;
+            // Check for cracked files in the folder
+            bool steamapiINI = File.Exists(Path.Combine(folder, "steam_api64.ini"));
+            bool cdxFiles = new DirectoryInfo(folder).GetFiles("*.cdx").Length > 0;
 
-            if (File.Exists(Path.Combine(folder, "desktop.ini"))) e--;
-
-            if (iniFiles.Length + cdxFiles.Length + e > 0) return true;
+            if (steamapiINI || cdxFiles) return true;
 
             return false;
         }

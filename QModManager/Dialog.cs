@@ -28,10 +28,16 @@ namespace QModManager
                 if (File.Exists(logPath))
                     Process.Start(logPath);
                 else
-                    Logger.Error("Log file was not found!");
+                    Logger.Error($"Expected log file at: \"{logPath}\" but none was found.");
             });
             internal static readonly Button close = new Button("Close", () => { });
-            internal static readonly Button download = new Button("Download", () => Process.Start(VersionCheck.nexusmodsURL));
+            internal static readonly Button download = new Button("Download", () =>
+            {
+                if (Patcher.game == Patcher.Game.Subnautica)
+                    Process.Start(VersionCheck.snNexus);
+                else
+                    Process.Start(VersionCheck.bzNexus);
+            });
 
             private Button() { }
             internal Button(string text, Action action)

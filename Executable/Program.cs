@@ -42,6 +42,7 @@ namespace QModManager
                 }
 
                 string managedDirectory = Environment.CurrentDirectory;
+                string globalgamemanagers = Path.Combine(managedDirectory, "../globalgamemanagers");
 
                 if (!File.Exists(managedDirectory + "/Assembly-CSharp.dll"))
                 {
@@ -101,8 +102,11 @@ namespace QModManager
                         Console.WriteLine("QModManager is already installed!");
                         Console.WriteLine("Skipping installation");
                         Console.WriteLine();
-                        //Console.WriteLine("Press any key to exit...");
-                        //Console.ReadKey();
+                        Console.WriteLine("Trying to enable Unity sound...");
+
+                        AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false);
+
+                        Console.WriteLine("Unity sound enabled successfully");
                         Environment.Exit(0);
                     }
                 }
@@ -118,8 +122,11 @@ namespace QModManager
                         Console.WriteLine("QModManager is already uninstalled!");
                         Console.WriteLine("Skipping uninstallation");
                         Console.WriteLine();
-                        //Console.WriteLine("Press any key to exit...");
-                        //Console.ReadKey();
+                        Console.WriteLine("Trying to disable Unity sound...");
+
+                        AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true);
+
+                        Console.WriteLine("Unity sound disabled successfully");
                         Environment.Exit(0);
                     }
                 }
