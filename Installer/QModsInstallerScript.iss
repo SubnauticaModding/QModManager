@@ -80,6 +80,10 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 
 ; Required files
 [Files]
+; Installer skin
+#define Theme "Carbon"
+Source: "VclStylesinno.dll"; Flags: DontCopy
+Source: "{#Theme}.vsf"; Flags: DontCopy
 ; Subnautica
 Source: "..\Dependencies\0Harmony.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 Source: "..\Dependencies\0Harmony-1.2.0.1.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
@@ -463,11 +467,19 @@ begin
     FSWbemLocator := Unassigned;
 end;
 
+// Imports some stuff from VclStylesInno.dll
+procedure LoadVCLStyle(VClStyleFile: String); external 'LoadVCLStyleW@files:VclStylesInno.dll stdcall';
+procedure UnLoadVCLStyles; external 'UnLoadVCLStyles@files:VclStylesInno.dll stdcall';
+
 // Called when the app launches. If returns false, cancel install
 // Same as InitializeWizard
 // TODO: Move and split event functions
 function InitializeSetup(): Boolean;
 begin
+  // Load skin
+  ExtractTemporaryFile('{#Theme}.vsf');
+  LoadVCLStyle(ExpandConstant('{tmp}\{#Theme}.vsf'));
+  // Check if game is running
   appIsSet := false // Sets a default value
   if IsAppRunning('Subnautica.exe') or IsAppRunning('SubnauticaZero.exe') then
   begin
@@ -584,4 +596,9 @@ begin
   #if PreRelease == true
     InitializeWizard_();
   #endif
+end;
+
+procedure DeinitializeSetup();
+begin
+  UnLoadVCLStyles;
 end;
