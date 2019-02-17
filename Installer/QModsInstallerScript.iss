@@ -54,7 +54,7 @@ InfoBeforeFile=Info.txt
 ; The output file name
 OutputBaseFilename=QModManager_Setup
 ; The output directory
-OutputDir=.
+OutputDir=..\Build
 ; The application might require administrator access
 PrivilegesRequired=admin
 ; Restarts closed applications after install
@@ -90,18 +90,18 @@ Source: "..\Dependencies\0Harmony-1.2.0.1.dll"; DestDir: "{app}\Subnautica_Data\
 Source: "..\Dependencies\AssetsTools.NET.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 Source: "..\Dependencies\cldb.dat"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 Source: "..\Dependencies\Mono.Cecil.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "QModInstaller.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "QModManager.exe"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "QModManagerAssets.unity3d"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
+Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
+Source: "..\Build\QModManager.exe"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
+Source: "..\Build\QModManagerAssets.unity3d"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 ; Below Zero
 Source: "..\Dependencies\0Harmony.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 Source: "..\Dependencies\0Harmony-1.2.0.1.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 Source: "..\Dependencies\AssetsTools.NET.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 Source: "..\Dependencies\cldb.dat"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 Source: "..\Dependencies\Mono.Cecil.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "QModInstaller.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "QModManager.exe"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "QModManagerAssets.unity3d"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
+Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
+Source: "..\Build\QModManager.exe"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
+Source: "..\Build\QModManagerAssets.unity3d"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 
 ; On install and uninstall, run executable based on condition
 [Run]

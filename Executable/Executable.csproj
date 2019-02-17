@@ -77,8 +77,8 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy /y "$(TargetDir)QModInstaller.dll" "$(SolutionDir)Installer\QModInstaller.dll"
-copy /y "$(TargetDir)QModManager.exe" "$(SolutionDir)Installer\QModManager.exe"
-copy /y "$(TargetDir)QModManagerAssets.unity3d" "$(SolutionDir)Installer\QModManagerAssets.unity3d"</PostBuildEvent>
+    <PostBuildEvent>copy /y "$(TargetDir)QModInstaller.dll" "$(SolutionDir)Build\QModInstaller.dll"
+copy /y "$(TargetDir)QModManager.exe" "$(SolutionDir)Build\QModManager.exe"
+copy /y "$(TargetDir)QModManagerAssets.unity3d" "$(SolutionDir)Build\QModManagerAssets.unity3d"</PostBuildEvent>
   </PropertyGroup>
 </Project>
