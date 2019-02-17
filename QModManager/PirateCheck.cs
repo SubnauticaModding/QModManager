@@ -249,17 +249,14 @@ namespace QModManager
             {
                 FileInfo fileInfo = new FileInfo(steamDll);
 
-                if (fileInfo.Length > 209000) return true;
+                if (fileInfo.Length > 220000) return true;
             }
 
-            // Check for ini files in the root
-            FileInfo[] iniFiles = new DirectoryInfo(folder).GetFiles("*.ini");
-            FileInfo[] cdxFiles = new DirectoryInfo(folder).GetFiles("*.cdx");
-            int e = 0;
+            // Check for cracked files in the folder
+            bool steamapiINI = File.Exists(Path.Combine(folder, "steam_api64.ini"));
+            bool cdxFiles = new DirectoryInfo(folder).GetFiles("*.cdx").Length > 0;
 
-            if (File.Exists(Path.Combine(folder, "desktop.ini"))) e--;
-
-            if (iniFiles.Length + cdxFiles.Length + e > 0) return true;
+            if (steamapiINI || cdxFiles) return true;
 
             return false;
         }
