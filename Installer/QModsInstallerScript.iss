@@ -117,8 +117,6 @@ Filename: "{app}\Subnautica_Data\Managed\QModManager.exe"; Parameters: "-u"; Che
 Filename: "{app}\SubnauticaZero_Data\Managed\QModManager.exe"; Parameters: "-u"; Check: IsBelowZeroApp
 
 [Messages]
-; The text that appears in the bottom-left, on the line of the box
-BeveledLabel={#Name} {#Version}
 ; The installer isn't password-protected, but the feature is used for the pre-release warning if the condition is set to true
 WizardPassword=Warning
 PasswordLabel1=Please read the following important information before continuing.
