@@ -64,7 +64,7 @@ SetupIconFile=QModsIcon.ico
 ; Changes compression, smaller size
 SolidCompression=yes
 ; Uninstall icon file
-UninstallDisplayIcon=QModsIcon.ico
+UninstallDisplayIcon={app}\{code:GetUninstallIcon}
 ; Uninstall app name
 UninstallDisplayName={code:GetName}
 ; Disables the usage of previous settings (when updating) because the GUID is generated too late for them to work
@@ -196,6 +196,22 @@ begin
   else
   begin
     Result := ExpandConstant('{app}')
+  end
+end;
+
+function GetUninstallIcon(def: string): String;
+begin
+  if (IsSubnauticaApp()) then
+  begin
+    Result := 'Subnautica_Data\Managed\QModManager.exe'
+  end
+  else if (IsBelowZeroApp()) then
+  begin
+    Result := 'SubnauticaZero_Data\Managed\QModManager.exe'
+  end
+  else
+  begin
+    Result := ''
   end
 end;
 
