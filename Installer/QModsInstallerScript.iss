@@ -72,7 +72,7 @@ UsePreviousAppDir=no
 UsePreviousLanguage=no
 ; Images that appear in the installer
 WizardImageFile=WizardImage.bmp
-WizardSmallImageFile=WizardSmallImage.bmp
+WizardSmallImageFile=WizardSmallImageTransparent.bmp
 
 ; Uses default messages when not overriden
 [Languages]
