@@ -6,7 +6,7 @@
 
 ; Defines some variables
 #define Name "QModManager" ; The name of the game will be added after it
-#define Version "2.X DONT FORGET TO UPDATE ON RELEASE"
+#define Version "2.0.1"
 #define Author "the QModManager dev team"
 #define URL "https://github.com/QModManager/QModManager"
 #define SupportURL "https://discord.gg/UpWuWwq"
