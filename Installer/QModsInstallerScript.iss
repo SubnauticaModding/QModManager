@@ -373,11 +373,11 @@ begin
   if CurPageID = wpSelectDir then // If the page is select install path
   begin
     WizardForm.DirEdit.Text := '' // Sets the install path to an empty string
-    if (GetDir('Subnautica', 'Subnautica') = 'none') and (SubnauticaButton.Enabled = true) then // If Subnautica isn't found
+    if GetDir('Subnautica', 'Subnautica') = 'none' then // If Subnautica isn't found
     begin
       SubnauticaButton.Enabled := false
     end;
-    if (GetDir('SubnauticaZero', 'SubnauticaZero') = 'none') and (BelowZeroButton.Enabled = true) then // If Below Zero isn't found
+    if GetDir('SubnauticaZero', 'SubnauticaZero') = 'none' then // If Below Zero isn't found
     begin
       BelowZeroButton.Enabled := false
     end;
@@ -465,20 +465,20 @@ end;
 // Detects wheter an app is running or not based on an .exe name
 function IsAppRunning(const FileName : string): Boolean;
 var
-    FSWbemLocator: Variant;
-    FWMIService   : Variant;
-    FWbemObjectSet: Variant;
+  FSWbemLocator: Variant;
+  FWMIService   : Variant;
+  FWbemObjectSet: Variant;
 begin
-    Result := false;
-    FSWbemLocator := CreateOleObject('WBEMScripting.SWBEMLocator');
-    FWMIService := FSWbemLocator.ConnectServer('', 'root\CIMV2', '', '');
-    FWbemObjectSet :=
-      FWMIService.ExecQuery(
-        Format('SELECT Name FROM Win32_Process Where Name="%s"', [FileName]));
-    Result := (FWbemObjectSet.Count > 0);
-    FWbemObjectSet := Unassigned;
-    FWMIService := Unassigned;
-    FSWbemLocator := Unassigned;
+  Result := false;
+  FSWbemLocator := CreateOleObject('WBEMScripting.SWBEMLocator');
+  FWMIService := FSWbemLocator.ConnectServer('', 'root\CIMV2', '', '');
+  FWbemObjectSet :=
+    FWMIService.ExecQuery(
+      Format('SELECT Name FROM Win32_Process Where Name="%s"', [FileName]));
+  Result := (FWbemObjectSet.Count > 0);
+  FWbemObjectSet := Unassigned;
+  FWMIService := Unassigned;
+  FSWbemLocator := Unassigned;
 end;
 
 // Imports some stuff from VclStylesInno.dll
@@ -600,13 +600,8 @@ begin
   WizardForm.ComponentsList.OnClickCheck := @ComponentsListClickCheck
   TypesComboOnChangePrev := WizardForm.TypesCombo.OnChange
   WizardForm.TypesCombo.OnChange := @TypesComboOnChange
-  #if PreRelease == true
-    InitializeWizard_()
-  #endif
   InitializeWizard_AddButtons
   InitializeWizard_DirOnChange
-  DirEditOnChangePrev := WizardForm.DirEdit.OnChange
-  WizardForm.DirEdit.OnChange := @DirEditOnChange
   #if PreRelease == true
     InitializeWizard_();
   #endif
