@@ -6,55 +6,56 @@
     internal enum LogLevel
     {
         Debug = 0,
-        Warn = 1,
-        Error = 2,
-        Info = 3
+        Info = 1,
+        Warn = 2,
+        Error = 3,
     }
 
     internal static class Logger
     {
-        internal static LogLevel LoggingLevel { get; private set; }
+        internal static bool EnableDebugging { get; private set; }
+        internal static void SetDebugging(bool value)
+        {
+            string configPath = "./QMods/Modding Helper/LogLevel.txt";
+
+            File.WriteAllText(configPath, value ? "All" : "Important");
+
+            EnableDebugging = value;
+        }
 
         internal static void Initialize()
         {
-            string configPath = "./QMods/Modding Helper/loglevel.txt";
+            string configPath = "./QMods/Modding Helper/LogLevel.txt";
 
-            if(!File.Exists(configPath))
+            if (!File.Exists(configPath))
             {
-                File.WriteAllText(configPath, "Warn");
-                LoggingLevel = LogLevel.Warn;
+                File.WriteAllText(configPath, "Important");
+                EnableDebugging = false;
 
                 return;
             }
 
-            string level = File.ReadAllText(configPath);
+            string fileContents = File.ReadAllText(configPath);
 
             try
             {
-                LoggingLevel = (LogLevel)Enum.Parse(typeof(LogLevel), level);
+                EnableDebugging = bool.Parse(fileContents);
 
-                if (LoggingLevel > LogLevel.Error)
-                {
-                    LoggingLevel = LogLevel.Error;
-
-                    File.WriteAllText(configPath, "Error");
-                }
-
-                Log($"Log level set to: LogLevel.{LoggingLevel.ToString()}.", LogLevel.Info);
+                Log($"Log level set to: {(EnableDebugging ? "All" : "Important")}", LogLevel.Info);
             }
             catch (Exception)
             {
-                LoggingLevel = LogLevel.Warn;
+                EnableDebugging = false;
 
-                File.WriteAllText(configPath, "Warn");
+                File.WriteAllText(configPath, "Important");
 
-                Log("Error reading log level configuration file. Defaulted to LogLevel.Warn.", LogLevel.Warn);
+                Log("Error reading log level configuration file. Defaulted to Important", LogLevel.Warn);
             }
         }
 
         internal static void Log(string text, LogLevel level = LogLevel.Error)
         {
-            if(level >= LoggingLevel)
+            if (level >= LogLevel.Info || EnableDebugging)
                 Console.WriteLine($"[SMLHelper/{level.ToString()}] {text}");
         }
 
@@ -63,7 +64,7 @@
             if (args != null && args.Length > 0)
                 text = string.Format(text, args);
 
-            if(level >= LoggingLevel)
+            if (level >= LogLevel.Info || EnableDebugging)
                 Console.WriteLine($"[SMLHelper/{level.ToString()}] {text}");
         }
 
