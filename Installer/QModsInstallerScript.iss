@@ -125,10 +125,10 @@ PasswordEditLabel=Consent:
 ; The text that appears on the Select install location page
 WizardSelectDir=Select install location
 SelectDirLabel3=Please select the install folder of the game.
-SelectDirBrowseLabel=To continue, click Next. If you would like to select a different folder, click Browse. You can also use the buttons on the bottom left to auto-complete the install path for the chosen game. (Only works for Steam)
+SelectDirBrowseLabel=To continue, click Next. If you would like to select a different folder, click Browse.%nYou can also use the buttons on the bottom left to auto-complete the install path for the chosen game. (Only works for Steam)
 ; Update checks are enabled by default
-ReadyLabel2a=By installing, you agree to allow QModManager to periodically check for updates. You can disable this option at any time in the Mods tab of the Subnautica options menu.
-ReadyLabel2b=By installing, you agree to allow QModManager to periodically check for updates. You can disable this option at any time in the Mods tab of the Subnautica options menu.
+ReadyLabel2a=By installing, you agree to allow QModManager to send external web requests, most often to check for updates. You can disable this option at any time in the Mods tab of the Subnautica options menu.
+ReadyLabel2b=By installing, you agree to allow QModManager to send external web requests, most often to check for updates. You can disable this option at any time in the Mods tab of the Subnautica options menu.
 ; The message that appears when the user tries to cancel the install
 ExitSetupMessage=Setup is not complete. If you exit now, {#Name} will not be installed.%nExit Setup?
 ; The installer doesn't use components, but the feature is used for letting the user know what game he is about to install QModManager for, or if the folder doesn't contain any valid games.
@@ -314,7 +314,7 @@ begin
       end
     end
   end;
-  Result := 'none' // Returns dummy value (before it was an empty string, but that would conflict with other stuff, so I changed it)
+  Result := 'none'
   Exit
 end;
 
@@ -402,33 +402,32 @@ var DirEditOnChangePrev: TNotifyEvent;
 
 procedure DirEditOnChange(Sender: TObject);
 begin
-  if not Pos('Subnautica', WizardForm.DirEdit.Text) = 0 then
+  if Pos('subnautica', LowerCase(WizardForm.DirEdit.Text)) <> 0 then
   begin
     if LowerCase(WizardForm.DirEdit.Text) = LowerCase(GetDir('Subnautica', 'Subnautica')) then // If the Subnautica path is typed manually
     begin
-      if not SubnauticaButton.Checked then
-      begin
-        SubnauticaButton.Checked := true // Check the button
-      end;
+      SubnauticaButton.Checked := true
     end
-  end;
-  if not Pos('SubnauticaZero', WizardForm.DirEdit.Text) = 0 then
-  begin
-    if LowerCase(WizardForm.DirEdit.Text) = LowerCase(GetDir('SubnauticaZero', 'SubnauticaZero')) then // If the Below Zero path is typed manually
-    begin
-      if not BelowZeroButton.Checked then
-      begin
-        BelowZeroButton.Checked := true // Check the button
-      end;
-    end
-  end
-  else // If the path doesn't match any of the known ones, disable the buttons
-  begin
-    if SubnauticaButton.Checked then
+    else
     begin
       SubnauticaButton.Checked := false;
-    end;
-    if BelowZeroButton.Checked then
+    end
+  end
+  else
+  begin
+    SubnauticaButton.Checked := false;
+    if Pos('subnauticazero', LowerCase(WizardForm.DirEdit.Text)) <> 0 then
+    begin
+      if LowerCase(WizardForm.DirEdit.Text) = LowerCase(GetDir('SubnauticaZero', 'SubnauticaZero')) then // If the Below Zero path is typed manually
+      begin
+        BelowZeroButton.Checked := true
+      end
+      else
+      begin
+        BelowZeroButton.Checked := false;
+      end
+    end
+    else
     begin
       BelowZeroButton.Checked := false;
     end
