@@ -126,7 +126,7 @@
 
                     if (!originalLines.ContainsKey(key))
                     {
-                        Logger.Log($"Key '{key}' on line '{lineIndex}' in language override file for '{modName}' did not match an original key.", LogLevel.Error);
+                        Logger.Log($"Key '{key}' on line '{lineIndex}' in language override file for '{modName}' did not match an original key.", LogLevel.Warn);
                         continue; // Skip keys we don't recognize.
                     }
 

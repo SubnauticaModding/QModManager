@@ -52,13 +52,13 @@
             }
         }
 
-        internal static void Log(string text, LogLevel level = LogLevel.Error)
+        internal static void Log(string text, LogLevel level = LogLevel.Info)
         {
             if(level >= LoggingLevel)
                 Console.WriteLine($"[SMLHelper/{level.ToString()}] {text}");
         }
 
-        internal static void Log(string text, LogLevel level = LogLevel.Error, params object[] args)
+        internal static void Log(string text, LogLevel level = LogLevel.Info, params object[] args)
         {
             if (args != null && args.Length > 0)
                 text = string.Format(text, args);
@@ -67,7 +67,7 @@
                 Console.WriteLine($"[SMLHelper/{level.ToString()}] {text}");
         }
 
-        internal static void Announce(string text, LogLevel level, bool logToFile = false)
+        internal static void Announce(string text, LogLevel level = LogLevel.Info, bool logToFile = false)
         {
             ErrorMessage.AddMessage(text);
 
@@ -75,7 +75,7 @@
                 Log(text, level);
         }
 
-        internal static void Announce(string text, LogLevel level, bool logToFile = false, params object[] args)
+        internal static void Announce(string text, LogLevel level = LogLevel.Info, bool logToFile = false, params object[] args)
         {
             ErrorMessage.AddMessage(string.Format(text, args));
 

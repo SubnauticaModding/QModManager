@@ -135,7 +135,7 @@
             Logger.Log($"Badly formatted entry for Retricted IDs{Environment.NewLine}" +
                        $"        File: '{filePath}{Environment.NewLine}'" +
                        $"        Line: '{line}'{Environment.NewLine}" +
-                       $"        This entry has been skipped.", LogLevel.Error);
+                       $"        This entry has been skipped.", LogLevel.Warn);
         }
 
     }
