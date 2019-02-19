@@ -33,6 +33,13 @@
             {
                 LoggingLevel = (LogLevel)Enum.Parse(typeof(LogLevel), level);
 
+                if (LoggingLevel > LogLevel.Error)
+                {
+                    LoggingLevel = LogLevel.Error;
+
+                    File.WriteAllText(configPath, "Error");
+                }
+
                 Log($"Log level set to: LogLevel.{LoggingLevel.ToString()}.", LogLevel.Info);
             }
             catch (Exception)
