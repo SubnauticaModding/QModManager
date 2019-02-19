@@ -3,12 +3,9 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Threading;
 
     internal class SelfCheckingDictionary<K, V> : IDictionary<K, V>
     {
-        [NonSerialized] private object _syncRoot;
-
         internal readonly HashSet<K> DuplicatesFound;
         internal readonly Dictionary<K, V> UniqueEntries;
         internal readonly string CollectionName;
@@ -38,21 +35,6 @@
         public int Count => UniqueEntries.Count;
         public bool IsReadOnly { get; } = false;
         public bool IsFixedSize { get; } = false;
-
-        public object SyncRoot
-        {
-            get
-            {
-                if (_syncRoot == null)
-                {
-                    Interlocked.CompareExchange<object>(ref _syncRoot, new object(), null);
-                }
-
-                return _syncRoot;
-            }
-        }
-
-        public bool IsSynchronized { get; } = false;
 
         public void Add(K key, V value)
         {
@@ -98,15 +80,7 @@
 
         public bool Remove(K key) => UniqueEntries.Remove(key) | DuplicatesFound.Remove(key);
 
-        public bool Remove(KeyValuePair<K, V> item)
-        {
-            if (UniqueEntries.TryGetValue(item.Key, out V value) && value.Equals(item.Value))
-            {
-                return UniqueEntries.Remove(item.Key);
-            }
-
-            return DuplicatesFound.Remove(item.Key);
-        }
+        public bool Remove(KeyValuePair<K, V> item) => UniqueEntries.Remove(item.Key) | DuplicatesFound.Remove(item.Key);
 
         public bool TryGetValue(K key, out V value) => UniqueEntries.TryGetValue(key, out value);
 

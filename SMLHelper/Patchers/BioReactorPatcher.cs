@@ -2,7 +2,6 @@
 {
     using Harmony;
     using System.Collections.Generic;
-    using Utility;
 
     internal class BioReactorPatcher
     {
