@@ -118,7 +118,7 @@
 
                     if (split.Length != 2)
                     {
-                        Logger.Log($"Line '{lineIndex}' in language override file for '{modName}' was not correctly formatted.", LogLevel.Error);
+                        Logger.Log($"Line '{lineIndex}' in language override file for '{modName}' was not correctly formatted.", LogLevel.Warn);
                         continue; // Not correctly formatter
                     }
 

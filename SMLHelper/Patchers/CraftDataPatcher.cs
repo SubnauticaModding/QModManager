@@ -221,7 +221,7 @@
                 if (techDataExists)
                 {
                     techData_Remove.Invoke(techData, new object[] { techType });
-                    Logger.Log($"{techType} TechType already existed in the CraftData.techData dictionary. Original value was replaced.", LogLevel.Debug);
+                    Logger.Log($"{techType} TechType already existed in the CraftData.techData dictionary. Original value was replaced.", LogLevel.Warn);
                     replaced++;
                 }
                 else
