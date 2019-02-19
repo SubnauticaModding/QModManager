@@ -14,7 +14,7 @@ namespace SMLHelper.Patchers
             foreach (KeyValuePair<string, string> kvPair in customLines)
                 LanguagePatcher2.AddCustomLanguageLine("SMLHelperLegacy", kvPair.Key, kvPair.Value);
 
-            V2.Logger.Log("Old LanguagePatcher is done.");
+            V2.Logger.Log("Old LanguagePatcher is done.", V2.LogLevel.Debug);
         }
     }
 }

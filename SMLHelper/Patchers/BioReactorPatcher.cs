@@ -18,7 +18,7 @@
         {
             PatchUtils.PatchDictionary(typeof(BaseBioReactor), "charge", CustomBioreactorCharges);
 
-            Logger.Log("BaseBioReactorPatcher is done.");
+            Logger.Log("BaseBioReactorPatcher is done.", LogLevel.Debug);
         }
 
         #endregion

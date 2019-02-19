@@ -32,7 +32,7 @@
 
             CustomTrees.ForEach(x => CraftTreePatcher2.CustomTrees.Add(x.Key, x.Value.GetV2RootNode()));
 
-            V2.Logger.Log("Old CraftTreePatcher is done.");
+            V2.Logger.Log("Old CraftTreePatcher is done.", V2.LogLevel.Debug);
         }
     }
 }

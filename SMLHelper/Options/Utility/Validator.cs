@@ -8,17 +8,17 @@
         {
             if (!ValidateID(id, out string result))
             {
-                Logger.Log($"There was an error while trying to add choice option with id: {id}. {result}");
+                Logger.Log($"There was an error while trying to add choice option with id: {id}. {result}", LogLevel.Error);
                 return false;
             }
             if (!ValidateLabel(label, out result))
             {
-                Logger.Log($"There was an error while trying to add choice option with id: {id}. {result}");
+                Logger.Log($"There was an error while trying to add choice option with id: {id}. {result}", LogLevel.Error);
                 return false;
             }
             if (!ValidateArray(options, index, out result))
             {
-                Logger.Log($"There was an error while trying to add choice option with id: {id}. {result}");
+                Logger.Log($"There was an error while trying to add choice option with id: {id}. {result}", LogLevel.Error);
                 return false;
             }
             return true;

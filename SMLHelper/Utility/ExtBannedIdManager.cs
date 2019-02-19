@@ -109,7 +109,7 @@
 
             foreach (string bannedIdType in BannedIdDictionary.Keys)
             {
-                Logger.Log($"{BannedIdDictionary[bannedIdType].Count} retricted IDs were registered for {bannedIdType}.");
+                Logger.Log($"{BannedIdDictionary[bannedIdType].Count} retricted IDs were registered for {bannedIdType}.", LogLevel.Info);
             }
 
             IsInitialized = true;
@@ -120,12 +120,12 @@
             try
             {
                 Directory.CreateDirectory(BannedIdDirectory);
-                Logger.Log("RetrictedIDs folder was not found. Folder created.");
+                Logger.Log("RetrictedIDs folder was not found. Folder created.", LogLevel.Debug);
             }
             catch (Exception ex)
             {
                 Logger.Log($"RetrictedIDs folder was not found. Failed to create folder.{Environment.NewLine}" +
-                           $"        Exception: {ex}");
+                           $"        Exception: {ex}", LogLevel.Error);
 
             }
         }
@@ -135,7 +135,7 @@
             Logger.Log($"Badly formatted entry for Retricted IDs{Environment.NewLine}" +
                        $"        File: '{filePath}{Environment.NewLine}'" +
                        $"        Line: '{line}'{Environment.NewLine}" +
-                       $"        This entry has been skipped.");
+                       $"        This entry has been skipped.", LogLevel.Error);
         }
 
     }

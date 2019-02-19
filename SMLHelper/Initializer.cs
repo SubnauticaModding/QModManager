@@ -12,7 +12,7 @@ namespace SMLHelper.V2
 
         public static void Patch()
         {
-            Logger.Log($"Loading v{Assembly.GetExecutingAssembly().GetName().Version}...");
+            Logger.Log($"Loading v{Assembly.GetExecutingAssembly().GetName().Version}...", LogLevel.Info);
 
             harmony = HarmonyInstance.Create("com.ahk1221.smlhelper");
 

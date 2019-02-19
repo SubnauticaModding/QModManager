@@ -83,7 +83,7 @@
                                     modOption.OnKeybindChange(keybind.Id, key)));
                             break;
                         default:
-                            V2.Logger.Log($"Invalid ModOptionType detected for option: {option.Id} ({option.Type.ToString()})");
+                            V2.Logger.Log($"Invalid ModOptionType detected for option: {option.Id} ({option.Type.ToString()})", LogLevel.Error);
                             break;
                     }
                 }

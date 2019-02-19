@@ -29,7 +29,6 @@ namespace SMLHelper.V2.MonoBehaviours
 
             if (transform.position == new Vector3(-5000, -5000, -5000) && gameObject != prefab && Time.time > time)
             {
-                Logger.Log("Destroying object: " + gameObject);
                 Destroy(gameObject);
             }
         }
