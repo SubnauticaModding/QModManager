@@ -8,7 +8,7 @@
     {
         #region Internal Fields
 
-        internal static Dictionary<TechType, float> CustomBioreactorCharges = new Dictionary<TechType, float>(TechTypeExtensions.sTechTypeComparer);
+        internal static IDictionary<TechType, float> CustomBioreactorCharges = new SelfCheckingDictionary<TechType, float>("CustomBioreactorCharges", TechTypeExtensions.sTechTypeComparer);
 
         #endregion
 
