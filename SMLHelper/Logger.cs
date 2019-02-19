@@ -5,10 +5,10 @@
 
     internal enum LogLevel
     {
-        Debug,
-        Warn,
-        Error,
-        Info
+        Debug = 0,
+        Warn = 1,
+        Error = 2,
+        Info = 3
     }
 
     internal static class Logger
@@ -21,7 +21,7 @@
 
             if(!File.Exists(configPath))
             {
-                File.AppendAllText(configPath, "Warn");
+                File.WriteAllText(configPath, "Warn");
                 LoggingLevel = LogLevel.Warn;
 
                 return;
@@ -39,8 +39,7 @@
             {
                 LoggingLevel = LogLevel.Warn;
 
-                File.Delete(configPath);
-                File.AppendAllText(configPath, "Warn");
+                File.WriteAllText(configPath, "Warn");
 
                 Log("Error reading log level configuration file. Defaulted to LogLevel.Warn.", LogLevel.Warn);
             }
