@@ -1,6 +1,7 @@
 ﻿namespace SMLHelper.V2
 {
     using System;
+    using System.IO;
 
     internal enum LogLevel
     {
@@ -12,11 +13,37 @@
 
     internal static class Logger
     {
-        internal static LogLevel LoggingLevel { get; private set; } = LogLevel.Warn;
+        internal static LogLevel LoggingLevel { get; private set; }
 
-        internal static void Initialize(LogLevel level)
+        internal static void Initialize()
         {
-            LoggingLevel = level;
+            string configPath = "./QMods/Modding Helper/loglevel.txt";
+
+            if(!File.Exists(configPath))
+            {
+                File.AppendAllText(configPath, "Warn");
+                LoggingLevel = LogLevel.Warn;
+
+                return;
+            }
+
+            string level = File.ReadAllText(configPath);
+
+            try
+            {
+                LoggingLevel = (LogLevel)Enum.Parse(typeof(LogLevel), level);
+
+                Log($"Log level set to: LogLevel.{LoggingLevel.ToString()}.", LogLevel.Info);
+            }
+            catch (Exception)
+            {
+                LoggingLevel = LogLevel.Warn;
+
+                File.Delete(configPath);
+                File.AppendAllText(configPath, "Warn");
+
+                Log("Error reading log level configuration file. Defaulted to LogLevel.Warn.", LogLevel.Warn);
+            }
         }
 
         internal static void Log(string text, LogLevel level = LogLevel.Error)
