@@ -240,8 +240,6 @@ namespace QModManager
 
         internal static bool IsPirate(string folder)
         {
-            //return true;
-
             string steamDll = Path.Combine(folder, "steam_api64.dll");
 
             // Check for a modified steam dll
