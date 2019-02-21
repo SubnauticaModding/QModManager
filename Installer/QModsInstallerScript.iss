@@ -78,12 +78,14 @@ WizardSmallImageFile=WizardSmallImageTransparent.bmp
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
-; Required files
 [Files]
-; Installer skin
-#define Theme "Carbon"
+// Files used by the installer but not required by QModManager
+; Installer theme
 Source: "VclStylesinno.dll"; Flags: DontCopy
-Source: "{#Theme}.vsf"; Flags: DontCopy
+Source: "Carbon.vsf"; Flags: DontCopy
+; Installer extensions
+Source: "InstallerExtensions.dll"; Flags: DontCopy
+// Files required by QModManager
 ; Subnautica
 Source: "..\Dependencies\0Harmony.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 Source: "..\Dependencies\0Harmony-1.2.0.1.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
@@ -147,6 +149,10 @@ Name: "qmm\sn"; Description: "Install for Subnautica"; Flags: exclusive fixed
 Name: "qmm\bz"; Description: "Install for Below Zero"; Flags: exclusive fixed
 
 [Code]
+// Import stuff from InstallerExtensions.dll
+function PathsEqual(pathone, pathtwo: WideString): Boolean; external 'PathsEqual@files:InstallerExtensions.dll stdcall';
+function PathCombine(pathone, pathtwo: WideString): Boolean; external 'PathCombine@files:InstallerExtensions.dll stdcall';
+
 function IsSubnautica(path: String): Boolean; // Checks if Subnautica is installed in the given folder
 begin
   if (FileExists(path + '\Subnautica.exe')) and (FileExists(path + '\Subnautica_Data\Managed\Assembly-CSharp.dll')) then // If Subnautica-specific files exist
@@ -489,11 +495,8 @@ procedure UnLoadVCLStyles; external 'UnLoadVCLStyles@files:VclStylesInno.dll std
 // TODO: Move and split event functions
 function InitializeSetup(): Boolean;
 begin
-  // Load skin
-  ExtractTemporaryFile('{#Theme}.vsf');
-  LoadVCLStyle(ExpandConstant('{tmp}\{#Theme}.vsf'));
-  // Check if game is running
   appIsSet := false // Sets a default value
+  // Check if game is running
   if IsAppRunning('Subnautica.exe') or IsAppRunning('SubnauticaZero.exe') then
   begin
     MsgBox('You need to close Subnautica and Subnautica: Below Zero before installing QModManager.' + #13#10 + 'If none of these games are running, please reboot your computer.', mbError, MB_OK);
@@ -501,6 +504,9 @@ begin
   end
   else
   begin
+    // Load skin
+    ExtractTemporaryFile('Carbon.vsf');
+    LoadVCLStyle(ExpandConstant('{tmp}\Carbon.vsf'));
     Result := true
   end
 end;
