@@ -8,6 +8,7 @@ namespace QModManager.Installer.Extensions
     public static class Extensions
     {
         [DllExport]
+        [return: MarshalAs(UnmanagedType.Bool)]
         public static bool PathsEqual([MarshalAs(UnmanagedType.BStr)] string path1, [MarshalAs(UnmanagedType.BStr)] string path2)
         {
             string path1parsed = Path.GetFullPath(path1.Trim('/', '\\'));
