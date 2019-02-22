@@ -173,7 +173,8 @@ end;
 
 function IsBelowZero(path: String): Boolean; // Checks if Below Zero is installed in the given folder
 begin
-  if (FileExists(path + '\SubnauticaZero.exe')) and (FileExists(path + '\SubnauticaZero_Data\Managed\Assembly-CSharp.dll')) then // If Subnautica-specific files exist
+  if (FileExists(PathCombine(path, '\SubnauticaZero.exe'))) and 
+    (FileExists(PathCombine(path, '\SubnauticaZero_Data\Managed\Assembly-CSharp.dll'))) then // If BelowZero-specific files exist
   begin
     Result := true // Returns true
     Exit
@@ -410,7 +411,7 @@ procedure DirEditOnChange(Sender: TObject);
 begin
   if Pos('subnautica', LowerCase(WizardForm.DirEdit.Text)) <> 0 then
   begin
-    if LowerCase(WizardForm.DirEdit.Text) = LowerCase(GetDir('Subnautica', 'Subnautica')) then // If the Subnautica path is typed manually
+    if PathsEqual(WizardForm.DirEdit.Text, GetDir('Subnautica', 'Subnautica')) then // If the Subnautica path is typed manually
     begin
       SubnauticaButton.Checked := true
     end
@@ -424,7 +425,7 @@ begin
     SubnauticaButton.Checked := false;
     if Pos('subnauticazero', LowerCase(WizardForm.DirEdit.Text)) <> 0 then
     begin
-      if LowerCase(WizardForm.DirEdit.Text) = LowerCase(GetDir('SubnauticaZero', 'SubnauticaZero')) then // If the Below Zero path is typed manually
+      if PathsEqual(WizardForm.DirEdit.Text, GetDir('SubnauticaZero', 'SubnauticaZero')) then // If the Below Zero path is typed manually
       begin
         BelowZeroButton.Checked := true
       end
