@@ -109,7 +109,6 @@ Name: "qmm\bz"; Description: "Install for Below Zero"; Flags: exclusive fixed
 [Code]
 // Import stuff from InstallerExtensions.dll
 function PathsEqual(pathone, pathtwo: WideString): Boolean; external 'PathsEqual@files:InstallerExtensions.dll stdcall';
-function PathCombine(pathone, pathtwo: WideString): WideString; external 'PathCombine@files:InstallerExtensions.dll stdcall';
 
 function IsSubnautica(path: String): Boolean;
 begin
