@@ -151,11 +151,11 @@ Name: "qmm\bz"; Description: "Install for Below Zero"; Flags: exclusive fixed
 [Code]
 // Import stuff from InstallerExtensions.dll
 function PathsEqual(pathone, pathtwo: WideString): Boolean; external 'PathsEqual@files:InstallerExtensions.dll stdcall';
-function PathCombine(pathone, pathtwo: WideString): Boolean; external 'PathCombine@files:InstallerExtensions.dll stdcall';
+function PathCombine(pathone, pathtwo: WideString): WideString; external 'PathCombine@files:InstallerExtensions.dll stdcall';
 
 function IsSubnautica(path: String): Boolean; // Checks if Subnautica is installed in the given folder
 begin
-  if (FileExists(path + '\Subnautica.exe')) and (FileExists(path + '\Subnautica_Data\Managed\Assembly-CSharp.dll')) then // If Subnautica-specific files exist
+  if (FileExists(PathCombine(path, '\Subnautica.exe'))) and (FileExists(PathCombine(path, '\Subnautica_Data\Managed\Assembly-CSharp.dll'))) then // If Subnautica-specific files exist
   begin
     Result := true // Returns true
     Exit

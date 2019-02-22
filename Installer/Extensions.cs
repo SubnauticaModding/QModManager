@@ -17,6 +17,7 @@ namespace QModManager.Installer.Extensions
         }
 
         [DllExport]
+        [return: MarshalAs(UnmanagedType.BStr)]
         public static string PathCombine([MarshalAs(UnmanagedType.BStr)] string path1, [MarshalAs(UnmanagedType.BStr)] string path2)
         {
             return Path.Combine(path1, path2);
