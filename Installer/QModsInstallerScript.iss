@@ -363,6 +363,8 @@ end;
 var DirEditOnChangePrev: TNotifyEvent;
 
 procedure DirEditOnChange(Sender: TObject);
+var
+  S: String;
 begin
   if Pos('subnautica', LowerCase(WizardForm.DirEdit.Text)) <> 0 then
   begin
@@ -393,6 +395,14 @@ begin
     begin
       BelowZeroButton.Checked := false;
     end
+  end;
+  
+  if (Pos('://', WizardForm.DirEdit.Text) <> 0) or (Pos(':\\', WizardForm.DirEdit.Text) <> 0) then
+  begin
+    S := WizardForm.DirEdit.Text;
+    StringChangeEx(S, '://', ':/', true);
+    StringChangeEx(S, ':\\', ':\', true);
+    WizardForm.DirEdit.Text := S;
   end
 end;
 
