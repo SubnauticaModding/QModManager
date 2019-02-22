@@ -113,7 +113,7 @@ function PathCombine(pathone, pathtwo: WideString): WideString; external 'PathCo
 
 function IsSubnautica(path: String): Boolean;
 begin
-  if (FileExists(PathCombine(path, '\Subnautica.exe'))) and (FileExists(PathCombine(path, '\Subnautica_Data\Managed\Assembly-CSharp.dll'))) then
+  if (FileExists(path + '\Subnautica.exe')) and (FileExists(path + '\Subnautica_Data\Managed\Assembly-CSharp.dll')) then
   begin
     Result := true
     Exit
@@ -131,8 +131,7 @@ end;
 
 function IsBelowZero(path: String): Boolean;
 begin
-  if (FileExists(PathCombine(path, '\SubnauticaZero.exe'))) and 
-    (FileExists(PathCombine(path, '\SubnauticaZero_Data\Managed\Assembly-CSharp.dll'))) then
+  if (FileExists(path + '\SubnauticaZero.exe')) and (FileExists(path + '\SubnauticaZero_Data\Managed\Assembly-CSharp.dll')) then
   begin
     Result := true
     Exit

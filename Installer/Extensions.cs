@@ -16,12 +16,5 @@ namespace QModManager.Installer.Extensions
 
             return string.Equals(path1parsed, path2parsed, StringComparison.OrdinalIgnoreCase);
         }
-
-        [DllExport]
-        [return: MarshalAs(UnmanagedType.BStr)]
-        public static string PathCombine([MarshalAs(UnmanagedType.BStr)] string path1, [MarshalAs(UnmanagedType.BStr)] string path2)
-        {
-            return Path.Combine(path1, path2);
-        }
     }
 }
