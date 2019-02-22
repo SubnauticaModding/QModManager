@@ -4,7 +4,6 @@
   #error An unicode version of Inno Setup is required to compile this script
 #endif
 
-; Defines some variables
 #define Name "QModManager" ; The name of the game will be added after it
 #define Version "2.0.1"
 #define Author "the QModManager dev team"
@@ -12,80 +11,50 @@
 #define SupportURL "https://discord.gg/UpWuWwq"
 #define UpdatesURL "https://nexusmods.com" ; The link to the mod will be added after it
 
-; Defines special flags that change the way the installer behaves
-#define PreRelease false ; If this is true, a window will appear, promting the user to agree to install the program in this unstable pre-release state
 [Setup]
 AllowNetworkDrive=no
 AllowUNCPath=no
-; Makes the install path appear on the Ready to Install page
 AlwaysShowDirOnReadyPage=yes
-; Fixes an issue with the previous version where 'not found' would appear at the end of the path
 AppendDefaultDirName=no
-; The GUID of the app
 AppId={code:GetGUID}
-; The app name
 AppName={#Name}
-; The authors of the app
 AppPublisher={#Author}
-; URLs that will appear on the information page of the app in the Add or Remove Programs page
 AppPublisherURL={#URL}
 AppSupportURL={#SupportURL}
 AppUpdatesURL={code:GetURL}
-; Display name of the app in the Add or Remove Programs page
 AppVerName={#Name} {#Version}
-; Sets the version of the app
 AppVersion={#Version}
-; How the installer compresses the required files
 Compression=lzma
-; The default directory name
 DefaultDirName=.
-; Disables directory exists warnings
 DirExistsWarning=no
-; Forces the choose install path page to appear
 DisableDirPage=no
-; Disables the start menu group page
 DisableProgramGroupPage=yes
-; Enables the welcome page
 DisableWelcomePage=no
-; Enables directory doesn't exist warnings
 EnableDirDoesntExistWarning=yes
-; Shows information before installing
 InfoBeforeFile=Info.txt
-; The output file name
 OutputBaseFilename=QModManager_Setup
-; The output directory
 OutputDir=..\Build
-; The application might require administrator access
 PrivilegesRequired=admin
-; Restarts closed applications after install
-RestartApplications=yes
-; Icon file
 SetupIconFile=QModsIcon.ico
-; Changes compression, smaller size
 SolidCompression=yes
-; Uninstall icon file
 UninstallDisplayIcon={app}\{code:GetUninstallIcon}
-; Uninstall app name
 UninstallDisplayName={code:GetName}
-; Disables the usage of previous settings (when updating) because the GUID is generated too late for them to work
 UsePreviousAppDir=no
 UsePreviousLanguage=no
-; Images that appear in the installer
 WizardImageFile=WizardImage.bmp
 WizardSmallImageFile=WizardSmallImageTransparent.bmp
 
-; Uses default messages when not overriden
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-// Files used by the installer but not required by QModManager
+// Files used by the installer but not required by QModManager itself
 ; Installer theme
 Source: "VclStylesinno.dll"; Flags: DontCopy
 Source: "Carbon.vsf"; Flags: DontCopy
 ; Installer extensions
 Source: "InstallerExtensions.dll"; Flags: DontCopy
-// Files required by QModManager
+// Files required by QModManager itself
 ; Subnautica
 Source: "..\Dependencies\0Harmony.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 Source: "..\Dependencies\0Harmony-1.2.0.1.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
@@ -105,7 +74,6 @@ Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\SubnauticaZero_Data\Manage
 Source: "..\Build\QModManager.exe"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 Source: "..\Build\QModManagerAssets.unity3d"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 
-; On install and uninstall, run executable based on condition
 [Run]
 ; Subnautica
 Filename: "{app}\Subnautica_Data\Managed\QModManager.exe"; Parameters: "-i"; Check: IsSubnauticaApp
@@ -119,21 +87,16 @@ Filename: "{app}\Subnautica_Data\Managed\QModManager.exe"; Parameters: "-u"; Che
 Filename: "{app}\SubnauticaZero_Data\Managed\QModManager.exe"; Parameters: "-u"; Check: IsBelowZeroApp
 
 [Messages]
-; The installer isn't password-protected, but the feature is used for the pre-release warning if the condition is set to true
 WizardPassword=Warning
 PasswordLabel1=Please read the following important information before continuing.
 PasswordLabel3=You are trying to install a pre-release version of QModManager.%nPre-releases are unstable and might contain bugs.%nWe are not responsible for any crashes or world corruptions that might occur.%n%nPlease type 'YES' (without quotes) to continue with the installation.
 PasswordEditLabel=Consent:
-; The text that appears on the Select install location page
 WizardSelectDir=Select install location
 SelectDirLabel3=Please select the install folder of the game.
 SelectDirBrowseLabel=To continue, click Next. If you would like to select a different folder, click Browse.%nYou can also use the buttons on the bottom left to auto-complete the install path for the chosen game. (Only works for Steam)
-; Update checks are enabled by default
 ReadyLabel2a=By installing, you agree to allow QModManager to send external web requests, most often to check for updates. You can disable this option at any time in the Mods tab of the Subnautica options menu.
 ReadyLabel2b=By installing, you agree to allow QModManager to send external web requests, most often to check for updates. You can disable this option at any time in the Mods tab of the Subnautica options menu.
-; The message that appears when the user tries to cancel the install
 ExitSetupMessage=Setup is not complete. If you exit now, {#Name} will not be installed.%nExit Setup?
-; The installer doesn't use components, but the feature is used for letting the user know what game he is about to install QModManager for, or if the folder doesn't contain any valid games.
 WizardSelectComponents=Review Install
 SelectComponentsDesc=
 SelectComponentsLabel2=
@@ -143,7 +106,6 @@ SelectComponentsLabel2=
 Name: "select"; Description: "QModManager"; Flags: IsCustom
 
 [Components]
-; Adds read-only components that are only used for displaying
 Name: "qmm"; Description: "QModManager"; Flags: fixed; Types: select
 Name: "qmm\sn"; Description: "Install for Subnautica"; Flags: exclusive fixed
 Name: "qmm\bz"; Description: "Install for Below Zero"; Flags: exclusive fixed
@@ -153,16 +115,16 @@ Name: "qmm\bz"; Description: "Install for Below Zero"; Flags: exclusive fixed
 function PathsEqual(pathone, pathtwo: WideString): Boolean; external 'PathsEqual@files:InstallerExtensions.dll stdcall';
 function PathCombine(pathone, pathtwo: WideString): WideString; external 'PathCombine@files:InstallerExtensions.dll stdcall';
 
-function IsSubnautica(path: String): Boolean; // Checks if Subnautica is installed in the given folder
+function IsSubnautica(path: String): Boolean;
 begin
-  if (FileExists(PathCombine(path, '\Subnautica.exe'))) and (FileExists(PathCombine(path, '\Subnautica_Data\Managed\Assembly-CSharp.dll'))) then // If Subnautica-specific files exist
+  if (FileExists(PathCombine(path, '\Subnautica.exe'))) and (FileExists(PathCombine(path, '\Subnautica_Data\Managed\Assembly-CSharp.dll'))) then
   begin
-    Result := true // Returns true
+    Result := true
     Exit
   end
   else
   begin
-    Result := false // Returns false
+    Result := false
     Exit
   end
 end;
@@ -171,17 +133,17 @@ begin
   Result := IsSubnautica(ExpandConstant('{app}'));
 end;
 
-function IsBelowZero(path: String): Boolean; // Checks if Below Zero is installed in the given folder
+function IsBelowZero(path: String): Boolean;
 begin
   if (FileExists(PathCombine(path, '\SubnauticaZero.exe'))) and 
-    (FileExists(PathCombine(path, '\SubnauticaZero_Data\Managed\Assembly-CSharp.dll'))) then // If BelowZero-specific files exist
+    (FileExists(PathCombine(path, '\SubnauticaZero_Data\Managed\Assembly-CSharp.dll'))) then
   begin
-    Result := true // Returns true
+    Result := true
     Exit
   end
   else
   begin
-    Result := false // Returns false
+    Result := false
     Exit
   end
 end;
@@ -238,35 +200,35 @@ begin
   end
 end;
 
-function CurPageChanged_SelectComponents(CurPageID: Integer): Boolean; // Executes whenever the page is changed
+function CurPageChanged_SelectComponents(CurPageID: Integer): Boolean;
 var
   Index: Integer;
   app: String;
 begin
-  if CurPageID = wpSelectComponents then // If the page is Select components (aka Review install)
+  if CurPageID = wpSelectComponents then
   begin
     try
       app := ExpandConstant('{app}')
     except
       app := 'null'
     end;
-    if IsSubnautica(app) and IsBelowZero(app) then // If multiple games detected (This should never happen in theory)
+    if IsSubnautica(app) and IsBelowZero(app) then
     begin
       WizardForm.SelectComponentsLabel.Caption := 'Multiple games detected in the same folder, cannot install'
       Exit
     end;
-    if not IsSubnautica(app) and not IsBelowZero(app) then // If no games are detected
+    if not IsSubnautica(app) and not IsBelowZero(app) then
     begin
       WizardForm.SelectComponentsLabel.Caption := 'No game detected in this folder, cannot install'
       Exit
     end;
-    Index := WizardForm.ComponentsList.Items.IndexOf('Install for Subnautica') // Gets the index of the component
-    if Index <> -1 then // If the component exists (it should)
+    Index := WizardForm.ComponentsList.Items.IndexOf('Install for Subnautica')
+    if Index <> -1 then
     begin
       if IsSubnautica(app) then
       begin
-        WizardForm.ComponentsList.Checked[Index] := true // Checks it
-        WizardForm.SelectComponentsLabel.Caption := 'Install QModManager for Subnautica' // Changes the description
+        WizardForm.ComponentsList.Checked[Index] := true
+        WizardForm.SelectComponentsLabel.Caption := 'Install QModManager for Subnautica'
       end
     end;
     Index := WizardForm.ComponentsList.Items.IndexOf('Install for Below Zero')
@@ -290,19 +252,18 @@ configFile : String;
 fileLines: TArrayOfString;
 temp: Integer;
 begin
-  steamInstallPath := 'Steam install location not found in registry' // Sets a dummy value
-  RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\WOW6432Node\Valve\Steam', 'InstallPath', steamInstallPath) // Gets the install path of steam from the registry
-  if (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '.exe')) and (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '_Data\Managed\Assembly-CSharp.dll')) then // If game files exist
+  steamInstallPath := ''
+  RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\WOW6432Node\Valve\Steam', 'InstallPath', steamInstallPath)
+  if (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '.exe')) and (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '_Data\Managed\Assembly-CSharp.dll')) then
   begin
     Result := steamInstallPath + '\steamapps\common\' + folder
     Exit
   end
-  else // If the game files DON'T exist
+  else
   begin
-    configFile := steamInstallPath + '\config\config.vdf' // Gets the path to the steam config file
-    if FileExists(configFile) then // If the config file exists
+    configFile := steamInstallPath + '\config\config.vdf' 
+    if FileExists(configFile) then
     begin
-      // Does some very complicated stuff to get other install folders
       if LoadStringsFromFile(configFile, FileLines) then 
       begin
         for I := 0 to GetArrayLength(FileLines) - 1 do
@@ -325,7 +286,7 @@ begin
   Exit
 end;
 
-var ACLabel: TLabel; // "Auto-complete path for:" label
+var ACLabel: TLabel;
 var SubnauticaButton: TNewRadioButton;
 var BelowZeroButton: TNewRadioButton;
 
@@ -341,10 +302,10 @@ begin
   BelowZeroButton.Checked := true
 end;
 
-function InitializeWizard_AddButtons(): Boolean; // Is called when the wizard gets initialized
+function InitializeWizard_AddButtons(): Boolean;
 begin
-  ACLabel := TLabel.Create(WizardForm) // Create
-  with ACLabel do // Set properties
+  ACLabel := TLabel.Create(WizardForm)
+  with ACLabel do
   begin
     Parent := WizardForm
     Caption := 'Auto-complete path for: (Steam)'
@@ -375,32 +336,32 @@ begin
   end;
 end;
 
-function CurPageChanged_AddButtons(CurPageID: Integer): Boolean; // Is called whenever the page is changed
+function CurPageChanged_AddButtons(CurPageID: Integer): Boolean;
 begin
-  if CurPageID = wpSelectDir then // If the page is select install path
+  if CurPageID = wpSelectDir then
   begin
-    WizardForm.DirEdit.Text := '' // Sets the install path to an empty string
-    if GetDir('Subnautica', 'Subnautica') = 'none' then // If Subnautica isn't found
+    WizardForm.DirEdit.Text := ''
+    if GetDir('Subnautica', 'Subnautica') = 'none' then
     begin
       SubnauticaButton.Enabled := false
     end;
-    if GetDir('SubnauticaZero', 'SubnauticaZero') = 'none' then // If Below Zero isn't found
+    if GetDir('SubnauticaZero', 'SubnauticaZero') = 'none' then
     begin
       BelowZeroButton.Enabled := false
     end;
     
-    if SubnauticaButton.Enabled and not BelowZeroButton.Enabled then // If only Subnautica is found
+    if SubnauticaButton.Enabled and not BelowZeroButton.Enabled then
     begin
-      WizardForm.DirEdit.Text := GetDir('Subnautica', 'Subnautica') // Sets path to Subnautica install location
+      WizardForm.DirEdit.Text := GetDir('Subnautica', 'Subnautica')
       SubnauticaButton.Checked := true
     end
     else if BelowZeroButton.Enabled and not SubnauticaButton.Enabled then
     begin
-      WizardForm.DirEdit.Text := GetDir('SubnauticaZero', 'SubnauticaZero') // Sets path to Below Zero install location
+      WizardForm.DirEdit.Text := GetDir('SubnauticaZero', 'SubnauticaZero')
       BelowZeroButton.Checked := true
     end;
   end;
-  SubnauticaButton.Visible := CurPageID = wpSelectDir // Enables or disables the buttons
+  SubnauticaButton.Visible := CurPageID = wpSelectDir
   BelowZeroButton.Visible := CurPageID = wpSelectDir
   ACLabel.Visible := CurPageID = wpSelectDir
 end;
@@ -411,7 +372,7 @@ procedure DirEditOnChange(Sender: TObject);
 begin
   if Pos('subnautica', LowerCase(WizardForm.DirEdit.Text)) <> 0 then
   begin
-    if PathsEqual(WizardForm.DirEdit.Text, GetDir('Subnautica', 'Subnautica')) then // If the Subnautica path is typed manually
+    if PathsEqual(WizardForm.DirEdit.Text, GetDir('Subnautica', 'Subnautica')) then
     begin
       SubnauticaButton.Checked := true
     end
@@ -425,7 +386,7 @@ begin
     SubnauticaButton.Checked := false;
     if Pos('subnauticazero', LowerCase(WizardForm.DirEdit.Text)) <> 0 then
     begin
-      if PathsEqual(WizardForm.DirEdit.Text, GetDir('SubnauticaZero', 'SubnauticaZero')) then // If the Below Zero path is typed manually
+      if PathsEqual(WizardForm.DirEdit.Text, GetDir('SubnauticaZero', 'SubnauticaZero')) then
       begin
         BelowZeroButton.Checked := true
       end
@@ -441,13 +402,13 @@ begin
   end
 end;
 
-function InitializeWizard_DirOnChange(): Boolean; // Overrides the DirEdit.OnChange event
+function InitializeWizard_DirOnChange(): Boolean;
 begin
   DirEditOnChangePrev := WizardForm.DirEdit.OnChange
   WizardForm.DirEdit.OnChange := @DirEditOnChange
 end;
 
-var appIsSet: Boolean; // True if {app} has a value, false otherwise
+var appIsSet: Boolean;
 
 function GetGUID(def: String): String;
 begin
@@ -455,7 +416,7 @@ begin
   begin
     Result := ''
     Exit
-  end; // The rest is self-explanatory. A different GUID is provided based on selected install location
+  end;
   if IsSubnautica(ExpandConstant('{app}')) then
   begin
     Result := '{52CC87AA-645D-40FB-8411-510142191678}'
@@ -468,7 +429,6 @@ begin
   end
 end;
 
-// Detects wheter an app is running or not based on an .exe name
 function IsAppRunning(const FileName : string): Boolean;
 var
   FSWbemLocator: Variant;
@@ -491,13 +451,9 @@ end;
 procedure LoadVCLStyle(VClStyleFile: String); external 'LoadVCLStyleW@files:VclStylesInno.dll stdcall';
 procedure UnLoadVCLStyles; external 'UnLoadVCLStyles@files:VclStylesInno.dll stdcall';
 
-// Called when the app launches. If returns false, cancel install
-// Same as InitializeWizard
-// TODO: Move and split event functions
 function InitializeSetup(): Boolean;
 begin
-  appIsSet := false // Sets a default value
-  // Check if game is running
+  appIsSet := false
   if IsAppRunning('Subnautica.exe') or IsAppRunning('SubnauticaZero.exe') then
   begin
     MsgBox('You need to close Subnautica and Subnautica: Below Zero before installing QModManager.' + #13#10 + 'If none of these games are running, please reboot your computer.', mbError, MB_OK);
@@ -512,13 +468,11 @@ begin
   end
 end;
 
-// Called whenever the Next button is clicked. If returns false, cancel click
-// Same as CurPageChanged ONLY IF THE PAGE IS CHANGED BY CLICKING THE BUTTON. If the page is changed thru script, this doesn't get called
 function NextButtonClick(CurPageID: Integer): Boolean;
 begin
-  if CurPageID = wpSelectComponents then // If the path has been selected, it means that the {app} variable is defined
+  if CurPageID = wpSelectComponents then
   begin
-    appIsSet := true // Set it to true
+    appIsSet := true
   end;
   Result := true
 end;
@@ -615,5 +569,6 @@ end;
 
 procedure DeinitializeSetup();
 begin
+  // Unload skin
   UnLoadVCLStyles;
 end;
