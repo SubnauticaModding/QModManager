@@ -18,7 +18,7 @@ namespace QModManager
     {
         private class Pirate : MonoBehaviour
         {
-            private string videoURL;
+            private static string videoURL;
             private const string VideoURLObtainer = "https://you-link.herokuapp.com/?url=https://www.youtube.com/watch?v=i8ju_10NkGY";
 
             private static readonly HashSet<string> BannedGameObjectNames = new HashSet<string>()
@@ -37,16 +37,15 @@ namespace QModManager
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
                 gameObject.AddComponent<RawImage>();
 
-                FindObjectsOfType<AudioListener>().Do(l => DestroyImmediate(l));
                 gameObject.AddComponent<AudioListener>().enabled = true;
 
                 GetVideo();
-                //DontDestroyOnLoad(this);
             }
 
             private void Update()
             {
-                RuntimeManager.GetBus("bus:/master").setMute(true);
+                if (Patcher.game == Patcher.Game.Subnautica)
+                    RuntimeManager.GetBus("bus:/master").setMute(true);
                 UWE.Utils.alwaysLockCursor = true;
                 UWE.Utils.lockCursor = true;
                 foreach (GameObject go in SceneManager.GetActiveScene().GetRootGameObjects())
@@ -118,16 +117,6 @@ namespace QModManager
 
                 return true;
             }
-            private void ShowText()
-            {
-                DestroyImmediate(gameObject.GetComponent<RawImage>());
-                Text text = gameObject.AddComponent<Text>();
-                text.text = $"An error has occured!\nQModManager couldn't be initialized.\nPlease turn on your internet connection,\nthen restart {(Patcher.game == Patcher.Game.Subnautica ? "Subnautica" : "Below Zero")}.";
-                text.color = new Color(1, 0, 0);
-                text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-                text.fontStyle = FontStyle.BoldAndItalic;
-                text.fontSize = 40;
-            }
 
             private IEnumerator PlayVideo()
             {
@@ -183,6 +172,16 @@ namespace QModManager
                 Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");                
 
                 yield return StartCoroutine(PlayVideo());
+            }
+            private void ShowText()
+            {
+                DestroyImmediate(gameObject.GetComponent<RawImage>());
+                Text text = gameObject.AddComponent<Text>();
+                text.text = $"An error has occured!\nQModManager couldn't be initialized.\nPlease go and actually purchase {(Patcher.game == Patcher.Game.Subnautica ? "Subnautica" : "Below Zero")}.\nPiracy is bad and hurts the game developer.";
+                text.color = new Color(1, 0, 0);
+                text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+                text.fontStyle = FontStyle.BoldAndItalic;
+                text.fontSize = 40;
             }
 
             private static bool CheckConnection(string hostedURL = "http://www.google.com")
