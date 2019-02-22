@@ -87,10 +87,6 @@ Filename: "{app}\Subnautica_Data\Managed\QModManager.exe"; Parameters: "-u"; Che
 Filename: "{app}\SubnauticaZero_Data\Managed\QModManager.exe"; Parameters: "-u"; Check: IsBelowZeroApp
 
 [Messages]
-WizardPassword=Warning
-PasswordLabel1=Please read the following important information before continuing.
-PasswordLabel3=You are trying to install a pre-release version of QModManager.%nPre-releases are unstable and might contain bugs.%nWe are not responsible for any crashes or world corruptions that might occur.%n%nPlease type 'YES' (without quotes) to continue with the installation.
-PasswordEditLabel=Consent:
 WizardSelectDir=Select install location
 SelectDirLabel3=Please select the install folder of the game.
 SelectDirBrowseLabel=To continue, click Next. If you would like to select a different folder, click Browse.%nYou can also use the buttons on the bottom left to auto-complete the install path for the chosen game. (Only works for Steam)
@@ -497,9 +493,6 @@ end;
 
 procedure CurPageChanged(CurPageID: Integer);
 begin
-  #if PreRelease == true
-    CurPageChanged__(CurPageID)
-  #endif
   CurPageChanged_SelectComponents(CurPageID)
   CurPageChanged_AddButtons(CurPageID)
   if CurPageID = wpSelectComponents then
@@ -508,53 +501,6 @@ begin
   end
 end;
 
-#if PreRelease == true
-  var PasswordEditOnChangePrev: TNotifyEvent;
-  var LastValue_PreRelease: Boolean;
-
-  procedure CurPageChanged(CurPageID: Integer);
-  begin
-    if CurPageID = wpPassword then
-    begin
-      WizardForm.PasswordEdit.Password := false;
-      WizardForm.NextButton.Enabled := false;
-      LastValue_PreRelease := false;
-    end
-    else if CurPageID = wpSelectDir then
-    begin
-      DirEditOnChange(1)
-    end
-  end;
-
-  procedure PasswordEditOnChange(Sender: TObject);
-  begin
-    if (LowerCase(WizardForm.PasswordEdit.Text) = 'yes') then
-    begin
-      WizardForm.NextButton.Enabled := true
-      LastValue_PreRelease := true
-    end
-    else if (LastValue_PreRelease = true) and not (WizardForm.PasswordEdit.Text = '') then
-    begin
-      WizardForm.NextButton.Enabled := false
-      LastValue_PreRelease := false
-    end
-  end;
-
-  function InitializeWizard_: Boolean;
-  begin
-    PasswordEditOnChangePrev := WizardForm.PasswordEdit.OnChange
-    WizardForm.PasswordEdit.OnChange := @PasswordEditOnChange
-  end;
-
-  function CheckPassword(Password: String): Boolean;
-  begin
-    if LowerCase(Password) = 'yes' then
-    begin
-      Result := true
-    end
-  end;
-#endif
-
 procedure InitializeWizard();
 begin
   WizardForm.ComponentsList.OnClickCheck := @ComponentsListClickCheck
@@ -562,9 +508,6 @@ begin
   WizardForm.TypesCombo.OnChange := @TypesComboOnChange
   InitializeWizard_AddButtons
   InitializeWizard_DirOnChange
-  #if PreRelease == true
-    InitializeWizard_();
-  #endif
 end;
 
 procedure DeinitializeSetup();
