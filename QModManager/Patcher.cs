@@ -789,13 +789,18 @@ namespace QModManager
         private static void ShowErroredMods()
         {
             if (erroredMods.Count <= 0) return;
+
             string display = "The following mods could not be loaded: ";
-            for (int i = 0; i < erroredMods.Count; i++)
-            {
-                display += erroredMods[i].DisplayName;
-                if (i + 1 != erroredMods.Count) display += ", ";
-            }
+
+            string[] modsToDisplay = erroredMods.Take(5).Select(mod => mod.DisplayName).ToArray();
+
+            display += string.Join(", ", modsToDisplay);
+
+            if (erroredMods.Count > 5)
+                display += $", and {erroredMods.Count - 5} others";
+
             display += ". Check the log for details.";
+
             Dialog.Show(display, Dialog.Button.seeLog, Dialog.Button.close, false);
         }
 
