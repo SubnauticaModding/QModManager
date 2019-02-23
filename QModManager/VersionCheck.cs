@@ -3,6 +3,7 @@ using System;
 using System.Net;
 using System.Reflection;
 using UnityEngine;
+using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
 {

@@ -6,6 +6,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Logger = QModManager.Utility.Logger;
 
 namespace QModManager.Debugger
 {

@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
+using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
 {
