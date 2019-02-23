@@ -11,7 +11,7 @@ namespace QModManager
     {
         internal const string snNexus = "https://nexusmods.com/subnautica/mods/201";
         internal const string bzNexus = "https://nexusmods.com/subnauticabelowzero/mods/1";
-        internal const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/master/latest-version.txt";
+        internal const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/dev/error-fixing/Data/latest-version.txt";
 
         internal static void Check()
         {
