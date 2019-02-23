@@ -87,6 +87,7 @@ Filename: "{app}\Subnautica_Data\Managed\QModManager.exe"; Parameters: "-u"; Che
 Filename: "{app}\SubnauticaZero_Data\Managed\QModManager.exe"; Parameters: "-u"; Check: IsBelowZeroApp
 
 [Messages]
+//BeveledLabel={#Name} {#Version}
 WizardSelectDir=Select install location
 SelectDirLabel3=Please select the install folder of the game.
 SelectDirBrowseLabel=To continue, click Next. If you would like to select a different folder, click Browse.%nYou can also use the buttons on the bottom left to auto-complete the install path for the chosen game. (Only works for Steam)
