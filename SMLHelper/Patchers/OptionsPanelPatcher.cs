@@ -48,7 +48,7 @@
 
             // Maybe this could be split into its own file to handle smlhelper options, or maybe it could be removed alltogether
             optionsPanel.AddHeading(modsTab, "SMLHelper");
-            optionsPanel.AddToggleOption(modsTab, "Enable debugging", V2.Logger.EnableDebugging, V2.Logger.SetDebugging);
+            optionsPanel.AddToggleOption(modsTab, "Enable debug logs", V2.Logger.EnableDebugging, V2.Logger.SetDebugging);
 
             foreach (ModOptions modOption in modOptions.Values)
             {
