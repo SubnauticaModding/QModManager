@@ -56,11 +56,11 @@ namespace QModManager
             }
             if (latestVersion > currentVersion)
             {
-                Logger.Info($"Newer version found: {latestVersion.ToString()} (current version: {currentVersion.ToString()}");
+                Logger.Info($"Newer version found: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()}");
                 if (Patcher.erroredMods.Count <= 0)
                 {
                     Dialog.Show(
-                        $"There is a newer version of QModManager available: {latestVersion.ToString()} (current version: {currentVersion.ToString()})",
+                        $"There is a newer version of QModManager available: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()})",
                         Dialog.Button.download, Dialog.Button.close, true);
                 }
             }
