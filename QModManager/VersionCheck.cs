@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QModManager.Utility;
+using System;
 using System.Net;
 using System.Net.Security;
 using System.Reflection;

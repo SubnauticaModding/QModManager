@@ -1,6 +1,7 @@
 using Harmony;
 using Oculus.Newtonsoft.Json;
 using QModManager.Debugger;
+using QModManager.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
