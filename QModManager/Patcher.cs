@@ -562,7 +562,7 @@ namespace QModManager
                 // If our current mod index (that is, the index of the mod that is passed into this function)
                 // is greater than the index of the current mod which we're looping through's index, skip it
                 // This means that the mod that is passed in is already positioned after this mod that we're looping through.
-                if (currentIndex > index) continue;
+                if (currentIndex > index || index == -1) continue;
 
                 // If we reached this point, that means that the index of the mod that is passed into this function is smaller than the one we're looping through currently
                 // This means that the mod that is passed in is positioned before this mod
@@ -607,7 +607,7 @@ namespace QModManager
 
                 // If the index of the mod that is passed in is smaller than the current loop mod, skip it.
                 // This means that the mod that is passed in is already positioned before the current loop mod.
-                if (currentIndex < index) continue;
+                if (currentIndex < index || index == -1) continue;
 
                 // Remove the mod from the list at this index
                 sortedMods.RemoveAt(index);
