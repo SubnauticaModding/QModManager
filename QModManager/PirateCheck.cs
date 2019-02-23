@@ -1,6 +1,6 @@
 ﻿using FMODUnity;
-using Harmony;
 using Oculus.Newtonsoft.Json;
+using QModManager.Utility;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -56,14 +56,14 @@ namespace QModManager
 
             private void GetVideo()
             {
-                if (!CheckConnection())
+                if (!NetworkUtilities.CheckConnection())
                 {
                     ShowText();
                     return;
                 }
                 try
                 {
-                    ServicePointManager.ServerCertificateValidationCallback = VersionCheck.CustomRemoteCertificateValidationCallback;
+                    ServicePointManager.ServerCertificateValidationCallback = NetworkUtilities.CustomSCVC;
 
                     using (WebClient client = new WebClient())
                     {
@@ -182,51 +182,6 @@ namespace QModManager
                 text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
                 text.fontStyle = FontStyle.BoldAndItalic;
                 text.fontSize = 40;
-            }
-
-            private static bool CheckConnection(string hostedURL = "http://www.google.com")
-            {
-                try
-                {
-                    string HtmlText = GetHtmlFromUri(hostedURL);
-                    if (string.IsNullOrEmpty(HtmlText))
-                        return false;
-                    else
-                        return true;
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-            private static string GetHtmlFromUri(string resource)
-            {
-                string html = string.Empty;
-                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(resource);
-                try
-                {
-                    using (HttpWebResponse resp = (HttpWebResponse)req.GetResponse())
-                    {
-                        bool isSuccess = resp.StatusCode >= HttpStatusCode.OK && resp.StatusCode < HttpStatusCode.Ambiguous;
-                        if (isSuccess)
-                        {
-                            using (StreamReader reader = new StreamReader(resp.GetResponseStream()))
-                            {
-                                char[] cs = new char[80];
-                                reader.Read(cs, 0, cs.Length);
-                                foreach (char ch in cs)
-                                {
-                                    html += ch;
-                                }
-                            }
-                        }
-                    }
-                }
-                catch
-                {
-                    return null;
-                }
-                return html;
             }
         }
 
