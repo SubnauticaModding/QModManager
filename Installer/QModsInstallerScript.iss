@@ -244,7 +244,6 @@ P : Integer;
 steamInstallPath : String;
 configFile : String;
 fileLines: TArrayOfString;
-temp: Integer;
 begin
   steamInstallPath := ''
   RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\WOW6432Node\Valve\Steam', 'InstallPath', steamInstallPath)

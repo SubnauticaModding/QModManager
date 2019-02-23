@@ -54,8 +54,8 @@ namespace QModManager
                 PatchHarmony();
                 StartLoadingMods();
 
-                Hooks.Update += ShowErroredMods;
-                Hooks.Update += VersionCheck.Check;
+                ShowErroredMods();
+                VersionCheck.Check();
                 Hooks.Start += PrefabDebugger.Main;
 
                 Hooks.OnLoadEnd?.Invoke();
@@ -786,14 +786,8 @@ namespace QModManager
 
         #region Errored mods
 
-        private static float timer = 0f;
-
         private static void ShowErroredMods()
         {
-            timer += Time.deltaTime;
-            if (timer < 1) return;
-            Hooks.Update -= ShowErroredMods;
-
             if (erroredMods.Count <= 0) return;
             string display = "The following mods could not be loaded: ";
             for (int i = 0; i < erroredMods.Count; i++)

@@ -13,13 +13,8 @@ namespace QModManager
         internal const string bzNexus = "https://nexusmods.com/subnauticabelowzero/mods/1";
         internal const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/master/latest-version.txt";
 
-        private static float timer = 0f;
-
         internal static void Check()
         {
-            timer += Time.deltaTime;
-            if (timer < 1) return;
-            Hooks.Update -= Check;
             if (PlayerPrefs.GetInt("QModManager_EnableUpdateCheck", 1) == 0)
             {
                 Logger.Info("Update check disabled");
