@@ -251,9 +251,11 @@ namespace QModManager
 
             // Check for cracked files in the folder
             bool steamapiINI = File.Exists(Path.Combine(folder, "steam_api64.ini"));
+            bool steamemuINI = File.Exists(Path.Combine(folder, "steam_emu.ini"));
+            bool valveINI = File.Exists(Path.Combine(folder, "valve.ini"));
             bool cdxFiles = new DirectoryInfo(folder).GetFiles("*.cdx").Length > 0;
 
-            if (steamapiINI || cdxFiles) return true;
+            if (steamapiINI || steamemuINI || valveINI || cdxFiles) return true;
 
             return false;
         }
