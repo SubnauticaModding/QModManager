@@ -16,20 +16,19 @@
         internal static bool EnableDebugging { get; private set; }
         internal static void SetDebugging(bool value)
         {
-            string configPath = "./QMods/Modding Helper/LogLevel.txt";
+            string configPath = "./QMods/Modding Helper/EnableDebugLogs.txt";
 
-            File.WriteAllText(configPath, value ? "All" : "Important");
-
+            File.WriteAllText(configPath, value.ToString());
             EnableDebugging = value;
         }
 
         internal static void Initialize()
         {
-            string configPath = "./QMods/Modding Helper/LogLevel.txt";
+            string configPath = "./QMods/Modding Helper/EnableDebugLogs.txt";
 
             if (!File.Exists(configPath))
             {
-                File.WriteAllText(configPath, "Important");
+                File.WriteAllText(configPath, "False");
                 EnableDebugging = false;
 
                 return;
@@ -41,15 +40,14 @@
             {
                 EnableDebugging = bool.Parse(fileContents);
 
-                Log($"Log level set to: {(EnableDebugging ? "All" : "Important")}", LogLevel.Info);
+                Log($"Enable debug logs set to: {EnableDebugging.ToString()}", LogLevel.Info);
             }
             catch (Exception)
             {
+                File.WriteAllText(configPath, "False");
                 EnableDebugging = false;
 
-                File.WriteAllText(configPath, "Important");
-
-                Log("Error reading log level configuration file. Defaulted to Important", LogLevel.Warn);
+                Log("Error reading EnableDebugLogs.txt configuration file. Defaulted to false", LogLevel.Warn);
             }
         }
 
