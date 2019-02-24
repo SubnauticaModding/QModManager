@@ -66,10 +66,10 @@
                 { TechType.AcidMushroom, 3 } // Dup
             };
 
-            Assert.IsFalse(testDictionary.ContainsKey(TechType.AcidMushroom));
+            Assert.IsFalse(testDictionary.UniqueEntries.ContainsKey(TechType.AcidMushroom));
             Assert.IsTrue(testDictionary.DuplicatesDiscarded.ContainsKey(TechType.AcidMushroom));
             Assert.AreEqual(1, testDictionary.DuplicatesDiscarded.Count);
-            Assert.AreEqual(2, testDictionary.DuplicatesDiscarded[TechType.AcidMushroom]); // Discarded twice
+            Assert.AreEqual(3, testDictionary.DuplicatesDiscarded[TechType.AcidMushroom]); // Discarded all three
 
             Assert.IsTrue(testDictionary.ContainsKey(TechType.WhiteMushroom));
             Assert.IsTrue(testDictionary.ContainsKey(TechType.PinkMushroom));
@@ -89,10 +89,10 @@
                 { TechType.AcidMushroom, 3 } // Dup
             };
 
-            Assert.IsFalse(testDictionary.ContainsKey(TechType.AcidMushroom));
+            Assert.IsFalse(testDictionary.UniqueEntries.ContainsKey(TechType.AcidMushroom));
             Assert.IsTrue(testDictionary.DuplicatesDiscarded.ContainsKey(TechType.AcidMushroom));            
             Assert.AreEqual(1, testDictionary.DuplicatesDiscarded.Count);
-            Assert.AreEqual(2, testDictionary.DuplicatesDiscarded[TechType.AcidMushroom]); // Discarded twice
+            Assert.AreEqual(3, testDictionary.DuplicatesDiscarded[TechType.AcidMushroom]); // Discarded all three
 
             Assert.IsTrue(testDictionary.ContainsKey(TechType.WhiteMushroom));
             Assert.IsTrue(testDictionary.ContainsKey(TechType.PinkMushroom));
@@ -120,8 +120,8 @@
             Assert.AreEqual(1, testDictionary.Count); // Count goes down as dup is removed
             Assert.AreEqual(1, testDictionary.DuplicatesDiscarded.Count);
             Assert.IsTrue(testDictionary.DuplicatesDiscarded.ContainsKey(TechType.Accumulator));
-            Assert.IsFalse(testDictionary.ContainsKey(TechType.Accumulator));
-            Assert.AreEqual(1, testDictionary.DuplicatesDiscarded[TechType.Accumulator]); // Discarded once
+            Assert.IsFalse(testDictionary.UniqueEntries.ContainsKey(TechType.Accumulator));
+            Assert.AreEqual(2, testDictionary.DuplicatesDiscarded[TechType.Accumulator]); // Discarded twice
         }
 
         // ----
