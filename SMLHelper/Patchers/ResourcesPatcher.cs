@@ -89,7 +89,7 @@
                 }
             }
 
-            Logger.Log("ResourcesPatcher is done.");
+            Logger.Log("ResourcesPatcher is done.", LogLevel.Debug);
         }
     }
 }

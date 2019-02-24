@@ -61,7 +61,7 @@ namespace SMLHelper.V2.Patchers
             harmony.Patch(cyclopsFabricatorScheme, null,
                 new HarmonyMethod(patcherClass.GetMethod("CyclopsFabricatorSchemePostfix", BindingFlags.Static | BindingFlags.NonPublic)));
 
-            Logger.Log($"CraftTreePatcher is done.");
+            Logger.Log($"CraftTreePatcher is done.", LogLevel.Debug);
         }
 
         private static bool GetTreePreFix(CraftTree.Type treeType, ref CraftTree __result)
@@ -153,7 +153,6 @@ namespace SMLHelper.V2.Patchers
                 for (int i = 0; i < tab.Path.Length; i++)
                 {
                     string currentPath = tab.Path[i];
-                    Logger.Log("Tab Current Path: " + currentPath + " Tab: " + tab.Name + " Crafter: " + tab.Scheme.ToString());
 
                     TreeNode node = currentNode[currentPath];
 

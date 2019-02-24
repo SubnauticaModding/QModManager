@@ -15,7 +15,7 @@ namespace SMLHelper.Patchers
         {
             commands.ForEach(x => DevConsolePatcher2.commands.Add(x.GetV2CommandInfo()));
 
-            V2.Logger.Log("Old DevConsolePatcher is done.");
+            V2.Logger.Log("Old DevConsolePatcher is done.", V2.LogLevel.Debug);
         }
     }
 

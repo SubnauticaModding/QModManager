@@ -45,12 +45,12 @@
                 prefix: null,
                 postfix: new HarmonyMethod(typeof(LanguagePatcher).GetMethod("Postfix", BindingFlags.Static | BindingFlags.NonPublic)));
 
-            Logger.Log("LanguagePatcher is done.");
+            Logger.Log("LanguagePatcher is done.", LogLevel.Debug);
         }
 
         private static void WriteOriginalCustomLines()
         {
-            Logger.Log("Writing original language files.");
+            Logger.Log("Writing original language files.", LogLevel.Debug);
 
             if (!Directory.Exists(LanguageOrigDir))
                 Directory.CreateDirectory(LanguageOrigDir);
@@ -68,7 +68,7 @@
                 filesWritten++;
             }
 
-            Logger.Log($"Updated {filesWritten} of {originalCustomLines.Count} original language files.");
+            Logger.Log($"Updated {filesWritten} of {originalCustomLines.Count} original language files.", LogLevel.Info);
         }
 
         private static void WriteOriginalLinesFile(string modKey)
@@ -94,7 +94,7 @@
             if (files.Length == 0)
                 return;
 
-            Logger.Log($"{files.Length} language override files found.");
+            Logger.Log($"{files.Length} language override files found.", LogLevel.Debug);
 
             foreach (string file in files)
             {
@@ -118,7 +118,7 @@
 
                     if (split.Length != 2)
                     {
-                        Logger.Log($"Line '{lineIndex}' in language override file for '{modName}' was not correctly formatted.");
+                        Logger.Log($"Line '{lineIndex}' in language override file for '{modName}' was not correctly formatted.", LogLevel.Warn);
                         continue; // Not correctly formatter
                     }
 
@@ -126,7 +126,7 @@
 
                     if (!originalLines.ContainsKey(key))
                     {
-                        Logger.Log($"Key '{key}' on line '{lineIndex}' in language override file for '{modName}' did not match an original key.");
+                        Logger.Log($"Key '{key}' on line '{lineIndex}' in language override file for '{modName}' did not match an original key.", LogLevel.Warn);
                         continue; // Skip keys we don't recognize.
                     }
 
@@ -134,7 +134,7 @@
                     overridesApplied++;
                 }
 
-                Logger.Log($"Applied {overridesApplied} language overrides to mod {modName}.");
+                Logger.Log($"Applied {overridesApplied} language overrides to mod {modName}.", LogLevel.Info);
             }
         }
 

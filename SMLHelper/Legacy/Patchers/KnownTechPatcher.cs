@@ -13,7 +13,7 @@ namespace SMLHelper.Patchers
         {
             unlockedAtStart.ForEach(x => KnownTechPatcher2.UnlockedAtStart.Add(x));
 
-            V2.Logger.Log("Old KnownTechPatcher is done.");
+            V2.Logger.Log("Old KnownTechPatcher is done.", V2.LogLevel.Debug);
         }
     }
 }
