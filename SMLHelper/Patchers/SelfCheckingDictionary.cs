@@ -34,7 +34,6 @@
         public ICollection<V> Values => UniqueEntries.Values;
         public int Count => UniqueEntries.Count;
         public bool IsReadOnly { get; } = false;
-        public bool IsFixedSize { get; } = false;
 
         public void Add(K key, V value)
         {
@@ -74,7 +73,13 @@
 
         public bool ContainsKey(K key) => UniqueEntries.ContainsKey(key);
 
-        public void CopyTo(KeyValuePair<K, V>[] array, int arrayIndex) => throw new NotImplementedException();
+        public void CopyTo(KeyValuePair<K, V>[] array, int arrayIndex)
+        {
+            foreach (KeyValuePair<K, V> pair in UniqueEntries)
+            {
+                array[arrayIndex++] = pair;
+            }
+        }
 
         public IEnumerator<KeyValuePair<K, V>> GetEnumerator() => UniqueEntries.GetEnumerator();
 
