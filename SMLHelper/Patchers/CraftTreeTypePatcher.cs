@@ -41,7 +41,7 @@
 
             cacheManager.SaveCache();
 
-            Logger.Log($"Successfully added CraftTree Type: '{name}' to Index: '{cache.Index}'");
+            Logger.Log($"Successfully added CraftTree Type: '{name}' to Index: '{cache.Index}'", LogLevel.Debug);
 
             var customTreeRoot = new ModCraftTreeRoot(craftTreeType, name);
 
@@ -78,7 +78,7 @@
                 bannedIndices.Add(realEnumValue);
             }
 
-            Logger.Log($"Finished known CraftTreeType exclusion. {bannedIndices.Count} IDs were added in ban list.");
+            Logger.Log($"Finished known CraftTreeType exclusion. {bannedIndices.Count} IDs were added in ban list.", LogLevel.Info);
 
             return bannedIndices;
         }
@@ -104,7 +104,7 @@
             harmony.Patch(techTypeType.GetMethod("ToString", new Type[0]),
                 new HarmonyMethod(thisType.GetMethod("Prefix_ToString", BindingFlags.NonPublic | BindingFlags.Static)), null);
 
-            Logger.Log("CraftTreeTypePatcher is done.");
+            Logger.Log("CraftTreeTypePatcher is done.", LogLevel.Debug);
         }
 
         internal static void Postfix_GetValues(Type enumType, ref Array __result)

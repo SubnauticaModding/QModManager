@@ -41,14 +41,14 @@
             if (techGroup == null)
             {
                 // Should never happen, but doesn't hurt to add it.
-                Logger.Log("Invalid TechGroup!");
+                Logger.Log("Invalid TechGroup!", LogLevel.Error);
                 return;
             }
 
             List<TechType> techCategory = techGroup[category];
             if (techCategory == null)
             {
-                Logger.Log($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}");
+                Logger.Log($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}", LogLevel.Error);
                 return;
             }
 
@@ -57,13 +57,13 @@
             if(index == -1) // Not found
             {
                 techCategory.Add(techType);
-                Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\"");
+                Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\"", LogLevel.Debug);
             }
             else
             {
                 techCategory.Insert(index + 1, techType);
 
-                Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\" after \"{after.AsString():G}\"");
+                Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\" after \"{after.AsString():G}\"", LogLevel.Debug);
             }
         }
 
@@ -74,20 +74,20 @@
             if (techGroup == null)
             {
                 // Should never happen, but doesn't hurt to add it.
-                Logger.Log("Invalid TechGroup!");
+                Logger.Log("Invalid TechGroup!", LogLevel.Error);
                 return;
             }
 
             List<TechType> techCategory = techGroup[category];
             if (techCategory == null)
             {
-                Logger.Log($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}");
+                Logger.Log($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}", LogLevel.Error);
                 return;
             }
 
             techCategory.Remove(techType);
 
-            Logger.Log($"Removed \"{techType.AsString():G}\" from groups under \"{group:G}->{category:G}\"");
+            Logger.Log($"Removed \"{techType.AsString():G}\" from groups under \"{group:G}->{category:G}\"", LogLevel.Debug);
         }
 
         internal static void AddToCustomTechData(TechType techType, ITechData techData)
@@ -119,7 +119,7 @@
 
             AddCustomTechDataToOriginalDictionary();
 
-            Logger.Log("CraftDataPatcher is done.");
+            Logger.Log("CraftDataPatcher is done.", LogLevel.Debug);
         }
 
         private static void PreparePrefabIDCachePostfix()
@@ -200,7 +200,7 @@
                 if (techDataExists)
                 {
                     techData_Remove.Invoke(techData, new object[] { techType });
-                    Logger.Log($"{techType} TechType already existed in the CraftData.techData dictionary. Original value was replaced.");
+                    Logger.Log($"{techType} TechType already existed in the CraftData.techData dictionary. Original value was replaced.", LogLevel.Warn);
                     replaced++;
                 }
                 else
@@ -211,10 +211,10 @@
                 techData_Add.Invoke(techData, new object[] { techType, techDataInstance });
             }
 
-            Logger.Log($"Added {added} new entries to the CraftData.techData dictionary.");
+            Logger.Log($"Added {added} new entries to the CraftData.techData dictionary.", LogLevel.Info);
 
             if (replaced > 0)
-                Logger.Log($"Replaced {replaced} existing entries to the CraftData.techData dictionary.");
+                Logger.Log($"Replaced {replaced} existing entries to the CraftData.techData dictionary.", LogLevel.Info);
         }
 
         #endregion

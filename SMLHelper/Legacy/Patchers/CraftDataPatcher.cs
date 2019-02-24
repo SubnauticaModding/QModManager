@@ -47,7 +47,7 @@ namespace SMLHelper.Patchers
             customEquipmentTypes.ForEach(x => CraftDataPatcher2.CustomEquipmentTypes.Add(x.Key, x.Value));
             customBuildables.ForEach(x => CraftDataPatcher2.CustomBuildables.Add(x));
 
-            V2.Logger.Log("Old CraftDataPatcher is done.");
+            V2.Logger.Log("Old CraftDataPatcher is done.", V2.LogLevel.Debug);
         }
     }
 

@@ -41,7 +41,7 @@
                 prefix: null, // No prefix call
                 postfix: new HarmonyMethod(NotifyChangeItem_Postfix_Method)); // NotifyAddItem and NotifyRemoveItem share the same Postfix method
 
-            Logger.Log($"ItemsContainerPatcher is done.");
+            Logger.Log($"ItemsContainerPatcher is done.", LogLevel.Debug);
         }
 
         private static bool HasRoomFor_XY_Prefix(ItemsContainer __instance, int width, int height, ref bool __result, ref Vector2int __state)

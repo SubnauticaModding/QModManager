@@ -58,8 +58,8 @@
 
         private void DupFoundError(K key)
         {
-            Logger.Log($"[ERROR] {CollectionName} already exists for '{key}'. {Environment.NewLine}" +
-                                        "All entries will be removed so conflict can be noted and resolved.");
+            Logger.Log($"{CollectionName} already exists for '{key}'. {Environment.NewLine}" +
+                        "All entries will be removed so conflict can be noted and resolved.", LogLevel.Warn);
         }
 
         public void Add(KeyValuePair<K, V> item) => Add(item.Key, item.Value);

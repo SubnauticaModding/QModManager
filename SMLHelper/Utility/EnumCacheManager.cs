@@ -105,9 +105,9 @@
             }
             catch (Exception exception)
             {
-                Logger.Log("Caught exception when reading cache!");
-                Logger.Log("Exception message: " + exception.Message);
-                Logger.Log("StackTrace: " + Environment.NewLine + exception.StackTrace);
+                Logger.Log("Caught exception when reading cache!", LogLevel.Error);
+                Logger.Log("Exception message: " + exception.Message, LogLevel.Error);
+                Logger.Log("StackTrace: " + Environment.NewLine + exception.StackTrace, LogLevel.Error);
             }
 
             cacheLoaded = true;
@@ -131,9 +131,9 @@
             }
             catch (Exception exception)
             {
-                Logger.Log("Caught exception when saving cache!");
-                Logger.Log("Exception message: " + exception.Message);
-                Logger.Log("StackTrace: " + Environment.NewLine + exception.StackTrace);
+                Logger.Log("Caught exception when saving cache!", LogLevel.Error);
+                Logger.Log("Exception message: " + exception.Message, LogLevel.Error);
+                Logger.Log("StackTrace: " + Environment.NewLine + exception.StackTrace, LogLevel.Error);
             }
         }
 
