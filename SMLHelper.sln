@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMLHelper", "SMLHelper\SMLH
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example mod", "Example mod\Example mod.csproj", "{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMLHelper.Tests", "SMLHelper.Tests\SMLHelper.Tests.csproj", "{EBC4AAF3-A13B-427E-BF99-3AE23EDEB4B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBC4AAF3-A13B-427E-BF99-3AE23EDEB4B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBC4AAF3-A13B-427E-BF99-3AE23EDEB4B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBC4AAF3-A13B-427E-BF99-3AE23EDEB4B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBC4AAF3-A13B-427E-BF99-3AE23EDEB4B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,7 +12,7 @@
         /// <seealso cref="CraftData.BackgroundType"/>
         public static void SetBioReactorCharge(TechType techType, float charge)
         {
-            BioReactorPatcher.CustomBioreactorCharges[techType] = charge;
+            BioReactorPatcher.CustomBioreactorCharges.Add(techType, charge);
         }
     }
 }

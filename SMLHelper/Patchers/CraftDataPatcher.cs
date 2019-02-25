@@ -9,18 +9,17 @@
     internal class CraftDataPatcher
     {
         #region Internal Fields
-
-        internal static List<TechType> DuplicateTechDataAttempts = new List<TechType>();
-        internal static Dictionary<TechType, ITechData> CustomTechData = new Dictionary<TechType, ITechData>();
-        internal static Dictionary<TechType, TechType> CustomHarvestOutputList = new Dictionary<TechType, TechType>();
-        internal static Dictionary<TechType, HarvestType> CustomHarvestTypeList = new Dictionary<TechType, HarvestType>();
-        internal static Dictionary<TechType, int> CustomFinalCutBonusList = new Dictionary<TechType, int>(TechTypeExtensions.sTechTypeComparer);
-        internal static Dictionary<TechType, Vector2int> CustomItemSizes = new Dictionary<TechType, Vector2int>();
-        internal static Dictionary<TechType, EquipmentType> CustomEquipmentTypes = new Dictionary<TechType, EquipmentType>();
-        internal static Dictionary<TechType, QuickSlotType> CustomSlotTypes = new Dictionary<TechType, QuickSlotType>();
-        internal static Dictionary<TechType, float> CustomCraftingTimes = new Dictionary<TechType, float>();
-        internal static Dictionary<TechType, TechType> CustomCookedCreatureList = new Dictionary<TechType, TechType>();
-        internal static Dictionary<TechType, CraftData.BackgroundType> CustomBackgroundTypes = new Dictionary<TechType, CraftData.BackgroundType>(TechTypeExtensions.sTechTypeComparer);
+        
+        internal static IDictionary<TechType, ITechData> CustomTechData = new SelfCheckingDictionary<TechType, ITechData>("CustomTechData");
+        internal static IDictionary<TechType, TechType> CustomHarvestOutputList = new SelfCheckingDictionary<TechType, TechType>("CustomHarvestOutputList");
+        internal static IDictionary<TechType, HarvestType> CustomHarvestTypeList = new SelfCheckingDictionary<TechType, HarvestType>("CustomHarvestTypeList");
+        internal static IDictionary<TechType, int> CustomFinalCutBonusList = new SelfCheckingDictionary<TechType, int>("CustomFinalCutBonusList", TechTypeExtensions.sTechTypeComparer);
+        internal static IDictionary<TechType, Vector2int> CustomItemSizes = new SelfCheckingDictionary<TechType, Vector2int>("CustomItemSizes");
+        internal static IDictionary<TechType, EquipmentType> CustomEquipmentTypes = new SelfCheckingDictionary<TechType, EquipmentType>("CustomEquipmentTypes");
+        internal static IDictionary<TechType, QuickSlotType> CustomSlotTypes = new SelfCheckingDictionary<TechType, QuickSlotType>("CustomSlotTypes");
+        internal static IDictionary<TechType, float> CustomCraftingTimes = new SelfCheckingDictionary<TechType, float>("CustomCraftingTimes");
+        internal static IDictionary<TechType, TechType> CustomCookedCreatureList = new SelfCheckingDictionary<TechType, TechType>("CustomCookedCreatureList");
+        internal static IDictionary<TechType, CraftData.BackgroundType> CustomBackgroundTypes = new SelfCheckingDictionary<TechType, CraftData.BackgroundType>("CustomBackgroundTypes", TechTypeExtensions.sTechTypeComparer);
         internal static List<TechType> CustomBuildables = new List<TechType>();
 
         #endregion
@@ -93,15 +92,7 @@
 
         internal static void AddToCustomTechData(TechType techType, ITechData techData)
         {
-            if (CustomTechData.ContainsKey(techType))
-            {
-                Logger.Log($"Custom TechData already exists for '{techType}'. {Environment.NewLine}" +
-                            "All entries will be removed so conflict can be noted and resolved.", LogLevel.Error);
-                DuplicateTechDataAttempts.Add(techType);
-                return; // Error condition exit
-            }
-
-            CustomTechData[techType] = techData;
+            CustomTechData.Add(techType, techData);
         }
 
         #endregion
@@ -145,18 +136,6 @@
 
         private static void AddCustomTechDataToOriginalDictionary()
         {
-            if (DuplicateTechDataAttempts.Count > 0)
-            {
-                Logger.Log($"Removing conflicting TechData entries from patching.{Environment.NewLine}" +
-                           $"This is so the user will take notice and know to resolve the conflict.{Environment.NewLine}" +
-                           "Only one custom TechData may be added per TechType.", LogLevel.Debug);
-
-                foreach (TechType dup in DuplicateTechDataAttempts)
-                {
-                    CustomTechData.Remove(dup);
-                }
-            }
-
             Type CraftDataType = typeof(CraftData);
             Type TechDataType = CraftDataType.GetNestedType("TechData", BindingFlags.NonPublic);
             Type IngredientType = CraftDataType.GetNestedType("Ingredient", BindingFlags.NonPublic);

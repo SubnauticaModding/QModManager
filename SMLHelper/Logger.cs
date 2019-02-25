@@ -50,6 +50,16 @@
                 Log("Error reading EnableDebugLogs.txt configuration file. Defaulted to false", LogLevel.Warn);
             }
         }
+                
+        internal static void Debug(string text) => Log(text, LogLevel.Debug);
+        internal static void Info(string text) => Log(text, LogLevel.Info);
+        internal static void Warn(string text) => Log(text, LogLevel.Warn);
+        internal static void Error(string text) => Log(text, LogLevel.Error);
+
+        internal static void Debug(string text, params object[] args) => Log(text, LogLevel.Debug, args);
+        internal static void Info(string text, params object[] args) => Log(text, LogLevel.Info, args);
+        internal static void Warn(string text, params object[] args) => Log(text, LogLevel.Warn, args);
+        internal static void Error(string text, params object[] args) => Log(text, LogLevel.Error, args);
 
         internal static void Log(string text, LogLevel level = LogLevel.Info)
         {

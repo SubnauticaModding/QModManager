@@ -105,9 +105,7 @@
             }
             catch (Exception exception)
             {
-                Logger.Log("Caught exception when reading cache!", LogLevel.Error);
-                Logger.Log("Exception message: " + exception.Message, LogLevel.Error);
-                Logger.Log("StackTrace: " + Environment.NewLine + exception.StackTrace, LogLevel.Error);
+                Logger.Error("Caught exception when reading cache!", Environment.NewLine, exception);
             }
 
             cacheLoaded = true;
