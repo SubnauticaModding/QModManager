@@ -63,7 +63,7 @@
 
         internal static void Log(string text, LogLevel level = LogLevel.Info)
         {
-            if (level >= LogLevel.Info || EnableDebugging)
+            if (level <= LogLevel.Info || EnableDebugging)
                 Console.WriteLine($"[SMLHelper/{level.ToString()}] {text}");
         }
 
@@ -72,7 +72,7 @@
             if (args != null && args.Length > 0)
                 text = string.Format(text, args);
 
-            if (level >= LogLevel.Info || EnableDebugging)
+            if (level <= LogLevel.Info || EnableDebugging)
                 Console.WriteLine($"[SMLHelper/{level.ToString()}] {text}");
         }
 
