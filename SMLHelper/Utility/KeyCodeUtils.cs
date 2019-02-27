@@ -127,7 +127,7 @@
                     }
                     catch (Exception)
                     {
-                        V2.Logger.Log($"Failed to parse {s} as a valid KeyCode!");
+                        V2.Logger.Log($"Failed to parse {s} as a valid KeyCode!", LogLevel.Error);
                         return 0;
                     }
             }

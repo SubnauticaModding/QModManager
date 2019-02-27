@@ -22,7 +22,7 @@
 
             harmony.Patch(initializeInfo, null, new HarmonyMethod(postfixInfo));
 
-            Logger.Log($"PDAPatcher is ready.");
+            Logger.Log($"PDAPatcher is ready.", LogLevel.Debug);
         }
 
         private static void InitializePostfix()
@@ -54,7 +54,7 @@
                 }
                 else
                 {
-                    Logger.Log($"Warning: TechType {fragmentEntry.Key} not known in PDAScanner.EntryData");
+                    Logger.Log($"Warning: TechType {fragmentEntry.Key} not known in PDAScanner.EntryData", LogLevel.Warn);
                 }
             }
 
@@ -71,11 +71,11 @@
                 }
                 else
                 {
-                    Logger.Log($"Warning: TechType {fragmentEntry.Key} not known in PDAScanner.EntryData");
+                    Logger.Log($"Warning: TechType {fragmentEntry.Key} not known in PDAScanner.EntryData", LogLevel.Warn);
                 }
             }
 
-            Logger.Log($"PDAPatcher is done.");
+            Logger.Log($"PDAPatcher is done.", LogLevel.Debug);
         }
     }
 }

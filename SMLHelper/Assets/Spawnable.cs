@@ -56,7 +56,7 @@
         {
             if (string.IsNullOrEmpty(classId))
             {
-                Logger.Log($"[ERROR] ClassID for Spawnables must be a non-empty value.");
+                Logger.Log($"ClassID for Spawnables must be a non-empty value.", LogLevel.Error);
                 throw new Exception($"Error patching Spawnable");
             }
 
@@ -115,7 +115,7 @@
             string assetsFolder = this.AssetsFolder;
             if (string.IsNullOrEmpty(assetsFolder))
             {
-                Logger.Log($"[ERROR] AssetsFolder property for Spawnable instance of {this.ClassID} must have a non-empty value.");
+                Logger.Log($"AssetsFolder property for Spawnable instance of {this.ClassID} must have a non-empty value.", LogLevel.Error);
                 throw new Exception($"Error patching Spawnable:{this.ClassID}");
             }
 

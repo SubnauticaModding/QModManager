@@ -9,18 +9,17 @@
     internal class CraftDataPatcher
     {
         #region Internal Fields
-
-        internal static List<TechType> DuplicateTechDataAttempts = new List<TechType>();
-        internal static Dictionary<TechType, ITechData> CustomTechData = new Dictionary<TechType, ITechData>();
-        internal static Dictionary<TechType, TechType> CustomHarvestOutputList = new Dictionary<TechType, TechType>();
-        internal static Dictionary<TechType, HarvestType> CustomHarvestTypeList = new Dictionary<TechType, HarvestType>();
-        internal static Dictionary<TechType, int> CustomFinalCutBonusList = new Dictionary<TechType, int>(TechTypeExtensions.sTechTypeComparer);
-        internal static Dictionary<TechType, Vector2int> CustomItemSizes = new Dictionary<TechType, Vector2int>();
-        internal static Dictionary<TechType, EquipmentType> CustomEquipmentTypes = new Dictionary<TechType, EquipmentType>();
-        internal static Dictionary<TechType, QuickSlotType> CustomSlotTypes = new Dictionary<TechType, QuickSlotType>();
-        internal static Dictionary<TechType, float> CustomCraftingTimes = new Dictionary<TechType, float>();
-        internal static Dictionary<TechType, TechType> CustomCookedCreatureList = new Dictionary<TechType, TechType>();
-        internal static Dictionary<TechType, CraftData.BackgroundType> CustomBackgroundTypes = new Dictionary<TechType, CraftData.BackgroundType>(TechTypeExtensions.sTechTypeComparer);
+        
+        internal static IDictionary<TechType, ITechData> CustomTechData = new SelfCheckingDictionary<TechType, ITechData>("CustomTechData");
+        internal static IDictionary<TechType, TechType> CustomHarvestOutputList = new SelfCheckingDictionary<TechType, TechType>("CustomHarvestOutputList");
+        internal static IDictionary<TechType, HarvestType> CustomHarvestTypeList = new SelfCheckingDictionary<TechType, HarvestType>("CustomHarvestTypeList");
+        internal static IDictionary<TechType, int> CustomFinalCutBonusList = new SelfCheckingDictionary<TechType, int>("CustomFinalCutBonusList", TechTypeExtensions.sTechTypeComparer);
+        internal static IDictionary<TechType, Vector2int> CustomItemSizes = new SelfCheckingDictionary<TechType, Vector2int>("CustomItemSizes");
+        internal static IDictionary<TechType, EquipmentType> CustomEquipmentTypes = new SelfCheckingDictionary<TechType, EquipmentType>("CustomEquipmentTypes");
+        internal static IDictionary<TechType, QuickSlotType> CustomSlotTypes = new SelfCheckingDictionary<TechType, QuickSlotType>("CustomSlotTypes");
+        internal static IDictionary<TechType, float> CustomCraftingTimes = new SelfCheckingDictionary<TechType, float>("CustomCraftingTimes");
+        internal static IDictionary<TechType, TechType> CustomCookedCreatureList = new SelfCheckingDictionary<TechType, TechType>("CustomCookedCreatureList");
+        internal static IDictionary<TechType, CraftData.BackgroundType> CustomBackgroundTypes = new SelfCheckingDictionary<TechType, CraftData.BackgroundType>("CustomBackgroundTypes", TechTypeExtensions.sTechTypeComparer);
         internal static List<TechType> CustomBuildables = new List<TechType>();
 
         #endregion
@@ -42,14 +41,14 @@
             if (techGroup == null)
             {
                 // Should never happen, but doesn't hurt to add it.
-                Logger.Log("Invalid TechGroup!");
+                Logger.Log("Invalid TechGroup!", LogLevel.Error);
                 return;
             }
 
             List<TechType> techCategory = techGroup[category];
             if (techCategory == null)
             {
-                Logger.Log($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}");
+                Logger.Log($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}", LogLevel.Error);
                 return;
             }
 
@@ -58,13 +57,13 @@
             if(index == -1) // Not found
             {
                 techCategory.Add(techType);
-                Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\"");
+                Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\"", LogLevel.Debug);
             }
             else
             {
                 techCategory.Insert(index + 1, techType);
 
-                Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\" after \"{after.AsString():G}\"");
+                Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\" after \"{after.AsString():G}\"", LogLevel.Debug);
             }
         }
 
@@ -75,33 +74,25 @@
             if (techGroup == null)
             {
                 // Should never happen, but doesn't hurt to add it.
-                Logger.Log("Invalid TechGroup!");
+                Logger.Log("Invalid TechGroup!", LogLevel.Error);
                 return;
             }
 
             List<TechType> techCategory = techGroup[category];
             if (techCategory == null)
             {
-                Logger.Log($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}");
+                Logger.Log($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}", LogLevel.Error);
                 return;
             }
 
             techCategory.Remove(techType);
 
-            Logger.Log($"Removed \"{techType.AsString():G}\" from groups under \"{group:G}->{category:G}\"");
+            Logger.Log($"Removed \"{techType.AsString():G}\" from groups under \"{group:G}->{category:G}\"", LogLevel.Debug);
         }
 
         internal static void AddToCustomTechData(TechType techType, ITechData techData)
         {
-            if (CustomTechData.ContainsKey(techType))
-            {
-                Logger.Log($"[ERROR] Custom TechData already exists for '{techType}'. {Environment.NewLine}" +
-                            "All entries will be removed so conflict can be noted and resolved.");
-                DuplicateTechDataAttempts.Add(techType);
-                return; // Error condition exit
-            }
-
-            CustomTechData[techType] = techData;
+            CustomTechData.Add(techType, techData);
         }
 
         #endregion
@@ -128,7 +119,7 @@
 
             AddCustomTechDataToOriginalDictionary();
 
-            Logger.Log("CraftDataPatcher is done.");
+            Logger.Log("CraftDataPatcher is done.", LogLevel.Debug);
         }
 
         private static void PreparePrefabIDCachePostfix()
@@ -145,18 +136,6 @@
 
         private static void AddCustomTechDataToOriginalDictionary()
         {
-            if (DuplicateTechDataAttempts.Count > 0)
-            {
-                Logger.Log($"Removing conflicting TechData entries from patching.{Environment.NewLine}" +
-                           $"This is so the user will take notice and know to resolve the conflict.{Environment.NewLine}" +
-                           "Only one custom TechData may be added per TechType.");
-
-                foreach (TechType dup in DuplicateTechDataAttempts)
-                {
-                    CustomTechData.Remove(dup);
-                }
-            }
-
             Type CraftDataType = typeof(CraftData);
             Type TechDataType = CraftDataType.GetNestedType("TechData", BindingFlags.NonPublic);
             Type IngredientType = CraftDataType.GetNestedType("Ingredient", BindingFlags.NonPublic);
@@ -221,7 +200,7 @@
                 if (techDataExists)
                 {
                     techData_Remove.Invoke(techData, new object[] { techType });
-                    Logger.Log($"{techType} TechType already existed in the CraftData.techData dictionary. Original value was replaced.");
+                    Logger.Log($"{techType} TechType already existed in the CraftData.techData dictionary. Original value was replaced.", LogLevel.Warn);
                     replaced++;
                 }
                 else
@@ -232,10 +211,10 @@
                 techData_Add.Invoke(techData, new object[] { techType, techDataInstance });
             }
 
-            Logger.Log($"Added {added} new entries to the CraftData.techData dictionary.");
+            Logger.Log($"Added {added} new entries to the CraftData.techData dictionary.", LogLevel.Info);
 
             if (replaced > 0)
-                Logger.Log($"Replaced {replaced} existing entries to the CraftData.techData dictionary.");
+                Logger.Log($"Replaced {replaced} existing entries to the CraftData.techData dictionary.", LogLevel.Info);
         }
 
         #endregion

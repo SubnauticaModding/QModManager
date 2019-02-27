@@ -17,7 +17,7 @@
             MethodInfo submitMethod = devConsoleType.GetMethod("Submit", BindingFlags.Instance | BindingFlags.NonPublic);
 
             harmony.Patch(submitMethod, null, new HarmonyMethod(thisType.GetMethod("Postfix", BindingFlags.Static | BindingFlags.NonPublic)));
-            Logger.Log("DevConsolePatcher is done.");
+            Logger.Log("DevConsolePatcher is done.", LogLevel.Debug);
         }
 
         internal static void Postfix(bool __result, string value)

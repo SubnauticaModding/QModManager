@@ -60,7 +60,7 @@
             harmony.Patch(getPrefabAsync,
                 new HarmonyMethod(typeof(PrefabDatabasePatcher).GetMethod("GetPrefabAsync_Prefix", BindingFlags.Static | BindingFlags.NonPublic)), null);
 
-            Logger.Log("PrefabDatabasePatcher is done.");
+            Logger.Log("PrefabDatabasePatcher is done.", LogLevel.Debug);
         }
     }
 }

@@ -46,6 +46,10 @@
                 modsTab = optionsPanel.AddTab("Mods");
             }
 
+            // Maybe this could be split into its own file to handle smlhelper options, or maybe it could be removed alltogether
+            optionsPanel.AddHeading(modsTab, "SMLHelper");
+            optionsPanel.AddToggleOption(modsTab, "Enable debug logs", V2.Logger.EnableDebugging, V2.Logger.SetDebugging);
+
             foreach (ModOptions modOption in modOptions.Values)
             {
                 optionsPanel.AddHeading(modsTab, modOption.Name);
@@ -83,7 +87,7 @@
                                     modOption.OnKeybindChange(keybind.Id, key)));
                             break;
                         default:
-                            V2.Logger.Log($"Invalid ModOptionType detected for option: {option.Id} ({option.Type.ToString()})");
+                            V2.Logger.Log($"Invalid ModOptionType detected for option: {option.Id} ({option.Type.ToString()})", LogLevel.Error);
                             break;
                     }
                 }

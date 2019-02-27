@@ -3,6 +3,7 @@
     using Harmony;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
     using Utility;
 
@@ -67,7 +68,7 @@
 
             cacheManager.SaveCache();
 
-            Logger.Log($"Successfully added Tech Type: '{name}' to Index: '{cache.Index}'");
+            Logger.Log($"Successfully added Tech Type: '{name}' to Index: '{cache.Index}'", LogLevel.Debug);
             return techType;
         }
 
@@ -96,7 +97,7 @@
                 bannedIndices.Add(currentTechTypeKey);
             }
 
-            Logger.Log($"Finished known TechTypes exclusion. {bannedIndices.Count} IDs were added in ban list.");
+            Logger.Log($"Finished known TechTypes exclusion. {bannedIndices.Count} IDs were added in ban list.", LogLevel.Debug);
 
             return bannedIndices;
         }
@@ -121,7 +122,9 @@
             harmony.Patch(techTypeType.GetMethod("ToString", new Type[0]),
                 new HarmonyMethod(thisType.GetMethod("Prefix_ToString", BindingFlags.NonPublic | BindingFlags.Static)), null);
 
-            Logger.Log("TechTypePatcher is done.");
+            Logger.Log($"Added {cacheManager.ModdedKeys.Count()} TechTypes succesfully into the game.", LogLevel.Info);
+
+            Logger.Log("TechTypePatcher is done.", LogLevel.Debug);
         }
 
         private static void Postfix_GetValues(Type enumType, ref Array __result)

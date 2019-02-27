@@ -40,15 +40,14 @@ namespace SMLHelper.Patchers
 
         internal static void Patch()
         {
-            customTechData.ForEach(x => CraftDataPatcher2.AddToCustomTechData(x.Key, x.Value));
-
+            customTechData.ForEach(x => CraftDataPatcher2.CustomTechData.Add(x.Key, x.Value));
             customHarvestOutputList.ForEach(x => CraftDataPatcher2.CustomHarvestOutputList.Add(x.Key, x.Value));
             customHarvestTypeList.ForEach(x => CraftDataPatcher2.CustomHarvestTypeList.Add(x.Key, x.Value));
             customItemSizes.ForEach(x => CraftDataPatcher2.CustomItemSizes.Add(x.Key, x.Value));
             customEquipmentTypes.ForEach(x => CraftDataPatcher2.CustomEquipmentTypes.Add(x.Key, x.Value));
             customBuildables.ForEach(x => CraftDataPatcher2.CustomBuildables.Add(x));
 
-            V2.Logger.Log("Old CraftDataPatcher is done.");
+            V2.Logger.Log("Old CraftDataPatcher is done.", V2.LogLevel.Debug);
         }
     }
 

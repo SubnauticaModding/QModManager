@@ -31,12 +31,12 @@
                 }
                 else
                 {
-                    Logger.Log("ERROR on LoadTextureFromFile call. Texture cannot be loaded: " + filePathToImage);
+                    Logger.Log("Error on LoadTextureFromFile call. Texture cannot be loaded: " + filePathToImage, LogLevel.Error);
                 }
             }
             else
             {
-                Logger.Log("ERROR on LoadTextureFromFile call. File not found at " + filePathToImage);
+                Logger.Log("Error on LoadTextureFromFile call. File not found at " + filePathToImage, LogLevel.Error);
             }
 
             return null;
