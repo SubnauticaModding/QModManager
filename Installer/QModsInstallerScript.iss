@@ -43,18 +43,21 @@ UsePreviousAppDir=no
 UsePreviousLanguage=no
 WizardImageFile=WizardImage.bmp
 WizardSmallImageFile=WizardSmallImageTransparent.bmp
+UsePreviousSetupType=False
+UsePreviousTasks=False
+CloseApplications=False
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-// Files used by the installer but not required by QModManager itself
+; Files used by the installer but not required by QModManager itself
 ; Installer theme
 Source: "VclStylesinno.dll"; Flags: DontCopy
 Source: "Carbon.vsf"; Flags: DontCopy
 ; Installer extensions
 Source: "InstallerExtensions.dll"; Flags: DontCopy
-// Files required by QModManager itself
+; Files required by QModManager itself
 ; Subnautica
 Source: "..\Dependencies\0Harmony.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 Source: "..\Dependencies\0Harmony-1.2.0.1.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
@@ -87,11 +90,11 @@ Filename: "{app}\Subnautica_Data\Managed\QModManager.exe"; Parameters: "-u"; Che
 Filename: "{app}\SubnauticaZero_Data\Managed\QModManager.exe"; Parameters: "-u"; Check: IsBelowZeroApp
 
 [Messages]
+; BeveledLabel={#Name} {#Version}
 WizardSelectDir=Select install location
 SelectDirLabel3=Please select the install folder of the game.
 SelectDirBrowseLabel=To continue, click Next. If you would like to select a different folder, click Browse.%nYou can also use the buttons on the bottom left to auto-complete the install path for the chosen game. (Only works for Steam)
 ReadyLabel2a=By installing, you agree to allow QModManager to send external web requests, most often to check for updates. You can disable this option at any time in the Mods tab of the Subnautica options menu.
-ReadyLabel2b=By installing, you agree to allow QModManager to send external web requests, most often to check for updates. You can disable this option at any time in the Mods tab of the Subnautica options menu.
 ExitSetupMessage=Setup is not complete. If you exit now, {#Name} will not be installed.%nExit Setup?
 WizardSelectComponents=Review Install
 SelectComponentsDesc=
@@ -244,7 +247,6 @@ P : Integer;
 steamInstallPath : String;
 configFile : String;
 fileLines: TArrayOfString;
-temp: Integer;
 begin
   steamInstallPath := ''
   RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SOFTWARE\WOW6432Node\Valve\Steam', 'InstallPath', steamInstallPath)

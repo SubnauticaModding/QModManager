@@ -1,6 +1,7 @@
 ﻿using Harmony;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
 {

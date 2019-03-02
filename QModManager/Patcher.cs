@@ -1,6 +1,7 @@
 using Harmony;
 using Oculus.Newtonsoft.Json;
 using QModManager.Debugger;
+using QModManager.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
 {
@@ -32,7 +34,7 @@ namespace QModManager
                 }
                 patched = true;
 
-                Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}...");
+                Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}...");
 
                 if (QModBaseDir == null)
                 {
@@ -54,8 +56,8 @@ namespace QModManager
                 PatchHarmony();
                 StartLoadingMods();
 
-                Hooks.Update += ShowErroredMods;
-                Hooks.Update += VersionCheck.Check;
+                ShowErroredMods();
+                VersionCheck.Check();
                 Hooks.Start += PrefabDebugger.Main;
 
                 Hooks.OnLoadEnd?.Invoke();
@@ -786,22 +788,21 @@ namespace QModManager
 
         #region Errored mods
 
-        private static float timer = 0f;
-
         private static void ShowErroredMods()
         {
-            timer += Time.deltaTime;
-            if (timer < 1) return;
-            Hooks.Update -= ShowErroredMods;
-
             if (erroredMods.Count <= 0) return;
+
             string display = "The following mods could not be loaded: ";
-            for (int i = 0; i < erroredMods.Count; i++)
-            {
-                display += erroredMods[i].DisplayName;
-                if (i + 1 != erroredMods.Count) display += ", ";
-            }
+
+            string[] modsToDisplay = erroredMods.Take(5).Select(mod => mod.DisplayName).ToArray();
+
+            display += string.Join(", ", modsToDisplay);
+
+            if (erroredMods.Count > 5)
+                display += $", and {erroredMods.Count - 5} others";
+
             display += ". Check the log for details.";
+
             Dialog.Show(display, Dialog.Button.seeLog, Dialog.Button.close, false);
         }
 

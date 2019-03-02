@@ -1,11 +1,14 @@
 ﻿using Harmony;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
+using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
 {
@@ -47,35 +50,48 @@ namespace QModManager
             }
         }
 
-        private static void Show(string error, Action onLeftButtonPressed = null, Action onRightButtonPressed = null, string leftButtonText = "See Log", string rightButtonText = "Close", bool blue = false)
+        internal static void Show(string error, Button leftButton, Button rightButton, bool blue)
         {
+            GameObject couroutineHandler = new GameObject("QModManager Dialog Coroutine");
+            couroutineHandler.AddComponent<DummyBehaviour>().StartCoroutine(ShowDialogEnumerator(error, leftButton?.action, rightButton?.action, leftButton?.text, rightButton?.text, blue, couroutineHandler));
+        }
+
+        private static IEnumerator ShowDialogEnumerator(string error, Action onLeftButtonPressed, Action onRightButtonPressed, string leftButtonText, string rightButtonText, bool blue, GameObject couroutineHandler)
+        {
+            while (typeof(uGUI).GetField("_main", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) == null)
+                yield return null;
+
+            yield return new WaitForSecondsRealtime(2);
+
             uGUI_SceneConfirmation confirmation = uGUI.main.confirmation;
 
-            if (onLeftButtonPressed == null) onLeftButtonPressed = () 
-                    => Process.Start(Path.Combine(Patcher.QModBaseDir, "../Subnautica_Data/output_log.txt"));
-            if (onRightButtonPressed == null) onRightButtonPressed = () => { };
+            // Disable buttons if their action is null
+            if (onLeftButtonPressed == null) confirmation.yes.gameObject.SetActive(false);
+            if (onRightButtonPressed == null) confirmation.no.gameObject.SetActive(false);
 
+            // Disable buttons if their text is null, otherwise set their button text
             if (string.IsNullOrEmpty(leftButtonText)) confirmation.yes.gameObject.SetActive(false);
             else confirmation.yes.gameObject.GetComponentInChildren<Text>().text = leftButtonText;
-
             if (string.IsNullOrEmpty(rightButtonText)) confirmation.no.gameObject.SetActive(false);
             else confirmation.no.gameObject.GetComponentInChildren<Text>().text = rightButtonText;
 
+            // Turn the dialog blue if the blue parameter is true
             Sprite sprite = confirmation.gameObject.GetComponentInChildren<Image>().sprite;
-
             if (blue)
             {
                 confirmation.gameObject.GetComponentInChildren<Image>().sprite = confirmation.gameObject.GetComponentsInChildren<Image>()[1].sprite;
             }
 
+            // Reduce the text size on the buttons by two pts
             List<Text> texts = confirmation.gameObject.GetComponentsInChildren<Text>().ToList();
             texts.RemoveAt(0);
             texts.Do(t => t.fontSize = t.fontSize - 2);
 
+            // Revert everything after the popup was closed
             confirmation.Show(error, delegate (bool leftButtonClicked)
             {
-                if (leftButtonClicked) onLeftButtonPressed.Invoke();
-                else onRightButtonPressed.Invoke();
+                if (leftButtonClicked) onLeftButtonPressed?.Invoke();
+                else onRightButtonPressed?.Invoke();
 
                 confirmation.yes.gameObject.SetActive(true);
                 confirmation.no.gameObject.SetActive(true);
@@ -86,10 +102,11 @@ namespace QModManager
                 confirmation.gameObject.GetComponentInChildren<Image>().sprite = sprite;
 
                 texts.Do(t => t.fontSize = t.fontSize + 2);
-            });
-        }
 
-        internal static void Show(string error, Button leftButton, Button rightButton, bool blue)
-            => Show(error, leftButton.action, rightButton.action, leftButton.text, rightButton.text, blue);
+                UnityEngine.Object.Destroy(couroutineHandler);
+            });
+
+            yield return null;
+        }
     }
 }

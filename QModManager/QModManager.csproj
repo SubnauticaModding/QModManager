@@ -105,8 +105,8 @@
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Dialog.cs" />
     <Compile Include="Hooks.cs" />
-    <Compile Include="Logger.cs" />
-    <Compile Include="Options.cs" />
+    <Compile Include="Utility\Logger.cs" />
+    <Compile Include="OptionsManager.cs" />
     <Compile Include="PirateCheck.cs" />
     <Compile Include="Prefab Debugger\HierarchyItem.cs" />
     <Compile Include="Prefab Debugger\LogMessage.cs" />
@@ -115,6 +115,9 @@
     <Compile Include="QMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Patcher.cs" />
+    <Compile Include="Utility\ExtensionMethods.cs" />
+    <Compile Include="Utility\NetworkUtilities.cs" />
+    <Compile Include="Utility\PlayerPrefsExtra.cs" />
     <Compile Include="VersionCheck.cs" />
   </ItemGroup>
   <ItemGroup>
