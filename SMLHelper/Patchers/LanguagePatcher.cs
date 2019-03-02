@@ -68,7 +68,8 @@
                 filesWritten++;
             }
 
-            Logger.Log($"Updated {filesWritten} of {originalCustomLines.Count} original language files.", LogLevel.Info);
+            if (filesWritten > 0)
+                Logger.Log($"Updated {filesWritten} of {originalCustomLines.Count} original language files.", LogLevel.Info);
         }
 
         private static void WriteOriginalLinesFile(string modKey)
