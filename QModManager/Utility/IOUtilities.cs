@@ -97,48 +97,21 @@ namespace QModManager.Utility
 
         private static string ParseSize(long lsize)
         {
+            string[] units = new[] { "B", "KB", "MB", "GB", "TB" };
             float size = lsize;
-            string unit;
+            int unit = 0;
 
-            if (size < 1024)
+            while (size > 1024)
             {
-                unit = "B";
-            }
-            else
-            {
+                unit++;
                 size /= 1024;
-                if (size < 1024)
-                {
-                    unit = "KB";
-                }
-                else
-                {
-                    size /= 1024;
-                    if (size < 1024)
-                    {
-                        unit = "MB";
-                    }
-                    else
-                    {
-                        size /= 1024;
-                        if (size < 1024)
-                        {
-                            unit = "GB";
-                        }
-                        else
-                        {
-                            size /= 1024;
-                            unit = "TB";
-                        }
-                    }
-                }
-            }
+            };
 
             string number = size.ToTwoDecimalString();
             number.TrimEnd('0');
             number.TrimEnd('.');
 
-            return number + unit;
+            return number + units[unit];
         }
 
         private static string GenerateSpaces(int spaces)
