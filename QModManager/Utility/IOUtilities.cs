@@ -1,0 +1,180 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+
+namespace QModManager.Utility
+{
+    internal static class IOUtilities
+    {
+        private static readonly HashSet<string> BannedFolders = new HashSet<string>()
+        {
+            "OST",
+            "SNAppData",
+            "SNUnmanagedData",
+            "Subnautica_Data/Mono",
+            "Subnautica_Data/Plugins",
+            "Subnautica_Data/Resources",
+            "Subnautica_Data/StreamingAssets",
+        };
+
+        internal static string GetFolderStructureAsTree(string directory = null)
+        {
+            try
+            {
+                directory = directory ?? Environment.CurrentDirectory;
+
+                return GenerateFolderStructure(directory) + "\n";
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        private static string GenerateFolderStructure(string directory)
+        {
+            try
+            {
+                string toWrite = $"+ {new DirectoryInfo(directory).Name} ({ParseSize(CalculateFolderSizeRecursively(directory))})\n";
+
+                foreach (string dir in Directory.GetDirectories(directory))
+                {
+                    toWrite += GetFolderStructureRecursively(dir, 0);
+                }
+
+                string[] files = Directory.GetFiles(directory);
+                for (int i = 1; i <= files.Length; i++)
+                {
+                    FileInfo fileinfo = new FileInfo(files[i - 1]);
+                    if (i != files.Length)
+                        toWrite += $"{GenerateSpaces(0)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})\n";
+                    else 
+                        toWrite += $"{GenerateSpaces(0)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})\n";
+                }
+
+                return toWrite;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        private static string GetFolderStructureRecursively(string directory, int spaces = 0)
+        {
+            try
+            {
+                DirectoryInfo dirInfo = new DirectoryInfo(directory);
+                string toWrite = $"{GenerateSpaces(spaces)}|---+ {dirInfo.Name} ({ParseSize(CalculateFolderSizeRecursively(directory))})\n";
+
+                if (BannedFolders.Contains(dirInfo.Name) || BannedFolders.Contains($"{dirInfo.Parent.Name}/{dirInfo.Name}"))
+                {
+                    toWrite += $"{GenerateSpaces(spaces + 4)}`---- ({GetFileCountRecursively(directory)} elements not shown...)\n";
+                    return toWrite;
+                }
+
+                foreach (string dir in Directory.GetDirectories(directory))
+                {
+                    toWrite += GetFolderStructureRecursively(dir, spaces + 4);
+                }
+
+                string[] files = Directory.GetFiles(directory);
+                for (int i = 1; i <= files.Length; i++)
+                {
+                    FileInfo fileinfo = new FileInfo(files[i - 1]);
+                    if (i != files.Length)
+                        toWrite += $"{GenerateSpaces(spaces + 4)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})\n";
+                    else
+                        toWrite += $"{GenerateSpaces(spaces + 4)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})\n";
+                }
+
+                return toWrite;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        private static string ParseSize(long lsize)
+        {
+            float size = lsize;
+            string unit;
+
+            if (size < 1024)
+            {
+                unit = "B";
+            }
+            else
+            {
+                size /= 1024;
+                if (size < 1024)
+                {
+                    unit = "KB";
+                }
+                else
+                {
+                    size /= 1024;
+                    if (size < 1024)
+                    {
+                        unit = "MB";
+                    }
+                    else
+                    {
+                        size /= 1024;
+                        if (size < 1024)
+                        {
+                            unit = "GB";
+                        }
+                        else
+                        {
+                            size /= 1024;
+                            unit = "TB";
+                        }
+                    }
+                }
+            }
+
+            string number = size.ToTwoDecimalString();
+            number.TrimEnd('0');
+            number.TrimEnd('.');
+
+            return number + unit;
+        }
+        private static long CalculateFolderSizeRecursively(string directory)
+        {
+            try
+            {
+                long size = 0;
+                foreach (string dir in Directory.GetDirectories(directory))
+                {
+                    size += CalculateFolderSizeRecursively(dir);
+                }
+                foreach (string file in Directory.GetFiles(directory))
+                {
+                    size += new FileInfo(file).Length;
+                }
+                return size;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        private static string GenerateSpaces(int spaces)
+        {
+            string s = "";
+            for (int i = 1; i <= spaces; i+=4)
+                s += "|   ";
+            return s;
+        }
+
+        private static int GetFileCountRecursively(string directory)
+        {
+            int c = 0;
+            foreach (string file in Directory.GetFiles(directory)) c++;
+            foreach (string dir in Directory.GetDirectories(directory)) c += GetFileCountRecursively(dir);
+            return c;
+        }
+    }
+}
