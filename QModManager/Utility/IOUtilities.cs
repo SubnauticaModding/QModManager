@@ -35,7 +35,7 @@ namespace QModManager.Utility
         {
             try
             {
-                string toWrite = $"+ {new DirectoryInfo(directory).Name} ({ParseSize(CalculateFolderSizeRecursively(directory))})\n";
+                string toWrite = $"+ {new DirectoryInfo(directory).Name}\n";
 
                 foreach (string dir in Directory.GetDirectories(directory))
                 {
@@ -64,7 +64,7 @@ namespace QModManager.Utility
             try
             {
                 DirectoryInfo dirInfo = new DirectoryInfo(directory);
-                string toWrite = $"{GenerateSpaces(spaces)}|---+ {dirInfo.Name} ({ParseSize(CalculateFolderSizeRecursively(directory))})\n";
+                string toWrite = $"{GenerateSpaces(spaces)}|---+ {dirInfo.Name}\n";
 
                 if (BannedFolders.Contains(dirInfo.Name) || BannedFolders.Contains($"{dirInfo.Parent.Name}/{dirInfo.Name}"))
                 {
@@ -139,26 +139,6 @@ namespace QModManager.Utility
             number.TrimEnd('.');
 
             return number + unit;
-        }
-        private static long CalculateFolderSizeRecursively(string directory)
-        {
-            try
-            {
-                long size = 0;
-                foreach (string dir in Directory.GetDirectories(directory))
-                {
-                    size += CalculateFolderSizeRecursively(dir);
-                }
-                foreach (string file in Directory.GetFiles(directory))
-                {
-                    size += new FileInfo(file).Length;
-                }
-                return size;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
         }
 
         private static string GenerateSpaces(int spaces)
