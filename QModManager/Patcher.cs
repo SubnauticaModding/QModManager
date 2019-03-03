@@ -220,7 +220,7 @@ namespace QModManager
                 mod.LoadedAssembly = Assembly.LoadFrom(modAssemblyPath);
                 mod.ModAssemblyPath = modAssemblyPath;
 
-                foundMods.Add(mod); 
+                foundMods.Add(mod);
             }
 
             // Add the found mods into the sortedMods list
@@ -260,8 +260,6 @@ namespace QModManager
                 {
                     if (mod.Id != "SMLHelper")
                     {
-                        toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
-
                         if (!LoadMod(mod))
                         {
                             if (!erroredMods.Contains(mod))
@@ -272,8 +270,11 @@ namespace QModManager
 
                             continue;
                         }
-
-                        loadedMods.Add(mod);
+                        else
+                        {
+                            toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
+                            loadedMods.Add(mod);
+                        }
                     }
                     else
                     {
@@ -283,8 +284,6 @@ namespace QModManager
             }
             if (smlHelper != null)
             {
-                toWrite += $"- {smlHelper.DisplayName} ({smlHelper.Id})\n";
-
                 if (!LoadMod(smlHelper))
                 {
                     if (!erroredMods.Contains(smlHelper))
@@ -295,6 +294,7 @@ namespace QModManager
                 }
                 else
                 {
+                    toWrite += $"- {smlHelper.DisplayName} ({smlHelper.Id})\n";
                     loadedMods.Add(smlHelper);
                 }
             }
@@ -339,6 +339,8 @@ namespace QModManager
                 {
                     Logger.Error($"Could not parse entry method \"{mod.AssemblyName}\" for mod \"{mod.Id}\"");
                     Debug.LogException(e);
+                    erroredMods.Add(mod);
+
                     return false;
                 }
                 catch (TargetInvocationException e)
@@ -791,7 +793,7 @@ namespace QModManager
                         break;
                     }
                 }
-            }   
+            }
         }
 
         #endregion
