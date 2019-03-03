@@ -1,5 +1,4 @@
-﻿#pragma warning disable CS0618 // Type or member is obsolete
-namespace SMLHelper.V2
+﻿namespace SMLHelper.V2
 {
     using System;
     using System.Reflection;
@@ -25,13 +24,7 @@ namespace SMLHelper.V2
             }
             catch (Exception e)
             {
-                Console.WriteLine("Exception caught" + (!string.IsNullOrEmpty(e.Message) ? ", Message: " + e.Message : ""));
-                Console.WriteLine("StackTrace: " + e.StackTrace);
-                if (e.InnerException != null)
-                {
-                    Console.WriteLine("Inner exception caught" + (!string.IsNullOrEmpty(e.InnerException.Message) ? ", Message: " + e.InnerException.Message : ""));
-                    Console.WriteLine("Inner StackTrace: " + e.InnerException.StackTrace);
-                }
+                Logger.Error($"Caught exception while trying to initialize SMLHelper{Environment.NewLine}{e}");
             }
         }
 
@@ -39,6 +32,7 @@ namespace SMLHelper.V2
         {
             // Some classes only have methods, no lists/dictionaries, and so no need to patch them
             // Some other classes, like PrefabDatabasePatcher, get data from other classes.
+#pragma warning disable CS0618 // Type or member is obsolete
             SMLHelper.CustomPrefabHandler.Patch();
             SMLHelper.CustomSpriteHandler.Patch();
 
@@ -47,6 +41,7 @@ namespace SMLHelper.V2
             SMLHelper.Patchers.DevConsolePatcher.Patch();
             SMLHelper.Patchers.LanguagePatcher.Patch();
             SMLHelper.Patchers.KnownTechPatcher.Patch();
+#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         internal static void Initialize()
