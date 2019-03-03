@@ -1,9 +1,9 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
-    using System.Collections.Generic;
-    using System.Reflection;
-    using System.Linq;
     using Harmony;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Reflection;
 
     internal class KnownTechPatcher
     {
@@ -24,12 +24,13 @@
 
         internal static void InitializePostfix()
         {
-            if (initialized) return;
+            if (initialized)
+                return;
             initialized = true;
 
             UnlockedAtStart.ForEach(x => KnownTech.Add(x, false));
 
-            var analysisTech = (List<KnownTech.AnalysisTech>)typeof(KnownTech).GetField("analysisTech", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null);
+            List<KnownTech.AnalysisTech> analysisTech = KnownTech.analysisTech;
             IEnumerable<KnownTech.AnalysisTech> techToAdd = AnalysisTech.Where(a => !analysisTech.Any(a2 => a.techType == a2.techType));
 
             foreach (KnownTech.AnalysisTech tech in analysisTech)
@@ -37,11 +38,11 @@
                 if (tech.unlockSound != null && tech.techType == TechType.BloodOil)
                     UnlockSound = tech.unlockSound;
 
-                foreach(KnownTech.AnalysisTech customTech in AnalysisTech)
+                foreach (KnownTech.AnalysisTech customTech in AnalysisTech)
                 {
-                    if(tech.techType == customTech.techType)
+                    if (tech.techType == customTech.techType)
                     {
-                        if(customTech.unlockTechTypes != null)
+                        if (customTech.unlockTechTypes != null)
                             tech.unlockTechTypes.AddRange(customTech.unlockTechTypes);
 
                         if (customTech.unlockSound != null)
@@ -56,7 +57,7 @@
                 }
             }
 
-            foreach(KnownTech.AnalysisTech tech in techToAdd)
+            foreach (KnownTech.AnalysisTech tech in techToAdd)
             {
                 if (tech == null) continue;
                 if (tech.unlockSound == null) tech.unlockSound = UnlockSound;

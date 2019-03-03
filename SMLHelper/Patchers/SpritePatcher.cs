@@ -1,16 +1,13 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
-    using System.Collections.Generic;
-    using System.Reflection;
     using Assets;
+    using System.Collections.Generic;
 
     internal class SpritePatcher
     {
         internal static void Patch()
         {
-            FieldInfo groupsField = typeof(SpriteManager).GetField("groups", BindingFlags.Static | BindingFlags.NonPublic);
-
-            var groups = (Dictionary<SpriteManager.Group, Dictionary<string, Atlas.Sprite>>)groupsField.GetValue(null);
+            Dictionary<SpriteManager.Group, Dictionary<string, Atlas.Sprite>> groups = SpriteManager.groups;
 
             foreach (SpriteManager.Group moddedGroup in ModSprite.ModSprites.Keys)
             {

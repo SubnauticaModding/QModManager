@@ -15,7 +15,7 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            PatchUtils.PatchDictionary(typeof(BaseBioReactor), "charge", CustomBioreactorCharges);
+            PatchUtils.PatchDictionary(BaseBioReactor.charge, CustomBioreactorCharges);
 
             Logger.Log("BaseBioReactorPatcher is done.", LogLevel.Debug);
         }

@@ -5,7 +5,6 @@
     using System.Reflection;
     using Utility;
     using Crafting;
-    using Assets;
     using System;
 
     internal class CraftTreePatcher

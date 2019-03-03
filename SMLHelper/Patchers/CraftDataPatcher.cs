@@ -1,15 +1,14 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Reflection;
     using Assets;
     using Harmony;
+    using System.Collections.Generic;
+    using System.Reflection;
 
     internal class CraftDataPatcher
     {
         #region Internal Fields
-        
+
         internal static IDictionary<TechType, ITechData> CustomTechData = new SelfCheckingDictionary<TechType, ITechData>("CustomTechData");
         internal static IDictionary<TechType, TechType> CustomHarvestOutputList = new SelfCheckingDictionary<TechType, TechType>("CustomHarvestOutputList");
         internal static IDictionary<TechType, HarvestType> CustomHarvestTypeList = new SelfCheckingDictionary<TechType, HarvestType>("CustomHarvestTypeList");
@@ -24,19 +23,11 @@
 
         #endregion
 
-        #region Reflection
-        private static readonly Type CraftDataType = typeof(CraftData);
-
-        private static readonly FieldInfo GroupsField =
-            CraftDataType.GetField("groups", BindingFlags.NonPublic | BindingFlags.Static);
-
-        #endregion
-
         #region Group Handling
 
         internal static void AddToCustomGroup(TechGroup group, TechCategory category, TechType techType, TechType after)
         {
-            var groups = GroupsField.GetValue(null) as Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>;
+            Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>> groups = CraftData.groups;
             Dictionary<TechCategory, List<TechType>> techGroup = groups[group];
             if (techGroup == null)
             {
@@ -54,7 +45,7 @@
 
             int index = techCategory.IndexOf(after);
 
-            if(index == -1) // Not found
+            if (index == -1) // Not found
             {
                 techCategory.Add(techType);
                 Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\"", LogLevel.Debug);
@@ -69,7 +60,7 @@
 
         internal static void RemoveFromCustomGroup(TechGroup group, TechCategory category, TechType techType)
         {
-            var groups = GroupsField.GetValue(null) as Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>>;
+            Dictionary<TechGroup, Dictionary<TechCategory, List<TechType>>> groups = CraftData.groups;
             Dictionary<TechCategory, List<TechType>> techGroup = groups[group];
             if (techGroup == null)
             {
@@ -101,18 +92,18 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            PatchUtils.PatchDictionary(CraftDataType, "harvestOutputList", CustomHarvestOutputList, BindingFlags.Static | BindingFlags.Public);
-            PatchUtils.PatchDictionary(CraftDataType, "harvestTypeList", CustomHarvestTypeList);
-            PatchUtils.PatchDictionary(CraftDataType, "harvestFinalCutBonusList", CustomFinalCutBonusList);
-            PatchUtils.PatchDictionary(CraftDataType, "itemSizes", CustomItemSizes);
-            PatchUtils.PatchDictionary(CraftDataType, "equipmentTypes", CustomEquipmentTypes);
-            PatchUtils.PatchDictionary(CraftDataType, "slotTypes", CustomSlotTypes);
-            PatchUtils.PatchDictionary(CraftDataType, "craftingTimes", CustomCraftingTimes);
-            PatchUtils.PatchDictionary(CraftDataType, "cookedCreatureList", CustomCookedCreatureList);
-            PatchUtils.PatchDictionary(CraftDataType, "backgroundTypes", CustomBackgroundTypes);
-            PatchUtils.PatchList(CraftDataType, "buildables", CustomBuildables);
+            PatchUtils.PatchDictionary(CraftData.harvestOutputList, CustomHarvestOutputList);
+            PatchUtils.PatchDictionary(CraftData.harvestTypeList, CustomHarvestTypeList);
+            PatchUtils.PatchDictionary(CraftData.harvestFinalCutBonusList, CustomFinalCutBonusList);
+            PatchUtils.PatchDictionary(CraftData.itemSizes, CustomItemSizes);
+            PatchUtils.PatchDictionary(CraftData.equipmentTypes, CustomEquipmentTypes);
+            PatchUtils.PatchDictionary(CraftData.slotTypes, CustomSlotTypes);
+            PatchUtils.PatchDictionary(CraftData.craftingTimes, CustomCraftingTimes);
+            PatchUtils.PatchDictionary(CraftData.cookedCreatureList, CustomCookedCreatureList);
+            PatchUtils.PatchDictionary(CraftData.backgroundTypes, CustomBackgroundTypes);
+            PatchUtils.PatchList(CraftData.buildables, CustomBuildables);
 
-            MethodInfo preparePrefabIDCache = CraftDataType.GetMethod("PreparePrefabIDCache", BindingFlags.Public | BindingFlags.Static);
+            MethodInfo preparePrefabIDCache = typeof(CraftData).GetMethod("PreparePrefabIDCache", BindingFlags.Public | BindingFlags.Static);
 
             harmony.Patch(preparePrefabIDCache, null,
                 new HarmonyMethod(typeof(CraftDataPatcher).GetMethod("PreparePrefabIDCachePostfix", BindingFlags.NonPublic | BindingFlags.Static)));
@@ -124,8 +115,8 @@
 
         private static void PreparePrefabIDCachePostfix()
         {
-            var techMapping = CraftDataType.GetField("techMapping", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as Dictionary<TechType, string>;
-            var entClassTechTable = CraftDataType.GetField("entClassTechTable", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) as Dictionary<string, TechType>;
+            Dictionary<TechType, string> techMapping = CraftData.techMapping;
+            Dictionary<string, TechType> entClassTechTable = CraftData.entClassTechTable;
 
             foreach (ModPrefab prefab in ModPrefab.Prefabs)
             {
@@ -136,39 +127,19 @@
 
         private static void AddCustomTechDataToOriginalDictionary()
         {
-            Type CraftDataType = typeof(CraftData);
-            Type TechDataType = CraftDataType.GetNestedType("TechData", BindingFlags.NonPublic);
-            Type IngredientType = CraftDataType.GetNestedType("Ingredient", BindingFlags.NonPublic);
-            Type IngredientsType = CraftDataType.GetNestedType("Ingredients", BindingFlags.NonPublic);
-
-            MethodInfo Ingredients_Add = IngredientsType.GetMethod("Add", BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-
-            FieldInfo TechData_techTypeField = TechDataType.GetField("_techType", BindingFlags.Public | BindingFlags.Instance);
-            FieldInfo TechData_craftAmountField = TechDataType.GetField("_craftAmount", BindingFlags.Public | BindingFlags.Instance);
-            FieldInfo TechData_ingredientsField = TechDataType.GetField("_ingredients", BindingFlags.Public | BindingFlags.Instance);
-            FieldInfo TechData_linkedItemsField = TechDataType.GetField("_linkedItems", BindingFlags.Public | BindingFlags.Instance);
-
-            FieldInfo CraftData_techdata = CraftDataType.GetField("techData", BindingFlags.NonPublic | BindingFlags.Static);
-            object techData = CraftData_techdata.GetValue(null);
-            Type techDataType = techData.GetType();
-
-            MethodInfo techData_Add = techDataType.GetMethod("Add", BindingFlags.Public | BindingFlags.Instance);
-            MethodInfo techData_Contains = techDataType.GetMethod("ContainsKey", BindingFlags.Public | BindingFlags.Instance);
-            MethodInfo techData_Remove = techDataType.GetMethod("Remove", BindingFlags.Public | BindingFlags.Instance);
-
             short added = 0;
             short replaced = 0;
             foreach (TechType techType in CustomTechData.Keys)
             {
                 ITechData smlTechData = CustomTechData[techType];
 
-                object techDataInstance = Activator.CreateInstance(TechDataType, true);
+                var techDataInstance = new CraftData.TechData
+                {
+                    _techType = techType,
+                    _craftAmount = smlTechData.craftAmount
+                };
 
-                TechData_techTypeField.SetValue(techDataInstance, techType);
-
-                TechData_craftAmountField.SetValue(techDataInstance, smlTechData.craftAmount);
-
-                object ingredientsList = Activator.CreateInstance(IngredientsType, true);
+                var ingredientsList = new CraftData.Ingredients();
 
                 if (smlTechData.ingredientCount > 0)
                 {
@@ -176,12 +147,10 @@
                     {
                         IIngredient smlIngredient = smlTechData.GetIngredient(i);
 
-                        object ingredient = Activator.CreateInstance(IngredientType, new object[] { smlIngredient.techType, smlIngredient.amount });
-
-                        Ingredients_Add.Invoke(ingredientsList, new object[] { smlIngredient.techType, smlIngredient.amount });
+                        var ingredient = new CraftData.Ingredient(smlIngredient.techType, smlIngredient.amount);
+                        ingredientsList.Add(smlIngredient.techType, smlIngredient.amount);
                     }
-
-                    TechData_ingredientsField.SetValue(techDataInstance, ingredientsList);
+                    techDataInstance._ingredients = ingredientsList;
                 }
 
                 if (smlTechData.linkedItemCount > 0)
@@ -191,15 +160,14 @@
                     {
                         linkedItems.Add(smlTechData.GetLinkedItem(l));
                     }
-
-                    TechData_linkedItemsField.SetValue(techDataInstance, linkedItems);
+                    techDataInstance._linkedItems = linkedItems;
                 }
 
-                bool techDataExists = (bool)techData_Contains.Invoke(techData, new object[] { techType });
+                bool techDataExists = CraftData.techData.ContainsKey(techType);
 
                 if (techDataExists)
                 {
-                    techData_Remove.Invoke(techData, new object[] { techType });
+                    CraftData.techData.Remove(techType);
                     Logger.Log($"{techType} TechType already existed in the CraftData.techData dictionary. Original value was replaced.", LogLevel.Warn);
                     replaced++;
                 }
@@ -208,10 +176,11 @@
                     added++;
                 }
 
-                techData_Add.Invoke(techData, new object[] { techType, techDataInstance });
+                CraftData.techData.Add(techType, techDataInstance);
             }
 
-            Logger.Log($"Added {added} new entries to the CraftData.techData dictionary.", LogLevel.Info);
+            if (added > 0)
+                Logger.Log($"Added {added} new entries to the CraftData.techData dictionary.", LogLevel.Info);
 
             if (replaced > 0)
                 Logger.Log($"Replaced {replaced} existing entries to the CraftData.techData dictionary.", LogLevel.Info);

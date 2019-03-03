@@ -1,9 +1,9 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
+    using Harmony;
     using System;
     using System.Collections.Generic;
     using System.Reflection;
-    using Harmony;
 
     // Special thanks to Gorillazilla9 for sharing this method of fragment count patching
     // https://github.com/Gorillazilla9/SubnauticaFragReqBoost/blob/master/PDAScannerPatcher.cs
@@ -29,9 +29,7 @@
         {
             BlueprintToFragment.Clear();
 
-            var pdaTraverse = Traverse.Create(pdaScannerType);
-            Traverse pdaMappingTraverse = pdaTraverse.Field("mapping");
-            Dictionary<TechType, PDAScanner.EntryData> mapping = pdaMappingTraverse.GetValue<Dictionary<TechType, PDAScanner.EntryData>>();
+            Dictionary<TechType, PDAScanner.EntryData> mapping = PDAScanner.mapping;
 
             // Populate BlueprintToFragment for reverse lookup
             foreach (KeyValuePair<TechType, PDAScanner.EntryData> entry in mapping)

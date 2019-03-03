@@ -59,8 +59,6 @@ namespace SMLHelper.Patchers
         public List<IngredientHelper> _ingredients = new List<IngredientHelper>();
         public List<TechType> _linkedItems = new List<TechType>();
 
-        public static Type TechDataType = typeof(CraftData).GetNestedType("TechData", BindingFlags.NonPublic);
-
         public int craftAmount { get { return _craftAmount; } }
 
         public int ingredientCount

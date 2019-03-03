@@ -47,24 +47,14 @@
 
             cacheManager.Add(techType, cache);
 
-            Type techTypeExtensions = typeof(TechTypeExtensions);
-            Traverse traverse = Traverse.Create(techTypeExtensions);
-
-            var stringsNormal = traverse.Field("stringsNormal").GetValue<Dictionary<TechType, string>>();
-            var stringsLowercase = traverse.Field("stringsLowercase").GetValue<Dictionary<TechType, string>>();
-            var techTypesNormal = traverse.Field("techTypesNormal").GetValue<Dictionary<string, TechType>>();
-            var techTypesIgnoreCase = traverse.Field("techTypesIgnoreCase").GetValue<Dictionary<string, TechType>>();
-            var techTypeKeys = traverse.Field("techTypeKeys").GetValue<Dictionary<TechType, string>>();
-            var keyTechTypes = traverse.Field("keyTechTypes").GetValue<Dictionary<string, TechType>>();
-
-            stringsNormal[techType] = name;
-            stringsLowercase[techType] = name.ToLowerInvariant();
-            techTypesNormal[name] = techType;
-            techTypesIgnoreCase[name] = techType;
+            TechTypeExtensions.stringsNormal[techType] = name;
+            TechTypeExtensions.stringsLowercase[techType] = name.ToLowerInvariant();
+            TechTypeExtensions.techTypesNormal[name] = techType;
+            TechTypeExtensions.techTypesIgnoreCase[name] = techType;
 
             string intKey = cache.Index.ToString();
-            techTypeKeys[techType] = intKey;
-            keyTechTypes[intKey] = techType;
+            TechTypeExtensions.techTypeKeys[techType] = intKey;
+            TechTypeExtensions.keyTechTypes[intKey] = techType;
 
             cacheManager.SaveCache();
 
@@ -81,8 +71,7 @@
 
             var bannedIndices = new List<int>();
 
-            FieldInfo keyTechTypesField = typeof(TechTypeExtensions).GetField("keyTechTypes", BindingFlags.NonPublic | BindingFlags.Static);
-            var knownTechTypes = keyTechTypesField.GetValue(null) as Dictionary<string, TechType>;
+            var knownTechTypes = TechTypeExtensions.keyTechTypes;
             foreach (TechType knownTechType in knownTechTypes.Values)
             {
                 int currentTechTypeKey = (int)knownTechType;
