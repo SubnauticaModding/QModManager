@@ -53,8 +53,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 [Files]
 ; Files used by the installer but not required by QModManager itself
 ; Installer theme
-Source: "VclStylesinno.dll"; Flags: DontCopy
-Source: "Carbon.vsf"; Flags: DontCopy
+Source: "..\Dependencies\VclStylesinno.dll"; Flags: DontCopy
+Source: "..\Dependencies\Carbon.vsf"; Flags: DontCopy
 ; Installer extensions
 Source: "InstallerExtensions.dll"; Flags: DontCopy
 ; Files required by QModManager itself
