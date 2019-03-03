@@ -189,6 +189,14 @@ namespace QModManager
                     continue;
                 }
 
+                if (mod.EntryMethod.Where(c => c == '.').ToList().Count < 2)
+                {
+                    Logger.Error($"Mod found in folder \"{folderName}\" has a badly-formatted entry point!");
+                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
+
+                    continue;
+                }
+
                 if (mod.Enable == false)
                 {
                     Logger.Info($"Mod \"{mod.DisplayName}\" is disabled via config, skipping");
