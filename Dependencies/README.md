@@ -1,5 +1,11 @@
+### Normal Dependencies
+These files are required and will be redistributed with QModManager
+- `0Harmony.dll` & `0Harmony-1.2.0.1.dll`: https://github.com/pardeike/Harmony
+
+---
+
 ### Game Dependencies
-These files are from the base game and will not be redistributed with QModManager
+These files are required, but are from the base game and will not be redistributed with QModManager
 - `Assembly-CSharp.dll` & `Assembly-CSharp-firstpass.dll`: https://github.com/unknownworlds
 - `Newtonsoft.JSON.dll`: https://github.com/JamesNK/Newtonsoft.Json
 - `UnityEngine.dll` & `UnityEngine.UI.dll`: https://github.com/Unity-Technologies/UnityCsReference
@@ -17,9 +23,3 @@ These files are required by the injector and will be redistributed with QModMana
 ### Installer Dependencies
 These files are required by the installer, but will not be redistributed with QModManager
 - `Carbon.vsf` & `VclStylesinno.dll`: https://github.com/RRUZ/vcl-styles-plugins
-
----
-
-### Modding Dependencies
-These files are not required by QModManager, but are redistributed with it to ease modding
-- `0Harmony.dll` & `0Harmony-1.2.0.1.dll`: https://github.com/pardeike/Harmony
