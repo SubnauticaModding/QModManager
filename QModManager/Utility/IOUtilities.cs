@@ -107,7 +107,7 @@ namespace QModManager.Utility
                 size /= 1024;
             };
 
-            string number = size.ToTwoDecimalString();
+            string number = size.ToString("F2");
             number.TrimEnd('0');
             number.TrimEnd('.');
 
