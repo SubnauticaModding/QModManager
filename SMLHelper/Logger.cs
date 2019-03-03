@@ -13,6 +13,8 @@
 
     internal static class Logger
     {
+        internal static bool Initialized = false;
+
         internal static bool EnableDebugging { get; private set; }
         internal static void SetDebugging(bool value)
         {
@@ -24,6 +26,9 @@
 
         internal static void Initialize()
         {
+            if (Initialized) return;
+            Initialized = true;
+
             string configPath = "./QMods/Modding Helper/EnableDebugLogs.txt";
 
             if (!File.Exists(configPath))
@@ -63,12 +68,16 @@
 
         internal static void Log(string text, LogLevel level = LogLevel.Info)
         {
+            Initialize();
+
             if (level >= LogLevel.Info || EnableDebugging)
                 Console.WriteLine($"[SMLHelper/{level.ToString()}] {text}");
         }
 
         internal static void Log(string text, LogLevel level = LogLevel.Info, params object[] args)
         {
+            Initialize();
+
             if (args != null && args.Length > 0)
                 text = string.Format(text, args);
 
@@ -78,6 +87,8 @@
 
         internal static void Announce(string text, LogLevel level = LogLevel.Info, bool logToFile = false)
         {
+            Initialize();
+
             ErrorMessage.AddMessage(text);
 
             if (logToFile)
@@ -86,6 +97,8 @@
 
         internal static void Announce(string text, LogLevel level = LogLevel.Info, bool logToFile = false, params object[] args)
         {
+            Initialize();
+
             ErrorMessage.AddMessage(string.Format(text, args));
 
             if (logToFile)
