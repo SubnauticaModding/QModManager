@@ -117,8 +117,7 @@ namespace QModManager
 
                 if (!File.Exists(jsonFile))
                 {
-                    Logger.Error($"No \"mod.json\" file found for mod located in folder \"{subDir}\"");
-                    Logger.Error("A template file will be created");
+                    Logger.Error($"No \"mod.json\" file found for mod located in folder \"{subDir}\". A template file will be created");
                     File.WriteAllText(jsonFile, JsonConvert.SerializeObject(new QMod()));
                     erroredMods.Add(QMod.CreateFakeQMod(folderName));
                     continue;
@@ -152,8 +151,8 @@ namespace QModManager
 
                 if (mod.Id != Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase))
                 {
-                    Logger.Error($"Mod found in folder \"{folderName}\" has an invalid ID! IDs can only contain alphanumeric characters and underscores (0-9, A-Z, a-z, _)");
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
+                    Logger.Warn($"Mod found in folder \"{folderName}\" has an invalid ID! All invalid characters have been removed. (This can lead to issues!)");
+                    mod.Id = Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase);
 
                     continue;
                 }
