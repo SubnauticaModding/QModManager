@@ -772,6 +772,8 @@ namespace QModManager
 
         private static void CheckOldHarmony()
         {
+            List<QMod> modsThatUseOldHarmony = new List<QMod>();
+
             foreach (QMod mod in loadedMods)
             {
                 AssemblyName[] references = mod.LoadedAssembly.GetReferencedAssemblies();
@@ -779,9 +781,18 @@ namespace QModManager
                 {
                     if (reference.FullName == "0Harmony, Version=1.0.9.1, Culture=neutral, PublicKeyToken=null")
                     {
-                        Logger.Warn($"Mod \"{mod.Id}\" is using an old version of harmony! Tell the author to update.");
+                        modsThatUseOldHarmony.Add(mod);
                         break;
                     }
+                }
+            }
+
+            if (modsThatUseOldHarmony.Count > 0)
+            {
+                Logger.Warn($"Some mods are using an old version of harmony! This will NOT cause any problems, but it's not recommended:");
+                foreach (QMod mod in modsThatUseOldHarmony)
+                {
+                    Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");
                 }
             }
         }
