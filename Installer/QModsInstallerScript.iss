@@ -56,7 +56,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Source: "..\Dependencies\VclStylesinno.dll"; Flags: DontCopy
 Source: "..\Dependencies\Carbon.vsf"; Flags: DontCopy
 ; Installer extensions
-Source: "InstallerExtensions.dll"; Flags: DontCopy
+Source: "..\Build\InstallerExtensions.dll"; Flags: DontCopy
 ; Files required by QModManager itself
 ; Subnautica
 Source: "..\Dependencies\0Harmony.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
