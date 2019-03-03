@@ -97,7 +97,7 @@ namespace QModManager.Utility
 
         private static string ParseSize(long lsize)
         {
-            string[] units = new[] { "B", "KB", "MB", "GB", "TB" };
+            string[] units = new[] { "B", "KB", "MB", "GB" };
             float size = lsize;
             int unit = 0;
 
@@ -117,7 +117,7 @@ namespace QModManager.Utility
         private static string GenerateSpaces(int spaces)
         {
             string s = "";
-            for (int i = 1; i <= spaces; i+=4)
+            for (int i = 1; i <= spaces; i += 4)
                 s += "|   ";
             return s;
         }
