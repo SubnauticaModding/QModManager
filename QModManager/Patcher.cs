@@ -399,6 +399,7 @@ namespace QModManager
             Subnautica,
             BelowZero,
             Both,
+            None,
         }
 
         internal static Game game;

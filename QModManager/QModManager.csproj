@@ -126,11 +126,6 @@
     <Compile Include="Utility\PlayerPrefsExtra.cs" />
     <Compile Include="VersionCheck.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="QModManagerAssets.unity3d">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
