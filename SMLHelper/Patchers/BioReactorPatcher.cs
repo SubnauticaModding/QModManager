@@ -15,7 +15,9 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            PatchUtils.PatchDictionary(typeof(BaseBioReactor), "charge", CustomBioreactorCharges);
+            // Direct access to private fields made possible by https://github.com/CabbageCrow/AssemblyPublicizer/
+            // See README.md for details.
+            PatchUtils.PatchDictionary(BaseBioReactor.charge, CustomBioreactorCharges);
 
             Logger.Log("BaseBioReactorPatcher is done.", LogLevel.Debug);
         }
