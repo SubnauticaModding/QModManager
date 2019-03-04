@@ -11,6 +11,3 @@ To create your own publiciezed DLLs, you will need to download or compile the [A
 You will need to copy these DLLs into the `Dependency` folder in order to build the solution.
 
 Then, load up the solution, make your edits, then create your Pull Request!
-
-## Alphabetical list of mods using SMLHelper
-_Moved to https://smlhelper.github.io_
