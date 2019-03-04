@@ -29,6 +29,8 @@
         {
             BlueprintToFragment.Clear();
 
+            // Direct access to private fields made possible by https://github.com/CabbageCrow/AssemblyPublicizer/
+            // See README.md for details.
             Dictionary<TechType, PDAScanner.EntryData> mapping = PDAScanner.mapping;
 
             // Populate BlueprintToFragment for reverse lookup

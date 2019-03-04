@@ -23,6 +23,8 @@
 
         internal static void Postfix(ref Language __instance)
         {
+            // Direct access to private fields made possible by https://github.com/CabbageCrow/AssemblyPublicizer/
+            // See README.md for details.
             Dictionary<string, string> strings = __instance.strings;
             foreach (KeyValuePair<string, string> a in customLines)
             {
