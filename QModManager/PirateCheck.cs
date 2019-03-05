@@ -44,8 +44,7 @@ namespace QModManager
 
             private void Update()
             {
-                if (Patcher.game == Patcher.Game.Subnautica)
-                    RuntimeManager.GetBus("bus:/master").setMute(true);
+                RuntimeManager.MuteAllEvents(true);
                 UWE.Utils.alwaysLockCursor = true;
                 UWE.Utils.lockCursor = true;
                 foreach (GameObject go in SceneManager.GetActiveScene().GetRootGameObjects())
