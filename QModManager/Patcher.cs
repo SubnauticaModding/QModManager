@@ -354,6 +354,12 @@ namespace QModManager
                 }
             }
 
+            if (PatchManager.ErroredMods.Contains(mod.LoadedAssembly))
+            {
+                Logger.Error($"Mod \"{mod.Id}\" could not be loaded.");
+                PatchManager.ErroredMods.Remove(mod.LoadedAssembly);
+                return false;
+            }
             mod.Loaded = true;
             Logger.Info($"Loaded mod \"{mod.Id}\"");
 
