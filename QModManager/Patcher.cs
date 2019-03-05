@@ -44,6 +44,16 @@ namespace QModManager
                     return;
                 }
 
+                try
+                {
+                    Logger.Info($"Folder structure:\n{IOUtilities.GetFolderStructureAsTree()}\n");
+                }
+                catch (Exception e)
+                {
+                    Logger.Error("There was an error while trying to display the folder structure.");
+                    Debug.LogException(e);
+                }
+
                 Hooks.Load();
 
                 if (PirateCheck.IsPirate(Environment.CurrentDirectory))
