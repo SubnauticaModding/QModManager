@@ -1,0 +1,6 @@
+- `0Harmony.dll` & `0Harmony-1.2.0.1.dll`: https://github.com/pardeike/Harmony
+- `AssetsTools.NET`: https://github.com/nesrak1/AssetsTools.NET
+- `cldb.dat`: https://github.com/DerPopo/UABE
+- `Mono.Cecil.dll`: https://github.com/jbevain/cecil
+- `Newtonsoft.JSON.dll`: https://github.com/JamesNK/Newtonsoft.Json
+- `UnityEngine.dll` & `UnityEngine.UI.dll`: https://github.com/Unity-Technologies/UnityCsReference

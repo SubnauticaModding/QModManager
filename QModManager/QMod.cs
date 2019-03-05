@@ -4,27 +4,28 @@ using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
 {
     public class QMod
     {
-        public string Id = "ModID";
-        public string DisplayName = "Mod display name";
-        public string Author = "Author name";
-        public string Version = "!.0.0";
+        public string Id = "";
+        public string DisplayName = "";
+        public string Author = "";
+        public string Version = "";
         public string[] Dependencies = new string[] { };
         public string[] LoadBefore = new string[] { };
         public string[] LoadAfter = new string[] { };
         public bool Enable = true;
-        public bool ForBelowZero = false;
-        public string AssemblyName = "Filename.dll";
-        public string EntryMethod = "Namespace.Class.Method";
+        public string Game = "Subnautica";
+        public string AssemblyName = "";
+        public string EntryMethod = "";
 
         [JsonIgnore] internal Assembly LoadedAssembly;
         [JsonIgnore] internal string ModAssemblyPath;
         [JsonIgnore] internal bool Loaded;
-        [JsonIgnore] internal Patcher.Game Game;
+        [JsonIgnore] internal Patcher.Game ParsedGame;
 
         internal static QMod FromJsonFile(string file)
         {
@@ -40,8 +41,9 @@ namespace QModManager
 
                 if (mod == null) return null;
 
-                if (mod.ForBelowZero == true) mod.Game = Patcher.Game.BelowZero;
-                else mod.Game = Patcher.Game.Subnautica;
+                if (mod.Game == "BelowZero") mod.ParsedGame = Patcher.Game.BelowZero;
+                else if (mod.Game == "Both") mod.ParsedGame = Patcher.Game.Both;
+                else mod.ParsedGame = Patcher.Game.Subnautica;
 
                 return mod;
             }
@@ -65,7 +67,7 @@ namespace QModManager
                 LoadBefore = new string[] { },
                 LoadAfter = new string[] { },
                 Enable = false,
-                ForBelowZero = false,
+                Game = "",
                 AssemblyName = "None",
                 EntryMethod = "None",
             };
