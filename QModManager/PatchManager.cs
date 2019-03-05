@@ -1,5 +1,4 @@
-﻿using QModManager.Utility;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 
 namespace QModManager
@@ -10,13 +9,9 @@ namespace QModManager
 
         public static void MarkAsErrored(Assembly modAssembly = null)
         {
+            if (ErroredMods.Contains(modAssembly)) return;
+
             modAssembly = modAssembly ?? Assembly.GetCallingAssembly();
-
-            if (ErroredMods.Contains(modAssembly))
-            {
-                return;
-            }
-
             ErroredMods.Add(modAssembly);
         }
     }
