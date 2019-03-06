@@ -1,11 +1,11 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
+    using Harmony;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
     using System.Text;
-    using Harmony;
 
     internal class LanguagePatcher
     {
@@ -23,8 +23,9 @@
 
         internal static void Postfix(ref Language __instance)
         {
-            FieldInfo stringsField = languageType.GetField("strings", BindingFlags.NonPublic | BindingFlags.Instance);
-            var strings = stringsField.GetValue(__instance) as Dictionary<string, string>;
+            // Direct access to private fields made possible by https://github.com/CabbageCrow/AssemblyPublicizer/
+            // See README.md for details.
+            Dictionary<string, string> strings = __instance.strings;
             foreach (KeyValuePair<string, string> a in customLines)
             {
                 strings[a.Key] = a.Value;
@@ -68,7 +69,8 @@
                 filesWritten++;
             }
 
-            Logger.Log($"Updated {filesWritten} of {originalCustomLines.Count} original language files.", LogLevel.Info);
+            if (filesWritten > 0)
+                Logger.Log($"Updated {filesWritten} of {originalCustomLines.Count} original language files.", LogLevel.Info);
         }
 
         private static void WriteOriginalLinesFile(string modKey)
@@ -187,6 +189,9 @@
             customLines[lineId] = text;
         }
 
-        internal static string TrimTextDelimiters(string value) => value.Trim(TextDelimiterOpen, TextDelimiterClose);
+        internal static string TrimTextDelimiters(string value)
+        {
+            return value.Trim(TextDelimiterOpen, TextDelimiterClose);
+        }
     }
 }

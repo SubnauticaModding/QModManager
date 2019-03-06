@@ -1,12 +1,10 @@
-﻿
-namespace SMLHelper.V2.Patchers
+﻿namespace SMLHelper.V2.Patchers
 {
     using Harmony;
     using System.Collections.Generic;
     using System.Reflection;
     using Utility;
     using Crafting;
-    using Assets;
     using System;
 
     internal class CraftTreePatcher
@@ -153,6 +151,7 @@ namespace SMLHelper.V2.Patchers
                 for (int i = 0; i < tab.Path.Length; i++)
                 {
                     string currentPath = tab.Path[i];
+                    Logger.Log("Tab Current Path: " + currentPath + " Tab: " + tab.Name + " Crafter: " + tab.Scheme.ToString(), LogLevel.Debug);
 
                     TreeNode node = currentNode[currentPath];
 
