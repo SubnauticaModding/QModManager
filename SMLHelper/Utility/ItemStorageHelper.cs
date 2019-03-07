@@ -6,7 +6,7 @@
 	{
 		private readonly Dictionary<IItemsContainer, Dictionary<Vector2int, bool>> HasRoomCacheCollection = new Dictionary<IItemsContainer, Dictionary<Vector2int, bool>>();
 
-		public static ItemStorageHelper helper;
+		public static readonly ItemStorageHelper Helper = new ItemStorageHelper();
 
 		private readonly IEnumerable<Vector2int> SmallerThan3x3 = new Vector2int[]
 		{
@@ -60,14 +60,14 @@
 			return this.Just1x1;
 		}
 
-		public void CacheNewContainer(IItemsContainer container)
+		private void CacheNewContainer(IItemsContainer container)
 		{
 			this.HasRoomCacheCollection.Add(container, new Dictionary<Vector2int, bool>());
 		}
 
-		public void RecacheContainer(IItemsContainer container)
+		internal void RecacheContainer(IItemsContainer container)
 		{
-			// Items in the inventory have changed. Clear out the cache.
+			// Items in storage have changed. Clear the related cache.
 			if (this.HasRoomCacheCollection.TryGetValue(container, out Dictionary<Vector2int, bool> cache))
 			{
 				cache.Clear();
@@ -80,7 +80,7 @@
 			}
 		}
 
-		public void CacheNewHasRoomData(IItemsContainer container, Vector2int itemSize, bool hasRoom)
+		internal void CacheNewHasRoomData(IItemsContainer container, Vector2int itemSize, bool hasRoom)
 		{
 			this.HasRoomCacheCollection[container][itemSize] = hasRoom;
 
@@ -94,15 +94,20 @@
 			}
 		}
 
-		public bool GetCachedHasRoomData(IItemsContainer container, Vector2int itemSize, ref bool __result)
+		public bool TryGetCachedHasRoom(IItemsContainer container, int width, int height, ref bool cachedResult)
+		{
+			Vector2int size = new Vector2int(width, height);
+
+			return this.TryGetCachedHasRoom(container, size, ref cachedResult);
+		}
+
+		public bool TryGetCachedHasRoom(IItemsContainer container, Vector2int itemSize, ref bool cachedResult)
 		{
 			if (this.HasRoomCacheCollection.TryGetValue(container, out Dictionary<Vector2int, bool> cache))
 			{
 				// Container has existing cache
-				if (cache.TryGetValue(itemSize, out bool cachedResult))
+				if (cache.TryGetValue(itemSize, out cachedResult))
 				{
-					__result = cachedResult; // Set cached bool as HasRoomFor result
-
 					return false; // Detour original code to avoid waste
 				}
 			}
@@ -114,11 +119,6 @@
 			}
 
 			return true; // Let vanilla code run and cache the result
-		}
-
-		public ItemStorageHelper()
-		{
-			helper = this;
 		}
 	}
 }

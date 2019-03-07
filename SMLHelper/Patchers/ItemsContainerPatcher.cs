@@ -57,7 +57,7 @@
 
 			__state = new Vector2int(width, height);
 
-			return ItemStorageHelper.helper.GetCachedHasRoomData(__instance, __state, ref __result);
+			return ItemStorageHelper.Helper.TryGetCachedHasRoom(__instance, __state, ref __result);
 		}
 
 		private static void HasRoomFor_Postfix(ItemsContainer __instance, bool __result, Vector2int __state)
@@ -65,12 +65,12 @@
 			// We should only enter this method if the Prefix didn't have a cached value to use.
 			// Catch the result and map it to the size provided by the Prefix.
 
-			ItemStorageHelper.helper.CacheNewHasRoomData(__instance, __state, __result);
+			ItemStorageHelper.Helper.CacheNewHasRoomData(__instance, __state, __result);
 		}
 
 		private static void NotifyChangeItem_Postfix(ItemsContainer __instance)
 		{
-			ItemStorageHelper.helper.RecacheContainer(__instance as IItemsContainer);
+			ItemStorageHelper.Helper.RecacheContainer(__instance as IItemsContainer);
 		}
 	}
 }

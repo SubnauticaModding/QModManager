@@ -1,13 +1,9 @@
 ﻿namespace SMLHelper.V2.Utility
 {
-	interface IStorageHelper
+	public interface IStorageHelper
 	{
-		void CacheNewContainer(IItemsContainer container);
+		bool TryGetCachedHasRoom(IItemsContainer container, int width, int height, ref bool hasRoom);
 
-		void RecacheContainer(IItemsContainer container);
-
-		void CacheNewHasRoomData(IItemsContainer container, Vector2int itemSize, bool hasRoom);
-
-		bool GetCachedHasRoomData(IItemsContainer container, Vector2int itemSize, ref bool __result);
+		bool TryGetCachedHasRoom(IItemsContainer container, Vector2int itemSize, ref bool hasRoom);
 	}
 }
