@@ -57,7 +57,9 @@
 
 			__state = new Vector2int(width, height);
 
-			return ItemStorageHelper.Helper.TryGetCachedHasRoom(__instance, __state, ref __result);
+			// If there is no cached result (false), return true and continue with code execution
+			// If a result exists (true), detour the rest of the method and return the cached result
+			return !ItemStorageHelper.Helper.TryGetCachedHasRoom(__instance, __state, ref __result);
 		}
 
 		private static void HasRoomFor_Postfix(ItemsContainer __instance, bool __result, Vector2int __state)

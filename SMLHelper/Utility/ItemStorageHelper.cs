@@ -108,7 +108,7 @@
 				// Container has existing cache
 				if (cache.TryGetValue(itemSize, out cachedResult))
 				{
-					return false; // Detour original code to avoid waste
+					return true;
 				}
 			}
 
@@ -118,7 +118,7 @@
 				this.CacheNewContainer(container);
 			}
 
-			return true; // Let vanilla code run and cache the result
+			return false;
 		}
 	}
 }
