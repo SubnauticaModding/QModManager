@@ -1,6 +1,6 @@
 Welcome to the QMods Installer!
 
-This will install QMods version 2.0.1 on your computer.
+This will install QModManager v2.0.1 on your computer.
 
 It is recommended that you close all other applications before continuing.
 
