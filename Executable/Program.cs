@@ -12,12 +12,14 @@ namespace QModManager
         Uninstall,
         RunByUser,
     }
+
+    [Flags]
     internal enum OS
     {
-        Windows,
-        Mac,
-        Both,
-        None,
+        None = 0b00,
+        Windows = 0b01,
+        Mac = 0b10,
+        Both = Windows | Mac,
     }
 
     internal static class Executable
@@ -233,43 +235,22 @@ namespace QModManager
                 }
             }
 
-            if (onWindows && !onMac)
+            os = OS.None;
+            directory = null;
+            if (onWindows)
             {
+                os |= OS.Windows;
                 directory = windowsDirectory;
-                os = OS.Windows;
             }
-            else if (onMac && !onWindows)
+            if (onMac)
             {
-                directory = macDirectory;
-                os = OS.Mac;
-            }
-            else if (onWindows && onMac)
-            {
-                directory = null;
-                os = OS.Both;
-            }
-            else
-            {
-                directory = null;
-                os = OS.None;
+                os |= OS.Mac;
+                directory = windowsDirectory;
             }
 
-            if (subnautica && !belowzero)
-            {
-                game = Patcher.Game.Subnautica;
-            }
-            else if (belowzero && !subnautica)
-            {
-                game = Patcher.Game.BelowZero;
-            }
-            else if (subnautica && belowzero)
-            {
-                game = Patcher.Game.Both;
-            }
-            else
-            {
-                game = Patcher.Game.None;
-            }
+            game = Patcher.Game.None;
+            if (subnautica) game |= Patcher.Game.Subnautica;
+            if (belowzero) game |= Patcher.Game.BelowZero;
         }
 
         #region Disable exit

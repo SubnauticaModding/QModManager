@@ -400,12 +400,13 @@ namespace QModManager
 
         #region Game detection
 
+        [Flags]
         internal enum Game
         {
-            Subnautica,
-            BelowZero,
-            Both,
-            None,
+            None = 0b00,
+            Subnautica = 0b01,
+            BelowZero = 0b10,
+            Both = Subnautica | BelowZero,
         }
 
         internal static Game game;
