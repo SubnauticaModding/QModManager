@@ -11,6 +11,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
 {
@@ -186,6 +187,7 @@ namespace QModManager
 
         internal static void PirateDetected()
         {
+            Logger.Error("Ahoy, matey! Ye be a pirate!");
             Hooks.Update += Log;
             GameObject obj = new GameObject("YOU ARE A PIRATE");
             obj.AddComponent<Pirate>();
