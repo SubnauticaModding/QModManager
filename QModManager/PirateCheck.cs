@@ -45,8 +45,7 @@ namespace QModManager
 
             private void Update()
             {
-                if (Patcher.game == Patcher.Game.Subnautica)
-                    RuntimeManager.GetBus("bus:/master").setMute(true);
+                RuntimeManager.MuteAllEvents(true);
                 UWE.Utils.alwaysLockCursor = true;
                 UWE.Utils.lockCursor = true;
                 foreach (GameObject go in SceneManager.GetActiveScene().GetRootGameObjects())
@@ -194,11 +193,20 @@ namespace QModManager
             obj.AddComponent<Pirate>();
         }
 
+        private static readonly HashSet<string> CrackedFiles = new HashSet<string>()
+        {
+            "steam_api64.cdx",
+            "steam_api64.ini",
+            "steam_emu.ini",
+            "valve.ini",
+            "Subnautica_Data/Plugins/steam_api64.cdx",
+            "Subnautica_Data/Plugins/steam_api64.ini",
+            "Subnautica_Data/Plugins/steam_emu.ini",
+        };
+
         internal static bool IsPirate(string folder)
         {
             string steamDll = Path.Combine(folder, "steam_api64.dll");
-
-            // Check for a modified steam dll
             if (File.Exists(steamDll))
             {
                 FileInfo fileInfo = new FileInfo(steamDll);
@@ -206,13 +214,10 @@ namespace QModManager
                 if (fileInfo.Length > 220000) return true;
             }
 
-            // Check for cracked files in the folder
-            bool steamapiINI = File.Exists(Path.Combine(folder, "steam_api64.ini"));
-            bool steamemuINI = File.Exists(Path.Combine(folder, "steam_emu.ini"));
-            bool valveINI = File.Exists(Path.Combine(folder, "valve.ini"));
-            bool cdxFiles = new DirectoryInfo(folder).GetFiles("*.cdx").Length > 0;
-
-            if (steamapiINI || steamemuINI || valveINI || cdxFiles) return true;
+            foreach (string file in CrackedFiles)
+            {
+                if (File.Exists(Path.Combine(folder, file))) return true;
+            }
 
             return false;
         }
