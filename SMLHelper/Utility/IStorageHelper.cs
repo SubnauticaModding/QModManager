@@ -1,9 +1,15 @@
 ﻿namespace SMLHelper.V2.Utility
 {
-	public interface IStorageHelper
-	{
-		bool TryGetCachedHasRoom(IItemsContainer container, int width, int height, ref bool hasRoom);
+    public interface IStorageHelper
+    {
+        // Expose singleton here
 
-		bool TryGetCachedHasRoom(IItemsContainer container, Vector2int itemSize, ref bool hasRoom);
-	}
+        bool HasRoomCached(ItemsContainer container, int width, int height);
+
+        bool HasRoomCached(ItemsContainer container, Vector2int itemSize);
+
+        bool IsEmpty(ItemsContainer container);
+
+        bool IsFull(ItemsContainer container);
+    }
 }
