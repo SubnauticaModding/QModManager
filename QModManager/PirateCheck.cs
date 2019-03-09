@@ -1,7 +1,6 @@
-﻿using FMOD.Studio;
-using FMODUnity;
-using Harmony;
+﻿using FMODUnity;
 using Oculus.Newtonsoft.Json;
+using QModManager.Utility;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +11,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.Video;
+using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
 {
@@ -19,9 +19,18 @@ namespace QModManager
     {
         private class Pirate : MonoBehaviour
         {
-            /*private string videoURL;
-
+            private static string videoURL;
             private const string VideoURLObtainer = "https://you-link.herokuapp.com/?url=https://www.youtube.com/watch?v=i8ju_10NkGY";
+
+            private static readonly HashSet<string> BannedGameObjectNames = new HashSet<string>()
+            {
+                "Audio",
+                "WorldCursor",
+                "Default Notification Center",
+                "InputHandlerStack",
+                "SelectorCanvas",
+                "Clip Camera"
+            };
 
             private void Start()
             {
@@ -29,51 +38,53 @@ namespace QModManager
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
                 gameObject.AddComponent<RawImage>();
 
-                FindObjectsOfType<AudioListener>().Do(l => DestroyImmediate(l));
                 gameObject.AddComponent<AudioListener>().enabled = true;
 
                 GetVideo();
-                //DontDestroyOnLoad(this);
-            }*/
+            }
 
             private void Update()
             {
-                RuntimeManager.GetBus("bus:/master").setMute(true);
+                RuntimeManager.MuteAllEvents(true);
                 UWE.Utils.alwaysLockCursor = true;
                 UWE.Utils.lockCursor = true;
-                SceneManager.GetActiveScene().GetRootGameObjects().Do(go =>
+                foreach (GameObject go in SceneManager.GetActiveScene().GetRootGameObjects())
                 {
-                    string[] bannedGOs =
-                    {
-                        "Audio",
-                        "WorldCursor",
-                        "Default Notification Center",
-                        "InputHandlerStack",
-                        "SelectorCanvas",
-                        "Clip Camera"
-                    };
-                    if (Array.IndexOf(bannedGOs, go.name) != -1) DestroyImmediate(go);
-                });
+                    if (BannedGameObjectNames.Contains(go.name)) DestroyImmediate(go);
+                }
             }
 
-            /*private void GetVideo()
+            private void GetVideo()
             {
-                ServicePointManager.ServerCertificateValidationCallback = VersionCheck.CustomRemoteCertificateValidationCallback;
-
-                using (WebClient client = new WebClient())
+                if (!NetworkUtilities.CheckConnection())
                 {
-                    client.DownloadStringCompleted += (sender, e) =>
-                    {
-                        if (e.Error != null)
-                        {
-                            UnityEngine.Debug.LogException(e.Error);
-                            ShowText();
-                            return;
-                        }
-                        if (!ParseVideo(e.Result)) ShowText();
-                    };
+                    ShowText();
+                    return;
+                }
+                try
+                {
+                    ServicePointManager.ServerCertificateValidationCallback = NetworkUtilities.CustomSCVC;
 
-                    client.DownloadStringAsync(new Uri(VideoURLObtainer));
+                    using (WebClient client = new WebClient())
+                    {
+                        client.DownloadStringCompleted += (sender, e) =>
+                        {
+                            if (e.Error != null)
+                            {
+                                UnityEngine.Debug.LogException(e.Error);
+                                ShowText();
+                                return;
+                            }
+                            if (!ParseVideo(e.Result)) ShowText();
+                        };
+
+                        client.DownloadStringAsync(new Uri(VideoURLObtainer));
+                    }
+                }
+                catch (Exception e)
+                {
+                    UnityEngine.Debug.LogException(e);
+                    ShowText();
                 }
             }
             private bool ParseVideo(string result)
@@ -105,16 +116,6 @@ namespace QModManager
                 StartCoroutine(PlayVideo());
 
                 return true;
-            }
-            private void ShowText()
-            {
-                DestroyImmediate(gameObject.GetComponent<RawImage>());
-                Text text = gameObject.AddComponent<Text>();
-                text.text = $"Oopsie poopsie, an error has occured!\nQModManager couldn't be initialized.\nTo fix this issue, turn on your internet connection,\nthen restart {(Patcher.game == Patcher.Game.Subnautica ? "Subnautica" : "Below Zero")}.\n(Is the game pirated?)";
-                text.color = new Color(1, 0, 0);
-                text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-                text.fontStyle = FontStyle.BoldAndItalic;
-                text.fontSize = 40;
             }
 
             private IEnumerator PlayVideo()
@@ -149,7 +150,7 @@ namespace QModManager
 
                 videoPlayer.Play();
 
-                yield return new WaitForSeconds(25);
+                yield return new WaitForSeconds(15);
                 if (Patcher.game == Patcher.Game.Subnautica)
                 {
                     Process.Start("https://store.steampowered.com/app/264710/Subnautica/");
@@ -162,46 +163,61 @@ namespace QModManager
                     Process.Start("https://www.epicgames.com/store/en-US/product/subnautica-below-zero/home");
                     Process.Start("https://discordapp.com/store/skus/535869836748783616/subnautica-below-zero");
                 }
-                yield return new WaitForSeconds(35);
-                Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
-                
 
                 while (videoPlayer.isPlaying)
                 {
                     yield return null;
                 }
 
+                Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");                
+
                 yield return StartCoroutine(PlayVideo());
-            }*/
+            }
+            private void ShowText()
+            {
+                DestroyImmediate(gameObject.GetComponent<RawImage>());
+                Text text = gameObject.AddComponent<Text>();
+                text.text = $"An error has occured!\nQModManager couldn't be initialized.\nPlease go and actually purchase {(Patcher.game == Patcher.Game.Subnautica ? "Subnautica" : "Below Zero")}.\nPiracy is bad and hurts the game developer.";
+                text.color = new Color(1, 0, 0);
+                text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+                text.fontStyle = FontStyle.BoldAndItalic;
+                text.fontSize = 40;
+            }
         }
 
         internal static void PirateDetected()
         {
-            //Hooks.Update += Log;
+            Logger.Error("Ahoy, matey! Ye be a pirate!");
+            Hooks.Update += Log;
             GameObject obj = new GameObject("YOU ARE A PIRATE");
             obj.AddComponent<Pirate>();
         }
 
+        private static readonly HashSet<string> CrackedFiles = new HashSet<string>()
+        {
+            "steam_api64.cdx",
+            "steam_api64.ini",
+            "steam_emu.ini",
+            "valve.ini",
+            "Subnautica_Data/Plugins/steam_api64.cdx",
+            "Subnautica_Data/Plugins/steam_api64.ini",
+            "Subnautica_Data/Plugins/steam_emu.ini",
+        };
+
         internal static bool IsPirate(string folder)
         {
             string steamDll = Path.Combine(folder, "steam_api64.dll");
-
-            // Check for a modified steam dll
             if (File.Exists(steamDll))
             {
                 FileInfo fileInfo = new FileInfo(steamDll);
 
-                if (fileInfo.Length > 209000) return true;
+                if (fileInfo.Length > 220000) return true;
             }
 
-            // Check for ini files in the root
-            FileInfo[] iniFiles = new DirectoryInfo(folder).GetFiles("*.ini");
-            FileInfo[] cdxFiles = new DirectoryInfo(folder).GetFiles("*.cdx");
-            int e = 0;
-
-            if (File.Exists(Path.Combine(folder, "desktop.ini"))) e--;
-
-            if (iniFiles.Length + cdxFiles.Length + e > 0) return true;
+            foreach (string file in CrackedFiles)
+            {
+                if (File.Exists(Path.Combine(folder, file))) return true;
+            }
 
             return false;
         }

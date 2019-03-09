@@ -6,6 +6,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Logger = QModManager.Utility.Logger;
 
 namespace QModManager.Debugger
 {
@@ -671,7 +672,7 @@ namespace QModManager.Debugger
                     }
                     //GUILayout.Label("val:" + property.GetValue(comp, null));
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     //GUILayout.Label("DBG ERR:" + e.StackTrace);
                     //UnityEngine.Debug.Log("msg:" + e.Message + "err" + e.Source);

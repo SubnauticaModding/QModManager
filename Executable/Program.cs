@@ -12,18 +12,21 @@ namespace QModManager
         Uninstall,
         RunByUser,
     }
+
+    [Flags]
     internal enum OS
     {
-        Windows,
-        Mac,
-        Both,
-        None,
+        None = 0b00,
+        Windows = 0b01,
+        Mac = 0b10,
+        Both = Windows | Mac,
     }
 
     internal static class Executable
     {
         internal static Action action = Action.RunByUser;
         internal static OS os;
+        internal static Patcher.Game game;
 
         internal static void Main(string[] args)
         {
@@ -42,6 +45,7 @@ namespace QModManager
                 }
 
                 string managedDirectory = Environment.CurrentDirectory;
+                string globalgamemanagers = Path.Combine(managedDirectory, "../globalgamemanagers");
 
                 if (!File.Exists(managedDirectory + "/Assembly-CSharp.dll"))
                 {
@@ -54,7 +58,7 @@ namespace QModManager
                     Environment.Exit(1);
                 }
 
-                GetInfo(out os, out string directory);
+                GetInfo(out os, out string directory, out game);
 
                 Injector injector;
 
@@ -101,8 +105,11 @@ namespace QModManager
                         Console.WriteLine("QModManager is already installed!");
                         Console.WriteLine("Skipping installation");
                         Console.WriteLine();
-                        //Console.WriteLine("Press any key to exit...");
-                        //Console.ReadKey();
+                        Console.WriteLine("Trying to enable Unity sound...");
+
+                        AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, game);
+
+                        Console.WriteLine("Unity sound enabled successfully");
                         Environment.Exit(0);
                     }
                 }
@@ -118,8 +125,11 @@ namespace QModManager
                         Console.WriteLine("QModManager is already uninstalled!");
                         Console.WriteLine("Skipping uninstallation");
                         Console.WriteLine();
-                        //Console.WriteLine("Press any key to exit...");
-                        //Console.ReadKey();
+                        Console.WriteLine("Trying to disable Unity sound...");
+
+                        AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, game);
+
+                        Console.WriteLine("Unity sound disabled successfully");
                         Environment.Exit(0);
                     }
                 }
@@ -171,10 +181,12 @@ namespace QModManager
             }
         }
 
-        internal static void GetInfo(out OS os, out string directory)
+        internal static void GetInfo(out OS os, out string directory, out Patcher.Game game)
         {
             string windowsDirectory = Path.Combine(Environment.CurrentDirectory, "../..");
             string macDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../..");
+
+            bool subnautica = false, belowzero = false;
 
             // Check if the device is running Windows OS
             bool onWindows = false, onWindowsSN = false, onWindowsBZ = false;
@@ -188,8 +200,11 @@ namespace QModManager
                     onWindowsBZ = Directory.GetFiles(windowsDirectory, "SubnauticaZero.exe", SearchOption.TopDirectoryOnly).Length > 0;
 
                     onWindows = onWindowsSN || onWindowsBZ;
+
+                    subnautica = subnautica || onWindowsSN;
+                    belowzero = belowzero || onWindowsBZ;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     // If an exception was thrown, the file probably isn't there
                     onWindows = false;
@@ -204,39 +219,38 @@ namespace QModManager
                 {
                     // Try to get the Subnautica executable
                     // This method throws a lot of exceptions
-                    // On mac, .app files act as files and folders at the same time, thus both file and directory checks
+                    // On mac, .app files act as files and folders at the same time, but they are detected as folders.
                     onMacSN = Directory.GetDirectories(macDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0;
                     onMacBZ = Directory.GetDirectories(macDirectory, "SubnauticaZero.app", SearchOption.TopDirectoryOnly).Length > 0;
 
                     onMac = onMacSN || onMacBZ;
+
+                    subnautica = subnautica || onMacSN;
+                    belowzero = belowzero || onMacBZ;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     // If an exception was thrown, the file probably isn't there
                     onMac = false;
                 }
             }
 
-            if (onWindows && !onMac)
+            os = OS.None;
+            directory = null;
+            if (onWindows)
             {
+                os |= OS.Windows;
                 directory = windowsDirectory;
-                os = OS.Windows;
             }
-            else if (onMac && !onWindows)
+            if (onMac)
             {
-                directory = macDirectory;
-                os = OS.Mac;
+                os |= OS.Mac;
+                directory = windowsDirectory;
             }
-            else if (onWindows && onMac)
-            {
-                directory = null;
-                os = OS.Both;
-            }
-            else
-            {
-                directory = null;
-                os = OS.None;
-            }
+
+            game = Patcher.Game.None;
+            if (subnautica) game |= Patcher.Game.Subnautica;
+            if (belowzero) game |= Patcher.Game.BelowZero;
         }
 
         #region Disable exit
