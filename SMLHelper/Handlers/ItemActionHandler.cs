@@ -17,7 +17,7 @@
         public static void RegisterMiddleClickAction(TechType targetTechType, Action<InventoryItem> callback, string tooltip = null)
         {
             ItemActionPatcher.CustomItemActions.Add(targetTechType, callback);
-            if (!string.IsNullOrEmpty(tooltip)) ItemActionPatcher.CustomItemActionTooltips.Add(targetTechType, null);
+            if (!string.IsNullOrEmpty(tooltip)) ItemActionPatcher.CustomItemActionTooltips.Add(targetTechType, tooltip);
         }
     }
 }

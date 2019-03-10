@@ -37,7 +37,7 @@ namespace SMLHelper.V2.Patchers
 
             Type TooltipFactoryType = typeof(TooltipFactory);
             MethodInfo ItemActionsMethod = TooltipFactoryType.GetMethod("ItemActions", BindingFlags.NonPublic | BindingFlags.Static);
-            harmony.Patch(ItemActionsMethod, new HarmonyMethod(thisType.GetMethod("ItemActions_Postfix", BindingFlags.NonPublic | BindingFlags.Static)));
+            harmony.Patch(ItemActionsMethod, null, new HarmonyMethod(thisType.GetMethod("ItemActions_Postfix", BindingFlags.NonPublic | BindingFlags.Static)));
 
             Logger.Log("ItemActionPatcher is done.", LogLevel.Debug);
         }
