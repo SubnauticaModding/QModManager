@@ -50,7 +50,6 @@ namespace SMLHelper.V2.Patchers
             }
             if (button == 2)
             {
-                ErrorMessage.AddDebug("Middle clicked an item!");
                 Inventory.main.ExecuteItemAction(MiddleClickItemAction, item);
                 return false;
             }
