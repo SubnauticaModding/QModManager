@@ -19,14 +19,5 @@
             ItemActionPatcher.CustomItemActions.Add(targetTechType, callback);
             if (!string.IsNullOrEmpty(tooltip)) ItemActionPatcher.CustomItemActionTooltips.Add(targetTechType, null);
         }
-
-        /// <summary>
-        /// Registers a middle click action for an <see cref="InventoryItem"/> based off of its <see cref="TechType"/>
-        /// </summary>
-        /// <param name="targetTechType">The <see cref="TechType"/> which the middle click action will be assigned to</param>
-        /// <param name="callback">The method which is called when the <see cref="InventoryItem"/> was middle-clicked<para/>The return value of the method is not used</param>
-        /// <param name="tooltip">The secondary tooltip which appears in the description of the item</param>
-        public static void RegisterMiddleClickAction(TechType targetTechType, Func<InventoryItem, object> callback, string tooltip = null)
-            => RegisterMiddleClickAction(targetTechType, (item) => callback?.Invoke(item), tooltip);
     }
 }
