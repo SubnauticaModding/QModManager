@@ -1,9 +1,9 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
+    using Harmony;
     using System;
     using System.Collections.Generic;
     using System.Reflection;
-    using Harmony;
 
     // This entire patcher is only here for performance reasons.
     // This is not intended to be exposed by the public API.
