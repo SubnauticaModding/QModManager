@@ -3,19 +3,47 @@
     using System.Collections.Generic;
     using System.Linq;
     using Patchers;
+    using Interfaces;
+    using UnityEngine;
 
     /// <summary>
     /// A handler class for configuring custom unlocking conditions for item blueprints.
     /// </summary>
-    public static class KnownTechHandler
+    public class KnownTechHandler : IKnownTechHandler
     {
+        private static readonly KnownTechHandler singleton = new KnownTechHandler();
+
+        public static IKnownTechHandler Main => singleton;
+
+        private KnownTechHandler()
+        {
+            // Hides constructor
+        }
+
+        public static void UnlockedAtStart(TechType techType)
+        {
+            Main.UnlockOnStart(techType);
+        }
+
         /// <summary>
         /// Allows you to unlock a TechType on game start.
         /// </summary>
         /// <param name="techType"></param>
-        public static void UnlockOnStart(TechType techType)
+        void IKnownTechHandler.UnlockOnStart(TechType techType)
         {
             KnownTechPatcher.UnlockedAtStart.Add(techType);
+        }
+
+        internal void AddAnalysisTech(TechType techTypeToBeAnalysed, IEnumerable<TechType> techTypesToUnlock, string UnlockMessage = "NotificationBlueprintUnlocked", FMODAsset UnlockSound = null, UnityEngine.Sprite UnlockSprite = null)
+        {
+            KnownTechPatcher.AnalysisTech.Add(new KnownTech.AnalysisTech()
+            {
+                techType = techTypeToBeAnalysed,
+                unlockMessage = UnlockMessage,
+                unlockSound = UnlockSound,
+                unlockPopup = UnlockSprite,
+                unlockTechTypes = techTypesToUnlock.ToList()
+            });
         }
 
         /// <summary>
@@ -38,6 +66,41 @@
                 unlockPopup = UnlockSprite,
                 unlockTechTypes = techTypesToUnlock.ToList()
             });
+        }
+
+        void IKnownTechHandler.SetAnalysisTechEntry(TechType techTypeToBeAnalysed, IEnumerable<TechType> techTypesToUnlock)
+        {
+            singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock);
+        }
+
+        void IKnownTechHandler.SetAnalysisTechEntry(TechType techTypeToBeAnalysed, IEnumerable<TechType> techTypesToUnlock, string UnlockMessage)
+        {
+            singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, UnlockMessage);
+        }
+
+        void IKnownTechHandler.SetAnalysisTechEntry(TechType techTypeToBeAnalysed, IEnumerable<TechType> techTypesToUnlock, FMODAsset UnlockSound)
+        {
+            singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, "NotificationBlueprintUnlocked", UnlockSound);
+        }
+
+        void IKnownTechHandler.SetAnalysisTechEntry(TechType techTypeToBeAnalysed, IEnumerable<TechType> techTypesToUnlock, Sprite UnlockSprite)
+        {
+            singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, "NotificationBlueprintUnlocked", null, UnlockSprite);
+        }
+
+        void IKnownTechHandler.SetAnalysisTechEntry(TechType techTypeToBeAnalysed, IEnumerable<TechType> techTypesToUnlock, string UnlockMessage, FMODAsset UnlockSound)
+        {
+            singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, UnlockMessage, UnlockSound, null);
+        }
+
+        void IKnownTechHandler.SetAnalysisTechEntry(TechType techTypeToBeAnalysed, IEnumerable<TechType> techTypesToUnlock, string UnlockMessage, Sprite UnlockSprite)
+        {
+            singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, UnlockMessage, null, UnlockSprite);
+        }
+
+        void IKnownTechHandler.SetAnalysisTechEntry(TechType techTypeToBeAnalysed, IEnumerable<TechType> techTypesToUnlock, FMODAsset UnlockSound, Sprite UnlockSprite)
+        {
+            singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, "NotificationBlueprintUnlocked", UnlockSound, UnlockSprite);
         }
     }
 }

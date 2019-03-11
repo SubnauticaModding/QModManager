@@ -43,6 +43,9 @@
     <Reference Include="0Harmony">
       <HintPath>..\Dependencies\0Harmony-1.2.0.1.dll</HintPath>
     </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\Dependencies\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
     <Reference Include="Assembly-CSharp-firstpass_publicized, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Assembly-CSharp-firstpass_publicized.dll</HintPath>
@@ -70,6 +73,8 @@
     <Compile Include="Handlers\LanguageHandler.cs" />
     <Compile Include="Handlers\OptionsPanelHandler.cs" />
     <Compile Include="Handlers\PDAHandler.cs" />
+    <Compile Include="Interfaces\IBioReactorHandler.cs" />
+    <Compile Include="Interfaces\IKnownTechHandler.cs" />
     <Compile Include="Legacy\CraftNodeToScrub.cs" />
     <Compile Include="Legacy\CraftScheme.cs" />
     <Compile Include="Legacy\CustomCraftNode.cs" />
