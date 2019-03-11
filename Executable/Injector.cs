@@ -33,7 +33,7 @@ namespace QModManager
                     Console.WriteLine();
                     Console.WriteLine("Trying to enable Unity sound...");
 
-                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false);
+                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, Executable.game);
 
                     Console.WriteLine("Unity sound enabled successfully");
                     Environment.Exit(0);
@@ -64,7 +64,7 @@ namespace QModManager
                 Console.WriteLine();
                 Console.WriteLine("Trying to enable Unity sound...");
 
-                AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false);
+                AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, Executable.game);
 
                 Console.WriteLine("Unity sound enabled successfully");
                 Environment.Exit(0);
@@ -89,7 +89,7 @@ namespace QModManager
                     Console.WriteLine();
                     Console.WriteLine("Trying to disable Unity sound...");
 
-                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true);
+                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, Executable.game);
 
                     Console.WriteLine("Unity sound disabled successfully");
                     Environment.Exit(0);
@@ -135,7 +135,7 @@ namespace QModManager
                 Console.WriteLine();
                 Console.WriteLine("Trying to disable Unity sound...");
 
-                AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true);
+                AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, Executable.game);
 
                 Console.WriteLine("Unity sound disabled successfully");
                 Environment.Exit(0);
@@ -176,5 +176,3 @@ namespace QModManager
         }
     }
 }
-
-#warning TODO: Implement installer rollback in Inno Setup
