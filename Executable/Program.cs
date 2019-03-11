@@ -245,7 +245,7 @@ namespace QModManager
             if (onMac)
             {
                 os |= OS.Mac;
-                directory = windowsDirectory;
+                directory = macDirectory;
             }
 
             game = Patcher.Game.None;
