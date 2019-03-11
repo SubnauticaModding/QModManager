@@ -128,6 +128,9 @@
     <Compile Include="Utility\EnumCacheManager.cs" />
     <Compile Include="Utility\ExtBannedIdManager.cs" />
     <Compile Include="Utility\ImageUtils.cs" />
+    <Compile Include="Utility\IStorageHelper.cs" />
+    <Compile Include="Utility\IStorageHelperExtensions.cs" />
+    <Compile Include="Utility\ItemStorageHelper.cs" />
     <Compile Include="Utility\KeyCodeUtils.cs" />
     <Compile Include="Utility\PlayerPrefsExtra.cs" />
     <Compile Include="Utility\PrefabUtils.cs" />
