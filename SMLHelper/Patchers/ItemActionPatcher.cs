@@ -10,6 +10,9 @@ namespace SMLHelper.V2.Patchers
     {
         #region Internal Fields
 
+        /// <summary>
+        /// A constant <see cref="ItemAction"/> value to represent a custom middle click action
+        /// </summary>
         internal const ItemAction MiddleClickItemAction = (ItemAction)1337;
 
         internal static IDictionary<TechType, Action<InventoryItem>> CustomItemActions = new SelfCheckingDictionary<TechType, Action<InventoryItem>>("CustomItemActions");
@@ -38,6 +41,9 @@ namespace SMLHelper.V2.Patchers
             Type TooltipFactoryType = typeof(TooltipFactory);
             MethodInfo ItemActionsMethod = TooltipFactoryType.GetMethod("ItemActions", BindingFlags.NonPublic | BindingFlags.Static);
             harmony.Patch(ItemActionsMethod, null, new HarmonyMethod(thisType.GetMethod("ItemActions_Postfix", BindingFlags.NonPublic | BindingFlags.Static)));
+
+            if (CustomItemActions.Count > 0)
+                Logger.Log($"Added {CustomItemActions.Count} middle click actions.");
 
             Logger.Log("ItemActionPatcher is done.", LogLevel.Debug);
         }
