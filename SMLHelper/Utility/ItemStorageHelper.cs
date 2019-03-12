@@ -4,9 +4,12 @@
 
     public class ItemStorageHelper : IStorageHelper
     {
+        private readonly Vector2int Simple1x1Size = new Vector2int(1, 1);
         private readonly Dictionary<ItemsContainer, Dictionary<Vector2int, bool>> HasRoomCacheCollection = new Dictionary<ItemsContainer, Dictionary<Vector2int, bool>>();
 
-        public static readonly ItemStorageHelper Helper = new ItemStorageHelper();
+        internal static readonly ItemStorageHelper singleton = new ItemStorageHelper();
+
+        public static IStorageHelper Main => singleton;
 
         #region Common Item Sizes
         private readonly IEnumerable<Vector2int> SmallerThan3x3 = new Vector2int[]
@@ -120,14 +123,14 @@
             return false;
         }
 
-        public bool HasRoomCached(ItemsContainer container, int width, int height)
+        public bool HasRoomForCached(ItemsContainer container, int width, int height)
         {
             Vector2int size = new Vector2int(width, height);
 
-            return this.HasRoomCached(container, size);
+            return this.HasRoomForCached(container, size);
         }
 
-        public bool HasRoomCached(ItemsContainer container, Vector2int itemSize)
+        public bool HasRoomForCached(ItemsContainer container, Vector2int itemSize)
         {
             if (this.HasRoomCacheCollection.TryGetValue(container, out Dictionary<Vector2int, bool> cache)
                 && cache.TryGetValue(itemSize, out bool hasRoom))
@@ -151,7 +154,7 @@
 
         public bool IsFull(ItemsContainer container)
         {
-            return !this.HasRoomCached(container, 1, 1);
+            return !this.HasRoomForCached(container, Simple1x1Size);
         }
     }
 }

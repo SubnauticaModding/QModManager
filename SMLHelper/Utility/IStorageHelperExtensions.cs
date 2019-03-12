@@ -5,22 +5,22 @@
     {
         public static bool HasRoomCached(this ItemsContainer container, int width, int height)
         {
-            return ItemStorageHelper.Helper.HasRoomCached(container, width, height);
+            return ItemStorageHelper.singleton.HasRoomForCached(container, width, height);
         }
 
         public static bool HasRoomCached(this ItemsContainer container, Vector2int itemSize)
         {
-            return ItemStorageHelper.Helper.HasRoomCached(container, itemSize);
+            return ItemStorageHelper.singleton.HasRoomForCached(container, itemSize);
         }
 
         public static bool IsEmpty(this ItemsContainer container)
         {
-            return ItemStorageHelper.Helper.IsEmpty(container);
+            return ItemStorageHelper.singleton.IsEmpty(container);
         }
 
         public static bool IsFull(this ItemsContainer container)
         {
-            return ItemStorageHelper.Helper.IsFull(container);
+            return ItemStorageHelper.singleton.IsFull(container);
         }
     }
 }

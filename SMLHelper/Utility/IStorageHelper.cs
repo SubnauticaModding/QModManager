@@ -2,11 +2,9 @@
 {
     public interface IStorageHelper
     {
-        // Expose singleton here
+        bool HasRoomForCached(ItemsContainer container, int width, int height);
 
-        bool HasRoomCached(ItemsContainer container, int width, int height);
-
-        bool HasRoomCached(ItemsContainer container, Vector2int itemSize);
+        bool HasRoomForCached(ItemsContainer container, Vector2int itemSize);
 
         bool IsEmpty(ItemsContainer container);
 
