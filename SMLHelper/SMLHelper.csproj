@@ -75,6 +75,8 @@
     <Compile Include="Handlers\PDAHandler.cs" />
     <Compile Include="Interfaces\IBioReactorHandler.cs" />
     <Compile Include="Interfaces\IKnownTechHandler.cs" />
+    <Compile Include="Interfaces\IOptionsPanelHandler.cs" />
+    <Compile Include="Interfaces\IPDAHandler.cs" />
     <Compile Include="Legacy\CraftNodeToScrub.cs" />
     <Compile Include="Legacy\CraftScheme.cs" />
     <Compile Include="Legacy\CustomCraftNode.cs" />

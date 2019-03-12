@@ -20,7 +20,11 @@
             // Hides constructor
         }
 
-        public static void UnlockedAtStart(TechType techType)
+        /// <summary>
+        /// Allows you to unlock a TechType on game start.
+        /// </summary>
+        /// <param name="techType"></param>
+        public static void UnlockOnStart(TechType techType)
         {
             Main.UnlockOnStart(techType);
         }
