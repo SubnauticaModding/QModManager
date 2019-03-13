@@ -11,9 +11,6 @@
     /// </summary>
     public static class TechTypeHandler
     {
-        private static readonly FieldInfo CachedEnumString_valueToString =
-            typeof(CachedEnumString<TechType>).GetField("valueToString", BindingFlags.NonPublic | BindingFlags.Instance);
-
         /// <summary>
         /// Adds a new <see cref="TechType"/> into the game.
         /// </summary>
@@ -37,7 +34,7 @@
             LanguagePatcher.AddCustomLanguageLine(modName, internalName, displayName);
             LanguagePatcher.AddCustomLanguageLine(modName, "Tooltip_" + internalName, tooltip);
 
-            var valueToString = CachedEnumString_valueToString.GetValue(TooltipFactory.techTypeTooltipStrings) as Dictionary<TechType, string>;
+            Dictionary<TechType, string> valueToString = TooltipFactory.techTypeTooltipStrings.valueToString;
             valueToString[techType] = "Tooltip_" + internalName;
 
             // Unlock the TechType on start

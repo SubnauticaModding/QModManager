@@ -4,7 +4,6 @@
 
     public class ItemStorageHelper : IStorageHelper
     {
-        private readonly Vector2int Simple1x1Size = new Vector2int(1, 1);
         private readonly Dictionary<ItemsContainer, Dictionary<Vector2int, bool>> HasRoomCacheCollection = new Dictionary<ItemsContainer, Dictionary<Vector2int, bool>>();
 
         internal static readonly ItemStorageHelper singleton = new ItemStorageHelper();
@@ -12,35 +11,41 @@
         public static IStorageHelper Main => singleton;
 
         #region Common Item Sizes
+
+        private static readonly Vector2int size1x1 = new Vector2int(1, 1);
+        private static readonly Vector2int size1x2 = new Vector2int(1, 2);
+        private static readonly Vector2int size2x1 = new Vector2int(2, 1);
+        private static readonly Vector2int size2x2 = new Vector2int(2, 2);
+
         private readonly IEnumerable<Vector2int> SmallerThan3x3 = new Vector2int[]
         {
             new Vector2int(3,2),
             new Vector2int(3,1),
             new Vector2int(2,3),
-            new Vector2int(2,2),
-            new Vector2int(2,1),
-            new Vector2int(1,2),
-            new Vector2int(1,1)
+            size2x2,
+            size2x1,
+            size1x2,
+            size1x1
         };
 
         private readonly IEnumerable<Vector2int> SmallerThan2x3 = new Vector2int[]
         {
-            new Vector2int(2,2),
-            new Vector2int(2,1),
-            new Vector2int(1,2),
-            new Vector2int(1,1)
+            size2x2,
+            size2x1,
+            size1x2,
+            size1x1
         };
 
         private readonly IEnumerable<Vector2int> SmallerThan2x2 = new Vector2int[]
         {
-            new Vector2int(2,1),
-            new Vector2int(1,2),
-            new Vector2int(1,1)
+            size2x1,
+            size1x2,
+            size1x1
         };
 
         private readonly IEnumerable<Vector2int> Just1x1 = new Vector2int[]
         {
-            new Vector2int(1,1)
+            size1x1
         };
         #endregion
 
@@ -154,7 +159,7 @@
 
         public bool IsFull(ItemsContainer container)
         {
-            return !this.HasRoomForCached(container, Simple1x1Size);
+            return !this.HasRoomForCached(container, size1x1);
         }
     }
 }
