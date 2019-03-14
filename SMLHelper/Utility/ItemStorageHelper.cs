@@ -28,7 +28,7 @@
             size1x1
         };
 
-        private readonly IEnumerable<Vector2int> SmallerThan2x3 = new Vector2int[]
+        private readonly IEnumerable<Vector2int> smallerThan2x3 = new Vector2int[]
         {
             size2x2,
             size2x1,
@@ -36,17 +36,18 @@
             size1x1
         };
 
-        private readonly IEnumerable<Vector2int> SmallerThan2x2 = new Vector2int[]
+        private readonly IEnumerable<Vector2int> smallerThan2x2 = new Vector2int[]
         {
             size2x1,
             size1x2,
             size1x1
         };
 
-        private readonly IEnumerable<Vector2int> Just1x1 = new Vector2int[]
+        private readonly IEnumerable<Vector2int> just1x1 = new Vector2int[]
         {
             size1x1
         };
+
         #endregion
 
         // Used to quickly cache common sizes if a large item is found to fit a container
@@ -54,31 +55,31 @@
         {
             if (original.x == 3 && original.y == 3) // Size of Mobile Vehicle Bay
             {
-                return this.SmallerThan3x3;
+                return SmallerThan3x3;
             }
 
             if (original.x == 2 && original.y == 3) // Size of Seaglide
             {
-                return this.SmallerThan2x3;
+                return smallerThan2x3;
             }
 
             if (original.x == 2 && original.y == 2) // Size of common game items
             {
-                return this.SmallerThan2x2;
+                return smallerThan2x2;
             }
 
-            return this.Just1x1;
+            return just1x1;
         }
 
         private void CacheNewContainer(ItemsContainer container)
         {
-            this.HasRoomCacheCollection.Add(container, new Dictionary<Vector2int, bool>());
+            HasRoomCacheCollection.Add(container, new Dictionary<Vector2int, bool>());
         }
 
         internal void RecacheContainer(ItemsContainer container, bool missingCache = false)
         {
             // Items in storage have changed. Clear the related cache
-            if (this.HasRoomCacheCollection.TryGetValue(container, out Dictionary<Vector2int, bool> cache))
+            if (HasRoomCacheCollection.TryGetValue(container, out Dictionary<Vector2int, bool> cache))
             {
                 cache.Clear();
             }
@@ -86,7 +87,7 @@
             else
             {
                 // This is a new container we haven't seen before, save it to the cache collection
-                this.CacheNewContainer(container);
+                CacheNewContainer(container);
             }
 
             // Can technically be simplified (with a micro performance hit):
@@ -95,14 +96,14 @@
 
         internal void CacheNewHasRoomData(ItemsContainer container, Vector2int itemSize, bool hasRoom)
         {
-            this.HasRoomCacheCollection[container][itemSize] = hasRoom;
+            HasRoomCacheCollection[container][itemSize] = hasRoom;
 
             // If item fits and is larger than 1x1, cache common sizes as true
             if (hasRoom && (itemSize.x > 1 || itemSize.y > 1))
             {
-                foreach (Vector2int size in this.CommonSmallerSizes(itemSize))
+                foreach (Vector2int size in CommonSmallerSizes(itemSize))
                 {
-                    this.HasRoomCacheCollection[container][size] = true;
+                    HasRoomCacheCollection[container][size] = true;
                 }
             }
         }
@@ -110,7 +111,7 @@
         // Called by ItemsContainer.HasRoom via Harmony
         internal bool TryGetCachedHasRoom(ItemsContainer container, Vector2int itemSize, ref bool cachedResult)
         {
-            if (this.HasRoomCacheCollection.TryGetValue(container, out Dictionary<Vector2int, bool> cache))
+            if (HasRoomCacheCollection.TryGetValue(container, out Dictionary<Vector2int, bool> cache))
             {
                 if (cache.TryGetValue(itemSize, out cachedResult))
                 {
@@ -122,7 +123,7 @@
 
             else
             {
-                this.CacheNewContainer(container);
+                CacheNewContainer(container);
             }
 
             return false;
@@ -130,14 +131,14 @@
 
         public bool HasRoomForCached(ItemsContainer container, int width, int height)
         {
-            Vector2int size = new Vector2int(width, height);
+            var size = new Vector2int(width, height);
 
-            return this.HasRoomForCached(container, size);
+            return HasRoomForCached(container, size);
         }
 
         public bool HasRoomForCached(ItemsContainer container, Vector2int itemSize)
         {
-            if (this.HasRoomCacheCollection.TryGetValue(container, out Dictionary<Vector2int, bool> cache)
+            if (HasRoomCacheCollection.TryGetValue(container, out Dictionary<Vector2int, bool> cache)
                 && cache.TryGetValue(itemSize, out bool hasRoom))
             {
                 // Return the cached result
@@ -159,7 +160,7 @@
 
         public bool IsFull(ItemsContainer container)
         {
-            return !this.HasRoomForCached(container, size1x1);
+            return !HasRoomForCached(container, size1x1);
         }
     }
 }

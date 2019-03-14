@@ -11,7 +11,7 @@ namespace SMLHelper.Patchers
         {
             string modName = Assembly.GetCallingAssembly().GetName().Name;
 
-            return TechTypeHandler.AddTechType(modName, name, languageName, languageTooltip);
+            return TechTypeHandler.Singleton.AddTechType(modName, name, languageName, languageTooltip);
         }
 
         [System.Obsolete("Use SMLHelper.V2 instead.")]
@@ -19,7 +19,7 @@ namespace SMLHelper.Patchers
         {
             string modName = Assembly.GetCallingAssembly().GetName().Name;
 
-            return TechTypeHandler.AddTechType(modName, name, languageName, languageTooltip, unlockOnGameStart);
+            return TechTypeHandler.Singleton.AddTechType(modName, name, languageName, languageTooltip, unlockOnGameStart);
         }
     }
 }

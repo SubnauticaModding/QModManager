@@ -76,6 +76,7 @@
     <Compile Include="Interfaces\IPDAHandler.cs" />
     <Compile Include="Interfaces\IPrefabHandler.cs" />
     <Compile Include="Interfaces\ISpriteHandler.cs" />
+    <Compile Include="Interfaces\ITechTypeHandler.cs" />
     <Compile Include="Legacy\CraftNodeToScrub.cs" />
     <Compile Include="Legacy\CraftScheme.cs" />
     <Compile Include="Legacy\CustomCraftNode.cs" />
