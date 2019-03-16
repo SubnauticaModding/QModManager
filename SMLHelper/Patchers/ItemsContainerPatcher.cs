@@ -59,7 +59,7 @@
 
             // If no result exists (false), return true and continue with code execution
             // If a result exists (true), detour the method and return the cached result
-            return !ItemStorageHelper.singleton.TryGetCachedHasRoom(__instance, __state, ref __result);
+            return !ItemStorageHelper.Singleton.TryGetCachedHasRoom(__instance, __state, ref __result);
         }
 
         private static void HasRoomFor_Postfix(ItemsContainer __instance, bool __result, Vector2int __state)
@@ -67,12 +67,12 @@
             // We should only enter this method if the Prefix didn't have a cached value to use
             // Catch the result and map it to the size provided by the Prefix
 
-            ItemStorageHelper.singleton.CacheNewHasRoomData(__instance, __state, __result);
+            ItemStorageHelper.Singleton.CacheNewHasRoomData(__instance, __state, __result);
         }
 
         private static void NotifyChangeItem_Postfix(ItemsContainer __instance)
         {
-            ItemStorageHelper.singleton.RecacheContainer(__instance);
+            ItemStorageHelper.Singleton.ClearContainerCache(__instance);
         }
     }
 }
