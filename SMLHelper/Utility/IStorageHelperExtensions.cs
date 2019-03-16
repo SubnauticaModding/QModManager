@@ -65,7 +65,7 @@
         /// <returns></returns>
         public static int GetTotalSlots(ItemsContainer container)
         {
-            return ItemStorageHelper.Singleton.GetTotalSlots(container);
+            return ItemStorageHelper.Main.GetTotalSlots(container);
         }
 
         /// <summary>
