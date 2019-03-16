@@ -3,8 +3,8 @@
     using Crafting;
     using Patchers;
     using Utility;
-    using UnityEngine.Assertions;
     using System.Reflection;
+    using System;
 
     /// <summary>
     /// A handler class for creating and editing of crafting trees.
@@ -61,7 +61,7 @@
         /// <exception cref="AssertionException">This method is intended for use only with standard crafting trees, not custom ones.</exception>
         public static void AddCraftingNode(CraftTree.Type craftTree, TechType craftingItem, params string[] stepsToTab)
         {
-            Assert.IsTrue(craftTree <= CraftTree.Type.Rocket, $"{nameof(AddCraftingNode)} is intended for use only with standard crafting trees, not custom ones.");
+            ValidateStandardCraftTree(craftTree);
             CraftTreePatcher.CraftingNodes.Add(new CraftingNode(stepsToTab, craftTree, craftingItem));
         }
 
@@ -73,7 +73,7 @@
         /// <exception cref="AssertionException">This method is intended for use only with standard crafting trees, not custom ones.</exception>
         public static void AddCraftingNode(CraftTree.Type craftTree, TechType craftingItem)
         {
-            Assert.IsTrue(craftTree <= CraftTree.Type.Rocket, $"{nameof(AddCraftingNode)} is intended for use only with standard crafting trees, not custom ones.");
+            ValidateStandardCraftTree(craftTree);
             CraftTreePatcher.CraftingNodes.Add(new CraftingNode(new string[0], craftTree, craftingItem));
         }
 
@@ -87,7 +87,7 @@
         /// <exception cref="AssertionException">This method is intended for use only with standard crafting trees, not custom ones.</exception>
         public static void AddTabNode(CraftTree.Type craftTree, string name, string displayName, Atlas.Sprite sprite)
         {
-            Assert.IsTrue(craftTree <= CraftTree.Type.Rocket, $"{nameof(AddTabNode)} is intended for use only with standard crafting trees, not custom ones.");
+            ValidateStandardCraftTree(craftTree);
             string modName = Assembly.GetCallingAssembly().GetName().Name;
 
             CraftTreePatcher.TabNodes.Add(new TabNode(new string[0], craftTree, sprite, modName, name, displayName));
@@ -103,7 +103,7 @@
         /// <exception cref="AssertionException">This method is intended for use only with standard crafting trees, not custom ones.</exception>
         public static void AddTabNode(CraftTree.Type craftTree, string name, string displayName, UnityEngine.Sprite sprite)
         {
-            Assert.IsTrue(craftTree <= CraftTree.Type.Rocket, $"{nameof(AddTabNode)} is intended for use only with standard crafting trees, not custom ones.");
+            ValidateStandardCraftTree(craftTree);
             string modName = Assembly.GetCallingAssembly().GetName().Name;
 
             CraftTreePatcher.TabNodes.Add(new TabNode(new string[0], craftTree, new Atlas.Sprite(sprite), modName, name, displayName));
@@ -124,7 +124,7 @@
         /// <exception cref="AssertionException">This method is intended for use only with standard crafting trees, not custom ones.</exception>
         public static void AddTabNode(CraftTree.Type craftTree, string name, string displayName, Atlas.Sprite sprite, params string[] stepsToTab)
         {
-            Assert.IsTrue(craftTree <= CraftTree.Type.Rocket, $"{nameof(AddTabNode)} is intended for use only with standard crafting trees, not custom ones.");
+            ValidateStandardCraftTree(craftTree);
             string modName = Assembly.GetCallingAssembly().GetName().Name;
 
             CraftTreePatcher.TabNodes.Add(new TabNode(stepsToTab, craftTree, sprite, modName, name, displayName));
@@ -145,7 +145,7 @@
         /// <exception cref="AssertionException">This method is intended for use only with standard crafting trees, not custom ones.</exception>
         public static void AddTabNode(CraftTree.Type craftTree, string name, string displayName, UnityEngine.Sprite sprite, params string[] stepsToTab)
         {
-            Assert.IsTrue(craftTree <= CraftTree.Type.Rocket, $"{nameof(AddTabNode)} is intended for use only with standard crafting trees, not custom ones.");
+            ValidateStandardCraftTree(craftTree);
             string modName = Assembly.GetCallingAssembly().GetName().Name;
 
             CraftTreePatcher.TabNodes.Add(new TabNode(stepsToTab, craftTree, new Atlas.Sprite(sprite), modName, name, displayName));
@@ -165,8 +165,30 @@
         /// <exception cref="AssertionException">This method is intended for use only with standard crafting trees, not custom ones.</exception>
         public static void RemoveNode(CraftTree.Type craftTree, params string[] stepsToNode)
         {
-            Assert.IsTrue(craftTree <= CraftTree.Type.Rocket, $"{nameof(RemoveNode)} is intended for use only with standard crafting trees, not custom ones.");
+            ValidateStandardCraftTree(craftTree);
             CraftTreePatcher.NodesToRemove.Add(new Node(stepsToNode, craftTree));
+        }
+
+        private static void ValidateStandardCraftTree(CraftTree.Type craftTree)
+        {
+            switch (craftTree)
+            {
+                case CraftTree.Type.Fabricator:
+                case CraftTree.Type.Constructor:
+                case CraftTree.Type.Workbench:
+                case CraftTree.Type.SeamothUpgrades:
+                case CraftTree.Type.MapRoom:
+                case CraftTree.Type.Centrifuge:
+                case CraftTree.Type.CyclopsFabricator:
+                case CraftTree.Type.Rocket:
+                    break; // Okay
+                case CraftTree.Type.Unused1:                    
+                case CraftTree.Type.Unused2:                    
+                case CraftTree.Type.None:
+                default:
+                    throw new ArgumentException($"{nameof(craftTree)} value of '{craftTree}' does not correspond to a standard crafting tree.{Environment.NewLine}" +
+                                            $"This method is intended for use only with standard crafting trees, not custom ones or unused ones.");
+            }   
         }
     }
 }
