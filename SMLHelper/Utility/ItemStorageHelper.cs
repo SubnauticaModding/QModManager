@@ -14,6 +14,11 @@
 
         public static IStorageHelper Main => Singleton;
 
+        private ItemStorageHelper()
+        {
+            // Hides contructor
+        }
+
         #region Common Item Sizes
 
         private static readonly Vector2int Size1x1 = new Vector2int(1, 1);

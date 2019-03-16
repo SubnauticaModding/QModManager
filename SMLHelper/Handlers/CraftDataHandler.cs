@@ -11,6 +11,11 @@
     {
         public static ICraftDataHandler Main { get; } = new CraftDataHandler();
 
+        private CraftDataHandler()
+        {
+            // Hides constructor
+        }
+
         #region Static Methods
 
         /// <summary>

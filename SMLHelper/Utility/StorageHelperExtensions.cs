@@ -5,7 +5,7 @@
     /// <summary>
     /// Extension methods to provide static calls for <see cref="ItemsContainer"/> into <see cref="ItemStorageHelper"/> methods.
     /// </summary>
-    public static class IStorageHelperExtensions
+    public static class StorageHelperExtensions
     {
         /// <summary>
         /// Using the cached container info, determines whether the specified container has room for an item of the specified size.
