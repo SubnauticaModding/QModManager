@@ -71,6 +71,7 @@
     <Compile Include="Handlers\OptionsPanelHandler.cs" />
     <Compile Include="Handlers\PDAHandler.cs" />
     <Compile Include="Interfaces\IBioReactorHandler.cs" />
+    <Compile Include="Interfaces\ICraftDataHandler.cs" />
     <Compile Include="Interfaces\IKnownTechHandler.cs" />
     <Compile Include="Interfaces\ILanguageHandler.cs" />
     <Compile Include="Interfaces\IOptionsPanelHandler.cs" />
