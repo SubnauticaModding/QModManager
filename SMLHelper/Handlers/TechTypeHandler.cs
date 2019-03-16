@@ -1,7 +1,6 @@
 ﻿namespace SMLHelper.V2.Handlers
 {
     using System.Collections.Generic;
-    using System.Reflection;
     using Assets;
     using Patchers;
     using SMLHelper.V2.Interfaces;
@@ -175,7 +174,7 @@
         /// <returns>The new <see cref="TechType"/> that is created.</returns>
         TechType ITechTypeHandler.AddTechType(string internalName, string displayName, string tooltip, bool unlockAtStart)
         {
-            string modName = Assembly.GetCallingAssembly().GetName().Name;
+            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
             return AddTechType(modName, internalName, displayName, tooltip, unlockAtStart);
         }
 
@@ -202,7 +201,7 @@
         /// <returns>The new <see cref="TechType"/> that is created.</returns>
         TechType ITechTypeHandler.AddTechType(string internalName, string displayName, string tooltip, Atlas.Sprite sprite, bool unlockAtStart)
         {
-            string modName = Assembly.GetCallingAssembly().GetName().Name;
+            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
 
             // Register the TechType using overload.
             TechType techType = Main.AddTechType(internalName, displayName, tooltip, unlockAtStart);
@@ -239,7 +238,7 @@
         /// <returns>The new <see cref="TechType"/> that is created.</returns>
         TechType ITechTypeHandler.AddTechType(string internalName, string displayName, string tooltip, Sprite sprite, bool unlockAtStart)
         {
-            string modName = Assembly.GetCallingAssembly().GetName().Name;
+            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
 
             // Register the TechType using overload.
             TechType techType = Main.AddTechType(internalName, displayName, tooltip, unlockAtStart);

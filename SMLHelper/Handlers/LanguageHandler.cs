@@ -1,8 +1,8 @@
 ﻿namespace SMLHelper.V2.Handlers
 {
-    using System.Reflection;
     using Interfaces;
     using Patchers;
+    using Utility;
 
     public class LanguageHandler : ILanguageHandler
     {
@@ -51,7 +51,7 @@
         /// <param name="text">The actual text related to the entry.</param>
         void ILanguageHandler.SetLanguageLine(string lineId, string text)
         {
-            string modName = Assembly.GetCallingAssembly().GetName().Name;
+            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
 
             LanguagePatcher.AddCustomLanguageLine(modName, lineId, text);
         }
@@ -63,7 +63,7 @@
         /// <param name="text">The new display name for the chosen <see cref="TechType"/>.</param>
         void ILanguageHandler.SetTechTypeName(TechType techType, string text)
         {
-            string modName = Assembly.GetCallingAssembly().GetName().Name;
+            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
 
             LanguagePatcher.AddCustomLanguageLine(modName, techType.AsString(), text);
         }
@@ -75,7 +75,7 @@
         /// <param name="text">The new tooltip for the chosen <see cref="TechType"/>.</param>
         void ILanguageHandler.SetTechTypeTooltip(TechType techType, string text)
         {
-            string modName = Assembly.GetCallingAssembly().GetName().Name;
+            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
 
             LanguagePatcher.AddCustomLanguageLine(modName, $"Tooltip_{techType.AsString()}", text);
         }
