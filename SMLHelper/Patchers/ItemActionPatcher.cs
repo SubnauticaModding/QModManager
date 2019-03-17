@@ -15,6 +15,8 @@ namespace SMLHelper.V2.Patchers
         /// </summary>
         internal const ItemAction MiddleClickItemAction = (ItemAction)1337;
 
+        internal const string MiddleClickMouseIcon = "<color=#ADF8FFFF></color>";
+
         internal static IDictionary<TechType, Action<InventoryItem>> CustomItemActions = new SelfCheckingDictionary<TechType, Action<InventoryItem>>("CustomItemActions");
 
         internal static IDictionary<TechType, string> CustomItemActionTooltips = new SelfCheckingDictionary<TechType, string>("CustomItemActionTooltips");
@@ -81,7 +83,7 @@ namespace SMLHelper.V2.Patchers
             if (CustomItemActionTooltips.TryGetValue(itemTechType, out string tooltip))
             {
                 sb.Append("\n");
-                TooltipFactory.WriteAction(sb, "MMB", tooltip);
+                TooltipFactory.WriteAction(sb, MiddleClickMouseIcon, tooltip);
             }
         }
 
