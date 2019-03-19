@@ -67,6 +67,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Crafting\NodeFamily.cs" />
+    <Compile Include="FishFramework\CustomFish.cs" />
+    <Compile Include="FishFramework\CustomFishPrefab.cs" />
+    <Compile Include="FishFramework\Extensions.cs" />
+    <Compile Include="FishFramework\FishSpawner.cs" />
+    <Compile Include="FishFramework\MainInit.cs" />
+    <Compile Include="FishFramework\ScaleFixer.cs" />
     <Compile Include="Handlers\LanguageHandler.cs" />
     <Compile Include="Handlers\OptionsPanelHandler.cs" />
     <Compile Include="Handlers\PDAHandler.cs" />

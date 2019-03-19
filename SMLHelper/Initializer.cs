@@ -4,6 +4,7 @@
     using System.Reflection;
     using Harmony;
     using Patchers;
+    using SMLHelper.V2.FishFramework;
 
     public class Initializer
     {
@@ -21,6 +22,7 @@
             {
                 InitializeOld(); // Some patch methods add values/call methods to V2 patchers, and so they need to called first.
                 Initialize();
+                MainInit.Init(); // <- Initialize FishFramework
             }
             catch (Exception e)
             {
