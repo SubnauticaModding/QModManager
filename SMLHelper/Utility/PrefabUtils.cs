@@ -18,5 +18,16 @@
             var forces = _object.AddComponent<WorldForces>();
             forces.useRigidbody = rb;
         }
+
+        public static T GetOrAddComponent<T>(this GameObject obj) where T : Component
+        {
+            T comp = obj.GetComponent<T>();
+            if (!comp)
+            {
+                comp = obj.AddComponent<T>();
+            }
+
+            return comp;
+        }
     }
 }

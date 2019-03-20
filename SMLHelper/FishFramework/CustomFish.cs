@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
-using SMLHelper.V2.Handlers;
-
-namespace SMLHelper.V2.FishFramework
+﻿namespace SMLHelper.V2.FishFramework
 {
+    using System;
+    using System.Collections.Generic;
+    using UnityEngine;
+
     public class CustomFish
     {
         /// <summary>
@@ -54,27 +51,5 @@ namespace SMLHelper.V2.FishFramework
         /// custom ones in your mod
         /// </summary>
         public List<Type> components = new List<Type>();
-
-        /// <summary>
-        /// Registers your fish into the game! This must be called *after* you have defined all your custom attributes
-        /// </summary>
-        public void Register()
-        {
-            Console.WriteLine("[FishFramework] Creating fish: " + displayName);
-            TechType type = TechTypeHandler.AddTechType(id, displayName, tooltip);
-
-            FishSpawner.fishTechTypes.Add(type);
-
-            CustomFishPrefab fish = new CustomFishPrefab(id, $"WorldEntities/Tools/{id}", type);
-            fish.modelPrefab = modelPrefab;
-            fish.scale = scale;
-            fish.swimSpeed = swimSpeed;
-            fish.swimRadius = swimRadius;
-            fish.pickupable = isPickupable;
-            fish.componentsToAdd = components;
-            fish.isWaterCreature = isWaterCreature;
-
-            PrefabHandler.RegisterPrefab(fish);
-        }
     }
 }

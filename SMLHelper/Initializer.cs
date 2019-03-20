@@ -22,7 +22,6 @@
             {
                 InitializeOld(); // Some patch methods add values/call methods to V2 patchers, and so they need to called first.
                 Initialize();
-                MainInit.Init(); // <- Initialize FishFramework
             }
             catch (Exception e)
             {
@@ -48,6 +47,7 @@
 
         internal static void Initialize()
         {
+            CustomFishPatcher.Patch(harmony);
             TechTypePatcher.Patch(harmony);
             CraftTreeTypePatcher.Patch(harmony);
             CraftDataPatcher.Patch(harmony);

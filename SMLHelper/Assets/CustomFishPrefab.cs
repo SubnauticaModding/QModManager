@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SMLHelper.V2.Assets;
-using UnityEngine;
-
-namespace SMLHelper.V2.FishFramework
+﻿namespace SMLHelper.V2.Assets
 {
+    using System;
+    using System.Collections.Generic;
+    using UnityEngine;
+    using SMLHelper.V2.Utility;
+    using SMLHelper.V2.MonoBehaviours;
+
     /// <summary>
-    /// Class used by CustomFish for constructing a prefab based on the values provided by the user
+    /// Class used by CustomFish for constructing a prefab based on the values provided by the user.
     /// You can use this yourself if you want, but you will need to manually provide a TechType
     /// </summary>
     public class CustomFishPrefab : ModPrefab
@@ -38,7 +37,7 @@ namespace SMLHelper.V2.FishFramework
             Console.WriteLine("[FishFramework] Initializing fish: "+ClassID);
             GameObject mainObj = modelPrefab;
 
-            mainObj.AddComponent<ScaleFixer>().scale = scale;
+            mainObj.AddComponent<CustomCreature>().scale = scale;
 
             Console.WriteLine("[FishFramework] Setting correct shaders on renderers");
             Renderer[] renderers = mainObj.GetComponentsInChildren<Renderer>();
@@ -49,11 +48,11 @@ namespace SMLHelper.V2.FishFramework
 
             Console.WriteLine("[FishFramework] Adding essential components to object");
 
-            Rigidbody rb = mainObj.AddOrGet<Rigidbody>();
+            Rigidbody rb = mainObj.GetOrAddComponent<Rigidbody>();
             rb.useGravity = false;
             rb.angularDrag = 1f;
 
-            WorldForces forces = mainObj.AddOrGet<WorldForces>();
+            WorldForces forces = mainObj.GetOrAddComponent<WorldForces>();
             forces.useRigidbody = rb;
             forces.aboveWaterDrag = 0f;
             forces.aboveWaterGravity = 9.81f;
@@ -65,49 +64,49 @@ namespace SMLHelper.V2.FishFramework
             forces.enabled = false;
             forces.enabled = true;
 
-            mainObj.AddOrGet<EntityTag>().slotType = EntitySlot.Type.Creature;
-            mainObj.AddOrGet<PrefabIdentifier>().ClassId = ClassID;
-            mainObj.AddOrGet<TechTag>().type = TechType;
+            mainObj.GetOrAddComponent<EntityTag>().slotType = EntitySlot.Type.Creature;
+            mainObj.GetOrAddComponent<PrefabIdentifier>().ClassId = ClassID;
+            mainObj.GetOrAddComponent<TechTag>().type = TechType;
 
-            mainObj.AddOrGet<SkyApplier>().renderers = renderers;
-            mainObj.AddOrGet<LargeWorldEntity>().cellLevel = LargeWorldEntity.CellLevel.Near;
-            mainObj.AddOrGet<LiveMixin>().health = 10f;
+            mainObj.GetOrAddComponent<SkyApplier>().renderers = renderers;
+            mainObj.GetOrAddComponent<LargeWorldEntity>().cellLevel = LargeWorldEntity.CellLevel.Near;
+            mainObj.GetOrAddComponent<LiveMixin>().health = 10f;
 
-            Creature creature = mainObj.AddOrGet<Creature>();
+            Creature creature = mainObj.GetOrAddComponent<Creature>();
             creature.initialCuriosity = AnimationCurve.Linear(0f, 0.5f, 1f, 0.5f);
             creature.initialFriendliness = AnimationCurve.Linear(0f, 0.5f, 1f, 0.5f);
             creature.initialHunger = AnimationCurve.Linear(0f, 0.5f, 1f, 0.5f);
             SwimBehaviour behaviour = null;
             if (isWaterCreature)
             {
-                behaviour = mainObj.AddOrGet<SwimBehaviour>();
-                SwimRandom swim = mainObj.AddOrGet<SwimRandom>();
+                behaviour = mainObj.GetOrAddComponent<SwimBehaviour>();
+                SwimRandom swim = mainObj.GetOrAddComponent<SwimRandom>();
                 swim.swimVelocity = swimSpeed;
                 swim.swimRadius = swimRadius;
                 swim.swimInterval = 1f;
             }
             else
             {
-                behaviour = mainObj.AddOrGet<WalkBehaviour>();
-                WalkOnGround walk = mainObj.AddOrGet<WalkOnGround>();
-                OnSurfaceMovement move = mainObj.AddOrGet<OnSurfaceMovement>();
-                move.onSurfaceTracker = mainObj.AddOrGet<OnSurfaceTracker>();
+                behaviour = mainObj.GetOrAddComponent<WalkBehaviour>();
+                WalkOnGround walk = mainObj.GetOrAddComponent<WalkOnGround>();
+                OnSurfaceMovement move = mainObj.GetOrAddComponent<OnSurfaceMovement>();
+                move.onSurfaceTracker = mainObj.GetOrAddComponent<OnSurfaceTracker>();
             }
-            Locomotion loco = mainObj.AddOrGet<Locomotion>();
+            Locomotion loco = mainObj.GetOrAddComponent<Locomotion>();
             loco.useRigidbody = rb;
-            mainObj.AddOrGet<EcoTarget>().type = EcoTargetType.Peeper;
-            mainObj.AddOrGet<CreatureUtils>();
-            mainObj.AddOrGet<VFXSchoolFishRepulsor>();
-            SplineFollowing spline = mainObj.AddOrGet<SplineFollowing>();
+            mainObj.GetOrAddComponent<EcoTarget>().type = EcoTargetType.Peeper;
+            mainObj.GetOrAddComponent<CreatureUtils>();
+            mainObj.GetOrAddComponent<VFXSchoolFishRepulsor>();
+            SplineFollowing spline = mainObj.GetOrAddComponent<SplineFollowing>();
             spline.locomotion = loco;
-            spline.levelOfDetail = mainObj.AddOrGet<BehaviourLOD>();
+            spline.levelOfDetail = mainObj.GetOrAddComponent<BehaviourLOD>();
             spline.GoTo(mainObj.transform.position + mainObj.transform.forward, mainObj.transform.forward, 5f);
             behaviour.splineFollowing = spline;
 
             if (pickupable)
             {
                 Console.WriteLine("[FishFramework] Adding pickupable component");
-                mainObj.AddOrGet<Pickupable>();
+                mainObj.GetOrAddComponent<Pickupable>();
             }
 
             Console.WriteLine("[FishFramework] Adding custom components");
