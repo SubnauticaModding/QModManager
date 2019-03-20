@@ -1,5 +1,5 @@
-﻿using System.Reflection;
-using SMLHelper.V2.Handlers;
+﻿using SMLHelper.V2.Handlers;
+using SMLHelper.V2.Utility;
 
 namespace SMLHelper.Patchers
 {
@@ -9,17 +9,17 @@ namespace SMLHelper.Patchers
         [System.Obsolete("Use SMLHelper.V2 instead.")]
         public static TechType AddTechType(string name, string languageName, string languageTooltip)
         {
-            string modName = Assembly.GetCallingAssembly().GetName().Name;
+            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
 
-            return TechTypeHandler.AddTechType(modName, name, languageName, languageTooltip);
+            return TechTypeHandler.Singleton.AddTechType(modName, name, languageName, languageTooltip);
         }
 
         [System.Obsolete("Use SMLHelper.V2 instead.")]
         public static TechType AddTechType(string name, string languageName, string languageTooltip, bool unlockOnGameStart)
         {
-            string modName = Assembly.GetCallingAssembly().GetName().Name;
+            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
 
-            return TechTypeHandler.AddTechType(modName, name, languageName, languageTooltip, unlockOnGameStart);
+            return TechTypeHandler.Singleton.AddTechType(modName, name, languageName, languageTooltip, unlockOnGameStart);
         }
     }
 }
