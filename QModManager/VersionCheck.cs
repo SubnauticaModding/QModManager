@@ -1,33 +1,33 @@
-﻿using Harmony;
+﻿using QModManager.Utility;
 using System;
 using System.Net;
-using System.Net.Security;
 using System.Reflection;
-using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
-using UnityEngine.Events;
+using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
 {
     internal static class VersionCheck
     {
-        internal const string nexusmodsURL = "https://nexusmods.com/subnautica/mods/16";
-        internal const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/master/latest-version.txt";
-
-        private static float timer = 0f;
+        internal const string snNexus = "https://nexusmods.com/subnautica/mods/201";
+        internal const string bzNexus = "https://nexusmods.com/subnauticabelowzero/mods/1";
+        internal const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/master/Data/latest-version.txt";
 
         internal static void Check()
         {
-            timer += Time.deltaTime;
-            if (timer < 1) return;
-            Hooks.Update -= Check;
             if (PlayerPrefs.GetInt("QModManager_EnableUpdateCheck", 1) == 0)
             {
                 Logger.Info("Update check disabled");
                 return;
             }
 
-            ServicePointManager.ServerCertificateValidationCallback = CustomRemoteCertificateValidationCallback;
+            if (!NetworkUtilities.CheckConnection())
+            {
+                Logger.Warn("Cannot check for updates, internet disabled");
+                return;
+            }
+
+            ServicePointManager.ServerCertificateValidationCallback = NetworkUtilities.CustomSCVC;
 
             using (WebClient client = new WebClient())
             {
@@ -48,74 +48,42 @@ namespace QModManager
         }
         private static void Parse(string versionStr)
         {
-            Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
-            if (versionStr == null)
+            try
             {
-                Logger.Error("There was an error retrieving the latest version from GitHub!");
-                return;
-            }
-            Version latestVersion = new Version(versionStr);
-            if (latestVersion == null)
-            {
-                Logger.Error("There was an error retrieving the latest version from GitHub!");
-                return;
-            }
-            if (latestVersion > currentVersion)
-            {
-                Logger.Info($"Newer version found: {latestVersion.ToString()} (current version: {currentVersion.ToString()}");
-                if (Patcher.erroredMods.Count <= 0)
+
+                Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
+                if (versionStr == null)
                 {
-                    Dialog.Show(
-                        $"There is a newer version of QModManager available: {latestVersion.ToString()} (current version: {currentVersion.ToString()})",
-                        Dialog.Button.download, Dialog.Button.close, true);
+                    Logger.Error("There was an error retrieving the latest version from GitHub!");
+                    return;
                 }
-            }
-            else 
-            {
-                Logger.Info($"Recieved latest version from GitHub. We are up to date!");
-            }
-        }
-
-        [HarmonyPatch(typeof(uGUI_OptionsPanel), "AddTabs")]
-        private static class AddTabPatch
-        {
-            [HarmonyPostfix]
-            private static void Postfix(uGUI_OptionsPanel __instance)
-            {
-                bool currentValue = PlayerPrefs.GetInt("QModManager_EnableUpdateCheck", 1) == 0 ? false : true;
-                int modsTab = __instance.AddTab("Mods");
-                __instance.AddHeading(modsTab, "QModManager");
-                __instance.AddToggleOption(modsTab, "Check for updates", currentValue,
-                    new UnityAction<bool>((bool toggleVal) => PlayerPrefs.SetInt("QModManager_EnableUpdateCheck", toggleVal == false ? 0 : 1)));
-            }
-        }
-
-        private static bool CustomRemoteCertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-        {
-            bool isOk = true;
-            // If there are errors in the certificate chain,
-            // look at each error to determine the cause.
-            if (sslPolicyErrors != SslPolicyErrors.None)
-            {
-                for (int i = 0; i < chain.ChainStatus.Length; i++)
+                Version latestVersion = new Version(versionStr);
+                if (latestVersion == null)
                 {
-                    if (chain.ChainStatus[i].Status == X509ChainStatusFlags.RevocationStatusUnknown)
+                    Logger.Error("There was an error retrieving the latest version from GitHub!");
+                    return;
+                }
+                if (latestVersion > currentVersion)
+                {
+                    Logger.Info($"Newer version found: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()}");
+                    if (Patcher.erroredMods.Count <= 0)
                     {
-                        continue;
-                    }
-                    chain.ChainPolicy.RevocationFlag = X509RevocationFlag.EntireChain;
-                    chain.ChainPolicy.RevocationMode = X509RevocationMode.Online;
-                    chain.ChainPolicy.UrlRetrievalTimeout = new TimeSpan(0, 1, 0);
-                    chain.ChainPolicy.VerificationFlags = X509VerificationFlags.AllFlags;
-                    bool chainIsValid = chain.Build((X509Certificate2)certificate);
-                    if (!chainIsValid)
-                    {
-                        isOk = false;
-                        break;
+                        Dialog.Show(
+                            $"There is a newer version of QModManager available: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()})",
+                            Dialog.Button.download, Dialog.Button.close, true);
                     }
                 }
+                else
+                {
+                    Logger.Info($"Recieved latest version from GitHub. We are up to date!");
+                }
             }
-            return isOk;
+            catch (Exception e)
+            {
+                Logger.Error("There was an error retrieving the latest version from GitHub!");
+                Debug.LogException(e);
+                return;
+            }
         }
     }
 }

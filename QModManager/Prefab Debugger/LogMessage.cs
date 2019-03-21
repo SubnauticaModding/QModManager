@@ -2,13 +2,13 @@
 
 namespace QModManager.Debugger
 {
-    public class LogMessage
+    internal class LogMessage
     {
-        public readonly string logString;
-        public readonly string stackTrace;
-        public readonly LogType type;
+        internal readonly string logString;
+        internal readonly string stackTrace;
+        internal readonly LogType type;
 
-        public LogMessage(string _logString, string _stackTrace, LogType _type)
+        internal LogMessage(string _logString, string _stackTrace, LogType _type)
         {
             logString = _logString;
             stackTrace = _stackTrace;

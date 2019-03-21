@@ -1,10 +1,47 @@
-File and details available at 
+### QModManager
 
-https://www.nexusmods.com/subnautica/mods/16/
+#### Config based patch management for Subnautica and Subnautica: Below Zero
+
+https://www.nexusmods.com/subnautica/mods/201/  
+https://www.nexusmods.com/subnauticabelowzero/mods/1/
 
 ___
 
-### Creating mods
+#### This file will not provide a step-by-step tutorial for creating mods!
+
+While creating a mod, you can use the [`0Harmony-1.2.0.1.dll`](https://github.com/pardeike/Harmony) found in the `Managed` folder to patch methods at runtime and change their code.
+
+Your mod must have a `static` method with **no parameters** that must be in a class which **needs to be in a namespace**. That method will be called when the game loads to load the mod. This is usually where you want to make your calls to [SMLHelper](https://nexusmods.com/subnautica/mods/113) or patch methods using [Harmony](https://github.com/pardeike/Harmony).
+
+The patch method and the build DLL file name will be specified in the `mod.json` file.
+
+Example:
+
+`Mod.cs`
+```cs
+using Harmony;
+
+namespace MyNamespace
+{
+    class MyClass
+    {
+        static void PatchMethod()
+        {
+            HarmonyInstance.Create("AwesomeMod").PatchAll();
+        }
+    }
+}
+```
+
+`mod.json`
+```
+{
+  ...
+  "AssemblyName": "MyMod.dll",
+  "EntryMethod": "MyNamespace.MyClass.PatchMethod",
+  ...
+}
+```
 
 #### To support your mod for the QMods system, you need to learn how the `mod.json` file works. It contains informations about a mod, and it can have the folling keys:
 
@@ -48,7 +85,12 @@ _(optional, defaults to `true`)_
 Type: `bool`  
 Example: `true`
 
-- `AssemblyName`: The name of the DLL file which contains the mod.
+- `Game`: The game that this mod is for. Can be `"Subnautica"`, `"BelowZero"`, or `"Both"`  
+_(optional, defaults to `"Subnautica"`)_  
+Type: `string`  
+Example: `"Subnautica"`
+
+- `AssemblyName`: The name of the DLL file which contains the mod.  
 _(required)_  
 Type: `string`  
 Example: `"BestMod.dll"`
@@ -70,6 +112,7 @@ Example: `"BestMod.QMod.Patch"`
   "LoadBefore": [ "AModID", "SomeOtherModID" ],
   "LoadAfter": [ "AnotherModID" ],
   "Enable": true,
+  "Game": "Subnautica",
   "AssemblyName": "BestMod.dll",
   "EntryMethod": "BestMod.QMod.Patch"
 }
@@ -81,4 +124,4 @@ ___
 
 ### Mac Users
 
-Refer to the README.md in the [`Mac Installation`](Mac%20Installation) folder for installation instructions.
+Refer to the `README.md` file in the [`Mac Installation`](Mac%20Installation) folder for installation instructions.

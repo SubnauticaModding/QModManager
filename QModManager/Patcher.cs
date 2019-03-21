@@ -1,12 +1,15 @@
 using Harmony;
 using Oculus.Newtonsoft.Json;
 using QModManager.Debugger;
+using QModManager.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using UnityEngine;
+using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
 {
@@ -31,7 +34,7 @@ namespace QModManager
                 }
                 patched = true;
 
-                Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToString()}...");
+                Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}...");
 
                 if (QModBaseDir == null)
                 {
@@ -41,13 +44,30 @@ namespace QModManager
                     return;
                 }
 
-                Hooks.Load();
-                if (!DetectGame()) return;
-                StartLoadingMods();
-                PatchHarmony();
+                try
+                {
+                    Logger.Info($"Folder structure:\n{IOUtilities.GetFolderStructureAsTree()}\n");
+                }
+                catch (Exception e)
+                {
+                    Logger.Error("There was an error while trying to display the folder structure.");
+                    Debug.LogException(e);
+                }
 
-                Hooks.Update += ShowErroredMods;
-                Hooks.Update += VersionCheck.Check;
+                Hooks.Load();
+
+                if (PirateCheck.IsPirate(Environment.CurrentDirectory))
+                {
+                    PirateCheck.PirateDetected();
+                    return;
+                }
+
+                if (!DetectGame()) return;
+                PatchHarmony();
+                StartLoadingMods();
+
+                ShowErroredMods();
+                VersionCheck.Check();
                 Hooks.Start += PrefabDebugger.Main;
 
                 Hooks.OnLoadEnd?.Invoke();
@@ -63,7 +83,7 @@ namespace QModManager
 
         private static void PatchHarmony()
         {
-            HarmonyInstance.Create("qmodmanager.subnautica").PatchAll();
+            HarmonyInstance.Create("qmodmanager").PatchAll();
             Logger.Debug("Patched!");
         }
 
@@ -100,14 +120,16 @@ namespace QModManager
 
             foreach (string subDir in subDirs)
             {
+                if (Directory.GetFiles(subDir, "*.dll", SearchOption.TopDirectoryOnly).Length < 1) continue;
+
+                string folderName = new DirectoryInfo(subDir).Name;
                 string jsonFile = Path.Combine(subDir, "mod.json");
 
                 if (!File.Exists(jsonFile))
                 {
-                    Logger.Error($"No \"mod.json\" file found for mod located in folder \"{subDir}\"");
-                    Logger.Error("A template file will be created");
+                    Logger.Error($"No \"mod.json\" file found for mod located in folder \"{subDir}\". A template file will be created");
                     File.WriteAllText(jsonFile, JsonConvert.SerializeObject(new QMod()));
-                    erroredMods.Add(QMod.CreateFakeQMod(subDir));
+                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
                     continue;
                 }
 
@@ -115,15 +137,79 @@ namespace QModManager
 
                 if (mod == null)
                 {
-                    Logger.Error($"Skipped a null mod found in folder \"{subDir}\"");
-                    erroredMods.Add(QMod.CreateFakeQMod(subDir));
+                    Logger.Error($"Skipped a null mod found in folder \"{folderName}\"");
+                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
+
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(mod.DisplayName))
+                {
+                    Logger.Error($"Mod found in folder \"{folderName}\" is missing a display name!");
+                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
+
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(mod.Id))
+                {
+                    Logger.Error($"Mod found in folder \"{folderName}\" is missing an ID!");
+                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
+
+                    continue;
+                }
+
+                if (mod.Id != Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase))
+                {
+                    Logger.Warn($"Mod found in folder \"{folderName}\" has an invalid ID! All invalid characters have been removed. (This can lead to issues!)");
+                    mod.Id = Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase);
+
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(mod.Author))
+                {
+                    Logger.Error($"Mod found in folder \"{folderName}\" is missing an author!");
+                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
+
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(mod.Version))
+                {
+                    Logger.Error($"Mod found in folder \"{folderName}\" is missing a version!");
+                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
+
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(mod.AssemblyName))
+                {
+                    Logger.Error($"Mod found in folder \"{folderName}\" is missing an assembly name!");
+                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
+
+                    continue;
+                }
+
+                if (string.IsNullOrEmpty(mod.EntryMethod))
+                {
+                    Logger.Error($"Mod found in folder \"{folderName}\" is missing an entry point!");
+                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
+
+                    continue;
+                }
+
+                if (mod.EntryMethod.Where(c => c == '.').ToList().Count < 2)
+                {
+                    Logger.Error($"Mod found in folder \"{folderName}\" has a badly-formatted entry point!");
+                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
 
                     continue;
                 }
 
                 if (mod.Enable == false)
                 {
-                    Logger.Info($"{mod.DisplayName} is disabled via config, skipping");
+                    Logger.Info($"Mod \"{mod.DisplayName}\" is disabled via config, skipping");
 
                     continue;
                 }
@@ -141,7 +227,7 @@ namespace QModManager
                 mod.LoadedAssembly = Assembly.LoadFrom(modAssemblyPath);
                 mod.ModAssemblyPath = modAssemblyPath;
 
-                foundMods.Add(mod); 
+                foundMods.Add(mod);
             }
 
             // Add the found mods into the sortedMods list
@@ -149,8 +235,10 @@ namespace QModManager
 
             // Disable mods that are not for the detected game
             // (Disable Subnautica mods if Below Zero is detected and disable Below Zero mods if Subnautica is detected)
-            // 
             DisableNonApplicableMods();
+
+            // Remove mods with duplicate mod ids if any are found
+            RemoveDuplicateModIDs();
 
             // Sort the mods based on their LoadBefore and LoadAfter properties
             // If any mods break (i.e., a loop is found), they are removed from the list so that they aren't loaded
@@ -179,8 +267,6 @@ namespace QModManager
                 {
                     if (mod.Id != "SMLHelper")
                     {
-                        toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
-
                         if (!LoadMod(mod))
                         {
                             if (!erroredMods.Contains(mod))
@@ -191,8 +277,11 @@ namespace QModManager
 
                             continue;
                         }
-
-                        loadedMods.Add(mod);
+                        else
+                        {
+                            toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
+                            loadedMods.Add(mod);
+                        }
                     }
                     else
                     {
@@ -202,8 +291,6 @@ namespace QModManager
             }
             if (smlHelper != null)
             {
-                toWrite += $"- {smlHelper.DisplayName} ({smlHelper.Id})\n";
-
                 if (!LoadMod(smlHelper))
                 {
                     if (!erroredMods.Contains(smlHelper))
@@ -214,6 +301,7 @@ namespace QModManager
                 }
                 else
                 {
+                    toWrite += $"- {smlHelper.DisplayName} ({smlHelper.Id})\n";
                     loadedMods.Add(smlHelper);
                 }
             }
@@ -258,6 +346,8 @@ namespace QModManager
                 {
                     Logger.Error($"Could not parse entry method \"{mod.AssemblyName}\" for mod \"{mod.Id}\"");
                     Debug.LogException(e);
+                    erroredMods.Add(mod);
+
                     return false;
                 }
                 catch (TargetInvocationException e)
@@ -274,20 +364,59 @@ namespace QModManager
                 }
             }
 
+            if (PatchManager.ErroredMods.Contains(mod.LoadedAssembly))
+            {
+                Logger.Error($"Mod \"{mod.Id}\" could not be loaded.");
+                PatchManager.ErroredMods.Remove(mod.LoadedAssembly);
+                return false;
+            }
             mod.Loaded = true;
             Logger.Info($"Loaded mod \"{mod.Id}\"");
 
             return true;
         }
 
+        private static void RemoveDuplicateModIDs()
+        {
+            List<QMod> duplicateModIDs = new List<QMod>();
+
+            foreach (QMod mod in sortedMods)
+            {
+                List<QMod> matchingMods = sortedMods.Where((QMod qmod) => qmod.Id == mod.Id).ToList();
+                if (matchingMods.Count > 1)
+                {
+                    foreach (QMod duplicateMod in matchingMods)
+                    {
+                        if (sortedMods.Contains(duplicateMod)) sortedMods.Remove(duplicateMod);
+                        if (!duplicateModIDs.Contains(duplicateMod)) duplicateModIDs.Add(duplicateMod);
+                        if (!erroredMods.Contains(duplicateMod)) erroredMods.Add(duplicateMod);
+                    }
+                }
+            }
+
+            if (duplicateModIDs.Count > 0)
+            {
+                string toWrite = $"Multiple mods with the same ID found:\n";
+                foreach (QMod mod in duplicateModIDs)
+                {
+                    toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
+                }
+
+                Logger.Error(toWrite);
+            }
+        }
+
         #endregion
 
         #region Game detection
 
+        [Flags]
         internal enum Game
         {
-            Subnautica,
-            BelowZero,
+            None = 0b00,
+            Subnautica = 0b01,
+            BelowZero = 0b10,
+            Both = Subnautica | BelowZero,
         }
 
         internal static Game game;
@@ -334,7 +463,7 @@ namespace QModManager
             List<QMod> nonApplicableMods = new List<QMod>();
             sortedMods = sortedMods.Where(mod =>
             {
-                if (mod.Game == game) return true;
+                if (mod.ParsedGame == Game.Both || mod.ParsedGame == game) return true;
 
                 if (!nonApplicableMods.Contains(mod)) nonApplicableMods.Add(mod);
                 if (!erroredMods.Contains(mod)) erroredMods.Add(mod);
@@ -462,7 +591,7 @@ namespace QModManager
                 // If our current mod index (that is, the index of the mod that is passed into this function)
                 // is greater than the index of the current mod which we're looping through's index, skip it
                 // This means that the mod that is passed in is already positioned after this mod that we're looping through.
-                if (currentIndex > index) continue;
+                if (currentIndex > index || index == -1) continue;
 
                 // If we reached this point, that means that the index of the mod that is passed into this function is smaller than the one we're looping through currently
                 // This means that the mod that is passed in is positioned before this mod
@@ -507,7 +636,7 @@ namespace QModManager
 
                 // If the index of the mod that is passed in is smaller than the current loop mod, skip it.
                 // This means that the mod that is passed in is already positioned before the current loop mod.
-                if (currentIndex < index) continue;
+                if (currentIndex < index || index == -1) continue;
 
                 // Remove the mod from the list at this index
                 sortedMods.RemoveAt(index);
@@ -668,6 +797,8 @@ namespace QModManager
 
         private static void CheckOldHarmony()
         {
+            List<QMod> modsThatUseOldHarmony = new List<QMod>();
+
             foreach (QMod mod in loadedMods)
             {
                 AssemblyName[] references = mod.LoadedAssembly.GetReferencedAssemblies();
@@ -675,33 +806,41 @@ namespace QModManager
                 {
                     if (reference.FullName == "0Harmony, Version=1.0.9.1, Culture=neutral, PublicKeyToken=null")
                     {
-                        Logger.Warn($"Mod \"{mod.Id}\" is using an old version of harmony! Tell the author to update.");
+                        modsThatUseOldHarmony.Add(mod);
                         break;
                     }
                 }
-            }   
+            }
+
+            if (modsThatUseOldHarmony.Count > 0)
+            {
+                Logger.Warn($"Some mods are using an old version of harmony! This will NOT cause any problems, but it's not recommended:");
+                foreach (QMod mod in modsThatUseOldHarmony)
+                {
+                    Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");
+                }
+            }
         }
 
         #endregion
 
         #region Errored mods
 
-        private static float timer = 0f;
-
         private static void ShowErroredMods()
         {
-            timer += Time.deltaTime;
-            if (timer < 1) return;
-            Hooks.Update -= ShowErroredMods;
-
             if (erroredMods.Count <= 0) return;
+
             string display = "The following mods could not be loaded: ";
-            for (int i = 0; i < erroredMods.Count; i++)
-            {
-                display += erroredMods[i].DisplayName;
-                if (i + 1 != erroredMods.Count) display += ", ";
-            }
+
+            string[] modsToDisplay = erroredMods.Take(5).Select(mod => mod.DisplayName).ToArray();
+
+            display += string.Join(", ", modsToDisplay);
+
+            if (erroredMods.Count > 5)
+                display += $", and {erroredMods.Count - 5} others";
+
             display += ". Check the log for details.";
+
             Dialog.Show(display, Dialog.Button.seeLog, Dialog.Button.close, false);
         }
 

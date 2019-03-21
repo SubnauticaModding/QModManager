@@ -2,12 +2,12 @@
 
 namespace QModManager.Debugger
 {
-    public class HierarchyItem
+    internal class HierarchyItem
     {
-        public GameObject source;
-        public bool opened;
+        internal GameObject source;
+        internal bool opened;
 
-        public HierarchyItem(GameObject _source)
+        internal HierarchyItem(GameObject _source)
         {
             source = _source;
         }

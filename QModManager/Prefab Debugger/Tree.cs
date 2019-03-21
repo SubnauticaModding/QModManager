@@ -2,22 +2,22 @@
 
 namespace QModManager.Debugger
 {
-    public class TreeNode<T>
+    internal class TreeNode<T>
     {
-        public List<TreeNode<T>> Children = new List<TreeNode<T>>();
+        internal List<TreeNode<T>> Children = new List<TreeNode<T>>();
 
-        public T Item { get; set; }
+        internal T Item { get; set; }
 
-        public TreeNode()
+        internal TreeNode()
         {
         }
-
-        public TreeNode(T item)
+        
+        internal TreeNode(T item)
         {
             Item = item;
         }
 
-        public TreeNode<T> AddChild(T item)
+        internal TreeNode<T> AddChild(T item)
         {
             TreeNode<T> nodeItem = new TreeNode<T>(item);
             Children.Add(nodeItem);

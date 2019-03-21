@@ -6,20 +6,12 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Logger = QModManager.Utility.Logger;
 
 namespace QModManager.Debugger
 {
-    public class PrefabDebugger : MonoBehaviour
+    internal class PrefabDebugger : MonoBehaviour
     {
-        //THINGS I NEED TO ADD
-
-        //Raycasting objects to view their components (in game highlighting of the object would be cool)
-        //Adding/Removing objects and their components
-        //Make the UI look much better (it sucks)
-        //Change the width of a component's property labels to not be hardcoded
-        //Fix the repopulate method so it works properly
-        //Refactor ShowSelectedComponents method to not be so bad
-
         private HierarchyItem selectedGameObject = null;
         private HierarchyItem draggedGameObject = null;
         private PropertyInfo colorProperty;
@@ -29,18 +21,18 @@ namespace QModManager.Debugger
         private bool addComponent = false;
         private readonly Dictionary<string, bool> componentTabs = new Dictionary<string, bool>
         {
-            {"UnityEngine", true },
-            {"UnityEngine.UI", true },
-            {"Subnautica", true },
+            { "Subnautica", true },
+            { "UnityEngine", true },
+            { "UnityEngine.UI", true },
         };
         private readonly Dictionary<string, bool> prefabTabs = new Dictionary<string, bool>
         {
-            {"Assets", true },
-            {"Scene", true },
+            { "Assets", true },
+            { "Scene", true },
         };
 
-
-        public GUISkin skinUWE;
+        private static AssetBundle guiBundle;
+        private static GUISkin skinUWE;
         private TreeNode<HierarchyItem> sceneTree;
         private Vector2 compScrollPos, hierarchyScrollPos, consoleScrollPos, addComponentScrollPos, sceneScrollPos;
         private int numGameObjects = 0;
@@ -50,7 +42,7 @@ namespace QModManager.Debugger
          * Navigating and debugging each component more difficult and lack any actual usage in debugging scenarios
          */
         private readonly string[] propertyBlacklist = { "enabled", "transform", "gameObject", "tag", "name",
-            "hideFlags", "sortingLayerName", "sortingLayerID", "sortingOrder", "sharedMaterial",
+            "hideFlags", "sortingLayerName", "sortingLayerID", "sharedMaterial",
             "sharedMaterials", "additionalVertexStreams","sharedMesh", "lightmapScaleOffset", "useGUILayout",
             "runInEditMode", "alphaHitTestMinimumThreshold", "onCullStateChanged", "maskable", "overrideSprite",
             "worldCamera", "planeDistance", "overridePixelPerfect", "normalizedSortingGridSize", "lightmapBakeType",
@@ -65,29 +57,34 @@ namespace QModManager.Debugger
         private Rect colorRect = new Rect(0, 0, 200, 400);
         private Rect addComponentRect = new Rect(0, 0, 350, 400);
         private Rect debuggerRect;
+        private static RectTransform debuggerRectTransform;
+        private static uGUI_InputGroup inputGroup;
         private int selectedTab;
         private Stack<LogMessage> debugMessages = new Stack<LogMessage>();
         private bool showDebugger = false;
         private bool showErrors, showLogs, showWarnings;
-        private string newScene;
         private Vector2 screenResolution;
 
         private readonly string[] tabs = { "Scenes", "Hierarchy", "Options" };
 
         private const string right_arrow = "▶";
         private const string down_arrow = "▼";
-        public Texture2D stop_symbol, warning_symbol, log_symbol;
+        private static Texture2D stop_symbol, warning_symbol, log_symbol;
 
         //User options that are saved and loaded
         private bool showReadonlyProperties = false;
         private bool showBlacklistedProperties = false;
+        private bool pauseWhenWindowOpen = false;
         private int windowMargin = 50;
         private int viewMargin = 10;
 
-
-        public static void Main()
+        internal static void Main()
         {
-            new GameObject("PrefabDebugger").AddComponent<PrefabDebugger>();
+            var debugger = new GameObject("PrefabDebugger");
+            debugger.AddComponent<PrefabDebugger>();
+            debuggerRectTransform = debugger.AddComponent<RectTransform>();
+            inputGroup = debugger.AddComponent<uGUI_InputGroup>();
+            Logger.Debug("Debugger initialized");
         }
 
         private void Start()
@@ -99,21 +96,26 @@ namespace QModManager.Debugger
             DontDestroyOnLoad(this);
 
             //Load Player Settings
-            windowMargin = PlayerPrefs.GetInt("windowMargin", 50);
-            viewMargin = PlayerPrefs.GetInt("viewMargin", 10);
-            showReadonlyProperties = PlayerPrefs.GetInt("showReadonlyProperties", 0) == 1 ? true : false;
-            showBlacklistedProperties = PlayerPrefs.GetInt("showBlacklistedProperties", 0) == 1 ? true : false;
+            windowMargin = PlayerPrefs.GetInt("QModManager_PrefabDebugger_WindowMargin", 50);
+            viewMargin = PlayerPrefs.GetInt("QModManager_PrefabDebugger_ViewMargin", 10);
+            showReadonlyProperties = PlayerPrefs.GetInt("QModManager_PrefabDebugger_ShowReadonlyProperties", 0) == 1 ? true : false;
+            showBlacklistedProperties = PlayerPrefs.GetInt("QModManager_PrefabDebugger_ShowBlacklistedProperties", 0) == 1 ? true : false;
+            pauseWhenWindowOpen = PlayerPrefs.GetInt("QModManager_PrefabDebugger_PauseWhenWindowOpen", 0) == 1 ? true : false;
 
             if (skinUWE == null)
             {
-                var assets = AssetBundle.LoadFromFile(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Replace('\\', '/') + "/PrefabDebugger.unity3d");
-                if (assets.LoadAsset("SubnauticaGUI") != null)
+                guiBundle = AssetBundle.LoadFromFile(Path.Combine(Application.dataPath, "Managed/QModManagerAssets.unity3d"));
+                if (guiBundle.LoadAsset("SubnauticaGUI") != null)
                 {
-                    skinUWE = (GUISkin)assets.LoadAsset("SubnauticaGUI");
+                    skinUWE = (GUISkin)guiBundle.LoadAsset("SubnauticaGUI");
 
-                    stop_symbol = (Texture2D)assets.LoadAsset("stop");
-                    warning_symbol = (Texture2D)assets.LoadAsset("warning");
-                    log_symbol = (Texture2D)assets.LoadAsset("speech");
+                    stop_symbol = (Texture2D)guiBundle.LoadAsset("stop");
+                    warning_symbol = (Texture2D)guiBundle.LoadAsset("warning");
+                    log_symbol = (Texture2D)guiBundle.LoadAsset("speech");
+                }
+                else
+                {
+                    Logger.Error("Could not load assets from \"QModManagerAssets.unity3d\"");
                 }
             }
             LoadSceneObjects();
@@ -137,17 +139,37 @@ namespace QModManager.Debugger
 
         private void LateUpdate()
         {
-            if (Input.GetKeyUp(KeyCode.F9))
+            if (Input.GetKeyDown(KeyCode.F9) && PlayerPrefs.GetInt("QModManager_PrefabDebugger_Enable", 1) == 1 || showDebugger && Input.GetKeyDown(KeyCode.Escape))
             {
                 showDebugger = !showDebugger;
                 UWE.Utils.alwaysLockCursor = false;
                 UWE.Utils.lockCursor = false;
+                if (showDebugger)
+                {
+                    if (pauseWhenWindowOpen)
+                    {
+                        UWE.FreezeTime.Begin("PrefabDebugger", true);
+                    }
+
+                    inputGroup.Select(true);
+                }
+                else
+                {
+                    if (pauseWhenWindowOpen)
+                    {
+                        UWE.FreezeTime.End("PrefabDebugger");
+                    }
+
+                    inputGroup.Deselect();
+                }
+                GamepadInputModule.current.SetCurrentGrid(null);
             }
 
             if (screenResolution != new Vector2(Screen.width, Screen.height))
             {
                 debuggerRect = new Rect(windowMargin, windowMargin, Screen.width - (windowMargin * 2), Screen.height - (windowMargin * 2));
                 screenResolution = new Vector2(Screen.width, Screen.height);
+                debuggerRectTransform.sizeDelta = debuggerRect.size;
             }
         }
 
@@ -214,7 +236,7 @@ namespace QModManager.Debugger
                     }
                     catch (Exception e)
                     {
-                        Debug.Log("Failure to load scene:" + e.StackTrace);
+                        Debug.Log("Failed to load scene:" + e.StackTrace);
                     }
                 }
 
@@ -270,6 +292,10 @@ namespace QModManager.Debugger
                 }
                 if (GUILayout.Button("Reload Hierarchy", GUILayout.Width(120), GUILayout.ExpandWidth(false)))
                 {
+                    foreach (var emitter in UnityEngine.Object.FindObjectsOfType<FMODUnity.StudioEventEmitter>())
+                    {
+                        emitter.enabled = false;
+                    }
                     LoadSceneObjects();
                 }
                 showLogs = GUILayout.Toggle(showLogs, "Show Logs", GUILayout.Width(100), GUILayout.ExpandWidth(false));
@@ -277,7 +303,7 @@ namespace QModManager.Debugger
                 showErrors = GUILayout.Toggle(showErrors, "Show Errors", GUILayout.Width(100), GUILayout.ExpandWidth(false));
                 GUILayout.EndHorizontal();
 
-                consoleScrollPos = GUILayout.BeginScrollView(consoleScrollPos, GUILayout.Width(900), GUILayout.MinHeight(200));
+                consoleScrollPos = GUILayout.BeginScrollView(consoleScrollPos, GUILayout.MinHeight(200));
                 foreach (LogMessage message in debugMessages)
                 {
                     //Inefficient, I know
@@ -311,7 +337,7 @@ namespace QModManager.Debugger
             {
                 GUILayout.BeginVertical("AreaBackground");
 
-                GUILayout.Label("Margin Settings", "HeaderLabel");
+                GUILayout.Label("Window Settings", "HeaderLabel");
 
                 GUILayout.BeginHorizontal();
                 GUILayout.Label("Window Margin", "NormalLabel", GUILayout.Width(100));
@@ -326,6 +352,9 @@ namespace QModManager.Debugger
 
                 GUILayout.EndHorizontal();
 
+                pauseWhenWindowOpen = GUILayout.Toggle(pauseWhenWindowOpen, "Pause When Prefab Debugger is Open");
+
+
                 GUILayout.Label("Property Settings", "HeaderLabel");
 
                 showReadonlyProperties = GUILayout.Toggle(showReadonlyProperties, "Show Readonly Properties");
@@ -334,11 +363,11 @@ namespace QModManager.Debugger
 
                 if (GUILayout.Button("Save Settings", GUILayout.Width(200)))
                 {
-                    PlayerPrefs.SetInt("windowMargin", windowMargin);
-                    PlayerPrefs.SetInt("viewMargin", viewMargin);
-                    PlayerPrefs.SetInt("showReadonlyProperties", showReadonlyProperties ? 1 : 0);
-                    PlayerPrefs.SetInt("showBlacklistedProperties", showBlacklistedProperties ? 1 : 0);
-                    //Save Settings, JSON?
+                    PlayerPrefs.SetInt("QModManager_PrefabDebugger_WindowMargin", windowMargin);
+                    PlayerPrefs.SetInt("QModManager_PrefabDebugger_ViewMargin", viewMargin);
+                    PlayerPrefs.SetInt("QModManager_PrefabDebugger_ShowReadonlyProperties", showReadonlyProperties ? 1 : 0);
+                    PlayerPrefs.SetInt("QModManager_PrefabDebugger_ShowBlacklistedProperties", showBlacklistedProperties ? 1 : 0);
+                    PlayerPrefs.SetInt("QModManager_PrefabDebugger_PauseWhenWindowOpen", pauseWhenWindowOpen ? 1 : 0);
                 }
 
                 GUILayout.EndVertical();
@@ -460,8 +489,7 @@ namespace QModManager.Debugger
         {
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            bool closed;
-            closed = GUILayout.Button("", "CloseWindow");
+            bool closed = GUILayout.Button("", "CloseWindow"); 
             GUILayout.EndHorizontal();
             GUILayout.Space(30);
 
@@ -644,7 +672,7 @@ namespace QModManager.Debugger
                     }
                     //GUILayout.Label("val:" + property.GetValue(comp, null));
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     //GUILayout.Label("DBG ERR:" + e.StackTrace);
                     //UnityEngine.Debug.Log("msg:" + e.Message + "err" + e.Source);
@@ -792,6 +820,7 @@ namespace QModManager.Debugger
         //This is broken and in the process of being fixed
         //Current issue: Doesn't remove gameobjects that aren't present in reload
         //Working: Adds new gameobjects and children seen in reload
+        [Obsolete("Broken", true)]
         private void RepopulateTreeRecursively()
         {
             var updatedSceneTree = new TreeNode<HierarchyItem>();
@@ -876,7 +905,7 @@ namespace QModManager.Debugger
 
         private void HandleLog(string logString, string stackTrace, LogType type)
         {
-            //Cap the debug messages saved at 500 to prevent lag
+            //Cap the debug messages saved at 100 to prevent lag
             if (debugMessages.Count > 100)
             {
                 debugMessages.Pop();
@@ -896,5 +925,4 @@ namespace QModManager.Debugger
             }
         }
     }
-
 }

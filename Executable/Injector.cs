@@ -6,10 +6,11 @@ using System.Linq;
 
 namespace QModManager
 {
-    public class Injector
+    internal class Injector
     {
         private readonly string gameDirectory;
         private readonly string managedDirectory;
+        private readonly string globalgamemanagers;
         private readonly string mainFilename = "Assembly-CSharp.dll";
         private const string installerFilename = "QModInstaller.dll";
 
@@ -18,6 +19,7 @@ namespace QModManager
             gameDirectory = dir;
 			managedDirectory = managedDir;
             mainFilename = Path.Combine(managedDirectory, mainFilename);
+            globalgamemanagers = Path.Combine(managedDirectory, "../globalgamemanagers");
         }
 
         internal void Inject()
@@ -29,8 +31,11 @@ namespace QModManager
                     Console.WriteLine("Tried to install, but it was already injected");
                     Console.WriteLine("Skipping installation");
                     Console.WriteLine();
-                    //Console.WriteLine("Press any key to exit...");
-                    //Console.ReadKey();
+                    Console.WriteLine("Trying to enable Unity sound...");
+
+                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, Executable.game);
+
+                    Console.WriteLine("Unity sound enabled successfully");
                     Environment.Exit(0);
                 }
 
@@ -57,8 +62,11 @@ namespace QModManager
 
                 Console.WriteLine("QModManager installed successfully");
                 Console.WriteLine();
-                //Console.WriteLine("Press any key to exit...");
-                //Console.ReadKey();
+                Console.WriteLine("Trying to enable Unity sound...");
+
+                AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, Executable.game);
+
+                Console.WriteLine("Unity sound enabled successfully");
                 Environment.Exit(0);
             }
             catch (Exception e)
@@ -79,8 +87,11 @@ namespace QModManager
                     Console.WriteLine("Tried to uninstall, but patch was not present");
                     Console.WriteLine("Skipping uninstallation");
                     Console.WriteLine();
-                    //Console.WriteLine("Press any key to exit...");
-                    //Console.ReadKey();
+                    Console.WriteLine("Trying to disable Unity sound...");
+
+                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, Executable.game);
+
+                    Console.WriteLine("Unity sound disabled successfully");
                     Environment.Exit(0);
                 }
 
@@ -122,8 +133,11 @@ namespace QModManager
 
                 Console.WriteLine("QModManager was uninstalled successfully");
                 Console.WriteLine();
-                //Console.WriteLine("Press any key to exit...");
-                //Console.ReadKey();
+                Console.WriteLine("Trying to disable Unity sound...");
+
+                AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, Executable.game);
+
+                Console.WriteLine("Unity sound disabled successfully");
                 Environment.Exit(0);
             }
             catch (Exception e)
@@ -162,5 +176,3 @@ namespace QModManager
         }
     }
 }
-
-#warning TODO: Implement installer rollback in Inno Setup
