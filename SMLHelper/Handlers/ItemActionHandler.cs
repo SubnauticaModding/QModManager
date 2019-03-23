@@ -17,8 +17,11 @@
         /// <param name="condition">The condition which must return <see langword="true"/> for the action to be called when the item is clicked<para/>If ommited, the action will always be called</param>
         public static void RegisterLeftClickAction(TechType targetTechType, Action<InventoryItem> callback, string tooltip, Predicate<InventoryItem> condition = null)
         {
+            string languageLine = $"LeftClickAction_{targetTechType.AsString()}";
+            LanguageHandler.SetLanguageLine(languageLine, tooltip);
+
             condition = condition ?? ((item) => true);
-            ItemActionPatcher.LeftClickActions.Add(targetTechType, new ItemActionPatcher.CustomItemAction(callback, tooltip, condition));
+            ItemActionPatcher.LeftClickActions.Add(targetTechType, new ItemActionPatcher.CustomItemAction(callback, languageLine, condition));
         }
         /// <summary>
         /// Registers a custom middle click action for a <see cref="TechType"/>
@@ -29,8 +32,11 @@
         /// <param name="condition">The condition which must return <see langword="true"/> for the action to be called when the item is clicked<para/>If ommited, the action will always be called</param>
         public static void RegisterMiddleClickAction(TechType targetTechType, Action<InventoryItem> callback, string tooltip, Predicate<InventoryItem> condition = null)
         {
+            string languageLine = $"MiddleClickAction_{targetTechType.AsString()}";
+            LanguageHandler.SetLanguageLine(languageLine, tooltip);
+
             condition = condition ?? ((item) => true);
-            ItemActionPatcher.MiddleClickActions.Add(targetTechType, new ItemActionPatcher.CustomItemAction(callback, tooltip, condition));
+            ItemActionPatcher.MiddleClickActions.Add(targetTechType, new ItemActionPatcher.CustomItemAction(callback, languageLine, condition));
         }
     }
 }

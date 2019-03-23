@@ -11,13 +11,13 @@ namespace SMLHelper.V2.Patchers
         internal class CustomItemAction
         {
             internal Action<InventoryItem> Action;
-            internal string Tooltip;
+            internal string LanguageLine;
             internal Predicate<InventoryItem> Condition;
 
             internal CustomItemAction(Action<InventoryItem> action, string tooltip, Predicate<InventoryItem> condition)
             {
                 Action = action;
-                Tooltip = tooltip;
+                LanguageLine = tooltip;
                 Condition = condition;
             }
         }
@@ -130,7 +130,7 @@ namespace SMLHelper.V2.Patchers
                 if (action.Condition(item))
                 {
                     sb.Append("\n");
-                    TooltipFactory.WriteAction(sb, LeftClickMouseIcon, action.Tooltip);
+                    TooltipFactory.WriteAction(sb, LeftClickMouseIcon, Language.main.Get(action.LanguageLine));
                     hasLeftAction = true;
                 }
             }
@@ -141,7 +141,7 @@ namespace SMLHelper.V2.Patchers
                 {
                     if (!hasLeftAction)
                         sb.Append("\n");
-                    TooltipFactory.WriteAction(sb, MiddleClickMouseIcon, action.Tooltip);
+                    TooltipFactory.WriteAction(sb, MiddleClickMouseIcon, Language.main.Get(action.LanguageLine));
                 }
             }
         }
