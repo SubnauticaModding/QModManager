@@ -1,7 +1,7 @@
-﻿using UnityEngine;
-
-namespace SMLHelper.V2.Utility
+﻿namespace SMLHelper.V2.Utility
 {
+    using UnityEngine;
+
     public static class PlayerPrefsExtra
     {
         /// <summary>
