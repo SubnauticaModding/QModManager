@@ -9,15 +9,28 @@
     public class ItemActionHandler
     {
         /// <summary>
-        /// Registers a middle click action for an <see cref="InventoryItem"/> based off of its <see cref="TechType"/>
+        /// Registers a custom left click action for a <see cref="TechType"/>
         /// </summary>
-        /// <param name="targetTechType">The <see cref="TechType"/> which the middle click action will be assigned to</param>
-        /// <param name="callback">The method which is called when the <see cref="InventoryItem"/> was middle-clicked</param>
-        /// <param name="tooltip">The secondary tooltip which appears in the description of the item</param>
-        public static void RegisterMiddleClickAction(TechType targetTechType, Action<InventoryItem> callback, string tooltip)
+        /// <param name="targetTechType">The <see cref="TechType"/> to which the left click action will be assigned</param>
+        /// <param name="callback">The method which will be called when a matching <see cref="InventoryItem"/> with the specified <see cref="TechType"/> was left-clicked</param>
+        /// <param name="tooltip">The secondary tooltip which will appear in the description of the item</param>
+        /// <param name="condition">The condition which must return <see langword="true"/> for the action to be called when the item is clicked<para/>If ommited, the action will always be called</param>
+        public static void RegisterLeftClickAction(TechType targetTechType, Action<InventoryItem> callback, string tooltip, Predicate<InventoryItem> condition = null)
         {
-            ItemActionPatcher.CustomItemActions.Add(targetTechType, callback);
-            if (!string.IsNullOrEmpty(tooltip)) ItemActionPatcher.CustomItemActionTooltips.Add(targetTechType, tooltip);
+            condition = condition ?? ((item) => true);
+            ItemActionPatcher.LeftClickActions.Add(targetTechType, new ItemActionPatcher.CustomItemAction(callback, tooltip, condition));
+        }
+        /// <summary>
+        /// Registers a custom middle click action for a <see cref="TechType"/>
+        /// </summary>
+        /// <param name="targetTechType">The <see cref="TechType"/> which the middle click action will be assigned</param>
+        /// <param name="callback">The method which will be called when a matching <see cref="InventoryItem"/> with the specified <see cref="TechType"/> was middle-clicked</param>
+        /// <param name="tooltip">The secondary tooltip which will appear in the description of the item</param>
+        /// <param name="condition">The condition which must return <see langword="true"/> for the action to be called when the item is clicked<para/>If ommited, the action will always be called</param>
+        public static void RegisterMiddleClickAction(TechType targetTechType, Action<InventoryItem> callback, string tooltip, Predicate<InventoryItem> condition = null)
+        {
+            condition = condition ?? ((item) => true);
+            ItemActionPatcher.MiddleClickActions.Add(targetTechType, new ItemActionPatcher.CustomItemAction(callback, tooltip, condition));
         }
     }
 }

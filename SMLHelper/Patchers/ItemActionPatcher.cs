@@ -6,20 +6,38 @@ using System.Text;
 
 namespace SMLHelper.V2.Patchers
 {
-    public class ItemActionPatcher
+    internal class ItemActionPatcher
     {
+        internal class CustomItemAction
+        {
+            internal Action<InventoryItem> Action;
+            internal string Tooltip;
+            internal Predicate<InventoryItem> Condition;
+
+            internal CustomItemAction(Action<InventoryItem> action, string tooltip, Predicate<InventoryItem> condition)
+            {
+                Action = action;
+                Tooltip = tooltip;
+                Condition = condition;
+            }
+        }
+
         #region Internal Fields
 
         /// <summary>
-        /// A constant <see cref="ItemAction"/> value to represent a custom middle click action
+        /// A constant <see cref="ItemAction"/> value to represent a custom middle click item action
         /// </summary>
-        internal const ItemAction MiddleClickItemAction = (ItemAction)1337;
+        internal const ItemAction CustomMiddleClickItemAction = (ItemAction)1337;
+        /// <summary>
+        /// A constant <see cref="ItemAction"/> value to represent a custom left click item action
+        /// </summary>
+        internal const ItemAction CustomLeftClickItemAction = (ItemAction)1338;
 
+        internal const string LeftClickMouseIcon = "<color=#ADF8FFFF></color>";
         internal const string MiddleClickMouseIcon = "<color=#ADF8FFFF></color>";
 
-        internal static IDictionary<TechType, Action<InventoryItem>> CustomItemActions = new SelfCheckingDictionary<TechType, Action<InventoryItem>>("CustomItemActions");
-
-        internal static IDictionary<TechType, string> CustomItemActionTooltips = new SelfCheckingDictionary<TechType, string>("CustomItemActionTooltips");
+        internal static readonly IDictionary<TechType, CustomItemAction> MiddleClickActions = new SelfCheckingDictionary<TechType, CustomItemAction>("MiddleClickActions");
+        internal static readonly IDictionary<TechType, CustomItemAction> LeftClickActions = new SelfCheckingDictionary<TechType, CustomItemAction>("LeftClickActions");
 
         #endregion
 
@@ -44,8 +62,12 @@ namespace SMLHelper.V2.Patchers
             MethodInfo ItemActionsMethod = TooltipFactoryType.GetMethod("ItemActions", BindingFlags.NonPublic | BindingFlags.Static);
             harmony.Patch(ItemActionsMethod, null, new HarmonyMethod(thisType.GetMethod("ItemActions_Postfix", BindingFlags.NonPublic | BindingFlags.Static)));
 
-            if (CustomItemActions.Count > 0)
-                Logger.Log($"Added {CustomItemActions.Count} middle click actions.");
+            if (MiddleClickActions.Count > 0 && LeftClickActions.Count > 0)
+                Logger.Log($"Added {LeftClickActions.Count} left click actions and {MiddleClickActions.Count} middle click actions.");
+            else if (LeftClickActions.Count > 0)
+                Logger.Log($"Added {LeftClickActions.Count} left click actions.");
+            else if (MiddleClickActions.Count > 0)
+                Logger.Log($"Added {MiddleClickActions.Count} middle click actions.");
 
             Logger.Log("ItemActionPatcher is done.", LogLevel.Debug);
         }
@@ -56,34 +78,71 @@ namespace SMLHelper.V2.Patchers
             {
                 return true;
             }
-            if (button == 2)
+            if (button == 0)
             {
-                Inventory.main.ExecuteItemAction(MiddleClickItemAction, item);
+                Inventory.main.ExecuteItemAction(CustomLeftClickItemAction, item);
                 return false;
             }
-            else return true;
+            if (button == 2)
+            {
+                Inventory.main.ExecuteItemAction(CustomMiddleClickItemAction, item);
+                return false;
+            }
+            return true;
         }
 
         internal static bool ExecuteItemAction_Prefix(ItemAction action, InventoryItem item)
         {
-            if (action != MiddleClickItemAction) return true;
+            if (action != CustomLeftClickItemAction && action != CustomMiddleClickItemAction) return true;
 
             TechType itemTechType = item.item.GetTechType();
-            if (CustomItemActions.TryGetValue(itemTechType, out Action<InventoryItem> method))
+
+            if (action == CustomLeftClickItemAction)
             {
-                method?.Invoke(item);
+                if (LeftClickActions.TryGetValue(itemTechType, out CustomItemAction customItemAction))
+                {
+                    if (customItemAction.Condition(item))
+                        customItemAction.Action(item);
+                }
                 return false;
             }
+
+            if (action == CustomMiddleClickItemAction)
+            {
+                if (MiddleClickActions.TryGetValue(itemTechType, out CustomItemAction customItemAction))
+                {
+                    if (customItemAction.Condition(item))
+                        customItemAction.Action(item);
+                }
+                return false;
+            }
+
             return true;
         }
 
         internal static void ItemActions_Postfix(StringBuilder sb, InventoryItem item)
         {
             TechType itemTechType = item.item.GetTechType();
-            if (CustomItemActionTooltips.TryGetValue(itemTechType, out string tooltip))
+            bool hasLeftAction = false;
+
+            if (LeftClickActions.TryGetValue(itemTechType, out CustomItemAction action))
             {
-                sb.Append("\n");
-                TooltipFactory.WriteAction(sb, MiddleClickMouseIcon, tooltip);
+                if (action.Condition(item))
+                {
+                    sb.Append("\n");
+                    TooltipFactory.WriteAction(sb, LeftClickMouseIcon, action.Tooltip);
+                    hasLeftAction = true;
+                }
+            }
+
+            if (MiddleClickActions.TryGetValue(itemTechType, out action))
+            {
+                if (action.Condition(item))
+                {
+                    if (!hasLeftAction)
+                        sb.Append("\n");
+                    TooltipFactory.WriteAction(sb, MiddleClickMouseIcon, action.Tooltip);
+                }
             }
         }
 
