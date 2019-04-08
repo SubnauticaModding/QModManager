@@ -22,7 +22,7 @@
 
             harmony.Patch(initializeInfo, null, new HarmonyMethod(postfixInfo));
 
-            Logger.Log($"PDAPatcher is ready.", LogLevel.Debug);
+            Logger.Log($"PDAPatcher is done.", LogLevel.Debug);
         }
 
         private static void InitializePostfix()
