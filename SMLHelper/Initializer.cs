@@ -4,7 +4,6 @@
     using System.Reflection;
     using Harmony;
     using Patchers;
-    using SMLHelper.V2.FishFramework;
 
     public class Initializer
     {

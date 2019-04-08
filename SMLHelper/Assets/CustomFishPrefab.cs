@@ -1,10 +1,10 @@
 ﻿namespace SMLHelper.V2.Assets
 {
     using System;
-    using System.Collections.Generic;
     using UnityEngine;
     using SMLHelper.V2.Utility;
     using SMLHelper.V2.MonoBehaviours;
+    using Logger = SMLHelper.V2.Logger;
 
     /// <summary>
     /// Class used by CustomFish for constructing a prefab based on the values provided by the user.
@@ -19,10 +19,7 @@
 
         public float swimSpeed;
         public Vector3 swimRadius;
-
-        public List<Type> componentsToAdd = new List<Type>();
-
-        GameObject cachedPrefab;
+        public float swimInterval;
 
         public CustomFishPrefab(string classId, string prefabFileName, TechType techType = TechType.None) : base(classId, prefabFileName, techType)
         {
@@ -30,23 +27,19 @@
 
         public override GameObject GetGameObject()
         {
-            if (cachedPrefab)
-            {
-                return cachedPrefab;
-            }
-            Console.WriteLine("[FishFramework] Initializing fish: "+ClassID);
+            Logger.Log($"[FishFramework] Initializing fish: {ClassID}", LogLevel.Debug);
             GameObject mainObj = modelPrefab;
 
             mainObj.AddComponent<CustomCreature>().scale = scale;
 
-            Console.WriteLine("[FishFramework] Setting correct shaders on renderers");
+            Logger.Log("[FishFramework] Setting correct shaders on renderers", LogLevel.Debug);
             Renderer[] renderers = mainObj.GetComponentsInChildren<Renderer>();
             foreach(Renderer rend in renderers)
             {
                 rend.material.shader = Shader.Find("MarmosetUBER");
             }
 
-            Console.WriteLine("[FishFramework] Adding essential components to object");
+            Logger.Log("[FishFramework] Adding essential components to object", LogLevel.Debug);
 
             Rigidbody rb = mainObj.GetOrAddComponent<Rigidbody>();
             rb.useGravity = false;
@@ -83,7 +76,7 @@
                 SwimRandom swim = mainObj.GetOrAddComponent<SwimRandom>();
                 swim.swimVelocity = swimSpeed;
                 swim.swimRadius = swimRadius;
-                swim.swimInterval = 1f;
+                swim.swimInterval = swimInterval;
             }
             else
             {
@@ -105,26 +98,11 @@
 
             if (pickupable)
             {
-                Console.WriteLine("[FishFramework] Adding pickupable component");
+                Logger.Log("[FishFramework] Adding pickupable component", LogLevel.Debug);
                 mainObj.GetOrAddComponent<Pickupable>();
             }
 
-            Console.WriteLine("[FishFramework] Adding custom components");
-
-            foreach (Type type in componentsToAdd)
-            {
-                try
-                {
-                    mainObj.AddComponent(type);
-                }
-                catch
-                {
-                    Console.WriteLine("[FishFramework] Failed to add component "+type.Name+" to GameObject");
-                }
-            }
-
             creature.ScanCreatureActions();
-            cachedPrefab = mainObj;
 
             return mainObj;
         }

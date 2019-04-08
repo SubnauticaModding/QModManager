@@ -1,6 +1,4 @@
-﻿
-
-namespace SMLHelper.V2.FishFramework
+﻿namespace SMLHelper.V2.Patchers
 {
     using System;
     using System.Collections.Generic;
@@ -31,7 +29,7 @@ namespace SMLHelper.V2.FishFramework
             }
             if(Random.value < 0.1f)
             {
-                Console.WriteLine($"[FishFramework] Selecting fish out of {CustomFishHandler.fishTechTypes.Count} total types");
+                Logger.Log($"[FishFramework] Selecting fish out of {CustomFishHandler.fishTechTypes.Count} total types", LogLevel.Debug);
                 int randomIndex = Random.Range(0, CustomFishHandler.fishTechTypes.Count);
                 TechType randomFish = CustomFishHandler.fishTechTypes[randomIndex];
 
@@ -62,7 +60,7 @@ namespace SMLHelper.V2.FishFramework
             harmony.Patch(creatureType.GetMethod("Start", BindingFlags.Public | BindingFlags.Instance),
                 null, new HarmonyMethod(thisType.GetMethod("CreatureStart_Postfix", BindingFlags.NonPublic | BindingFlags.Static)), null);
 
-            Logger.Log("TechTypePatcher is done.", LogLevel.Debug);
+            Logger.Log("CustomFishPatcher is done.", LogLevel.Debug);
         }
     }
 }
