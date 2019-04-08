@@ -10,7 +10,7 @@
     {
         public static List<TechType> fishTechTypes = new List<TechType>();
 
-        public static void RegisterFish(CustomFish fish)
+        public static TechType RegisterFish(CustomFish fish)
         {
             Logger.Log($"[FishFramework] Creating fish: {fish.displayName}");
             TechType type = TechTypeHandler.AddTechType(fish.id, fish.displayName, fish.tooltip);
@@ -34,6 +34,8 @@
             }
 
             PrefabHandler.RegisterPrefab(fishPrefab);
+
+            return type;
         }
     }
 }
