@@ -67,12 +67,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Crafting\NodeFamily.cs" />
+    <Compile Include="Handlers\ItemActionHandler.cs" />
     <Compile Include="Handlers\LanguageHandler.cs" />
     <Compile Include="Handlers\OptionsPanelHandler.cs" />
     <Compile Include="Handlers\PDAHandler.cs" />
     <Compile Include="Interfaces\IBioReactorHandler.cs" />
     <Compile Include="Interfaces\ICraftDataHandler.cs" />
     <Compile Include="Interfaces\ICraftTreeHandler.cs" />
+    <Compile Include="Interfaces\IItemActionHandler.cs" />
     <Compile Include="Interfaces\IKnownTechHandler.cs" />
     <Compile Include="Interfaces\ILanguageHandler.cs" />
     <Compile Include="Interfaces\IOptionsPanelHandler.cs" />
@@ -114,10 +116,11 @@
     <Compile Include="Options\SliderModOption.cs" />
     <Compile Include="Options\ToggleModOption.cs" />
     <Compile Include="Options\Utility\Validator.cs" />
+    <Compile Include="Patchers\ItemActionPatcher.cs" />
     <Compile Include="Patchers\ItemsContainerPatcher.cs" />
     <Compile Include="Patchers\OptionsPanelPatcher.cs" />
     <Compile Include="Patchers\PDAPatcher.cs" />
-    <Compile Include="Patchers\SelfCheckingDictionary.cs" />
+    <Compile Include="Utility\SelfCheckingDictionary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Legacy\Patchers\TechTypePatcher.cs" />
     <Compile Include="Legacy\Utility.cs" />

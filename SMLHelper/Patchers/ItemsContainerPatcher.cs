@@ -1,9 +1,9 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
-    using System;
-    using System.Reflection;
     using Harmony;
     using SMLHelper.V2.Utility;
+    using System;
+    using System.Reflection;
 
     internal static class ItemsContainerPatcher
     {
