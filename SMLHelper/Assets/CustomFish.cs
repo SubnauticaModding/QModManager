@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.V2.FishFramework
+﻿namespace SMLHelper.V2.Assets
 {
     using UnityEngine;
 

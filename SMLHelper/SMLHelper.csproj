@@ -67,7 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Crafting\NodeFamily.cs" />
-    <Compile Include="FishFramework\CustomFish.cs" />
+    <Compile Include="Assets\CustomFish.cs" />
     <Compile Include="Assets\CustomFishPrefab.cs" />
     <Compile Include="Patchers\CustomFishPatcher.cs" />
     <Compile Include="Handlers\CustomFishHandler.cs" />
