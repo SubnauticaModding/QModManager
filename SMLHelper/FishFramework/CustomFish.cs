@@ -32,13 +32,9 @@
         /// </summary>
         public bool isPickupable;
         /// <summary>
-        /// Determines whether the creature moves on land or in water. Default true, which is in water
+        /// Determines whether the creature moves on land or in water. Default true, which is in water. Land creature AI does not work ATM.
         /// </summary>
         public bool isWaterCreature = true;
-        /// <summary>
-        /// A value to change the size of your creature, in case your model is far too large or small
-        /// </summary>
-        public float scale = 1f;
 
         /// <summary>
         /// The speed at which your creature will swim

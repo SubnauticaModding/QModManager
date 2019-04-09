@@ -1,9 +1,7 @@
 ﻿namespace SMLHelper.V2.Assets
 {
-    using System;
     using UnityEngine;
     using SMLHelper.V2.Utility;
-    using SMLHelper.V2.MonoBehaviours;
     using Logger = SMLHelper.V2.Logger;
 
     /// <summary>
@@ -12,13 +10,30 @@
     /// </summary>
     public class CustomFishPrefab : ModPrefab
     {
+        /// <summary>
+        /// The model to use to create the creature. This would ideally only have renderer/collider components attached, but will still work if it has behaviours
+        /// </summary>
         public GameObject modelPrefab;
-        public float scale;
+        /// <summary>
+        /// Determines whether your creature can be picked up
+        /// </summary>
         public bool pickupable;
+        /// <summary>
+        /// Determines whether your creature walks or swims. Only works for swimming at the moment, land will probably be fixed at a later time
+        /// </summary>
         public bool isWaterCreature = true;
 
+        /// <summary>
+        /// The speed at which your creature moves
+        /// </summary>
         public float swimSpeed;
+        /// <summary>
+        /// The area in which your creature's AI will look for a new spot to move to
+        /// </summary>
         public Vector3 swimRadius;
+        /// <summary>
+        /// The interval in seconds between when your creature finds a new spot to move to
+        /// </summary>
         public float swimInterval;
 
         public CustomFishPrefab(string classId, string prefabFileName, TechType techType = TechType.None) : base(classId, prefabFileName, techType)
@@ -29,8 +44,6 @@
         {
             Logger.Log($"[FishFramework] Initializing fish: {ClassID}", LogLevel.Debug);
             GameObject mainObj = modelPrefab;
-
-            mainObj.AddComponent<CustomCreature>().scale = scale;
 
             Logger.Log("[FishFramework] Setting correct shaders on renderers", LogLevel.Debug);
             Renderer[] renderers = mainObj.GetComponentsInChildren<Renderer>();

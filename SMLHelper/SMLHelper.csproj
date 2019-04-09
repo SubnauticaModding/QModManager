@@ -71,7 +71,6 @@
     <Compile Include="Assets\CustomFishPrefab.cs" />
     <Compile Include="Patchers\CustomFishPatcher.cs" />
     <Compile Include="Handlers\CustomFishHandler.cs" />
-    <Compile Include="MonoBehaviours\CustomCreature.cs" />
     <Compile Include="Handlers\ItemActionHandler.cs" />
     <Compile Include="Handlers\LanguageHandler.cs" />
     <Compile Include="Handlers\OptionsPanelHandler.cs" />
