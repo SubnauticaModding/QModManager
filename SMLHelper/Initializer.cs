@@ -61,6 +61,7 @@
             OptionsPanelPatcher.Patch(harmony);
             ItemsContainerPatcher.Patch(harmony);
             PDAPatcher.Patch(harmony);
+            ItemActionPatcher.Patch(harmony);
         }
     }
 }
