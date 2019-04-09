@@ -46,6 +46,7 @@
 
         internal static void Initialize()
         {
+            CustomFishPatcher.Patch(harmony);
             TechTypePatcher.Patch(harmony);
             CraftTreeTypePatcher.Patch(harmony);
             CraftDataPatcher.Patch(harmony);
