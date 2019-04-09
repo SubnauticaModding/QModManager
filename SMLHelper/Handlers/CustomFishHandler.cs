@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using SMLHelper.V2.FishFramework;
     using SMLHelper.V2.Assets;
     using System.IO;
 
