@@ -73,7 +73,7 @@
 
             var bannedIndices = new List<int>();
 
-            var knownTechTypes = TechTypeExtensions.keyTechTypes;
+            Dictionary<string, TechType> knownTechTypes = TechTypeExtensions.keyTechTypes;
             foreach (TechType knownTechType in knownTechTypes.Values)
             {
                 int currentTechTypeKey = (int)knownTechType;

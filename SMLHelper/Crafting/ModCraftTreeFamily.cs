@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
     using Assets;
     using Patchers;
     using UnityEngine;
@@ -108,7 +107,7 @@
         /// <returns>A new tab node linked to the root node and ready to use.</returns>
         public ModCraftTreeTab AddTabNode(string nameID, string displayText, Atlas.Sprite sprite)
         {
-            string modName = Assembly.GetCallingAssembly().GetName().Name;
+            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
 
             var tabNode = new ModCraftTreeTab(modName, nameID, displayText, sprite);
             tabNode.LinkToParent(this);
@@ -127,7 +126,7 @@
         /// <returns>A new tab node linked to the root node and ready to use.</returns>
         public ModCraftTreeTab AddTabNode(string nameID, string displayText, Sprite sprite)
         {
-            string modName = Assembly.GetCallingAssembly().GetName().Name;
+            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
 
             var tabNode = new ModCraftTreeTab(modName, nameID, displayText, sprite);
             tabNode.LinkToParent(this);
@@ -144,7 +143,7 @@
         /// <returns>A new tab node linked to the root node and ready to use.</returns>
         public ModCraftTreeTab AddTabNode(string nameID)
         {
-            string modName = Assembly.GetCallingAssembly().GetName().Name;
+            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
 
             var tabNode = new ModCraftTreeTab(modName, nameID);
             tabNode.LinkToParent(this);
