@@ -35,18 +35,24 @@
         internal static void CustomTooltip(StringBuilder sb, InventoryItem item)
         {
             TechType techType = item.item.GetTechType();
-            if (IsUnmoddedItem(techType))
-                WriteModName(sb, "\nSubnautica (" + techType + ")");
+            if (IsVanillaTechType(techType))
+                WriteModName(sb, "\nSubnautica (" + techType.AsString() + ")");
             else if (TechTypePatcher.cacheManager.ContainsKey(techType))
-                WriteModName(sb, "\nModded (" + techType + ")");
+                WriteModName(sb, "\nModded (" + techType.AsString() + ")");
+            else
+                WriteModNameError(sb, "\nUnknown Mod (" + techType.AsString() + ")");
         }
 
-        internal static void WriteModName(StringBuilder sb, string title)
+        internal static void WriteModName(StringBuilder sb, string text)
         {
-            sb.AppendFormat("\n<size=23><color=#00ffffff>{0}</color></size>", title);
+            sb.AppendFormat("\n<size=23><color=#00ffffff>{0}</color></size>", text);
+        }
+        internal static void WriteModNameError(StringBuilder sb, string text)
+        {
+            sb.AppendFormat("\n<size=23><color=#ff0000ff>{0}</color></size>", text);
         }
 
-        internal static bool IsUnmoddedItem(TechType type)
+        internal static bool IsVanillaTechType(TechType type)
         {
             DisableEnumIsDefinedPatch = true;
             bool result = Enum.IsDefined(typeof(TechType), type);
