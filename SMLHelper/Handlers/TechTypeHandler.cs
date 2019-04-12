@@ -1,6 +1,7 @@
 ﻿namespace SMLHelper.V2.Handlers
 {
     using System.Collections.Generic;
+    using System.Reflection;
     using Assets;
     using Patchers;
     using SMLHelper.V2.Interfaces;
@@ -12,6 +13,8 @@
     /// </summary>
     public class TechTypeHandler : ITechTypeHandler
     {
+        internal static readonly Dictionary<TechType, Assembly> TechTypesByAssemblies = new Dictionary<TechType, Assembly>();
+
         internal static readonly TechTypeHandler Singleton = new TechTypeHandler();
         public static ITechTypeHandler Main => Singleton;
 
@@ -175,7 +178,10 @@
         TechType ITechTypeHandler.AddTechType(string internalName, string displayName, string tooltip, bool unlockAtStart)
         {
             string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
-            return AddTechType(modName, internalName, displayName, tooltip, unlockAtStart);
+            Assembly mod = ReflectionHelper.CallingAssemblyByStackTrace();
+            TechType techType = AddTechType(modName, internalName, displayName, tooltip, unlockAtStart);
+            TechTypesByAssemblies.Add(techType, mod);
+            return techType;
         }
 
         /// <summary>

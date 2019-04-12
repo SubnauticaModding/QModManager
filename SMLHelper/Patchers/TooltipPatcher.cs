@@ -1,6 +1,7 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
     using Harmony;
+    using SMLHelper.V2.Handlers;
     using System;
     using System.Reflection;
     using System.Text;
@@ -35,14 +36,20 @@
         internal static void CustomTooltip(StringBuilder sb, InventoryItem item)
         {
             TechType techType = item.item.GetTechType();
+            WriteTechType(sb, techType);
+
             if (IsVanillaTechType(techType))
-                WriteModName(sb, "\nSubnautica (" + techType.AsString() + ")");
+                WriteModName(sb, "Subnautica");
             else if (TechTypePatcher.cacheManager.ContainsKey(techType))
-                WriteModName(sb, "\nModded (" + techType.AsString() + ")");
+                GetAndWriteModName(sb, techType);
             else
-                WriteModNameError(sb, "\nUnknown Mod (" + techType.AsString() + ")");
+                WriteModNameError(sb, "Unknown Mod");
         }
 
+        internal static void WriteTechType(StringBuilder sb, TechType techType)
+        {
+            sb.AppendFormat("\n\n<size=19><color=#808080FF>{0} ({1})</color></size>", techType.AsString(), (int)techType);
+        }
         internal static void WriteModName(StringBuilder sb, string text)
         {
             sb.AppendFormat("\n<size=23><color=#00ffffff>{0}</color></size>", text);
@@ -50,6 +57,18 @@
         internal static void WriteModNameError(StringBuilder sb, string text)
         {
             sb.AppendFormat("\n<size=23><color=#ff0000ff>{0}</color></size>", text);
+        }
+
+        internal static void GetAndWriteModName(StringBuilder sb, TechType type)
+        {
+            if (TechTypeHandler.TechTypesByAssemblies.TryGetValue(type, out Assembly assembly))
+            {
+
+            }
+            else
+            {
+                WriteModNameError(sb, "Unknown Mod");
+            }
         }
 
         internal static bool IsVanillaTechType(TechType type)
