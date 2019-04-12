@@ -5,6 +5,7 @@
     using System;
     using System.Reflection;
     using System.Text;
+    using QModManager;
 
     internal class TooltipPatcher
     {
@@ -61,9 +62,34 @@
 
         internal static void GetAndWriteModName(StringBuilder sb, TechType type)
         {
+            // if (MissingTechTypes.Contains(type)) WriteModNameError(sb, "Mod Missing");
+            // This is for something else I am going to do
+
             if (TechTypeHandler.TechTypesByAssemblies.TryGetValue(type, out Assembly assembly))
             {
+                // SMLHelper can access QModManager internals because of this: 
+                // https://github.com/QModManager/QModManager/blob/releases/2.0.1/QModManager/Properties/AssemblyInfo.cs#L21
 
+                string modName = null;
+
+                foreach (QMod mod in Patcher.loadedMods)
+                {
+                    if (mod == null || mod.LoadedAssembly == null) continue;
+                    if (mod.LoadedAssembly == assembly)
+                    {
+                        modName = mod.DisplayName;
+                        break;
+                    }
+                }
+
+                if (string.IsNullOrEmpty(modName))
+                {
+                    WriteModNameError(sb, "Unknown Mod");
+                }
+                else
+                {
+                    WriteModName(sb, modName);
+                }
             }
             else
             {
