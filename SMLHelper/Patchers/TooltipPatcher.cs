@@ -44,7 +44,7 @@
             else if (TechTypePatcher.cacheManager.ContainsKey(techType))
                 GetAndWriteModName(sb, techType);
             else
-                WriteModNameError(sb, "Unknown Mod");
+                WriteModNameError(sb, "Unknown Mod", "Mod added item without using SMLHelper");
         }
 
         internal static void WriteTechType(StringBuilder sb, TechType techType)
@@ -55,9 +55,9 @@
         {
             sb.AppendFormat("\n<size=23><color=#00ffffff>{0}</color></size>", text);
         }
-        internal static void WriteModNameError(StringBuilder sb, string text)
+        internal static void WriteModNameError(StringBuilder sb, string text, string reason)
         {
-            sb.AppendFormat("\n<size=23><color=#ff0000ff>{0}</color></size>", text);
+            sb.AppendFormat("\n<size=23><color=#ff0000ff>{0}</color></size><size=17><color=#808080FF>({1})</color></size>", text, reason);
         }
 
         internal static void GetAndWriteModName(StringBuilder sb, TechType type)
@@ -84,7 +84,7 @@
 
                 if (string.IsNullOrEmpty(modName))
                 {
-                    WriteModNameError(sb, "Unknown Mod");
+                    WriteModNameError(sb, "Unknown Mod", "Mod could not be determined");
                 }
                 else
                 {
@@ -93,7 +93,7 @@
             }
             else
             {
-                WriteModNameError(sb, "Unknown Mod");
+                WriteModNameError(sb, "Unknown Mod", "Assembly could not be determined");
             }
         }
 

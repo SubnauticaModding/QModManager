@@ -33,6 +33,10 @@
             // Register the TechType.
             TechType techType = TechTypePatcher.AddTechType(internalName);
 
+            // Remember which Assembly added it
+            Assembly mod = ReflectionHelper.CallingAssemblyByStackTrace();
+            TechTypesByAssemblies.Add(techType, mod);
+
             // Register Language lines.
             LanguagePatcher.AddCustomLanguageLine(modName, internalName, displayName);
             LanguagePatcher.AddCustomLanguageLine(modName, "Tooltip_" + internalName, tooltip);
@@ -178,10 +182,7 @@
         TechType ITechTypeHandler.AddTechType(string internalName, string displayName, string tooltip, bool unlockAtStart)
         {
             string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
-            Assembly mod = ReflectionHelper.CallingAssemblyByStackTrace();
-            TechType techType = AddTechType(modName, internalName, displayName, tooltip, unlockAtStart);
-            TechTypesByAssemblies.Add(techType, mod);
-            return techType;
+            return AddTechType(modName, internalName, displayName, tooltip, unlockAtStart);
         }
 
         /// <summary>
