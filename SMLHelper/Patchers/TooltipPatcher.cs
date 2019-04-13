@@ -1,11 +1,15 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
     using Harmony;
+    using QModManager;
     using SMLHelper.V2.Handlers;
     using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Linq.Expressions;
     using System.Reflection;
+    using System.Reflection.Emit;
     using System.Text;
-    using QModManager;
 
     internal class TooltipPatcher
     {
@@ -13,30 +17,25 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
+            HarmonyInstance.DEBUG = true;
+
             Type TooltipFactoryType = typeof(TooltipFactory);
             Type thisType = typeof(TooltipPatcher);
-            MethodInfo InventoryItemMethod = TooltipFactoryType.GetMethod("InventoryItem", BindingFlags.Public | BindingFlags.Static);
-            MethodInfo InventoryItemViewMethod = TooltipFactoryType.GetMethod("InventoryItemView", BindingFlags.Public | BindingFlags.Static);
+            MethodInfo InventoryItemMethod = AccessTools.Method(typeof(TooltipFactory), "InventoryItem");
+            MethodInfo InventoryItemViewMethod = AccessTools.Method(typeof(TooltipFactory), "InventoryItemView");
+            MethodInfo BuildTechMethod = AccessTools.Method(typeof(TooltipFactory), "BuildTech");
+            MethodInfo RecipeMethod = AccessTools.Method(typeof(TooltipFactory), "Recipe");
 
-            harmony.Patch(InventoryItemMethod, new HarmonyMethod(thisType.GetMethod("II_Prefix", BindingFlags.NonPublic | BindingFlags.Static)));
-            harmony.Patch(InventoryItemViewMethod, new HarmonyMethod(thisType.GetMethod("IIV_Prefix", BindingFlags.NonPublic | BindingFlags.Static)));
+            HarmonyMethod TranspilerPatch = new HarmonyMethod(SymbolExtensions.GetMethodInfo(() => Transpiler(null, null)));
+
+            harmony.Patch(InventoryItemMethod, transpiler: TranspilerPatch);
+            harmony.Patch(InventoryItemViewMethod, transpiler: TranspilerPatch);
+            harmony.Patch(BuildTechMethod, transpiler: TranspilerPatch);
+            harmony.Patch(RecipeMethod, transpiler: TranspilerPatch);
         }
 
-        internal static string GetTooltip(InventoryItem item, bool view = false)
+        internal static void CustomTooltip(StringBuilder sb, TechType techType)
         {
-            TooltipFactory.Initialize();
-            StringBuilder stringBuilder = new StringBuilder();
-            Pickupable item2 = item.item;
-            TooltipFactory.ItemCommons(stringBuilder, item2.GetTechType(), item2.gameObject);
-            if (!view) TooltipFactory.ItemActions(stringBuilder, item);
-
-            CustomTooltip(stringBuilder, item);
-
-            return stringBuilder.ToString();
-        }
-        internal static void CustomTooltip(StringBuilder sb, InventoryItem item)
-        {
-            TechType techType = item.item.GetTechType();
             WriteTechType(sb, techType);
 
             if (IsVanillaTechType(techType))
@@ -45,6 +44,10 @@
                 GetAndWriteModName(sb, techType);
             else
                 WriteModNameError(sb, "Unknown Mod", "Mod added item without using SMLHelper");
+        }
+        internal static void CustomTooltip(StringBuilder sb, InventoryItem item)
+        {
+            CustomTooltip(sb, item.item.GetTechType());
         }
 
         internal static void WriteTechType(StringBuilder sb, TechType techType)
@@ -105,15 +108,33 @@
             return result;
         }
 
-        internal static bool II_Prefix(ref string __result, InventoryItem item)
+        #region Patches
+
+        internal static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, MethodBase method)
         {
-            __result = GetTooltip(item);
-            return false;
+            List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
+
+            OpCode targetCode = method.Name.Contains("InventoryItem") ? OpCodes.Ldloc_0 : OpCodes.Ldarg_2;
+            int entryIndex = codes.FindLastIndex(c => c.opcode == targetCode);
+
+            Expression<Action> methodInfo;
+            if (method.Name.Contains("InventoryItem")) methodInfo = () => CustomTooltip(null, null);
+            else methodInfo = () => CustomTooltip(null, TechType.None);
+
+            List<Label> labelsToMove = codes[entryIndex].labels.ToArray().ToList();
+            codes[entryIndex].labels.Clear();
+            
+            CodeInstruction[] codesToInsert = new CodeInstruction[]
+            {
+                new CodeInstruction(OpCodes.Ldloc_0) { labels = labelsToMove },
+                new CodeInstruction(OpCodes.Ldarg_0),
+                new CodeInstruction(OpCodes.Call, SymbolExtensions.GetMethodInfo(methodInfo))
+            };
+            codes.InsertRange(entryIndex, codesToInsert);
+
+            return codes.AsEnumerable();
         }
-        internal static bool IIV_Prefix(ref string __result, InventoryItem item)
-        {
-            __result = GetTooltip(item, true);
-            return false;
-        }
+
+        #endregion
     }
 }
