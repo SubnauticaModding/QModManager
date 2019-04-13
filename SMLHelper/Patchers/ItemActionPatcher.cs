@@ -78,12 +78,12 @@ namespace SMLHelper.V2.Patchers
             {
                 return true;
             }
-            if (button == 0)
+            if (button == 0 && LeftClickActions.ContainsKey(item.item.GetTechType()))
             {
                 Inventory.main.ExecuteItemAction(CustomLeftClickItemAction, item);
                 return false;
             }
-            if (button == 2)
+            if (button == 2 && MiddleClickActions.ContainsKey(item.item.GetTechType()))
             {
                 Inventory.main.ExecuteItemAction(CustomMiddleClickItemAction, item);
                 return false;
