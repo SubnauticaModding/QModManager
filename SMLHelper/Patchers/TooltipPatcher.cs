@@ -5,6 +5,7 @@
     using SMLHelper.V2.Handlers;
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
@@ -17,7 +18,7 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            HarmonyInstance.DEBUG = true;
+            Initialize();
 
             Type TooltipFactoryType = typeof(TooltipFactory);
             Type thisType = typeof(TooltipPatcher);
@@ -36,7 +37,10 @@
 
         internal static void CustomTooltip(StringBuilder sb, TechType techType)
         {
-            WriteTechType(sb, techType);
+            if (ExtraItemInfoOption == ExtraItemInfo.Nothing) return;
+
+            if (ExtraItemInfoOption == ExtraItemInfo.ModNameAndItemID) WriteTechType(sb, techType);
+            else WriteSpace(sb);
 
             if (IsVanillaTechType(techType))
                 WriteModName(sb, "Subnautica");
@@ -61,6 +65,10 @@
         internal static void WriteModNameError(StringBuilder sb, string text, string reason)
         {
             sb.AppendFormat("\n<size=23><color=#ff0000ff>{0}</color></size><size=17><color=#808080FF>({1})</color></size>", text, reason);
+        }
+        internal static void WriteSpace(StringBuilder sb)
+        {
+            sb.AppendFormat("\n<size=19></size>");
         }
 
         internal static void GetAndWriteModName(StringBuilder sb, TechType type)
@@ -107,6 +115,87 @@
             DisableEnumIsDefinedPatch = false;
             return result;
         }
+
+        #region Options
+
+        internal enum ExtraItemInfo
+        {
+            ModName,
+            ModNameAndItemID,
+            Nothing
+        }
+
+        /// <summary>
+        /// Should be one of: '<see langword="Mod name (default)">'</see>, '<see langword="Mod name and item ID"></see>', or '<see langword="Nothing"></see>'
+        /// </summary>
+        internal static ExtraItemInfo ExtraItemInfoOption { get; private set; }
+
+        internal static void SetExtraItemInfo(ExtraItemInfo value)
+        {
+            string configPath = "./QMods/Modding Helper/ExtraItemInfo.txt";
+
+            string text;
+            switch (value)
+            {
+                case ExtraItemInfo.ModName:
+                    text = "Mod name (default)";
+                    break;
+                case ExtraItemInfo.ModNameAndItemID:
+                    text = "Mod name and item ID";
+                    break;
+                case ExtraItemInfo.Nothing:
+                    text = "Nothing";
+                    break;
+                default:
+                    return;
+            }
+
+            File.WriteAllText(configPath, text);
+            ExtraItemInfoOption = value;
+        }
+
+        internal static bool Initialized = false;
+
+        internal static void Initialize()
+        {
+            if (Initialized) return;
+            Initialized = true;
+
+            string configPath = "./QMods/Modding Helper/ExtraItemInfo.txt";
+
+            if (!File.Exists(configPath))
+            {
+                File.WriteAllText(configPath, "Mod name (default)");
+                ExtraItemInfoOption = ExtraItemInfo.ModName;
+
+                return;
+            }
+
+            string fileContents = File.ReadAllText(configPath);
+
+            switch (fileContents)
+            {
+                case "Mod name (default)":
+                    ExtraItemInfoOption = ExtraItemInfo.ModName;
+                    Logger.Log($"Extra item info set to: {fileContents}", LogLevel.Info);
+                    break;
+                case "Mod name and item ID":
+                    ExtraItemInfoOption = ExtraItemInfo.ModNameAndItemID;
+                    Logger.Log($"Extra item info set to: {fileContents}", LogLevel.Info);
+                    break;
+                case "Nothing":
+                    ExtraItemInfoOption = ExtraItemInfo.Nothing;
+                    Logger.Log($"Extra item info set to: {fileContents}", LogLevel.Info);
+                    break;
+                default:
+                    File.WriteAllText(configPath, "Mod name (default)");
+                    ExtraItemInfoOption = ExtraItemInfo.ModName;
+                    Logger.Log("Error reading ExtraItemInfo.txt configuration file. Defaulted to mod name.", LogLevel.Warn);
+                    break;
+            }
+        }
+
+        #endregion
 
         #region Patches
 

@@ -49,6 +49,12 @@
             // Maybe this could be split into its own file to handle smlhelper options, or maybe it could be removed alltogether
             optionsPanel.AddHeading(modsTab, "SMLHelper");
             optionsPanel.AddToggleOption(modsTab, "Enable debug logs", V2.Logger.EnableDebugging, V2.Logger.SetDebugging);
+            optionsPanel.AddChoiceOption(modsTab, "Extra item info", new string[]
+            {
+                "Mod name (default)",
+                "Mod name and item ID",
+                "Nothing"
+            }, (int)TooltipPatcher.ExtraItemInfoOption, (i) => TooltipPatcher.SetExtraItemInfo((TooltipPatcher.ExtraItemInfo)i));
 
             foreach (ModOptions modOption in modOptions.Values)
             {
