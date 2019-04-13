@@ -13,7 +13,7 @@
     /// </summary>
     public class TechTypeHandler : ITechTypeHandler
     {
-        internal static readonly Dictionary<TechType, Assembly> TechTypesByAssemblies = new Dictionary<TechType, Assembly>();
+        internal static readonly Dictionary<TechType, Assembly> TechTypesAddedBy = new Dictionary<TechType, Assembly>();
 
         internal static readonly TechTypeHandler Singleton = new TechTypeHandler();
         public static ITechTypeHandler Main => Singleton;
@@ -35,7 +35,7 @@
 
             // Remember which Assembly added it
             Assembly mod = ReflectionHelper.CallingAssemblyByStackTrace();
-            TechTypesByAssemblies.Add(techType, mod);
+            TechTypesAddedBy.Add(techType, mod);
 
             // Register Language lines.
             LanguagePatcher.AddCustomLanguageLine(modName, internalName, displayName);

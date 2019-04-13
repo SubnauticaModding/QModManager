@@ -76,7 +76,7 @@
             // if (MissingTechTypes.Contains(type)) WriteModNameError(sb, "Mod Missing");
             // This is for something else I am going to do
 
-            if (TechTypeHandler.TechTypesByAssemblies.TryGetValue(type, out Assembly assembly))
+            if (TechTypeHandler.TechTypesAddedBy.TryGetValue(type, out Assembly assembly))
             {
                 // SMLHelper can access QModManager internals because of this: 
                 // https://github.com/QModManager/QModManager/blob/releases/2.0.1/QModManager/Properties/AssemblyInfo.cs#L21
