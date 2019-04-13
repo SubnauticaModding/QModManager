@@ -1,11 +1,11 @@
-﻿using Harmony;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
-
-namespace SMLHelper.V2.Patchers
+﻿namespace SMLHelper.V2.Patchers
 {
+    using Harmony;
+    using System;
+    using System.Collections.Generic;
+    using System.Reflection;
+    using System.Text;
+
     internal class ItemActionPatcher
     {
         internal class CustomItemAction
@@ -48,19 +48,14 @@ namespace SMLHelper.V2.Patchers
             // Direct access to private fields made possible by https://github.com/CabbageCrow/AssemblyPublicizer/
             // See README.md for details.
 
-            Type thisType = typeof(ItemActionPatcher);
+            harmony.Patch(AccessTools.Method(typeof(uGUI_InventoryTab), "OnPointerClick"), 
+                prefix: new HarmonyMethod(AccessTools.Method(typeof(ItemActionPatcher), "OnPointerClick_Prefix")));
 
-            Type uGUI_InventoryTabType = typeof(uGUI_InventoryTab);
-            MethodInfo OnPointerClickMethod = uGUI_InventoryTabType.GetMethod("OnPointerClick", BindingFlags.Public | BindingFlags.Instance);
-            harmony.Patch(OnPointerClickMethod, new HarmonyMethod(thisType.GetMethod("OnPointerClick_Prefix", BindingFlags.NonPublic | BindingFlags.Static)));
+            harmony.Patch(AccessTools.Method(typeof(Inventory), "ExecuteItemAction"), 
+                prefix: new HarmonyMethod(AccessTools.Method(typeof(ItemActionPatcher), "ExecuteItemAction_Prefix")));
 
-            Type InventoryType = typeof(Inventory);
-            MethodInfo ExecuteItemActionMethod = InventoryType.GetMethod("ExecuteItemAction", BindingFlags.NonPublic | BindingFlags.Instance);
-            harmony.Patch(ExecuteItemActionMethod, new HarmonyMethod(thisType.GetMethod("ExecuteItemAction_Prefix", BindingFlags.NonPublic | BindingFlags.Static)));
-
-            Type TooltipFactoryType = typeof(TooltipFactory);
-            MethodInfo ItemActionsMethod = TooltipFactoryType.GetMethod("ItemActions", BindingFlags.NonPublic | BindingFlags.Static);
-            harmony.Patch(ItemActionsMethod, null, new HarmonyMethod(thisType.GetMethod("ItemActions_Postfix", BindingFlags.NonPublic | BindingFlags.Static)));
+            harmony.Patch(AccessTools.Method(typeof(TooltipFactory), "ItemActions"), 
+                postfix: new HarmonyMethod(AccessTools.Method(typeof(ItemActionPatcher), "ItemActions_Postfix")));
 
             if (MiddleClickActions.Count > 0 && LeftClickActions.Count > 0)
                 Logger.Log($"Added {LeftClickActions.Count} left click actions and {MiddleClickActions.Count} middle click actions.");
