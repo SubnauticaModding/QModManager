@@ -9,9 +9,9 @@
 
     internal class LanguagePatcher
     {
-        private const string LanguageDir = "./QMods/Modding Helper/Language";
-        private const string LanguageOrigDir = LanguageDir + "/Originals";
-        private const string LanguageOverDir = LanguageDir + "/Overrides";
+        private static readonly string LanguageDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Language");
+        private static readonly string LanguageOrigDir = Path.Combine(LanguageDir, "/Originals");
+        private static readonly string LanguageOverDir = Path.Combine(LanguageDir, "/Overrides");
         private const char TextDelimiterOpen = '{';
         private const char TextDelimiterClose = '}';
         private const char KeyValueSeparator = ':';

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Reflection;
     using System.Text;
 
     internal class EnumTypeCache
@@ -62,7 +63,7 @@
 
         private string GetCacheDirectoryPath()
         {
-            string saveDir = $"./QMods/Modding Helper/{EnumTypeName}Cache";
+            string saveDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), $"{EnumTypeName}Cache");
 
             if (!Directory.Exists(saveDir))
                 Directory.CreateDirectory(saveDir);

@@ -47,7 +47,7 @@
             else if (TechTypePatcher.cacheManager.ContainsKey(techType))
                 WriteModNameFromTechType(sb, techType);
             else
-                WriteModNameError(sb, "Unknown Mod", "Mod added item without using SMLHelper");
+                WriteModNameError(sb, "Unknown Mod", "Item added without SMLHelper");
         }
         internal static void CustomTooltip(StringBuilder sb, InventoryItem item)
         {
@@ -131,7 +131,7 @@
 
         internal static void SetExtraItemInfo(ExtraItemInfo value)
         {
-            string configPath = "./QMods/Modding Helper/ExtraItemInfo.txt";
+            string configPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ExtraItemInfo.txt");
 
             string text;
             switch (value)
@@ -160,7 +160,7 @@
             if (Initialized) return;
             Initialized = true;
 
-            string configPath = "./QMods/Modding Helper/ExtraItemInfo.txt";
+            string configPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "ExtraItemInfo.txt");
 
             if (!File.Exists(configPath))
             {
