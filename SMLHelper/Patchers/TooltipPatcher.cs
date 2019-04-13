@@ -64,7 +64,7 @@
         }
         internal static void WriteModNameError(StringBuilder sb, string text, string reason)
         {
-            sb.AppendFormat("\n<size=23><color=#ff0000ff>{0}</color></size><size=17><color=#808080FF>({1})</color></size>", text, reason);
+            sb.AppendFormat("\n<size=23><color=#ff0000ff>{0}</color></size>\n<size=17><color=#808080FF>({1})</color></size>", text, reason);
         }
         internal static void WriteModNameFromTechType(StringBuilder sb, TechType type)
         {
