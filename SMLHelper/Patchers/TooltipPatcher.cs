@@ -112,26 +112,39 @@
 
         internal static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions, MethodBase method)
         {
+            // Turn the IEnumerable into a List
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
 
+            // Get the target op code based on what method is being patched
+            // Ldloc_0 for InventoryItem and InventoryItemView, Ldarg_2 for BuildTech and Recipe
             OpCode targetCode = method.Name.Contains("InventoryItem") ? OpCodes.Ldloc_0 : OpCodes.Ldarg_2;
+            // Get the last occurance of the code
             int entryIndex = codes.FindLastIndex(c => c.opcode == targetCode);
 
+            // Get the fnction that will be injected based on what method is currently being patched
+            // CustomTooltip(StringBuilder, InventoryItem) for InventoryItem and InventoryItemView, CustomTooltip(StringBuilder, TechType) for BuildTech and Recipe
             Expression<Action> methodInfo;
             if (method.Name.Contains("InventoryItem")) methodInfo = () => CustomTooltip(null, null);
             else methodInfo = () => CustomTooltip(null, TechType.None);
 
+            // Remove all labels at the target op code
             List<Label> labelsToMove = codes[entryIndex].labels.ToArray().ToList();
             codes[entryIndex].labels.Clear();
             
+            // Insert custom IL codes
             CodeInstruction[] codesToInsert = new CodeInstruction[]
             {
-                new CodeInstruction(OpCodes.Ldloc_0) { labels = labelsToMove },
+                new CodeInstruction(OpCodes.Ldloc_0)
+                {
+                    // Move labels correctly
+                    labels = labelsToMove
+                },
                 new CodeInstruction(OpCodes.Ldarg_0),
                 new CodeInstruction(OpCodes.Call, SymbolExtensions.GetMethodInfo(methodInfo))
             };
             codes.InsertRange(entryIndex, codesToInsert);
 
+            // Return modified IL
             return codes.AsEnumerable();
         }
 
