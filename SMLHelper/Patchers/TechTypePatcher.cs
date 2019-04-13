@@ -88,7 +88,8 @@
                 bannedIndices.Add(currentTechTypeKey);
             }
 
-            Logger.Log($"Finished known TechTypes exclusion. {bannedIndices.Count} IDs were added in ban list.", LogLevel.Debug);
+            if (bannedIndices.Count > 0)
+                Logger.Log($"Finished known TechTypes exclusion. {bannedIndices.Count} IDs were added in ban list.", LogLevel.Debug);
 
             return bannedIndices;
         }
@@ -179,6 +180,5 @@
         }
 
         #endregion
-
     }
 }
