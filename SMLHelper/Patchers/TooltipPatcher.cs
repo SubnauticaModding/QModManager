@@ -45,7 +45,7 @@
             if (IsVanillaTechType(techType))
                 WriteModName(sb, "Subnautica");
             else if (TechTypePatcher.cacheManager.ContainsKey(techType))
-                GetAndWriteModName(sb, techType);
+                WriteModNameFromTechType(sb, techType);
             else
                 WriteModNameError(sb, "Unknown Mod", "Mod added item without using SMLHelper");
         }
@@ -66,12 +66,7 @@
         {
             sb.AppendFormat("\n<size=23><color=#ff0000ff>{0}</color></size><size=17><color=#808080FF>({1})</color></size>", text, reason);
         }
-        internal static void WriteSpace(StringBuilder sb)
-        {
-            sb.AppendFormat("\n<size=19></size>");
-        }
-
-        internal static void GetAndWriteModName(StringBuilder sb, TechType type)
+        internal static void WriteModNameFromTechType(StringBuilder sb, TechType type)
         {
             // if (MissingTechTypes.Contains(type)) WriteModNameError(sb, "Mod Missing");
             // This is for something else I am going to do
@@ -106,6 +101,10 @@
             {
                 WriteModNameError(sb, "Unknown Mod", "Assembly could not be determined");
             }
+        }
+        internal static void WriteSpace(StringBuilder sb)
+        {
+            sb.AppendFormat("\n<size=19></size>");
         }
 
         internal static bool IsVanillaTechType(TechType type)
