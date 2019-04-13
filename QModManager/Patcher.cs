@@ -762,17 +762,26 @@ namespace QModManager
 
             foreach (string dependencyId in mod.Dependencies)
             {
-                foreach (QMod dependencyMod in foundMods)
+                if (!dependencyId.Contains("@"))
                 {
-                    if (dependencyId == dependencyMod.Id)
-                        dependencies.Add(dependencyMod);
+                    foreach (QMod dependencyMod in foundMods)
+                    {
+                        if (Regex.Replace(dependencyId, "[^0-9a-z_]", "", RegexOptions.IgnoreCase) == dependencyMod.Id)
+                            dependencies.Add(dependencyMod);
+                    }
+                }
+                else
+                {
+                    if ()
+                    string moddependency = dependencyId.Split(new char[] { '@' })[0];
+                    string version = dependencyId.Split(new char[] { '@' })[1];
                 }
             }
 
             return dependencies;
         }
 
-        private static List<string> GetMissingDependencies(QMod mod, IEnumerable<QMod> presentDependencies)
+        private static List<string> GetMissingDependencies(QMod mod, List<QMod> presentDependencies)
         {
             if (mod == null) return null;
             if (presentDependencies == null || presentDependencies.Count() == 0) return mod.Dependencies.ToList();
