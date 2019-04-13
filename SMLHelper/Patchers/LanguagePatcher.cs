@@ -4,7 +4,6 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Reflection;
     using System.Text;
 
     internal class LanguagePatcher
@@ -18,8 +17,6 @@
 
         private static readonly Dictionary<string, Dictionary<string, string>> originalCustomLines = new Dictionary<string, Dictionary<string, string>>();
         private static readonly Dictionary<string, string> customLines = new Dictionary<string, string>();
-
-        private static Type languageType = typeof(Language);
 
         internal static void Postfix(ref Language __instance)
         {
@@ -41,10 +38,8 @@
 
             ReadOverrideCustomLines();
 
-            harmony.Patch(
-                original: languageType.GetMethod("LoadLanguageFile", BindingFlags.NonPublic | BindingFlags.Instance),
-                prefix: null,
-                postfix: new HarmonyMethod(typeof(LanguagePatcher).GetMethod("Postfix", BindingFlags.Static | BindingFlags.NonPublic)));
+            harmony.Patch(AccessTools.Method(typeof(Language), "LoadLanguageFile"),
+                postfix: new HarmonyMethod(AccessTools.Method(typeof(LanguagePatcher), "Postfix")));
 
             Logger.Log("LanguagePatcher is done.", LogLevel.Debug);
         }

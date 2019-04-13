@@ -20,19 +20,19 @@
         {
             Initialize();
 
-            Type TooltipFactoryType = typeof(TooltipFactory);
-            Type thisType = typeof(TooltipPatcher);
-            MethodInfo InventoryItemMethod = AccessTools.Method(typeof(TooltipFactory), "InventoryItem");
-            MethodInfo InventoryItemViewMethod = AccessTools.Method(typeof(TooltipFactory), "InventoryItemView");
-            MethodInfo BuildTechMethod = AccessTools.Method(typeof(TooltipFactory), "BuildTech");
-            MethodInfo RecipeMethod = AccessTools.Method(typeof(TooltipFactory), "Recipe");
+            harmony.Patch(AccessTools.Method(typeof(TooltipFactory), "InventoryItem"),
+                transpiler: new HarmonyMethod(AccessTools.Method(typeof(TooltipPatcher), "Transpiler")));
 
-            HarmonyMethod TranspilerPatch = new HarmonyMethod(SymbolExtensions.GetMethodInfo(() => Transpiler(null, null)));
+            harmony.Patch(AccessTools.Method(typeof(TooltipFactory), "InventoryItemView"),
+                transpiler: new HarmonyMethod(AccessTools.Method(typeof(TooltipPatcher), "Transpiler")));
 
-            harmony.Patch(InventoryItemMethod, transpiler: TranspilerPatch);
-            harmony.Patch(InventoryItemViewMethod, transpiler: TranspilerPatch);
-            harmony.Patch(BuildTechMethod, transpiler: TranspilerPatch);
-            harmony.Patch(RecipeMethod, transpiler: TranspilerPatch);
+            harmony.Patch(AccessTools.Method(typeof(TooltipFactory), "BuildTech"),
+                transpiler: new HarmonyMethod(AccessTools.Method(typeof(TooltipPatcher), "Transpiler")));
+
+            harmony.Patch(AccessTools.Method(typeof(TooltipFactory), "Recipe"),
+                transpiler: new HarmonyMethod(AccessTools.Method(typeof(TooltipPatcher), "Transpiler")));
+
+            Logger.Log("TooltipPatcher is done.", LogLevel.Debug);
         }
 
         internal static void CustomTooltip(StringBuilder sb, TechType techType)

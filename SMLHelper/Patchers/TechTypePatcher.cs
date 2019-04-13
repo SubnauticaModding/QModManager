@@ -98,21 +98,17 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            Type enumType = typeof(Enum);
-            Type thisType = typeof(TechTypePatcher);
-            Type techTypeType = typeof(TechType);
+            harmony.Patch(AccessTools.Method(typeof(Enum), "GetValues"),
+                postfix: new HarmonyMethod(AccessTools.Method(typeof(TechTypePatcher), "Postfix_GetValues")));
 
-            harmony.Patch(enumType.GetMethod("GetValues", BindingFlags.Public | BindingFlags.Static), null,
-                new HarmonyMethod(thisType.GetMethod("Postfix_GetValues", BindingFlags.NonPublic | BindingFlags.Static)));
+            harmony.Patch(AccessTools.Method(typeof(Enum), "IsDefined"),
+                prefix: new HarmonyMethod(AccessTools.Method(typeof(TechTypePatcher), "Prefix_IsDefined")));
 
-            harmony.Patch(enumType.GetMethod("IsDefined", BindingFlags.Public | BindingFlags.Static),
-                new HarmonyMethod(thisType.GetMethod("Prefix_IsDefined", BindingFlags.NonPublic | BindingFlags.Static)), null);
+            harmony.Patch(AccessTools.Method(typeof(Enum), "Parse", new Type[] { typeof(Type), typeof(string), typeof(bool) }),
+                prefix: new HarmonyMethod(AccessTools.Method(typeof(TechTypePatcher), "Prefix_Parse")));
 
-            harmony.Patch(enumType.GetMethod("Parse", new Type[] { typeof(Type), typeof(string), typeof(bool) }),
-                new HarmonyMethod(thisType.GetMethod("Prefix_Parse", BindingFlags.NonPublic | BindingFlags.Static)), null);
-
-            harmony.Patch(techTypeType.GetMethod("ToString", new Type[0]),
-                new HarmonyMethod(thisType.GetMethod("Prefix_ToString", BindingFlags.NonPublic | BindingFlags.Static)), null);
+            harmony.Patch(AccessTools.Method(typeof(TechType), "ToString", new Type[] { }),
+                prefix: new HarmonyMethod(AccessTools.Method(typeof(TechTypePatcher), "Prefix_ToString")));
 
             Logger.Log($"Added {cacheManager.ModdedKeys.Count()} TechTypes succesfully into the game.", LogLevel.Info);
 

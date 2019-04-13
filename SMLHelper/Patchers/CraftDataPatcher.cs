@@ -106,7 +106,7 @@
             PatchUtils.PatchList(CraftData.buildables, CustomBuildables);
 
             harmony.Patch(AccessTools.Method(typeof(CraftData), "PreparePrefabIDCache"), 
-                postfix: new HarmonyMethod(SymbolExtensions.GetMethodInfo(() => PreparePrefabIDCachePostfix())));
+                postfix: new HarmonyMethod(AccessTools.Method(typeof(CraftDataPatcher), "PreparePrefabIDCachePostfix")));
 
             AddCustomTechDataToOriginalDictionary();
 
