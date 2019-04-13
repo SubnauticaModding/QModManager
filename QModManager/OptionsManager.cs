@@ -26,7 +26,7 @@ namespace QModManager
 
                 bool enableDebugger = PlayerPrefsExtra.GetBool("QModManager_PrefabDebugger_Enable", true);
                 __instance.AddToggleOption(modsTab, "Enable prefab debugger", enableDebugger,
-                    new UnityAction<bool>(toggleVal => PlayerPrefsExtra.GetBool("QModManager_PrefabDebugger_Enable", toggleVal)));
+                    new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_PrefabDebugger_Enable", toggleVal)));
             }
         }
     }
