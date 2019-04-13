@@ -62,7 +62,7 @@
         /// <param name="ingredients">The ingredients.</param>
         public TechData(params Ingredient[] ingredients)
         {
-            foreach(Ingredient ingredient in ingredients)
+            foreach (Ingredient ingredient in ingredients)
             {
                 Ingredients.Add(ingredient); 
             }
@@ -75,7 +75,7 @@
         /// <returns>The <see cref="IIngredient"/> at the requested the index if the index is value; Otherwise returns null.</returns>
         public IIngredient GetIngredient(int index)
         {
-            if(Ingredients != null && Ingredients.Count > index)
+            if (Ingredients != null && Ingredients.Count > index)
             {
                 return Ingredients[index];
             }

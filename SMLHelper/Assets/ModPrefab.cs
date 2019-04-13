@@ -38,8 +38,8 @@
         public string PrefabFileName { get; protected set; }
 
         /// <summary>
-        /// The techtype of the corresponding item.
-        /// Used for the <see cref="Fixer" />, <see cref="TechTag" />, and <see cref="Constructable" /> components whenever applicable.
+        /// The <see cref="TechType"/> of the corresponding item.
+        /// Used for <see cref="Fixer" />, <see cref="TechTag" />, and <see cref="Constructable" /> components whenever applicable.
         /// </summary>
         public TechType TechType { get; protected set; }
 
@@ -76,7 +76,7 @@
             SceneCleanerPreserve scp = go.AddComponent<SceneCleanerPreserve>();
             scp.enabled = true;
           
-            if(TechType != TechType.None)
+            if (TechType != TechType.None)
             {
                 go.AddComponent<Fixer>().techType = TechType;
 
