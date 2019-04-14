@@ -1,23 +1,23 @@
-﻿using FMODUnity;
+﻿/*using FMODUnity;
 using Oculus.Newtonsoft.Json;
 using QModManager.Utility;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Net;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using UnityEngine.Video;
+using UnityEngine.Video;*/
+using System.Collections.Generic;
+using System.IO;
 using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
 {
     internal static class PirateCheck
     {
-        private class Pirate : MonoBehaviour
+        /*private class Pirate : MonoBehaviour
         {
             private static string videoURL;
             private const string VideoURLObtainer = "https://you-link.herokuapp.com/?url=https://www.youtube.com/watch?v=i8ju_10NkGY";
@@ -183,14 +183,14 @@ namespace QModManager
                 text.fontStyle = FontStyle.BoldAndItalic;
                 text.fontSize = 40;
             }
-        }
+        }*/
 
         internal static void PirateDetected()
         {
             Logger.Error("Ahoy, matey! Ye be a pirate!");
-            Hooks.Update += Log;
+            /*Hooks.Update += Log;
             GameObject obj = new GameObject("YOU ARE A PIRATE");
-            obj.AddComponent<Pirate>();
+            obj.AddComponent<Pirate>();*/
         }
 
         private static readonly HashSet<string> CrackedFiles = new HashSet<string>()
@@ -204,29 +204,33 @@ namespace QModManager
             "Subnautica_Data/Plugins/steam_emu.ini",
         };
 
-        internal static bool IsPirate(string folder)
+        internal static void IsPirate(string folder)
         {
-            return false;
-
             string steamDll = Path.Combine(folder, "steam_api64.dll");
             if (File.Exists(steamDll))
             {
                 FileInfo fileInfo = new FileInfo(steamDll);
 
-                if (fileInfo.Length > 220000) return true;
+                if (fileInfo.Length > 220000)
+                {
+                    PirateDetected();
+                    return;
+                }
             }
 
             foreach (string file in CrackedFiles)
             {
-                if (File.Exists(Path.Combine(folder, file))) return true;
+                if (File.Exists(Path.Combine(folder, file)))
+                {
+                    PirateDetected();
+                    return;
+                }
             }
-
-            return false;
         }
 
-        internal static void Log()
+        /*internal static void Log()
         {
-            UnityEngine.Debug.LogError("Do what you want cause a pirate is free, you are a pirate!\nYarr har fiddle dee dee\nBeing a pirate is alright to be\nDo what you want cause a pirate is free\nYou are a pirate!");
-        }
+            UnityEngine.Debug.LogError("");
+        }*/
     }
 }
