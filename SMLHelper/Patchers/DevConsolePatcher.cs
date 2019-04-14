@@ -12,11 +12,9 @@
 
         public static void Patch(HarmonyInstance harmony)
         {
-            Type devConsoleType = typeof(DevConsole);
-            Type thisType = typeof(DevConsolePatcher);
-            MethodInfo submitMethod = devConsoleType.GetMethod("Submit", BindingFlags.Instance | BindingFlags.NonPublic);
+            harmony.Patch(AccessTools.Method(typeof(DevConsole), "Submit"),
+                postfix: new HarmonyMethod(AccessTools.Method(typeof(DevConsolePatcher), "Postfix")));
 
-            harmony.Patch(submitMethod, null, new HarmonyMethod(thisType.GetMethod("Postfix", BindingFlags.Static | BindingFlags.NonPublic)));
             Logger.Log("DevConsolePatcher is done.", LogLevel.Debug);
         }
 

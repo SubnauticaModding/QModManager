@@ -38,7 +38,7 @@
             if (FabricatorType == CraftTree.Type.None)
             {
                 Logger.Log($"FabricatorType property for Craftable instance of {this.ClassID} must have a value greater than CraftTree.Type.None.", LogLevel.Error);
-                throw new Exception($"Error patching Craftable:{this.ClassID}");
+                throw new Exception($"Error patching Craftable: {this.ClassID}");
             }
 
             if (this.StepsToFabricatorTab == null || this.StepsToFabricatorTab.Length == 0)

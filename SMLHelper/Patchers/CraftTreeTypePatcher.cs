@@ -1,11 +1,10 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
+    using Crafting;
     using Harmony;
     using System;
     using System.Collections.Generic;
-    using System.Reflection;
     using Utility;
-    using Crafting;
 
     internal class CraftTreeTypePatcher
     {
@@ -87,22 +86,17 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
+            harmony.Patch(AccessTools.Method(typeof(Enum), "GetValues"),
+                postfix: new HarmonyMethod(AccessTools.Method(typeof(CraftTreeTypePatcher), "Postfix_GetValues")));
 
-            Type enumType = typeof(Enum);
-            Type thisType = typeof(CraftTreeTypePatcher);
-            Type techTypeType = typeof(CraftTree.Type);
+            harmony.Patch(AccessTools.Method(typeof(Enum), "IsDefined"),
+                prefix: new HarmonyMethod(AccessTools.Method(typeof(CraftTreeTypePatcher), "Prefix_IsDefined")));
 
-            harmony.Patch(enumType.GetMethod("GetValues", BindingFlags.Public | BindingFlags.Static), null,
-                new HarmonyMethod(thisType.GetMethod("Postfix_GetValues", BindingFlags.NonPublic | BindingFlags.Static)));
+            harmony.Patch(AccessTools.Method(typeof(Enum), "Parse", new Type[] { typeof(Type), typeof(string), typeof(bool) }),
+                prefix: new HarmonyMethod(AccessTools.Method(typeof(CraftTreeTypePatcher), "Prefix_Parse")));
 
-            harmony.Patch(enumType.GetMethod("IsDefined", BindingFlags.Public | BindingFlags.Static),
-                new HarmonyMethod(thisType.GetMethod("Prefix_IsDefined", BindingFlags.NonPublic | BindingFlags.Static)), null);
-
-            harmony.Patch(enumType.GetMethod("Parse", new Type[] { typeof(Type), typeof(string), typeof(bool) }),
-                new HarmonyMethod(thisType.GetMethod("Prefix_Parse", BindingFlags.NonPublic | BindingFlags.Static)), null);
-
-            harmony.Patch(techTypeType.GetMethod("ToString", new Type[0]),
-                new HarmonyMethod(thisType.GetMethod("Prefix_ToString", BindingFlags.NonPublic | BindingFlags.Static)), null);
+            harmony.Patch(AccessTools.Method(typeof(CraftTree.Type), "ToString", new Type[] { }),
+                prefix: new HarmonyMethod(AccessTools.Method(typeof(CraftTreeTypePatcher), "Prefix_ToString")));
 
             Logger.Log("CraftTreeTypePatcher is done.", LogLevel.Debug);
         }

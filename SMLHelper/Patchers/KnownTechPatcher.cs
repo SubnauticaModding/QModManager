@@ -3,7 +3,6 @@
     using Harmony;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
 
     internal class KnownTechPatcher
     {
@@ -16,10 +15,8 @@
 
         public static void Patch(HarmonyInstance harmony)
         {
-            MethodInfo initMethod = typeof(KnownTech).GetMethod("Initialize", BindingFlags.Public | BindingFlags.Static);
-            MethodInfo postfix = typeof(KnownTechPatcher).GetMethod("InitializePostfix", BindingFlags.NonPublic | BindingFlags.Static);
-
-            harmony.Patch(initMethod, null, new HarmonyMethod(postfix));
+            harmony.Patch(AccessTools.Method(typeof(KnownTech), "Initialize"), 
+                postfix: new HarmonyMethod(AccessTools.Method(typeof(KnownTechPatcher), "InitializePostfix")));
         }
 
         internal static void InitializePostfix()

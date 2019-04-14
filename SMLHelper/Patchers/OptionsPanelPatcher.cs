@@ -2,9 +2,7 @@
 {
     using Harmony;
     using Options;
-    using System;
     using System.Collections.Generic;
-    using System.Reflection;
     using UnityEngine;
     using UnityEngine.Events;
     using UnityEngine.UI;
@@ -15,11 +13,8 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            Type uGUI_OptionsPanelType = typeof(uGUI_OptionsPanel);
-            Type thisType = typeof(OptionsPanelPatcher);
-            MethodInfo startMethod = uGUI_OptionsPanelType.GetMethod("AddTabs", BindingFlags.NonPublic | BindingFlags.Instance);
-
-            harmony.Patch(startMethod, null, new HarmonyMethod(thisType.GetMethod("AddTabs_Postfix", BindingFlags.NonPublic | BindingFlags.Static)));
+            harmony.Patch(AccessTools.Method(typeof(uGUI_OptionsPanel), "AddTabs"),
+                postfix: new HarmonyMethod(AccessTools.Method(typeof(OptionsPanelPatcher), "AddTabs_Postfix")));
         }
 
         internal static void AddTabs_Postfix(uGUI_OptionsPanel __instance)

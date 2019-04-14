@@ -1,9 +1,9 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
+    using Assets;
     using Harmony;
     using System.Reflection;
-    using Assets;
-    using System;
+    using UnityEngine;
 
     internal class ResourcesPatcher
     {
@@ -18,20 +18,17 @@
             return true;
         }
 
-        private static readonly PropertyInfo AssetsInfo = 
-            typeof(UnityEngine.ResourceRequest).GetProperty("asset");
+        private static readonly PropertyInfo AssetsInfo = AccessTools.Property(typeof(ResourceRequest), "asset");
 
-        private static readonly FieldInfo MPathInfo =
-            typeof(UnityEngine.ResourceRequest).GetField("m_Path", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo MPathInfo = AccessTools.Field(typeof(ResourceRequest), "m_Path");
 
-        private static readonly FieldInfo MTypeInfo =
-            typeof(UnityEngine.ResourceRequest).GetField("m_Type", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo MTypeInfo = AccessTools.Field(typeof(ResourceRequest), "m_Type");
 
-        internal static bool Prefix_Async(ref UnityEngine.ResourceRequest __result, string path)
+        internal static bool Prefix_Async(ref ResourceRequest __result, string path)
         {
             if (ModPrefab.TryGetFromFileName(path, out ModPrefab prefab))
             {
-                __result = new UnityEngine.ResourceRequest();
+                __result = new ResourceRequest();
                 AssetsInfo.SetValue(__result, prefab.GetGameObject(), null);
 
                 MPathInfo.SetValue(__result, path);
@@ -45,51 +42,41 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            Type resourcesType = typeof(UnityEngine.Resources);
-            MethodInfo[] methods = resourcesType.GetMethods();
+            MethodInfo[] methods = typeof(Resources).GetMethods();
 
             foreach (MethodInfo method in methods)
             {
-                if (method.Name == "Load")
+                if (method.GetParameters().Length == 1)
                 {
-                    if (method.GetParameters().Length == 1)
+                    if (method.Name == "Load")
                     {
+                        MethodInfo patchMethod = method;
+
                         if (method.IsGenericMethod)
                         {
-                            MethodInfo genericMethod = method.MakeGenericMethod(typeof(UnityEngine.Object));
+                            patchMethod = method.MakeGenericMethod(typeof(UnityEngine.Object));
+                        }
 
-                            harmony.Patch(genericMethod,
-                                new HarmonyMethod(typeof(ResourcesPatcher).GetMethod("Prefix", BindingFlags.Static | BindingFlags.NonPublic)), null);
-                        }
-                        else
-                        {
-                            harmony.Patch(method,
-                                new HarmonyMethod(typeof(ResourcesPatcher).GetMethod("Prefix", BindingFlags.Static | BindingFlags.NonPublic)), null);
-                        }
+                        harmony.Patch(patchMethod,
+                            prefix: new HarmonyMethod(AccessTools.Method(typeof(ResourcesPatcher), "Prefix")));
                     }
-                }
 
-                if (method.Name == "LoadAsync")
-                {
-                    if (method.GetParameters().Length == 1)
+                    else if (method.Name == "LoadAsync")
                     {
+                        MethodInfo patchMethod = method;
+
                         if (method.IsGenericMethod)
                         {
-                            MethodInfo genericMethod = method.MakeGenericMethod(typeof(UnityEngine.Object));
+                            patchMethod = method.MakeGenericMethod(typeof(UnityEngine.Object));
+                        }
 
-                            harmony.Patch(genericMethod,
-                                new HarmonyMethod(typeof(ResourcesPatcher).GetMethod("Prefix_Async", BindingFlags.Static | BindingFlags.NonPublic)), null);
-                        }
-                        else
-                        {
-                            harmony.Patch(method,
-                                new HarmonyMethod(typeof(ResourcesPatcher).GetMethod("Prefix_Async", BindingFlags.Static | BindingFlags.NonPublic)), null);
-                        }
+                        harmony.Patch(patchMethod,
+                            prefix: new HarmonyMethod(AccessTools.Method(typeof(ResourcesPatcher), "Prefix_Async")));
                     }
                 }
             }
 
-            Logger.Log("ResourcesPatcher is done.", LogLevel.Debug);
+            V2.Logger.Log("ResourcesPatcher is done.", LogLevel.Debug);
         }
     }
 }

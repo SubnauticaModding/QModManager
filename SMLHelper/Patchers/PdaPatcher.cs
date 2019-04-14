@@ -1,9 +1,7 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
     using Harmony;
-    using System;
     using System.Collections.Generic;
-    using System.Reflection;
 
     // Special thanks to Gorillazilla9 for sharing this method of fragment count patching
     // https://github.com/Gorillazilla9/SubnauticaFragReqBoost/blob/master/PDAScannerPatcher.cs
@@ -12,15 +10,12 @@
         internal static readonly Dictionary<TechType, int> FragmentCount = new Dictionary<TechType, int>();
         internal static readonly Dictionary<TechType, float> FragmentScanTime = new Dictionary<TechType, float>();
 
-        private static readonly Type pdaScannerType = typeof(PDAScanner);
         private static readonly Dictionary<TechType, PDAScanner.EntryData> BlueprintToFragment = new Dictionary<TechType, PDAScanner.EntryData>();
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            MethodInfo initializeInfo = pdaScannerType.GetMethod("Initialize", BindingFlags.Public | BindingFlags.Static);
-            MethodInfo postfixInfo = typeof(PDAPatcher).GetMethod("InitializePostfix", BindingFlags.NonPublic | BindingFlags.Static);
-
-            harmony.Patch(initializeInfo, null, new HarmonyMethod(postfixInfo));
+            harmony.Patch(AccessTools.Method(typeof(PDAScanner), "Initialize"),
+                postfix: new HarmonyMethod(AccessTools.Method(typeof(PDAPatcher), "InitializePostfix")));
 
             Logger.Log($"PDAPatcher is done.", LogLevel.Debug);
         }
@@ -74,8 +69,6 @@
                     Logger.Log($"Warning: TechType {fragmentEntry.Key} not known in PDAScanner.EntryData", LogLevel.Warn);
                 }
             }
-
-            Logger.Log($"PDAPatcher is done.", LogLevel.Debug);
         }
     }
 }

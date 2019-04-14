@@ -3,44 +3,20 @@
     using Harmony;
     using SMLHelper.V2.Utility;
     using System;
-    using System.Reflection;
 
     internal static class ItemsContainerPatcher
     {
         internal static void Patch(HarmonyInstance harmony)
         {
-            // Original methods
-            Type itemsContainerType = typeof(ItemsContainer); // Vanilla Subnautica class for all item storage containers
-            MethodInfo HasRoomFor_XY_Method = itemsContainerType.GetMethod(nameof(ItemsContainer.HasRoomFor), new Type[] { typeof(int), typeof(int) });
-            MethodInfo NotifyAddItem_Method = itemsContainerType.GetMethod("NotifyAddItem", BindingFlags.NonPublic | BindingFlags.Instance); // Private void
-            MethodInfo NotifyRemoveItem_Method = itemsContainerType.GetMethod("NotifyRemoveItem", BindingFlags.NonPublic | BindingFlags.Instance); // Private void
+            harmony.Patch(AccessTools.Method(typeof(ItemsContainer), "HasRoomFor", new Type[] { typeof(int), typeof(int) }),
+                prefix: new HarmonyMethod(AccessTools.Method(typeof(ItemsContainerPatcher), "HasRoomFor_XY_Prefix")),
+                postfix: new HarmonyMethod(AccessTools.Method(typeof(ItemsContainerPatcher), "HasRoomFor_Postfix")));
 
-            // Harmony methods
-            Type patcherType = typeof(ItemsContainerPatcher);
-            MethodInfo HasRoomFor_XY_Prefix_Method = patcherType.GetMethod(nameof(ItemsContainerPatcher.HasRoomFor_XY_Prefix), BindingFlags.NonPublic | BindingFlags.Static);
-            MethodInfo HasRoomFor_Postfix_Method = patcherType.GetMethod(nameof(ItemsContainerPatcher.HasRoomFor_Postfix), BindingFlags.NonPublic | BindingFlags.Static);
-            MethodInfo NotifyChangeItem_Postfix_Method = patcherType.GetMethod(nameof(ItemsContainerPatcher.NotifyChangeItem_Postfix), BindingFlags.NonPublic | BindingFlags.Static);
+            harmony.Patch(AccessTools.Method(typeof(ItemsContainer), "NotifyAddItem"),
+                postfix: new HarmonyMethod(AccessTools.Method(typeof(ItemsContainerPatcher), "NotifyChangeItem_Postfix")));
 
-            /* Patch with Harmony
-			 * All active ItemsContainer.HasRoom methods cascade into HasRoomFor(int width, int height)
-			 * NotifyAddItem and NotifyRemoveItem share the same HarmonyPostfix */
-            harmony.Patch(
-                original: HasRoomFor_XY_Method,
-                prefix: new HarmonyMethod(HasRoomFor_XY_Prefix_Method),
-                postfix: new HarmonyMethod(HasRoomFor_Postfix_Method),
-                transpiler: null);
-
-            harmony.Patch(
-                original: NotifyAddItem_Method,
-                prefix: null,
-                postfix: new HarmonyMethod(NotifyChangeItem_Postfix_Method),
-                transpiler: null);
-
-            harmony.Patch(
-                original: NotifyRemoveItem_Method,
-                prefix: null,
-                postfix: new HarmonyMethod(NotifyChangeItem_Postfix_Method),
-                transpiler: null);
+            harmony.Patch(AccessTools.Method(typeof(ItemsContainer), "NotifyRemoveItem"),
+                postfix: new HarmonyMethod(AccessTools.Method(typeof(ItemsContainerPatcher), "NotifyChangeItem_Postfix")));
 
             Logger.Log($"ItemsContainerPatcher is done.", LogLevel.Debug);
         }

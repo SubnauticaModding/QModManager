@@ -5,13 +5,7 @@
 
     internal class BioReactorPatcher
     {
-        #region Internal Fields
-
         internal static IDictionary<TechType, float> CustomBioreactorCharges = new SelfCheckingDictionary<TechType, float>("CustomBioreactorCharges", TechTypeExtensions.sTechTypeComparer);
-
-        #endregion
-
-        #region Patching
 
         internal static void Patch(HarmonyInstance harmony)
         {
@@ -21,7 +15,5 @@
 
             Logger.Log("BaseBioReactorPatcher is done.", LogLevel.Debug);
         }
-
-        #endregion
     }
 }

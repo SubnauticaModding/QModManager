@@ -105,10 +105,8 @@
             PatchUtils.PatchDictionary(CraftData.backgroundTypes, CustomBackgroundTypes);
             PatchUtils.PatchList(CraftData.buildables, CustomBuildables);
 
-            MethodInfo preparePrefabIDCache = typeof(CraftData).GetMethod("PreparePrefabIDCache", BindingFlags.Public | BindingFlags.Static);
-
-            harmony.Patch(preparePrefabIDCache, null,
-                new HarmonyMethod(typeof(CraftDataPatcher).GetMethod("PreparePrefabIDCachePostfix", BindingFlags.NonPublic | BindingFlags.Static)));
+            harmony.Patch(AccessTools.Method(typeof(CraftData), "PreparePrefabIDCache"), 
+                postfix: new HarmonyMethod(AccessTools.Method(typeof(CraftDataPatcher), "PreparePrefabIDCachePostfix")));
 
             AddCustomTechDataToOriginalDictionary();
 

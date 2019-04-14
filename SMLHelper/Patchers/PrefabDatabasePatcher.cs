@@ -1,7 +1,5 @@
 ﻿namespace SMLHelper.V2.Patchers
 {
-    using System;
-    using System.Reflection;
     using Assets;
     using Harmony;
     using UnityEngine;
@@ -12,7 +10,7 @@
     {
         internal static void LoadPrefabDatabase_Postfix()
         {
-            foreach(ModPrefab prefab in ModPrefab.Prefabs)
+            foreach (ModPrefab prefab in ModPrefab.Prefabs)
             {
                 PrefabDatabase.prefabFiles[prefab.ClassID] = prefab.PrefabFileName;
             }
@@ -46,19 +44,14 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            Type prefabDatabaseType = typeof(PrefabDatabase);
-            MethodInfo loadPrefabDatabase = prefabDatabaseType.GetMethod("LoadPrefabDatabase", BindingFlags.Public | BindingFlags.Static);
-            MethodInfo getPrefabForFilename = prefabDatabaseType.GetMethod("GetPrefabForFilename", BindingFlags.Public | BindingFlags.Static);
-            MethodInfo getPrefabAsync = prefabDatabaseType.GetMethod("GetPrefabAsync", BindingFlags.Public | BindingFlags.Static);
+            harmony.Patch(AccessTools.Method(typeof(PrefabDatabase), "LoadPrefabDatabase"),
+                postfix: new HarmonyMethod(AccessTools.Method(typeof(PrefabDatabasePatcher), "LoadPrefabDatabase_Postfix")));
 
-            harmony.Patch(loadPrefabDatabase, null,
-                new HarmonyMethod(typeof(PrefabDatabasePatcher).GetMethod("LoadPrefabDatabase_Postfix", BindingFlags.NonPublic | BindingFlags.Static)));
+            harmony.Patch(AccessTools.Method(typeof(PrefabDatabase), "GetPrefabForFilename"), 
+                prefix: new HarmonyMethod(AccessTools.Method(typeof(PrefabDatabasePatcher), "GetPrefabForFilename_Prefix")));
 
-            harmony.Patch(getPrefabForFilename, 
-                new HarmonyMethod(typeof(PrefabDatabasePatcher).GetMethod("GetPrefabForFilename_Prefix", BindingFlags.Static | BindingFlags.NonPublic)), null);
-
-            harmony.Patch(getPrefabAsync,
-                new HarmonyMethod(typeof(PrefabDatabasePatcher).GetMethod("GetPrefabAsync_Prefix", BindingFlags.Static | BindingFlags.NonPublic)), null);
+            harmony.Patch(AccessTools.Method(typeof(PrefabDatabase), "GetPrefabAsync"),
+                prefix: new HarmonyMethod(AccessTools.Method(typeof(PrefabDatabasePatcher), "GetPrefabAsync_Prefix")));
 
             Logger.Log("PrefabDatabasePatcher is done.", LogLevel.Debug);
         }
