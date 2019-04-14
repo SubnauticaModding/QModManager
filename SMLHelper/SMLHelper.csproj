@@ -51,6 +51,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Assembly-CSharp_publicized.dll</HintPath>
     </Reference>
+    <Reference Include="QModInstaller">
+      <HintPath>..\Dependencies\QModInstaller.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -124,6 +127,7 @@
     <Compile Include="Patchers\ItemsContainerPatcher.cs" />
     <Compile Include="Patchers\OptionsPanelPatcher.cs" />
     <Compile Include="Patchers\PDAPatcher.cs" />
+    <Compile Include="Patchers\TooltipPatcher.cs" />
     <Compile Include="Utility\SelfCheckingDictionary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Legacy\Patchers\TechTypePatcher.cs" />

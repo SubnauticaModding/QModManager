@@ -172,6 +172,10 @@
 
         internal static string CallingAssemblyNameByStackTrace()
         {
+            return CallingAssemblyByStackTrace().GetName().Name;
+        }
+        internal static Assembly CallingAssemblyByStackTrace()
+        {
             var stackTrace = new StackTrace();
             StackFrame[] frames = stackTrace.GetFrames();
 
@@ -179,10 +183,10 @@
             {
                 Assembly ownerAssembly = stackFrame.GetMethod().DeclaringType.Assembly;
                 if (ownerAssembly != smlHelperAssembly)
-                    return ownerAssembly.GetName().Name;
+                    return ownerAssembly;
             }
 
-            return smlHelperAssembly.GetName().Name;
+            return smlHelperAssembly;
         }
     }
 }

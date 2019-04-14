@@ -88,7 +88,8 @@
                 bannedIndices.Add(currentTechTypeKey);
             }
 
-            Logger.Log($"Finished known TechTypes exclusion. {bannedIndices.Count} IDs were added in ban list.", LogLevel.Debug);
+            if (bannedIndices.Count > 0)
+                Logger.Log($"Finished known TechTypes exclusion. {bannedIndices.Count} IDs were added in ban list.", LogLevel.Debug);
 
             return bannedIndices;
         }
@@ -136,6 +137,8 @@
 
         private static bool Prefix_IsDefined(Type enumType, object value, ref bool __result)
         {
+            if (TooltipPatcher.DisableEnumIsDefinedPatch) return true;
+
             if (enumType.Equals(typeof(TechType)))
             {
                 if (cacheManager.ContainsKey((TechType)value))
@@ -177,6 +180,5 @@
         }
 
         #endregion
-
     }
 }

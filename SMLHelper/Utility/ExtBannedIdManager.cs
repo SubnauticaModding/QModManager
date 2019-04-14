@@ -1,9 +1,10 @@
 ﻿namespace SMLHelper.V2.Utility
 {
-    using System.IO;
-    using System.Collections.Generic;
     using System;
     using System.Collections;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Reflection;
 
     /// <summary>
     /// This class is tasked with checking external txt files for banned IDs that are not to be isssued when patching in new enum entries.
@@ -14,7 +15,7 @@
 
         private static readonly Dictionary<string, List<int>> BannedIdDictionary = new Dictionary<string, List<int>>();
 
-        private const string BannedIdDirectory = @"./QMods/Modding Helper/RestrictedIDs";
+        private static readonly string BannedIdDirectory = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "RestrictedIDs");
 
         /// <summary>
         /// Gets the banned ids, reported by the external files, for the specified enum.

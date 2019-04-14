@@ -2,6 +2,7 @@
 {
     using System;
     using System.IO;
+    using System.Reflection;
 
     internal enum LogLevel
     {
@@ -18,7 +19,7 @@
         internal static bool EnableDebugging { get; private set; }
         internal static void SetDebugging(bool value)
         {
-            string configPath = "./QMods/Modding Helper/EnableDebugLogs.txt";
+            string configPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "EnableDebugLogs.txt");
 
             File.WriteAllText(configPath, value.ToString());
             EnableDebugging = value;
@@ -29,7 +30,7 @@
             if (Initialized) return;
             Initialized = true;
 
-            string configPath = "./QMods/Modding Helper/EnableDebugLogs.txt";
+            string configPath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "EnableDebugLogs.txt");
 
             if (!File.Exists(configPath))
             {
