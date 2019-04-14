@@ -157,7 +157,7 @@ begin
   end
   else if (IsBelowZeroApp()) then
   begin
-    Result := '{#Name} (Below zero)'
+    Result := '{#Name} (Below Zero)'
   end
   else
   begin
