@@ -139,7 +139,7 @@ namespace QModManager.Debugger
 
         private void LateUpdate()
         {
-            if (Input.GetKeyDown(KeyCode.F9) && PlayerPrefs.GetInt("QModManager_PrefabDebugger_Enable", 1) == 1 || showDebugger && Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.F9) && OptionsManager.DebuggerEnabled || showDebugger && Input.GetKeyDown(KeyCode.Escape))
             {
                 showDebugger = !showDebugger;
                 UWE.Utils.alwaysLockCursor = false;

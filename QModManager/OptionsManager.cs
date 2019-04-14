@@ -6,6 +6,8 @@ namespace QModManager
 {
     internal static class OptionsManager
     {
+        internal static bool DebuggerEnabled { get => PlayerPrefsExtra.GetBool("QModManager_PrefabDebugger_Enable", false); }
+
         [HarmonyPatch(typeof(uGUI_OptionsPanel), "AddTabs")]
         private static class OptionsPatch
         {
@@ -23,9 +25,13 @@ namespace QModManager
                 __instance.AddToggleOption(modsTab, "Check for updates", updateCheck,
                     new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_EnableUpdateCheck", toggleVal)));
 
-                bool enableDebugger = PlayerPrefsExtra.GetBool("QModManager_PrefabDebugger_Enable", true);
+                bool enableDebugger = PlayerPrefsExtra.GetBool("QModManager_PrefabDebugger_EnableExperimental", false);
+                __instance.AddToggleOption(modsTab, "Enable prefab debugger (experimental)", enableDebugger,
+                    new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_PrefabDebugger_EnableExperimental", toggleVal)));
+
+                /*bool enableDebugger = PlayerPrefsExtra.GetBool("QModManager_PrefabDebugger_Enable", true);
                 __instance.AddToggleOption(modsTab, "Enable prefab debugger", enableDebugger,
-                    new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_PrefabDebugger_Enable", toggleVal)));
+                    new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_PrefabDebugger_Enable", toggleVal)));*/
             }
         }
     }
