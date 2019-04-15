@@ -311,7 +311,6 @@ namespace QModManager
                 {
                     foreach (QMod duplicateMod in matchingMods)
                     {
-                        if (sortedMods.Contains(duplicateMod)) sortedMods.Remove(duplicateMod);
                         if (!duplicateModIDs.Contains(duplicateMod)) duplicateModIDs.Add(duplicateMod);
                         if (!erroredMods.Contains(duplicateMod)) erroredMods.Add(duplicateMod);
                     }
@@ -323,6 +322,7 @@ namespace QModManager
                 string toWrite = $"Multiple mods with the same ID found:\n";
                 foreach (QMod mod in duplicateModIDs)
                 {
+                    if (sortedMods.Contains(mod)) sortedMods.Remove(mod);
                     toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
                 }
 
