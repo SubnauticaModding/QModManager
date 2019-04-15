@@ -70,9 +70,10 @@ namespace QModManager
                 }
 
                 StartLoadingMods();
-
                 ShowErroredMods();
+
                 VersionCheck.Check();
+
                 Hooks.Start += PrefabDebugger.Main;
 
                 Hooks.OnLoadEnd?.Invoke();

@@ -27,6 +27,7 @@ namespace QModManager
         [JsonIgnore] internal string ModAssemblyPath;
         [JsonIgnore] internal bool Loaded;
         [JsonIgnore] internal Patcher.Game ParsedGame;
+        [JsonIgnore] internal Version ParsedVersion;
 
         internal static QMod FromJsonFile(string file)
         {
@@ -45,6 +46,15 @@ namespace QModManager
                 if (mod.Game == "BelowZero") mod.ParsedGame = Patcher.Game.BelowZero;
                 else if (mod.Game == "Both") mod.ParsedGame = Patcher.Game.Both;
                 else mod.ParsedGame = Patcher.Game.Subnautica;
+
+                try
+                {
+                    mod.ParsedVersion = new Version(mod.Version);
+                }
+                catch
+                {
+                    mod.ParsedVersion = null;
+                }
 
                 return mod;
             }
@@ -117,6 +127,11 @@ namespace QModManager
                 return false;
             }
 
+            if (mod.ParsedVersion == null)
+            {
+                Logger.Warn($"Mod found in folder \"{folderName}\" has an invalid version!");
+            }
+
             if (string.IsNullOrEmpty(mod.AssemblyName))
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" is missing an assembly name!");
@@ -133,7 +148,7 @@ namespace QModManager
 
             if (mod.EntryMethod.Count(c => c == '.') < 2)
             {
-                Logger.Error($"Mod found in folder \"{folderName}\" has a badly-formatted entry point!");
+                Logger.Error($"Mod found in folder \"{folderName}\" has an invalid entry point!");
 
                 return false;
             }
