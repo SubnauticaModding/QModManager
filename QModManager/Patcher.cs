@@ -131,81 +131,15 @@ namespace QModManager
 
                 QMod mod = QMod.FromJsonFile(Path.Combine(subDir, "mod.json"));
 
-                if (mod == null)
+                if (!QMod.QModValid(mod, folderName))
                 {
-                    Logger.Error($"Skipped a null mod found in folder \"{folderName}\"");
                     erroredMods.Add(QMod.CreateFakeQMod(folderName));
-
-                    continue;
-                }
-
-                if (string.IsNullOrEmpty(mod.DisplayName))
-                {
-                    Logger.Error($"Mod found in folder \"{folderName}\" is missing a display name!");
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
-
-                    continue;
-                }
-
-                if (string.IsNullOrEmpty(mod.Id))
-                {
-                    Logger.Error($"Mod found in folder \"{folderName}\" is missing an ID!");
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
-
-                    continue;
-                }
-
-                if (mod.Id != Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase))
-                {
-                    Logger.Warn($"Mod found in folder \"{folderName}\" has an invalid ID! All invalid characters have been removed. (This can cause issues!)");
-                    mod.Id = Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase);
-
-                    continue;
-                }
-
-                if (string.IsNullOrEmpty(mod.Author))
-                {
-                    Logger.Error($"Mod found in folder \"{folderName}\" is missing an author!");
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
-
-                    continue;
-                }
-
-                if (string.IsNullOrEmpty(mod.Version))
-                {
-                    Logger.Error($"Mod found in folder \"{folderName}\" is missing a version!");
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
-
-                    continue;
-                }
-
-                if (string.IsNullOrEmpty(mod.AssemblyName))
-                {
-                    Logger.Error($"Mod found in folder \"{folderName}\" is missing an assembly name!");
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
-
-                    continue;
-                }
-
-                if (string.IsNullOrEmpty(mod.EntryMethod))
-                {
-                    Logger.Error($"Mod found in folder \"{folderName}\" is missing an entry point!");
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
-
-                    continue;
-                }
-
-                if (mod.EntryMethod.Where(c => c == '.').ToList().Count < 2)
-                {
-                    Logger.Error($"Mod found in folder \"{folderName}\" has a badly-formatted entry point!");
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
-
                     continue;
                 }
 
                 if (mod.Enable == false)
                 {
-                    Logger.Info($"Mod \"{mod.DisplayName}\" is disabled via config, skipping");
+                    Logger.Info($"Mod \"{mod.DisplayName}\" is disabled via config, skipping...");
 
                     continue;
                 }
@@ -337,9 +271,9 @@ namespace QModManager
 
             try
             {
-                string[] entryMethodSig = mod.EntryMethod.Split('.');
-                string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
-                string entryMethod = entryMethodSig[entryMethodSig.Length - 1];
+                string[] splits = mod.EntryMethod.Split('.');
+                string entryType = string.Join(".", splits.Take(splits.Length - 1).ToArray());
+                string entryMethod = splits[splits.Length - 1];
 
                 MethodInfo patchMethod = mod.LoadedAssembly.GetType(entryType).GetMethod(entryMethod);
                 patchMethod.Invoke(mod.LoadedAssembly, new object[] { });
