@@ -131,73 +131,8 @@ namespace QModManager
 
                 QMod mod = QMod.FromJsonFile(Path.Combine(subDir, "mod.json"));
 
-                if (mod == null)
+                if (!QMod.QModValid(mod, folderName))
                 {
-                    Logger.Error($"Skipped a null mod found in folder \"{folderName}\"");
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
-
-                    continue;
-                }
-
-                if (string.IsNullOrEmpty(mod.DisplayName))
-                {
-                    Logger.Error($"Mod found in folder \"{folderName}\" is missing a display name!");
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
-
-                    continue;
-                }
-
-                if (string.IsNullOrEmpty(mod.Id))
-                {
-                    Logger.Error($"Mod found in folder \"{folderName}\" is missing an ID!");
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
-
-                    continue;
-                }
-
-                if (mod.Id != Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase))
-                {
-                    Logger.Warn($"Mod found in folder \"{folderName}\" has an invalid ID! All invalid characters have been removed. (This can lead to issues!)");
-                    mod.Id = Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase);
-
-                    continue;
-                }
-
-                if (string.IsNullOrEmpty(mod.Author))
-                {
-                    Logger.Error($"Mod found in folder \"{folderName}\" is missing an author!");
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
-
-                    continue;
-                }
-
-                if (string.IsNullOrEmpty(mod.Version))
-                {
-                    Logger.Error($"Mod found in folder \"{folderName}\" is missing a version!");
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
-
-                    continue;
-                }
-
-                if (string.IsNullOrEmpty(mod.AssemblyName))
-                {
-                    Logger.Error($"Mod found in folder \"{folderName}\" is missing an assembly name!");
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
-
-                    continue;
-                }
-
-                if (string.IsNullOrEmpty(mod.EntryMethod))
-                {
-                    Logger.Error($"Mod found in folder \"{folderName}\" is missing an entry point!");
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
-
-                    continue;
-                }
-
-                if (mod.EntryMethod.Where(c => c == '.').ToList().Count < 2)
-                {
-                    Logger.Error($"Mod found in folder \"{folderName}\" has a badly-formatted entry point!");
                     erroredMods.Add(QMod.CreateFakeQMod(folderName));
 
                     continue;
@@ -205,7 +140,7 @@ namespace QModManager
 
                 if (mod.Enable == false)
                 {
-                    Logger.Info($"Mod \"{mod.DisplayName}\" is disabled via config, skipping");
+                    Logger.Info($"Mod \"{mod.DisplayName}\" is disabled via config, skipping...");
 
                     continue;
                 }
@@ -323,47 +258,40 @@ namespace QModManager
         {
             if (mod == null || mod.Loaded) return false;
 
-            if (string.IsNullOrEmpty(mod.EntryMethod))
+            try
             {
-                Logger.Error($"No EntryMethod specified for mod {mod.DisplayName}");
+                string[] entryMethodSig = mod.EntryMethod.Split('.');
+                string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
+                string entryMethod = entryMethodSig[entryMethodSig.Length - 1];
+
+                MethodInfo patchMethod = mod.LoadedAssembly.GetType(entryType).GetMethod(entryMethod);
+                patchMethod.Invoke(mod.LoadedAssembly, new object[] { });
             }
-            else
+            catch (ArgumentNullException e)
             {
-                try
-                {
-                    string[] entryMethodSig = mod.EntryMethod.Split('.');
-                    string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
-                    string entryMethod = entryMethodSig[entryMethodSig.Length - 1];
+                Logger.Error($"Could not parse entry method \"{mod.AssemblyName}\" for mod \"{mod.Id}\"");
+                Debug.LogException(e);
+                erroredMods.Add(mod);
 
-                    MethodInfo patchMethod = mod.LoadedAssembly.GetType(entryType).GetMethod(entryMethod);
-                    patchMethod.Invoke(mod.LoadedAssembly, new object[] { });
-                }
-                catch (ArgumentNullException e)
-                {
-                    Logger.Error($"Could not parse entry method \"{mod.AssemblyName}\" for mod \"{mod.Id}\"");
-                    Debug.LogException(e);
-                    erroredMods.Add(mod);
-
-                    return false;
-                }
-                catch (TargetInvocationException e)
-                {
-                    Logger.Error($"Invoking the specified entry method \"{mod.EntryMethod}\" failed for mod \"{mod.Id}\"");
-                    Debug.LogException(e);
-                    return false;
-                }
-                catch (Exception e)
-                {
-                    Logger.Error($"An unexpected error occurred whilst trying to load mod \"{mod.Id}\"");
-                    Debug.LogException(e);
-                    return false;
-                }
+                return false;
+            }
+            catch (TargetInvocationException e)
+            {
+                Logger.Error($"Invoking the specified entry method \"{mod.EntryMethod}\" failed for mod \"{mod.Id}\"");
+                Debug.LogException(e);
+                return false;
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"An unexpected error occurred whilst trying to load mod \"{mod.Id}\"");
+                Debug.LogException(e);
+                return false;
             }
 
-            if (PatchManager.ErroredMods.Contains(mod.LoadedAssembly))
+            if (PatchManager.ErroredMods.Contains(mod?.LoadedAssembly))
             {
                 Logger.Error($"Mod \"{mod.Id}\" could not be loaded.");
-                PatchManager.ErroredMods.Remove(mod.LoadedAssembly);
+                PatchManager.ErroredMods.Remove(mod?.LoadedAssembly);
                 return false;
             }
             mod.Loaded = true;

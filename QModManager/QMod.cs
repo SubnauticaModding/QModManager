@@ -1,6 +1,7 @@
 ﻿using Oculus.Newtonsoft.Json;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEngine;
@@ -71,6 +72,73 @@ namespace QModManager
                 AssemblyName = "None",
                 EntryMethod = "None",
             };
+        }
+
+        internal static bool QModValid(QMod mod, string folderName)
+        {
+            if (mod == null)
+            {
+                Logger.Error($"Skipped a null mod found in folder \"{folderName}\"");
+
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(mod.DisplayName))
+            {
+                Logger.Error($"Mod found in folder \"{folderName}\" is missing a display name!");
+
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(mod.Id))
+            {
+                Logger.Error($"Mod found in folder \"{folderName}\" is missing an ID!");
+
+                return false;
+            }
+
+            if (mod.Id != Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase))
+            {
+                Logger.Warn($"Mod found in folder \"{folderName}\" has an invalid ID! All invalid characters have been removed. (This can cause issues!)");
+                mod.Id = Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase);
+            }
+
+            if (string.IsNullOrEmpty(mod.Author))
+            {
+                Logger.Error($"Mod found in folder \"{folderName}\" is missing an author!");
+
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(mod.Version))
+            {
+                Logger.Error($"Mod found in folder \"{folderName}\" is missing a version!");
+
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(mod.AssemblyName))
+            {
+                Logger.Error($"Mod found in folder \"{folderName}\" is missing an assembly name!");
+
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(mod.EntryMethod))
+            {
+                Logger.Error($"Mod found in folder \"{folderName}\" is missing an entry point!");
+
+                return false;
+            }
+
+            if (mod.EntryMethod.Count(c => c == '.') < 2)
+            {
+                Logger.Error($"Mod found in folder \"{folderName}\" has a badly-formatted entry point!");
+
+                return false;
+            }
+
+            return true;
         }
     }
 }
