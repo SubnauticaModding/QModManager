@@ -157,7 +157,7 @@ namespace QModManager
 
                 if (mod.Id != Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase))
                 {
-                    Logger.Warn($"Mod found in folder \"{folderName}\" has an invalid ID! All invalid characters have been removed. (This can cause issues!)");
+                    Logger.Warn($"Mod found in folder \"{folderName}\" has an invalid ID! All invalid characters have been removed. (This can lead to issues!)");
                     mod.Id = Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase);
 
                     continue;
@@ -326,43 +326,38 @@ namespace QModManager
             if (string.IsNullOrEmpty(mod.EntryMethod))
             {
                 Logger.Error($"No EntryMethod specified for mod {mod.DisplayName}");
-                return false;
             }
+            else
+            {
+                try
+                {
+                    string[] entryMethodSig = mod.EntryMethod.Split('.');
+                    string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
+                    string entryMethod = entryMethodSig[entryMethodSig.Length - 1];
 
-            if (string.IsNullOrEmpty(mod.AssemblyName))
-            {
-                Logger.Error($"No AssemblyName specified for mod {mod.DisplayName}");
-                return false;
-            }
+                    MethodInfo patchMethod = mod.LoadedAssembly.GetType(entryType).GetMethod(entryMethod);
+                    patchMethod.Invoke(mod.LoadedAssembly, new object[] { });
+                }
+                catch (ArgumentNullException e)
+                {
+                    Logger.Error($"Could not parse entry method \"{mod.AssemblyName}\" for mod \"{mod.Id}\"");
+                    Debug.LogException(e);
+                    erroredMods.Add(mod);
 
-            try
-            {
-                string[] entryMethodSig = mod.EntryMethod.Split('.');
-                string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
-                string entryMethod = entryMethodSig[entryMethodSig.Length - 1];
-
-                MethodInfo patchMethod = mod.LoadedAssembly.GetType(entryType).GetMethod(entryMethod);
-                patchMethod.Invoke(mod.LoadedAssembly, new object[] { });
-            }
-            catch (ArgumentNullException e)
-            {
-                Logger.Error($"Could not parse entry method \"{mod.AssemblyName}\" for mod \"{mod.Id}\"");
-                Debug.LogException(e);
-                erroredMods.Add(mod);
-
-                return false;
-            }
-            catch (TargetInvocationException e)
-            {
-                Logger.Error($"Invoking the specified entry method \"{mod.EntryMethod}\" failed for mod \"{mod.Id}\"");
-                Debug.LogException(e);
-                return false;
-            }
-            catch (Exception e)
-            {
-                Logger.Error($"An unexpected error occurred whilst trying to load mod \"{mod.Id}\"");
-                Debug.LogException(e);
-                return false;
+                    return false;
+                }
+                catch (TargetInvocationException e)
+                {
+                    Logger.Error($"Invoking the specified entry method \"{mod.EntryMethod}\" failed for mod \"{mod.Id}\"");
+                    Debug.LogException(e);
+                    return false;
+                }
+                catch (Exception e)
+                {
+                    Logger.Error($"An unexpected error occurred whilst trying to load mod \"{mod.Id}\"");
+                    Debug.LogException(e);
+                    return false;
+                }
             }
 
             if (PatchManager.ErroredMods.Contains(mod.LoadedAssembly))
@@ -773,28 +768,9 @@ namespace QModManager
                 }
                 else
                 {
-                    string neededDependency = dependencyId.Split(new char[] { '@' })[0].Trim();
-                    string stringVersion = dependencyId.Split(new char[] { '@' })[1].Trim();
-
-                    foreach (QMod dependencyMod in foundMods)
-                    {
-                        if (Regex.Replace(neededDependency, "[^0-9a-z_]", "", RegexOptions.IgnoreCase) == dependencyMod.Id)
-                        {
-                            if (stringVersion.StartsWith(">="))
-                            {
-                                stringVersion = stringVersion.Substring(2);
-                                Version version;
-                                try
-                                {
-                                    version = new Version(stringVersion);
-                                }
-                                catch
-                                {
-                                    Logger.Error($"Could not parse dependency version of '{neededDependency}' for '{mod.Id}'. '{stringVersion} is not a valid version");
-                                }
-                            }
-                        }
-                    }
+                    if ()
+                    string moddependency = dependencyId.Split(new char[] { '@' })[0];
+                    string version = dependencyId.Split(new char[] { '@' })[1];
                 }
             }
 
