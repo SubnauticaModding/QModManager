@@ -633,126 +633,51 @@ namespace QModManager
         {
             // Check if all mods have dependencies present
             Dictionary<QMod, List<string>> missingDependenciesByMod = new Dictionary<QMod, List<string>>();
-            Dictionary<QMod, List<KeyValuePair<string, string>>> outdatedDependenciesByMod = new Dictionary<QMod, List<KeyValuePair<string, string>>>();
 
             foreach (QMod mod in foundMods)
             {
-                List<string> missingDependencies = GetMissingDependencies(mod);
-                List<KeyValuePair<string, string>> outdatedDependencies = GetOutdatedDependencies(mod);
-                List<QMod> presentDependencies = GetPresentDependencies(mod, missingDependencies, outdatedDependencies);
+                List<QMod> presentDependencies = GetPresentDependencies(mod);
+                List<string> missingDependencies = GetMissingDependencies(mod, presentDependencies);
 
                 if (missingDependencies.Count != 0)
                 {
                     missingDependenciesByMod.Add(mod, missingDependencies);
 
-                    if (!erroredMods.Contains(mod))
-                        erroredMods.Add(mod);
-                }
-                if (outdatedDependencies.Count != 0)
-                {
-                    outdatedDependenciesByMod.Add(mod, outdatedDependencies);
-
+                    // Add this mod to the list of errored mods
                     if (!erroredMods.Contains(mod))
                         erroredMods.Add(mod);
                 }
             }
 
-            if (missingDependenciesByMod.Count > 0 || outdatedDependenciesByMod.Count > 0)
-                Logger.Error(FormatDependencies(missingDependenciesByMod, outdatedDependenciesByMod));
-        }
-
-        private static List<string> GetMissingDependencies(QMod mod)
-        {
-            if (mod == null) return null;
-
-            List<string> dependenciesMissing = new List<string>(mod.Dependencies);
-
-            foreach (string dependencyId in mod.Dependencies)
+            if (missingDependenciesByMod.Count != 0)
             {
-                foreach (QMod dependencyMod in sortedMods)
+                // There are missing dependencies! Output them!
+                Logger.Error("The following mods were not loaded due to missing dependencies:");
+
+                foreach (var entry in missingDependenciesByMod)
                 {
-                    string dep = dependencyId;
-                    if (dependencyId.Contains("@"))
-                        dep = dependencyId.Split('@')[0];
+                    // Remove the mod from the sortedMods list to stop it from loading
+                    if (sortedMods.Contains(entry.Key))
+                        sortedMods.Remove(entry.Key);
 
-                    if (dep == dependencyMod.Id)
-                        dependenciesMissing.Remove(dependencyId);
-                }
-            }
+                    // Build the string to be displayed for this mod
+                    string str = $"- {entry.Key.DisplayName}  (missing: ";
 
-            return dependenciesMissing;
-        }
-
-        private static List<KeyValuePair<string, string>> GetOutdatedDependencies(QMod mod)
-        {
-            if (mod == null) return null;
-
-            List<string> dependenciesOutdated = new List<string>(mod.Dependencies);
-
-            foreach (string dependencyId in mod.Dependencies)
-            {
-                if (!dependencyId.Contains('@')) continue;
-
-                foreach (QMod dependencyMod in sortedMods)
-                {
-                    if (dependencyId != dependencyMod.Id)
+                    foreach (string missingDependencyId in entry.Value)
                     {
-
+                        str += missingDependencyId + ", ";
                     }
+
+                    // Remove the ", " characters at the end of the string
+                    str = str.Substring(0, str.Length - 2);
+                    str += ")";
+
+                    Console.WriteLine(str);
                 }
+
             }
         }
 
-        internal static string FormatDependencies(Dictionary<QMod, List<string>> missingDependencies, Dictionary<QMod, List<KeyValuePair<string, string>>> outdatedDependencies)
-        {
-            List<QMod> badMods = missingDependencies.Keys.Union(outdatedDependencies.Keys).ToList();
-
-            string log = "The following mods were not loaded due to ";
-            if (missingDependencies.Count > 0)
-                log += "missing";
-            if (missingDependencies.Count > 0 && outdatedDependencies.Count > 0)
-                log += "/";
-            if (outdatedDependencies.Count > 00)
-                log += "outdated";
-            log += " dependencies:\n";
-
-            foreach (QMod mod in badMods)
-            {
-                log += $"- {mod.DisplayName} ({mod.Id})\n";
-
-                if (missingDependencies.TryGetValue(mod, out List<string> missingMods))
-                {
-                    foreach (string missing in missingMods)
-                    {
-                        string modname = missing;
-                        string version = null;
-                        if (missing.Contains("@"))
-                        {
-                            version = missing.Split(new char[] { '@' }, 2)[1];
-                            modname = missing.Split(new char[] { '@' }, 2)[0];
-                        }
-
-                        log += $"  - {modname} (required: {(version == null ? "any" : $"\"{version}\"")}; found: none)\n";
-                    }
-                }
-
-                if (outdatedDependencies.TryGetValue(mod, out List<KeyValuePair<string, string>> outdatedMods))
-                {
-                    foreach (KeyValuePair<string, string> outdated in outdatedMods)
-                    {
-                        string found = outdated.Value.Split(new char[] { '@' }, 2)[0];
-                        string version = outdated.Value.Split(new char[] { '@' }, 2)[1];
-                        string needed = outdated.Key;
-
-                        log += $"  - {found} (required: \"{needed}\"; found: \"{version}\")\n";
-                    }
-                }
-            }
-
-            return log;
-        }
-
-        /*
         private static List<QMod> GetPresentDependencies(QMod mod)
         {
             if (mod == null) return null;
@@ -770,7 +695,25 @@ namespace QModManager
 
             return dependencies;
         }
-        */
+
+        private static List<string> GetMissingDependencies(QMod mod, IEnumerable<QMod> presentDependencies)
+        {
+            if (mod == null) return null;
+            if (presentDependencies == null || presentDependencies.Count() == 0) return mod.Dependencies.ToList();
+
+            List<string> dependenciesMissing = new List<string>(mod.Dependencies);
+
+            foreach (string dependencyId in mod.Dependencies)
+            {
+                foreach (QMod presentDependency in presentDependencies)
+                {
+                    if (dependencyId == presentDependency.Id)
+                        dependenciesMissing.Remove(dependencyId);
+                }
+            }
+
+            return dependenciesMissing;
+        }
 
         #endregion
 
