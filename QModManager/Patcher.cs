@@ -59,7 +59,16 @@ namespace QModManager
                 PirateCheck.IsPirate(Environment.CurrentDirectory);
 
                 if (!DetectGame()) return;
+
                 PatchHarmony();
+
+                if (NitroxCheck.IsInstalled)
+                {
+                    Logger.Fatal($"Nitrox was detected!");
+                    Dialog.Show("Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.", Dialog.Button.disabled, Dialog.Button.disabled, false);
+                    return;
+                }
+
                 StartLoadingMods();
 
                 ShowErroredMods();
@@ -443,13 +452,12 @@ namespace QModManager
             else if (sn && bz)
             {
                 Logger.Fatal("A fatal error has occurred.");
-                Logger.Fatal("Both Windows and Mac files detected!");
-                Logger.Fatal("Is this a Windows or a Mac environment?");
+                Logger.Fatal("Both Subnautica and Below Zero files detected!");
             }
             else
             {
                 Logger.Fatal("A fatal error has occurred.");
-                Logger.Fatal("No Subnautica executable was found!");
+                Logger.Fatal("No game executable was found!");
             }
             return false;
         }
