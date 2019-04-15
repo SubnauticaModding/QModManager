@@ -86,25 +86,27 @@ namespace QModManager
 
         internal static bool QModValid(QMod mod, string folderName)
         {
+            bool flag = true;
+
             if (mod == null)
             {
                 Logger.Error($"Skipped a null mod found in folder \"{folderName}\"");
 
-                return false;
+                flag = false;
             }
 
             if (string.IsNullOrEmpty(mod.DisplayName))
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" is missing a display name!");
 
-                return false;
+                flag = false;
             }
 
             if (string.IsNullOrEmpty(mod.Id))
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" is missing an ID!");
 
-                return false;
+                flag = false;
             }
 
             if (mod.Id != Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase))
@@ -117,14 +119,14 @@ namespace QModManager
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" is missing an author!");
 
-                return false;
+                flag = false;
             }
 
             if (string.IsNullOrEmpty(mod.Version))
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" is missing a version!");
 
-                return false;
+                flag = false;
             }
 
             if (mod.ParsedVersion == null)
@@ -136,24 +138,24 @@ namespace QModManager
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" is missing an assembly name!");
 
-                return false;
+                flag = false;
             }
 
             if (string.IsNullOrEmpty(mod.EntryMethod))
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" is missing an entry point!");
 
-                return false;
+                flag = false;
             }
 
             if (mod.EntryMethod.Count(c => c == '.') < 2)
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" has an invalid entry point!");
 
-                return false;
+                flag = false;
             }
 
-            return true;
+            return flag;
         }
     }
 }
