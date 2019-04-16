@@ -1,25 +1,15 @@
-### Normal Dependencies
-These files are required and will be redistributed with QModManager
-- `0Harmony.dll` & `0Harmony-1.2.0.1.dll`: https://github.com/pardeike/Harmony
+## Dependencies
 
----
-
-### Game Dependencies
-These files are required, but are from the base game and will not be redistributed with QModManager
-- `Assembly-CSharp.dll` & `Assembly-CSharp-firstpass.dll`: https://github.com/unknownworlds
-- `Newtonsoft.JSON.dll`: https://github.com/JamesNK/Newtonsoft.Json
-- `UnityEngine.dll` & `UnityEngine.UI.dll`: https://github.com/Unity-Technologies/UnityCsReference
-
----
-
-### Injector Dependencies
-These files are required by the injector and will be redistributed with QModManager
-- `AssetsTools.NET`: https://github.com/nesrak1/AssetsTools.NET
-- `cldb.dat` & `cldb2018.dat`: https://github.com/DerPopo/UABE
-- `Mono.Cecil.dll`: https://github.com/jbevain/cecil
-
----
-
-### Installer Dependencies
-These files are required by the installer, but will not be redistributed with QModManager
-- `Carbon.vsf` & `VclStylesinno.dll`: https://github.com/RRUZ/vcl-styles-plugins
+|       Dependency       |          Used by          |               Redistributed              |
+|:----------------------:|:-------------------------:|:----------------------------------------:|
+|     `0Harmony.dll`     | (backwards compatibility) |                  &#9745;                 |
+| `0Harmony-1.2.0.1.dll` |        QModManager        |                  &#9745;                 |
+|  `AssetsTools.NET.dll` |          Injector         |                  &#9745;                 |
+|      `Carbon.vsf`      |         Installer         |  &#9744; <br>Bundled with the installer  |
+|       `cldb.dat`       |          Injector         | &#9745; <br>Only for Subnautica installs |
+|     `cldb2018.dat`     |          Injector         | &#9745; <br>Only for Below Zero installs |
+|    `Mono.Cecil.dll`    |         Installer         |                  &#9745;                 |
+|  `Netwonsoft.Json.dll` |        QModManager        |           &#9744; <br>Game file          |
+|    `UnityEngine.dll`   |        QModManager        |           &#9744; <br>Game file          |
+|  `UnityEngine.UI.dll`  |        QModManager        |           &#9744; <br>Game file          |
+|   `VclStylesinno.dll`  |         Installer         |  &#9744; <br>Bundled with the installer  |
