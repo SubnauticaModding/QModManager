@@ -1,12 +1,11 @@
-﻿namespace QMMTests
-{
-    using System;
-    using System.Collections.Generic;
-    using NUnit.Framework;
-    using QModManager;
+﻿using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 
+namespace QModManager.Tests
+{
     [TestFixture]
-    public class SortModTests
+    public class Sorting
     {
         [Test]
         public void FourModTest()
@@ -16,7 +15,7 @@
             Patcher.sortedMods.Clear();
             Patcher.erroredMods.Clear();
 
-            var mod1 = new QMod
+            QMod mod1 = new QMod
             {
                 Id = "Mod1",
                 LoadBefore = new string[2]
@@ -30,7 +29,7 @@
                 }
             };
 
-            var mod2 = new QMod
+            QMod mod2 = new QMod
             {
                 Id = "Mod2",
                 LoadAfter = new string[2]
@@ -40,12 +39,12 @@
                 }
             };
 
-            var mod3 = new QMod
+            QMod mod3 = new QMod
             {
                 Id = "Mod3"
             };
 
-            var mod4 = new QMod
+            QMod mod4 = new QMod
             {
                 Id = "Mod4"
             };
@@ -91,7 +90,7 @@
             Patcher.sortedMods.Clear();
             Patcher.erroredMods.Clear();
 
-            var mod1 = new QMod
+            QMod mod1 = new QMod
             {
                 Id = "Mod1",
                 LoadBefore = new string[1]
@@ -100,7 +99,7 @@
                 }
             };
 
-            var mod2 = new QMod
+            QMod mod2 = new QMod
             {
                 Id = "Mod2",
                 LoadAfter = new string[1]
@@ -143,12 +142,12 @@
             Patcher.sortedMods.Clear();
             Patcher.erroredMods.Clear();
 
-            var mod1 = new QMod
+            QMod mod1 = new QMod
             {
                 Id = "Mod1"
             };
 
-            var mod2 = new QMod
+            QMod mod2 = new QMod
             {
                 Id = "Mod2",
                 LoadAfter = new string[1]
@@ -191,7 +190,7 @@
             Patcher.sortedMods.Clear();
             Patcher.erroredMods.Clear();
 
-            var mod1 = new QMod
+            QMod mod1 = new QMod
             {
                 Id = "Mod1",
                 LoadBefore = new string[1]
@@ -200,7 +199,7 @@
                 }
             };
 
-            var mod2 = new QMod
+            QMod mod2 = new QMod
             {
                 Id = "Mod2",
             };
@@ -239,7 +238,7 @@
             Patcher.sortedMods.Clear();
             Patcher.erroredMods.Clear();
 
-            var mod1 = new QMod
+            QMod mod1 = new QMod
             {
                 Id = "Mod1",
                 LoadBefore = new string[1]
@@ -248,7 +247,7 @@
                 }
             };
 
-            var mod2 = new QMod
+            QMod mod2 = new QMod
             {
                 Id = "Mod2",
                 LoadBefore = new string[1]

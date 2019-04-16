@@ -721,12 +721,16 @@ namespace QModManager
             {
                 foreach (QMod dependencyMod in sortedMods)
                 {
-                    if (dependency.Key == dependencyMod.Id)
+                    if (dependency.Key.Trim() == dependencyMod.Id.Trim())
                     {
                         try
                         {
-                            if (dependency.Value == dependencyMod.Version || Range.IsSatisfied(dependency.Value, dependencyMod.Version))
+                            if (dependency.Value.Trim() == dependencyMod.Version.Trim() || dependency.Value.Trim(' ', '=') == dependencyMod.Version.Trim() || Range.IsSatisfied(dependency.Value.Trim(), dependencyMod.Version.Trim(), true))
                                 dependencies.Add(dependencyMod);
+                        }
+                        catch (ArgumentException)
+                        {
+                            Logger.Warn($"Caught an ArgumentException while trying to parse dependency version range \"{dependency.Value}\" of dependency \"{dependencyMod.DisplayName}\" for mod \"{mod.DisplayName}\"");
                         }
                         catch (Exception e)
                         {

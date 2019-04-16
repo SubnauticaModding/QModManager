@@ -7,7 +7,7 @@ namespace QModManager
 {
     internal static class NitroxCheck
     {
-        internal static bool IsInstalled { get; internal set; } = false;
+        internal static bool IsInstalled { get; set; } = false;
 
         [HarmonyPatch(typeof(GameInput), "Awake")]
         internal static class AwakePatch
