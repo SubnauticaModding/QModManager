@@ -70,6 +70,11 @@ _(optional, defaults to `[]`)_
 Type: `string[]`  
 Example: `[ "DependencyModID" ]`
 
+- `VersionDependencies`: Just like `Dependencies`, but you can specify a version range for the needed mods.  
+_(optional, default to `{}`)_  
+Type: `Dictionary<string, string>`  
+Example: `{ "VeryImportantMod": "1.2.x", "AnotherVeryImportantMod": "2.1.2 - 2.3.2" }`
+
 - `LoadBefore`: Specify mods that will be loaded after your mod. If a mod in this list isn't found, it is simply ignored.  
 _(optional, defaults to `[]`)_  
 Type: `string[]`  
@@ -109,6 +114,10 @@ Example: `"BestMod.QMod.Patch"`
   "Author": "Awesome Guy",
   "Version": "1.0.0",
   "Dependencies": [ "DependencyModID" ],
+  "VersionDependencies": { 
+    "VeryImportantMod": "1.2.x", 
+    "AnotherVeryImportantMod": "2.1.2 - 2.3.2" 
+  },
   "LoadBefore": [ "AModID", "SomeOtherModID" ],
   "LoadAfter": [ "AnotherModID" ],
   "Enable": true,
