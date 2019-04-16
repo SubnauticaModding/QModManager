@@ -79,7 +79,7 @@ namespace QModManager
                         Match match = Regex.Match(version, "^([<>]=?|!?=)");
                         if (match.Success)
                         {
-                            vOperator = version.Substring(0, match.Value.Length).Trim();
+                            vOperator = version.Substring(0, match.Value.Length);
                             version = version.Substring(match.Value.Length).Trim();
                         }
 
@@ -126,7 +126,7 @@ namespace QModManager
             {
                 Logger.Error($"Skipped a null mod found in folder \"{folderName}\"");
 
-                success = false;
+                return false;
             }
 
             if (string.IsNullOrEmpty(mod.DisplayName))
@@ -143,7 +143,7 @@ namespace QModManager
                 success = false;
             }
 
-            if (mod.Id != Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase))
+            else if (mod.Id != Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase))
             {
                 Logger.Warn($"Mod found in folder \"{folderName}\" has an invalid ID! All invalid characters have been removed. (This can cause issues!)");
                 mod.Id = Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase);
@@ -175,6 +175,13 @@ namespace QModManager
                 success = false;
             }
 
+            else if (!mod.AssemblyName.EndsWith(".dll"))
+            {
+                Logger.Error($"Mod found in folder \"{folderName}\" is has an invalid assembly name!");
+
+                success = false;
+            }
+
             if (string.IsNullOrEmpty(mod.EntryMethod))
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" is missing an entry point!");
@@ -182,7 +189,7 @@ namespace QModManager
                 success = false;
             }
 
-            if (mod.EntryMethod.Count(c => c == '.') < 2)
+            else if (mod.EntryMethod?.Count(c => c == '.') < 2)
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" has an invalid entry point!");
 
@@ -200,7 +207,7 @@ namespace QModManager
                     catch
                     {
                         dependency.Version = null;
-                        if (!string.IsNullOrEmpty(dependency.Operator))
+                        if (!string.IsNullOrEmpty(dependency.Operator) && dependency.Operator != "=")
                             Logger.Error($"Mod in folder \"{folderName}\" has an invalid version dependency for \"{dependency.Dependency}\": \"{dependency.Operator}\" is not a valid operator for version \"{dependency.RawVersion}\"");
 
                         success = false;
