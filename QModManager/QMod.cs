@@ -12,15 +12,6 @@ namespace QModManager
 {
     public class QMod
     {
-        public class VersionDependency
-        {
-            public string Dependency;
-            public string Operator;
-            public Version Version;
-
-            public string RawVersion;
-        }
-
         public string Id = "";
         public string DisplayName = "";
         public string Author = "";
@@ -36,7 +27,6 @@ namespace QModManager
 
         [JsonIgnore] public Assembly LoadedAssembly;
         [JsonIgnore] public Version ParsedVersion;
-        [JsonIgnore] public List<VersionDependency> ParsedVersionDependencies = new List<VersionDependency>();
 
         [JsonIgnore] internal string ModAssemblyPath;
         [JsonIgnore] internal bool Loaded;
@@ -64,29 +54,11 @@ namespace QModManager
                 {
                     mod.ParsedVersion = new Version(mod.Version);
                 }
-                catch
+                catch (Exception e)
                 {
+                    Logger.Error($"There was an error parsing version \"{mod.Version}\" for mod \"{mod.DisplayName}\"");
+                    Debug.LogException(e);
                     mod.ParsedVersion = null;
-                }
-
-                if (mod.VersionDependencies.Count > 0)
-                {
-                    foreach (KeyValuePair<string, string> dependency in mod.VersionDependencies)
-                    {
-                        string version = dependency.Value.Trim();
-                        string vOperator = "";
-
-                        Match match = Regex.Match(version, "^([<>]=?|!?=)");
-                        if (match.Success)
-                        {
-                            vOperator = version.Substring(0, match.Value.Length);
-                            version = version.Substring(match.Value.Length).Trim();
-                        }
-
-                        VersionDependency vd = new VersionDependency() { RawVersion = version, Operator = vOperator, Dependency = dependency.Key };
-
-                        mod.ParsedVersionDependencies.Add(vd);
-                    }
                 }
 
                 return mod;
@@ -196,22 +168,28 @@ namespace QModManager
                 success = false;
             }
 
-            if (mod.ParsedVersionDependencies.Count > 0)
+            for (int i = 0; i < mod.LoadAfter.Length; i++)
             {
-                foreach (VersionDependency dependency in mod.ParsedVersionDependencies)
-                {
-                    try
-                    {
-                        dependency.Version = new Version(dependency.RawVersion);
-                    }
-                    catch
-                    {
-                        dependency.Version = null;
-                        if (!string.IsNullOrEmpty(dependency.Operator) && dependency.Operator != "=")
-                            Logger.Error($"Mod in folder \"{folderName}\" has an invalid version dependency for \"{dependency.Dependency}\": \"{dependency.Operator}\" is not a valid operator for version \"{dependency.RawVersion}\"");
+                string good = Regex.Replace(mod.LoadAfter[i], "[^0-9a-z_]", "", RegexOptions.IgnoreCase);
+                if (mod.LoadAfter[i] != good)
+                    mod.LoadAfter[i] = good;
+            }
 
-                        success = false;
-                    }
+            for (int i = 0; i < mod.LoadBefore.Length; i++)
+            {
+                string good = Regex.Replace(mod.LoadBefore[i], "[^0-9a-z_]", "", RegexOptions.IgnoreCase);
+                if (mod.LoadBefore[i] != good)
+                    mod.LoadBefore[i] = good;
+            }
+
+            Dictionary<string, string> versionDependenciesLoop = new Dictionary<string, string>(mod.VersionDependencies);
+            foreach (KeyValuePair<string, string> kvp in versionDependenciesLoop)
+            {
+                string good = Regex.Replace(kvp.Key, "[^0-9a-z_]", "", RegexOptions.IgnoreCase);
+                if (kvp.Key != good)
+                {
+                    mod.VersionDependencies.Remove(kvp.Key);
+                    mod.VersionDependencies.Add(good, kvp.Value);
                 }
             }
 

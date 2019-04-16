@@ -2,12 +2,12 @@ using Harmony;
 using Oculus.Newtonsoft.Json;
 using QModManager.Debugger;
 using QModManager.Utility;
+using SemVer;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using UnityEngine;
 using Logger = QModManager.Utility.Logger;
 
@@ -640,36 +640,45 @@ namespace QModManager
 
         private static void CheckForDependencies()
         {
-            // Check if all mods have dependencies present
             Dictionary<QMod, List<string>> missingDependenciesByMod = new Dictionary<QMod, List<string>>();
+            Dictionary<QMod, List<KeyValuePair<string, string>>> missingVersionDependenciesByMod = new Dictionary<QMod, List<KeyValuePair<string, string>>>();
 
             foreach (QMod mod in foundMods)
             {
                 List<QMod> presentDependencies = GetPresentDependencies(mod);
                 List<string> missingDependencies = GetMissingDependencies(mod, presentDependencies);
 
-                if (missingDependencies.Count != 0)
+                if (missingDependencies.Count > 0)
                 {
                     missingDependenciesByMod.Add(mod, missingDependencies);
 
-                    // Add this mod to the list of errored mods
+                    if (!erroredMods.Contains(mod))
+                        erroredMods.Add(mod);
+                }
+
+                List<QMod> presentVersionDependencies = GetPresentVersionDependencies(mod);
+                List<KeyValuePair<string, string>> missingVersionDependencies = GetMissingVersionDependencies(mod, presentVersionDependencies);
+
+                if (missingVersionDependencies.Count > 0)
+                {
+                    missingVersionDependenciesByMod.Add(mod, missingVersionDependencies);
+
                     if (!erroredMods.Contains(mod))
                         erroredMods.Add(mod);
                 }
             }
 
-            if (missingDependenciesByMod.Count != 0)
+            Dictionary<QMod, List<string>> finalDependencies = MergeDependencyDictionaries(missingDependenciesByMod, missingVersionDependenciesByMod);
+
+            if (finalDependencies.Count > 0)
             {
-                // There are missing dependencies! Output them!
                 Logger.Error("The following mods were not loaded due to missing dependencies:");
 
-                foreach (var entry in missingDependenciesByMod)
+                foreach (var entry in finalDependencies)
                 {
-                    // Remove the mod from the sortedMods list to stop it from loading
                     if (sortedMods.Contains(entry.Key))
                         sortedMods.Remove(entry.Key);
 
-                    // Build the string to be displayed for this mod
                     string str = $"- {entry.Key.DisplayName}  (missing: ";
 
                     foreach (string missingDependencyId in entry.Value)
@@ -677,13 +686,11 @@ namespace QModManager
                         str += missingDependencyId + ", ";
                     }
 
-                    // Remove the ", " characters at the end of the string
                     str = str.Substring(0, str.Length - 2);
                     str += ")";
 
                     Console.WriteLine(str);
                 }
-
             }
         }
 
@@ -695,7 +702,7 @@ namespace QModManager
 
             foreach (string dependencyId in mod.Dependencies)
             {
-                foreach (QMod dependencyMod in foundMods)
+                foreach (QMod dependencyMod in sortedMods)
                 {
                     if (dependencyId == dependencyMod.Id)
                         dependencies.Add(dependencyMod);
@@ -704,8 +711,36 @@ namespace QModManager
 
             return dependencies;
         }
+        private static List<QMod> GetPresentVersionDependencies(QMod mod)
+        {
+            if (mod == null) return null;
 
-        private static List<string> GetMissingDependencies(QMod mod, IEnumerable<QMod> presentDependencies)
+            List<QMod> dependencies = new List<QMod>();
+
+            foreach (KeyValuePair<string, string> dependency in mod.VersionDependencies)
+            {
+                foreach (QMod dependencyMod in sortedMods)
+                {
+                    if (dependency.Key == dependencyMod.Id)
+                    {
+                        try
+                        {
+                            if (dependency.Value == dependencyMod.Version || Range.IsSatisfied(dependency.Value, dependencyMod.Version))
+                                dependencies.Add(dependencyMod);
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.Error($"An error occurred while trying to parse version range \"{dependency.Value}\" of dependency \"{dependency.Key}\" for mod \"{mod.DisplayName}\"");
+                            Debug.LogException(e);
+                        }
+                    }
+                }
+            }
+
+            return dependencies;
+        }
+
+        private static List<string> GetMissingDependencies(QMod mod, List<QMod> presentDependencies)
         {
             if (mod == null) return null;
             if (presentDependencies == null || presentDependencies.Count() == 0) return mod.Dependencies.ToList();
@@ -722,6 +757,40 @@ namespace QModManager
             }
 
             return dependenciesMissing;
+        }
+        private static List<KeyValuePair<string, string>> GetMissingVersionDependencies(QMod mod, List<QMod> presentDependencies)
+        {
+            if (mod == null) return null;
+            if (presentDependencies == null || presentDependencies.Count() == 0) return mod.VersionDependencies.ToList();
+
+            List<KeyValuePair<string, string>> dependenciesMissing = new List<KeyValuePair<string, string>>(mod.VersionDependencies);
+
+            foreach (KeyValuePair<string, string> dependency in mod.VersionDependencies)
+            {
+                foreach (QMod presentDependency in presentDependencies)
+                {
+                    if (dependency.Key == presentDependency.Id)
+                        dependenciesMissing.Remove(dependency);
+                }
+            }
+
+            return dependenciesMissing;
+        }
+
+        private static Dictionary<QMod, List<string>> MergeDependencyDictionaries(Dictionary<QMod, List<string>> normalDependencies, Dictionary<QMod, List<KeyValuePair<string, string>>> versionDependencies)
+        {
+            Dictionary<QMod, List<string>> dependencies = new Dictionary<QMod, List<string>>(normalDependencies);
+
+            foreach (KeyValuePair<QMod, List<KeyValuePair<string, string>>> dependency in versionDependencies)
+            {
+                List<string> parsed = dependency.Value.Select(kvp => kvp.Key + "@" + kvp.Value).ToList();
+                if (dependencies.ContainsKey(dependency.Key))
+                    dependencies[dependency.Key].AddRange(parsed);
+                else
+                    dependencies.Add(dependency.Key, parsed);
+            }
+
+            return dependencies;
         }
 
         #endregion
