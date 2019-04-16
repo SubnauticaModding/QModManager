@@ -1,5 +1,6 @@
 ﻿using Oculus.Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -11,11 +12,21 @@ namespace QModManager
 {
     public class QMod
     {
+        public class VersionDependency
+        {
+            public string Dependency;
+            public string Operator;
+            public Version Version;
+
+            public string RawVersion;
+        }
+
         public string Id = "";
         public string DisplayName = "";
         public string Author = "";
         public string Version = "";
         public string[] Dependencies = new string[] { };
+        public Dictionary<string, string> VersionDependencies = new Dictionary<string, string>();
         public string[] LoadBefore = new string[] { };
         public string[] LoadAfter = new string[] { };
         public bool Enable = true;
@@ -23,11 +34,13 @@ namespace QModManager
         public string AssemblyName = "";
         public string EntryMethod = "";
 
-        [JsonIgnore] internal Assembly LoadedAssembly;
+        [JsonIgnore] public Assembly LoadedAssembly;
+        [JsonIgnore] public Version ParsedVersion;
+        [JsonIgnore] public List<VersionDependency> ParsedVersionDependencies = new List<VersionDependency>();
+
         [JsonIgnore] internal string ModAssemblyPath;
         [JsonIgnore] internal bool Loaded;
         [JsonIgnore] internal Patcher.Game ParsedGame;
-        [JsonIgnore] internal Version ParsedVersion;
 
         internal static QMod FromJsonFile(string file)
         {
@@ -56,6 +69,26 @@ namespace QModManager
                     mod.ParsedVersion = null;
                 }
 
+                if (mod.VersionDependencies.Count > 0)
+                {
+                    foreach (KeyValuePair<string, string> dependency in mod.VersionDependencies)
+                    {
+                        string version = dependency.Value.Trim();
+                        string vOperator = "";
+
+                        Match match = Regex.Match(version, "^([<>]=?|!?=)");
+                        if (match.Success)
+                        {
+                            vOperator = version.Substring(0, match.Value.Length).Trim();
+                            version = version.Substring(match.Value.Length).Trim();
+                        }
+
+                        VersionDependency vd = new VersionDependency() { RawVersion = version, Operator = vOperator, Dependency = dependency.Key };
+
+                        mod.ParsedVersionDependencies.Add(vd);
+                    }
+                }
+
                 return mod;
             }
             catch (Exception e)
@@ -75,6 +108,7 @@ namespace QModManager
                 Author = "None",
                 Version = "None",
                 Dependencies = new string[] { },
+                VersionDependencies = new Dictionary<string, string>(),
                 LoadBefore = new string[] { },
                 LoadAfter = new string[] { },
                 Enable = false,
@@ -86,27 +120,27 @@ namespace QModManager
 
         internal static bool QModValid(QMod mod, string folderName)
         {
-            bool flag = true;
+            bool success = true;
 
             if (mod == null)
             {
                 Logger.Error($"Skipped a null mod found in folder \"{folderName}\"");
 
-                flag = false;
+                success = false;
             }
 
             if (string.IsNullOrEmpty(mod.DisplayName))
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" is missing a display name!");
 
-                flag = false;
+                success = false;
             }
 
             if (string.IsNullOrEmpty(mod.Id))
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" is missing an ID!");
 
-                flag = false;
+                success = false;
             }
 
             if (mod.Id != Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase))
@@ -119,14 +153,14 @@ namespace QModManager
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" is missing an author!");
 
-                flag = false;
+                success = false;
             }
 
             if (string.IsNullOrEmpty(mod.Version))
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" is missing a version!");
 
-                flag = false;
+                success = false;
             }
 
             if (mod.ParsedVersion == null)
@@ -138,24 +172,43 @@ namespace QModManager
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" is missing an assembly name!");
 
-                flag = false;
+                success = false;
             }
 
             if (string.IsNullOrEmpty(mod.EntryMethod))
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" is missing an entry point!");
 
-                flag = false;
+                success = false;
             }
 
             if (mod.EntryMethod.Count(c => c == '.') < 2)
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" has an invalid entry point!");
 
-                flag = false;
+                success = false;
             }
 
-            return flag;
+            if (mod.ParsedVersionDependencies.Count > 0)
+            {
+                foreach (VersionDependency dependency in mod.ParsedVersionDependencies)
+                {
+                    try
+                    {
+                        dependency.Version = new Version(dependency.RawVersion);
+                    }
+                    catch
+                    {
+                        dependency.Version = null;
+                        if (!string.IsNullOrEmpty(dependency.Operator))
+                            Logger.Error($"Mod in folder \"{folderName}\" has an invalid version dependency for \"{dependency.Dependency}\": \"{dependency.Operator}\" is not a valid operator for version \"{dependency.RawVersion}\"");
+
+                        success = false;
+                    }
+                }
+            }
+
+            return success;
         }
     }
 }
