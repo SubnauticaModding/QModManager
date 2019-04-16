@@ -17,12 +17,12 @@ namespace QModManager
 {
     internal static class PirateCheck
     {
-        /*private class Pirate : MonoBehaviour
+        /*internal class Pirate : MonoBehaviour
         {
-            private static string videoURL;
-            private const string VideoURLObtainer = "https://you-link.herokuapp.com/?url=https://www.youtube.com/watch?v=i8ju_10NkGY";
+            internal static string videoURL;
+            internal const string VideoURLObtainer = "https://you-link.herokuapp.com/?url=https://www.youtube.com/watch?v=i8ju_10NkGY";
 
-            private static readonly HashSet<string> BannedGameObjectNames = new HashSet<string>()
+            internal static readonly HashSet<string> BannedGameObjectNames = new HashSet<string>()
             {
                 "Audio",
                 "WorldCursor",
@@ -32,7 +32,7 @@ namespace QModManager
                 "Clip Camera"
             };
 
-            private void Start()
+            internal void Start()
             {
                 Canvas canvas = gameObject.AddComponent<Canvas>();
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
@@ -43,7 +43,7 @@ namespace QModManager
                 GetVideo();
             }
 
-            private void Update()
+            internal void Update()
             {
                 RuntimeManager.MuteAllEvents(true);
                 UWE.Utils.alwaysLockCursor = true;
@@ -54,7 +54,7 @@ namespace QModManager
                 }
             }
 
-            private void GetVideo()
+            internal void GetVideo()
             {
                 if (!NetworkUtilities.CheckConnection())
                 {
@@ -87,7 +87,7 @@ namespace QModManager
                     ShowText();
                 }
             }
-            private bool ParseVideo(string result)
+            internal bool ParseVideo(string result)
             {
                 if (result == null)
                 {
@@ -118,7 +118,7 @@ namespace QModManager
                 return true;
             }
 
-            private IEnumerator PlayVideo()
+            internal IEnumerator PlayVideo()
             {
                 VideoPlayer videoPlayer = gameObject.GetComponent<VideoPlayer>() ?? gameObject.AddComponent<VideoPlayer>();
                 AudioSource audioSource = gameObject.GetComponent<AudioSource>() ?? gameObject.AddComponent<AudioSource>();
@@ -173,7 +173,7 @@ namespace QModManager
 
                 yield return StartCoroutine(PlayVideo());
             }
-            private void ShowText()
+            internal void ShowText()
             {
                 DestroyImmediate(gameObject.GetComponent<RawImage>());
                 Text text = gameObject.AddComponent<Text>();
@@ -193,7 +193,7 @@ namespace QModManager
             obj.AddComponent<Pirate>();*/
         }
 
-        private static readonly HashSet<string> CrackedFiles = new HashSet<string>()
+        internal static readonly HashSet<string> CrackedFiles = new HashSet<string>()
         {
             "steam_api64.cdx",
             "steam_api64.ini",

@@ -23,10 +23,10 @@ namespace QModManager
         }
 
         [HarmonyPatch(typeof(DevConsole), "Start")]
-        private static class AddComponentPatch
+        internal static class AddComponentPatch
         {
             [HarmonyPostfix]
-            private static void Postfix(DevConsole __instance)
+            internal static void Postfix(DevConsole __instance)
             {
                 __instance.gameObject.AddComponent<QMMHooks>();
 
@@ -36,12 +36,12 @@ namespace QModManager
             }
         }
 
-        private class QMMHooks : MonoBehaviour
+        internal class QMMHooks : MonoBehaviour
         {
-            private void FixedUpdate() => Hooks.FixedUpdate?.Invoke();
-            private void Update() => Hooks.Update?.Invoke();
-            private void LateUpdate() => Hooks.LateUpdate?.Invoke();
-            private void OnApplicationQuit() => Hooks.OnApplicationQuit?.Invoke();
+            internal void FixedUpdate() => Hooks.FixedUpdate?.Invoke();
+            internal void Update() => Hooks.Update?.Invoke();
+            internal void LateUpdate() => Hooks.LateUpdate?.Invoke();
+            internal void OnApplicationQuit() => Hooks.OnApplicationQuit?.Invoke();
         }
 
         public class Delegates

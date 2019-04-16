@@ -9,10 +9,10 @@ namespace QModManager
         internal static bool DebuggerEnabled { get => PlayerPrefsExtra.GetBool("QModManager_PrefabDebugger_Enable", false); }
 
         [HarmonyPatch(typeof(uGUI_OptionsPanel), "AddTabs")]
-        private static class OptionsPatch
+        internal static class OptionsPatch
         {
             [HarmonyPostfix]
-            private static void Postfix(uGUI_OptionsPanel __instance)
+            internal static void Postfix(uGUI_OptionsPanel __instance)
             {
                 int modsTab = __instance.AddTab("Mods");
                 __instance.AddHeading(modsTab, "QModManager");

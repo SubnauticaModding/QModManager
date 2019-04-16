@@ -7,12 +7,12 @@ namespace QModManager
 {
     internal static class NitroxCheck
     {
-        internal static bool IsInstalled { get; private set; } = false;
+        internal static bool IsInstalled { get; internal set; } = false;
 
         [HarmonyPatch(typeof(GameInput), "Awake")]
-        private static class AwakePatch
+        internal static class AwakePatch
         {
-            private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+            internal static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
                 foreach (CodeInstruction instruction in instructions)
                 {

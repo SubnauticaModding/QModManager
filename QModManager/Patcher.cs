@@ -16,7 +16,7 @@ namespace QModManager
     internal static class Patcher
     {
         internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? null : Path.Combine(Environment.CurrentDirectory, "QMods");
-        private static bool patched = false;
+        internal static bool patched = false;
 
         internal static List<QMod> foundMods = new List<QMod>();
         internal static List<QMod> sortedMods = new List<QMod>();
@@ -87,7 +87,7 @@ namespace QModManager
             }
         }
 
-        private static void PatchHarmony()
+        internal static void PatchHarmony()
         {
             HarmonyInstance.Create("qmodmanager").PatchAll();
             Logger.Debug("Patched!");
@@ -95,7 +95,7 @@ namespace QModManager
 
         #region Mod loading
 
-        private static void StartLoadingMods()
+        internal static void StartLoadingMods()
         {
             Logger.Info("Started loading mods");
 
@@ -195,7 +195,7 @@ namespace QModManager
             LoadAllMods();
         }
 
-        private static void LoadAllMods()
+        internal static void LoadAllMods()
         {
             string toWrite = "Loaded mods:\n";
 
@@ -264,7 +264,7 @@ namespace QModManager
             CheckOldHarmony();
         }
 
-        private static bool LoadMod(QMod mod)
+        internal static bool LoadMod(QMod mod)
         {
             if (mod == null || mod.Loaded) return false;
 
@@ -310,7 +310,7 @@ namespace QModManager
             return true;
         }
 
-        private static void RemoveDuplicateModIDs()
+        internal static void RemoveDuplicateModIDs()
         {
             List<QMod> duplicateModIDs = new List<QMod>();
 
@@ -355,7 +355,7 @@ namespace QModManager
 
         internal static Game game;
 
-        private static bool DetectGame()
+        internal static bool DetectGame()
         {
             bool sn = Directory.GetFiles(Environment.CurrentDirectory, "Subnautica.exe", SearchOption.TopDirectoryOnly).Length > 0
                 || Directory.GetFiles(Environment.CurrentDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0
@@ -391,7 +391,7 @@ namespace QModManager
             return false;
         }
 
-        private static void DisableNonApplicableMods()
+        internal static void DisableNonApplicableMods()
         {
             List<QMod> nonApplicableMods = new List<QMod>();
             sortedMods = sortedMods.Where(mod =>
@@ -416,7 +416,7 @@ namespace QModManager
             }
         }
 
-        private static string GetOtherGame()
+        internal static string GetOtherGame()
         {
             if (game == Game.Subnautica) return "BelowZero";
             else return "Subnautica";
@@ -428,7 +428,7 @@ namespace QModManager
 
         internal static List<QMod> modSortingChain = new List<QMod>();
 
-        private static void SortMods()
+        internal static void SortMods()
         {
             // Contains all the mods that errored out during the sorting process.
             List<List<QMod>> sortingErrorLoops = new List<List<QMod>>();
@@ -598,7 +598,7 @@ namespace QModManager
             return true;
         }
 
-        private static List<QMod> GetLoadBefore(QMod mod)
+        internal static List<QMod> GetLoadBefore(QMod mod)
         {
             if (mod == null) return null;
 
@@ -616,7 +616,7 @@ namespace QModManager
             return mods;
         }
 
-        private static List<QMod> GetLoadAfter(QMod mod)
+        internal static List<QMod> GetLoadAfter(QMod mod)
         {
             if (mod == null) return null;
 
@@ -638,7 +638,7 @@ namespace QModManager
 
         #region Dependencies
 
-        private static void CheckForDependencies()
+        internal static void CheckForDependencies()
         {
             Dictionary<QMod, List<string>> missingDependenciesByMod = new Dictionary<QMod, List<string>>();
             Dictionary<QMod, List<KeyValuePair<string, string>>> missingVersionDependenciesByMod = new Dictionary<QMod, List<KeyValuePair<string, string>>>();
@@ -694,7 +694,7 @@ namespace QModManager
             }
         }
 
-        private static List<QMod> GetPresentDependencies(QMod mod)
+        internal static List<QMod> GetPresentDependencies(QMod mod)
         {
             if (mod == null) return null;
 
@@ -711,7 +711,7 @@ namespace QModManager
 
             return dependencies;
         }
-        private static List<QMod> GetPresentVersionDependencies(QMod mod)
+        internal static List<QMod> GetPresentVersionDependencies(QMod mod)
         {
             if (mod == null) return null;
 
@@ -740,7 +740,7 @@ namespace QModManager
             return dependencies;
         }
 
-        private static List<string> GetMissingDependencies(QMod mod, List<QMod> presentDependencies)
+        internal static List<string> GetMissingDependencies(QMod mod, List<QMod> presentDependencies)
         {
             if (mod == null) return null;
             if (presentDependencies == null || presentDependencies.Count() == 0) return mod.Dependencies.ToList();
@@ -758,7 +758,7 @@ namespace QModManager
 
             return dependenciesMissing;
         }
-        private static List<KeyValuePair<string, string>> GetMissingVersionDependencies(QMod mod, List<QMod> presentDependencies)
+        internal static List<KeyValuePair<string, string>> GetMissingVersionDependencies(QMod mod, List<QMod> presentDependencies)
         {
             if (mod == null) return null;
             if (presentDependencies == null || presentDependencies.Count() == 0) return mod.VersionDependencies.ToList();
@@ -777,7 +777,7 @@ namespace QModManager
             return dependenciesMissing;
         }
 
-        private static Dictionary<QMod, List<string>> MergeDependencyDictionaries(Dictionary<QMod, List<string>> normalDependencies, Dictionary<QMod, List<KeyValuePair<string, string>>> versionDependencies)
+        internal static Dictionary<QMod, List<string>> MergeDependencyDictionaries(Dictionary<QMod, List<string>> normalDependencies, Dictionary<QMod, List<KeyValuePair<string, string>>> versionDependencies)
         {
             Dictionary<QMod, List<string>> dependencies = new Dictionary<QMod, List<string>>(normalDependencies);
 
@@ -797,7 +797,7 @@ namespace QModManager
 
         #region Old harmony detection
 
-        private static void CheckOldHarmony()
+        internal static void CheckOldHarmony()
         {
             List<QMod> modsThatUseOldHarmony = new List<QMod>();
 
@@ -828,7 +828,7 @@ namespace QModManager
 
         #region Errored mods
 
-        private static void ShowErroredMods()
+        internal static void ShowErroredMods()
         {
             if (erroredMods.Count <= 0) return;
 
