@@ -1,3 +1,5 @@
+## Dependencies
+
 |            Dependency           |                          Link                          |               Redistributed              |
 |:-------------------------------:|:------------------------------------------------------:|:----------------------------------------:|
 |          `0Harmony.dll`         |           https://github.com/pardeike/Harmony          |                  &#9745;                 |
