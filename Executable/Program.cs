@@ -47,7 +47,7 @@ namespace QModManager
                 string managedDirectory = Environment.CurrentDirectory;
                 string globalgamemanagers = Path.Combine(managedDirectory, "../globalgamemanagers");
 
-                if (!File.Exists(managedDirectory + "/Assembly-CSharp.dll"))
+                if (!File.Exists(Path.Combine(managedDirectory, "Assembly-CSharp.dll")))
                 {
                     Console.WriteLine("Could not find the assembly file.");
                     Console.WriteLine("Please make sure you have installed QModManager in the right folder.");
