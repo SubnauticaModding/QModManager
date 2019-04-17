@@ -25,7 +25,7 @@ namespace QModManager
         }
         public static QMod GetMod(string id)
         {
-            if (id == null) return null;
+            if (string.IsNullOrEmpty(id)) return null;
             foreach (QMod mod in Patcher.sortedMods)
                 if (mod.Id == Regex.Replace(id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase)) return mod;
             return null;
