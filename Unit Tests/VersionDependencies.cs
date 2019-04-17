@@ -444,7 +444,7 @@ namespace QModManager.Tests
             [TestFixture]
             public class Standard
             {
-                [Test] [Ignore("Broken")]
+                [Test]
                 public void MatchSuccess_1()
                 {
                     Patcher.loadedMods.Clear();
@@ -463,7 +463,7 @@ namespace QModManager.Tests
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
                         {
-                            { "Mod1", ">1.2" }
+                            { "Mod1", ">1.2.0" }
                         }
                     };
 
@@ -619,7 +619,7 @@ namespace QModManager.Tests
 
                     Assert.IsTrue(Patcher.erroredMods.Count == 0);
                 }
-                [Test] [Ignore("Broken")]
+                [Test]
                 public void MatchSuccess_1_WithSpace()
                 {
                     Patcher.loadedMods.Clear();
@@ -638,7 +638,7 @@ namespace QModManager.Tests
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
                         {
-                            { "Mod1", " > 1.2" }
+                            { "Mod1", " > 1.2.0" }
                         }
                     };
 
@@ -793,6 +793,781 @@ namespace QModManager.Tests
                     Patcher.CheckForDependencies();
 
                     Assert.IsTrue(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchFail_1()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "1.1.9",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", ">1.2.0" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchFail_2()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "2.0",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", "<1.4" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchFail_3()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "1.4",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", ">1.2.2 <1.4" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchFail_4()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "1.0",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", ">=1.2.3 <1.3.0 || =1.2.2" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchFail_5()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "1.1",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", ">=1.2 <=1.3" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchFail_1_WithSpace()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "1.1.9",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", " > 1.2.0" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchFail_2_WithSpace()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "2.0",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", " < 1.4" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchFail_3_WithSpace()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "1.4",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", " > 1.2.2 < 1.4" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchFail_4_WithSpace()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "1.0",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", " >= 1.2.3 < 1.3.0 || = 1.2.2" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchFail_5_WithSpace()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "1.1",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", " >= 1.2 <= 1.3" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
+                }
+            }
+
+            [TestFixture]
+            public class Hyphen
+            {
+                [Test]
+                public void SemVer_Weirdness_1()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "1.2.3",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", "1.2.0-1.4.0" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void SemVer_Weirdness_2()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "1.2.3",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", "1.2-1.3" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void SemVer_Weirdness_3()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "1.2.3",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", "1.2.2-1.4" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchSuccess_1_WithSpace()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "1.2.3",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", "1.2.0 - 1.4.0" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsTrue(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchSuccess_2_WithSpace()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "1.2.3",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", "1.2 - 1.3" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsTrue(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchSuccess_3_WithSpace()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "1.2.3",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", "1.2.2 - 1.4" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsTrue(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchFail_1()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "1.4.1",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", "1.2.0-1.4.0" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchFail_2()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "2.0",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", "1.2-1.3" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchFail_3()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "1.4.1",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", "1.2.2-1.4" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchFail_1_WithSpace()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "1.4.1",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", "1.2.0 - 1.4.0" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchFail_2_WithSpace()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "2.0",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", "1.2 - 1.3" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
+                }
+                [Test]
+                public void MatchFail_3_WithSpace()
+                {
+                    Patcher.loadedMods.Clear();
+                    Patcher.foundMods.Clear();
+                    Patcher.sortedMods.Clear();
+                    Patcher.erroredMods.Clear();
+
+                    QMod mod1 = new QMod
+                    {
+                        Id = "Mod1",
+                        Version = "1.4",
+                    };
+
+                    QMod mod2 = new QMod
+                    {
+                        Id = "Mod2",
+                        VersionDependencies = new Dictionary<string, string>()
+                        {
+                            { "Mod1", "1.2.2 - 1.4" }
+                        }
+                    };
+
+                    Patcher.foundMods = new List<QMod>
+                    {
+                        mod1,
+                        mod2,
+                    };
+
+                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+
+                    Patcher.CheckForDependencies();
+
+                    Assert.IsFalse(Patcher.erroredMods.Count == 0);
                 }
             }
         }
