@@ -46,16 +46,16 @@ namespace QModManager
 
         private class QMMHooks : MonoBehaviour
         {
-            private void FixedUpdate() => Hooks.FixedUpdate?.Invoke();
-            private void Update()
+            private void FixedUpdate()
             {
                 if (!LateStartInvoked)
                 {
                     LateStart?.Invoke();
                     LateStartInvoked = true;
                 }
-                Hooks.Update?.Invoke();
+                Hooks.FixedUpdate?.Invoke();
             }
+            private void Update() => Hooks.Update?.Invoke();
             private void LateUpdate() => Hooks.LateUpdate?.Invoke();
             private void OnApplicationQuit() => Hooks.OnApplicationQuit?.Invoke();
         }
