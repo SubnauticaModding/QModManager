@@ -538,7 +538,7 @@ function InitializeSetup(): Boolean;
 var
   ErrCode: Integer;
 begin
-  if not IsDotNetDetected('v1.1', 0) then 
+  if not IsDotNetDetected('v3.5', 0) then 
   begin
     if MsgBox('QModManager requires Microsoft .NET Framework 3.5.' + #13#10 + 'Would you like to install it now?', mbInformation, MB_YESNO) = IDYES then
     begin
