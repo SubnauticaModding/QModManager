@@ -112,6 +112,7 @@
     <Compile Include="Dialog.cs" />
     <Compile Include="Hooks.cs" />
     <Compile Include="Legacy\PatchManager.cs" />
+    <Compile Include="Messages.cs" />
     <Compile Include="QModAPI.cs" />
     <Compile Include="NitroxCheck.cs" />
     <Compile Include="Utility\IOUtilities.cs" />

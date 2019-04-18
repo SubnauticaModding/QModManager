@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace QModManager
 {
-    public static class QModAPI
+    public static partial class QModAPI
     {
         internal static List<Assembly> ErroredMods = new List<Assembly>();
         public static void MarkAsErrored(Assembly modAssembly = null)
@@ -43,12 +43,8 @@ namespace QModManager
         }
 
         public static bool ModPresent(Assembly modAssembly, bool includeUnloaded = false, bool includeErrored = false)
-        {
-            return GetMod(modAssembly, includeUnloaded, includeErrored) != null;
-        }
+            => GetMod(modAssembly, includeUnloaded, includeErrored) != null;
         public static bool ModPresent(string id, bool includeUnloaded = false, bool includeErrored = false)
-        {
-            return GetMod(id, includeUnloaded, includeErrored) != null;
-        }
+            => GetMod(id, includeUnloaded, includeErrored) != null;
     }
 }
