@@ -6,7 +6,7 @@ namespace QModManager
 {
     internal static class OptionsManager
     {
-        internal static bool DebuggerEnabled { get => PlayerPrefsExtra.GetBool("QModManager_PrefabDebugger_Enable", false); }
+        internal static bool DebuggerEnabled { get => PlayerPrefsExtra.GetBool("QModManager_PrefabDebugger_EnableExperimental", false); }
 
         [HarmonyPatch(typeof(uGUI_OptionsPanel), "AddTabs")]
         internal static class OptionsPatch

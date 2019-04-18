@@ -298,10 +298,10 @@ namespace QModManager
                 return false;
             }
 
-            if (PatchManager.ErroredMods.Contains(mod?.LoadedAssembly))
+            if (QModAPI.ErroredMods.Contains(mod?.LoadedAssembly))
             {
                 Logger.Error($"Mod \"{mod.Id}\" could not be loaded.");
-                PatchManager.ErroredMods.Remove(mod?.LoadedAssembly);
+                QModAPI.ErroredMods.Remove(mod?.LoadedAssembly);
                 return false;
             }
             mod.Loaded = true;
