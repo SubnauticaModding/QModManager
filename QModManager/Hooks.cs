@@ -28,9 +28,14 @@ namespace QModManager
         [HarmonyPatch(typeof(DevConsole), "Start")]
         private static class AddComponentPatch
         {
+            private static bool hooksLoaded = false;
+
             [HarmonyPostfix]
             private static void Postfix(DevConsole __instance)
             {
+                if (hooksLoaded) return;
+                hooksLoaded = true;
+                
                 __instance.gameObject.AddComponent<QMMHooks>();
 
                 Logger.Debug("Hooks loaded");
