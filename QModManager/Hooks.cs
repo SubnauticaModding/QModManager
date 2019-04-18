@@ -9,6 +9,7 @@ namespace QModManager
     {
         public static Delegates.Start Start;
         public static Delegates.FixedUpdate FixedUpdate;
+        public static Delegates.LateStart LateStart;
         public static Delegates.Update Update;
         public static Delegates.LateUpdate LateUpdate;
         public static Delegates.OnApplicationQuit OnApplicationQuit;
@@ -16,6 +17,8 @@ namespace QModManager
         public static Delegates.SceneLoaded SceneLoaded;
 
         public static Delegates.OnLoadEnd OnLoadEnd;
+
+        public static bool LateStartInvoked { get; internal set; } = false;
 
         internal static void Load()
         {
@@ -39,7 +42,15 @@ namespace QModManager
         private class QMMHooks : MonoBehaviour
         {
             private void FixedUpdate() => Hooks.FixedUpdate?.Invoke();
-            private void Update() => Hooks.Update?.Invoke();
+            private void Update()
+            {
+                if (!LateStartInvoked)
+                {
+                    LateStart?.Invoke();
+                    LateStartInvoked = true;
+                }
+                Hooks.Update?.Invoke();
+            }
             private void LateUpdate() => Hooks.LateUpdate?.Invoke();
             private void OnApplicationQuit() => Hooks.OnApplicationQuit?.Invoke();
         }
@@ -48,6 +59,7 @@ namespace QModManager
         {
             public delegate void Start();
             public delegate void FixedUpdate();
+            public delegate void LateStart();
             public delegate void Update();
             public delegate void LateUpdate();
             public delegate void OnApplicationQuit();
