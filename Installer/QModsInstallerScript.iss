@@ -540,7 +540,7 @@ var
 begin
   if not IsDotNetDetected('v3.5', 0) then 
   begin
-    if MsgBox('QModManager requires Microsoft .NET Framework 3.5.' + #13#10 + 'Would you like to install it now?', mbInformation, MB_YESNO) = IDYES then
+    if MsgBox('QModManager requires Microsoft .NET Framework 3.5.' + #13#10 + 'Would you like to install it now?', mbCriticalError, MB_YESNO) = IDYES then
     begin
       if not ShellExec('open', 'https://docs.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows-10', '', '', SW_SHOW, ewNoWait, ErrCode) then
       begin
