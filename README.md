@@ -73,7 +73,7 @@ Example: `[ "DependencyModID" ]`
 - `VersionDependencies`: Just like `Dependencies`, but you can specify a version range for the needed mods.  
 _(optional, default to `{}`)_  
 Type: `Dictionary<string, string>`  
-Example: `{ "VeryImportantMod": "1.2.x", "AnotherVeryImportantMod": "2.1.2 - 2.3.2" }`  
+Example: `{ "SMLHelper": "2.x", "AnotherVeryImportantMod": ">1.2.3" }`  
 **Note: The versioning system which is used is SemVer. [Here](https://github.com/adamreeve/semver.net/blob/master/README.md) is a readme file with all of the possible version range declarations. Some weird things could occurr, so it's recommended that you test out your version ranges [here](https://semver.npmjs.com/).**
 
 - `LoadBefore`: Specify mods that will be loaded after your mod. If a mod in this list isn't found, it is simply ignored.  
@@ -116,8 +116,8 @@ Example: `"BestMod.QMod.Patch"`
   "Version": "1.0.0",
   "Dependencies": [ "DependencyModID" ],
   "VersionDependencies": { 
-    "VeryImportantMod": "1.2.x", 
-    "AnotherVeryImportantMod": "2.1.2 - 2.3.2" 
+    "SMLHelper": "2.x", 
+    "AnotherVeryImportantMod": ">1.2.3" 
   },
   "LoadBefore": [ "AModID", "SomeOtherModID" ],
   "LoadAfter": [ "AnotherModID" ],
