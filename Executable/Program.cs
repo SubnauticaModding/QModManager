@@ -47,7 +47,7 @@ namespace QModManager
                 string managedDirectory = Environment.CurrentDirectory;
                 string globalgamemanagers = Path.Combine(managedDirectory, "../globalgamemanagers");
 
-                if (!File.Exists(managedDirectory + "/Assembly-CSharp.dll"))
+                if (!File.Exists(Path.Combine(managedDirectory, "Assembly-CSharp.dll")))
                 {
                     Console.WriteLine("Could not find the assembly file.");
                     Console.WriteLine("Please make sure you have installed QModManager in the right folder.");
@@ -262,11 +262,11 @@ namespace QModManager
             Console.TreatControlCAsInput = true;
         }
 
-        private static void DisableExitButton() => EnableMenuItem(GetSystemMenu(GetConsoleWindow(), false), 0xF060, 0x1);
-        private static void CancelKeyPress(object sender, ConsoleCancelEventArgs e) => e.Cancel = true;
-        [DllImport("user32.dll")] private static extern int EnableMenuItem(IntPtr tMenu, int targetItem, int targetStatus);
-        [DllImport("user32.dll")] private static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
-        [DllImport("kernel32.dll", ExactSpelling = true)] private static extern IntPtr GetConsoleWindow();
+        internal static void DisableExitButton() => EnableMenuItem(GetSystemMenu(GetConsoleWindow(), false), 0xF060, 0x1);
+        internal static void CancelKeyPress(object sender, ConsoleCancelEventArgs e) => e.Cancel = true;
+        [DllImport("user32.dll")] internal static extern int EnableMenuItem(IntPtr tMenu, int targetItem, int targetStatus);
+        [DllImport("user32.dll")] internal static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+        [DllImport("kernel32.dll", ExactSpelling = true)] internal static extern IntPtr GetConsoleWindow();
 
         #endregion
     }

@@ -26,12 +26,12 @@ namespace QModManager
         }
 
         [HarmonyPatch(typeof(DevConsole), "Start")]
-        private static class AddComponentPatch
+        internal static class AddComponentPatch
         {
-            private static bool hooksLoaded = false;
+            internal static bool hooksLoaded = false;
 
             [HarmonyPostfix]
-            private static void Postfix(DevConsole __instance)
+            internal static void Postfix(DevConsole __instance)
             {
                 if (hooksLoaded) return;
                 hooksLoaded = true;
@@ -44,9 +44,9 @@ namespace QModManager
             }
         }
 
-        private class QMMHooks : MonoBehaviour
+        internal class QMMHooks : MonoBehaviour
         {
-            private void FixedUpdate()
+            internal void FixedUpdate()
             {
                 if (!LateStartInvoked)
                 {
@@ -55,9 +55,9 @@ namespace QModManager
                 }
                 Hooks.FixedUpdate?.Invoke();
             }
-            private void Update() => Hooks.Update?.Invoke();
-            private void LateUpdate() => Hooks.LateUpdate?.Invoke();
-            private void OnApplicationQuit() => Hooks.OnApplicationQuit?.Invoke();
+            internal void Update() => Hooks.Update?.Invoke();
+            internal void LateUpdate() => Hooks.LateUpdate?.Invoke();
+            internal void OnApplicationQuit() => Hooks.OnApplicationQuit?.Invoke();
         }
 
         public class Delegates
