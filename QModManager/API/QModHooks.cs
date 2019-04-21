@@ -3,9 +3,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Logger = QModManager.Utility.Logger;
 
-namespace QModManager
+namespace QModManager.API
 {
-    public static class Hooks
+    public static class QModHooks
     {
         public static Delegates.Start Start;
         public static Delegates.FixedUpdate FixedUpdate;
@@ -35,7 +35,7 @@ namespace QModManager
             {
                 if (hooksLoaded) return;
                 hooksLoaded = true;
-                
+
                 __instance.gameObject.AddComponent<QMMHooks>();
 
                 Logger.Debug("Hooks loaded");
@@ -53,11 +53,11 @@ namespace QModManager
                     LateStart?.Invoke();
                     LateStartInvoked = true;
                 }
-                Hooks.FixedUpdate?.Invoke();
+                QModHooks.FixedUpdate?.Invoke();
             }
-            internal void Update() => Hooks.Update?.Invoke();
-            internal void LateUpdate() => Hooks.LateUpdate?.Invoke();
-            internal void OnApplicationQuit() => Hooks.OnApplicationQuit?.Invoke();
+            internal void Update() => QModHooks.Update?.Invoke();
+            internal void LateUpdate() => QModHooks.LateUpdate?.Invoke();
+            internal void OnApplicationQuit() => QModHooks.OnApplicationQuit?.Invoke();
         }
 
         public class Delegates
