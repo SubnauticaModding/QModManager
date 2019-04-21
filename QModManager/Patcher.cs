@@ -168,6 +168,7 @@ namespace QModManager
 
                 mod.LoadedAssembly = Assembly.LoadFrom(modAssemblyPath);
                 mod.ModAssemblyPath = modAssemblyPath;
+                mod.MessageReceivers = GetMessageRecievers(mod.LoadedAssembly);
 
                 foundMods.Add(mod);
             }
@@ -339,6 +340,23 @@ namespace QModManager
 
                 Logger.Error(toWrite);
             }
+        }
+
+        internal static Dictionary<QMod, List<MethodInfo>> GetMessageRecievers(Assembly assembly)
+        {
+            return assembly.GetTypes()
+                           .SelectMany(t => t.GetMethods())
+                           .Where(m => m.IsStatic && m.GetParameters().Length == 3)
+                           .Where(m => m.GetCustomAttributes(typeof(MessageReceiver), false).Length == 1)
+                           .GroupBy(m => ((MessageReceiver)m.GetCustomAttributes(typeof(MessageReceiver), false)[0]).Sender)
+                           .Select(g => new KeyValuePair<QMod, List<MethodInfo>>(g.Key, g.ToList()))
+                           .Add(new KeyValuePair<QMod, List<MethodInfo>>(null,
+                   assembly.GetTypes()
+                           .SelectMany(t => t.GetMethods())
+                           .Where(m => m.IsStatic && m.GetParameters().Length == 3)
+                           .Where(m => m.GetCustomAttributes(typeof(GlobalMessageReciever), false).Length == 1)
+                           .ToList()))
+                           .ToDictionary(k => k.Key, v => v.Value);
         }
 
         #endregion

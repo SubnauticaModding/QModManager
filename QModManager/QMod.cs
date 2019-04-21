@@ -31,6 +31,7 @@ namespace QModManager
         [JsonIgnore] internal string ModAssemblyPath;
         [JsonIgnore] internal bool Loaded;
         [JsonIgnore] internal Patcher.Game ParsedGame;
+        [JsonIgnore] internal Dictionary<QMod, List<MethodInfo>> MessageReceivers;
 
         internal static QMod FromJsonFile(string file)
         {

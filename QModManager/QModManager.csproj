@@ -115,7 +115,7 @@
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Dialog.cs" />
     <Compile Include="Hooks.cs" />
-    <Compile Include="Legacy\PatchManager.cs" />
+    <Compile Include="Obsolete\PatchManager.cs" />
     <Compile Include="API\Messages.cs" />
     <Compile Include="API\QModAPI.cs" />
     <Compile Include="NitroxCheck.cs" />
