@@ -1,5 +1,6 @@
 using Harmony;
 using Oculus.Newtonsoft.Json;
+using QModManager.API;
 using QModManager.Debugger;
 using QModManager.Utility;
 using SemVer;

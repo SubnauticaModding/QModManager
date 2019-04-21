@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace QModManager
+namespace QModManager.API
 {
     public static partial class QModAPI
     {
