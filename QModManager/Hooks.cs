@@ -9,6 +9,7 @@ namespace QModManager
     {
         public static Delegates.Start Start;
         public static Delegates.FixedUpdate FixedUpdate;
+        public static Delegates.LateStart LateStart;
         public static Delegates.Update Update;
         public static Delegates.LateUpdate LateUpdate;
         public static Delegates.OnApplicationQuit OnApplicationQuit;
@@ -17,17 +18,24 @@ namespace QModManager
 
         public static Delegates.OnLoadEnd OnLoadEnd;
 
+        public static bool LateStartInvoked { get; internal set; } = false;
+
         internal static void Load()
         {
             SceneManager.sceneLoaded += (scene, loadSceneMode) => SceneLoaded?.Invoke(scene, loadSceneMode);
         }
 
         [HarmonyPatch(typeof(DevConsole), "Start")]
-        private static class AddComponentPatch
+        internal static class AddComponentPatch
         {
+            internal static bool hooksLoaded = false;
+
             [HarmonyPostfix]
-            private static void Postfix(DevConsole __instance)
+            internal static void Postfix(DevConsole __instance)
             {
+                if (hooksLoaded) return;
+                hooksLoaded = true;
+                
                 __instance.gameObject.AddComponent<QMMHooks>();
 
                 Logger.Debug("Hooks loaded");
@@ -36,18 +44,27 @@ namespace QModManager
             }
         }
 
-        private class QMMHooks : MonoBehaviour
+        internal class QMMHooks : MonoBehaviour
         {
-            private void FixedUpdate() => Hooks.FixedUpdate?.Invoke();
-            private void Update() => Hooks.Update?.Invoke();
-            private void LateUpdate() => Hooks.LateUpdate?.Invoke();
-            private void OnApplicationQuit() => Hooks.OnApplicationQuit?.Invoke();
+            internal void FixedUpdate()
+            {
+                if (!LateStartInvoked)
+                {
+                    LateStart?.Invoke();
+                    LateStartInvoked = true;
+                }
+                Hooks.FixedUpdate?.Invoke();
+            }
+            internal void Update() => Hooks.Update?.Invoke();
+            internal void LateUpdate() => Hooks.LateUpdate?.Invoke();
+            internal void OnApplicationQuit() => Hooks.OnApplicationQuit?.Invoke();
         }
 
         public class Delegates
         {
             public delegate void Start();
             public delegate void FixedUpdate();
+            public delegate void LateStart();
             public delegate void Update();
             public delegate void LateUpdate();
             public delegate void OnApplicationQuit();

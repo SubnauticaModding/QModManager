@@ -42,7 +42,7 @@ namespace QModManager
                     Process.Start(VersionCheck.bzNexus);
             });
 
-            private Button() { }
+            internal Button() { }
             internal Button(string text, Action action)
             {
                 this.text = text;
@@ -56,7 +56,7 @@ namespace QModManager
             couroutineHandler.AddComponent<DummyBehaviour>().StartCoroutine(ShowDialogEnumerator(error, leftButton?.action, rightButton?.action, leftButton?.text, rightButton?.text, blue, couroutineHandler));
         }
 
-        private static IEnumerator ShowDialogEnumerator(string error, Action onLeftButtonPressed, Action onRightButtonPressed, string leftButtonText, string rightButtonText, bool blue, GameObject couroutineHandler)
+        internal static IEnumerator ShowDialogEnumerator(string error, Action onLeftButtonPressed, Action onRightButtonPressed, string leftButtonText, string rightButtonText, bool blue, GameObject couroutineHandler)
         {
             while (typeof(uGUI).GetField("_main", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) == null)
                 yield return null;

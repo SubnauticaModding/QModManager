@@ -46,7 +46,7 @@ namespace QModManager
                 client.DownloadStringAsync(new Uri(VersionURL));
             }
         }
-        private static void Parse(string versionStr)
+        internal static void Parse(string versionStr)
         {
             try
             {
