@@ -26,9 +26,11 @@ namespace QModManager.API
                 return Patcher.loadedMods.AsReadOnly();
         }
 
-        public static QMod GetMod(Assembly modAssembly = null, bool includeUnloaded = false, bool includeErrored = false)
+        public static QMod GetMyMod()
+            => GetMod(Assembly.GetCallingAssembly(), true, true);
+        public static QMod GetMod(Assembly modAssembly, bool includeUnloaded = false, bool includeErrored = false)
         {
-            modAssembly = modAssembly ?? Assembly.GetCallingAssembly();
+            if (modAssembly == null) return null;
 
             foreach (QMod mod in GetAllMods(includeUnloaded, includeErrored))
                 if (mod.LoadedAssembly == modAssembly) return mod;
@@ -37,6 +39,7 @@ namespace QModManager.API
         public static QMod GetMod(string id, bool includeUnloaded = false, bool includeErrored = false)
         {
             if (string.IsNullOrEmpty(id)) return null;
+
             foreach (QMod mod in GetAllMods(includeUnloaded, includeErrored))
                 if (mod.Id == Regex.Replace(id, Patcher.IDRegex, "", RegexOptions.IgnoreCase)) return mod;
             return null;
