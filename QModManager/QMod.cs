@@ -76,7 +76,7 @@ namespace QModManager
         {
             return new QMod()
             {
-                Id = Regex.Replace(name, "[^0-9a-z_]", "", RegexOptions.IgnoreCase),
+                Id = Regex.Replace(name, Patcher.IDRegex, "", RegexOptions.IgnoreCase),
                 DisplayName = name,
                 Author = "None",
                 Version = "None",
@@ -116,10 +116,10 @@ namespace QModManager
                 success = false;
             }
 
-            else if (mod.Id != Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase))
+            else if (mod.Id != Regex.Replace(mod.Id, Patcher.IDRegex, "", RegexOptions.IgnoreCase))
             {
                 Logger.Warn($"Mod found in folder \"{folderName}\" has an invalid ID! All invalid characters have been removed. (This can cause issues!)");
-                mod.Id = Regex.Replace(mod.Id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase);
+                mod.Id = Regex.Replace(mod.Id, Patcher.IDRegex, "", RegexOptions.IgnoreCase);
             }
 
             if (string.IsNullOrEmpty(mod.Author))
@@ -171,14 +171,14 @@ namespace QModManager
 
             for (int i = 0; i < mod.LoadAfter.Length; i++)
             {
-                string good = Regex.Replace(mod.LoadAfter[i], "[^0-9a-z_]", "", RegexOptions.IgnoreCase);
+                string good = Regex.Replace(mod.LoadAfter[i], Patcher.IDRegex, "", RegexOptions.IgnoreCase);
                 if (mod.LoadAfter[i] != good)
                     mod.LoadAfter[i] = good;
             }
 
             for (int i = 0; i < mod.LoadBefore.Length; i++)
             {
-                string good = Regex.Replace(mod.LoadBefore[i], "[^0-9a-z_]", "", RegexOptions.IgnoreCase);
+                string good = Regex.Replace(mod.LoadBefore[i], Patcher.IDRegex, "", RegexOptions.IgnoreCase);
                 if (mod.LoadBefore[i] != good)
                     mod.LoadBefore[i] = good;
             }
@@ -186,7 +186,7 @@ namespace QModManager
             Dictionary<string, string> versionDependenciesLoop = new Dictionary<string, string>(mod.VersionDependencies);
             foreach (KeyValuePair<string, string> kvp in versionDependenciesLoop)
             {
-                string good = Regex.Replace(kvp.Key, "[^0-9a-z_]", "", RegexOptions.IgnoreCase);
+                string good = Regex.Replace(kvp.Key, Patcher.IDRegex, "", RegexOptions.IgnoreCase);
                 if (kvp.Key != good)
                 {
                     mod.VersionDependencies.Remove(kvp.Key);

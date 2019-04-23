@@ -38,7 +38,7 @@ namespace QModManager.API
         {
             if (string.IsNullOrEmpty(id)) return null;
             foreach (QMod mod in GetAllMods(includeUnloaded, includeErrored))
-                if (mod.Id == Regex.Replace(id, "[^0-9a-z_]", "", RegexOptions.IgnoreCase)) return mod;
+                if (mod.Id == Regex.Replace(id, Patcher.IDRegex, "", RegexOptions.IgnoreCase)) return mod;
             return null;
         }
 
