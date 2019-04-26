@@ -57,7 +57,10 @@ namespace QModManager
                     Debug.LogException(e);
                 }
 
+                QModHooks.Load();
+#pragma warning disable CS0618 // Type or member is obsolete
                 Hooks.Load();
+#pragma warning restore CS0618 // Type or member is obsolete
 
                 PirateCheck.IsPirate(Environment.CurrentDirectory);
 
@@ -77,9 +80,12 @@ namespace QModManager
 
                 VersionCheck.Check();
 
-                Hooks.Start += PrefabDebugger.Main;
+                QModHooks.Start += PrefabDebugger.Main;
 
+                QModHooks.OnLoadEnd?.Invoke();
+#pragma warning disable CS0618 // Type or member is obsolete
                 Hooks.OnLoadEnd?.Invoke();
+#pragma warning restore CS0618 // Type or member is obsolete
 
                 Logger.Info($"Finished loading QModManager. Loaded {loadedMods.Count} mods");
             }
