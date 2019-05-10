@@ -1,4 +1,5 @@
 ﻿using Oculus.Newtonsoft.Json;
+using QModManager.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,6 +13,28 @@ namespace QModManager
 {
     public class QMod
     {
+        public static QMod QModManagerQMod { get; } = new QMod()
+        {
+            AssemblyName = "QModInstaller.dll",
+            Author = "the QModManager dev team",
+            Dependencies = new string[] { },
+            DisplayName = "QModManager",
+            Enable = true,
+            EntryMethod = null,
+            Game = "Both",
+            Id = "QModManager",
+            LoadAfter = new string[] { },
+            LoadBefore = new string[] { },
+            Loaded = true,
+            LoadedAssembly = Assembly.GetExecutingAssembly(),
+            MessageReceivers = new Dictionary<QMod, List<MethodInfo>>(),
+            ModAssemblyPath = Assembly.GetExecutingAssembly().Location,
+            ParsedGame = Patcher.Game.Both,
+            ParsedVersion = Assembly.GetExecutingAssembly().GetName().Version,
+            Version = Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed(),
+            VersionDependencies = new Dictionary<string, string>(),
+        };
+
         public string Id = "";
         public string DisplayName = "";
         public string Author = "";

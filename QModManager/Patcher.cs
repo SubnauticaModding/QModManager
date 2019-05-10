@@ -729,6 +729,12 @@ namespace QModManager
 
             foreach (string dependencyId in mod.Dependencies)
             {
+                if (dependencyId == "QModManager")
+                {
+                    dependencies.Add(QMod.QModManagerQMod);
+                    continue;
+                }
+
                 foreach (QMod dependencyMod in sortedMods)
                 {
                     if (dependencyId == dependencyMod.Id)
@@ -746,6 +752,25 @@ namespace QModManager
 
             foreach (KeyValuePair<string, string> dependency in mod.VersionDependencies)
             {
+                if (dependency.Key.Trim() == "QModManager")
+                {
+                    try
+                    {
+                        if (dependency.Value.Trim() == QMod.QModManagerQMod.Version.Trim() || dependency.Value.Trim(' ', '=') == QMod.QModManagerQMod.Version.Trim() || Range.IsSatisfied(dependency.Value.Trim(), QMod.QModManagerQMod.Version.Trim(), true))
+                            dependencies.Add(QMod.QModManagerQMod);
+                    }
+                    catch (ArgumentException)
+                    {
+                        Logger.Warn($"Caught an ArgumentException while trying to parse dependency version range \"{dependency.Value}\" of dependency \"QModManager\" for mod \"{mod.DisplayName}\"");
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error($"An error occurred while trying to parse version range \"{dependency.Value}\" of dependency \"QModManager\" for mod \"{mod.DisplayName}\"");
+                        Debug.LogException(e);
+                    }
+                    continue;
+                }
+
                 foreach (QMod dependencyMod in sortedMods)
                 {
                     if (dependency.Key.Trim() == dependencyMod.Id.Trim())
