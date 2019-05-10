@@ -31,7 +31,7 @@ namespace QModManager.API
         public GlobalMessageReciever() { }
     }
 
-    public static partial class QModAPI
+    public partial class QModAPI : IQModAPI
     {
         public static void SendMessage(QMod mod, string message, params object[] data)
         {
