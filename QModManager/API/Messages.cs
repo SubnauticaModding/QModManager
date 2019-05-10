@@ -33,7 +33,18 @@ namespace QModManager.API
 
     public partial class QModAPI : IQModAPI
     {
-        public static void SendMessage(QMod mod, string message, params object[] data)
+        public static void SendMessage(QMod mod, string message, params object[] data) 
+            => Main.SendMessage(mod, message, data);
+        public static void SendMessage(Assembly modAssembly, string message, params object[] data)
+            => Main.SendMessage(modAssembly, message, data);
+        public static void SendMessage(string modID, string message, params object[] data)
+            => Main.SendMessage(modID, message, data);
+
+        public static void BroadcastMessage(string message, params object[] data) => Main.BroadcastMessage(message, data);
+
+        #region Non-static
+
+        void IQModAPI.SendMessage(QMod mod, string message, params object[] data)
         {
             if (mod == null) return;
             if (data == null) data = new object[] { };
@@ -44,12 +55,12 @@ namespace QModManager.API
                 foreach (MethodInfo method in methods)
                     method.Invoke(null, new object[] { caller, message, data });
         }
-        public static void SendMessage(Assembly modAssembly, string message, params object[] data)
+        void IQModAPI.SendMessage(Assembly modAssembly, string message, params object[] data) 
             => SendMessage(GetMod(modAssembly, true, true), message, data);
-        public static void SendMessage(string modID, string message, params object[] data)
+        void IQModAPI.SendMessage(string modID, string message, params object[] data) 
             => SendMessage(GetMod(modID, true, true), message, data);
 
-        public static void BroadcastMessage(string message, params object[] data)
+        void IQModAPI.BroadcastMessage(string message, params object[] data)
         {
             if (data == null) data = new object[] { };
 
@@ -61,5 +72,16 @@ namespace QModManager.API
                 foreach (MethodInfo method in methods)
                     method.Invoke(null, new object[] { caller, message, data });
         }
+
+        #endregion
+    }
+
+    public partial interface IQModAPI
+    {
+        void SendMessage(QMod mod, string message, params object[] data);
+        void SendMessage(Assembly modAssembly, string message, params object[] data);
+        void SendMessage(string modID, string message, params object[] data);
+
+        void BroadcastMessage(string message, params object[] data);
     }
 }
