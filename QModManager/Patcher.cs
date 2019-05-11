@@ -353,17 +353,14 @@ namespace QModManager
         internal static Dictionary<IQMod, List<MethodInfo>> GetMessageRecievers(Assembly assembly)
         {
             return assembly.GetTypes()
-                           .SelectMany(t => t.GetMethods())
-                           .Where(m => m.IsStatic && m.GetParameters().Length == 3)
-                           .Where(m => m.GetCustomAttributes(typeof(MessageReceiver), false).Length == 1)
-                           .GroupBy(m => ((MessageReceiver)m.GetCustomAttributes(typeof(MessageReceiver), false)[0]).Sender)
-                           .Select(g => new KeyValuePair<IQMod, List<MethodInfo>>(g.Key, g.ToList()))
-                           .Add(new KeyValuePair<IQMod, List<MethodInfo>>(null,
-                   assembly.GetTypes()
-                           .SelectMany(t => t.GetMethods())
-                           .Where(m => m.IsStatic && m.GetParameters().Length == 3)
-                           .Where(m => m.GetCustomAttributes(typeof(GlobalMessageReceiver), false).Length == 1)
-                           .ToList()))
+                           .Where(t => t.IsSubclassOf(typeof(MessageReceiver)))
+                           .GroupBy(t => t.GetField("From") as IQMod)
+                           .Select(g => new KeyValuePair<IQMod, List<MethodInfo>>(g.Key, g.Select(t => t.GetMethod("OnMessageReceived"))
+                               .ToList()))
+                           .Add(new KeyValuePair<IQMod, List<MethodInfo>>(null, assembly.GetTypes()
+                               .Where(t => t.IsSubclassOf(typeof(GlobalMessageReceiver)))
+                               .Select(t => t.GetMethod("OnMessageReceived"))
+                               .ToList()))
                            .ToDictionary(k => k.Key, v => v.Value);
         }
 

@@ -5,30 +5,22 @@ using System.Reflection;
 
 namespace QModManager.API
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    public class MessageReceiver : Attribute
+    public abstract class MessageReceiver
     {
-        public IQMod Sender;
+        public IQMod From;
 
-        public MessageReceiver(IQMod sender)
-        {
-            Sender = sender ?? throw new ArgumentNullException("The provided mod is null!", nameof(sender));
-        }
-        public MessageReceiver(Assembly senderAssembly)
-        {
-            Sender = QModAPI.GetMod(senderAssembly, true, true) ?? throw new ArgumentException("The provided assembly is not a mod assembly!", nameof(senderAssembly));
-        }
-        public MessageReceiver(string senderID)
-        {
-            // Should we not want to throw an exception in case the mod is not present?
-            Sender = QModAPI.GetMod(senderID, true, true) ?? throw new ArgumentException($"No mod matching the provided ID \"{senderID}\" was found!", nameof(senderID));
-        }
+        public MessageReceiver(IQMod from) => From = from ?? throw new ArgumentNullException("from", "The provided mod is null!");
+        public MessageReceiver(Assembly fromAssembly) => From = QModAPI.GetMod(fromAssembly ?? throw new ArgumentNullException(nameof(fromAssembly), "The provided assembly is null!"), true, true) ?? throw new ArgumentException("The provided assembly is not a mod assembly!", nameof(fromAssembly));
+        public MessageReceiver(string fromID) => From = QModAPI.GetMod(fromID ?? throw new ArgumentNullException(nameof(fromID), "The provided ID is null!"), true, true) ?? throw new ArgumentException("No mod matching the provided ID was found!");
+
+        public abstract void OnMessageReceived(IQMod from, string message, params object[] data);
     }
 
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    public class GlobalMessageReceiver : Attribute
+    public abstract class GlobalMessageReceiver
     {
         public GlobalMessageReceiver() { }
+
+        public abstract void OnMessageReceived(IQMod from, string message, params object[] data);
     }
 
     public partial class QModAPI : IQModAPI
