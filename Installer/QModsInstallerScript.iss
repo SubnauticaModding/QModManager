@@ -51,33 +51,47 @@ CloseApplications=False
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-; Files used by the installer but not required by QModManager itself
-; Installer theme
+; Files required by the installer
 Source: "..\Dependencies\VclStylesinno.dll"; Flags: DontCopy
 Source: "..\Dependencies\Carbon.vsf"; Flags: DontCopy
-; Installer extensions
 Source: "..\Build\InstallerExtensions.dll"; Flags: DontCopy
-; Files required by QModManager itself
-; Subnautica
-Source: "..\Dependencies\0Harmony.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Dependencies\0Harmony-1.2.0.1.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Dependencies\AssetsTools.NET.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Dependencies\cldb.dat"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Dependencies\Mono.Cecil.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Dependencies\SemVer.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Build\QModManager.exe"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Assets\QModManagerAssets.unity3d"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-; Below Zero
-Source: "..\Dependencies\0Harmony.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Dependencies\0Harmony-1.2.0.1.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Dependencies\AssetsTools.NET.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Dependencies\cldb2018.dat"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Dependencies\Mono.Cecil.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Dependencies\SemVer.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Build\QModManager.exe"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Assets\QModManagerAssets.unity3d"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
+; Files required by doorstop
+Source: "..\Dependencies\doorstop_config.ini"; DestDir: "{app}"; Flags: IgnoreVersion
+Source: "..\Dependencies\version.dll"; DestDir: "{app}"; Flags: IgnoreVersion
+; Files required by QModManager
+Source: "..\Dependencies\0Harmony.dll"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
+Source: "..\Dependencies\0Harmony-1.2.0.1.dll"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
+Source: "..\Dependencies\AssetsTools.NET.dll"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
+Source: "..\Dependencies\cldb.dat"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
+Source: "..\Dependencies\Mono.Cecil.dll"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
+Source: "..\Dependencies\SemVer.dll"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
+Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
+Source: "..\Build\QModManager.exe"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
+Source: "..\Assets\QModManagerAssets.unity3d"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
+
+[InstallDelete]
+; Old Subnautica files
+Type: files; Name: "{app}\Subnautica_Data\Managed\0Harmony.dll"; Check: IsSubnauticaApp
+Type: files; Name: "{app}\Subnautica_Data\Managed\0Harmony-1.2.0.1.dll"; Check: IsSubnauticaApp
+Type: files; Name: "{app}\Subnautica_Data\Managed\AssetsTools.NET.dll"; Check: IsSubnauticaApp
+Type: files; Name: "{app}\Subnautica_Data\Managed\cldb.dat"; Check: IsSubnauticaApp
+Type: files; Name: "{app}\Subnautica_Data\Managed\cldb2018.dat"; Check: IsSubnauticaApp
+Type: files; Name: "{app}\Subnautica_Data\Managed\Mono.Cecil.dll"; Check: IsSubnauticaApp
+Type: files; Name: "{app}\Subnautica_Data\Managed\SemVer.dll"; Check: IsSubnauticaApp
+Type: files; Name: "{app}\Subnautica_Data\Managed\QModInstaller.dll"; Check: IsSubnauticaApp
+Type: files; Name: "{app}\Subnautica_Data\Managed\QModManager.exe"; Check: IsSubnauticaApp
+Type: files; Name: "{app}\Subnautica_Data\Managed\QModManagerAssets.unity3d"; Check: IsSubnauticaApp
+; Old Below Zero files
+Type: files; Name: "{app}\SubnauticaZero_Data\Managed\0Harmony.dll"; Check: IsBelowZeroApp
+Type: files; Name: "{app}\SubnauticaZero_Data\Managed\0Harmony-1.2.0.1.dll"; Check: IsBelowZeroApp
+Type: files; Name: "{app}\SubnauticaZero_Data\Managed\AssetsTools.NET.dll"; Check: IsBelowZeroApp
+Type: files; Name: "{app}\SubnauticaZero_Data\Managed\cldb.dat"; Check: IsBelowZeroApp
+Type: files; Name: "{app}\SubnauticaZero_Data\Managed\cldb2018.dat"; Check: IsBelowZeroApp
+Type: files; Name: "{app}\SubnauticaZero_Data\Managed\Mono.Cecil.dll"; Check: IsBelowZeroApp
+Type: files; Name: "{app}\SubnauticaZero_Data\Managed\SemVer.dll"; Check: IsBelowZeroApp
+Type: files; Name: "{app}\SubnauticaZero_Data\Managed\QModInstaller.dll"; Check: IsBelowZeroApp
+Type: files; Name: "{app}\SubnauticaZero_Data\Managed\QModManager.exe"; Check: IsBelowZeroApp
+Type: files; Name: "{app}\SubnauticaZero_Data\Managed\QModManagerAssets.unity3d"; Check: IsBelowZeroApp
 
 [Run]
 ; Subnautica
