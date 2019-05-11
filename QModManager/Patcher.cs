@@ -111,7 +111,9 @@ namespace QModManager
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {
                 FileInfo[] allDlls = new DirectoryInfo(QModBaseDir).GetFiles("*.dll", SearchOption.AllDirectories);
-                foreach (FileInfo dll in allDlls)
+                FileInfo[] qmmDlls = new DirectoryInfo(Path.Combine(QModBaseDir, "../QModManager")).GetFiles("*.dll", SearchOption.AllDirectories);
+
+                foreach (FileInfo dll in allDlls.AddRangeToArray(qmmDlls))
                 {
                     if (args.Name.Contains(Path.GetFileNameWithoutExtension(dll.Name)))
                     {
