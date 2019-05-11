@@ -60,7 +60,11 @@ namespace QModManager.API
             if (modAssembly == null) return null;
 
             foreach (QMod mod in GetAllMods(includeUnloaded, includeErrored))
-                if (mod.LoadedAssembly == modAssembly) return mod;
+            {
+                if (mod.LoadedAssembly == modAssembly)
+                    return mod;
+            }
+
             return null;
         }
         IQMod IQModAPI.GetMod(string id, bool includeUnloaded = false, bool includeErrored = false)
@@ -68,7 +72,11 @@ namespace QModManager.API
             if (string.IsNullOrEmpty(id)) return null;
 
             foreach (QMod mod in GetAllMods(includeUnloaded, includeErrored))
-                if (mod.Id == Regex.Replace(id, Patcher.IDRegex, "", RegexOptions.IgnoreCase)) return mod;
+            {
+                if (mod.Id == Regex.Replace(id, Patcher.IDRegex, "", RegexOptions.IgnoreCase))
+                    return mod;
+            }
+
             return null;
         }
 

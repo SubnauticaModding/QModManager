@@ -9,9 +9,39 @@ namespace QModManager.API
     {
         public IQMod From;
 
-        public MessageReceiver(IQMod from) => From = from ?? throw new ArgumentNullException("from", "The provided mod is null!");
-        public MessageReceiver(Assembly fromAssembly) => From = QModAPI.GetMod(fromAssembly ?? throw new ArgumentNullException(nameof(fromAssembly), "The provided assembly is null!"), true, true) ?? throw new ArgumentException("The provided assembly is not a mod assembly!", nameof(fromAssembly));
-        public MessageReceiver(string fromID) => From = QModAPI.GetMod(fromID ?? throw new ArgumentNullException(nameof(fromID), "The provided ID is null!"), true, true) ?? throw new ArgumentException("No mod matching the provided ID was found!");
+        public MessageReceiver(IQMod from)
+        {
+            if (from == null)
+                throw new ArgumentNullException("from", "The provided mod is null!");
+
+            From = from;
+        }
+
+        public MessageReceiver(Assembly fromAssembly)
+        {
+            if (fromAssembly == null)
+                throw new ArgumentNullException(nameof(fromAssembly), "The provided assembly is null!");
+
+            IQMod mod = QModAPI.GetMod(fromAssembly, true, true);
+
+            if (mod == null)
+                throw new ArgumentException("The provided assembly is not a mod assembly!", nameof(fromAssembly));
+
+            From = mod;
+        }
+
+        public MessageReceiver(string fromID)
+        {
+            if (string.IsNullOrEmpty(fromID))
+                throw new ArgumentNullException(nameof(fromID), "The provided ID is null or empty!");
+
+            IQMod mod = QModAPI.GetMod(fromID, true, true);
+
+            if (mod == null)
+                throw new ArgumentException("No mod matching the provided ID was found!");
+
+            From = mod;
+        }
 
         public abstract void OnMessageReceived(IQMod from, string message, params object[] data);
     }
@@ -46,8 +76,12 @@ namespace QModManager.API
             if (mod.MessageReceivers == null || mod.MessageReceivers.Count < 1) return;
 
             if (mod.MessageReceivers.TryGetValue(caller, out List<MethodInfo> methods))
+            {
                 foreach (MethodInfo method in methods)
+                {
                     method.Invoke(null, new object[] { caller, message, data });
+                }
+            }
         }
         void IQModAPI.SendMessage(Assembly modAssembly, string message, params object[] data) 
             => SendMessage(GetMod(modAssembly, true, true), message, data);
@@ -60,13 +94,19 @@ namespace QModManager.API
 
             IQMod caller = GetMod(Assembly.GetCallingAssembly(), true);
 
-            Dictionary<IQMod, List<MethodInfo>> messageReceivers = GetAllMods().SelectMany(m => m.MessageReceivers ?? new Dictionary<IQMod, List<MethodInfo>>() { }).ToDictionary(k => k.Key, v => v.Value);
+            Dictionary<IQMod, List<MethodInfo>> messageReceivers = GetAllMods()
+                .SelectMany(m => m.MessageReceivers ?? new Dictionary<IQMod, List<MethodInfo>>() { })
+                .ToDictionary(k => k.Key, v => v.Value);
 
             if (messageReceivers.Count < 1) return;
 
             if (messageReceivers.TryGetValue(null, out List<MethodInfo> methods))
+            {
                 foreach (MethodInfo method in methods)
+                {
                     method.Invoke(null, new object[] { caller, message, data });
+                }
+            }
         }
 
         #endregion
