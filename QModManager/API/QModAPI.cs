@@ -33,13 +33,12 @@ namespace QModManager.API
 
         #region Non-static
 
-#pragma warning disable CS1066 // The default value specified will have no effect because it applies to a member that is used in contexts that do not allow optional arguments
-
         void IQModAPI.MarkAsErrored(Assembly modAssembly = null)
         {
+            modAssembly = modAssembly ?? Assembly.GetCallingAssembly();
+
             if (ErroredMods.Contains(modAssembly)) return;
 
-            modAssembly = modAssembly ?? Assembly.GetCallingAssembly();
             ErroredMods.Add(modAssembly);
         }
 
@@ -84,8 +83,6 @@ namespace QModManager.API
             => GetMod(modAssembly, includeUnloaded, includeErrored) != null;
         bool IQModAPI.ModPresent(string id, bool includeUnloaded = false, bool includeErrored = false)
             => GetMod(id, includeUnloaded, includeErrored) != null;
-
-#pragma warning restore CS1066 // The default value specified will have no effect because it applies to a member that is used in contexts that do not allow optional arguments
         
         #endregion
     }
