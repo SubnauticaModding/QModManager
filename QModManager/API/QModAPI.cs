@@ -33,7 +33,9 @@ namespace QModManager.API
 
         #region Non-static
 
-        void IQModAPI.MarkAsErrored(Assembly modAssembly = null)
+        void IQModAPI.MarkAsErrored()
+            => MarkAsErrored(null);
+        void IQModAPI.MarkAsErrored(Assembly modAssembly)
         {
             modAssembly = modAssembly ?? Assembly.GetCallingAssembly();
 
@@ -42,7 +44,11 @@ namespace QModManager.API
             ErroredMods.Add(modAssembly);
         }
 
-        ReadOnlyCollection<IQMod> IQModAPI.GetAllMods(bool includeUnloaded = false, bool includeErrored = false)
+        ReadOnlyCollection<IQMod> IQModAPI.GetAllMods()
+            => GetAllMods(false, false);
+        ReadOnlyCollection<IQMod> IQModAPI.GetAllMods(bool includeUnloaded)
+            => GetAllMods(includeUnloaded, false);
+        ReadOnlyCollection<IQMod> IQModAPI.GetAllMods(bool includeUnloaded, bool includeErrored)
         {
             if (includeErrored)
                 return Patcher.foundMods.Select(qmod => (IQMod)qmod).ToList().AsReadOnly();
@@ -54,7 +60,12 @@ namespace QModManager.API
 
         IQMod IQModAPI.GetMyMod()
             => GetMod(Assembly.GetCallingAssembly(), true, true);
-        IQMod IQModAPI.GetMod(Assembly modAssembly, bool includeUnloaded = false, bool includeErrored = false)
+
+        IQMod IQModAPI.GetMod(Assembly modAssembly)
+            => GetMod(modAssembly, false, false);
+        IQMod IQModAPI.GetMod(Assembly modAssembly, bool includeUnloaded)
+            => GetMod(modAssembly, includeUnloaded, false);
+        IQMod IQModAPI.GetMod(Assembly modAssembly, bool includeUnloaded, bool includeErrored)
         {
             if (modAssembly == null) return null;
 
@@ -66,7 +77,12 @@ namespace QModManager.API
 
             return null;
         }
-        IQMod IQModAPI.GetMod(string id, bool includeUnloaded = false, bool includeErrored = false)
+
+        IQMod IQModAPI.GetMod(string id)
+            => GetMod(id, false, false);
+        IQMod IQModAPI.GetMod(string id, bool includeUnloaded)
+            => GetMod(id, includeUnloaded, false);
+        IQMod IQModAPI.GetMod(string id, bool includeUnloaded, bool includeErrored)
         {
             if (string.IsNullOrEmpty(id)) return null;
 
@@ -79,9 +95,18 @@ namespace QModManager.API
             return null;
         }
 
-        bool IQModAPI.ModPresent(Assembly modAssembly, bool includeUnloaded = false, bool includeErrored = false)
+        bool IQModAPI.ModPresent(Assembly modAssembly)
+            => ModPresent(modAssembly, false, false);
+        bool IQModAPI.ModPresent(Assembly modAssembly, bool includeUnloaded)
+            => ModPresent(modAssembly, includeUnloaded, false);
+        bool IQModAPI.ModPresent(Assembly modAssembly, bool includeUnloaded, bool includeErrored)
             => GetMod(modAssembly, includeUnloaded, includeErrored) != null;
-        bool IQModAPI.ModPresent(string id, bool includeUnloaded = false, bool includeErrored = false)
+
+        bool IQModAPI.ModPresent(string id)
+            => ModPresent(id, false, false);
+        bool IQModAPI.ModPresent(string id, bool includeUnloaded)
+            => ModPresent(id, includeUnloaded, false);
+        bool IQModAPI.ModPresent(string id, bool includeUnloaded, bool includeErrored)
             => GetMod(id, includeUnloaded, includeErrored) != null;
         
         #endregion
@@ -89,15 +114,29 @@ namespace QModManager.API
 
     public partial interface IQModAPI
     {
-        void MarkAsErrored(Assembly modAssembly = null);
+        void MarkAsErrored();
+        void MarkAsErrored(Assembly modAssembly);
 
-        ReadOnlyCollection<IQMod> GetAllMods(bool includeUnloaded = false, bool includeErrored = false);
+        ReadOnlyCollection<IQMod> GetAllMods();
+        ReadOnlyCollection<IQMod> GetAllMods(bool includeUnloaded);
+        ReadOnlyCollection<IQMod> GetAllMods(bool includeUnloaded, bool includeErrored);
 
         IQMod GetMyMod();
-        IQMod GetMod(Assembly modAssembly, bool includeUnloaded = false, bool includeErrored = false);
-        IQMod GetMod(string id, bool includeUnloaded = false, bool includeErrored = false);
 
-        bool ModPresent(Assembly modAssembly, bool includeUnloaded = false, bool includeErrored = false);
-        bool ModPresent(string id, bool includeUnloaded = false, bool includeErrored = false);
+        IQMod GetMod(Assembly modAssembly);
+        IQMod GetMod(Assembly modAssembly, bool includeUnloaded);
+        IQMod GetMod(Assembly modAssembly, bool includeUnloaded, bool includeErrored);
+
+        IQMod GetMod(string id);
+        IQMod GetMod(string id, bool includeUnloaded);
+        IQMod GetMod(string id, bool includeUnloaded, bool includeErrored);
+
+        bool ModPresent(Assembly modAssembly);
+        bool ModPresent(Assembly modAssembly, bool includeUnloaded);
+        bool ModPresent(Assembly modAssembly, bool includeUnloaded, bool includeErrored);
+
+        bool ModPresent(string id);
+        bool ModPresent(string id, bool includeUnloaded);
+        bool ModPresent(string id, bool includeUnloaded, bool includeErrored);
     }
 }
