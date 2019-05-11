@@ -14,7 +14,7 @@ using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
 {
-    internal static class Patcher
+    public static class Patcher
     {
         internal const string IDRegex = "[^0-9a-z_]";
 
@@ -350,15 +350,15 @@ namespace QModManager
             }
         }
 
-        internal static Dictionary<QMod, List<MethodInfo>> GetMessageRecievers(Assembly assembly)
+        internal static Dictionary<IQMod, List<MethodInfo>> GetMessageRecievers(Assembly assembly)
         {
             return assembly.GetTypes()
                            .SelectMany(t => t.GetMethods())
                            .Where(m => m.IsStatic && m.GetParameters().Length == 3)
                            .Where(m => m.GetCustomAttributes(typeof(MessageReceiver), false).Length == 1)
                            .GroupBy(m => ((MessageReceiver)m.GetCustomAttributes(typeof(MessageReceiver), false)[0]).Sender)
-                           .Select(g => new KeyValuePair<QMod, List<MethodInfo>>(g.Key, g.ToList()))
-                           .Add(new KeyValuePair<QMod, List<MethodInfo>>(null,
+                           .Select(g => new KeyValuePair<IQMod, List<MethodInfo>>(g.Key, g.ToList()))
+                           .Add(new KeyValuePair<IQMod, List<MethodInfo>>(null,
                    assembly.GetTypes()
                            .SelectMany(t => t.GetMethods())
                            .Where(m => m.IsStatic && m.GetParameters().Length == 3)
@@ -372,7 +372,7 @@ namespace QModManager
         #region Game detection
 
         [Flags]
-        internal enum Game
+        public enum Game
         {
             None = 0b00,
             Subnautica = 0b01,

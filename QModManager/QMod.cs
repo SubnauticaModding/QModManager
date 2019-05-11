@@ -11,7 +11,7 @@ using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
 {
-    public class QMod
+    public class QMod : IQMod
     {
         public static QMod QModManagerQMod { get; } = new QMod()
         {
@@ -27,7 +27,7 @@ namespace QModManager
             LoadBefore = new string[] { },
             Loaded = true,
             LoadedAssembly = Assembly.GetExecutingAssembly(),
-            MessageReceivers = new Dictionary<QMod, List<MethodInfo>>(),
+            MessageReceivers = new Dictionary<IQMod, List<MethodInfo>>(),
             ModAssemblyPath = Assembly.GetExecutingAssembly().Location,
             ParsedGame = Patcher.Game.Both,
             ParsedVersion = Assembly.GetExecutingAssembly().GetName().Version,
@@ -35,26 +35,25 @@ namespace QModManager
             VersionDependencies = new Dictionary<string, string>(),
         };
 
-        public string Id = "";
-        public string DisplayName = "";
-        public string Author = "";
-        public string Version = "";
-        public string[] Dependencies = new string[] { };
-        public Dictionary<string, string> VersionDependencies = new Dictionary<string, string>();
-        public string[] LoadBefore = new string[] { };
-        public string[] LoadAfter = new string[] { };
-        public bool Enable = true;
-        public string Game = "Subnautica";
-        public string AssemblyName = "";
-        public string EntryMethod = "";
+        public string Id { get; set; } = "";
+        public string DisplayName { get; set; } = "";
+        public string Author { get; set; } = "";
+        public string Version { get; set; } = "";
+        public string[] Dependencies { get; set; } = new string[] { };
+        public Dictionary<string, string> VersionDependencies { get; set; } = new Dictionary<string, string>();
+        public string[] LoadBefore { get; set; } = new string[] { };
+        public string[] LoadAfter { get; set; } = new string[] { };
+        public bool Enable { get; set; } = true;
+        public string Game { get; set; } = "Subnautica";
+        public string AssemblyName { get; set; } = "";
+        public string EntryMethod { get; set; } = "";
 
-        [JsonIgnore] public Assembly LoadedAssembly;
-        [JsonIgnore] public Version ParsedVersion;
-
-        [JsonIgnore] internal string ModAssemblyPath;
-        [JsonIgnore] internal bool Loaded;
-        [JsonIgnore] internal Patcher.Game ParsedGame;
-        [JsonIgnore] internal Dictionary<QMod, List<MethodInfo>> MessageReceivers;
+        [JsonIgnore] public Assembly LoadedAssembly { get; set; }
+        [JsonIgnore] public Version ParsedVersion { get; set; }
+        [JsonIgnore] public Patcher.Game ParsedGame { get; set; }
+        [JsonIgnore] public string ModAssemblyPath { get; set; }
+        [JsonIgnore] public bool Loaded { get; set; }
+        [JsonIgnore] public Dictionary<IQMod, List<MethodInfo>> MessageReceivers { get; set; }
 
         internal static QMod FromJsonFile(string file)
         {
@@ -219,5 +218,28 @@ namespace QModManager
 
             return success;
         }
+    }
+
+    public interface IQMod
+    {
+        string Id { get; }
+        string DisplayName { get; }
+        string Author { get; }
+        string Version { get; }
+        string[] Dependencies { get; }
+        Dictionary<string, string> VersionDependencies { get; }
+        string[] LoadBefore { get; }
+        string[] LoadAfter { get; }
+        bool Enable { get; }
+        string Game { get; }
+        string AssemblyName { get; }
+        string EntryMethod { get; }
+
+        Assembly LoadedAssembly { get; }
+        Version ParsedVersion { get; }
+        Patcher.Game ParsedGame { get; }
+        string ModAssemblyPath { get; }
+        bool Loaded { get; }
+        Dictionary<IQMod, List<MethodInfo>> MessageReceivers { get; }
     }
 }

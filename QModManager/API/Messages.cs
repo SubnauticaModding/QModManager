@@ -8,9 +8,9 @@ namespace QModManager.API
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public class MessageReceiver : Attribute
     {
-        public QMod Sender;
+        public IQMod Sender;
 
-        public MessageReceiver(QMod sender)
+        public MessageReceiver(IQMod sender)
         {
             Sender = sender ?? throw new ArgumentNullException("The provided mod is null!", nameof(sender));
         }
@@ -33,7 +33,7 @@ namespace QModManager.API
 
     public partial class QModAPI : IQModAPI
     {
-        public static void SendMessage(QMod mod, string message, params object[] data) 
+        public static void SendMessage(IQMod mod, string message, params object[] data) 
             => Main.SendMessage(mod, message, data);
         public static void SendMessage(Assembly modAssembly, string message, params object[] data)
             => Main.SendMessage(modAssembly, message, data);
@@ -44,12 +44,12 @@ namespace QModManager.API
 
         #region Non-static
 
-        void IQModAPI.SendMessage(QMod mod, string message, params object[] data)
+        void IQModAPI.SendMessage(IQMod mod, string message, params object[] data)
         {
             if (mod == null) return;
             if (data == null) data = new object[] { };
 
-            QMod caller = GetMod(Assembly.GetCallingAssembly(), true);
+            IQMod caller = GetMod(Assembly.GetCallingAssembly(), true);
 
             if (mod.MessageReceivers == null || mod.MessageReceivers.Count < 1) return;
 
@@ -66,9 +66,9 @@ namespace QModManager.API
         {
             if (data == null) data = new object[] { };
 
-            QMod caller = GetMod(Assembly.GetCallingAssembly(), true);
+            IQMod caller = GetMod(Assembly.GetCallingAssembly(), true);
 
-            Dictionary<QMod, List<MethodInfo>> messageReceivers = GetAllMods().SelectMany(m => m.MessageReceivers ?? new Dictionary<QMod, List<MethodInfo>>() { }).ToDictionary(k => k.Key, v => v.Value);
+            Dictionary<IQMod, List<MethodInfo>> messageReceivers = GetAllMods().SelectMany(m => m.MessageReceivers ?? new Dictionary<IQMod, List<MethodInfo>>() { }).ToDictionary(k => k.Key, v => v.Value);
 
             if (messageReceivers.Count < 1) return;
 
@@ -82,7 +82,7 @@ namespace QModManager.API
 
     public partial interface IQModAPI
     {
-        void SendMessage(QMod mod, string message, params object[] data);
+        void SendMessage(IQMod mod, string message, params object[] data);
         void SendMessage(Assembly modAssembly, string message, params object[] data);
         void SendMessage(string modID, string message, params object[] data);
 

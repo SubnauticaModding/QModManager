@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
@@ -15,14 +16,14 @@ namespace QModManager.API
         public static void MarkAsErrored(Assembly modAssembly = null)
             => Main.MarkAsErrored(modAssembly);
 
-        public static ReadOnlyCollection<QMod> GetAllMods(bool includeUnloaded = false, bool includeErrored = false)
+        public static ReadOnlyCollection<IQMod> GetAllMods(bool includeUnloaded = false, bool includeErrored = false)
             => Main.GetAllMods(includeUnloaded, includeErrored);
 
-        public static QMod GetMyMod()
+        public static IQMod GetMyMod()
             => Main.GetMyMod();
-        public static QMod GetMod(Assembly modAssembly, bool includeUnloaded = false, bool includeErrored = false)
+        public static IQMod GetMod(Assembly modAssembly, bool includeUnloaded = false, bool includeErrored = false)
             => Main.GetMod(modAssembly, includeUnloaded, includeErrored);
-        public static QMod GetMod(string id, bool includeUnloaded = false, bool includeErrored = false)
+        public static IQMod GetMod(string id, bool includeUnloaded = false, bool includeErrored = false)
             => Main.GetMod(id, includeUnloaded, includeErrored);
 
         public static bool ModPresent(Assembly modAssembly, bool includeUnloaded = false, bool includeErrored = false)
@@ -42,19 +43,19 @@ namespace QModManager.API
             ErroredMods.Add(modAssembly);
         }
 
-        ReadOnlyCollection<QMod> IQModAPI.GetAllMods(bool includeUnloaded = false, bool includeErrored = false)
+        ReadOnlyCollection<IQMod> IQModAPI.GetAllMods(bool includeUnloaded = false, bool includeErrored = false)
         {
             if (includeErrored)
-                return Patcher.foundMods.AsReadOnly();
+                return Patcher.foundMods.Select(qmod => (IQMod)qmod).ToList().AsReadOnly();
             else if (includeUnloaded)
-                return Patcher.sortedMods.AsReadOnly();
+                return Patcher.sortedMods.Select(qmod => (IQMod)qmod).ToList().AsReadOnly();
             else
-                return Patcher.loadedMods.AsReadOnly();
+                return Patcher.loadedMods.Select(qmod => (IQMod)qmod).ToList().AsReadOnly();
         }
 
-        QMod IQModAPI.GetMyMod()
+        IQMod IQModAPI.GetMyMod()
             => GetMod(Assembly.GetCallingAssembly(), true, true);
-        QMod IQModAPI.GetMod(Assembly modAssembly, bool includeUnloaded = false, bool includeErrored = false)
+        IQMod IQModAPI.GetMod(Assembly modAssembly, bool includeUnloaded = false, bool includeErrored = false)
         {
             if (modAssembly == null) return null;
 
@@ -62,7 +63,7 @@ namespace QModManager.API
                 if (mod.LoadedAssembly == modAssembly) return mod;
             return null;
         }
-        QMod IQModAPI.GetMod(string id, bool includeUnloaded = false, bool includeErrored = false)
+        IQMod IQModAPI.GetMod(string id, bool includeUnloaded = false, bool includeErrored = false)
         {
             if (string.IsNullOrEmpty(id)) return null;
 
@@ -85,11 +86,11 @@ namespace QModManager.API
     {
         void MarkAsErrored(Assembly modAssembly = null);
 
-        ReadOnlyCollection<QMod> GetAllMods(bool includeUnloaded = false, bool includeErrored = false);
+        ReadOnlyCollection<IQMod> GetAllMods(bool includeUnloaded = false, bool includeErrored = false);
 
-        QMod GetMyMod();
-        QMod GetMod(Assembly modAssembly, bool includeUnloaded = false, bool includeErrored = false);
-        QMod GetMod(string id, bool includeUnloaded = false, bool includeErrored = false);
+        IQMod GetMyMod();
+        IQMod GetMod(Assembly modAssembly, bool includeUnloaded = false, bool includeErrored = false);
+        IQMod GetMod(string id, bool includeUnloaded = false, bool includeErrored = false);
 
         bool ModPresent(Assembly modAssembly, bool includeUnloaded = false, bool includeErrored = false);
         bool ModPresent(string id, bool includeUnloaded = false, bool includeErrored = false);
