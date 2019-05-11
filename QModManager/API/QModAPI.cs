@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using QModManager.Utility;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
@@ -37,7 +38,7 @@ namespace QModManager.API
             => MarkAsErrored(null);
         void IQModAPI.MarkAsErrored(Assembly modAssembly)
         {
-            modAssembly = modAssembly ?? Assembly.GetCallingAssembly();
+            modAssembly = modAssembly ?? ReflectionHelper.CallingAssemblyByStackTrace();
 
             if (ErroredMods.Contains(modAssembly)) return;
 
@@ -59,7 +60,7 @@ namespace QModManager.API
         }
 
         IQMod IQModAPI.GetMyMod()
-            => GetMod(Assembly.GetCallingAssembly(), true, true);
+            => GetMod(ReflectionHelper.CallingAssemblyByStackTrace(), true, true);
 
         IQMod IQModAPI.GetMod(Assembly modAssembly)
             => GetMod(modAssembly, false, false);

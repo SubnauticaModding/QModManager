@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QModManager.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -71,7 +72,7 @@ namespace QModManager.API
             if (mod == null) return;
             if (data == null) data = new object[] { };
 
-            IQMod caller = GetMod(Assembly.GetCallingAssembly(), true);
+            IQMod caller = GetMod(ReflectionHelper.CallingAssemblyByStackTrace(), true);
 
             if (mod.MessageReceivers == null || mod.MessageReceivers.Count < 1) return;
 
@@ -92,7 +93,7 @@ namespace QModManager.API
         {
             if (data == null) data = new object[] { };
 
-            IQMod caller = GetMod(Assembly.GetCallingAssembly(), true);
+            IQMod caller = GetMod(ReflectionHelper.CallingAssemblyByStackTrace(), true);
 
             Dictionary<IQMod, List<MethodInfo>> messageReceivers = GetAllMods()
                 .SelectMany(m => m.MessageReceivers ?? new Dictionary<IQMod, List<MethodInfo>>() { })

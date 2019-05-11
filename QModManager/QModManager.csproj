@@ -134,6 +134,7 @@
     <Compile Include="Utility\ExtensionMethods.cs" />
     <Compile Include="Utility\NetworkUtilities.cs" />
     <Compile Include="Utility\PlayerPrefsExtra.cs" />
+    <Compile Include="Utility\ReflectionHelper.cs" />
     <Compile Include="VersionCheck.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
