@@ -445,7 +445,6 @@ namespace QModManager
                 if (!nonApplicableMods.Contains(mod)) nonApplicableMods.Add(mod);
                 if (!erroredMods.Contains(mod)) erroredMods.Add(mod);
                 return false;
-
             }).ToList();
 
             if (nonApplicableMods.Count > 0)

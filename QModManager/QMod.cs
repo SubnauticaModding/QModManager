@@ -204,7 +204,6 @@ namespace QModManager
 
                 success = false;
             }
-
             else if (mod.Id != Regex.Replace(mod.Id, Patcher.IDRegex, "", RegexOptions.IgnoreCase))
             {
                 Logger.Warn($"Mod found in folder \"{folderName}\" has an invalid ID! All invalid characters have been removed. (This can cause issues!)");
@@ -236,7 +235,6 @@ namespace QModManager
 
                 success = false;
             }
-
             else if (!mod.AssemblyName.EndsWith(".dll"))
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" is has an invalid assembly name!");
@@ -250,7 +248,6 @@ namespace QModManager
 
                 success = false;
             }
-
             else if (mod.EntryMethod?.Count(c => c == '.') < 2)
             {
                 Logger.Error($"Mod found in folder \"{folderName}\" has an invalid entry point!");

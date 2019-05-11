@@ -105,7 +105,7 @@ namespace QModManager.Utility
             {
                 unit++;
                 size /= 1024;
-            };
+            }
 
             string number = size.ToString("F2");
             number.TrimEnd('0');
