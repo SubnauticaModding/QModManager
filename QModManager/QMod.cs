@@ -1,4 +1,5 @@
 ﻿using Oculus.Newtonsoft.Json;
+using QModManager.API;
 using QModManager.Utility;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,14 @@ using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
 {
+    /// <summary>
+    /// A class containing information about a mod
+    /// </summary>
     public class QMod : IQMod
     {
+        /// <summary>
+        /// The dummy <see cref="QMod"/> which is used to represent QModManager
+        /// </summary>
         public static QMod QModManagerQMod { get; } = new QMod()
         {
             AssemblyName = "QModInstaller.dll",
@@ -35,24 +42,84 @@ namespace QModManager
             VersionDependencies = new Dictionary<string, string>(),
         };
 
+        /// <summary>
+        /// The ID of the mod <para/>
+        /// Can only contain alphanumeric characters and underscores: (<see langword="a-z"/>, <see langword="A-Z"/>, <see langword="0-9"/>, <see langword="_"/>)
+        /// </summary>
         public string Id { get; set; } = "";
+        /// <summary>
+        /// The display name of the mod
+        /// </summary>
         public string DisplayName { get; set; } = "";
+        /// <summary>
+        /// The author of the mod
+        /// </summary>
         public string Author { get; set; } = "";
+        /// <summary>
+        /// The version of the mod <para/>
+        /// Should be have this form: <see langword="MAJOR"/>.<see langword="MINOR"/>.<see langword="BUILD"/>.<see langword="REVISION"/>
+        /// </summary>
         public string Version { get; set; } = "";
+        /// <summary>
+        /// The dependencies of the mod <para/>
+        /// If you also want to specify the version of required dependencies, see <see cref="VersionDependencies"/>
+        /// </summary>
         public string[] Dependencies { get; set; } = new string[] { };
+        /// <summary>
+        /// The version dependencies of the mod <para/>
+        /// </summary>
         public Dictionary<string, string> VersionDependencies { get; set; } = new Dictionary<string, string>();
+        /// <summary>
+        /// A list of mods before which this mod will load
+        /// </summary>
         public string[] LoadBefore { get; set; } = new string[] { };
+        /// <summary>
+        /// A list of mods after which this mod will load
+        /// </summary>
         public string[] LoadAfter { get; set; } = new string[] { };
+        /// <summary>
+        /// Whether or not this mod is enabled
+        /// </summary>
         public bool Enable { get; set; } = true;
+        /// <summary>
+        /// The game of this mod <para/>
+        /// Should be <see langword="Subnautica"/>, <see langword="BelowZero"/>, or <see langword="Both"/>
+        /// </summary>
         public string Game { get; set; } = "Subnautica";
+        /// <summary>
+        /// The assembly name of the mod (including <see langword=".dll"/>)
+        /// </summary>
         public string AssemblyName { get; set; } = "";
+        /// <summary>
+        /// The entry method of the mod <para/>
+        /// Should have this form: <see langword="NAMESPACE"/>.<see langword="CLASS"/>.<see langword="METHOD"/>
+        /// </summary>
         public string EntryMethod { get; set; } = "";
 
+        /// <summary>
+        /// The assembly of this mod <para/>
+        /// Check if <see langword="null"/> before using
+        /// </summary>
         [JsonIgnore] public Assembly LoadedAssembly { get; set; }
+        /// <summary>
+        /// The parsed <see cref="Version"/> of this mod
+        /// </summary>
         [JsonIgnore] public Version ParsedVersion { get; set; }
+        /// <summary>
+        /// The parsed <see cref="Patcher.Game"/> of this mod
+        /// </summary>
         [JsonIgnore] public Patcher.Game ParsedGame { get; set; }
+        /// <summary>
+        /// The dll path of this mod
+        /// </summary>
         [JsonIgnore] public string ModAssemblyPath { get; set; }
+        /// <summary>
+        /// Whether or not this mod is loaded
+        /// </summary>
         [JsonIgnore] public bool Loaded { get; set; }
+        /// <summary>
+        /// The <see cref="MessageReceiver"/>s and <see cref="GlobalMessageReceiver"/>s defined in this mod
+        /// </summary>
         [JsonIgnore] public Dictionary<IQMod, List<MethodInfo>> MessageReceivers { get; set; }
 
         internal static QMod FromJsonFile(string file)
@@ -220,26 +287,89 @@ namespace QModManager
         }
     }
 
+    /// <summary>
+    /// A read-only <see cref="QMod"/>
+    /// </summary>
     public interface IQMod
     {
+        /// <summary>
+        /// The ID of the mod <para/>
+        /// Can only contain alphanumeric characters and underscores: (<see langword="a-z"/>, <see langword="A-Z"/>, <see langword="0-9"/>, <see langword="_"/>)
+        /// </summary>
         string Id { get; }
+        /// <summary>
+        /// The display name of the mod
+        /// </summary>
         string DisplayName { get; }
+        /// <summary>
+        /// The author of the mod
+        /// </summary>
         string Author { get; }
+        /// <summary>
+        /// The version of the mod <para/>
+        /// Should be have this form: <see langword="MAJOR"/>.<see langword="MINOR"/>.<see langword="BUILD"/>.<see langword="REVISION"/>
+        /// </summary>
         string Version { get; }
+        /// <summary>
+        /// The dependencies of the mod <para/>
+        /// If you also want to specify the version of required dependencies, see <see cref="VersionDependencies"/>
+        /// </summary>
         string[] Dependencies { get; }
+        /// <summary>
+        /// The version dependencies of the mod <para/>
+        /// </summary>
         Dictionary<string, string> VersionDependencies { get; }
+        /// <summary>
+        /// A list of mods before which this mod will load
+        /// </summary>
         string[] LoadBefore { get; }
+        /// <summary>
+        /// A list of mods after which this mod will load
+        /// </summary>
         string[] LoadAfter { get; }
+        /// <summary>
+        /// Whether or not this mod is enabled
+        /// </summary>
         bool Enable { get; }
+        /// <summary>
+        /// The game of this mod <para/>
+        /// Should be <see langword="Subnautica"/>, <see langword="BelowZero"/>, or <see langword="Both"/>
+        /// </summary>
         string Game { get; }
+        /// <summary>
+        /// The assembly name of the mod (including <see langword=".dll"/>)
+        /// </summary>
         string AssemblyName { get; }
+        /// <summary>
+        /// The entry method of the mod <para/>
+        /// Should have this form: <see langword="NAMESPACE"/>.<see langword="CLASS"/>.<see langword="METHOD"/>
+        /// </summary>
         string EntryMethod { get; }
 
+        /// <summary>
+        /// The assembly of this mod <para/>
+        /// Check if <see langword="null"/> before using
+        /// </summary>
         Assembly LoadedAssembly { get; }
+        /// <summary>
+        /// The parsed <see cref="Version"/> of this mod
+        /// </summary>
         Version ParsedVersion { get; }
+        /// <summary>
+        /// The parsed <see cref="Patcher.game"/> of this mod
+        /// </summary>
         Patcher.Game ParsedGame { get; }
+        /// <summary>
+        /// The dll path of this mod
+        /// </summary>
         string ModAssemblyPath { get; }
+        /// <summary>
+        /// Whether or not this mod is loaded
+        /// </summary>
         bool Loaded { get; }
+        /// <summary>
+        /// The <see cref="MessageReceiver"/>s and <see cref="GlobalMessageReceiver"/>s defined in this mod
+        /// </summary>
         Dictionary<IQMod, List<MethodInfo>> MessageReceivers { get; }
     }
 }
