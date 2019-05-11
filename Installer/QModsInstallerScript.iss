@@ -55,7 +55,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Source: "..\Dependencies\VclStylesinno.dll"; Flags: DontCopy
 Source: "..\Dependencies\Carbon.vsf"; Flags: DontCopy
 Source: "..\Build\InstallerExtensions.dll"; Flags: DontCopy
-; Files required by doorstop
+; Files required by Doorstop
 Source: "..\Dependencies\doorstop_config.ini"; DestDir: "{app}"; Flags: IgnoreVersion
 Source: "..\Dependencies\version.dll"; DestDir: "{app}"; Flags: IgnoreVersion
 ; Files required by QModManager
@@ -66,6 +66,7 @@ Source: "..\Dependencies\cldb.dat"; DestDir: "{app}\QModManager"; Flags: IgnoreV
 Source: "..\Dependencies\Mono.Cecil.dll"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
 Source: "..\Dependencies\SemVer.dll"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
 Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
+Source: "..\Build\QModInstaller.xml"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
 Source: "..\Build\QModManager.exe"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
 Source: "..\Assets\QModManagerAssets.unity3d"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
 

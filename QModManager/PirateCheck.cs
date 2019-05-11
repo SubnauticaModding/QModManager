@@ -187,7 +187,7 @@ namespace QModManager
 
         internal static void PirateDetected()
         {
-            Logger.Error("Ahoy, matey! Ye be a pirate!");
+            Logger.Warn("Ahoy, matey! Ye be a pirate!");
             /*Hooks.Update += Log;
             GameObject obj = new GameObject("YOU ARE A PIRATE");
             obj.AddComponent<Pirate>();*/

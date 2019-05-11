@@ -1,4 +1,6 @@
-﻿using QModManager.API;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using QModManager.API;
 using System;
 using System.Reflection;
 

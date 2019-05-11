@@ -14,6 +14,9 @@ using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
 {
+    /// <summary>
+    /// The main class which handles all of QModManager's patching
+    /// </summary>
     public static class Patcher
     {
         internal const string IDRegex = "[^0-9a-z_]";
@@ -370,12 +373,29 @@ namespace QModManager
 
         #region Game detection
 
+        /// <summary>
+        /// An enum which contains possible values for <see cref="IQMod.ParsedGame"/>
+        /// </summary>
         [Flags]
         public enum Game
         {
+            /// <summary>
+            /// No game was detected <para/>
+            /// In theory, this should never be the case
+            /// </summary>
             None = 0b00,
+            /// <summary>
+            /// Subnautica was detected
+            /// </summary>
             Subnautica = 0b01,
+            /// <summary>
+            /// Below Zero was detected
+            /// </summary>
             BelowZero = 0b10,
+            /// <summary>
+            /// Both games were detected <para/>
+            /// In theory, this should never be the case
+            /// </summary>
             Both = Subnautica | BelowZero,
         }
 
@@ -427,7 +447,6 @@ namespace QModManager
                 if (!nonApplicableMods.Contains(mod)) nonApplicableMods.Add(mod);
                 if (!erroredMods.Contains(mod)) erroredMods.Add(mod);
                 return false;
-
             }).ToList();
 
             if (nonApplicableMods.Count > 0)

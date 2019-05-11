@@ -1,4 +1,6 @@
-﻿using Harmony;
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
+using Harmony;
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
