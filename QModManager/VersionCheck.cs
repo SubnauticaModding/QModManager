@@ -50,7 +50,6 @@ namespace QModManager
         {
             try
             {
-
                 Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
                 if (versionStr == null)
                 {
