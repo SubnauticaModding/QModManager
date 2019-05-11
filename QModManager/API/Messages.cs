@@ -51,6 +51,8 @@ namespace QModManager.API
 
             QMod caller = GetMod(Assembly.GetCallingAssembly(), true);
 
+            if (mod.MessageReceivers == null || mod.MessageReceivers.Count < 1) return;
+
             if (mod.MessageReceivers.TryGetValue(caller, out List<MethodInfo> methods))
                 foreach (MethodInfo method in methods)
                     method.Invoke(null, new object[] { caller, message, data });
@@ -66,9 +68,11 @@ namespace QModManager.API
 
             QMod caller = GetMod(Assembly.GetCallingAssembly(), true);
 
-            if (GetAllMods().SelectMany(m => m.MessageReceivers)
-                            .ToDictionary(k => k.Key, v => v.Value)
-                            .TryGetValue(null, out List<MethodInfo> methods))
+            Dictionary<QMod, List<MethodInfo>> messageReceivers = GetAllMods().SelectMany(m => m.MessageReceivers ?? new Dictionary<QMod, List<MethodInfo>>() { }).ToDictionary(k => k.Key, v => v.Value);
+
+            if (messageReceivers.Count < 1) return;
+
+            if (messageReceivers.TryGetValue(null, out List<MethodInfo> methods))
                 foreach (MethodInfo method in methods)
                     method.Invoke(null, new object[] { caller, message, data });
         }
