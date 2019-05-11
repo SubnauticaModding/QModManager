@@ -362,7 +362,7 @@ namespace QModManager
                    assembly.GetTypes()
                            .SelectMany(t => t.GetMethods())
                            .Where(m => m.IsStatic && m.GetParameters().Length == 3)
-                           .Where(m => m.GetCustomAttributes(typeof(GlobalMessageReciever), false).Length == 1)
+                           .Where(m => m.GetCustomAttributes(typeof(GlobalMessageReceiver), false).Length == 1)
                            .ToList()))
                            .ToDictionary(k => k.Key, v => v.Value);
         }

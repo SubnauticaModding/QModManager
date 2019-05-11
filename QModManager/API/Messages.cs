@@ -26,9 +26,9 @@ namespace QModManager.API
     }
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    public class GlobalMessageReciever : Attribute
+    public class GlobalMessageReceiver : Attribute
     {
-        public GlobalMessageReciever() { }
+        public GlobalMessageReceiver() { }
     }
 
     public partial class QModAPI : IQModAPI
