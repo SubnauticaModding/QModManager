@@ -113,7 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\QModHooks.cs" />
-    <Compile Include="EntryPoint.cs" />
+    <Compile Include="Obsolete\EntryPoint.cs" />
     <Compile Include="Dialog.cs" />
     <Compile Include="Obsolete\Hooks.cs" />
     <Compile Include="Obsolete\PatchManager.cs" />

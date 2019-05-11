@@ -26,7 +26,7 @@ namespace QModManager
         internal static List<QMod> loadedMods = new List<QMod>();
         internal static List<QMod> erroredMods = new List<QMod>();
 
-        internal static void Patch()
+        public static void Main()
         {
             try
             {
