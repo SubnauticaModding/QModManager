@@ -40,7 +40,7 @@ namespace QModManager.API
 
             IQMod mod = QModAPI.GetMod(fromAssembly, true, true);
 
-            if (mod == null)
+            if (mod == null || mod == QMod.QModManagerQMod)
             {
                 if (throwIfNotFound)
                     throw new ArgumentException("The provided assembly is not a mod assembly!", nameof(fromAssembly));
@@ -63,7 +63,7 @@ namespace QModManager.API
 
             IQMod mod = QModAPI.GetMod(fromID, true, true);
 
-            if (mod == null)
+            if (mod == null || mod == QMod.QModManagerQMod)
             {
                 if (throwIfNotFound)
                     throw new ArgumentException("No mod matching the provided ID was found!");
@@ -201,7 +201,7 @@ namespace QModManager.API
 
             if (messageReceivers.Count < 1) return;
 
-            if (messageReceivers.TryGetValue(null, out List<MethodInfo> methods))
+            if (messageReceivers.TryGetValue(QMod.QModManagerQMod, out List<MethodInfo> methods))
             {
                 foreach (MethodInfo method in methods)
                 {

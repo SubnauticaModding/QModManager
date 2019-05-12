@@ -360,7 +360,7 @@ namespace QModManager
                            .GroupBy(t => t.GetField("From") as IQMod)
                            .Select(g => new KeyValuePair<IQMod, List<MethodInfo>>(g.Key, g.Select(t => t.GetMethod("OnMessageReceived"))
                                .ToList()))
-                           .Add(new KeyValuePair<IQMod, List<MethodInfo>>(null, assembly.GetTypes()
+                           .Add(new KeyValuePair<IQMod, List<MethodInfo>>(QMod.QModManagerQMod, assembly.GetTypes()
                                .Where(t => t.IsSubclassOf(typeof(GlobalMessageReceiver)))
                                .Select(t => t.GetMethod("OnMessageReceived"))
                                .ToList()))

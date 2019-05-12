@@ -42,6 +42,8 @@ namespace QModManager
             VersionDependencies = new Dictionary<string, string>(),
         };
 
+        internal QMod() { }
+
         /// <summary>
         /// The ID of the mod <para/>
         /// Can only contain alphanumeric characters and underscores: (<see langword="a-z"/>, <see langword="A-Z"/>, <see langword="0-9"/>, <see langword="_"/>)
