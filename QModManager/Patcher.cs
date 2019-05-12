@@ -57,7 +57,7 @@ namespace QModManager
                 catch (Exception e)
                 {
                     Logger.Error("There was an error while trying to display the folder structure.");
-                    Debug.LogException(e);
+                    Logger.Exception(e);
                 }
 
                 QModHooks.Load();
@@ -95,7 +95,7 @@ namespace QModManager
             catch (Exception e)
             {
                 Logger.Error("EXCEPTION CAUGHT!");
-                Debug.LogException(e);
+                Logger.Exception(e);
             }
         }
 
@@ -293,7 +293,7 @@ namespace QModManager
             catch (ArgumentNullException e)
             {
                 Logger.Error($"Could not parse entry method \"{mod.AssemblyName}\" for mod \"{mod.Id}\"");
-                Debug.LogException(e);
+                Logger.Exception(e);
                 erroredMods.Add(mod);
 
                 return false;
@@ -301,13 +301,13 @@ namespace QModManager
             catch (TargetInvocationException e)
             {
                 Logger.Error($"Invoking the specified entry method \"{mod.EntryMethod}\" failed for mod \"{mod.Id}\"");
-                Debug.LogException(e);
+                Logger.Exception(e);
                 return false;
             }
             catch (Exception e)
             {
                 Logger.Error($"An unexpected error occurred whilst trying to load mod \"{mod.Id}\"");
-                Debug.LogException(e);
+                Logger.Exception(e);
                 return false;
             }
 
@@ -782,7 +782,7 @@ namespace QModManager
                     catch (Exception e)
                     {
                         Logger.Error($"An error occurred while trying to parse version range \"{dependency.Value}\" of dependency \"QModManager\" for mod \"{mod.DisplayName}\"");
-                        Debug.LogException(e);
+                        Logger.Exception(e);
                     }
                     continue;
                 }
@@ -803,7 +803,7 @@ namespace QModManager
                         catch (Exception e)
                         {
                             Logger.Error($"An error occurred while trying to parse version range \"{dependency.Value}\" of dependency \"{dependency.Key}\" for mod \"{mod.DisplayName}\"");
-                            Debug.LogException(e);
+                            Logger.Exception(e);
                         }
                     }
                 }

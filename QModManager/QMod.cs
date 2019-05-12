@@ -149,7 +149,7 @@ namespace QModManager
                 catch (Exception e)
                 {
                     Logger.Error($"There was an error parsing version \"{mod.Version}\" for mod \"{mod.DisplayName}\"");
-                    Debug.LogException(e);
+                    Logger.Exception(e);
                     mod.ParsedVersion = null;
                 }
 
@@ -158,7 +158,7 @@ namespace QModManager
             catch (Exception e)
             {
                 Logger.Error($"\"mod.json\" deserialization failed for file \"{file}\"!");
-                Debug.LogException(e);
+                Logger.Exception(e);
 
                 return null;
             }
