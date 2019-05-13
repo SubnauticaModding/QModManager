@@ -22,7 +22,7 @@ From a terminal run:
 ## Usage
 
 Place all mods you wish to use in `~/"Library/Application Support/Steam/steamapps/common/Subnautica/QMods"`
-For epic games, the folder is in '~/Library/Application Support/Epic Games/Subnautica/QMods'
+For epic games, the folder is in `~/"Library/Application Support/Epic Games/Subnautica/QMods"`
 
 ## Testing
 
