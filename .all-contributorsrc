@@ -103,6 +103,15 @@
         "platform",
         "doc"
       ]
+    },
+    {
+      "login": "pardeike",
+      "name": "Andreas Pardeike",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/853584?v=4",
+      "profile": "https://www.patreon.com/pardeike",
+      "contributions": [
+        "plugin"
+      ]
     }
   ],
   "contributorsPerLine": 7,
