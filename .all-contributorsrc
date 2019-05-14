@@ -1,0 +1,122 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "contributors": [
+    {
+      "login": "AlexejheroYTB",
+      "name": "AlexejheroYTB",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/32238504?v=4",
+      "profile": "https://github.com/AlexejheroYTB",
+      "contributions": [
+        "code",
+        "maintenance",
+        "question",
+        "doc",
+        "ideas",
+        "projectManagement"
+      ]
+    },
+    {
+      "login": "qwiso",
+      "name": "Zachary Jones",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/4432563?v=4",
+      "profile": "https://github.com/Qwiso",
+      "contributions": [
+        "code",
+        "content",
+        "tool",
+        "infra",
+        "example"
+      ]
+    },
+    {
+      "login": "RandyKnapp",
+      "name": "Randy Knapp",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/3331569?v=4",
+      "profile": "https://github.com/RandyKnapp",
+      "contributions": [
+        "code",
+        "design"
+      ]
+    },
+    {
+      "login": "ahk1221",
+      "name": "ahk1221",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/16101353?v=4",
+      "profile": "https://github.com/ahk1221",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "BlueFire9020",
+      "name": "Zachary Amoss",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/21204932?v=4",
+      "profile": "https://github.com/BlueFire9020",
+      "contributions": [
+        "code",
+        "design"
+      ]
+    },
+    {
+      "login": "PrimeSonic",
+      "name": "PrimeSonic",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/39146191?v=4",
+      "profile": "https://www.nexusmods.com/subnautica/users/1733280",
+      "contributions": [
+        "question",
+        "ideas",
+        "test",
+        "bug"
+      ]
+    },
+    {
+      "login": "legojoshua12",
+      "name": "legojoshua12",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/11251167?v=4",
+      "profile": "https://github.com/legojoshua12",
+      "contributions": [
+        "platform",
+        "test",
+        "doc"
+      ]
+    },
+    {
+      "login": "Zebralear",
+      "name": "Zebralear",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/31323325?v=4",
+      "profile": "https://github.com/Zebralear",
+      "contributions": [
+        "platform",
+        "doc"
+      ]
+    },
+    {
+      "login": "Eonfge",
+      "name": "Eonfge",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/33983090?v=4",
+      "profile": "http://www.kevindegeling.nl",
+      "contributions": [
+        "platform",
+        "doc"
+      ]
+    },
+    {
+      "login": "pardeike",
+      "name": "Andreas Pardeike",
+      "avatar_url": "https://avatars1.githubusercontent.com/u/853584?v=4",
+      "profile": "https://www.patreon.com/pardeike",
+      "contributions": [
+        "plugin"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "QModManager",
+  "projectOwner": "QModManager",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}

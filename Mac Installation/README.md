@@ -16,7 +16,7 @@ Download and install [Mono Project](https://www.mono-project.com/download/stable
 From a terminal run:
 1. `cp Build/* ~/"Library/Application Support/Steam/steamapps/common/Subnautica/Subnautica.app/Contents/Resources/Data/Managed"`
 1. `cd ~/"Library/Application Support/Steam/steamapps/common/Subnautica/Subnautica.app/Contents/Resources/Data/Managed"`
-1. `mono QModManager.exe` - Note: If an error is encountered, make sure you copied all the necessary dependancies to the folder as well. To see which dependancies are necessary, [Check Here](https://github.com/QModManager/QModManager/tree/dev/sendmessage/Dependencies).
+1. `mono QModManager.exe` - Note: If an error is encountered, make sure you copied all the necessary dependencies to the folder as well. To see which dependencies are necessary, [check here](../Dependencies).
 1. `mkdir ~/"Library/Application Support/Steam/steamapps/common/Subnautica/QMods"`
 
 ## Usage
