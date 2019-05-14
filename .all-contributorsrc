@@ -72,6 +72,16 @@
         "test",
         "bug"
       ]
+    },
+    {
+      "login": "legojoshua12",
+      "name": "legojoshua12",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/11251167?v=4",
+      "profile": "https://github.com/legojoshua12",
+      "contributions": [
+        "platform",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
