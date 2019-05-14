@@ -69,7 +69,8 @@
       "contributions": [
         "question",
         "ideas",
-        "test"
+        "test",
+        "bug"
       ]
     }
   ],
