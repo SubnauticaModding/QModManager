@@ -1,5 +1,4 @@
 ﻿using QModManager.Utility;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -14,65 +13,13 @@ namespace QModManager.API
         /// <summary>
         /// The <see cref="IQMod"/> from which this class will receive messages
         /// </summary>
-        public IQMod From { get; }
+        public abstract IQMod From { get; }
 
         /// <summary>
-        /// Creates a new message receiver which will receive messages from a provided mod
+        /// Creates a new message receiver which will receive messages from a provided mod <para/>
+        /// You will need to specify a mod for the "<see langword="From"/>" property.
         /// </summary>
-        /// <param name="from">The <see cref="IQMod"/> from which this class will receive messages</param>
-        public MessageReceiver(IQMod from)
-        {
-            if (from == null)
-                throw new ArgumentNullException("from", "The provided mod is null!");
-
-            From = from;
-        }
-
-        /// <summary>
-        /// Creates a new message receiver which will receive messages from a provided assembly
-        /// </summary>
-        /// <param name="fromAssembly">The <see cref="Assembly"/> from which this class will receive messages</param>
-        /// <param name="throwIfNotFound">Whether or not to throw an <see cref="ArgumentException"/> if the targeted mod was not found</param>
-        public MessageReceiver(Assembly fromAssembly, bool throwIfNotFound = true)
-        {
-            if (fromAssembly == null)
-                throw new ArgumentNullException(nameof(fromAssembly), "The provided assembly is null!");
-
-            IQMod mod = QModAPI.GetMod(fromAssembly, true, true);
-
-            if (mod == null || mod == QMod.QModManagerQMod)
-            {
-                if (throwIfNotFound)
-                    throw new ArgumentException("The provided assembly is not a mod assembly!", nameof(fromAssembly));
-            }
-            else
-            {
-                From = mod;
-            }
-        }
-
-        /// <summary>
-        /// Creates a new message receiver which will receive messages from any mod which has the a provided ID
-        /// </summary>
-        /// <param name="fromID">The ID of the mod from which this class will receive messages</param>
-        /// <param name="throwIfNotFound">Whether or not to throw an <see cref="ArgumentException"/> if the targeted mod was not found</param>
-        public MessageReceiver(string fromID, bool throwIfNotFound = true)
-        {
-            if (string.IsNullOrEmpty(fromID))
-                throw new ArgumentNullException(nameof(fromID), "The provided ID is null or empty!");
-
-            IQMod mod = QModAPI.GetMod(fromID, true, true);
-
-            if (mod == null || mod == QMod.QModManagerQMod)
-            {
-                if (throwIfNotFound)
-                    throw new ArgumentException("No mod matching the provided ID was found!");
-            }
-            else
-            {
-                From = mod;
-            }
-        }
+        public MessageReceiver() { }
 
         /// <summary>
         /// The method which will be called when a message is received
