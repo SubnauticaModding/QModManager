@@ -145,3 +145,12 @@ Using [Steam Proton 4.2](https://www.protondb.com/app/264710), QModManager can b
 - Run the Windows installer in the Steam Proton directory `./steamapps/compatdata/264710/`
 - Install QModManager into the actual Subnautica directory `./steamapps/common/Subnautica/`
 - Manually install mods by adding them to the QMods folder in your Subnautica directory  `./steamapps/common/Subnautica/QMods/`
+
+___
+
+### Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
