@@ -60,6 +60,17 @@
         "code",
         "design"
       ]
+    },
+    {
+      "login": "PrimeSonic",
+      "name": "PrimeSonic",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/39146191?v=4",
+      "profile": "https://www.nexusmods.com/subnautica/users/1733280",
+      "contributions": [
+        "question",
+        "ideas",
+        "test"
+      ]
     }
   ],
   "contributorsPerLine": 7,
