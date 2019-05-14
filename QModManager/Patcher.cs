@@ -355,16 +355,63 @@ namespace QModManager
 
         internal static Dictionary<IQMod, List<MethodInfo>> GetMessageRecievers(Assembly assembly)
         {
-            return assembly.GetTypes()
-                           .Where(t => t.IsSubclassOf(typeof(MessageReceiver)))
-                           .GroupBy(t => t.GetField("From") as IQMod)
+            IEnumerable<Type> messageReceivers = assembly.GetTypes()
+                           .Where(t => t.IsSubclassOf(typeof(MessageReceiver)));
+
+            IEnumerable<KeyValuePair<IQMod, List<MethodInfo>>> groupedMessageReceivers = messageReceivers
+                           .GroupBy(t =>
+                           {
+                               object instance;
+                               try
+                               {
+                                   instance = t.GetConstructor(Type.EmptyTypes).Invoke(new object[] { });
+                               }
+                               catch
+                               {
+                                   instance = null;
+                               }
+
+                               IQMod From;
+                               if (instance == null)
+                               {
+                                   Logger.Error($"Could not get the targeted QMod from a MessageReceiver in mod \"{QModAPI.GetMod(assembly, true, true).DisplayName}\". The constructor could not be invoked.");
+                                   Logger.Warn($"That MessageReceiver has been turned into a GlobalMessageReceiver.");
+
+                                   From = QMod.QModManagerQMod;
+                               }
+                               else
+                               {
+                                   try
+                                   {
+                                       From = t.GetField("From").GetValue(instance) as IQMod;
+                                   }
+                                   catch
+                                   {
+                                       From = null;
+                                   }
+                               }
+
+                               if (From == null)
+                               {
+                                   Logger.Error($"Could not get the targeted QMod from a MessageReceiver in mod \"{QModAPI.GetMod(assembly, true, true).DisplayName}\". The value of the property \"From\" could not be obtained.");
+                                   Logger.Warn($"That MessageReceiver has been turned into a GlobalMessageReceiver.");
+
+                                   From = QMod.QModManagerQMod;
+                               }
+
+                               return From;
+                           })
                            .Select(g => new KeyValuePair<IQMod, List<MethodInfo>>(g.Key, g.Select(t => t.GetMethod("OnMessageReceived"))
-                               .ToList()))
-                           .Add(new KeyValuePair<IQMod, List<MethodInfo>>(QMod.QModManagerQMod, assembly.GetTypes()
-                               .Where(t => t.IsSubclassOf(typeof(GlobalMessageReceiver)))
-                               .Select(t => t.GetMethod("OnMessageReceived"))
-                               .ToList()))
-                           .ToDictionary(k => k.Key, v => v.Value);
+                               .ToList()));
+
+            KeyValuePair<IQMod, List<MethodInfo>> globalMessageReceivers = new KeyValuePair<IQMod, List<MethodInfo>>(QMod.QModManagerQMod, assembly.GetTypes()
+                .Where(t => t.IsSubclassOf(typeof(GlobalMessageReceiver)))
+                .Select(t => t.GetMethod("OnMessageReceived"))
+                .ToList());
+
+            Dictionary<IQMod, List<MethodInfo>> finalReceivers = groupedMessageReceivers.Add(globalMessageReceivers).ToDictionary(k => k.Key, v => v.Value);
+
+            return finalReceivers;
         }
 
         #endregion
