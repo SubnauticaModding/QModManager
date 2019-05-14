@@ -1,0 +1,28 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "AlexejheroYTB",
+      "name": "AlexejheroYTB",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/32238504?v=4",
+      "profile": "https://github.com/AlexejheroYTB",
+      "contributions": [
+        "code",
+        "maintenance",
+        "question",
+        "doc",
+        "ideas",
+        "projectManagement"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "QModManager",
+  "projectOwner": "QModManager",
+  "repoType": "github",
+  "repoHost": "https://github.com"
+}
