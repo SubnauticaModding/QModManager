@@ -1,4 +1,5 @@
 ### QModManager
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
 #### Config based patch management for Subnautica and Subnautica: Below Zero
 
@@ -135,3 +136,15 @@ Using [Steam Proton 4.2](https://www.protondb.com/app/264710), QModManager can b
 - Run the Windows installer in the Steam Proton directory `./steamapps/compatdata/264710/`
 - Install QModManager into the actual Subnautica directory `./steamapps/common/Subnautica/`
 - Manually install mods by adding them to the QMods folder in your Subnautica directory  `./steamapps/common/Subnautica/QMods/`
+
+## Contributors
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore -->
+<table><tr><td align="center"><a href="https://github.com/AlexejheroYTB"><img src="https://avatars3.githubusercontent.com/u/32238504?v=4" width="100px;" alt="AlexejheroYTB"/><br /><sub><b>AlexejheroYTB</b></sub></a><br /><a href="https://github.com/QModManager/QModManager/commits?author=AlexejheroYTB" title="Code">💻</a> <a href="#maintenance-AlexejheroYTB" title="Maintenance">🚧</a> <a href="#question-AlexejheroYTB" title="Answering Questions">💬</a> <a href="https://github.com/QModManager/QModManager/commits?author=AlexejheroYTB" title="Documentation">📖</a> <a href="#ideas-AlexejheroYTB" title="Ideas, Planning, & Feedback">🤔</a> <a href="#projectManagement-AlexejheroYTB" title="Project Management">📆</a></td></tr></table>
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
