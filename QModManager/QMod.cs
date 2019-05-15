@@ -34,7 +34,7 @@ namespace QModManager
             LoadBefore = new string[] { },
             Loaded = true,
             LoadedAssembly = Assembly.GetExecutingAssembly(),
-            MessageReceivers = new Dictionary<IQMod, List<MethodInfo>>(),
+            //MessageReceivers = new Dictionary<IQMod, List<MethodInfo>>(),
             ModAssemblyPath = Assembly.GetExecutingAssembly().Location,
             ParsedGame = Patcher.Game.Both,
             ParsedVersion = Assembly.GetExecutingAssembly().GetName().Version,
@@ -119,10 +119,10 @@ namespace QModManager
         /// Whether or not this mod is loaded
         /// </summary>
         [JsonIgnore] public bool Loaded { get; set; }
-        /// <summary>
-        /// The <see cref="MessageReceiver"/>s and <see cref="GlobalMessageReceiver"/>s defined in this mod
-        /// </summary>
-        [JsonIgnore] public Dictionary<IQMod, List<MethodInfo>> MessageReceivers { get; set; }
+        //// <summary>
+        //// The <see cref="MessageReceiver"/>s and <see cref="GlobalMessageReceiver"/>s defined in this mod
+        //// </summary>
+        //[JsonIgnore] public Dictionary<IQMod, List<MethodInfo>> MessageReceivers { get; set; }
 
         internal static QMod FromJsonFile(string file)
         {
@@ -366,9 +366,9 @@ namespace QModManager
         /// Whether or not this mod is loaded
         /// </summary>
         bool Loaded { get; }
-        /// <summary>
-        /// The <see cref="MessageReceiver"/>s and <see cref="GlobalMessageReceiver"/>s defined in this mod
-        /// </summary>
-        Dictionary<IQMod, List<MethodInfo>> MessageReceivers { get; }
+        //// <summary>
+        //// The <see cref="MessageReceiver"/>s and <see cref="GlobalMessageReceiver"/>s defined in this mod
+        //// </summary>
+        //Dictionary<IQMod, List<MethodInfo>> MessageReceivers { get; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using QModManager.Utility;
+﻿/*
+using QModManager.Utility;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -194,3 +195,4 @@ namespace QModManager.API
         void BroadcastMessage(string message, params object[] data);
     }
 }
+*/

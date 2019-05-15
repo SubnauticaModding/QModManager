@@ -179,7 +179,7 @@ namespace QModManager
 
                 mod.LoadedAssembly = Assembly.LoadFrom(modAssemblyPath);
                 mod.ModAssemblyPath = modAssemblyPath;
-                mod.MessageReceivers = GetMessageRecievers(mod.LoadedAssembly);
+                //mod.MessageReceivers = GetMessageRecievers(mod.LoadedAssembly);
 
                 foundMods.Add(mod);
             }
@@ -353,6 +353,7 @@ namespace QModManager
             }
         }
 
+        /*
         internal static Dictionary<IQMod, List<MethodInfo>> GetMessageRecievers(Assembly assembly)
         {
             IEnumerable<Type> messageReceivers = assembly.GetTypes()
@@ -413,6 +414,7 @@ namespace QModManager
 
             return finalReceivers;
         }
+        */
 
         #endregion
 
