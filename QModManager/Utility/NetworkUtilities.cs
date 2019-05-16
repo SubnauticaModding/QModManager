@@ -23,7 +23,7 @@ namespace QModManager.Utility
                 return false;
             }
         }
-        private static string GetHtmlFromUri(string resource)
+        internal static string GetHtmlFromUri(string resource)
         {
             string html = string.Empty;
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(resource);

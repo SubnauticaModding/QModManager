@@ -12,36 +12,36 @@ namespace QModManager.Debugger
 {
     internal class PrefabDebugger : MonoBehaviour
     {
-        private HierarchyItem selectedGameObject = null;
-        private HierarchyItem draggedGameObject = null;
-        private PropertyInfo colorProperty;
-        private object component;
-        private Color selectedColor;
+        internal HierarchyItem selectedGameObject = null;
+        internal HierarchyItem draggedGameObject = null;
+        internal PropertyInfo colorProperty;
+        internal object component;
+        internal Color selectedColor;
 
-        private bool addComponent = false;
-        private readonly Dictionary<string, bool> componentTabs = new Dictionary<string, bool>
+        internal bool addComponent = false;
+        internal readonly Dictionary<string, bool> componentTabs = new Dictionary<string, bool>
         {
             { "Subnautica", true },
             { "UnityEngine", true },
             { "UnityEngine.UI", true },
         };
-        private readonly Dictionary<string, bool> prefabTabs = new Dictionary<string, bool>
+        internal readonly Dictionary<string, bool> prefabTabs = new Dictionary<string, bool>
         {
             { "Assets", true },
             { "Scene", true },
         };
 
-        private static AssetBundle guiBundle;
-        private static GUISkin skinUWE;
-        private TreeNode<HierarchyItem> sceneTree;
-        private Vector2 compScrollPos, hierarchyScrollPos, consoleScrollPos, addComponentScrollPos, sceneScrollPos;
-        private int numGameObjects = 0;
+        internal static AssetBundle guiBundle;
+        internal static GUISkin skinUWE;
+        internal TreeNode<HierarchyItem> sceneTree;
+        internal Vector2 compScrollPos, hierarchyScrollPos, consoleScrollPos, addComponentScrollPos, sceneScrollPos;
+        internal int numGameObjects = 0;
 
         /* This is a list of class properties that are either identical for each component or hidden in the Inspector
          * These can be shown/hidden in the Component view but should almost always be hidden because they make
          * Navigating and debugging each component more difficult and lack any actual usage in debugging scenarios
          */
-        private readonly string[] propertyBlacklist = { "enabled", "transform", "gameObject", "tag", "name",
+        internal readonly string[] propertyBlacklist = { "enabled", "transform", "gameObject", "tag", "name",
             "hideFlags", "sortingLayerName", "sortingLayerID", "sharedMaterial",
             "sharedMaterials", "additionalVertexStreams","sharedMesh", "lightmapScaleOffset", "useGUILayout",
             "runInEditMode", "alphaHitTestMinimumThreshold", "onCullStateChanged", "maskable", "overrideSprite",
@@ -51,32 +51,32 @@ namespace QModManager.Debugger
         /* This is a list of components that are either default or impossible to add to components normally, 
          * so they are listed here to be removed from the Add Component window.
          */
-        private readonly string[] componentBlacklist = { "Behaviour", "Component", "Transform", "MonoBehaviour", "GameObject" };
+        internal readonly string[] componentBlacklist = { "Behaviour", "Component", "Transform", "MonoBehaviour", "GameObject" };
 
-        private Rect dragRect = new Rect(0, 0, 200, 50);
-        private Rect colorRect = new Rect(0, 0, 200, 400);
-        private Rect addComponentRect = new Rect(0, 0, 350, 400);
-        private Rect debuggerRect;
-        private static RectTransform debuggerRectTransform;
-        private static uGUI_InputGroup inputGroup;
-        private int selectedTab;
-        private Stack<LogMessage> debugMessages = new Stack<LogMessage>();
-        private bool showDebugger = false;
-        private bool showErrors, showLogs, showWarnings;
-        private Vector2 screenResolution;
+        internal Rect dragRect = new Rect(0, 0, 200, 50);
+        internal Rect colorRect = new Rect(0, 0, 200, 400);
+        internal Rect addComponentRect = new Rect(0, 0, 350, 400);
+        internal Rect debuggerRect;
+        internal static RectTransform debuggerRectTransform;
+        internal static uGUI_InputGroup inputGroup;
+        internal int selectedTab;
+        internal Stack<LogMessage> debugMessages = new Stack<LogMessage>();
+        internal bool showDebugger = false;
+        internal bool showErrors, showLogs, showWarnings;
+        internal Vector2 screenResolution;
 
-        private readonly string[] tabs = { "Scenes", "Hierarchy", "Options" };
+        internal readonly string[] tabs = { "Scenes", "Hierarchy", "Options" };
 
-        private const string right_arrow = "▶";
-        private const string down_arrow = "▼";
-        private static Texture2D stop_symbol, warning_symbol, log_symbol;
+        internal const string right_arrow = "▶";
+        internal const string down_arrow = "▼";
+        internal static Texture2D stop_symbol, warning_symbol, log_symbol;
 
         //User options that are saved and loaded
-        private bool showReadonlyProperties = false;
-        private bool showBlacklistedProperties = false;
-        private bool pauseWhenWindowOpen = false;
-        private int windowMargin = 50;
-        private int viewMargin = 10;
+        internal bool showReadonlyProperties = false;
+        internal bool showBlacklistedProperties = false;
+        internal bool pauseWhenWindowOpen = false;
+        internal int windowMargin = 50;
+        internal int viewMargin = 10;
 
         internal static void Main()
         {
@@ -87,7 +87,7 @@ namespace QModManager.Debugger
             Logger.Debug("Debugger initialized");
         }
 
-        private void Start()
+        internal void Start()
         {
             Scene scene = SceneManager.GetActiveScene();
             numGameObjects = scene.rootCount;
@@ -121,7 +121,7 @@ namespace QModManager.Debugger
             LoadSceneObjects();
         }
 
-        private void LoadSceneObjects()
+        internal void LoadSceneObjects()
         {
             Scene scene = SceneManager.GetActiveScene();
             numGameObjects = scene.rootCount;
@@ -137,9 +137,9 @@ namespace QModManager.Debugger
             }
         }
 
-        private void LateUpdate()
+        internal void LateUpdate()
         {
-            if (Input.GetKeyDown(KeyCode.F9) && PlayerPrefs.GetInt("QModManager_PrefabDebugger_Enable", 1) == 1 || showDebugger && Input.GetKeyDown(KeyCode.Escape))
+            if (Input.GetKeyDown(KeyCode.F9) && OptionsManager.DebuggerEnabled || showDebugger && Input.GetKeyDown(KeyCode.Escape))
             {
                 showDebugger = !showDebugger;
                 UWE.Utils.alwaysLockCursor = false;
@@ -173,7 +173,7 @@ namespace QModManager.Debugger
             }
         }
 
-        private void OnGUI()
+        internal void OnGUI()
         {
             //Set the GUI's style
             GUI.skin = skinUWE;
@@ -197,7 +197,7 @@ namespace QModManager.Debugger
             }
         }
 
-        private void ShowDebuggerWindow(int windowID)
+        internal void ShowDebuggerWindow(int windowID)
         {
             GUI.DragWindow(new Rect(0, 0, debuggerRect.width - 24, 40));
 
@@ -374,13 +374,13 @@ namespace QModManager.Debugger
             }
         }
 
-        private void ShowChangeParentWindow(int windowID)
+        internal void ShowChangeParentWindow(int windowID)
         {
             GUI.FocusWindow(0);
             GUILayout.Button(draggedGameObject.source.name, "TreeItemSelected");
         }
 
-        private void ShowColorPaletteWindow(int windowID)
+        internal void ShowColorPaletteWindow(int windowID)
         {
             GUI.DragWindow(new Rect(0, 0, colorRect.width - 24, 40));
             if (DrawCloseButton())
@@ -422,7 +422,7 @@ namespace QModManager.Debugger
             }
         }
 
-        private void ShowAddComponentWindow(int windowID)
+        internal void ShowAddComponentWindow(int windowID)
         {
             GUI.DragWindow(new Rect(0, 0, addComponentRect.width - 24, 40));
             if (DrawCloseButton())
@@ -470,7 +470,7 @@ namespace QModManager.Debugger
             GUILayout.EndScrollView();
         }
 
-        private void ShowSubclassComponents(IEnumerable<Type> subclasses, string removePrefix)
+        internal void ShowSubclassComponents(IEnumerable<Type> subclasses, string removePrefix)
         {
             foreach (Type type in subclasses)
             {
@@ -485,7 +485,7 @@ namespace QModManager.Debugger
             }
         }
 
-        private bool DrawCloseButton()
+        internal bool DrawCloseButton()
         {
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
@@ -496,7 +496,7 @@ namespace QModManager.Debugger
             return closed;
         }
 
-        private void ShowSelectedComponents()
+        internal void ShowSelectedComponents()
         {
             if (selectedGameObject != null)
             {
@@ -531,7 +531,7 @@ namespace QModManager.Debugger
             }
         }
 
-        private void GetComponentsOfType(GameObject gameObject, Type componentType)
+        internal void GetComponentsOfType(GameObject gameObject, Type componentType)
         {
             foreach (var comp in gameObject.GetComponents(componentType))
             {
@@ -557,7 +557,7 @@ namespace QModManager.Debugger
             }
         }
 
-        private void DisplayComponentProperties(object comp)
+        internal void DisplayComponentProperties(object comp)
         {
             foreach (var property in comp.GetType().GetProperties())
             {
@@ -681,7 +681,7 @@ namespace QModManager.Debugger
             }
         }
 
-        private void NavigateNodeRecursively(TreeNode<HierarchyItem> node, int depth = 0)
+        internal void NavigateNodeRecursively(TreeNode<HierarchyItem> node, int depth = 0)
         {
             try
             {
@@ -803,7 +803,7 @@ namespace QModManager.Debugger
             }
         }
 
-        private void PopulateTreeRecursively(GameObject target, TreeNode<HierarchyItem> parent)
+        internal void PopulateTreeRecursively(GameObject target, TreeNode<HierarchyItem> parent)
         {
             HierarchyItem node = new HierarchyItem(target)
             {
@@ -821,7 +821,7 @@ namespace QModManager.Debugger
         //Current issue: Doesn't remove gameobjects that aren't present in reload
         //Working: Adds new gameobjects and children seen in reload
         [Obsolete("Broken", true)]
-        private void RepopulateTreeRecursively()
+        internal void RepopulateTreeRecursively()
         {
             var updatedSceneTree = new TreeNode<HierarchyItem>();
 
@@ -835,7 +835,7 @@ namespace QModManager.Debugger
             sceneTree = MergeTrees(updatedSceneTree, sceneTree);
         }
 
-        private TreeNode<HierarchyItem> MergeTrees(TreeNode<HierarchyItem> source, TreeNode<HierarchyItem> target)
+        internal TreeNode<HierarchyItem> MergeTrees(TreeNode<HierarchyItem> source, TreeNode<HierarchyItem> target)
         {
             foreach (TreeNode<HierarchyItem> item in source.Children)
             {
@@ -852,7 +852,7 @@ namespace QModManager.Debugger
             return target;
         }
 
-        private Vector3 ShowVectorField(Vector3 value, string title)
+        internal Vector3 ShowVectorField(Vector3 value, string title)
         {
             GUILayout.BeginHorizontal();
 
@@ -870,7 +870,7 @@ namespace QModManager.Debugger
             return value;
         }
 
-        private bool ShowBoolField(bool value, string title)
+        internal bool ShowBoolField(bool value, string title)
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label(title, "NormalLabel", GUILayout.Width(150));
@@ -880,7 +880,7 @@ namespace QModManager.Debugger
             return value;
         }
 
-        private string ShowTextField(string value, string title)
+        internal string ShowTextField(string value, string title)
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label(title, "NormalLabel", GUILayout.Width(150));
@@ -889,7 +889,7 @@ namespace QModManager.Debugger
             return value;
         }
 
-        private Texture2D MakeTex(int width, int height, Color col)
+        internal Texture2D MakeTex(int width, int height, Color col)
         {
             Color[] pix = new Color[width * height];
 
@@ -903,7 +903,7 @@ namespace QModManager.Debugger
             return result;
         }
 
-        private void HandleLog(string logString, string stackTrace, LogType type)
+        internal void HandleLog(string logString, string stackTrace, LogType type)
         {
             //Cap the debug messages saved at 100 to prevent lag
             if (debugMessages.Count > 100)
@@ -913,7 +913,7 @@ namespace QModManager.Debugger
             debugMessages.Push(new LogMessage(logString, stackTrace, type));
         }
 
-        private string GetOpenPrefix(bool boolean)
+        internal string GetOpenPrefix(bool boolean)
         {
             if (boolean)
             {
