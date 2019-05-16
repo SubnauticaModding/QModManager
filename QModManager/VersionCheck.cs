@@ -36,7 +36,7 @@ namespace QModManager
                     if (e.Error != null)
                     {
                         Logger.Error("There was an error retrieving the latest version from GitHub!");
-                        Debug.LogException(e.Error);
+                        Logger.Exception(e.Error);
                         return;
                     }
                     Parse(e.Result);
@@ -80,7 +80,7 @@ namespace QModManager
             catch (Exception e)
             {
                 Logger.Error("There was an error retrieving the latest version from GitHub!");
-                Debug.LogException(e);
+                Logger.Exception(e);
                 return;
             }
         }

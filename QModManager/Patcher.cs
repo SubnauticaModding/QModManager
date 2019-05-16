@@ -1,5 +1,6 @@
 using Harmony;
 using Oculus.Newtonsoft.Json;
+using QModManager.API;
 using QModManager.Debugger;
 using QModManager.Utility;
 using SemVer;
@@ -13,8 +14,13 @@ using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
 {
-    internal static class Patcher
+    /// <summary>
+    /// The main class which handles all of QModManager's patching
+    /// </summary>
+    public static class Patcher
     {
+        internal const string IDRegex = "[^0-9a-z_]";
+
         internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? null : Path.Combine(Environment.CurrentDirectory, "QMods");
         internal static bool patched = false;
 
@@ -51,10 +57,13 @@ namespace QModManager
                 catch (Exception e)
                 {
                     Logger.Error("There was an error while trying to display the folder structure.");
-                    Debug.LogException(e);
+                    Logger.Exception(e);
                 }
 
+                QModHooks.Load();
+#pragma warning disable CS0618 // Type or member is obsolete
                 Hooks.Load();
+#pragma warning restore CS0618 // Type or member is obsolete
 
                 PirateCheck.IsPirate(Environment.CurrentDirectory);
 
@@ -74,16 +83,19 @@ namespace QModManager
 
                 VersionCheck.Check();
 
-                Hooks.Start += PrefabDebugger.Main;
+                QModHooks.Start += PrefabDebugger.Main;
 
+                QModHooks.OnLoadEnd?.Invoke();
+#pragma warning disable CS0618 // Type or member is obsolete
                 Hooks.OnLoadEnd?.Invoke();
+#pragma warning restore CS0618 // Type or member is obsolete
 
                 Logger.Info($"Finished loading QModManager. Loaded {loadedMods.Count} mods");
             }
             catch (Exception e)
             {
                 Logger.Error("EXCEPTION CAUGHT!");
-                Debug.LogException(e);
+                Logger.Exception(e);
             }
         }
 
@@ -167,6 +179,7 @@ namespace QModManager
 
                 mod.LoadedAssembly = Assembly.LoadFrom(modAssemblyPath);
                 mod.ModAssemblyPath = modAssemblyPath;
+                //mod.MessageReceivers = GetMessageRecievers(mod.LoadedAssembly);
 
                 foundMods.Add(mod);
             }
@@ -280,7 +293,7 @@ namespace QModManager
             catch (ArgumentNullException e)
             {
                 Logger.Error($"Could not parse entry method \"{mod.AssemblyName}\" for mod \"{mod.Id}\"");
-                Debug.LogException(e);
+                Logger.Exception(e);
                 erroredMods.Add(mod);
 
                 return false;
@@ -288,13 +301,13 @@ namespace QModManager
             catch (TargetInvocationException e)
             {
                 Logger.Error($"Invoking the specified entry method \"{mod.EntryMethod}\" failed for mod \"{mod.Id}\"");
-                Debug.LogException(e);
+                Logger.Exception(e);
                 return false;
             }
             catch (Exception e)
             {
                 Logger.Error($"An unexpected error occurred whilst trying to load mod \"{mod.Id}\"");
-                Debug.LogException(e);
+                Logger.Exception(e);
                 return false;
             }
 
@@ -340,16 +353,96 @@ namespace QModManager
             }
         }
 
+        /*
+        internal static Dictionary<IQMod, List<MethodInfo>> GetMessageRecievers(Assembly assembly)
+        {
+            IEnumerable<Type> messageReceivers = assembly.GetTypes()
+                           .Where(t => t.IsSubclassOf(typeof(MessageReceiver)));
+
+            IEnumerable<KeyValuePair<IQMod, List<MethodInfo>>> groupedMessageReceivers = messageReceivers
+                           .GroupBy(t =>
+                           {
+                               object instance;
+                               try
+                               {
+                                   instance = t.GetConstructor(Type.EmptyTypes).Invoke(new object[] { });
+                               }
+                               catch
+                               {
+                                   instance = null;
+                               }
+
+                               IQMod From;
+                               if (instance == null)
+                               {
+                                   Logger.Error($"Could not get the targeted QMod from a MessageReceiver in mod \"{QModAPI.GetMod(assembly, true, true).DisplayName}\". The constructor could not be invoked.");
+                                   Logger.Warn($"That MessageReceiver has been turned into a GlobalMessageReceiver.");
+
+                                   From = QMod.QModManagerQMod;
+                               }
+                               else
+                               {
+                                   try
+                                   {
+                                       From = t.GetField("From").GetValue(instance) as IQMod;
+                                   }
+                                   catch
+                                   {
+                                       From = null;
+                                   }
+                               }
+
+                               if (From == null)
+                               {
+                                   Logger.Error($"Could not get the targeted QMod from a MessageReceiver in mod \"{QModAPI.GetMod(assembly, true, true).DisplayName}\". The value of the property \"From\" could not be obtained.");
+                                   Logger.Warn($"That MessageReceiver has been turned into a GlobalMessageReceiver.");
+
+                                   From = QMod.QModManagerQMod;
+                               }
+
+                               return From;
+                           })
+                           .Select(g => new KeyValuePair<IQMod, List<MethodInfo>>(g.Key, g.Select(t => t.GetMethod("OnMessageReceived"))
+                               .ToList()));
+
+            KeyValuePair<IQMod, List<MethodInfo>> globalMessageReceivers = new KeyValuePair<IQMod, List<MethodInfo>>(QMod.QModManagerQMod, assembly.GetTypes()
+                .Where(t => t.IsSubclassOf(typeof(GlobalMessageReceiver)))
+                .Select(t => t.GetMethod("OnMessageReceived"))
+                .ToList());
+
+            Dictionary<IQMod, List<MethodInfo>> finalReceivers = groupedMessageReceivers.Add(globalMessageReceivers).ToDictionary(k => k.Key, v => v.Value);
+
+            return finalReceivers;
+        }
+        */
+
         #endregion
 
         #region Game detection
 
+        /// <summary>
+        /// An enum which contains possible values for <see cref="IQMod.ParsedGame"/>
+        /// </summary>
         [Flags]
-        internal enum Game
+        public enum Game
         {
+            /// <summary>
+            /// No game was detected <para/>
+            /// In theory, this should never be the case
+            /// </summary>
             None = 0b00,
+            /// <summary>
+            /// Subnautica was detected
+            /// </summary>
             Subnautica = 0b01,
+            /// <summary>
+            /// Below Zero was detected
+            /// </summary>
             BelowZero = 0b10,
+            /// <summary>
+            /// Both games were detected <para/>
+            /// In theory, this should never be the case
+            /// </summary>
             Both = Subnautica | BelowZero,
         }
 
@@ -701,6 +794,12 @@ namespace QModManager
 
             foreach (string dependencyId in mod.Dependencies)
             {
+                if (dependencyId == "QModManager")
+                {
+                    dependencies.Add(QMod.QModManagerQMod);
+                    continue;
+                }
+
                 foreach (QMod dependencyMod in sortedMods)
                 {
                     if (dependencyId == dependencyMod.Id)
@@ -718,6 +817,25 @@ namespace QModManager
 
             foreach (KeyValuePair<string, string> dependency in mod.VersionDependencies)
             {
+                if (dependency.Key.Trim() == "QModManager")
+                {
+                    try
+                    {
+                        if (dependency.Value.Trim() == QMod.QModManagerQMod.Version.Trim() || dependency.Value.Trim(' ', '=') == QMod.QModManagerQMod.Version.Trim() || Range.IsSatisfied(dependency.Value.Trim(), QMod.QModManagerQMod.Version.Trim(), true))
+                            dependencies.Add(QMod.QModManagerQMod);
+                    }
+                    catch (ArgumentException)
+                    {
+                        Logger.Warn($"Caught an ArgumentException while trying to parse dependency version range \"{dependency.Value}\" of dependency \"QModManager\" for mod \"{mod.DisplayName}\"");
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error($"An error occurred while trying to parse version range \"{dependency.Value}\" of dependency \"QModManager\" for mod \"{mod.DisplayName}\"");
+                        Logger.Exception(e);
+                    }
+                    continue;
+                }
+
                 foreach (QMod dependencyMod in sortedMods)
                 {
                     if (dependency.Key.Trim() == dependencyMod.Id.Trim())
@@ -734,7 +852,7 @@ namespace QModManager
                         catch (Exception e)
                         {
                             Logger.Error($"An error occurred while trying to parse version range \"{dependency.Value}\" of dependency \"{dependency.Key}\" for mod \"{mod.DisplayName}\"");
-                            Debug.LogException(e);
+                            Logger.Exception(e);
                         }
                     }
                 }

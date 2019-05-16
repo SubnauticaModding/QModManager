@@ -23,6 +23,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <LangVersion>latest</LangVersion>
+    <DocumentationFile>..\Build\QModInstaller.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -112,11 +113,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\QModHooks.cs" />
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Dialog.cs" />
-    <Compile Include="Hooks.cs" />
-    <Compile Include="Legacy\PatchManager.cs" />
-    <Compile Include="QModAPI.cs" />
+    <Compile Include="Obsolete\Hooks.cs" />
+    <Compile Include="Obsolete\PatchManager.cs" />
+    <Compile Include="API\Messages.cs" />
+    <Compile Include="API\QModAPI.cs" />
     <Compile Include="NitroxCheck.cs" />
     <Compile Include="Utility\IOUtilities.cs" />
     <Compile Include="Utility\Logger.cs" />
@@ -132,6 +135,7 @@
     <Compile Include="Utility\ExtensionMethods.cs" />
     <Compile Include="Utility\NetworkUtilities.cs" />
     <Compile Include="Utility\PlayerPrefsExtra.cs" />
+    <Compile Include="Utility\ReflectionHelper.cs" />
     <Compile Include="VersionCheck.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

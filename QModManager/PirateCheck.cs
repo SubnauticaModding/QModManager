@@ -71,7 +71,7 @@ namespace QModManager
                         {
                             if (e.Error != null)
                             {
-                                UnityEngine.Debug.LogException(e.Error);
+                                UnityEngine.Logger.Exception(e.Error);
                                 ShowText();
                                 return;
                             }
@@ -83,7 +83,7 @@ namespace QModManager
                 }
                 catch (Exception e)
                 {
-                    UnityEngine.Debug.LogException(e);
+                    UnityEngine.Logger.Exception(e);
                     ShowText();
                 }
             }
@@ -187,7 +187,7 @@ namespace QModManager
 
         internal static void PirateDetected()
         {
-            Logger.Error("Ahoy, matey! Ye be a pirate!");
+            Logger.Warn("Ahoy, matey! Ye be a pirate!");
             /*Hooks.Update += Log;
             GameObject obj = new GameObject("YOU ARE A PIRATE");
             obj.AddComponent<Pirate>();*/
