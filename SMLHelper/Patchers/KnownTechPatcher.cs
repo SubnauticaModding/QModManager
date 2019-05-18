@@ -7,7 +7,7 @@
     internal class KnownTechPatcher
     {
         internal static List<TechType> UnlockedAtStart = new List<TechType>();
-        internal static List<KnownTech.AnalysisTech> AnalysisTech = new List<KnownTech.AnalysisTech>();
+        internal static IDictionary<TechType, KnownTech.AnalysisTech> AnalysisTech = new SelfCheckingDictionary<TechType, KnownTech.AnalysisTech>("AnalysisTech");
 
         private static bool initialized = false;
 
@@ -30,14 +30,14 @@
             // Direct access to private fields made possible by https://github.com/CabbageCrow/AssemblyPublicizer/
             // See README.md for details.
             List<KnownTech.AnalysisTech> analysisTech = KnownTech.analysisTech;
-            IEnumerable<KnownTech.AnalysisTech> techToAdd = AnalysisTech.Where(a => !analysisTech.Any(a2 => a.techType == a2.techType));
+            IEnumerable<KnownTech.AnalysisTech> techToAdd = AnalysisTech.Values.Where(a => !analysisTech.Any(a2 => a.techType == a2.techType));
 
             foreach (KnownTech.AnalysisTech tech in analysisTech)
             {
                 if (tech.unlockSound != null && tech.techType == TechType.BloodOil)
                     UnlockSound = tech.unlockSound;
 
-                foreach (KnownTech.AnalysisTech customTech in AnalysisTech)
+                foreach (KnownTech.AnalysisTech customTech in AnalysisTech.Values)
                 {
                     if (tech.techType == customTech.techType)
                     {

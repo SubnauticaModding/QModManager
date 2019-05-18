@@ -1,9 +1,9 @@
 ﻿namespace SMLHelper.V2.Handlers
 {
+    using Interfaces;
+    using Patchers;
     using System.Collections.Generic;
     using System.Linq;
-    using Patchers;
-    using Interfaces;
     using UnityEngine;
 
     /// <summary>
@@ -40,14 +40,24 @@
 
         internal void AddAnalysisTech(TechType techTypeToBeAnalysed, IEnumerable<TechType> techTypesToUnlock, string UnlockMessage = "NotificationBlueprintUnlocked", FMODAsset UnlockSound = null, UnityEngine.Sprite UnlockSprite = null)
         {
-            KnownTechPatcher.AnalysisTech.Add(new KnownTech.AnalysisTech()
+            if (KnownTechPatcher.AnalysisTech.TryGetValue(techTypeToBeAnalysed, out KnownTech.AnalysisTech existingEntry))
             {
-                techType = techTypeToBeAnalysed,
-                unlockMessage = UnlockMessage,
-                unlockSound = UnlockSound,
-                unlockPopup = UnlockSprite,
-                unlockTechTypes = techTypesToUnlock.ToList()
-            });
+                existingEntry.unlockMessage = existingEntry.unlockMessage ?? UnlockMessage;
+                existingEntry.unlockSound = existingEntry.unlockSound ?? UnlockSound;
+                existingEntry.unlockPopup = existingEntry.unlockPopup ?? UnlockSprite;
+                existingEntry.unlockTechTypes.AddRange(techTypesToUnlock);
+            }
+            else
+            {
+                KnownTechPatcher.AnalysisTech.Add(techTypeToBeAnalysed, new KnownTech.AnalysisTech()
+                {
+                    techType = techTypeToBeAnalysed,
+                    unlockMessage = UnlockMessage,
+                    unlockSound = UnlockSound,
+                    unlockPopup = UnlockSprite,
+                    unlockTechTypes = techTypesToUnlock.ToList()
+                });
+            }
         }
 
         /// <summary>
@@ -62,14 +72,7 @@
         /// <param name="UnlockSprite">The sprite that shows up when you unlock the blueprint.</param>
         public static void SetAnalysisTechEntry(TechType techTypeToBeAnalysed, IEnumerable<TechType> techTypesToUnlock, string UnlockMessage = "NotificationBlueprintUnlocked", FMODAsset UnlockSound = null, UnityEngine.Sprite UnlockSprite = null)
         {
-            KnownTechPatcher.AnalysisTech.Add(new KnownTech.AnalysisTech()
-            {
-                techType = techTypeToBeAnalysed,
-                unlockMessage = UnlockMessage,
-                unlockSound = UnlockSound,
-                unlockPopup = UnlockSprite,
-                unlockTechTypes = techTypesToUnlock.ToList()
-            });
+            singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, UnlockMessage, UnlockSound, UnlockSprite);
         }
 
         /// <summary>
