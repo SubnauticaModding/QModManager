@@ -54,6 +54,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LanguagePatcherTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SelfCheckingDictionaryTests.cs" />
   </ItemGroup>
