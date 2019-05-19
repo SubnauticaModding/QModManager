@@ -12,8 +12,6 @@
         private static readonly string LanguageDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Language");
         private static readonly string LanguageOrigDir = Path.Combine(LanguageDir, "/Originals");
         private static readonly string LanguageOverDir = Path.Combine(LanguageDir, "/Overrides");
-        private const char TextDelimiterOpen = '{';
-        private const char TextDelimiterClose = '}';
         private const char KeyValueSeparator = ':';
 
         private static readonly Dictionary<string, Dictionary<string, string>> originalCustomLines = new Dictionary<string, Dictionary<string, string>>();
@@ -66,7 +64,7 @@
             }
 
             if (filesWritten > 0)
-                Logger.Log($"Updated {filesWritten} of {originalCustomLines.Count} original language files.", LogLevel.Info);
+                Logger.Log($"Updated {filesWritten} of {originalCustomLines.Count} original language files.", LogLevel.Debug);
         }
 
         private static void WriteOriginalLinesFile(string modKey)
@@ -75,8 +73,8 @@
             var text = new StringBuilder();
             foreach (string langLineKey in modCustomLines.Keys)
             {
-                string value = modCustomLines[langLineKey];
-                text.AppendLine($"{langLineKey}{KeyValueSeparator}{TextDelimiterOpen}{value}{TextDelimiterClose}");
+                string value = modCustomLines[langLineKey].Replace("\n", "\\n").Replace("\r", "\\r");
+                text.AppendLine($"{langLineKey}{KeyValueSeparator}{value}");
             }
 
             File.WriteAllText($"{LanguageOrigDir}/{modKey}.txt", text.ToString(), Encoding.UTF8);
@@ -87,7 +85,7 @@
             if (!Directory.Exists(LanguageOverDir))
                 Directory.CreateDirectory(LanguageOverDir);
 
-            string[] files = Directory.GetFiles(LanguageOverDir);
+            string[] files = Directory.GetFiles(LanguageOverDir, "*.txt");
 
             if (files.Length == 0)
                 return;
@@ -96,7 +94,7 @@
 
             foreach (string file in files)
             {
-                string modName = Path.GetFileName(file).Replace(".txt", string.Empty);
+                string modName = Path.GetFileNameWithoutExtension(file);
 
                 if (!originalCustomLines.ContainsKey(modName))
                     continue; // Not for a mod we know about
@@ -112,13 +110,7 @@
                     if (string.IsNullOrEmpty(line))
                         continue; // Skip empty lines
 
-                    string[] split = line.Split(new[] { KeyValueSeparator }, StringSplitOptions.RemoveEmptyEntries);
-
-                    if (split.Length != 2)
-                    {
-                        Logger.Log($"Line '{lineIndex}' in language override file for '{modName}' was not correctly formatted.", LogLevel.Warn);
-                        continue; // Not correctly formatter
-                    }
+                    string[] split = line.Split(new[] { KeyValueSeparator }, 2, StringSplitOptions.RemoveEmptyEntries);
 
                     string key = split[0];
 
@@ -128,7 +120,7 @@
                         continue; // Skip keys we don't recognize.
                     }
 
-                    customLines[key] = TrimTextDelimiters(split[1]);
+                    customLines[key] = split[1].Replace("\\n", "\n").Replace("\\r", "\r");
                     overridesApplied++;
                 }
 
@@ -139,7 +131,7 @@
         private static bool FileNeedsRewrite(string modKey)
         {
             Dictionary<string, string> modCustomLines = originalCustomLines[modKey];
-            string fileName = $"{LanguageOrigDir}/{modKey}.txt";
+            string fileName = Path.Combine(LanguageOrigDir, $"{modKey}.txt");
 
             if (!File.Exists(fileName))
                 return true; // File not found
@@ -152,13 +144,10 @@
             // Confirm if the file actually needs to be updated
             foreach (string line in lines)
             {
-                string[] split = line.Split(new[] { KeyValueSeparator }, StringSplitOptions.RemoveEmptyEntries);
-
-                if (split.Length != 2)
-                    return true; // Malformatted, likely externally edited
+                string[] split = line.Split(new[] { KeyValueSeparator }, 2, StringSplitOptions.RemoveEmptyEntries);
 
                 string lineKey = split[0];
-                string lineValue = TrimTextDelimiters(split[1]);
+                string lineValue = split[1].Replace("\\n", "\n").Replace("\\r", "\r");
 
                 if (modCustomLines.TryGetValue(lineKey, out string origValue))
                 {
@@ -183,11 +172,6 @@
 
             originalCustomLines[modAssemblyName][lineId] = text;
             customLines[lineId] = text;
-        }
-
-        internal static string TrimTextDelimiters(string value)
-        {
-            return value.Trim(TextDelimiterOpen, TextDelimiterClose);
         }
     }
 }
