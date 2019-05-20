@@ -120,6 +120,12 @@
 
                 string key = split[0];
 
+                if (split.Length < 2)
+                {
+                    Logger.Log($"Line '{lineIndex}' in language override file for '{modName}' was incorrectly formatted.", LogLevel.Warn);
+                    continue; // Not correctly formatted
+                }
+
                 if (!originalLines.ContainsKey(key))
                 {
                     Logger.Log($"Key '{key}' on line '{lineIndex}' in language override file for '{modName}' did not match an original key.", LogLevel.Warn);
@@ -150,6 +156,11 @@
             foreach (string line in lines)
             {
                 string[] split = line.Split(new[] { KeyValueSeparator }, 2, StringSplitOptions.RemoveEmptyEntries);
+
+                if (split.Length < 2)
+                {
+                    return true; // Not correctly formatted
+                }
 
                 string lineKey = split[0];
                 string lineValue = split[1].Replace("\\n", "\n").Replace("\\r", "\r");
