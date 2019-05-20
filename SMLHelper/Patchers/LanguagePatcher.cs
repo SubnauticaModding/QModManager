@@ -45,8 +45,6 @@
 
         private static void WriteOriginalCustomLines()
         {
-            Logger.Log("Writing original language files.", LogLevel.Debug);
-
             if (!Directory.Exists(LanguageOrigDir))
                 Directory.CreateDirectory(LanguageOrigDir);
 
@@ -77,7 +75,7 @@
                 text.AppendLine($"{langLineKey}{KeyValueSeparator}{value}");
             }
 
-            File.WriteAllText($"{LanguageOrigDir}/{modKey}.txt", text.ToString(), Encoding.UTF8);
+            File.WriteAllText(Path.Combine(LanguageOrigDir, $"{modKey}.txt"), text.ToString(), Encoding.UTF8);
         }
 
         private static void ReadOverrideCustomLines()
@@ -85,12 +83,12 @@
             if (!Directory.Exists(LanguageOverDir))
                 Directory.CreateDirectory(LanguageOverDir);
 
-            string[] files = Directory.GetFiles(LanguageOverDir, "*.txt");
+            string[] files = Directory.GetFiles(LanguageOverDir);
+
+            Logger.Log($"{files.Length} language override files found.", LogLevel.Debug);
 
             if (files.Length == 0)
                 return;
-
-            Logger.Log($"{files.Length} language override files found.", LogLevel.Debug);
 
             foreach (string file in files)
             {
