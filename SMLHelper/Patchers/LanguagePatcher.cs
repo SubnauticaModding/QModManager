@@ -101,29 +101,36 @@
 
                 Dictionary<string, string> originalLines = originalCustomLines[modName];
 
-                int overridesApplied = 0;
-                for (int lineIndex = 0; lineIndex < languageLines.Length; lineIndex++)
-                {
-                    string line = languageLines[lineIndex];
-                    if (string.IsNullOrEmpty(line))
-                        continue; // Skip empty lines
-
-                    string[] split = line.Split(new[] { KeyValueSeparator }, 2, StringSplitOptions.RemoveEmptyEntries);
-
-                    string key = split[0];
-
-                    if (!originalLines.ContainsKey(key))
-                    {
-                        Logger.Log($"Key '{key}' on line '{lineIndex}' in language override file for '{modName}' did not match an original key.", LogLevel.Warn);
-                        continue; // Skip keys we don't recognize.
-                    }
-
-                    customLines[key] = split[1].Replace("\\n", "\n").Replace("\\r", "\r");
-                    overridesApplied++;
-                }
+                int overridesApplied = ExtractOverrideLines(modName, languageLines, originalLines);
 
                 Logger.Log($"Applied {overridesApplied} language overrides to mod {modName}.", LogLevel.Info);
             }
+        }
+
+        internal static int ExtractOverrideLines(string modName, string[] languageLines, Dictionary<string, string> originalLines)
+        {
+            int overridesApplied = 0;
+            for (int lineIndex = 0; lineIndex < languageLines.Length; lineIndex++)
+            {
+                string line = languageLines[lineIndex];
+                if (string.IsNullOrEmpty(line))
+                    continue; // Skip empty lines
+
+                string[] split = line.Split(new[] { KeyValueSeparator }, 2, StringSplitOptions.RemoveEmptyEntries);
+
+                string key = split[0];
+
+                if (!originalLines.ContainsKey(key))
+                {
+                    Logger.Log($"Key '{key}' on line '{lineIndex}' in language override file for '{modName}' did not match an original key.", LogLevel.Warn);
+                    continue; // Skip keys we don't recognize.
+                }
+
+                customLines[key] = split[1].Replace("\\n", "\n").Replace("\\r", "\r");
+                overridesApplied++;
+            }
+
+            return overridesApplied;
         }
 
         private static bool FileNeedsRewrite(string modKey)
@@ -170,6 +177,11 @@
 
             originalCustomLines[modAssemblyName][lineId] = text;
             customLines[lineId] = text;
+        }
+
+        internal static string GetCustomLine(string key)
+        {
+            return customLines[key];
         }
     }
 }
