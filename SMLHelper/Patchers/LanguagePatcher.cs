@@ -13,6 +13,7 @@
         private static readonly string LanguageOrigDir = Path.Combine(LanguageDir, "Originals");
         private static readonly string LanguageOverDir = Path.Combine(LanguageDir, "Overrides");
         private const char KeyValueSeparator = ':';
+        private const int SplitCount = 2;
 
         private static readonly Dictionary<string, Dictionary<string, string>> originalCustomLines = new Dictionary<string, Dictionary<string, string>>();
         private static readonly Dictionary<string, string> customLines = new Dictionary<string, string>();
@@ -116,11 +117,11 @@
                 if (string.IsNullOrEmpty(line))
                     continue; // Skip empty lines
 
-                string[] split = line.Split(new[] { KeyValueSeparator }, 2, StringSplitOptions.RemoveEmptyEntries);
+                string[] split = line.Split(new[] { KeyValueSeparator }, SplitCount, StringSplitOptions.RemoveEmptyEntries);
 
                 string key = split[0];
 
-                if (split.Length != 2)
+                if (split.Length != SplitCount)
                 {
                     Logger.Log($"Line '{lineIndex}' in language override file for '{modName}' was incorrectly formatted.", LogLevel.Warn);
                     continue; // Not correctly formatted
@@ -155,9 +156,9 @@
             // Confirm if the file actually needs to be updated
             foreach (string line in lines)
             {
-                string[] split = line.Split(new[] { KeyValueSeparator }, 2, StringSplitOptions.RemoveEmptyEntries);
+                string[] split = line.Split(new[] { KeyValueSeparator }, SplitCount, StringSplitOptions.RemoveEmptyEntries);
 
-                if (split.Length != 2)
+                if (split.Length != SplitCount)
                 {
                     return true; // Not correctly formatted
                 }
