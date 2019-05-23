@@ -10,8 +10,8 @@
     internal class LanguagePatcher
     {
         private static readonly string LanguageDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Language");
-        private static readonly string LanguageOrigDir = Path.Combine(LanguageDir, "/Originals");
-        private static readonly string LanguageOverDir = Path.Combine(LanguageDir, "/Overrides");
+        private static readonly string LanguageOrigDir = Path.Combine(LanguageDir, "Originals");
+        private static readonly string LanguageOverDir = Path.Combine(LanguageDir, "Overrides");
         private const char KeyValueSeparator = ':';
 
         private static readonly Dictionary<string, Dictionary<string, string>> originalCustomLines = new Dictionary<string, Dictionary<string, string>>();
