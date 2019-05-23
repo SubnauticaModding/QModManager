@@ -120,7 +120,7 @@
 
                 string key = split[0];
 
-                if (split.Length < 2)
+                if (split.Length != 2)
                 {
                     Logger.Log($"Line '{lineIndex}' in language override file for '{modName}' was incorrectly formatted.", LogLevel.Warn);
                     continue; // Not correctly formatted
@@ -157,7 +157,7 @@
             {
                 string[] split = line.Split(new[] { KeyValueSeparator }, 2, StringSplitOptions.RemoveEmptyEntries);
 
-                if (split.Length < 2)
+                if (split.Length != 2)
                 {
                     return true; // Not correctly formatted
                 }
