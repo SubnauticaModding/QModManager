@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.V2.Utility
+﻿namespace QModManager.API.SMLHelper.Utility
 {
     using System;
     using UnityEngine;
@@ -127,7 +127,7 @@
                     }
                     catch (Exception)
                     {
-                        V2.Logger.Log($"Failed to parse {s} as a valid KeyCode!", LogLevel.Error);
+                        API.SMLHelper.Logger.Log($"Failed to parse {s} as a valid KeyCode!", LogLevel.Error);
                         return 0;
                     }
             }

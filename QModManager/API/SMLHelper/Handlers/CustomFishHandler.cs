@@ -1,8 +1,8 @@
-﻿namespace SMLHelper.V2.Handlers
+﻿namespace QModManager.API.SMLHelper.Handlers
 {
     using System;
     using System.Collections.Generic;
-    using SMLHelper.V2.Assets;
+    using QModManager.API.SMLHelper.Assets;
     using System.IO;
 
     /// <summary>

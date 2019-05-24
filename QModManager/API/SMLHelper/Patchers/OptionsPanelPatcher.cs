@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.V2.Patchers
+﻿namespace QModManager.API.SMLHelper.Patchers
 {
     using Harmony;
     using Options;
@@ -43,7 +43,7 @@
 
             // Maybe this could be split into its own file to handle smlhelper options, or maybe it could be removed alltogether
             optionsPanel.AddHeading(modsTab, "SMLHelper");
-            optionsPanel.AddToggleOption(modsTab, "Enable debug logs", V2.Logger.EnableDebugging, V2.Logger.SetDebugging);
+            optionsPanel.AddToggleOption(modsTab, "Enable debug logs", API.SMLHelper.Logger.EnableDebugging, API.SMLHelper.Logger.SetDebugging);
             optionsPanel.AddChoiceOption(modsTab, "Extra item info", new string[]
             {
                 "Mod name (default)",
@@ -88,7 +88,7 @@
                                     modOption.OnKeybindChange(keybind.Id, key)));
                             break;
                         default:
-                            V2.Logger.Log($"Invalid ModOptionType detected for option: {option.Id} ({option.Type.ToString()})", LogLevel.Error);
+                            API.SMLHelper.Logger.Log($"Invalid ModOptionType detected for option: {option.Id} ({option.Type.ToString()})", LogLevel.Error);
                             break;
                     }
                 }

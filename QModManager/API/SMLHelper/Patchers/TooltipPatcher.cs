@@ -1,8 +1,8 @@
-﻿namespace SMLHelper.V2.Patchers
+﻿namespace QModManager.API.SMLHelper.Patchers
 {
     using Harmony;
     using QModManager;
-    using SMLHelper.V2.Handlers;
+    using QModManager.API.SMLHelper.Handlers;
     using System;
     using System.Collections.Generic;
     using System.IO;

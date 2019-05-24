@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.V2.Crafting
+﻿namespace QModManager.API.SMLHelper.Crafting
 {
     using System.Collections.Generic;
     using System.Linq;

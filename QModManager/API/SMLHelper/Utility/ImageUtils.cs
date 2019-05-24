@@ -1,8 +1,8 @@
-﻿namespace SMLHelper.V2.Utility
+﻿namespace QModManager.API.SMLHelper.Utility
 {
     using System.IO;
     using UnityEngine;
-    using Logger = V2.Logger;
+    using Logger = API.SMLHelper.Logger;
 
     public static class ImageUtils
     {

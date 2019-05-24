@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.V2.Patchers
+﻿namespace QModManager.API.SMLHelper.Patchers
 {
     using Crafting;
     using Harmony;

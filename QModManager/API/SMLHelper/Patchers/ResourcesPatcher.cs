@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.V2.Patchers
+﻿namespace QModManager.API.SMLHelper.Patchers
 {
     using Assets;
     using Harmony;
@@ -76,7 +76,7 @@
                 }
             }
 
-            V2.Logger.Log("ResourcesPatcher is done.", LogLevel.Debug);
+            API.SMLHelper.Logger.Log("ResourcesPatcher is done.", LogLevel.Debug);
         }
     }
 }

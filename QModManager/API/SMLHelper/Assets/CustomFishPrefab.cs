@@ -1,8 +1,8 @@
-﻿namespace SMLHelper.V2.Assets
+﻿namespace QModManager.API.SMLHelper.Assets
 {
     using UnityEngine;
-    using SMLHelper.V2.Utility;
-    using Logger = SMLHelper.V2.Logger;
+    using QModManager.API.SMLHelper.Utility;
+    using Logger = QModManager.API.SMLHelper.Logger;
 
     /// <summary>
     /// Class used by CustomFish for constructing a prefab based on the values provided by the user.

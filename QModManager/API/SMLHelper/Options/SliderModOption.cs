@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.V2.Options
+﻿namespace QModManager.API.SMLHelper.Options
 {
     using System;
     using UnityEngine;

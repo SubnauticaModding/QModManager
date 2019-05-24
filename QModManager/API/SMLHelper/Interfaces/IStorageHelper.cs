@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.V2.Utility
+﻿namespace QModManager.API.SMLHelper.Utility
 {
     using System.Collections.Generic;
 

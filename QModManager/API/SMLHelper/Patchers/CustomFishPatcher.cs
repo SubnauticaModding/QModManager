@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.V2.Patchers
+﻿namespace QModManager.API.SMLHelper.Patchers
 {
     using System;
     using System.Collections.Generic;
@@ -6,8 +6,8 @@
     using Harmony;
     using UnityEngine;
     using Random = UnityEngine.Random;
-    using SMLHelper.V2.Handlers;
-    using Logger = SMLHelper.V2.Logger;
+    using QModManager.API.SMLHelper.Handlers;
+    using Logger = QModManager.API.SMLHelper.Logger;
 
     internal class CustomFishPatcher
     {

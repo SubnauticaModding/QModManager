@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.V2.Interfaces
+﻿namespace QModManager.API.SMLHelper.Interfaces
 {
     public interface ITechTypeHandler
     {

@@ -1,10 +1,10 @@
-﻿namespace SMLHelper.V2.Handlers
+﻿namespace QModManager.API.SMLHelper.Handlers
 {
     using System.Collections.Generic;
     using System.Reflection;
     using Assets;
     using Patchers;
-    using SMLHelper.V2.Interfaces;
+    using QModManager.API.SMLHelper.Interfaces;
     using UnityEngine;
     using Utility;
 

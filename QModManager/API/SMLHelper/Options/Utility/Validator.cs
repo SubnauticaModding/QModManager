@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.V2.Options.Utility
+﻿namespace QModManager.API.SMLHelper.Options.Utility
 {
     using System.Text.RegularExpressions;
 

@@ -1,7 +1,7 @@
-﻿namespace SMLHelper.V2.Patchers
+﻿namespace QModManager.API.SMLHelper.Patchers
 {
     using Harmony;
-    using SMLHelper.V2.Utility;
+    using QModManager.API.SMLHelper.Utility;
     using System;
 
     internal static class ItemsContainerPatcher

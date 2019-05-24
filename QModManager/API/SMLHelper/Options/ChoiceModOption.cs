@@ -1,6 +1,6 @@
-﻿namespace SMLHelper.V2.Options
+﻿namespace QModManager.API.SMLHelper.Options
 {
-    using SMLHelper.V2.Options.Utility;
+    using QModManager.API.SMLHelper.Options.Utility;
     using System;
     using System.Linq;
 

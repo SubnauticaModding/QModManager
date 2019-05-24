@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.V2
+﻿namespace QModManager.API.SMLHelper
 {
     using System;
     using System.IO;

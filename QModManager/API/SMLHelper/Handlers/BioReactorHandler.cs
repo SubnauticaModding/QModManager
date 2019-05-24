@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.V2.Handlers
+﻿namespace QModManager.API.SMLHelper.Handlers
 {
     using Patchers;
     using Interfaces;

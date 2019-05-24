@@ -1,10 +1,10 @@
-﻿namespace SMLHelper.V2.Patchers
+﻿namespace QModManager.API.SMLHelper.Patchers
 {
     using Assets;
     using Harmony;
     using UnityEngine;
     using UWE;
-    using Logger = V2.Logger;
+    using Logger = API.SMLHelper.Logger;
 
     internal class PrefabDatabasePatcher
     {

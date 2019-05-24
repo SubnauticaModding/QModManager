@@ -1,7 +1,7 @@
-﻿namespace SMLHelper.V2.Handlers
+﻿namespace QModManager.API.SMLHelper.Handlers
 {
-    using SMLHelper.V2.Interfaces;
-    using SMLHelper.V2.Patchers;
+    using QModManager.API.SMLHelper.Interfaces;
+    using QModManager.API.SMLHelper.Patchers;
     using System;
 
     /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.V2
+﻿namespace QModManager.API.SMLHelper
 {
     using System;
     using System.Reflection;
@@ -19,29 +19,12 @@
 
             try
             {
-                InitializeOld(); // Some patch methods add values/call methods to V2 patchers, and so they need to called first.
                 Initialize();
             }
             catch (Exception e)
             {
                 Logger.Error($"Caught exception while trying to initialize SMLHelper{Environment.NewLine}{e}");
             }
-        }
-
-        internal static void InitializeOld()
-        {
-            // Some classes only have methods, no lists/dictionaries, and so no need to patch them
-            // Some other classes, like PrefabDatabasePatcher, get data from other classes.
-#pragma warning disable CS0618 // Type or member is obsolete
-            SMLHelper.CustomPrefabHandler.Patch();
-            SMLHelper.CustomSpriteHandler.Patch();
-
-            SMLHelper.Patchers.CraftDataPatcher.Patch();
-            SMLHelper.Patchers.CraftTreePatcher.Patch();
-            SMLHelper.Patchers.DevConsolePatcher.Patch();
-            SMLHelper.Patchers.LanguagePatcher.Patch();
-            SMLHelper.Patchers.KnownTechPatcher.Patch();
-#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         internal static void Initialize()
