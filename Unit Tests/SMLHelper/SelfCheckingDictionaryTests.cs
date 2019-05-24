@@ -1,4 +1,4 @@
-﻿namespace SMLHelper.Tests
+﻿namespace QModManager.Tests.SMLHelper
 {
     using NUnit.Framework;
     using SMLHelper.V2.Patchers;

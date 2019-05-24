@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace QModManager.Tests
+namespace QModManager.Tests.QModManager
 {
     [TestFixture]
     public class Sorting
