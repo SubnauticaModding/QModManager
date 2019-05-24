@@ -1,8 +1,8 @@
-﻿namespace QModManager.Tests.SMLHelper
-{
-    using NUnit.Framework;
-    using SMLHelper.V2.Patchers;
+﻿using NUnit.Framework;
+using QModManager.API.SMLHelper.Patchers;
 
+namespace QModManager.Tests.SMLHelper
+{
     [TestFixture]
     internal class SelfCheckingDictionaryTests
     {

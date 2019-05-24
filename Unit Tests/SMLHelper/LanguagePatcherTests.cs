@@ -1,10 +1,10 @@
-﻿namespace QModManager.Tests.SMLHelper
-{
-    using NUnit.Framework;
-    using SMLHelper.V2.Patchers;
-    using System;
-    using System.Collections.Generic;
+﻿using NUnit.Framework;
+using QModManager.API.SMLHelper.Patchers;
+using System;
+using System.Collections.Generic;
 
+namespace QModManager.Tests.SMLHelper
+{
     [TestFixture]
     public class LanguagePatcherTests
     {
