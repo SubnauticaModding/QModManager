@@ -138,6 +138,7 @@
     <Compile Include="Utility\ReflectionHelper.cs" />
     <Compile Include="VersionCheck.cs" />
   </ItemGroup>
+  <Import Project="API\SMLHelper\SMLHelper.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
