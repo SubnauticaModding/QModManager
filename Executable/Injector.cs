@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace QModManager
+namespace QModManager.Executable
 {
     internal class Injector
     {
@@ -33,7 +33,7 @@ namespace QModManager
                     Console.WriteLine();
                     Console.WriteLine("Trying to enable Unity sound...");
 
-                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, Executable.game);
+                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, Program.game);
 
                     Console.WriteLine("Unity sound enabled successfully");
                     Environment.Exit(0);
@@ -64,7 +64,7 @@ namespace QModManager
                 Console.WriteLine();
                 Console.WriteLine("Trying to enable Unity sound...");
 
-                AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, Executable.game);
+                AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, Program.game);
 
                 Console.WriteLine("Unity sound enabled successfully");
                 Environment.Exit(0);
@@ -89,7 +89,7 @@ namespace QModManager
                     Console.WriteLine();
                     Console.WriteLine("Trying to disable Unity sound...");
 
-                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, Executable.game);
+                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, Program.game);
 
                     Console.WriteLine("Unity sound disabled successfully");
                     Environment.Exit(0);
@@ -135,7 +135,7 @@ namespace QModManager
                 Console.WriteLine();
                 Console.WriteLine("Trying to disable Unity sound...");
 
-                AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, Executable.game);
+                AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, Program.game);
 
                 Console.WriteLine("Unity sound disabled successfully");
                 Environment.Exit(0);

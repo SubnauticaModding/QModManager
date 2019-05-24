@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace QModManager
+namespace QModManager.Executable
 {
     internal enum Action
     {
@@ -22,7 +22,7 @@ namespace QModManager
         Both = Windows | Mac,
     }
 
-    internal static class Executable
+    internal static class Program
     {
         internal static Action action = Action.RunByUser;
         internal static OS os;
