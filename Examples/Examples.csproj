@@ -52,15 +52,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SMLHelper\SMLHelper.csproj">
-      <Project>{418502dd-372d-4ef9-8021-b262552dfede}</Project>
-      <Name>SMLHelper</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="mod.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QModManager\QModManager.csproj">
+      <Project>{da63f59d-4676-4726-afec-bd9d3682733f}</Project>
+      <Name>QModManager</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

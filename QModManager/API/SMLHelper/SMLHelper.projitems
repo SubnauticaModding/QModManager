@@ -69,7 +69,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Patchers\TechTypePatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Assets\Buildable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Assets\Craftable.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Assets\PdaItem.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Assets\PDAItem.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Assets\Spawnable.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\EnumCacheManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\ExtBannedIdManager.cs" />

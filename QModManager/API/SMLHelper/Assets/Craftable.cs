@@ -6,9 +6,9 @@
     /// <summary>
     /// An item that can be crafted into the game world.
     /// </summary>
-    /// <seealso cref="PdaItem" />
+    /// <seealso cref="PDAItem" />
     /// <seealso cref="Spawnable" />
-    public abstract class Craftable : PdaItem
+    public abstract class Craftable : PDAItem
     {
         /// <summary>
         /// Override with the fabricator that crafts this item.

@@ -5,9 +5,9 @@
     /// <summary>
     /// An item that can be built into the game world.
     /// </summary>
-    /// <seealso cref="PdaItem" />
+    /// <seealso cref="PDAItem" />
     /// <seealso cref="Spawnable"/>
-    public abstract class Buildable : PdaItem
+    public abstract class Buildable : PDAItem
     {
         /// <summary>
         /// Override with the text to be displayed when your hover the cursor over the built item.
