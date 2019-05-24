@@ -30,11 +30,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ISpriteHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ITechTypeHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IStorageHelper.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Legacy\CraftNodeToScrub.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Legacy\CraftScheme.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Legacy\CustomCraftNode.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Legacy\CustomCraftTab.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Legacy\CustomCraftTreeFamily.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Assets\ModPrefab.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Assets\ModSprite.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Crafting\ModCraftTreeFamily.cs" />
@@ -47,15 +42,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\SpriteHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\TechTypeHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Logger.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Legacy\Patchers\CraftDataPatcher.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Legacy\Patchers\CraftTreePatcher.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Legacy\CustomPrefabHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Legacy\CustomSpriteHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Legacy\Patchers\CraftTreeTypePatcher.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Legacy\Patchers\DevConsolePatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Initializer.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Legacy\Patchers\KnownTechPatcher.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Legacy\Patchers\LanguagePatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Options\ChoiceModOption.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Options\KeybindModOption.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Options\ModOptions.cs" />
@@ -69,8 +56,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Patchers\PDAPatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patchers\TooltipPatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\SelfCheckingDictionary.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Legacy\Patchers\TechTypePatcher.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Legacy\Utility.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patchers\BioReactorPatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patchers\CraftDataPatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patchers\CraftTreePatcher.cs" />
