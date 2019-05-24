@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallerExtensions", "Inst
 EndProject
 Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SMLHelper", "QModManager\API\SMLHelper\SMLHelper.shproj", "{6D9CF0D9-A17B-44AE-BB72-2B1EA0E54E1E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examples", "Examples\Examples.csproj", "{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		QModManager\API\SMLHelper\SMLHelper.projitems*{6d9cf0d9-a17b-44ae-bb72-2b1ea0e54e1e}*SharedItemsImports = 13
@@ -71,6 +73,18 @@ Global
 		{92726127-A08F-4843-BF96-4989CE1BF422}.Release|x64.Build.0 = Release|x64
 		{92726127-A08F-4843-BF96-4989CE1BF422}.Release|x86.ActiveCfg = Release|x86
 		{92726127-A08F-4843-BF96-4989CE1BF422}.Release|x86.Build.0 = Release|x86
+		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Debug|x64.Build.0 = Debug|Any CPU
+		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Debug|x86.Build.0 = Debug|Any CPU
+		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Release|x64.ActiveCfg = Release|Any CPU
+		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Release|x64.Build.0 = Release|Any CPU
+		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Release|x86.ActiveCfg = Release|Any CPU
+		{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

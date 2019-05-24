@@ -1,9 +1,9 @@
-﻿using SMLHelper.V2.Handlers;
-using SMLHelper.V2.Options;
-using SMLHelper.V2.Utility;
+﻿using QModManager.API.SMLHelper.Handlers;
+using QModManager.API.SMLHelper.Options;
+using QModManager.API.SMLHelper.Utility;
 using UnityEngine;
 
-namespace SMLHelper.V2.Examples
+namespace QModManager.Examples
 {
     public static class ExampleMod
     {
