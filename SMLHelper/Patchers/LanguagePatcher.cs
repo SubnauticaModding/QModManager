@@ -133,11 +133,27 @@
                     continue; // Skip keys we don't recognize.
                 }
 
-                customLines[key] = split[1].Replace("\\n", "\n").Replace("\\r", "\r");
+                string value = RemoveOptionalDelimiters(split[1]);
+
+                customLines[key] = value.Replace("\\n", "\n").Replace("\\r", "\r");
                 overridesApplied++;
             }
 
             return overridesApplied;
+        }
+
+        private static string RemoveOptionalDelimiters(string value)
+        {
+            const int firstChar = 0;
+            int lastChar = value.Length - 1;
+
+            if (value[firstChar] == '{' && value[lastChar] == '}' &&
+                value[firstChar + 2] != '}' && value[lastChar - 2] != '{')
+            {
+                value = value.Substring(1, lastChar - 1);
+            }
+
+            return value;
         }
 
         private static bool FileNeedsRewrite(string modKey)

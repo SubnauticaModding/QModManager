@@ -60,7 +60,7 @@
 
 
         [Test, Combinatorial]
-        public void ExtractOverrideLines_WhenTextIsValid_MultipleEntries_KeyIsKnown_Overrides(            
+        public void ExtractOverrideLines_WhenTextIsValid_MultipleEntries_KeyIsKnown_Overrides(
             [ValueSource(nameof(CustomValues))] string otherCustomValue,
             [ValueSource(nameof(Keys))] string secondKey)
         {
@@ -80,6 +80,25 @@
             Assert.AreEqual(2, overridesApplied);
             Assert.AreEqual("CustomValue1", LanguagePatcher.GetCustomLine("Key1"));
             Assert.AreEqual(otherCustomValue.Replace("\\n", "\n"), LanguagePatcher.GetCustomLine(secondKey));
+        }
+
+        [Test, Combinatorial]
+        public void ExtractOverrideLines_WhenLegacyDelimitersPresent_Overrides(
+            [ValueSource(nameof(CustomValues))] string customValue)
+        {
+            var originalLines = new Dictionary<string, string>
+            {
+                { "Key", "OriginalValue" }
+            };
+
+            string text = "Key:{" + customValue + "}";
+
+            Console.WriteLine("TestText");
+            Console.WriteLine(text);
+            int overridesApplied = LanguagePatcher.ExtractOverrideLines("Test1", new[] { text }, originalLines);
+
+            Assert.AreEqual(1, overridesApplied);
+            Assert.AreEqual(customValue.Replace("\\n", "\n"), LanguagePatcher.GetCustomLine("Key"));
         }
     }
 }
