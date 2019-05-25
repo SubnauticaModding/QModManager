@@ -5,13 +5,9 @@
 
     public class BioReactorHandler : IBioReactorHandler
     {
-        // Singleton
         public static IBioReactorHandler Main { get; } = new BioReactorHandler();
 
-        private BioReactorHandler()
-        {
-            // Hides constructor
-        }
+        private BioReactorHandler() { }
 
         /// <summary>
         /// <para>Allows you to specify the quantity of energy that a TechType will produce with bio reactors.</para>

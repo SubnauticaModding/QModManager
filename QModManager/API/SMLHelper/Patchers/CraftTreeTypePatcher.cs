@@ -2,6 +2,7 @@
 {
     using Crafting;
     using Harmony;
+    using QModManager.Utility;
     using System;
     using System.Collections.Generic;
     using Utility;
@@ -40,7 +41,7 @@
 
             cacheManager.SaveCache();
 
-            Logger.Log($"Successfully added CraftTree Type: '{name}' to Index: '{cache.Index}'", LogLevel.Debug);
+            Logger.Debug($"Successfully added CraftTree Type: '{name}' to Index: '{cache.Index}'");
 
             var customTreeRoot = new ModCraftTreeRoot(craftTreeType, name);
 
@@ -77,7 +78,7 @@
                 bannedIndices.Add(realEnumValue);
             }
 
-            Logger.Log($"Finished known CraftTreeType exclusion. {bannedIndices.Count} IDs were added in ban list.", LogLevel.Info);
+            Logger.Info($"Finished known CraftTreeType exclusion. {bannedIndices.Count} IDs were added in ban list.");
 
             return bannedIndices;
         }
@@ -98,7 +99,7 @@
             harmony.Patch(AccessTools.Method(typeof(CraftTree.Type), "ToString", new Type[] { }),
                 prefix: new HarmonyMethod(AccessTools.Method(typeof(CraftTreeTypePatcher), "Prefix_ToString")));
 
-            Logger.Log("CraftTreeTypePatcher is done.", LogLevel.Debug);
+            Logger.Debug("CraftTreeTypePatcher is done.");
         }
 
         internal static void Postfix_GetValues(Type enumType, ref Array __result)

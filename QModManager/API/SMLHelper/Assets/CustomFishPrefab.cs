@@ -1,8 +1,8 @@
 ﻿namespace QModManager.API.SMLHelper.Assets
 {
-    using UnityEngine;
     using QModManager.API.SMLHelper.Utility;
-    using Logger = QModManager.API.SMLHelper.Logger;
+    using QModManager.Utility;
+    using UnityEngine;
 
     /// <summary>
     /// Class used by CustomFish for constructing a prefab based on the values provided by the user.
@@ -36,13 +36,11 @@
         /// </summary>
         public float swimInterval;
 
-        public CustomFishPrefab(string classId, string prefabFileName, TechType techType = TechType.None) : base(classId, prefabFileName, techType)
-        {
-        }
+        public CustomFishPrefab(string classId, string prefabFileName, TechType techType = TechType.None) : base(classId, prefabFileName, techType) { }
 
         public override GameObject GetGameObject()
         {
-            Logger.Log($"[FishFramework] Initializing fish: {ClassID}", LogLevel.Debug);
+            Logger.Debug($"[FishFramework] Initializing fish: {ClassID}");
             GameObject mainObj = modelPrefab;
 
             Renderer[] renderers = mainObj.GetComponentsInChildren<Renderer>();

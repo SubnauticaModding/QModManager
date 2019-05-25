@@ -13,10 +13,10 @@
     /// </summary>
     public class TechTypeHandler : ITechTypeHandler
     {
-        internal static readonly Dictionary<TechType, Assembly> TechTypesAddedBy = new Dictionary<TechType, Assembly>();
-
         internal static readonly TechTypeHandler Singleton = new TechTypeHandler();
         public static ITechTypeHandler Main => Singleton;
+
+        internal static readonly Dictionary<TechType, Assembly> TechTypesAddedBy = new Dictionary<TechType, Assembly>();
 
         private TechTypeHandler()
         {

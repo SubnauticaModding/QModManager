@@ -1,5 +1,6 @@
 ﻿namespace QModManager.API.SMLHelper.Utility
 {
+    using QModManager.Utility;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -33,7 +34,6 @@
 
             foreach (IList<int> otherBannedIds in combineWith)
                 BannedIdDictionary[enumName].AddRange(otherBannedIds);
-
 
             return GetBannedIdsFor(enumName);
         }
@@ -110,7 +110,7 @@
 
             foreach (string bannedIdType in BannedIdDictionary.Keys)
             {
-                Logger.Log($"{BannedIdDictionary[bannedIdType].Count} retricted IDs were registered for {bannedIdType}.", LogLevel.Info);
+                Logger.Info($"{BannedIdDictionary[bannedIdType].Count} retricted IDs were registered for {bannedIdType}.");
             }
 
             IsInitialized = true;
@@ -121,22 +121,21 @@
             try
             {
                 Directory.CreateDirectory(BannedIdDirectory);
-                Logger.Log("RetrictedIDs folder was not found. Folder created.", LogLevel.Debug);
+                Logger.Debug("RetrictedIDs folder was not found. Folder created.");
             }
             catch (Exception ex)
             {
-                Logger.Log($"RetrictedIDs folder was not found. Failed to create folder.{Environment.NewLine}" +
-                           $"        Exception: {ex}", LogLevel.Error);
-
+                Logger.Error($"RetrictedIDs folder was not found. Failed to create folder.{Environment.NewLine}");
+                Logger.Exception(ex);
             }
         }
 
         private static void LogBadEntry(string filePath, string line)
         {
-            Logger.Log($"Badly formatted entry for Retricted IDs{Environment.NewLine}" +
-                       $"        File: '{filePath}{Environment.NewLine}'" +
-                       $"        Line: '{line}'{Environment.NewLine}" +
-                       $"        This entry has been skipped.", LogLevel.Warn);
+            Logger.Warn($"Badly formatted entry for Retricted IDs\n" +
+                       $"        File: '{filePath}\n'" +
+                       $"        Line: '{line}'\n" +
+                       $"        This entry has been skipped.");
         }
 
     }

@@ -1,6 +1,7 @@
 ﻿namespace QModManager.API.SMLHelper.Patchers
 {
     using Harmony;
+    using QModManager.Utility;
     using System;
     using System.Collections.Generic;
     using System.Text;
@@ -57,13 +58,13 @@
                 postfix: new HarmonyMethod(AccessTools.Method(typeof(ItemActionPatcher), "ItemActions_Postfix")));
 
             if (MiddleClickActions.Count > 0 && LeftClickActions.Count > 0)
-                Logger.Log($"Added {LeftClickActions.Count} left click actions and {MiddleClickActions.Count} middle click actions.");
+                Logger.Info($"Added {LeftClickActions.Count} left click actions and {MiddleClickActions.Count} middle click actions.");
             else if (LeftClickActions.Count > 0)
-                Logger.Log($"Added {LeftClickActions.Count} left click actions.");
+                Logger.Info($"Added {LeftClickActions.Count} left click actions.");
             else if (MiddleClickActions.Count > 0)
-                Logger.Log($"Added {MiddleClickActions.Count} middle click actions.");
+                Logger.Info($"Added {MiddleClickActions.Count} middle click actions.");
 
-            Logger.Log("ItemActionPatcher is done.", LogLevel.Debug);
+            Logger.Debug("ItemActionPatcher is done.");
         }
 
         internal static bool OnPointerClick_Prefix(InventoryItem item, int button)

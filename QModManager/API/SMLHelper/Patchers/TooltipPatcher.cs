@@ -3,6 +3,7 @@
     using Harmony;
     using QModManager;
     using QModManager.API.SMLHelper.Handlers;
+    using QModManager.Utility;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -32,7 +33,7 @@
             harmony.Patch(AccessTools.Method(typeof(TooltipFactory), "Recipe"),
                 transpiler: new HarmonyMethod(AccessTools.Method(typeof(TooltipPatcher), "Transpiler")));
 
-            Logger.Log("TooltipPatcher is done.", LogLevel.Debug);
+            Logger.Debug("TooltipPatcher is done.");
         }
 
         internal static void CustomTooltip(StringBuilder sb, TechType techType)
@@ -215,7 +216,7 @@
             if (method.Name.Contains("InventoryItem")) methodInfo = () => CustomTooltip(null, null);
             else methodInfo = () => CustomTooltip(null, TechType.None);
 
-            // Remove all labels at the target op code
+            // Remove labels at the target op code
             List<Label> labelsToMove = codes[entryIndex].labels.ToArray().ToList();
             codes[entryIndex].labels.Clear();
             

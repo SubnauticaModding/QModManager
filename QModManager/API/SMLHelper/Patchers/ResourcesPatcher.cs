@@ -4,6 +4,7 @@
     using Harmony;
     using System.Reflection;
     using UnityEngine;
+    using Logger = QModManager.Utility.Logger;
 
     internal static class ResourcesPatcher
     {
@@ -76,7 +77,7 @@
                 }
             }
 
-            API.SMLHelper.Logger.Log("ResourcesPatcher is done.", LogLevel.Debug);
+            Logger.Debug("ResourcesPatcher is done.");
         }
     }
 }

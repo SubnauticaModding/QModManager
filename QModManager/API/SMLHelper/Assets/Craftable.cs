@@ -1,7 +1,8 @@
 ﻿namespace QModManager.API.SMLHelper.Assets
 {
-    using System;
     using Handlers;
+    using QModManager.Utility;
+    using System;
 
     /// <summary>
     /// An item that can be crafted into the game world.
@@ -37,7 +38,7 @@
         {
             if (FabricatorType == CraftTree.Type.None)
             {
-                Logger.Log($"FabricatorType property for Craftable instance of {this.ClassID} must have a value greater than CraftTree.Type.None.", LogLevel.Error);
+                Logger.Error($"FabricatorType property for Craftable instance of {this.ClassID} must have a value greater than CraftTree.Type.None.");
                 throw new Exception($"Error patching Craftable: {this.ClassID}");
             }
 

@@ -11,14 +11,10 @@
     /// </summary>
     public class KnownTechHandler : IKnownTechHandler
     {
-        private static readonly KnownTechHandler singleton = new KnownTechHandler();
+        private static readonly KnownTechHandler Singleton = new KnownTechHandler();
+        public static IKnownTechHandler Main => Singleton;
 
-        public static IKnownTechHandler Main => singleton;
-
-        private KnownTechHandler()
-        {
-            // Hides constructor
-        }
+        private KnownTechHandler() { }
 
         /// <summary>
         /// Allows you to unlock a TechType on game start.
@@ -72,7 +68,7 @@
         /// <param name="UnlockSprite">The sprite that shows up when you unlock the blueprint.</param>
         public static void SetAnalysisTechEntry(TechType techTypeToBeAnalysed, IEnumerable<TechType> techTypesToUnlock, string UnlockMessage = "NotificationBlueprintUnlocked", FMODAsset UnlockSound = null, UnityEngine.Sprite UnlockSprite = null)
         {
-            singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, UnlockMessage, UnlockSound, UnlockSprite);
+            Singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, UnlockMessage, UnlockSound, UnlockSprite);
         }
 
         /// <summary>
@@ -84,7 +80,7 @@
         /// <param name="techTypesToUnlock">The TechTypes that will be unlocked when "techTypeToSet" is unlocked.</param>
         void IKnownTechHandler.SetAnalysisTechEntry(TechType techTypeToBeAnalysed, IEnumerable<TechType> techTypesToUnlock)
         {
-            singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock);
+            Singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock);
         }
 
         /// <summary>
@@ -97,7 +93,7 @@
         /// <param name="UnlockMessage">The message that shows up on the right when the blueprint is unlocked. </param>
         void IKnownTechHandler.SetAnalysisTechEntry(TechType techTypeToBeAnalysed, IEnumerable<TechType> techTypesToUnlock, string UnlockMessage)
         {
-            singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, UnlockMessage);
+            Singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, UnlockMessage);
         }
 
         /// <summary>
@@ -110,7 +106,7 @@
         /// <param name="UnlockSound">The sound that plays when you unlock the blueprint.</param>
         void IKnownTechHandler.SetAnalysisTechEntry(TechType techTypeToBeAnalysed, IEnumerable<TechType> techTypesToUnlock, FMODAsset UnlockSound)
         {
-            singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, "NotificationBlueprintUnlocked", UnlockSound);
+            Singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, "NotificationBlueprintUnlocked", UnlockSound);
         }
 
         /// <summary>
@@ -123,7 +119,7 @@
         /// <param name="UnlockSprite">The sprite that shows up when you unlock the blueprint.</param>
         void IKnownTechHandler.SetAnalysisTechEntry(TechType techTypeToBeAnalysed, IEnumerable<TechType> techTypesToUnlock, Sprite UnlockSprite)
         {
-            singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, "NotificationBlueprintUnlocked", null, UnlockSprite);
+            Singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, "NotificationBlueprintUnlocked", null, UnlockSprite);
         }
 
         /// <summary>
@@ -137,7 +133,7 @@
         /// <param name="UnlockSound">The sound that plays when you unlock the blueprint.</param>
         void IKnownTechHandler.SetAnalysisTechEntry(TechType techTypeToBeAnalysed, IEnumerable<TechType> techTypesToUnlock, string UnlockMessage, FMODAsset UnlockSound)
         {
-            singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, UnlockMessage, UnlockSound, null);
+            Singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, UnlockMessage, UnlockSound, null);
         }
 
         /// <summary>
@@ -151,7 +147,7 @@
         /// <param name="UnlockSprite">The sprite that shows up when you unlock the blueprint.</param>
         void IKnownTechHandler.SetAnalysisTechEntry(TechType techTypeToBeAnalysed, IEnumerable<TechType> techTypesToUnlock, string UnlockMessage, Sprite UnlockSprite)
         {
-            singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, UnlockMessage, null, UnlockSprite);
+            Singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, UnlockMessage, null, UnlockSprite);
         }
 
         /// <summary>
@@ -165,7 +161,7 @@
         /// <param name="UnlockSprite">The sprite that shows up when you unlock the blueprint.</param>
         void IKnownTechHandler.SetAnalysisTechEntry(TechType techTypeToBeAnalysed, IEnumerable<TechType> techTypesToUnlock, FMODAsset UnlockSound, Sprite UnlockSprite)
         {
-            singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, "NotificationBlueprintUnlocked", UnlockSound, UnlockSprite);
+            Singleton.AddAnalysisTech(techTypeToBeAnalysed, techTypesToUnlock, "NotificationBlueprintUnlocked", UnlockSound, UnlockSprite);
         }
     }
 }

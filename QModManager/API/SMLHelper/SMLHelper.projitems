@@ -42,7 +42,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\PrefabHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\SpriteHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\TechTypeHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Logger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Initializer.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Options\ChoiceModOption.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Options\KeybindModOption.cs" />

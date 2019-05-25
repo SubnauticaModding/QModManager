@@ -93,10 +93,7 @@
         /// </summary>
         public readonly List<ModCraftTreeNode> ChildNodes = new List<ModCraftTreeNode>();
 
-        protected ModCraftTreeLinkingNode(string name, TreeAction action, TechType techType)
-            : base(name, action, techType)
-        {
-        }
+        protected ModCraftTreeLinkingNode(string name, TreeAction action, TechType techType) : base(name, action, techType) { }
 
         /// <summary>
         /// Creates a new tab node for the crafting tree and links it to the calling node.

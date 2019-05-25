@@ -14,10 +14,7 @@
 
         public static IStorageHelper Main => Singleton;
 
-        private ItemStorageHelper()
-        {
-            // Hides contructor
-        }
+        private ItemStorageHelper() { }
 
         #region Common Item Sizes
 

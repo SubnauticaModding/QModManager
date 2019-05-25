@@ -2,7 +2,7 @@
 {
     using System.IO;
     using UnityEngine;
-    using Logger = API.SMLHelper.Logger;
+    using Logger = QModManager.Utility.Logger;
 
     public static class ImageUtils
     {
@@ -31,12 +31,12 @@
                 }
                 else
                 {
-                    Logger.Log("Error on LoadTextureFromFile call. Texture cannot be loaded: " + filePathToImage, LogLevel.Error);
+                    Logger.Error("Error on LoadTextureFromFile call. Texture cannot be loaded: " + filePathToImage);
                 }
             }
             else
             {
-                Logger.Log("Error on LoadTextureFromFile call. File not found at " + filePathToImage, LogLevel.Error);
+                Logger.Error("Error on LoadTextureFromFile call. File not found at " + filePathToImage);
             }
 
             return null;

@@ -5,7 +5,7 @@
     using System.Collections.Generic;
     using UnityEngine;
     using UnityEngine.Events;
-    using UnityEngine.UI;
+    using Logger = QModManager.Utility.Logger;
 
     internal static class OptionsPanelPatcher
     {
@@ -15,6 +15,8 @@
         {
             harmony.Patch(AccessTools.Method(typeof(uGUI_OptionsPanel), "AddTabs"),
                 postfix: new HarmonyMethod(AccessTools.Method(typeof(OptionsPanelPatcher), "AddTabs_Postfix")));
+
+            Logger.Debug("OptionsPanelPatcher is done.");
         }
 
         internal static void AddTabs_Postfix(uGUI_OptionsPanel __instance)
@@ -68,7 +70,7 @@
                                     modOption.OnKeybindChange(keybind.Id, key)));
                             break;
                         default:
-                            API.SMLHelper.Logger.Log($"Invalid ModOptionType detected for option: {option.Id} ({option.Type.ToString()})", LogLevel.Error);
+                            Logger.Error($"Invalid ModOptionType detected for option: {option.Id} ({option.Type.ToString()})");
                             break;
                     }
                 }

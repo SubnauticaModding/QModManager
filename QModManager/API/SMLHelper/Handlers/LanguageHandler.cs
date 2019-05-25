@@ -8,10 +8,7 @@
     {
         public static ILanguageHandler Main { get; } = new LanguageHandler();
 
-        private LanguageHandler()
-        {
-            // Hides contructor
-        }
+        private LanguageHandler() { }
 
         #region Static Methods
 

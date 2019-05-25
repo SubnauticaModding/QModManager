@@ -12,10 +12,7 @@
     {
         public static ISpriteHandler Main { get; } = new SpriteHandler();
 
-        private SpriteHandler()
-        {
-            // Hide constructor
-        }
+        private SpriteHandler() { }
 
         #region Static Methods
 

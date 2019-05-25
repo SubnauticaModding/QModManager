@@ -35,7 +35,7 @@
         public bool UnlockedAtStart => this.RequiredForUnlock == TechType.None;
 
         /// <summary>
-        /// Initializes a new <see cref="PDAItem"/>, the basic class for any item that appears among your PDA blueprints.
+        /// Initializes a new <see cref="PDAItem"/>, the basic class for any item that appears among your PDA blueprints. <para/>
         /// DO NOT USE THIS CLASS DIRECTLY! Use <seealso cref="Craftable"/> or <see cref="Buildable"/> instead.
         /// </summary>
         /// <param name="classId">The main internal identifier for this item. Your item's <see cref="TechType" /> will be created using this name.</param>

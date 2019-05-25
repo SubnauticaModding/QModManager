@@ -11,10 +11,7 @@
     {
         public static IOptionsPanelHandler Main { get; } = new OptionsPanelHandler();
 
-        private OptionsPanelHandler()
-        {
-            // Hide constructor
-        }
+        private OptionsPanelHandler() { }
 
         /// <summary>
         /// Registers your mod options to the in-game menu.

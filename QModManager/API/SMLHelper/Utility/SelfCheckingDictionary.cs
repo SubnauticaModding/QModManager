@@ -1,5 +1,6 @@
 ﻿namespace QModManager.API.SMLHelper.Patchers
 {
+    using QModManager.Utility;
     using System;
     using System.Collections;
     using System.Collections.Generic;

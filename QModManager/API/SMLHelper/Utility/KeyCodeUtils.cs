@@ -2,6 +2,7 @@
 {
     using System;
     using UnityEngine;
+    using Logger = QModManager.Utility.Logger;
 
     public static class KeyCodeUtils
     {
@@ -127,7 +128,7 @@
                     }
                     catch (Exception)
                     {
-                        API.SMLHelper.Logger.Log($"Failed to parse {s} as a valid KeyCode!", LogLevel.Error);
+                        Logger.Error($"Failed to parse {s} as a valid KeyCode!");
                         return 0;
                     }
             }

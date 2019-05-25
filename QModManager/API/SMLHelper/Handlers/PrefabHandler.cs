@@ -7,10 +7,7 @@
     {
         public static IPrefabHandler Main { get; } = new PrefabHandler();
 
-        private PrefabHandler()
-        {
-            // Hide constructor
-        }
+        private PrefabHandler() { }
 
         /// <summary>
         /// Registers a ModPrefab into the game.

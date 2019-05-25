@@ -1,11 +1,11 @@
 ﻿namespace QModManager.API.SMLHelper.Patchers
 {
+    using Crafting;
     using Harmony;
+    using QModManager.Utility;
     using System.Collections.Generic;
     using System.Reflection;
     using Utility;
-    using Crafting;
-    using System;
 
     internal static class CraftTreePatcher
     {
@@ -46,7 +46,7 @@
             harmony.Patch(AccessTools.Method(typeof(CraftTree), "CyclopsFabricatorScheme"),
                 postfix: new HarmonyMethod(AccessTools.Method(typeof(CraftTreePatcher), "CyclopsFabricatorSchemePostfix")));
 
-            Logger.Log($"CraftTreePatcher is done.", LogLevel.Debug);
+            Logger.Debug($"CraftTreePatcher is done.");
         }
 
         private static bool GetTreePreFix(CraftTree.Type treeType, ref CraftTree __result)
@@ -62,7 +62,7 @@
 
         private static void InitializePostFix()
         {
-            var craftTreeInitialized = (bool)ReflectionHelper.GetStaticField<CraftTree>("initialized");
+            var craftTreeInitialized = CraftTree.initialized;
         
             if (craftTreeInitialized && !ModCraftTreeNode.Initialized)
             {
@@ -132,7 +132,7 @@
                 for (int i = 0; i < tab.Path.Length; i++)
                 {
                     string currentPath = tab.Path[i];
-                    Logger.Log("Tab Current Path: " + currentPath + " Tab: " + tab.Name + " Crafter: " + tab.Scheme.ToString(), LogLevel.Debug);
+                    Logger.Debug("Tab Current Path: " + currentPath + " Tab: " + tab.Name + " Crafter: " + tab.Scheme.ToString());
 
                     TreeNode node = currentNode[currentPath];
 

@@ -2,6 +2,7 @@
 {
     using Harmony;
     using QModManager.API.SMLHelper.Utility;
+    using QModManager.Utility;
     using System;
 
     internal static class ItemsContainerPatcher
@@ -18,7 +19,7 @@
             harmony.Patch(AccessTools.Method(typeof(ItemsContainer), "NotifyRemoveItem"),
                 postfix: new HarmonyMethod(AccessTools.Method(typeof(ItemsContainerPatcher), "NotifyChangeItem_Postfix")));
 
-            Logger.Log($"ItemsContainerPatcher is done.", LogLevel.Debug);
+            Logger.Debug($"ItemsContainerPatcher is done.");
         }
 
         private static bool HasRoomFor_XY_Prefix(ItemsContainer __instance, int width, int height, ref bool __result, ref Vector2int __state)

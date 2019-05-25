@@ -1,5 +1,6 @@
 ﻿namespace QModManager.API.SMLHelper.Utility
 {
+    using QModManager.Utility;
     using System;
     using System.Collections.Generic;
     using System.IO;

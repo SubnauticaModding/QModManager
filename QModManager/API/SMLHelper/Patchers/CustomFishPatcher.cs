@@ -1,33 +1,44 @@
 ﻿namespace QModManager.API.SMLHelper.Patchers
 {
+    using Harmony;
+    using QModManager.API.SMLHelper.Handlers;
     using System;
     using System.Collections.Generic;
     using System.Reflection;
-    using Harmony;
     using UnityEngine;
+    using Logger = QModManager.Utility.Logger;
     using Random = UnityEngine.Random;
-    using QModManager.API.SMLHelper.Handlers;
-    using Logger = QModManager.API.SMLHelper.Logger;
 
     internal static class CustomFishPatcher
     {
-        static List<Creature> usedCreatures = new List<Creature>();
+        internal static List<Creature> usedCreatures = new List<Creature>();
+
+        public static void Patch(HarmonyInstance harmony)
+        {
+            Type creatureType = typeof(Creature);
+            Type thisType = typeof(CustomFishPatcher);
+
+            harmony.Patch(creatureType.GetMethod("Start", BindingFlags.Public | BindingFlags.Instance),
+                null, new HarmonyMethod(thisType.GetMethod("CreatureStart_Postfix", BindingFlags.NonPublic | BindingFlags.Static)), null);
+
+            Logger.Debug("CustomFishPatcher is done.");
+        }
 
         private static void CreatureStart_Postfix(Creature __instance)
         {
-            if(usedCreatures.Contains(__instance) || CustomFishHandler.fishTechTypes.Count == 0)
+            if (usedCreatures.Contains(__instance) || CustomFishHandler.fishTechTypes.Count == 0)
             {
                 return;
             }
             TechTag tag = __instance.GetComponent<TechTag>();
-            if(tag)
+            if (tag)
             {
-                if(CustomFishHandler.fishTechTypes.Contains(tag.type))
+                if (CustomFishHandler.fishTechTypes.Contains(tag.type))
                 {
                     return;
                 }
             }
-            if(Random.value < 0.1f)
+            if (Random.value < 0.1f)
             {
                 int randomIndex = Random.Range(0, CustomFishHandler.fishTechTypes.Count);
                 TechType randomFish = CustomFishHandler.fishTechTypes[randomIndex];
@@ -49,17 +60,6 @@
 
                 usedCreatures.Add(__instance);
             }
-        }
-
-        public static void Patch(HarmonyInstance harmony)
-        {
-            Type creatureType = typeof(Creature);
-            Type thisType = typeof(CustomFishPatcher);
-
-            harmony.Patch(creatureType.GetMethod("Start", BindingFlags.Public | BindingFlags.Instance),
-                null, new HarmonyMethod(thisType.GetMethod("CreatureStart_Postfix", BindingFlags.NonPublic | BindingFlags.Static)), null);
-
-            Logger.Log("CustomFishPatcher is done.", LogLevel.Debug);
         }
     }
 }

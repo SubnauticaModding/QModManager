@@ -4,7 +4,7 @@
     using Harmony;
     using UnityEngine;
     using UWE;
-    using Logger = API.SMLHelper.Logger;
+    using Logger = QModManager.Utility.Logger;
 
     internal static class PrefabDatabasePatcher
     {
@@ -53,7 +53,7 @@
             harmony.Patch(AccessTools.Method(typeof(PrefabDatabase), "GetPrefabAsync"),
                 prefix: new HarmonyMethod(AccessTools.Method(typeof(PrefabDatabasePatcher), "GetPrefabAsync_Prefix")));
 
-            Logger.Log("PrefabDatabasePatcher is done.", LogLevel.Debug);
+            Logger.Debug("PrefabDatabasePatcher is done.");
         }
     }
 }

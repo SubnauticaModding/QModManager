@@ -1,7 +1,8 @@
 ﻿namespace QModManager.API.SMLHelper.Assets
 {
-    using System;
     using Handlers;
+    using QModManager.Utility;
+    using System;
 
     /// <summary>
     /// An item that can be spawned into the game.
@@ -55,7 +56,7 @@
         {
             if (string.IsNullOrEmpty(classId))
             {
-                Logger.Log($"ClassID for Spawnables must be a non-empty value.", LogLevel.Error);
+                Logger.Error($"ClassID for Spawnables must be a non-empty value.");
                 throw new Exception($"Error patching Spawnable");
             }
 
@@ -114,7 +115,7 @@
             string assetsFolder = this.AssetsFolder;
             if (string.IsNullOrEmpty(assetsFolder))
             {
-                Logger.Log($"AssetsFolder property for Spawnable instance of {this.ClassID} must have a non-empty value.", LogLevel.Error);
+                Logger.Error($"AssetsFolder property for Spawnable instance of {this.ClassID} must have a non-empty value.");
                 throw new Exception($"Error patching Spawnable:{this.ClassID}");
             }
 

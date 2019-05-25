@@ -1,6 +1,7 @@
 ﻿namespace QModManager.API.SMLHelper.Patchers
 {
     using Assets;
+    using QModManager.Utility;
     using System.Collections.Generic;
 
     internal static class SpritePatcher
@@ -21,7 +22,7 @@
                 }
             }
 
-            Logger.Log("SpritePatcher is done.", LogLevel.Debug);
+            Logger.Log("SpritePatcher is done.");
         }
     }
 }

@@ -14,10 +14,7 @@
     {
         public static ICraftTreeHandler Main { get; } = new CraftTreeHandler();
 
-        private CraftTreeHandler()
-        {
-            // Hides constructor
-        }
+        private CraftTreeHandler() { }
 
         #region Static Methods
 

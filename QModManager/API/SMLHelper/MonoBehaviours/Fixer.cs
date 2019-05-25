@@ -2,7 +2,8 @@ namespace QModManager.API.SMLHelper.MonoBehaviours
 {
     using UnityEngine;
     using System.Reflection;
-    using Logger = API.SMLHelper.Logger;
+    using Logger = QModManager.Utility.Logger;
+    using Harmony;
 
     public class Fixer : MonoBehaviour, IProtoEventListener
     {
@@ -15,7 +16,7 @@ namespace QModManager.API.SMLHelper.MonoBehaviours
         private float time;
         private bool initalized;
 
-        private static FieldInfo BuilderPrefab = typeof(Builder).GetField("prefab", BindingFlags.NonPublic | BindingFlags.Static);
+        private static FieldInfo BuilderPrefab = AccessTools.Field(typeof(Builder), "prefab");
 
         private void Update()
         {
@@ -34,9 +35,7 @@ namespace QModManager.API.SMLHelper.MonoBehaviours
             }
         }
 
-        public void OnProtoSerialize(ProtobufSerializer serializer)
-        {
-        }
+        public void OnProtoSerialize(ProtobufSerializer serializer) { }
 
         public void OnProtoDeserialize(ProtobufSerializer serializer)
         {

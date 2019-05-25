@@ -2,8 +2,8 @@
 {
     using Assets;
     using Harmony;
+    using QModManager.Utility;
     using System.Collections.Generic;
-    using System.Reflection;
 
     internal static class CraftDataPatcher
     {
@@ -32,14 +32,14 @@
             if (techGroup == null)
             {
                 // Should never happen, but doesn't hurt to add it.
-                Logger.Log("Invalid TechGroup!", LogLevel.Error);
+                Logger.Error("Invalid TechGroup!");
                 return;
             }
 
             List<TechType> techCategory = techGroup[category];
             if (techCategory == null)
             {
-                Logger.Log($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}", LogLevel.Error);
+                Logger.Error($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}");
                 return;
             }
 
@@ -48,13 +48,13 @@
             if (index == -1) // Not found
             {
                 techCategory.Add(techType);
-                Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\"", LogLevel.Debug);
+                Logger.Debug($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\"");
             }
             else
             {
                 techCategory.Insert(index + 1, techType);
 
-                Logger.Log($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\" after \"{after.AsString():G}\"", LogLevel.Debug);
+                Logger.Debug($"Added \"{techType.AsString():G}\" to groups under \"{group:G}->{category:G}\" after \"{after.AsString():G}\"");
             }
         }
 
@@ -65,20 +65,20 @@
             if (techGroup == null)
             {
                 // Should never happen, but doesn't hurt to add it.
-                Logger.Log("Invalid TechGroup!", LogLevel.Error);
+                Logger.Error("Invalid TechGroup!");
                 return;
             }
 
             List<TechType> techCategory = techGroup[category];
             if (techCategory == null)
             {
-                Logger.Log($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}", LogLevel.Error);
+                Logger.Error($"Invalid TechCategory Combination! TechCategory: {category} TechGroup: {group}");
                 return;
             }
 
             techCategory.Remove(techType);
 
-            Logger.Log($"Removed \"{techType.AsString():G}\" from groups under \"{group:G}->{category:G}\"", LogLevel.Debug);
+            Logger.Debug($"Removed \"{techType.AsString():G}\" from groups under \"{group:G}->{category:G}\"");
         }
 
         internal static void AddToCustomTechData(TechType techType, ITechData techData)
@@ -110,7 +110,7 @@
 
             AddCustomTechDataToOriginalDictionary();
 
-            Logger.Log("CraftDataPatcher is done.", LogLevel.Debug);
+            Logger.Debug("CraftDataPatcher is done.");
         }
 
         private static void PreparePrefabIDCachePostfix()
@@ -168,7 +168,7 @@
                 if (techDataExists)
                 {
                     CraftData.techData.Remove(techType);
-                    Logger.Log($"{techType} TechType already existed in the CraftData.techData dictionary. Original value was replaced.", LogLevel.Warn);
+                    Logger.Warn($"{techType} TechType already existed in the CraftData.techData dictionary. Original value was replaced.");
                     replaced++;
                 }
                 else
@@ -180,10 +180,10 @@
             }
 
             if (added > 0)
-                Logger.Log($"Added {added} new entries to the CraftData.techData dictionary.", LogLevel.Info);
+                Logger.Info($"Added {added} new entries to the CraftData.techData dictionary.");
 
             if (replaced > 0)
-                Logger.Log($"Replaced {replaced} existing entries to the CraftData.techData dictionary.", LogLevel.Info);
+                Logger.Info($"Replaced {replaced} existing entries to the CraftData.techData dictionary.");
         }
 
         #endregion

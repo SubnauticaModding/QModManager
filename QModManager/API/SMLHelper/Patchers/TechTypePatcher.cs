@@ -1,10 +1,10 @@
 ﻿namespace QModManager.API.SMLHelper.Patchers
 {
     using Harmony;
+    using QModManager.Utility;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
     using Utility;
 
     internal static class TechTypePatcher
@@ -60,7 +60,7 @@
 
             cacheManager.SaveCache();
 
-            Logger.Log($"Successfully added Tech Type: '{name}' to Index: '{cache.Index}'", LogLevel.Debug);
+            Logger.Debug($"Successfully added Tech Type: '{name}' to Index: '{cache.Index}'");
             return techType;
         }
 
@@ -89,7 +89,7 @@
             }
 
             if (bannedIndices.Count > 0)
-                Logger.Log($"Finished known TechTypes exclusion. {bannedIndices.Count} IDs were added in ban list.", LogLevel.Debug);
+                Logger.Debug($"Finished known TechTypes exclusion. {bannedIndices.Count} IDs were added in ban list.");
 
             return bannedIndices;
         }
@@ -110,9 +110,9 @@
             harmony.Patch(AccessTools.Method(typeof(TechType), "ToString", new Type[] { }),
                 prefix: new HarmonyMethod(AccessTools.Method(typeof(TechTypePatcher), "Prefix_ToString")));
 
-            Logger.Log($"Added {cacheManager.ModdedKeys.Count()} TechTypes succesfully into the game.", LogLevel.Info);
+            Logger.Info($"Added {cacheManager.ModdedKeys.Count()} TechTypes succesfully into the game.");
 
-            Logger.Log("TechTypePatcher is done.", LogLevel.Debug);
+            Logger.Debug("TechTypePatcher is done.");
         }
 
         private static void Postfix_GetValues(Type enumType, ref Array __result)

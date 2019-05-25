@@ -1,6 +1,7 @@
 ﻿namespace QModManager.API.SMLHelper.Patchers
 {
     using Harmony;
+    using QModManager.Utility;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -15,7 +16,7 @@
             harmony.Patch(AccessTools.Method(typeof(DevConsole), "Submit"),
                 postfix: new HarmonyMethod(AccessTools.Method(typeof(DevConsolePatcher), "Postfix")));
 
-            Logger.Log("DevConsolePatcher is done.", LogLevel.Debug);
+            Logger.Debug("DevConsolePatcher is done.");
         }
 
         internal static void Postfix(bool __result, string value)

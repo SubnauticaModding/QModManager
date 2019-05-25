@@ -10,10 +10,7 @@
     {
         public static IPDAHandler Main { get; } = new PDAHandler();
 
-        private PDAHandler()
-        {
-            // Hide constructor
-        }
+        private PDAHandler() { }
 
         /// <summary>
         /// Edits how many fragments must be scanned before unlocking the techtype's blueprint.

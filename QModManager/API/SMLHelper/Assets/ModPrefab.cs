@@ -65,7 +65,7 @@
 
         internal GameObject GetGameObjectInternal()
         {
-            if(cachedPrefab)
+            if (cachedPrefab)
             {
                 // This will avoid GetGameObject() being called every time the object is spawned. Could break things if there is a degree 
                 // of random generation in GetGameObject(), in that case the modder will need to do their random stuff in a MonoBehaviour.Awake()

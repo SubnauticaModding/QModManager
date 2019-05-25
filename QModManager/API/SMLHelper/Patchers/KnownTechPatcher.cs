@@ -1,6 +1,7 @@
 ﻿namespace QModManager.API.SMLHelper.Patchers
 {
     using Harmony;
+    using QModManager.Utility;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -17,6 +18,8 @@
         {
             harmony.Patch(AccessTools.Method(typeof(KnownTech), "Initialize"), 
                 postfix: new HarmonyMethod(AccessTools.Method(typeof(KnownTechPatcher), "InitializePostfix")));
+
+            Logger.Debug("KnownTechPatcher is done.");
         }
 
         internal static void InitializePostfix()

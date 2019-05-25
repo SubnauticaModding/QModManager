@@ -99,9 +99,7 @@
         /// <param name="group">The sprite group this sprite will be added to.</param>
         /// <param name="id">The sprite internal identifier.</param>
         /// <param name="sprite">The sprite to be added.</param>
-        public ModSprite(SpriteManager.Group group, string id, UnityEngine.Sprite sprite) : this(group, id, new Atlas.Sprite(sprite, false))
-        {
-        }
+        public ModSprite(SpriteManager.Group group, string id, UnityEngine.Sprite sprite) : this(group, id, new Atlas.Sprite(sprite, false)) { }
 
         /// <summary>
         /// Creates a new ModSprite to be used with a specific TechType.
@@ -109,8 +107,6 @@
         /// </summary>
         /// <param name="type">The techtype paired to this sprite.</param>
         /// <param name="sprite">The sprite to be added.</param>
-        public ModSprite(TechType type, UnityEngine.Sprite sprite) : this(type, new Atlas.Sprite(sprite, false))
-        {
-        }
+        public ModSprite(TechType type, UnityEngine.Sprite sprite) : this(type, new Atlas.Sprite(sprite, false)) { }
     }
 }

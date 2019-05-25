@@ -1,6 +1,7 @@
 ﻿namespace QModManager.API.SMLHelper.Patchers
 {
     using Harmony;
+    using QModManager.Utility;
     using System.Collections.Generic;
 
     // Special thanks to Gorillazilla9 for sharing this method of fragment count patching
@@ -17,7 +18,7 @@
             harmony.Patch(AccessTools.Method(typeof(PDAScanner), "Initialize"),
                 postfix: new HarmonyMethod(AccessTools.Method(typeof(PDAPatcher), "InitializePostfix")));
 
-            Logger.Log($"PDAPatcher is done.", LogLevel.Debug);
+            Logger.Debug($"PDAPatcher is done.");
         }
 
         private static void InitializePostfix()
@@ -49,7 +50,7 @@
                 }
                 else
                 {
-                    Logger.Log($"Warning: TechType {fragmentEntry.Key} not known in PDAScanner.EntryData", LogLevel.Warn);
+                    Logger.Warn($"Warning: TechType {fragmentEntry.Key} not known in PDAScanner.EntryData");
                 }
             }
 
@@ -66,7 +67,7 @@
                 }
                 else
                 {
-                    Logger.Log($"Warning: TechType {fragmentEntry.Key} not known in PDAScanner.EntryData", LogLevel.Warn);
+                    Logger.Warn($"Warning: TechType {fragmentEntry.Key} not known in PDAScanner.EntryData");
                 }
             }
         }
