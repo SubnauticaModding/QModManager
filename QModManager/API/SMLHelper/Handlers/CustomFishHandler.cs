@@ -23,7 +23,7 @@
         /// <returns>The TechType created using the info from your CustomFish object</returns>
         public static TechType RegisterFish(CustomFish fish)
         {
-            Logger.Log($"[FishFramework] Creating fish: {fish.displayName}");
+            Logger.Log($"[FishFramework] Creating fish: {fish.displayName}", LogLevel.Debug);
             TechType type = TechTypeHandler.AddTechType(fish.id, fish.displayName, fish.tooltip);
 
             fishTechTypes.Add(type);
@@ -38,9 +38,9 @@
                 isWaterCreature = fish.isWaterCreature
             };
 
-            if(!string.IsNullOrEmpty(fish.spriteFileName))
+            if (!string.IsNullOrEmpty(fish.spriteFileName))
             {
-                SpriteHandler.RegisterSprite(type, Path.Combine(Environment.CurrentDirectory + "/QMods/",fish.spriteFileName));
+                SpriteHandler.RegisterSprite(type, Path.Combine(Path.Combine(Environment.CurrentDirectory, "QMods"), fish.spriteFileName));
             }
 
             PrefabHandler.RegisterPrefab(fishPrefab);
