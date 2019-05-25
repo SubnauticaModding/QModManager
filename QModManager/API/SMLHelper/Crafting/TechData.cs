@@ -132,5 +132,15 @@
             this.techType = techType;
             this.amount = amount;
         }
+
+        public static implicit operator Ingredient(TechType techType)
+        {
+            return new Ingredient(techType, 1);
+        }
+
+        public static implicit operator TechType(Ingredient ingredient)
+        {
+            return ingredient.techType;
+        }
     }
 }
