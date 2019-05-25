@@ -18,6 +18,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\LanguageHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\OptionsPanelHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Handlers\PDAHandler.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ICustomFishHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IBioReactorHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ICraftDataHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ICraftTreeHandler.cs" />

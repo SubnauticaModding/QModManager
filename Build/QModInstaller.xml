@@ -880,7 +880,7 @@
             <summary>
             An item that can be built into the game world.
             </summary>
-            <seealso cref="T:QModManager.API.SMLHelper.Assets.PdaItem" />
+            <seealso cref="T:QModManager.API.SMLHelper.Assets.PDAItem" />
             <seealso cref="T:QModManager.API.SMLHelper.Assets.Spawnable"/>
         </member>
         <member name="P:QModManager.API.SMLHelper.Assets.Buildable.HandOverText">
@@ -900,7 +900,7 @@
             <summary>
             An item that can be crafted into the game world.
             </summary>
-            <seealso cref="T:QModManager.API.SMLHelper.Assets.PdaItem" />
+            <seealso cref="T:QModManager.API.SMLHelper.Assets.PDAItem" />
             <seealso cref="T:QModManager.API.SMLHelper.Assets.Spawnable" />
         </member>
         <member name="P:QModManager.API.SMLHelper.Assets.Craftable.FabricatorType">
@@ -922,47 +922,47 @@
             <param name="friendlyName">The name displayed in-game for this item whether in the open world or in the inventory.</param>
             <param name="description">The description for this item; Typically seen in the PDA, inventory, or crafting screens.</param>
         </member>
-        <member name="T:QModManager.API.SMLHelper.Assets.PdaItem">
+        <member name="T:QModManager.API.SMLHelper.Assets.PDAItem">
             <summary>
             A <see cref="T:QModManager.API.SMLHelper.Assets.Spawnable"/> item that appears in the PDA blueprints.
             </summary>
             <seealso cref="T:QModManager.API.SMLHelper.Assets.Spawnable" />
         </member>
-        <member name="P:QModManager.API.SMLHelper.Assets.PdaItem.RequiredForUnlock">
+        <member name="P:QModManager.API.SMLHelper.Assets.PDAItem.RequiredForUnlock">
             <summary>
             Override to set the <see cref="T:TechType"/> that must first be scanned or picked up to unlock the blueprint for this item.
             If not overriden, it this item will be unlocked from the start of the game.
             </summary>
         </member>
-        <member name="P:QModManager.API.SMLHelper.Assets.PdaItem.GroupForPDA">
+        <member name="P:QModManager.API.SMLHelper.Assets.PDAItem.GroupForPDA">
             <summary>
             Override with the main group in the PDA blueprints where this item appears.
             </summary>
         </member>
-        <member name="P:QModManager.API.SMLHelper.Assets.PdaItem.CategoryForPDA">
+        <member name="P:QModManager.API.SMLHelper.Assets.PDAItem.CategoryForPDA">
             <summary>
             Override with the category within the group in the PDA blueprints where this item appears.
             </summary>
         </member>
-        <member name="P:QModManager.API.SMLHelper.Assets.PdaItem.UnlockedAtStart">
+        <member name="P:QModManager.API.SMLHelper.Assets.PDAItem.UnlockedAtStart">
             <summary>
-            Gets a value indicating whether <see cref="P:QModManager.API.SMLHelper.Assets.PdaItem.RequiredForUnlock"/> has been set to lock this blueprint behind another <see cref="T:TechType"/>.
+            Gets a value indicating whether <see cref="P:QModManager.API.SMLHelper.Assets.PDAItem.RequiredForUnlock"/> has been set to lock this blueprint behind another <see cref="T:TechType"/>.
             </summary>
             <value>
               Returns <c>true</c> if will be unlocked from the start of the game; otherwise, <c>false</c>.
             </value>
-            <seealso cref="P:QModManager.API.SMLHelper.Assets.PdaItem.RequiredForUnlock"/>
+            <seealso cref="P:QModManager.API.SMLHelper.Assets.PDAItem.RequiredForUnlock"/>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Assets.PdaItem.#ctor(System.String,System.String,System.String)">
+        <member name="M:QModManager.API.SMLHelper.Assets.PDAItem.#ctor(System.String,System.String,System.String)">
             <summary>
-            Initializes a new <see cref="T:QModManager.API.SMLHelper.Assets.PdaItem"/>, the basic class for any item that appears among your PDA blueprints.
+            Initializes a new <see cref="T:QModManager.API.SMLHelper.Assets.PDAItem"/>, the basic class for any item that appears among your PDA blueprints.
             DO NOT USE THIS CLASS DIRECTLY! Use <seealso cref="T:QModManager.API.SMLHelper.Assets.Craftable"/> or <see cref="T:QModManager.API.SMLHelper.Assets.Buildable"/> instead.
             </summary>
             <param name="classId">The main internal identifier for this item. Your item's <see cref="T:TechType" /> will be created using this name.</param>
             <param name="friendlyName">The name displayed in-game for this item whether in the open world or in the inventory.</param>
             <param name="description">The description for this item; Typically seen in the PDA, inventory, or crafting screens.</param>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Assets.PdaItem.GetBlueprintRecipe">
+        <member name="M:QModManager.API.SMLHelper.Assets.PDAItem.GetBlueprintRecipe">
             <summary>
             This provides the <see cref="T:QModManager.API.SMLHelper.Crafting.TechData"/> instance used to designate how this item is crafted or constructed.
             </summary>
@@ -1120,6 +1120,13 @@
             A list of all the custom fish that have so far been registered into the game. This includes ones from mods that may have been loaded earlier.
             It is mainly used by CustomFishPatcher to spawn fish in
             </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Handlers.CustomFishHandler.QModManager#API#SMLHelper#Interfaces#ICustomFishHandler#RegisterFish(QModManager.API.SMLHelper.Assets.CustomFish)">
+            <summary>
+            Registers a CustomFish object into the game
+            </summary>
+            <param name="fish">The CustomFish that you are registering</param>
+            <returns>The TechType created using the info from your CustomFish object</returns>
         </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.CustomFishHandler.RegisterFish(QModManager.API.SMLHelper.Assets.CustomFish)">
             <summary>

@@ -4,12 +4,17 @@
     using System.Collections.Generic;
     using QModManager.API.SMLHelper.Assets;
     using System.IO;
+    using QModManager.API.SMLHelper.Interfaces;
 
     /// <summary>
     /// Class to manage registering of fish into the game
     /// </summary>
-    public static class CustomFishHandler
+    public class CustomFishHandler : ICustomFishHandler
     {
+        public static ICustomFishHandler Main { get; } = new CustomFishHandler();
+
+        private CustomFishHandler() { }
+
         /// <summary>
         /// A list of all the custom fish that have so far been registered into the game. This includes ones from mods that may have been loaded earlier.
         /// It is mainly used by CustomFishPatcher to spawn fish in
@@ -21,7 +26,7 @@
         /// </summary>
         /// <param name="fish">The CustomFish that you are registering</param>
         /// <returns>The TechType created using the info from your CustomFish object</returns>
-        public static TechType RegisterFish(CustomFish fish)
+        TechType ICustomFishHandler.RegisterFish(CustomFish fish)
         {
             Logger.Log($"[FishFramework] Creating fish: {fish.displayName}", LogLevel.Debug);
             TechType type = TechTypeHandler.AddTechType(fish.id, fish.displayName, fish.tooltip);
@@ -46,6 +51,16 @@
             PrefabHandler.RegisterPrefab(fishPrefab);
 
             return type;
+        }
+
+        /// <summary>
+        /// Registers a CustomFish object into the game
+        /// </summary>
+        /// <param name="fish">The CustomFish that you are registering</param>
+        /// <returns>The TechType created using the info from your CustomFish object</returns>
+        public static TechType RegisterFish(CustomFish fish)
+        {
+            return Main.RegisterFish(fish);
         }
     }
 }
