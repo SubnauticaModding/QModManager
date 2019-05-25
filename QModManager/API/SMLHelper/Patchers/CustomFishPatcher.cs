@@ -29,7 +29,6 @@
             }
             if(Random.value < 0.1f)
             {
-                Logger.Log($"[FishFramework] Selecting fish out of {CustomFishHandler.fishTechTypes.Count} total types", LogLevel.Debug);
                 int randomIndex = Random.Range(0, CustomFishHandler.fishTechTypes.Count);
                 TechType randomFish = CustomFishHandler.fishTechTypes[randomIndex];
 
