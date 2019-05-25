@@ -7,8 +7,8 @@
     <ProjectGuid>{C8FB0981-77D2-47C7-BBEF-A3A9EBACACBF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Example_mod</RootNamespace>
-    <AssemblyName>Example mod</AssemblyName>
+    <RootNamespace>QModManager.Examples</RootNamespace>
+    <AssemblyName>Examples</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

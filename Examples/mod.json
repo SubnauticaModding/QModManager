@@ -1,9 +1,9 @@
 {
-  "Id": "SMLHelperExampleMod",
-  "DisplayName": "Example Mod For SMLHelper",
-  "Author": "ahk1221 & PrimeSonic & AlexejheroYTB",
-  "Version": "Updated for the latest version of SMLHelper",
+  "Id": "ExampleMod",
+  "DisplayName": "Example Mod",
+  "Author": "the QModManager dev team",
+  "Version": "1.0",
   "Enable": true,
-  "AssemblyName": "Example mod.dll",
-  "EntryMethod": "SMLHelper.V2.Examples.ExampleMod.Patch"
+  "AssemblyName": "Examples.dll",
+  "EntryMethod": "QModManager.Examples.ExampleMod.Patch"
 }
