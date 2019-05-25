@@ -79,7 +79,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utility\KeyCodeUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\PlayerPrefsExtra.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\PrefabUtils.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utility\ReflectionHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\PatchUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\SaveUtils.cs" />
   </ItemGroup>
