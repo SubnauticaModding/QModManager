@@ -12,7 +12,7 @@
     using System.Reflection.Emit;
     using System.Text;
 
-    internal class TooltipPatcher
+    internal static class TooltipPatcher
     {
         internal static bool DisableEnumIsDefinedPatch = false;
 

@@ -3,7 +3,7 @@
     using Harmony;
     using System.Collections.Generic;
 
-    internal class BioReactorPatcher
+    internal static class BioReactorPatcher
     {
         internal static IDictionary<TechType, float> CustomBioreactorCharges = new SelfCheckingDictionary<TechType, float>("CustomBioreactorCharges", TechTypeExtensions.sTechTypeComparer);
 

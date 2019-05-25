@@ -7,7 +7,7 @@
     using UnityEngine.Events;
     using UnityEngine.UI;
 
-    internal class OptionsPanelPatcher
+    internal static class OptionsPanelPatcher
     {
         internal static SortedList<string, ModOptions> modOptions = new SortedList<string, ModOptions>();
 

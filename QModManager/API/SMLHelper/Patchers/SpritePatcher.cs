@@ -3,7 +3,7 @@
     using Assets;
     using System.Collections.Generic;
 
-    internal class SpritePatcher
+    internal static class SpritePatcher
     {
         internal static void Patch()
         {

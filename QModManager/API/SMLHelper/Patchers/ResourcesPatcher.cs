@@ -5,7 +5,7 @@
     using System.Reflection;
     using UnityEngine;
 
-    internal class ResourcesPatcher
+    internal static class ResourcesPatcher
     {
         internal static bool Prefix(ref UnityEngine.Object __result, string path)
         {

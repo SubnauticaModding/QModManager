@@ -6,7 +6,7 @@
     using System.Collections.Generic;
     using Utility;
 
-    internal class CraftTreeTypePatcher
+    internal static class CraftTreeTypePatcher
     {
         private const string CraftTreeTypeEnumName = "CraftTreeType";
 

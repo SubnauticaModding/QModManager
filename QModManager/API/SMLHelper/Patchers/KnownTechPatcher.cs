@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    internal class KnownTechPatcher
+    internal static class KnownTechPatcher
     {
         internal static List<TechType> UnlockedAtStart = new List<TechType>();
         internal static IDictionary<TechType, KnownTech.AnalysisTech> AnalysisTech = new SelfCheckingDictionary<TechType, KnownTech.AnalysisTech>("AnalysisTech");

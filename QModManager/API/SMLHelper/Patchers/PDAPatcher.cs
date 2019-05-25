@@ -5,7 +5,7 @@
 
     // Special thanks to Gorillazilla9 for sharing this method of fragment count patching
     // https://github.com/Gorillazilla9/SubnauticaFragReqBoost/blob/master/PDAScannerPatcher.cs
-    internal class PDAPatcher
+    internal static class PDAPatcher
     {
         internal static readonly Dictionary<TechType, int> FragmentCount = new Dictionary<TechType, int>();
         internal static readonly Dictionary<TechType, float> FragmentScanTime = new Dictionary<TechType, float>();

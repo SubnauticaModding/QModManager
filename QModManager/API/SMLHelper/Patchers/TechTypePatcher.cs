@@ -7,7 +7,7 @@
     using System.Reflection;
     using Utility;
 
-    internal class TechTypePatcher
+    internal static class TechTypePatcher
     {
         private const string TechTypeEnumName = "TechType";
         internal static readonly int startingIndex = 11010;

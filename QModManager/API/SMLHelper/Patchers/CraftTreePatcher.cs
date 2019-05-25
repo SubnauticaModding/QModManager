@@ -7,7 +7,7 @@
     using Crafting;
     using System;
 
-    internal class CraftTreePatcher
+    internal static class CraftTreePatcher
     {
         #region Internal Fields
 

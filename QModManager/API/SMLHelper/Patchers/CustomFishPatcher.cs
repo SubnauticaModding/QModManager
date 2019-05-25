@@ -9,7 +9,7 @@
     using QModManager.API.SMLHelper.Handlers;
     using Logger = QModManager.API.SMLHelper.Logger;
 
-    internal class CustomFishPatcher
+    internal static class CustomFishPatcher
     {
         static List<Creature> usedCreatures = new List<Creature>();
 

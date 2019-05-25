@@ -6,7 +6,7 @@
     using System.Linq;
     using System.Reflection;
 
-    internal class DevConsolePatcher
+    internal static class DevConsolePatcher
     {
         public static List<CommandInfo> commands = new List<CommandInfo>();
 

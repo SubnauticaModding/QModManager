@@ -5,7 +5,7 @@
     using System.Collections.Generic;
     using System.Text;
 
-    internal class ItemActionPatcher
+    internal static class ItemActionPatcher
     {
         internal class CustomItemAction
         {

@@ -7,7 +7,7 @@
     using System.Reflection;
     using System.Text;
 
-    internal class LanguagePatcher
+    internal static class LanguagePatcher
     {
         private static readonly string LanguageDir = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "Language");
         private static readonly string LanguageOrigDir = Path.Combine(LanguageDir, "Originals");

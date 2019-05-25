@@ -6,7 +6,7 @@
     using UWE;
     using Logger = API.SMLHelper.Logger;
 
-    internal class PrefabDatabasePatcher
+    internal static class PrefabDatabasePatcher
     {
         internal static void LoadPrefabDatabase_Postfix()
         {
