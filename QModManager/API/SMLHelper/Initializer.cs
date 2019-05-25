@@ -9,11 +9,29 @@
     {
         private static HarmonyInstance harmony { get => Patcher.harmony; }
 
-        public static void Patch()
+        public static void PrePreInit()
         {
             Logger.Initialize();
+        }
 
-            Logger.Log($"Loading v{Assembly.GetExecutingAssembly().GetName().Version}...", LogLevel.Info);
+        public static void PreInit()
+        {
+
+        }
+
+        public static void Init()
+        {
+
+        }
+
+        public static void PostInit()
+        {
+
+        }
+
+        public static void PostPostInit()
+        {
+            Logger.Log($"Loading SMLHelper v{Assembly.GetExecutingAssembly().GetName().Version}...", LogLevel.Info);
 
             try
             {
