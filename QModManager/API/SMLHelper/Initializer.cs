@@ -7,15 +7,13 @@
 
     public class Initializer
     {
-        private static HarmonyInstance harmony;
+        private static HarmonyInstance harmony { get => Patcher.harmony; }
 
         public static void Patch()
         {
             Logger.Initialize();
 
             Logger.Log($"Loading v{Assembly.GetExecutingAssembly().GetName().Version}...", LogLevel.Info);
-
-            harmony = HarmonyInstance.Create("com.ahk1221.smlhelper");
 
             try
             {

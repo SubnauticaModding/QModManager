@@ -19,6 +19,8 @@ namespace QModManager
     /// </summary>
     public static class Patcher
     {
+        internal static HarmonyInstance harmony;
+
         internal const string IDRegex = "[^0-9a-z_]";
 
         internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? null : Path.Combine(Environment.CurrentDirectory, "QMods");
@@ -101,7 +103,8 @@ namespace QModManager
 
         internal static void PatchHarmony()
         {
-            HarmonyInstance.Create("qmodmanager").PatchAll();
+            harmony = HarmonyInstance.Create("qmodmanager");
+            harmony.PatchAll();
             Logger.Debug("Patched!");
         }
 
