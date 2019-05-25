@@ -20,30 +20,10 @@
         internal static void AddTabs_Postfix(uGUI_OptionsPanel __instance)
         {
             uGUI_OptionsPanel optionsPanel = __instance;
-            
-            // Start the modsTab index at a value of -1
-            var modsTab = -1;
-            // Loop through all of the tabs
-            for (int i = 0; i < optionsPanel.tabsContainer.childCount; i++)
-            {
-                // Check if they are named "Mods"
-                var text = optionsPanel.tabsContainer.GetChild(i).GetComponentInChildren<Text>(true);
-                if (text != null && text.text == "Mods")
-                {
-                    // Set the tab index to the found one and break
-                    modsTab = i;
-                    break;
-                }
-            }
-            // If no tab was found, create one
-            if (modsTab == -1)
-            {
-                modsTab = optionsPanel.AddTab("Mods");
-            }
 
-            // Maybe this could be split into its own file to handle smlhelper options, or maybe it could be removed alltogether
-            optionsPanel.AddHeading(modsTab, "SMLHelper");
-            optionsPanel.AddToggleOption(modsTab, "Enable debug logs", API.SMLHelper.Logger.EnableDebugging, API.SMLHelper.Logger.SetDebugging);
+            // Start the modsTab index at a value of -1
+            var modsTab = OptionsManager.ModsTab;
+
             optionsPanel.AddChoiceOption(modsTab, "Extra item info", new string[]
             {
                 "Mod name (default)",
