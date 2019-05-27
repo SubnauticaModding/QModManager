@@ -38,7 +38,7 @@
 
         public CustomFishPrefab(string classId, string prefabFileName, TechType techType = TechType.None) : base(classId, prefabFileName, techType) { }
 
-        public override GameObject GetGameObject()
+        public sealed override GameObject GetGameObject()
         {
             Logger.Debug($"[FishFramework] Initializing fish: {ClassID}");
             GameObject mainObj = modelPrefab;
