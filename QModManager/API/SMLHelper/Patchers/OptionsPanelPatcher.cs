@@ -9,6 +9,8 @@
 
     internal static class OptionsPanelPatcher
     {
+        internal static int ModsTab { get => OptionsManager.ModsTab; }
+
         internal static SortedList<string, ModOptions> modOptions = new SortedList<string, ModOptions>();
 
         internal static void Patch(HarmonyInstance harmony)
@@ -23,51 +25,32 @@
         {
             uGUI_OptionsPanel optionsPanel = __instance;
 
-            // Start the modsTab index at a value of -1
-            int modsTab = OptionsManager.ModsTab;
-
-            optionsPanel.AddChoiceOption(modsTab, "Extra item info", new string[]
+            optionsPanel.AddChoiceOption(ModsTab, "Extra item info", new string[]
             {
                 "Mod name (default)",
                 "Mod name and item ID",
                 "Nothing"
             }, (int)TooltipPatcher.ExtraItemInfoOption, (i) => TooltipPatcher.SetExtraItemInfo((TooltipPatcher.ExtraItemInfo)i));
 
-            foreach (ModOptions modOption in modOptions.Values)
+            foreach (ModOptions modOptions in modOptions.Values)
             {
-                optionsPanel.AddHeading(modsTab, modOption.Name);
+                optionsPanel.AddHeading(ModsTab, modOptions.Name);
 
-                foreach (ModOption option in modOption.Options)
+                foreach (ModOption option in modOptions.Options)
                 {
                     switch (option.Type)
                     {
                         case ModOptionType.Slider:
-                            ModSliderOption slider = (ModSliderOption)option;
-
-                            optionsPanel.AddSliderOption(modsTab, slider.Label, slider.Value, slider.MinValue, slider.MaxValue, slider.Value,
-                                new UnityAction<float>((float sliderVal) =>
-                                    modOption.OnSliderChange(slider.Id, sliderVal)));
+                            AddSliderOption(option, modOptions, optionsPanel);
                             break;
                         case ModOptionType.Toggle:
-                            ModToggleOption toggle = (ModToggleOption)option;
-
-                            optionsPanel.AddToggleOption(modsTab, toggle.Label, toggle.Value,
-                                new UnityAction<bool>((bool toggleVal) =>
-                                    modOption.OnToggleChange(toggle.Id, toggleVal)));
+                            AddToggleOption(option, modOptions, optionsPanel);
                             break;
                         case ModOptionType.Choice:
-                            ModChoiceOption choice = (ModChoiceOption)option;
-
-                            optionsPanel.AddChoiceOption(modsTab, choice.Label, choice.Options, choice.Index,
-                                new UnityAction<int>((int index) =>
-                                    modOption.OnChoiceChange(choice.Id, index, choice.Options[index])));
+                            AddChoiceOption(option, modOptions, optionsPanel);
                             break;
                         case ModOptionType.Keybind:
-                            ModKeybindOption keybind = (ModKeybindOption)option;
-
-                            ModKeybindOption.AddBindingOptionWithCallback(optionsPanel, modsTab, keybind.Label, keybind.Key, keybind.Device,
-                                new UnityAction<KeyCode>((KeyCode key) => 
-                                    modOption.OnKeybindChange(keybind.Id, key)));
+                            AddKeybindOption(option, modOptions, optionsPanel);
                             break;
                         default:
                             Logger.Error($"Invalid ModOptionType detected for option: {option.Id} ({option.Type.ToString()})");
@@ -75,6 +58,42 @@
                     }
                 }
             }
+        }
+
+        internal static void AddSliderOption(ModOption option, ModOptions modOptions, uGUI_OptionsPanel optionsPanel)
+        {
+            ModSliderOption slider = (ModSliderOption)option;
+
+            optionsPanel.AddSliderOption(ModsTab, slider.Label, slider.Value, slider.MinValue, slider.MaxValue, slider.Value,
+                new UnityAction<float>((float sliderVal) =>
+                    modOptions.OnSliderChange(slider.Id, sliderVal)));
+        }
+
+        internal static void AddToggleOption(ModOption option, ModOptions modOptions, uGUI_OptionsPanel optionsPanel)
+        {
+            ModToggleOption toggle = (ModToggleOption)option;
+
+            optionsPanel.AddToggleOption(ModsTab, toggle.Label, toggle.Value,
+                new UnityAction<bool>((bool toggleVal) =>
+                    modOptions.OnToggleChange(toggle.Id, toggleVal)));
+        }
+
+        internal static void AddChoiceOption(ModOption option, ModOptions modOptions, uGUI_OptionsPanel optionsPanel)
+        {
+            ModChoiceOption choice = (ModChoiceOption)option;
+
+            optionsPanel.AddChoiceOption(ModsTab, choice.Label, choice.Options, choice.Index,
+                new UnityAction<int>((int index) =>
+                    modOptions.OnChoiceChange(choice.Id, index, choice.Options[index])));
+        }
+
+        internal static void AddKeybindOption(ModOption option, ModOptions modOptions, uGUI_OptionsPanel optionsPanel)
+        {
+            ModKeybindOption keybind = (ModKeybindOption)option;
+
+            ModKeybindOption.AddBindingOptionWithCallback(optionsPanel, ModsTab, keybind.Label, keybind.Key, keybind.Device,
+                new UnityAction<KeyCode>((KeyCode key) =>
+                    modOptions.OnKeybindChange(keybind.Id, key)));
         }
     }
 }
