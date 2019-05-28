@@ -637,6 +637,18 @@
             </summary>
             <param name="ingredients">The ingredients.</param>
         </member>
+        <member name="M:QModManager.API.SMLHelper.Crafting.TechData.#ctor(System.Collections.Generic.List{TechType})">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.SMLHelper.Crafting.TechData"/> class for a custom recipe with a list of ingridients.
+            </summary>
+            <param name="ingredients">The ingredients.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Crafting.TechData.#ctor(TechType[])">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.SMLHelper.Crafting.TechData"/> class for a custom recipe with a collection of ingridients.
+            </summary>
+            <param name="ingredients">The ingredients.</param>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Crafting.TechData.GetIngredient(System.Int32)">
             <summary>
             Gets the ingredient at the specified index.

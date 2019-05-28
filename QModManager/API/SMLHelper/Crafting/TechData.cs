@@ -1,6 +1,7 @@
 ﻿namespace QModManager.API.SMLHelper.Crafting
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
     /// A class that fully describes a recipe for a <see cref="TechType"/> identified item.
@@ -62,10 +63,25 @@
         /// <param name="ingredients">The ingredients.</param>
         public TechData(params Ingredient[] ingredients)
         {
-            foreach (Ingredient ingredient in ingredients)
-            {
-                Ingredients.Add(ingredient); 
-            }
+            Ingredients = ingredients.ToList();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TechData"/> class for a custom recipe with a list of ingridients.
+        /// </summary>
+        /// <param name="ingredients">The ingredients.</param>
+        public TechData(List<TechType> ingredients)
+        {
+            Ingredients = ingredients.Select(techType => new Ingredient(techType, 1)).ToList();
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TechData"/> class for a custom recipe with a collection of ingridients.
+        /// </summary>
+        /// <param name="ingredients">The ingredients.</param>
+        public TechData(params TechType[] ingredients)
+        {
+            Ingredients = ingredients.Select(techType => new Ingredient(techType, 1)).ToList();
         }
 
         /// <summary>
