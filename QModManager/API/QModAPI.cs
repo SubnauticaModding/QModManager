@@ -198,7 +198,7 @@ namespace QModManager.API
         {
             if (string.IsNullOrEmpty(id)) return null;
 
-            string regexedID = Regex.Replace(id, Patcher.IDRegex, "", RegexOptions.IgnoreCase);
+            string regexedID = Patcher.IDRegex.Replace(id, "");
 
             if (regexedID == "QModManager") return QMod.QModManagerQMod;
 

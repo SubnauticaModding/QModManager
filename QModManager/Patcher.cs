@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
@@ -21,7 +22,7 @@ namespace QModManager
     {
         internal static HarmonyInstance harmony;
 
-        internal const string IDRegex = "[^0-9a-z_]";
+        internal static readonly Regex IDRegex = new Regex("[^0-9a-z_]", RegexOptions.IgnoreCase);
 
         internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? null : Path.Combine(Environment.CurrentDirectory, "QMods");
         internal static bool patched = false;

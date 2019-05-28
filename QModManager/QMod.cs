@@ -167,7 +167,7 @@ namespace QModManager
         {
             return new QMod()
             {
-                Id = Regex.Replace(name, Patcher.IDRegex, "", RegexOptions.IgnoreCase),
+                Id = Patcher.IDRegex.Replace(name, ""),
                 DisplayName = name,
                 Author = "None",
                 Version = "None",
@@ -206,10 +206,10 @@ namespace QModManager
 
                 success = false;
             }
-            else if (mod.Id != Regex.Replace(mod.Id, Patcher.IDRegex, "", RegexOptions.IgnoreCase))
+            else if (mod.Id != Patcher.IDRegex.Replace(mod.Id, ""))
             {
                 Logger.Warn($"Mod found in folder \"{folderName}\" has an invalid ID! All invalid characters have been removed. (This can cause issues!)");
-                mod.Id = Regex.Replace(mod.Id, Patcher.IDRegex, "", RegexOptions.IgnoreCase);
+                mod.Id = Patcher.IDRegex.Replace(mod.Id, "");
             }
 
             if (string.IsNullOrEmpty(mod.Author))
@@ -259,14 +259,14 @@ namespace QModManager
 
             for (int i = 0; i < mod.LoadAfter.Length; i++)
             {
-                string good = Regex.Replace(mod.LoadAfter[i], Patcher.IDRegex, "", RegexOptions.IgnoreCase);
+                string good = Patcher.IDRegex.Replace(mod.LoadAfter[i], "");
                 if (mod.LoadAfter[i] != good)
                     mod.LoadAfter[i] = good;
             }
 
             for (int i = 0; i < mod.LoadBefore.Length; i++)
             {
-                string good = Regex.Replace(mod.LoadBefore[i], Patcher.IDRegex, "", RegexOptions.IgnoreCase);
+                string good = Patcher.IDRegex.Replace(mod.LoadBefore[i], "");
                 if (mod.LoadBefore[i] != good)
                     mod.LoadBefore[i] = good;
             }
@@ -274,7 +274,7 @@ namespace QModManager
             Dictionary<string, string> versionDependenciesLoop = new Dictionary<string, string>(mod.VersionDependencies);
             foreach (KeyValuePair<string, string> kvp in versionDependenciesLoop)
             {
-                string good = Regex.Replace(kvp.Key, Patcher.IDRegex, "", RegexOptions.IgnoreCase);
+                string good = Patcher.IDRegex.Replace(kvp.Key, "");
                 if (kvp.Key != good)
                 {
                     mod.VersionDependencies.Remove(kvp.Key);
