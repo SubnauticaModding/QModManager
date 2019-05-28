@@ -3646,12 +3646,12 @@
             <param name="label">The display text to show on the in-game menus.</param>
             <param name="value">The starting value.</param>
         </member>
-        <member name="T:QModManager.PirateCheck">
+        <member name="T:QModManager.Checks.PirateCheck">
             <summary>
             Utility class which detects whether or not the game is pirated
             </summary>
         </member>
-        <member name="P:QModManager.PirateCheck.IsPirate">
+        <member name="P:QModManager.Checks.PirateCheck.IsPirate">
             <summary>
             Whether or not the game is pirated
             </summary>

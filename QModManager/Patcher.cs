@@ -2,7 +2,7 @@ using Harmony;
 using Oculus.Newtonsoft.Json;
 using QModManager.API;
 using QModManager.API.SMLHelper;
-using QModManager.Debugger;
+using QModManager.Checks;
 using QModManager.Utility;
 using SemVer;
 using System;
@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using UnityEngine;
 using Logger = QModManager.Utility.Logger;
 
 namespace QModManager

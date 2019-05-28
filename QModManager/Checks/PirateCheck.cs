@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using Logger = QModManager.Utility.Logger;
 
-namespace QModManager
+namespace QModManager.Checks
 {
     /// <summary>
     /// Utility class which detects whether or not the game is pirated

@@ -5,7 +5,7 @@ using System.Reflection;
 using UnityEngine;
 using Logger = QModManager.Utility.Logger;
 
-namespace QModManager
+namespace QModManager.Checks
 {
     internal static class VersionCheck
     {

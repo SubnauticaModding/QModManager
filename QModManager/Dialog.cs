@@ -1,4 +1,5 @@
 ﻿using Harmony;
+using QModManager.Checks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
