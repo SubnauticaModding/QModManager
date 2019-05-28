@@ -5,6 +5,7 @@
     using QModManager.API.SMLHelper.Assets;
     using System.IO;
     using QModManager.API.SMLHelper.Interfaces;
+    using QModManager.Utility;
 
     /// <summary>
     /// Class to manage registering of fish into the game
@@ -28,7 +29,6 @@
         /// <returns>The TechType created using the info from your CustomFish object</returns>
         TechType ICustomFishHandler.RegisterFish(CustomFish fish)
         {
-            Logger.Log($"[FishFramework] Creating fish: {fish.displayName}", LogLevel.Debug);
             TechType type = TechTypeHandler.AddTechType(fish.id, fish.displayName, fish.tooltip);
 
             fishTechTypes.Add(type);
@@ -49,6 +49,8 @@
             }
 
             PrefabHandler.RegisterPrefab(fishPrefab);
+
+            Logger.Debug($"Successfully registered fish: '{fish.displayName}' with Tech Type: '{fish.id}'");
 
             return type;
         }

@@ -1,5 +1,6 @@
 ﻿namespace QModManager.API.SMLHelper.Options.Utility
 {
+    using QModManager.Utility;
     using System.Text.RegularExpressions;
 
     internal static class Validator
@@ -8,17 +9,17 @@
         {
             if (!ValidateID(id, out string result))
             {
-                Logger.Log($"There was an error while trying to add choice option with id: {id}. {result}", LogLevel.Error);
+                Logger.Error($"There was an error while trying to add choice option with id: {id}. {result}");
                 return false;
             }
             if (!ValidateLabel(label, out result))
             {
-                Logger.Log($"There was an error while trying to add choice option with id: {id}. {result}", LogLevel.Error);
+                Logger.Error($"There was an error while trying to add choice option with id: {id}. {result}");
                 return false;
             }
             if (!ValidateArray(options, index, out result))
             {
-                Logger.Log($"There was an error while trying to add choice option with id: {id}. {result}", LogLevel.Error);
+                Logger.Error($"There was an error while trying to add choice option with id: {id}. {result}");
                 return false;
             }
             return true;

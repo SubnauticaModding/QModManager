@@ -2,6 +2,7 @@
 {
     using Interfaces;
     using Patchers;
+    using QModManager.Utility;
     using Utility;
 
     public class LanguageHandler : ILanguageHandler
@@ -53,7 +54,7 @@
         /// <param name="text">The actual text related to the entry.</param>
         void ILanguageHandler.SetLanguageLine(string lineId, string text)
         {
-            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
+            string modName = ReflectionHelper.CallingAssemblyByStackTrace().GetName().Name;
 
             LanguagePatcher.AddCustomLanguageLine(modName, lineId, text);
         }
@@ -65,7 +66,7 @@
         /// <param name="text">The new display name for the chosen <see cref="TechType"/>.</param>
         void ILanguageHandler.SetTechTypeName(TechType techType, string text)
         {
-            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
+            string modName = ReflectionHelper.CallingAssemblyByStackTrace().GetName().Name;
 
             LanguagePatcher.AddCustomLanguageLine(modName, techType.AsString(), text);
         }
@@ -77,7 +78,7 @@
         /// <param name="text">The new tooltip for the chosen <see cref="TechType"/>.</param>
         void ILanguageHandler.SetTechTypeTooltip(TechType techType, string text)
         {
-            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
+            string modName = ReflectionHelper.CallingAssemblyByStackTrace().GetName().Name;
 
             LanguagePatcher.AddCustomLanguageLine(modName, $"Tooltip_{techType.AsString()}", text);
         }

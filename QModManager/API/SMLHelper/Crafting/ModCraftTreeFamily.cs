@@ -4,6 +4,7 @@
     using System.Linq;
     using Assets;
     using Patchers;
+    using QModManager.Utility;
     using UnityEngine;
     using UnityEngine.Assertions;
     using Utility;
@@ -104,7 +105,7 @@
         /// <returns>A new tab node linked to the root node and ready to use.</returns>
         public ModCraftTreeTab AddTabNode(string nameID, string displayText, Atlas.Sprite sprite)
         {
-            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
+            string modName = ReflectionHelper.CallingAssemblyByStackTrace().GetName().Name;
 
             var tabNode = new ModCraftTreeTab(modName, nameID, displayText, sprite);
             tabNode.LinkToParent(this);
@@ -123,7 +124,7 @@
         /// <returns>A new tab node linked to the root node and ready to use.</returns>
         public ModCraftTreeTab AddTabNode(string nameID, string displayText, Sprite sprite)
         {
-            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
+            string modName = ReflectionHelper.CallingAssemblyByStackTrace().GetName().Name;
 
             var tabNode = new ModCraftTreeTab(modName, nameID, displayText, sprite);
             tabNode.LinkToParent(this);
@@ -140,7 +141,7 @@
         /// <returns>A new tab node linked to the root node and ready to use.</returns>
         public ModCraftTreeTab AddTabNode(string nameID)
         {
-            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
+            string modName = ReflectionHelper.CallingAssemblyByStackTrace().GetName().Name;
 
             var tabNode = new ModCraftTreeTab(modName, nameID);
             tabNode.LinkToParent(this);

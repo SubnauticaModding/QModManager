@@ -6,6 +6,7 @@
     using Utility;
     using System;
     using UnityEngine;
+    using QModManager.Utility;
 
     /// <summary>
     /// A handler class for creating and editing of crafting trees.
@@ -232,7 +233,7 @@
         void ICraftTreeHandler.AddTabNode(CraftTree.Type craftTree, string name, string displayName, Atlas.Sprite sprite)
         {
             ValidateStandardCraftTree(craftTree);
-            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
+            string modName = ReflectionHelper.CallingAssemblyByStackTrace().GetName().Name;
 
             CraftTreePatcher.TabNodes.Add(new TabNode(new string[0], craftTree, sprite, modName, name, displayName));
         }
@@ -248,7 +249,7 @@
         void ICraftTreeHandler.AddTabNode(CraftTree.Type craftTree, string name, string displayName, UnityEngine.Sprite sprite)
         {
             ValidateStandardCraftTree(craftTree);
-            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
+            string modName = ReflectionHelper.CallingAssemblyByStackTrace().GetName().Name;
 
             CraftTreePatcher.TabNodes.Add(new TabNode(new string[0], craftTree, new Atlas.Sprite(sprite), modName, name, displayName));
         }
@@ -268,7 +269,7 @@
         void ICraftTreeHandler.AddTabNode(CraftTree.Type craftTree, string name, string displayName, Atlas.Sprite sprite, params string[] stepsToTab)
         {
             ValidateStandardCraftTree(craftTree);
-            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
+            string modName = ReflectionHelper.CallingAssemblyByStackTrace().GetName().Name;
 
             CraftTreePatcher.TabNodes.Add(new TabNode(stepsToTab, craftTree, sprite, modName, name, displayName));
         }
@@ -288,7 +289,7 @@
         void ICraftTreeHandler.AddTabNode(CraftTree.Type craftTree, string name, string displayName, UnityEngine.Sprite sprite, params string[] stepsToTab)
         {
             ValidateStandardCraftTree(craftTree);            
-            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
+            string modName = ReflectionHelper.CallingAssemblyByStackTrace().GetName().Name;
 
             CraftTreePatcher.TabNodes.Add(new TabNode(stepsToTab, craftTree, new Atlas.Sprite(sprite), modName, name, displayName));
         }

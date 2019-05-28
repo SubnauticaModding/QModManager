@@ -955,7 +955,7 @@
         </member>
         <member name="M:QModManager.API.SMLHelper.Assets.PDAItem.#ctor(System.String,System.String,System.String)">
             <summary>
-            Initializes a new <see cref="T:QModManager.API.SMLHelper.Assets.PDAItem"/>, the basic class for any item that appears among your PDA blueprints.
+            Initializes a new <see cref="T:QModManager.API.SMLHelper.Assets.PDAItem"/>, the basic class for any item that appears among your PDA blueprints. <para/>
             DO NOT USE THIS CLASS DIRECTLY! Use <seealso cref="T:QModManager.API.SMLHelper.Assets.Craftable"/> or <see cref="T:QModManager.API.SMLHelper.Assets.Buildable"/> instead.
             </summary>
             <param name="classId">The main internal identifier for this item. Your item's <see cref="T:TechType" /> will be created using this name.</param>
@@ -2235,6 +2235,13 @@
             so if two mods are added at the same time, it may take a second game load for both to be visible to each other.
             </remarks>
         </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICustomFishHandler.RegisterFish(QModManager.API.SMLHelper.Assets.CustomFish)">
+            <summary>
+            Registers a CustomFish object into the game
+            </summary>
+            <param name="fish">The CustomFish that you are registering</param>
+            <returns>The TechType created using the info from your CustomFish object</returns>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Interfaces.IBioReactorHandler.SetBioReactorCharge(TechType,System.Single)">
             <summary>
             <para>Allows you to specify the quantity of energy that a TechType will produce with bio reactors.</para>
@@ -3283,141 +3290,6 @@
             <param name="key"></param>
             <param name="value"></param>
         </member>
-        <member name="T:QModManager.API.SMLHelper.Utility.ReflectionHelper">
-            <summary>
-            An extension method class for simplifying reflection calls for improved readability.
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ReflectionHelper.GetInstanceField``1(``0,System.String,System.Reflection.BindingFlags)">
-            <summary>
-            Gets the value of the requested private field, using reflection, from the instance object.
-            </summary>
-            <typeparam name="T">The instance class type.</typeparam>
-            <param name="instance">The instance.</param>
-            <param name="fieldName">Name of the private field.</param>
-            <param name="bindingFlags">The additional binding flags you wish to set.
-            <see cref="F:System.Reflection.BindingFlags.NonPublic" /> and <see cref="F:System.Reflection.BindingFlags.Instance" /> are already included.</param>
-            <returns>
-            The value of the requested field as an <see cref="T:System.Object" />.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ReflectionHelper.SetInstanceField``1(``0,System.String,System.Object,System.Reflection.BindingFlags)">
-            <summary>
-            Sets the value of the requested private field, using reflection, on the instance object.
-            </summary>
-            <typeparam name="T">The instance class type.</typeparam>
-            <param name="instance">The instance.</param>
-            <param name="fieldName">Name of the private field.</param>
-            <param name="value">The value to set.</param>
-            <param name="bindingFlags">The additional binding flags you wish to set.
-            <see cref="F:System.Reflection.BindingFlags.NonPublic" /> and <see cref="F:System.Reflection.BindingFlags.Instance" /> are already included.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ReflectionHelper.GetStaticField``1(System.String,System.Reflection.BindingFlags)">
-            <summary>
-            Gets the value of the requested private static field, using reflection, from the static object.
-            </summary>
-            <typeparam name="T">The static class type.</typeparam>
-            <param name="fieldName">Name of the field.</param>
-            <param name="bindingFlags">The additional binding flags you wish to set.
-            <see cref="F:System.Reflection.BindingFlags.NonPublic" /> and <see cref="F:System.Reflection.BindingFlags.Static" /> are already included.</param>
-            <returns>
-            The value of the requested static field as an <see cref="T:System.Object" />.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ReflectionHelper.GetStaticField``1(``0,System.String,System.Reflection.BindingFlags)">
-            <summary>
-            Gets the value of the requested private static field, using reflection, from the instance object.
-            </summary>
-            <typeparam name="T">The static class type.</typeparam>
-            <param name="instance">The instance.</param>
-            <param name="fieldName">Name of the field.</param>
-            <param name="bindingFlags">The additional binding flags you wish to set.
-            <see cref="F:System.Reflection.BindingFlags.NonPublic" /> and <see cref="F:System.Reflection.BindingFlags.Static" /> are already included.</param>
-            <returns>
-            The value of the requested static field as an <see cref="T:System.Object" />.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ReflectionHelper.SetStaticField``1(System.String,System.Object,System.Reflection.BindingFlags)">
-            <summary>
-            Sets the value of the requested private static field, using reflection, on the static object.
-            </summary>
-            <typeparam name="T">The static class type.</typeparam>
-            <param name="fieldName">Name of the field.</param>
-            <param name="value">The value to set.</param>
-            <param name="bindingFlags">The additional binding flags you wish to set.
-            <see cref="F:System.Reflection.BindingFlags.NonPublic" /> and <see cref="F:System.Reflection.BindingFlags.Static" /> are already included.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ReflectionHelper.SetStaticField``1(``0,System.String,System.Object,System.Reflection.BindingFlags)">
-            <summary>
-            Sets the value of the requested private static field, using reflection, on the instance object.
-            </summary>
-            <typeparam name="T">The static class type.</typeparam>
-            <param name="instance">The instance.</param>
-            <param name="fieldName">Name of the field.</param>
-            <param name="value">The value to set.</param>
-            <param name="bindingFlags">The additional binding flags you wish to set.
-            <see cref="F:System.Reflection.BindingFlags.NonPublic" /> and <see cref="F:System.Reflection.BindingFlags.Static" /> are already included.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ReflectionHelper.GetInstanceMethod``1(System.String,System.Reflection.BindingFlags)">
-            <summary>
-            Gets the <see cref="T:System.Reflection.MethodInfo" /> of a private instance method, using refelction, from the specified class.
-            </summary>
-            <typeparam name="T">The instance object type.</typeparam>
-            <param name="methodName">Name of the method.</param>
-            <param name="bindingFlags">The additional binding flags you wish to set.
-            <see cref="F:System.Reflection.BindingFlags.NonPublic" /> and <see cref="F:System.Reflection.BindingFlags.Instance" /> are already included.</param>
-            <returns>
-            The <see cref="T:System.Reflection.MethodInfo" /> of the requested private method.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ReflectionHelper.GetInstanceMethod``1(``0,System.String,System.Reflection.BindingFlags)">
-            <summary>
-            Gets the <see cref="T:System.Reflection.MethodInfo" /> of a private instance method, using refelction, from the instance object.
-            </summary>
-            <typeparam name="T">The instance object type.</typeparam>
-            <param name="instance">The instance.</param>
-            <param name="methodName">Name of the method.</param>
-            <param name="bindingFlags">The additional binding flags you wish to set.
-            <see cref="F:System.Reflection.BindingFlags.NonPublic" /> and <see cref="F:System.Reflection.BindingFlags.Instance" /> are already included.</param>
-            <returns>
-            The <see cref="T:System.Reflection.MethodInfo" /> of the requested private method.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ReflectionHelper.GetStaticMethod``1(System.String,System.Reflection.BindingFlags)">
-            <summary>
-            Gets the <see cref="T:System.Reflection.MethodInfo" /> of a private static method, using refelction, from the specified class.
-            </summary>
-            <typeparam name="T">The object type.</typeparam>
-            <param name="methodName">Name of the method.</param>
-            <param name="bindingFlags">The additional binding flags you wish to set.
-            <see cref="F:System.Reflection.BindingFlags.NonPublic" /> and <see cref="F:System.Reflection.BindingFlags.Static" /> are already included.</param>
-            <returns>
-            The <see cref="T:System.Reflection.MethodInfo" /> of the requested private method.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ReflectionHelper.GetStaticMethod``1(``0,System.String,System.Reflection.BindingFlags)">
-            <summary>
-            Gets the <see cref="T:System.Reflection.MethodInfo" /> of a private static method, using refelction, from the instance object.
-            </summary>
-            <typeparam name="T">The object type.</typeparam>
-            <param name="instance">The instance.</param>
-            <param name="methodName">Name of the method.</param>
-            <param name="bindingFlags">The additional binding flags you wish to set.
-            <see cref="F:System.Reflection.BindingFlags.NonPublic" /> and <see cref="F:System.Reflection.BindingFlags.Static" /> are already included.</param>
-            <returns>
-            The <see cref="T:System.Reflection.MethodInfo" /> of the requested private method.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ReflectionHelper.CopyFields``1(``0,``0,System.Reflection.BindingFlags)">
-            <summary>
-            Does a deep copy of all field values from the original instance onto the copied instance.
-            </summary>
-            <typeparam name="T">The class type of both objects.</typeparam>
-            <param name="original">The original instance.</param>
-            <param name="copy">The instance receiving the copied values.</param>
-            <param name="bindingFlags">The additional binding flags you wish to set.
-            <see cref="F:System.Reflection.BindingFlags.Instance" /> is already included.</param>
-        </member>
         <member name="M:QModManager.API.SMLHelper.Utility.SaveUtils.GetCurrentSaveDataDir">
             <summary>
             Returns the path to the current save slot's directory.
@@ -3773,6 +3645,16 @@
             <param name="id">The internal ID of this option.</param>
             <param name="label">The display text to show on the in-game menus.</param>
             <param name="value">The starting value.</param>
+        </member>
+        <member name="T:QModManager.PirateCheck">
+            <summary>
+            Utility class which detects whether or not the game is pirated
+            </summary>
+        </member>
+        <member name="P:QModManager.PirateCheck.IsPirate">
+            <summary>
+            Whether or not the game is pirated
+            </summary>
         </member>
         <member name="T:QModManager.QMod">
             <summary>

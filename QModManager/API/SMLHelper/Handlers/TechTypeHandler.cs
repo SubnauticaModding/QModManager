@@ -1,10 +1,11 @@
 ﻿namespace QModManager.API.SMLHelper.Handlers
 {
-    using System.Collections.Generic;
-    using System.Reflection;
     using Assets;
     using Patchers;
     using QModManager.API.SMLHelper.Interfaces;
+    using QModManager.Utility;
+    using System.Collections.Generic;
+    using System.Reflection;
     using UnityEngine;
     using Utility;
 
@@ -181,7 +182,7 @@
         /// <returns>The new <see cref="TechType"/> that is created.</returns>
         TechType ITechTypeHandler.AddTechType(string internalName, string displayName, string tooltip, bool unlockAtStart)
         {
-            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
+            string modName = ReflectionHelper.CallingAssemblyByStackTrace().GetName().Name;
             return AddTechType(modName, internalName, displayName, tooltip, unlockAtStart);
         }
 
@@ -208,7 +209,7 @@
         /// <returns>The new <see cref="TechType"/> that is created.</returns>
         TechType ITechTypeHandler.AddTechType(string internalName, string displayName, string tooltip, Atlas.Sprite sprite, bool unlockAtStart)
         {
-            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
+            string modName = ReflectionHelper.CallingAssemblyByStackTrace().GetName().Name;
 
             // Register the TechType using overload.
             TechType techType = Main.AddTechType(internalName, displayName, tooltip, unlockAtStart);
@@ -245,7 +246,7 @@
         /// <returns>The new <see cref="TechType"/> that is created.</returns>
         TechType ITechTypeHandler.AddTechType(string internalName, string displayName, string tooltip, Sprite sprite, bool unlockAtStart)
         {
-            string modName = ReflectionHelper.CallingAssemblyNameByStackTrace();
+            string modName = ReflectionHelper.CallingAssemblyByStackTrace().GetName().Name;
 
             // Register the TechType using overload.
             TechType techType = Main.AddTechType(internalName, displayName, tooltip, unlockAtStart);
