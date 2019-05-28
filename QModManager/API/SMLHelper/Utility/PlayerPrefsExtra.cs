@@ -2,6 +2,9 @@
 {
     using UnityEngine;
 
+    /// <summary>
+    /// Additional methods for <see cref="PlayerPrefs"/>
+    /// </summary>
     public static class PlayerPrefsExtra
     {
         /// <summary>

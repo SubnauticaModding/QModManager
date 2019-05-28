@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QModManager.API.SMLHelper.Utility;
+using System;
 
 namespace QModManager.Utility
 {

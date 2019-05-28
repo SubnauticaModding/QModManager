@@ -2863,6 +2863,171 @@
             <param name="container">The container to check.</param>
             <returns>The collection of techtypes allowed in the container.</returns>
         </member>
+        <member name="T:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra">
+            <summary>
+            Additional methods for <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetBool(System.String,System.Boolean)">
+            <summary>
+            Get a <see cref="T:System.Boolean"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetBool(System.String,System.Boolean)">
+            <summary>
+            Set a <see cref="T:System.Boolean"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetKeyCode(System.String,UnityEngine.KeyCode)">
+            <summary>
+            Get a <see cref="T:UnityEngine.KeyCode"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetKeyCode(System.String,UnityEngine.KeyCode)">
+            <summary>
+            Set a <see cref="T:UnityEngine.KeyCode"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetColor(System.String)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Color"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetColor(System.String,UnityEngine.Color)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Color"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetColor(System.String,UnityEngine.Color)">
+            <summary>
+            Set a <see cref="T:UnityEngine.Color"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector2(System.String)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Vector2"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector2(System.String,UnityEngine.Vector2)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Vector2"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetVector2(System.String,UnityEngine.Vector2)">
+            <summary>
+            Set a <see cref="T:UnityEngine.Vector2"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector2int(System.String)">
+            <summary>
+            Get a <see cref="T:Vector2int"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector2int(System.String,Vector2int)">
+            <summary>
+            Get a <see cref="T:Vector2int"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetVector2int(System.String,Vector2int)">
+            <summary>
+            Set a <see cref="T:Vector2int"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector3(System.String)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Vector3"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector3(System.String,UnityEngine.Vector3)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Vector3"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetVector3(System.String,UnityEngine.Vector3)">
+            <summary>
+            Set a <see cref="T:UnityEngine.Vector3"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector4(System.String)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Vector4"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector4(System.String,UnityEngine.Vector4)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Vector4"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetVector4(System.String,UnityEngine.Vector4)">
+            <summary>
+            Set a <see cref="T:UnityEngine.Vector4"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetQuaternion(System.String)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Quaternion"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetQuaternion(System.String,UnityEngine.Quaternion)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Quaternion"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetQuaternion(System.String,UnityEngine.Quaternion)">
+            <summary>
+            Set a <see cref="T:UnityEngine.Quaternion"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
         <member name="T:QModManager.API.SMLHelper.Utility.ExtBannedIdManager">
             <summary>
             This class is tasked with checking external txt files for banned IDs that are not to be isssued when patching in new enum entries.
@@ -3129,166 +3294,6 @@
             </summary>
             <param name="s"></param>
             <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetBool(System.String,System.Boolean)">
-            <summary>
-            Get a <see cref="T:System.Boolean"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="defaultValue"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetBool(System.String,System.Boolean)">
-            <summary>
-            Set a <see cref="T:System.Boolean"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetKeyCode(System.String,UnityEngine.KeyCode)">
-            <summary>
-            Get a <see cref="T:UnityEngine.KeyCode"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="defaultValue"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetKeyCode(System.String,UnityEngine.KeyCode)">
-            <summary>
-            Set a <see cref="T:UnityEngine.KeyCode"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetColor(System.String)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Color"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetColor(System.String,UnityEngine.Color)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Color"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="defaultValue"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetColor(System.String,UnityEngine.Color)">
-            <summary>
-            Set a <see cref="T:UnityEngine.Color"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector2(System.String)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Vector2"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector2(System.String,UnityEngine.Vector2)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Vector2"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="defaultValue"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetVector2(System.String,UnityEngine.Vector2)">
-            <summary>
-            Set a <see cref="T:UnityEngine.Vector2"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector2int(System.String)">
-            <summary>
-            Get a <see cref="T:Vector2int"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector2int(System.String,Vector2int)">
-            <summary>
-            Get a <see cref="T:Vector2int"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="defaultValue"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetVector2int(System.String,Vector2int)">
-            <summary>
-            Set a <see cref="T:Vector2int"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector3(System.String)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Vector3"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector3(System.String,UnityEngine.Vector3)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Vector3"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="defaultValue"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetVector3(System.String,UnityEngine.Vector3)">
-            <summary>
-            Set a <see cref="T:UnityEngine.Vector3"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector4(System.String)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Vector4"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector4(System.String,UnityEngine.Vector4)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Vector4"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="defaultValue"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetVector4(System.String,UnityEngine.Vector4)">
-            <summary>
-            Set a <see cref="T:UnityEngine.Vector4"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetQuaternion(System.String)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Quaternion"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetQuaternion(System.String,UnityEngine.Quaternion)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Quaternion"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="defaultValue"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetQuaternion(System.String,UnityEngine.Quaternion)">
-            <summary>
-            Set a <see cref="T:UnityEngine.Quaternion"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
         </member>
         <member name="M:QModManager.API.SMLHelper.Utility.SaveUtils.GetCurrentSaveDataDir">
             <summary>

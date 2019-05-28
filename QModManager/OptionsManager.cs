@@ -1,5 +1,5 @@
 ﻿using Harmony;
-using QModManager.Utility;
+using QModManager.API.SMLHelper.Utility;
 using UnityEngine.Events;
 
 namespace QModManager

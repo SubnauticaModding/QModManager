@@ -55,6 +55,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Patchers\OptionsPanelPatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patchers\PDAPatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patchers\TooltipPatcher.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utility\PlayerPrefsExtra.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\SelfCheckingDictionary.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patchers\BioReactorPatcher.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Patchers\CraftDataPatcher.cs" />
@@ -77,7 +78,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Utility\StorageHelperExtensions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\ItemStorageHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\KeyCodeUtils.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Utility\PlayerPrefsExtra.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\PrefabUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\PatchUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utility\SaveUtils.cs" />
