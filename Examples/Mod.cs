@@ -23,16 +23,16 @@ namespace QModManager.Examples
 
         public static void Load()
         {
-            ChoiceIndex = PlayerPrefs.GetInt("SMLHelperExampleModChoice", 0);
-            KeybindKey = PlayerPrefsExtra.GetKeyCode("SMLHelperExampleModKeybind", KeyCode.X);
-            SliderValue = PlayerPrefs.GetFloat("SMLHelperExampleModSlider", 50f);
-            ToggleValue = PlayerPrefsExtra.GetBool("SMLHelperExampleModToggle", true);
+            ChoiceIndex = PlayerPrefs.GetInt("QModManagerExampleModChoice", 0);
+            KeybindKey = PlayerPrefsExtra.GetKeyCode("QModManagerExampleModKeybind", KeyCode.X);
+            SliderValue = PlayerPrefs.GetFloat("QModManagerExampleModSlider", 50f);
+            ToggleValue = PlayerPrefsExtra.GetBool("QModManagerExampleModToggle", true);
         }
     }
 
     public class Options : ModOptions
     {
-        public Options() : base("SMLHelper Example Mod")
+        public Options() : base("Example Mod")
         {
             ChoiceChanged += Options_ChoiceChanged;
             KeybindChanged += Options_KeybindChanged;
@@ -44,25 +44,25 @@ namespace QModManager.Examples
         {
             if (e.Id != "exampleChoice") return;
             Config.ChoiceIndex = e.Index;
-            PlayerPrefs.SetInt("SMLHelperExampleModChoice", e.Index);
+            PlayerPrefs.SetInt("QModManagerExampleModChoice", e.Index);
         }
         public void Options_KeybindChanged(object sender, KeybindChangedEventArgs e)
         {
             if (e.Id != "exampleKeybind") return;
             Config.KeybindKey = e.Key;
-            PlayerPrefsExtra.SetKeyCode("SMLHelperExampleModKeybind", e.Key);
+            PlayerPrefsExtra.SetKeyCode("QModManagerExampleModKeybind", e.Key);
         }
         public void Options_SliderChanged(object sender, SliderChangedEventArgs e)
         {
             if (e.Id != "exampleSlider") return;
             Config.SliderValue = e.Value;
-            PlayerPrefs.SetFloat("SMLHelperExampleModSlider", e.Value);
+            PlayerPrefs.SetFloat("QModManagerExampleModSlider", e.Value);
         }
         public void Options_ToggleChanged(object sender, ToggleChangedEventArgs e)
         {
             if (e.Id != "exampleToggle") return;
             Config.ToggleValue = e.Value;
-            PlayerPrefsExtra.SetBool("SMLHelperExampleModToggle", e.Value);
+            PlayerPrefsExtra.SetBool("QModManagerExampleModToggle", e.Value);
         }
 
         public override void BuildModOptions()
