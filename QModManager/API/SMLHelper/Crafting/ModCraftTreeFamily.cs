@@ -107,7 +107,7 @@
         {
             string modName = ReflectionHelper.CallingAssemblyByStackTrace().GetName().Name;
 
-            var tabNode = new ModCraftTreeTab(modName, nameID, displayText, sprite);
+            ModCraftTreeTab tabNode = new ModCraftTreeTab(modName, nameID, displayText, sprite);
             tabNode.LinkToParent(this);
 
             ChildNodes.Add(tabNode);
@@ -126,7 +126,7 @@
         {
             string modName = ReflectionHelper.CallingAssemblyByStackTrace().GetName().Name;
 
-            var tabNode = new ModCraftTreeTab(modName, nameID, displayText, sprite);
+            ModCraftTreeTab tabNode = new ModCraftTreeTab(modName, nameID, displayText, sprite);
             tabNode.LinkToParent(this);
 
             ChildNodes.Add(tabNode);
@@ -143,7 +143,7 @@
         {
             string modName = ReflectionHelper.CallingAssemblyByStackTrace().GetName().Name;
 
-            var tabNode = new ModCraftTreeTab(modName, nameID);
+            ModCraftTreeTab tabNode = new ModCraftTreeTab(modName, nameID);
             tabNode.LinkToParent(this);
 
             ChildNodes.Add(tabNode);
@@ -164,7 +164,7 @@
 
                 if (node.Name == nameID && node.Action == TreeAction.Expand)
                 {
-                    var tab = (ModCraftTreeTab)node;
+                    ModCraftTreeTab tab = node;
                     return tab;
                 }
             }
@@ -185,7 +185,7 @@
 
                 if (node.TechType == techType && node.Action == TreeAction.Craft)
                 {
-                    var craftNode = (ModCraftTreeCraft)node;
+                    ModCraftTreeCraft craftNode = (ModCraftTreeCraft)node;
                     return craftNode;
                 }
             }
@@ -219,7 +219,7 @@
         {
             Assert.AreNotEqual(TechType.None, techType, "Attempt to add TechType.None as a crafting node.");
 
-            var craftNode = new ModCraftTreeCraft(techType);
+            ModCraftTreeCraft craftNode = new ModCraftTreeCraft(techType);
             craftNode.LinkToParent(this);
 
             ChildNodes.Add(craftNode);
@@ -258,8 +258,8 @@
 
             if (cache != null)
             {
-                var techType = (TechType)cache.Index;
-                var craftNode = new ModCraftTreeCraft(techType);
+                TechType techType = (TechType)cache.Index;
+                ModCraftTreeCraft craftNode = new ModCraftTreeCraft(techType);
                 craftNode.LinkToParent(this);
 
                 ChildNodes.Add(craftNode);
@@ -307,13 +307,13 @@
                 if (node.action == TreeAction.Expand)
                 {
                     ModCraftTreeTab tab = root.AddTabNode(node.id);
-                    var thing = (ModCraftTreeLinkingNode)tab;
+                    ModCraftTreeLinkingNode thing = (ModCraftTreeLinkingNode)tab;
                     CreateFromExistingTree(node, ref thing);
                 }
 
                 if (node.action == TreeAction.Craft)
                 {
-                    var techType = TechType.None;
+                    TechType techType = TechType.None;
                     TechTypeExtensions.FromString(node.id, out techType, false);
 
                     if (node.id == "SeamothHullModule2") techType = TechType.VehicleHullModule2;

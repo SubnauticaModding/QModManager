@@ -46,7 +46,6 @@
         internal static void Patch(HarmonyInstance harmony)
         {
             // Direct access to private fields made possible by https://github.com/CabbageCrow/AssemblyPublicizer/
-            // See README.md for details.
 
             harmony.Patch(AccessTools.Method(typeof(uGUI_InventoryTab), "OnPointerClick"), 
                 prefix: new HarmonyMethod(AccessTools.Method(typeof(ItemActionPatcher), "OnPointerClick_Prefix")));

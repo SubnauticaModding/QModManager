@@ -588,7 +588,7 @@ namespace QModManager
             modSortingChain.Add(mod);
 
             // Get all the duplicates present in the chain
-            var duplicates = modSortingChain.GroupBy(s => s)
+            List<QMod> duplicates = modSortingChain.GroupBy(s => s)
                 .SelectMany(grp => grp.Skip(1))
                 .ToList();
 

@@ -43,12 +43,12 @@
             if (cacheManager.IsIndexValid(cache.Index))
                 cache.Index = cacheManager.GetNextFreeIndex();
 
-            var techType = (TechType)cache.Index;
+            TechType techType = (TechType)cache.Index;
 
             cacheManager.Add(techType, cache);
 
             // Direct access to private fields made possible by https://github.com/CabbageCrow/AssemblyPublicizer/
-            // See README.md for details.
+
             TechTypeExtensions.stringsNormal[techType] = name;
             TechTypeExtensions.stringsLowercase[techType] = name.ToLowerInvariant();
             TechTypeExtensions.techTypesNormal[name] = techType;
@@ -71,7 +71,7 @@
             // Any mod that patches after this one will not be picked up by this method.
             // For those cases, there are additional ways of excluding these IDs.
 
-            var bannedIndices = new List<int>();
+            List<int> bannedIndices = new List<int>();
 
             Dictionary<string, TechType> knownTechTypes = TechTypeExtensions.keyTechTypes;
             foreach (TechType knownTechType in knownTechTypes.Values)
@@ -119,7 +119,7 @@
         {
             if (enumType.Equals(typeof(TechType)))
             {
-                var listArray = new List<TechType>();
+                List<TechType> listArray = new List<TechType>();
                 foreach (object obj in __result)
                 {
                     listArray.Add((TechType)obj);

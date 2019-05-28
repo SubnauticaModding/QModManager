@@ -43,7 +43,7 @@
 
             Logger.Debug($"Successfully added CraftTree Type: '{name}' to Index: '{cache.Index}'");
 
-            var customTreeRoot = new ModCraftTreeRoot(craftTreeType, name);
+            ModCraftTreeRoot customTreeRoot = new ModCraftTreeRoot(craftTreeType, name);
 
             CraftTreePatcher.CustomTrees[craftTreeType] = customTreeRoot;
 
@@ -57,7 +57,7 @@
             // Any mod that patches after this one will not be picked up by this method.
             // For those cases, there are additional ways of excluding these IDs.
 
-            var bannedIndices = new List<int>();
+            List<int> bannedIndices = new List<int>();
 
             Array enumValues = Enum.GetValues(typeof(CraftTree.Type));
 
@@ -106,7 +106,7 @@
         {
             if (enumType.Equals(typeof(CraftTree.Type)))
             {
-                var listArray = new List<CraftTree.Type>();
+                List<CraftTree.Type> listArray = new List<CraftTree.Type>();
                 foreach (object obj in __result)
                 {
                     listArray.Add((CraftTree.Type)obj);

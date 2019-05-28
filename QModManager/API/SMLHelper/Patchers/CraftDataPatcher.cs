@@ -93,7 +93,7 @@
         internal static void Patch(HarmonyInstance harmony)
         {
             // Direct access to private fields made possible by https://github.com/CabbageCrow/AssemblyPublicizer/
-            // See README.md for details.
+
             PatchUtils.PatchDictionary(CraftData.harvestOutputList, CustomHarvestOutputList);
             PatchUtils.PatchDictionary(CraftData.harvestTypeList, CustomHarvestTypeList);
             PatchUtils.PatchDictionary(CraftData.harvestFinalCutBonusList, CustomFinalCutBonusList);
@@ -133,13 +133,13 @@
             {
                 ITechData smlTechData = CustomTechData[techType];
 
-                var techDataInstance = new CraftData.TechData
+                CraftData.TechData techDataInstance = new CraftData.TechData
                 {
                     _techType = techType,
                     _craftAmount = smlTechData.craftAmount
                 };
 
-                var ingredientsList = new CraftData.Ingredients();
+                CraftData.Ingredients ingredientsList = new CraftData.Ingredients();
 
                 if (smlTechData.ingredientCount > 0)
                 {
@@ -147,7 +147,7 @@
                     {
                         IIngredient smlIngredient = smlTechData.GetIngredient(i);
 
-                        var ingredient = new CraftData.Ingredient(smlIngredient.techType, smlIngredient.amount);
+                        CraftData.Ingredient ingredient = new CraftData.Ingredient(smlIngredient.techType, smlIngredient.amount);
                         ingredientsList.Add(smlIngredient.techType, smlIngredient.amount);
                     }
                     techDataInstance._ingredients = ingredientsList;
@@ -155,7 +155,7 @@
 
                 if (smlTechData.linkedItemCount > 0)
                 {
-                    var linkedItems = new List<TechType>();
+                    List<TechType> linkedItems = new List<TechType>();
                     for (int l = 0; l < smlTechData.linkedItemCount; l++)
                     {
                         linkedItems.Add(smlTechData.GetLinkedItem(l));

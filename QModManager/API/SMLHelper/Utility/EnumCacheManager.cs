@@ -96,7 +96,7 @@
                     string name = split[0];
                     string index = split[1];
 
-                    var cache = new EnumTypeCache()
+                    EnumTypeCache cache = new EnumTypeCache()
                     {
                         Name = name,
                         Index = int.Parse(index)
@@ -118,7 +118,7 @@
             try
             {
                 string savePathDir = GetCachePath();
-                var stringBuilder = new StringBuilder();
+                StringBuilder stringBuilder = new StringBuilder();
 
                 foreach (KeyValuePair<T, EnumTypeCache> entry in customEnumTypes)
                 {

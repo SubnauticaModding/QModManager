@@ -61,10 +61,8 @@
         }
 
         private static void InitializePostFix()
-        {
-            var craftTreeInitialized = CraftTree.initialized;
-        
-            if (craftTreeInitialized && !ModCraftTreeNode.Initialized)
+        {        
+            if (CraftTree.initialized && !ModCraftTreeNode.Initialized)
             {
                 foreach (CraftTree.Type cTreeKey in CustomTrees.Keys)
                 {
@@ -144,7 +142,7 @@
                 }
 
                 // Add the new tab node.
-                var newNode = new CraftNode(tab.Name, TreeAction.Expand, TechType.None);
+                CraftNode newNode = new CraftNode(tab.Name, TreeAction.Expand, TechType.None);
                 currentNode.AddNode(new TreeNode[]
                 {
                     newNode

@@ -21,7 +21,7 @@
 
         internal static void Postfix(bool __result, string value)
         {
-            var separator = new char[]
+            char[] separator = new char[]
             {
                 ' ',
                 '\t'

@@ -31,7 +31,7 @@
             UnlockedAtStart.ForEach(x => KnownTech.Add(x, false));
 
             // Direct access to private fields made possible by https://github.com/CabbageCrow/AssemblyPublicizer/
-            // See README.md for details.
+
             List<KnownTech.AnalysisTech> analysisTech = KnownTech.analysisTech;
             IEnumerable<KnownTech.AnalysisTech> techToAdd = AnalysisTech.Values.Where(a => !analysisTech.Any(a2 => a.techType == a2.techType));
 

@@ -22,7 +22,7 @@
         internal static void Postfix(ref Language __instance)
         {
             // Direct access to private fields made possible by https://github.com/CabbageCrow/AssemblyPublicizer/
-            // See README.md for details.
+
             Dictionary<string, string> strings = __instance.strings;
             foreach (KeyValuePair<string, string> a in customLines)
             {
@@ -70,7 +70,7 @@
         private static void WriteOriginalLinesFile(string modKey)
         {
             Dictionary<string, string> modCustomLines = originalCustomLines[modKey];
-            var text = new StringBuilder();
+            StringBuilder text = new StringBuilder();
             foreach (string langLineKey in modCustomLines.Keys)
             {
                 string value = modCustomLines[langLineKey].Replace("\n", "\\n").Replace("\r", "\\r");

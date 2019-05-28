@@ -9,7 +9,7 @@ namespace QModManager.Utility
     {
         internal static Assembly CallingAssemblyByStackTrace()
         {
-            var stackTrace = new StackTrace();
+            StackTrace stackTrace = new StackTrace();
             StackFrame[] frames = stackTrace.GetFrames();
 
             foreach (StackFrame stackFrame in frames)
