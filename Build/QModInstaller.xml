@@ -965,6 +965,11 @@
             </value>
             <seealso cref="P:QModManager.API.SMLHelper.Assets.PDAItem.RequiredForUnlock"/>
         </member>
+        <member name="P:QModManager.API.SMLHelper.Assets.PDAItem.DiscoverMessage">
+            <summary>
+            Message which should be shown when the item is unlocked
+            </summary>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Assets.PDAItem.#ctor(System.String,System.String,System.String)">
             <summary>
             Initializes a new <see cref="T:QModManager.API.SMLHelper.Assets.PDAItem"/>, the basic class for any item that appears among your PDA blueprints. <para/>

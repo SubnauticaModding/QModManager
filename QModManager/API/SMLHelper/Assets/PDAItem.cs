@@ -35,6 +35,13 @@
         public bool UnlockedAtStart => this.RequiredForUnlock == TechType.None;
 
         /// <summary>
+        /// Message which should be shown when the item is unlocked
+        /// </summary>
+        public virtual string DiscoverMessage => $"{this.FriendlyName} blueprint discovered!";
+
+        internal string DiscoverMessageKey => $"{TechType.AsString()}_DiscoverMessage";
+
+        /// <summary>
         /// Initializes a new <see cref="PDAItem"/>, the basic class for any item that appears among your PDA blueprints. <para/>
         /// DO NOT USE THIS CLASS DIRECTLY! Use <seealso cref="Craftable"/> or <see cref="Buildable"/> instead.
         /// </summary>
@@ -45,6 +52,8 @@
             : base(classId, friendlyName, description)
         {
             CorePatchEvents += PatchTechDataEntry;
+
+            LanguageHandler.SetLanguageLine(DiscoverMessageKey, DiscoverMessage);
         }
 
         /// <summary>
@@ -61,7 +70,7 @@
             if (this.UnlockedAtStart)
                 KnownTechHandler.UnlockOnStart(this.TechType);
             else
-                KnownTechHandler.SetAnalysisTechEntry(this.RequiredForUnlock, new TechType[1] { this.TechType }, $"{this.FriendlyName} blueprint discovered!");
+                KnownTechHandler.SetAnalysisTechEntry(this.RequiredForUnlock, new TechType[1] { this.TechType }, Language.main.Get(this.DiscoverMessageKey));
         }
     }
 }
