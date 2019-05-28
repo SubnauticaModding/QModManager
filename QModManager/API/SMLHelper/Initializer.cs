@@ -1,37 +1,17 @@
 ﻿namespace QModManager.API.SMLHelper
 {
-    using System;
-    using System.Reflection;
     using Harmony;
     using Patchers;
+    using QModManager.Utility;
+    using System;
 
-    public class Initializer
+    internal static class Initializer
     {
         private static HarmonyInstance harmony { get => Patcher.harmony; }
 
-        public static void PrePreInit()
+        internal static void PostPostInit()
         {
-            Logger.Initialize();
-        }
-
-        public static void PreInit()
-        {
-
-        }
-
-        public static void Init()
-        {
-
-        }
-
-        public static void PostInit()
-        {
-
-        }
-
-        public static void PostPostInit()
-        {
-            Logger.Log($"Loading SMLHelper v{Assembly.GetExecutingAssembly().GetName().Version}...", LogLevel.Info);
+            Logger.Info($"Loading SMLHelper...");
 
             try
             {
@@ -39,7 +19,8 @@
             }
             catch (Exception e)
             {
-                Logger.Error($"Caught exception while trying to initialize SMLHelper{Environment.NewLine}{e}");
+                Logger.Error($"Caught an exception while trying to initialize SMLHelper");
+                Logger.Exception(e);
             }
         }
 

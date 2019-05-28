@@ -1,6 +1,7 @@
 using Harmony;
 using Oculus.Newtonsoft.Json;
 using QModManager.API;
+using QModManager.API.SMLHelper;
 using QModManager.Debugger;
 using QModManager.Utility;
 using SemVer;
@@ -82,7 +83,9 @@ namespace QModManager
 
                 VersionCheck.Check();
 
-                QModHooks.Start += PrefabDebugger.Main;
+                //QModHooks.Start += PrefabDebugger.Main;
+
+                Initializer.PostPostInit();
 
                 QModHooks.OnLoadEnd?.Invoke();
 
