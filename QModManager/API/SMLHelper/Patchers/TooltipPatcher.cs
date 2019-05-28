@@ -69,38 +69,31 @@
         }
         internal static void WriteModNameFromTechType(StringBuilder sb, TechType type)
         {
-            // if (MissingTechTypes.Contains(type)) WriteModNameError(sb, "Mod Missing");
-            // This is for something else I am going to do
-
-            if (TechTypeHandler.TechTypesAddedBy.TryGetValue(type, out Assembly assembly))
+            try
             {
-                // SMLHelper can access QModManager internals because of this: 
-                // https://github.com/QModManager/QModManager/blob/releases/2.0.1/QModManager/Properties/AssemblyInfo.cs#L21
-
-                string modName = null;
-
-                foreach (QMod mod in Patcher.loadedMods)
+                if (TechTypeHandler.TechTypesAddedBy.TryGetValue(type, out Assembly assembly))
                 {
-                    if (mod == null || mod.LoadedAssembly == null) continue;
-                    if (mod.LoadedAssembly == assembly)
+                    string modName = QModAPI.GetMod(assembly).DisplayName;
+
+                    if (string.IsNullOrEmpty(modName))
                     {
-                        modName = mod.DisplayName;
-                        break;
+                        WriteModNameError(sb, "Unknown Mod", "Mod could not be determined");
                     }
-                }
-
-                if (string.IsNullOrEmpty(modName))
-                {
-                    WriteModNameError(sb, "Unknown Mod", "Mod could not be determined");
+                    else
+                    {
+                        WriteModName(sb, modName);
+                    }
                 }
                 else
                 {
-                    WriteModName(sb, modName);
+                    WriteModNameError(sb, "Unknown Mod", "Assembly could not be determined");
                 }
             }
-            else
+            catch (Exception e)
             {
-                WriteModNameError(sb, "Unknown Mod", "Assembly could not be determined");
+                WriteModNameError(sb, "Unknown Mod", "An error has occurred");
+                Logger.Error($"There was an error displaying extra item information for TechType '{type.AsString()}'");
+                Logger.Exception(e);
             }
         }
         internal static void WriteSpace(StringBuilder sb)
