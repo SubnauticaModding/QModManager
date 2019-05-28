@@ -8,15 +8,13 @@ namespace QModManager.Utility
         internal static string ToStringParsed(this Version version)
         {
             if (version == null) throw new ArgumentNullException(nameof(version));
-            if (version.Revision == 0)
-                if (version.Build == 0)
-                    if (version.Minor == 0)
-                        return version.ToString(1);
-                    else
-                        return version.ToString(2);
-                else
-                    return version.ToString(3);
-            else return version.ToString(4);
+
+            string text = version.ToString();
+
+            while (text.EndsWith(".0"))
+                text = text.Substring(0, text.Length - 2);
+
+            return text;
         }
 
         internal static T GetOrAddComponent<T>(this GameObject gameObject) where T : Component
