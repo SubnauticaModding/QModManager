@@ -15,7 +15,10 @@ using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
 {
-    internal static class PirateCheck
+    /// <summary>
+    /// Utility class which detects whether or not the game is pirated
+    /// </summary>
+    public static class PirateCheck
     {
         /*internal class Pirate : MonoBehaviour
         {
@@ -185,9 +188,17 @@ namespace QModManager
             }
         }*/
 
+        /// <summary>
+        /// Whether or not the game is pirated
+        /// </summary>
+        public static bool IsPirate { get; internal set; } = false;
+
         internal static void PirateDetected()
         {
             Logger.Warn("Ahoy, matey! Ye be a pirate!");
+
+            IsPirate = true;
+
             /*Hooks.Update += Log;
             GameObject obj = new GameObject("YOU ARE A PIRATE");
             obj.AddComponent<Pirate>();*/
@@ -204,7 +215,7 @@ namespace QModManager
             "Subnautica_Data/Plugins/steam_emu.ini",
         };
 
-        internal static void IsPirate(string folder)
+        internal static void CheckIfPirate(string folder)
         {
             string steamDll = Path.Combine(folder, "steam_api64.dll");
             if (File.Exists(steamDll))
