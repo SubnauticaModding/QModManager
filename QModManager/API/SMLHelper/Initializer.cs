@@ -42,7 +42,7 @@
             ItemsContainerPatcher.Patch(harmony);
             PDAPatcher.Patch(harmony);
             ItemActionPatcher.Patch(harmony);
-            //TooltipPatcher.Patch(harmony);
+            TooltipPatcher.Patch(harmony);
         }
     }
 }
