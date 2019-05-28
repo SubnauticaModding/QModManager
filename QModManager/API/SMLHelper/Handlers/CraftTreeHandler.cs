@@ -216,7 +216,6 @@
         /// </summary>
         /// <param name="craftTree">The target craft tree to edit.</param>
         /// <param name="craftingItem">The item to craft.</param>
-        
         void ICraftTreeHandler.AddCraftingNode(CraftTree.Type craftTree, TechType craftingItem)
         {
             ValidateStandardCraftTree(craftTree);
@@ -245,7 +244,6 @@
         /// <param name="name">The ID of the tab node. Must be unique!</param>
         /// <param name="displayName">The display name of the tab, which will show up when you hover your mouse on the tab.</param>
         /// <param name="sprite">The sprite of the tab.</param>
-        
         void ICraftTreeHandler.AddTabNode(CraftTree.Type craftTree, string name, string displayName, UnityEngine.Sprite sprite)
         {
             ValidateStandardCraftTree(craftTree);
@@ -305,7 +303,6 @@
         /// <para>This means matching the id of the crafted item or the id of the tab name.</para>
         /// <para>Do not include "root" in this path.</para>
         /// </param>
-        
         void ICraftTreeHandler.RemoveNode(CraftTree.Type craftTree, params string[] stepsToNode)
         {
             ValidateStandardCraftTree(craftTree);

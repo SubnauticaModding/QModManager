@@ -61,7 +61,6 @@
                         harmony.Patch(patchMethod,
                             prefix: new HarmonyMethod(AccessTools.Method(typeof(ResourcesPatcher), "Prefix")));
                     }
-
                     else if (method.Name == "LoadAsync")
                     {
                         MethodInfo patchMethod = method;
