@@ -1,5 +1,7 @@
 ﻿using QModManager.API.SMLHelper.Utility;
 using System;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace QModManager.Utility
 {
@@ -17,9 +19,19 @@ namespace QModManager.Utility
             }
         }
 
-        internal static void Log(string prefix, string text)
+        internal static void Log(string logLevel, string text)
         {
-            Console.WriteLine($"[QModManager{prefix}] {text}");
+            string from;
+            Type classType = GetCallingClass();
+
+            if (classType == null) from = null;
+            else if (classType.Namespace.Contains("SMLHelper")) from = "SMLHelper";
+            else from = classType.Name;
+
+            if (string.IsNullOrEmpty(from))
+                Console.WriteLine($"[QModManager] [{logLevel}] {text}");
+            else
+                Console.WriteLine($"[QModManager] [{from}] [{logLevel}] {text}");
         }
 
         internal static void Log(string text)
@@ -30,27 +42,42 @@ namespace QModManager.Utility
         internal static void Debug(string text, bool force = false)
         {
             if (EnableDebugging || force)
-                Log("/DEBUG", text);
+                Log("Debug", text);
         }
         internal static void Info(string text)
         {
-            Log("/INFO", text);
+            Log("Info", text);
         }
         internal static void Warn(string text)
         {
-            Log("/WARN", text);
+            Log("Warn", text);
         }
         internal static void Error(string text)
         {
-            Log("/ERROR", text);
+            Log("Error", text);
         }
         internal static void Exception(Exception e)
         {
-            Log("/EXCEPTION", e.ToString());
+            Log("Exception", e.ToString());
         }
         internal static void Fatal(string text)
         {
-            Log("/FATAL", text);
+            Log("Fatal", text);
+        }
+
+        internal static Type GetCallingClass()
+        {
+            StackTrace stackTrace = new StackTrace();
+            StackFrame[] frames = stackTrace.GetFrames();
+
+            foreach (StackFrame stackFrame in frames)
+            {
+                Type declaringClass = stackFrame.GetMethod().DeclaringType;
+                if (declaringClass != typeof(Logger))
+                    return declaringClass;
+            }
+
+            return null;
         }
     }
 }
