@@ -1062,8 +1062,8 @@
             This dictionary strtucture automatically checks for duplicate keys as they are being added to the collection.
             Duplicate entires are logged and removed from the final collection.
             </summary>
-            <typeparam name="K"></typeparam>
-            <typeparam name="V"></typeparam>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
         </member>
         <member name="F:QModManager.API.SMLHelper.Patchers.SelfCheckingDictionary`2.DuplicatesDiscarded">
             <summary>
