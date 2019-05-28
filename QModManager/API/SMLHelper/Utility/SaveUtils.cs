@@ -11,7 +11,10 @@
         /// </summary>
         public static string GetCurrentSaveDataDir()
         {
-            return Path.Combine(SNUtils.savedGamesDir, Utils.GetSavegameDir());
+            if (Patcher.game == Patcher.Game.Subnautica)
+                return Path.Combine(SNUtils.savedGamesDir, Utils.GetSavegameDir());
+            else
+                return SaveLoadManager.temporarySavePath;
         }
     }
 }
