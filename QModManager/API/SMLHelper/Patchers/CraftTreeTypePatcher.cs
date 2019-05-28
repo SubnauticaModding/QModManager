@@ -73,7 +73,7 @@
                 // Anything below this range we won't ever assign
 
                 if (bannedIndices.Contains(realEnumValue))
-                    continue;// Already exists in list
+                    continue; // Already exists in list
 
                 bannedIndices.Add(realEnumValue);
             }

@@ -139,7 +139,7 @@ namespace QModManager.Debugger
 
         internal void LateUpdate()
         {
-            if (Input.GetKeyDown(KeyCode.F9) && OptionsManager.DebuggerEnabled || showDebugger && Input.GetKeyDown(KeyCode.Escape))
+            if ((Input.GetKeyDown(KeyCode.F9) && OptionsManager.DebuggerEnabled) || (showDebugger && Input.GetKeyDown(KeyCode.Escape)))
             {
                 showDebugger = !showDebugger;
                 UWE.Utils.alwaysLockCursor = false;
@@ -354,7 +354,6 @@ namespace QModManager.Debugger
 
                 pauseWhenWindowOpen = GUILayout.Toggle(pauseWhenWindowOpen, "Pause When Prefab Debugger is Open");
 
-
                 GUILayout.Label("Property Settings", "HeaderLabel");
 
                 showReadonlyProperties = GUILayout.Toggle(showReadonlyProperties, "Show Readonly Properties");
@@ -508,9 +507,7 @@ namespace QModManager.Debugger
                 trans.eulerAngles = ShowVectorField(trans.eulerAngles, "Rotation");
                 trans.localScale = ShowVectorField(trans.localScale, "Scale");
 
-
                 GUILayout.EndVertical();
-
 
                 //By calling GetComponents with the Behaviour class, we can get every component that can 100% be disabled. 
                 //Needs to be refactored because this code is super bad
@@ -739,7 +736,6 @@ namespace QModManager.Debugger
                     }
 
                     GUILayout.EndHorizontal();
-
                 }
                 else if (node.Item.source == null && depth == 0)
                 {

@@ -151,7 +151,6 @@
             return Main.TryGetModdedTechType(techtypeString, out modTechType);
         }
 
-
         /// <summary>
         /// Safely looks for a modded item from another mod in the SMLHelper TechTypeCache.
         /// </summary>

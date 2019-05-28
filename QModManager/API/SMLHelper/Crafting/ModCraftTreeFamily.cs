@@ -426,7 +426,6 @@
             else
             {
                 modSprite = new ModSprite(SpriteManager.Group.Category, spriteID, Usprite);
-
             }
 
             ModSprite.Add(modSprite);

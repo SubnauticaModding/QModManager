@@ -256,7 +256,6 @@
                 // Return the cached result
                 return hasRoom;
             }
-
             else
             {
                 // Return the normal result, it will be cached for next time
