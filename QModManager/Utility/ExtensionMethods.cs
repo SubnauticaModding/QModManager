@@ -27,7 +27,7 @@ namespace QModManager.Utility
         internal static T GetOrAddComponent<T>(this MonoBehaviour behaviour) where T : Component
         {
             if (!behaviour) throw new ArgumentNullException(nameof(behaviour));
-            if (!behaviour.gameObject) throw new NullReferenceException($"The provided component is not attached to a GameObject!");
+            if (!behaviour.gameObject) throw new ArgumentException($"The provided component is not attached to a GameObject!");
             return behaviour.gameObject.GetOrAddComponent<T>();
         }
     }
