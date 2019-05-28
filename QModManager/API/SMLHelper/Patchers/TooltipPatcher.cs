@@ -177,20 +177,20 @@
             {
                 case "Mod name (default)":
                     ExtraItemInfoOption = ExtraItemInfo.ModName;
-                    Logger.Log($"Extra item info set to: {fileContents}", LogLevel.Info);
+                    Logger.Info($"Extra item info set to: {fileContents}");
                     break;
                 case "Mod name and item ID":
                     ExtraItemInfoOption = ExtraItemInfo.ModNameAndItemID;
-                    Logger.Log($"Extra item info set to: {fileContents}", LogLevel.Info);
+                    Logger.Info($"Extra item info set to: {fileContents}");
                     break;
                 case "Nothing":
                     ExtraItemInfoOption = ExtraItemInfo.Nothing;
-                    Logger.Log($"Extra item info set to: {fileContents}", LogLevel.Info);
+                    Logger.Info($"Extra item info set to: {fileContents}");
                     break;
                 default:
                     File.WriteAllText(configPath, "Mod name (default)");
                     ExtraItemInfoOption = ExtraItemInfo.ModName;
-                    Logger.Log("Error reading ExtraItemInfo.txt configuration file. Defaulted to mod name.", LogLevel.Warn);
+                    Logger.Warn("Error reading ExtraItemInfo.txt configuration file. Defaulted to mod name.");
                     break;
             }
         }
