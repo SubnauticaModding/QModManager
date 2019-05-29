@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using UnityEngine;
 using Logger = QModManager.Utility.Logger;
 
 namespace QModManager
@@ -328,6 +329,17 @@ namespace QModManager
 
                 Logger.Error(toWrite);
             }
+        }
+
+        internal static void UpdateSMLHelper()
+        {
+            string oldPath = IOUtilities.Combine(".", "QMods", "Modding Helper");
+            if (File.Exists(Path.Combine(oldPath, "SMLHelper.dll")))
+                File.Delete(Path.Combine(oldPath, "SMLHelper.dll"));
+            if (File.Exists(Path.Combine(oldPath, "mod.json")))
+                File.Delete(Path.Combine(oldPath, "mod.json"));
+
+            // To do in #81
         }
 
         /*
