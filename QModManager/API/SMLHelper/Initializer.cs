@@ -7,7 +7,7 @@
 
     internal static class Initializer
     {
-        private static HarmonyInstance harmony { get => Patcher.harmony; }
+        private static HarmonyInstance Harmony { get => Patcher.harmony; }
 
         internal static void PostPostInit()
         {
@@ -26,23 +26,23 @@
 
         internal static void Initialize()
         {
-            CustomFishPatcher.Patch(harmony);
-            TechTypePatcher.Patch(harmony);
-            CraftTreeTypePatcher.Patch(harmony);
-            CraftDataPatcher.Patch(harmony);
-            CraftTreePatcher.Patch(harmony);
-            DevConsolePatcher.Patch(harmony);
-            LanguagePatcher.Patch(harmony);
-            ResourcesPatcher.Patch(harmony);
-            PrefabDatabasePatcher.Patch(harmony);
+            CustomFishPatcher.Patch(Harmony);
+            TechTypePatcher.Patch(Harmony);
+            CraftTreeTypePatcher.Patch(Harmony);
+            CraftDataPatcher.Patch(Harmony);
+            CraftTreePatcher.Patch(Harmony);
+            DevConsolePatcher.Patch(Harmony);
+            LanguagePatcher.Patch(Harmony);
+            ResourcesPatcher.Patch(Harmony);
+            PrefabDatabasePatcher.Patch(Harmony);
             SpritePatcher.Patch();
-            KnownTechPatcher.Patch(harmony);
-            BioReactorPatcher.Patch(harmony);
-            OptionsPanelPatcher.Patch(harmony);
-            ItemsContainerPatcher.Patch(harmony);
-            PDAPatcher.Patch(harmony);
-            ItemActionPatcher.Patch(harmony);
-            TooltipPatcher.Patch(harmony);
+            KnownTechPatcher.Patch(Harmony);
+            BioReactorPatcher.Patch(Harmony);
+            OptionsPanelPatcher.Patch(Harmony);
+            ItemsContainerPatcher.Patch(Harmony);
+            PDAPatcher.Patch(Harmony);
+            ItemActionPatcher.Patch(Harmony);
+            TooltipPatcher.Patch(Harmony);
         }
     }
 }
