@@ -942,7 +942,7 @@
         </member>
         <member name="P:QModManager.API.SMLHelper.Assets.PDAItem.RequiredForUnlock">
             <summary>
-            Override to set the <see cref="T:TechType"/> that must first be scanned or picked up to unlock the blueprint for this item.
+            Override to set the <see cref="T:TechType"/> that must first be scanned or picked up to unlock the blueprint for this item. <para/>
             If not overriden, it this item will be unlocked from the start of the game.
             </summary>
         </member>
@@ -967,7 +967,8 @@
         </member>
         <member name="P:QModManager.API.SMLHelper.Assets.PDAItem.DiscoverMessage">
             <summary>
-            Message which should be shown when the item is unlocked
+            Message which should be shown when the item is unlocked. <para/>
+            If not overridden, the message will default to "<see langword="{FriendlyName} blueprint discovered!"/>"
             </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Assets.PDAItem.#ctor(System.String,System.String,System.String)">

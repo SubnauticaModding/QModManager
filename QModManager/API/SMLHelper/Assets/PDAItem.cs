@@ -10,7 +10,7 @@
     public abstract class PDAItem : Spawnable
     {
         /// <summary>
-        /// Override to set the <see cref="TechType"/> that must first be scanned or picked up to unlock the blueprint for this item.
+        /// Override to set the <see cref="TechType"/> that must first be scanned or picked up to unlock the blueprint for this item. <para/>
         /// If not overriden, it this item will be unlocked from the start of the game.
         /// </summary>
         public virtual TechType RequiredForUnlock => TechType.None;
@@ -35,7 +35,8 @@
         public bool UnlockedAtStart => this.RequiredForUnlock == TechType.None;
 
         /// <summary>
-        /// Message which should be shown when the item is unlocked
+        /// Message which should be shown when the item is unlocked. <para/>
+        /// If not overridden, the message will default to "<see langword="{FriendlyName} blueprint discovered!"/>"
         /// </summary>
         public virtual string DiscoverMessage => $"{this.FriendlyName} blueprint discovered!";
 
@@ -70,7 +71,7 @@
             if (this.UnlockedAtStart)
                 KnownTechHandler.UnlockOnStart(this.TechType);
             else
-                KnownTechHandler.SetAnalysisTechEntry(this.RequiredForUnlock, new TechType[1] { this.TechType }, Language.main.Get(this.DiscoverMessageKey));
+                KnownTechHandler.SetAnalysisTechEntry(this.RequiredForUnlock, new TechType[1] { this.TechType }, this.DiscoverMessageKey);
         }
     }
 }
