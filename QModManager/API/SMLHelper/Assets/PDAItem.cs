@@ -38,9 +38,9 @@
         /// Message which should be shown when the item is unlocked. <para/>
         /// If not overridden, the message will default to "<see langword="{FriendlyName} blueprint discovered!"/>"
         /// </summary>
-        public virtual string DiscoverMessage => $"{this.FriendlyName} blueprint discovered!";
+        public virtual string DiscoverMessage => null;
 
-        internal string DiscoverMessageKey => $"{TechType.AsString()}_DiscoverMessage";
+        internal string DiscoverMessageKey => DiscoverMessage == null ? "NotificationBlueprintUnlocked" : $"{TechType.AsString()}_DiscoverMessage";
 
         /// <summary>
         /// Initializes a new <see cref="PDAItem"/>, the basic class for any item that appears among your PDA blueprints. <para/>
@@ -54,7 +54,8 @@
         {
             CorePatchEvents += PatchTechDataEntry;
 
-            LanguageHandler.SetLanguageLine(DiscoverMessageKey, DiscoverMessage);
+            if (DiscoverMessage != null)
+                LanguageHandler.SetLanguageLine(DiscoverMessageKey, DiscoverMessage);
         }
 
         /// <summary>
