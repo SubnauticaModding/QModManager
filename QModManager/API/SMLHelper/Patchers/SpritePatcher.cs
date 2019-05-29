@@ -8,8 +8,6 @@
     {
         internal static void Patch()
         {
-            // Direct access to private fields made possible by https://github.com/CabbageCrow/AssemblyPublicizer/
-
             Dictionary<SpriteManager.Group, Dictionary<string, Atlas.Sprite>> groups = SpriteManager.groups;
 
             foreach (SpriteManager.Group moddedGroup in ModSprite.ModSprites.Keys)

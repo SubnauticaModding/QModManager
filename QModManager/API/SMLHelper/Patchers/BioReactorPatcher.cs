@@ -10,8 +10,6 @@
 
         internal static void Patch(HarmonyInstance harmony)
         {
-            // Direct access to private fields made possible by https://github.com/CabbageCrow/AssemblyPublicizer/
-
             PatchUtils.PatchDictionary(BaseBioReactor.charge, CustomBioreactorCharges);
 
             Logger.Debug("BaseBioReactorPatcher is done.");

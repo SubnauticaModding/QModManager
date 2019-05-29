@@ -64,8 +64,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SMLHelper\LanguagePatcherTests.cs" />
-    <Compile Include="SMLHelper\SelfCheckingDictionaryTests.cs" />
+    <Compile Include="SMLHelper\LanguagePatcher.cs" />
+    <Compile Include="SMLHelper\SelfCheckingDictionary.cs" />
     <Compile Include="QModManager\VersionDependencies.cs" />
     <Compile Include="QModManager\Sorting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

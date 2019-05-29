@@ -36,10 +36,10 @@
                 {
                     if (command.Name.Contains(args[0]))
                     {
-                        List<string> argsList = args.ToList();
-                        argsList.RemoveAt(0);
-                        string[] newArgs = argsList.ToArray();
-                        command.CommandHandler.Invoke(null, new object[] { newArgs });
+                        string[] argsList = args.ToList().GetRange(1, args.Length - 1).ToArray();
+
+                        command.CommandHandler.Invoke(null, new object[] { argsList });
+
                         __result = true;
                         return;
                     }

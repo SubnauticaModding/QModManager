@@ -27,35 +27,33 @@
         private static void CreatureStart_Postfix(Creature __instance)
         {
             if (usedCreatures.Contains(__instance) || CustomFishHandler.fishTechTypes.Count == 0)
-            {
                 return;
-            }
+
             TechTag tag = __instance.GetComponent<TechTag>();
-            if (tag)
-            {
-                if (CustomFishHandler.fishTechTypes.Contains(tag.type))
-                {
-                    return;
-                }
-            }
+            if (tag && CustomFishHandler.fishTechTypes.Contains(tag.type))
+                return;
+
             if (Random.value < 0.1f)
             {
                 int randomIndex = Random.Range(0, CustomFishHandler.fishTechTypes.Count);
                 TechType randomFish = CustomFishHandler.fishTechTypes[randomIndex];
 
                 GameObject fish = CraftData.InstantiateFromPrefab(randomFish);
+
                 // Deletes the fish if it is a ground creature spawned in water
                 if (fish.GetComponent<WalkOnGround>() && !__instance.GetComponent<WalkOnGround>())
                 {
                     GameObject.Destroy(fish);
                     return;
                 }
+
                 // Deletes the fish if it is a water creature spawned on ground
                 if (!fish.GetComponent<WalkOnGround>() && __instance.GetComponent<WalkOnGround>())
                 {
                     GameObject.Destroy(fish);
                     return;
                 }
+
                 fish.transform.position = __instance.transform.position;
 
                 usedCreatures.Add(__instance);

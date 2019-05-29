@@ -4,7 +4,7 @@ using QModManager.API.SMLHelper.Patchers;
 namespace QModManager.Tests.SMLHelper
 {
     [TestFixture]
-    internal class SelfCheckingDictionaryTests
+    internal class SelfCheckingDictionary
     {
         [Test]
         public void Add_WhenUnique_AllAdded()

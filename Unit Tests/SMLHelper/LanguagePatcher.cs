@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace QModManager.Tests.SMLHelper
 {
     [TestFixture]
-    public class LanguagePatcherTests
+    public class LanguagePatcher
     {
         private static readonly IEnumerable<string> Keys = new string[]
         {
@@ -52,10 +52,10 @@ namespace QModManager.Tests.SMLHelper
 
             Console.WriteLine("TestText");
             Console.WriteLine(text);
-            int overridesApplied = LanguagePatcher.ExtractOverrideLines("Test1", new[] { text }, originalLines);
+            int overridesApplied = API.SMLHelper.Patchers.LanguagePatcher.ExtractOverrideLines("Test1", new[] { text }, originalLines);
 
             Assert.AreEqual(1, overridesApplied);
-            Assert.AreEqual(customValue.Replace("\\n", "\n"), LanguagePatcher.GetCustomLine("Key"));
+            Assert.AreEqual(customValue.Replace("\\n", "\n"), API.SMLHelper.Patchers.LanguagePatcher.GetCustomLine("Key"));
         }
 
 
@@ -75,11 +75,11 @@ namespace QModManager.Tests.SMLHelper
             Console.WriteLine("TestText");
             Console.WriteLine(line1);
             Console.WriteLine(line2);
-            int overridesApplied = LanguagePatcher.ExtractOverrideLines("Test1", new[] { line1, line2 }, originalLines);
+            int overridesApplied = API.SMLHelper.Patchers.LanguagePatcher.ExtractOverrideLines("Test1", new[] { line1, line2 }, originalLines);
 
             Assert.AreEqual(2, overridesApplied);
-            Assert.AreEqual("CustomValue1", LanguagePatcher.GetCustomLine("Key1"));
-            Assert.AreEqual(otherCustomValue.Replace("\\n", "\n"), LanguagePatcher.GetCustomLine(secondKey));
+            Assert.AreEqual("CustomValue1", API.SMLHelper.Patchers.LanguagePatcher.GetCustomLine("Key1"));
+            Assert.AreEqual(otherCustomValue.Replace("\\n", "\n"), API.SMLHelper.Patchers.LanguagePatcher.GetCustomLine(secondKey));
         }
 
         [Test, Combinatorial]
@@ -95,10 +95,10 @@ namespace QModManager.Tests.SMLHelper
 
             Console.WriteLine("TestText");
             Console.WriteLine(text);
-            int overridesApplied = LanguagePatcher.ExtractOverrideLines("Test1", new[] { text }, originalLines);
+            int overridesApplied = API.SMLHelper.Patchers.LanguagePatcher.ExtractOverrideLines("Test1", new[] { text }, originalLines);
 
             Assert.AreEqual(1, overridesApplied);
-            Assert.AreEqual(customValue.Replace("\\n", "\n"), LanguagePatcher.GetCustomLine("Key"));
+            Assert.AreEqual(customValue.Replace("\\n", "\n"), API.SMLHelper.Patchers.LanguagePatcher.GetCustomLine("Key"));
         }
     }
 }

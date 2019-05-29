@@ -46,9 +46,7 @@
             TechType techType = (TechType)cache.Index;
 
             cacheManager.Add(techType, cache);
-
-            // Direct access to private fields made possible by https://github.com/CabbageCrow/AssemblyPublicizer/
-
+            
             TechTypeExtensions.stringsNormal[techType] = name;
             TechTypeExtensions.stringsLowercase[techType] = name.ToLowerInvariant();
             TechTypeExtensions.techTypesNormal[name] = techType;
