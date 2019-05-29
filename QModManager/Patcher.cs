@@ -771,12 +771,6 @@ namespace QModManager
 
             foreach (string dependencyId in mod.Dependencies)
             {
-                if (dependencyId == "QModManager")
-                {
-                    dependencies.Add(QMod.QModManagerQMod);
-                    continue;
-                }
-
                 foreach (QMod dependencyMod in sortedMods)
                 {
                     if (dependencyId == dependencyMod.Id)
@@ -845,6 +839,9 @@ namespace QModManager
 
             List<string> dependenciesMissing = new List<string>(mod.Dependencies);
 
+            dependenciesMissing = dependenciesMissing.Where(dep => dep != "QModManager").ToList();
+            dependenciesMissing = dependenciesMissing.Where(dep => dep != "SMLHelper").ToList();
+
             foreach (string dependencyId in mod.Dependencies)
             {
                 foreach (QMod presentDependency in presentDependencies)
@@ -862,6 +859,8 @@ namespace QModManager
             if (presentDependencies == null || presentDependencies.Count() == 0) return mod.VersionDependencies.ToList();
 
             List<KeyValuePair<string, string>> dependenciesMissing = new List<KeyValuePair<string, string>>(mod.VersionDependencies);
+
+            dependenciesMissing = dependenciesMissing.Where(kvp => kvp.Key != "SMLHelper").ToList();
 
             foreach (KeyValuePair<string, string> dependency in mod.VersionDependencies)
             {
