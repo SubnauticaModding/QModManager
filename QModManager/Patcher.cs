@@ -85,6 +85,7 @@ namespace QModManager
 
                 //QModHooks.Start += PrefabDebugger.Main;
 
+                UpdateSMLHelper();
                 Initializer.PostPostInit();
 
                 QModHooks.OnLoadEnd?.Invoke();
@@ -213,50 +214,26 @@ namespace QModManager
             string toWrite = "Loaded mods:\n";
 
             List<QMod> loadingErrorMods = new List<QMod>();
-            QMod smlHelper = null;
 
             foreach (QMod mod in sortedMods)
             {
                 if (mod != null && !mod.Loaded)
                 {
-                    if (mod.Id != "SMLHelper")
+                    if (!LoadMod(mod))
                     {
-                        if (!LoadMod(mod))
-                        {
-                            if (!erroredMods.Contains(mod))
-                                erroredMods.Add(mod);
+                        if (!erroredMods.Contains(mod))
+                            erroredMods.Add(mod);
 
-                            if (!loadingErrorMods.Contains(mod))
-                                loadingErrorMods.Add(mod);
+                        if (!loadingErrorMods.Contains(mod))
+                            loadingErrorMods.Add(mod);
 
-                            continue;
-                        }
-                        else
-                        {
-                            toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
-                            loadedMods.Add(mod);
-                        }
+                        continue;
                     }
                     else
                     {
-                        smlHelper = mod;
+                        toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
+                        loadedMods.Add(mod);
                     }
-                }
-            }
-            if (smlHelper != null)
-            {
-                if (!LoadMod(smlHelper))
-                {
-                    if (!erroredMods.Contains(smlHelper))
-                        erroredMods.Add(smlHelper);
-
-                    if (!loadingErrorMods.Contains(smlHelper))
-                        loadingErrorMods.Add(smlHelper);
-                }
-                else
-                {
-                    toWrite += $"- {smlHelper.DisplayName} ({smlHelper.Id})\n";
-                    loadedMods.Add(smlHelper);
                 }
             }
 
