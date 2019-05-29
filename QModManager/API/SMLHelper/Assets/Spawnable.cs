@@ -3,6 +3,7 @@
     using Handlers;
     using QModManager.Utility;
     using System;
+    using System.IO;
 
     /// <summary>
     /// An item that can be spawned into the game.
@@ -119,7 +120,9 @@
                 throw new Exception($"Error patching Spawnable:{this.ClassID}");
             }
 
-            SpriteHandler.RegisterSprite(this.TechType, $"./QMods/{assetsFolder.Trim('/')}/{this.IconFileName}");
+            string path = IOUtilities.Combine(".", "QMods", assetsFolder.Trim('/'), this.IconFileName);
+
+            SpriteHandler.RegisterSprite(this.TechType, path);
         }
     }
 }

@@ -6,7 +6,7 @@ namespace QModManager.Utility
 {
     internal static class IOUtilities
     {
-        internal static readonly HashSet<string> BannedFolders = new HashSet<string>()
+        private static readonly HashSet<string> BannedFolders = new HashSet<string>()
         {
             "OST",
             "SNAppData",
@@ -31,7 +31,7 @@ namespace QModManager.Utility
             }
         }
 
-        internal static string GenerateFolderStructure(string directory)
+        private static string GenerateFolderStructure(string directory)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace QModManager.Utility
                 throw e;
             }
         }
-        internal static string GetFolderStructureRecursively(string directory, int spaces = 0)
+        private static string GetFolderStructureRecursively(string directory, int spaces = 0)
         {
             try
             {
@@ -114,7 +114,7 @@ namespace QModManager.Utility
             return number + units[unit];
         }
 
-        internal static string GenerateSpaces(int spaces)
+        private static string GenerateSpaces(int spaces)
         {
             string s = "";
             for (int i = 1; i <= spaces; i += 4)
@@ -122,12 +122,24 @@ namespace QModManager.Utility
             return s;
         }
 
-        internal static int GetFileCountRecursively(string directory)
+        private static int GetFileCountRecursively(string directory)
         {
             int c = 0;
             foreach (string file in Directory.GetFiles(directory)) c++;
             foreach (string dir in Directory.GetDirectories(directory)) c += GetFileCountRecursively(dir);
             return c;
+        }
+
+        internal static string Combine(string one, string two, params string[] rest)
+        {
+            string path = Path.Combine(one, two);
+
+            foreach (string str in rest)
+            {
+                path = Path.Combine(path, str);
+            }
+
+            return path;
         }
     }
 }
