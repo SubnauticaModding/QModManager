@@ -149,14 +149,13 @@
             this.amount = amount;
         }
 
+        /// <summary>
+        /// Turn a <see cref="TechType"/> into an <see cref="Ingredient"/> with amount of 1
+        /// </summary>
+        /// <param name="techType"></param>
         public static implicit operator Ingredient(TechType techType)
         {
             return new Ingredient(techType, 1);
-        }
-
-        public static implicit operator TechType(Ingredient ingredient)
-        {
-            return ingredient.techType;
         }
     }
 }

@@ -23,6 +23,11 @@
         /// </summary>
         public int IntegerValue { get; }
 
+        /// <summary>
+        /// Creates a new instance of <see cref="SliderChangedEventArgs"/>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
         public SliderChangedEventArgs(string id, float value)
         {
             Id = id;
@@ -67,8 +72,17 @@
     /// </summary>
     public class ModSliderOption : ModOption
     {
+        /// <summary>
+        /// The minimum value of the slider
+        /// </summary>
         public float MinValue { get; }
+        /// <summary>
+        /// The maximum value of the slider
+        /// </summary>
         public float MaxValue { get; }
+        /// <summary>
+        /// The current value of the slider
+        /// </summary>
         public float Value { get; }
 
         /// <summary>

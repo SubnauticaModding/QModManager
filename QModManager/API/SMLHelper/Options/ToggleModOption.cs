@@ -17,6 +17,11 @@
         /// </summary>
         public bool Value { get; }
 
+        /// <summary>
+        /// Creates a new instance of <see cref="ToggleChangedEventArgs"/>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
         public ToggleChangedEventArgs(string id, bool value)
         {
             Id = id;
@@ -58,6 +63,9 @@
     /// </summary>
     public class ModToggleOption : ModOption
     {
+        /// <summary>
+        /// The current value
+        /// </summary>
         public bool Value { get; }
 
         /// <summary>

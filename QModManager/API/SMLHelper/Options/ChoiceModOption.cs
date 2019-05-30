@@ -24,11 +24,22 @@
         /// </summary>
         public string Value { get; }
 
+        /// <summary>
+        /// Creates a new instance of <see cref="ChoiceChangedEventArgs"/>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="index"></param>
         public ChoiceChangedEventArgs(string id, int index)
         {
             Id = id;
             Index = index;
         }
+        /// <summary>
+        /// Creates a new instance of <see cref="ChoiceChangedEventArgs"/>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="index"></param>
+        /// <param name="value"></param>
         public ChoiceChangedEventArgs(string id, int index, string value)
         {
             Id = id;
@@ -132,7 +143,13 @@
     /// </summary>
     public class ModChoiceOption : ModOption
     {
+        /// <summary>
+        /// The options that are available
+        /// </summary>
         public string[] Options { get; }
+        /// <summary>
+        /// The index of the selected option
+        /// </summary>
         public int Index { get; }
 
         /// <summary>

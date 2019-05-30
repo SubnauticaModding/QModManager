@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace QModManager.API
 {
+    /// <summary>
+    /// The main class for the QModManager API
+    /// </summary>
     public partial class QModAPI : IQModAPI
     {
         /// <summary>
@@ -256,6 +258,10 @@ namespace QModManager.API
             => GetMod(id, includeUnloaded, includeErrored) != null;
     }
 
+    /// <summary>
+    /// The interface used by <see cref="QModAPI"/> <para/>
+    /// Designed for dependency injection
+    /// </summary>
     public partial interface IQModAPI
     {
         /// <summary>

@@ -99,6 +99,11 @@
             Delegate for <see cref="F:QModManager.API.QModHooks.OnLoadEnd"/>
             </summary>
         </member>
+        <member name="T:QModManager.API.QModAPI">
+            <summary>
+            The main class for the QModManager API
+            </summary>
+        </member>
         <member name="P:QModManager.API.QModAPI.Main">
             <summary>
             The main instance of this class <para/>
@@ -284,6 +289,12 @@
             <param name="id"></param>
             <param name="includeUnloaded">Whether or not to include unloaded mods</param>
             <param name="includeErrored">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="T:QModManager.API.IQModAPI">
+            <summary>
+            The interface used by <see cref="T:QModManager.API.QModAPI"/> <para/>
+            Designed for dependency injection
+            </summary>
         </member>
         <member name="M:QModManager.API.IQModAPI.MarkAsErrored">
             <summary>
@@ -693,6 +704,12 @@
             <param name="techType">The item ID.</param>
             <param name="amount">The number of instances of this item required for the recipe.</param>
         </member>
+        <member name="M:QModManager.API.SMLHelper.Crafting.Ingredient.op_Implicit(TechType)~QModManager.API.SMLHelper.Crafting.Ingredient">
+            <summary>
+            Turn a <see cref="T:TechType"/> into an <see cref="T:QModManager.API.SMLHelper.Crafting.Ingredient"/> with amount of 1
+            </summary>
+            <param name="techType"></param>
+        </member>
         <member name="F:QModManager.API.SMLHelper.Assets.CustomFish.id">
             <summary>
             The id to use to create the creature. This should be unique
@@ -778,6 +795,19 @@
         <member name="F:QModManager.API.SMLHelper.Assets.CustomFishPrefab.swimInterval">
             <summary>
             The interval in seconds between when your creature finds a new spot to move to
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Assets.CustomFishPrefab.#ctor(System.String,System.String,TechType)">
+            <summary>
+            Creates a new <see cref="T:QModManager.API.SMLHelper.Assets.CustomFishPrefab"/> with the given values
+            </summary>
+            <param name="classId"></param>
+            <param name="prefabFileName"></param>
+            <param name="techType"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Assets.CustomFishPrefab.GetGameObject">
+            <summary>
+            Gets the prefab game object
             </summary>
         </member>
         <member name="T:QModManager.API.SMLHelper.Assets.ModPrefab">
@@ -1194,6 +1224,11 @@
             <param name="tooltip">The secondary tooltip which will appear in the description of the item</param>
             <param name="condition">The condition which must return <see langword="true"/> for the action to be called when the item is clicked<para/>If ommited, the action will always be called</param>
         </member>
+        <member name="T:QModManager.API.SMLHelper.Handlers.LanguageHandler">
+            <summary>
+            A handler class for managing language lines
+            </summary>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.LanguageHandler.SetLanguageLine(System.String,System.String)">
             <summary>
             Allows you to define a language entry into the game.
@@ -1287,6 +1322,11 @@
             </summary>
             <param name="techType">Can be either techtype of the fragment or the crafted item.</param>
             <param name="scanTime">The relative time spent on scanning. Default value is 1.</param>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Handlers.BioReactorHandler">
+            <summary>
+            A handler class for managing Bio Reactor fuels
+            </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.BioReactorHandler.QModManager#API#SMLHelper#Interfaces#IBioReactorHandler#SetBioReactorCharge(TechType,System.Single)">
             <summary>
@@ -1913,6 +1953,11 @@
             <param name="UnlockSound">The sound that plays when you unlock the blueprint.</param>
             <param name="UnlockSprite">The sprite that shows up when you unlock the blueprint.</param>
         </member>
+        <member name="T:QModManager.API.SMLHelper.Handlers.PrefabHandler">
+            <summary>
+            A handler class adding custom prefabs into the game
+            </summary>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.PrefabHandler.QModManager#API#SMLHelper#Interfaces#IPrefabHandler#RegisterPrefab(QModManager.API.SMLHelper.Assets.ModPrefab)">
             <summary>
             Registers a ModPrefab into the game.
@@ -2253,12 +2298,24 @@
             so if two mods are added at the same time, it may take a second game load for both to be visible to each other.
             </remarks>
         </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.ICustomFishHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.CustomFishHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Interfaces.ICustomFishHandler.RegisterFish(QModManager.API.SMLHelper.Assets.CustomFish)">
             <summary>
             Registers a CustomFish object into the game
             </summary>
             <param name="fish">The CustomFish that you are registering</param>
             <returns>The TechType created using the info from your CustomFish object</returns>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.IBioReactorHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.BioReactorHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Interfaces.IBioReactorHandler.SetBioReactorCharge(TechType,System.Single)">
             <summary>
@@ -2267,6 +2324,12 @@
             <param name="techType">The TechType that you want to use with bioreactors.</param>
             <param name="charge">The quantity of energy that will be produced by this TechType.</param>
             <seealso cref="T:CraftData.BackgroundType"/>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.CraftDataHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetTechData(TechType,ITechData)">
             <summary>
@@ -2409,6 +2472,12 @@
             <param name="techType">The TechType whose TechData you want to access.</param>
             <returns>The ITechData from the modded item if it exists; Otherwise, returns <c>null</c>.</returns>
         </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.CraftTreeHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.CreateCustomCraftTreeAndType(System.String,CraftTree.Type@)">
             <summary>
             <para>Your first method call to start a new custom crafting tree.</para>
@@ -2517,6 +2586,12 @@
             <para>Do not include "root" in this path.</para>
             </param>        
         </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.IItemActionHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.ItemActionHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Interfaces.IItemActionHandler.RegisterLeftClickAction(TechType,System.Action{InventoryItem},System.String,System.Predicate{InventoryItem})">
             <summary>
             Registers a custom left click action for a <see cref="T:TechType"/>
@@ -2534,6 +2609,12 @@
             <param name="callback">The method which will be called when a matching <see cref="T:InventoryItem"/> with the specified <see cref="T:TechType"/> was middle-clicked</param>
             <param name="tooltip">The secondary tooltip which will appear in the description of the item</param>
             <param name="condition">The condition which must return <see langword="true"/> for the action to be called when the item is clicked<para/>If ommited, the action will always be called</param>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.KnownTechHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler.UnlockOnStart(TechType)">
             <summary>
@@ -2613,6 +2694,12 @@
             <param name="UnlockSound">The sound that plays when you unlock the blueprint.</param>
             <param name="UnlockSprite">The sprite that shows up when you unlock the blueprint.</param>
         </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.ILanguageHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.LanguageHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Interfaces.ILanguageHandler.SetLanguageLine(System.String,System.String)">
             <summary>
             Allows you to define a language entry into the game.
@@ -2634,12 +2721,24 @@
             <param name="techType">The <see cref="T:TechType"/> whose tooltip that is to be changed.</param>
             <param name="text">The new tooltip for the chosen <see cref="T:TechType"/>.</param>
         </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.IOptionsPanelHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.OptionsPanelHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Interfaces.IOptionsPanelHandler.RegisterModOptions(QModManager.API.SMLHelper.Options.ModOptions)">
             <summary>
             Registers your mod options to the in-game menu.
             </summary>
             <param name="options">The mod options. Create a new child class inheriting from this one and add your options to it.</param>
             <seealso cref="T:QModManager.API.SMLHelper.Options.ModOptions"/>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.IPDAHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.PDAHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Interfaces.IPDAHandler.EditFragmentsToScan(TechType,System.Int32)">
             <summary>
@@ -2655,12 +2754,24 @@
             <param name="techType">Can be either techtype of the fragment or the crafted item.</param>
             <param name="scanTime">The relative time spent on scanning. Default value is 1.</param>
         </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.IPrefabHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.PrefabHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Interfaces.IPrefabHandler.RegisterPrefab(QModManager.API.SMLHelper.Assets.ModPrefab)">
             <summary>
             Registers a ModPrefab into the game.
             </summary>
             <param name="prefab">The mod prefab to register. Create a child class inheriting off this one and configure as needed.</param>
             <seealso cref="T:QModManager.API.SMLHelper.Assets.ModPrefab"/>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.ISpriteHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.SpriteHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Interfaces.ISpriteHandler.RegisterSprite(TechType,Atlas.Sprite)">
             <summary>
@@ -2731,6 +2842,12 @@
             <param name="id">The sprite internal identifier.</param>
             <param name="filePathToImage">The file path to image.</param>
             <seealso cref="M:QModManager.API.SMLHelper.Utility.ImageUtils.LoadSpriteFromFile(System.String,UnityEngine.TextureFormat)" />
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.TechTypeHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler.AddTechType(System.String,System.String,System.String)">
             <summary>
@@ -2820,7 +2937,13 @@
             so if two mods are added at the same time, it may take a second game load for both to be visible to each other.
             </remarks>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.IStorageHelper.HasRoomForCached(ItemsContainer,System.Int32,System.Int32)">
+        <member name="T:QModManager.API.SMLHelper.Utility.IItemStorageHelper">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Utility.ItemStorageHelper"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.HasRoomForCached(ItemsContainer,System.Int32,System.Int32)">
             <summary>
             Using the cached container info, determines whether the specified container has room for an item of the specified size.
             </summary>
@@ -2831,7 +2954,7 @@
               <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
             </returns>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.IStorageHelper.HasRoomForCached(ItemsContainer,Vector2int)">
+        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.HasRoomForCached(ItemsContainer,Vector2int)">
             <summary>
             Using the cached container info, determines whether the specified container has room for an item of the specified size.
             </summary>
@@ -2841,7 +2964,7 @@
               <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
             </returns>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.IStorageHelper.IsEmpty(ItemsContainer)">
+        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.IsEmpty(ItemsContainer)">
             <summary>
             Determines whether the specified container is empty.
             </summary>
@@ -2850,7 +2973,7 @@
               <c>true</c> if the specified container is empty; otherwise, <c>false</c>.
             </returns>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.IStorageHelper.IsFull(ItemsContainer)">
+        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.IsFull(ItemsContainer)">
             <summary>
             Determines whether the specified container is full.
             </summary>
@@ -2859,21 +2982,21 @@
               <c>true</c> if the specified container is full; otherwise, <c>false</c>.
             </returns>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.IStorageHelper.GetTotalSlots(ItemsContainer)">
+        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.GetTotalSlots(ItemsContainer)">
             <summary>
             Get the totals number of 1x1 slots in the container, as calculated by the container's width and height.
             </summary>
             <param name="container">The container.</param>
             <returns>The total number of slots in the container.</returns>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.IStorageHelper.GetStorageLabel(ItemsContainer)">
+        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.GetStorageLabel(ItemsContainer)">
             <summary>
             Get the inernal label for the storage container.
             </summary>
             <param name="container">The container.</param>
             <returns>The label used and displayed in-game for the container.</returns>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.IStorageHelper.GetAllowedTechTypes(ItemsContainer)">
+        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.GetAllowedTechTypes(ItemsContainer)">
             <summary>
             Gets the set of techtypes allowed in this container. This set can be altered.
             If the set is null or empty, then all items can be added.
@@ -3167,7 +3290,7 @@
             <summary>
             A utility class that offers additional info about <see cref="T:ItemsContainer"/> instances.
             </summary>
-            <seealso cref="T:QModManager.API.SMLHelper.Utility.IStorageHelper" />
+            <seealso cref="T:QModManager.API.SMLHelper.Utility.IItemStorageHelper" />
         </member>
         <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.HasRoomCached(ItemsContainer,System.Int32,System.Int32)">
             <summary>
@@ -3234,7 +3357,7 @@
             The collection of techtypes allowed in the container.
             </returns>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IStorageHelper#HasRoomForCached(ItemsContainer,System.Int32,System.Int32)">
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#HasRoomForCached(ItemsContainer,System.Int32,System.Int32)">
             <summary>
             Using the cached container info, determines whether the specified container has room for an item of the specified size.
             </summary>
@@ -3245,7 +3368,7 @@
               <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
             </returns>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IStorageHelper#HasRoomForCached(ItemsContainer,Vector2int)">
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#HasRoomForCached(ItemsContainer,Vector2int)">
             <summary>
             Using the cached container info, determines whether the specified container has room for an item of the specified size.
             </summary>
@@ -3255,7 +3378,7 @@
               <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
             </returns>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IStorageHelper#IsEmpty(ItemsContainer)">
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#IsEmpty(ItemsContainer)">
             <summary>
             Determines whether the specified container is empty.
             </summary>
@@ -3264,7 +3387,7 @@
               <c>true</c> if the specified container is empty; otherwise, <c>false</c>.
             </returns>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IStorageHelper#IsFull(ItemsContainer)">
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#IsFull(ItemsContainer)">
             <summary>
             Determines whether the specified container is full.
             </summary>
@@ -3273,14 +3396,14 @@
               <c>true</c> if the specified container is full; otherwise, <c>false</c>.
             </returns>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IStorageHelper#GetTotalSlots(ItemsContainer)">
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#GetTotalSlots(ItemsContainer)">
             <summary>
             The totals number of 1x1 slots in the container, as calculated by the container's width and height.
             </summary>
             <param name="container">The container.</param>
             <returns></returns>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IStorageHelper#GetStorageLabel(ItemsContainer)">
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#GetStorageLabel(ItemsContainer)">
             <summary>
             Get the inernal label for the storage container.
             </summary>
@@ -3289,7 +3412,7 @@
             The label used and displayed in-game for the container.
             </returns>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IStorageHelper#GetAllowedTechTypes(ItemsContainer)">
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#GetAllowedTechTypes(ItemsContainer)">
             <summary>
             Gets the set of techtypes allowed in this container. This set can be altered.
             If the set is null or empty, then all items can be added.
@@ -3337,6 +3460,21 @@
             <summary>
             The value of the <see cref="T:QModManager.API.SMLHelper.Options.ModChoiceOption"/> as a string
             </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Options.ChoiceChangedEventArgs.#ctor(System.String,System.Int32)">
+            <summary>
+            Creates a new instance of <see cref="T:QModManager.API.SMLHelper.Options.ChoiceChangedEventArgs"/>
+            </summary>
+            <param name="id"></param>
+            <param name="index"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Options.ChoiceChangedEventArgs.#ctor(System.String,System.Int32,System.String)">
+            <summary>
+            Creates a new instance of <see cref="T:QModManager.API.SMLHelper.Options.ChoiceChangedEventArgs"/>
+            </summary>
+            <param name="id"></param>
+            <param name="index"></param>
+            <param name="value"></param>
         </member>
         <member name="T:QModManager.API.SMLHelper.Options.ModOptions">
             <summary>
@@ -3510,6 +3648,16 @@
             A mod option class for handling an option that can select one item from a list of values.
             </summary>
         </member>
+        <member name="P:QModManager.API.SMLHelper.Options.ModChoiceOption.Options">
+            <summary>
+            The options that are available
+            </summary>
+        </member>
+        <member name="P:QModManager.API.SMLHelper.Options.ModChoiceOption.Index">
+            <summary>
+            The index of the selected option
+            </summary>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Options.ModChoiceOption.#ctor(System.String,System.String,System.String[],System.Int32)">
             <summary>
             Instantiates a new <see cref="T:QModManager.API.SMLHelper.Options.ModChoiceOption"/> for handling an option that can select one item from a list of values.
@@ -3539,9 +3687,26 @@
             The new value for the <see cref="T:QModManager.API.SMLHelper.Options.ModKeybindOption"/> parsed as a <see cref="T:System.String"/>
             </summary>
         </member>
+        <member name="M:QModManager.API.SMLHelper.Options.KeybindChangedEventArgs.#ctor(System.String,UnityEngine.KeyCode)">
+            <summary>
+            Creates a new instance of <see cref="T:QModManager.API.SMLHelper.Options.KeybindChangedEventArgs"/>
+            </summary>
+            <param name="id"></param>
+            <param name="key"></param>
+        </member>
         <member name="T:QModManager.API.SMLHelper.Options.ModKeybindOption">
             <summary>
             A mod option class for handling an option that is a keybind.
+            </summary>
+        </member>
+        <member name="P:QModManager.API.SMLHelper.Options.ModKeybindOption.Key">
+            <summary>
+            The current <see cref="T:UnityEngine.KeyCode"/> value
+            </summary>
+        </member>
+        <member name="P:QModManager.API.SMLHelper.Options.ModKeybindOption.Device">
+            <summary>
+            The <see cref="T:GameInput.Device"/> that this option is applied to
             </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Options.ModKeybindOption.#ctor(System.String,System.String,GameInput.Device,UnityEngine.KeyCode)">
@@ -3626,9 +3791,31 @@
             The new value for the <see cref="T:QModManager.API.SMLHelper.Options.ModSliderOption"/> parsed as an <see cref="T:System.Int32"/>
             </summary>
         </member>
+        <member name="M:QModManager.API.SMLHelper.Options.SliderChangedEventArgs.#ctor(System.String,System.Single)">
+            <summary>
+            Creates a new instance of <see cref="T:QModManager.API.SMLHelper.Options.SliderChangedEventArgs"/>
+            </summary>
+            <param name="id"></param>
+            <param name="value"></param>
+        </member>
         <member name="T:QModManager.API.SMLHelper.Options.ModSliderOption">
             <summary>
             A mod option class for handling an option that can have any floating point value between a minimum and maximum.
+            </summary>
+        </member>
+        <member name="P:QModManager.API.SMLHelper.Options.ModSliderOption.MinValue">
+            <summary>
+            The minimum value of the slider
+            </summary>
+        </member>
+        <member name="P:QModManager.API.SMLHelper.Options.ModSliderOption.MaxValue">
+            <summary>
+            The maximum value of the slider
+            </summary>
+        </member>
+        <member name="P:QModManager.API.SMLHelper.Options.ModSliderOption.Value">
+            <summary>
+            The current value of the slider
             </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Options.ModSliderOption.#ctor(System.String,System.String,System.Single,System.Single,System.Single)">
@@ -3656,9 +3843,21 @@
             The new value for the <see cref="T:QModManager.API.SMLHelper.Options.ModToggleOption"/>.
             </summary>
         </member>
+        <member name="M:QModManager.API.SMLHelper.Options.ToggleChangedEventArgs.#ctor(System.String,System.Boolean)">
+            <summary>
+            Creates a new instance of <see cref="T:QModManager.API.SMLHelper.Options.ToggleChangedEventArgs"/>
+            </summary>
+            <param name="id"></param>
+            <param name="value"></param>
+        </member>
         <member name="T:QModManager.API.SMLHelper.Options.ModToggleOption">
             <summary>
             A mod option class for handling an option that can be either ON or OFF.
+            </summary>
+        </member>
+        <member name="P:QModManager.API.SMLHelper.Options.ModToggleOption.Value">
+            <summary>
+            The current value
             </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Options.ModToggleOption.#ctor(System.String,System.String,System.Boolean)">

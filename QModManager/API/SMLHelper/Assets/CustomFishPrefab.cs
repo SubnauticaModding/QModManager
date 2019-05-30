@@ -36,8 +36,17 @@
         /// </summary>
         public float swimInterval;
 
+        /// <summary>
+        /// Creates a new <see cref="CustomFishPrefab"/> with the given values
+        /// </summary>
+        /// <param name="classId"></param>
+        /// <param name="prefabFileName"></param>
+        /// <param name="techType"></param>
         public CustomFishPrefab(string classId, string prefabFileName, TechType techType = TechType.None) : base(classId, prefabFileName, techType) { }
 
+        /// <summary>
+        /// Gets the prefab game object
+        /// </summary>
         public sealed override GameObject GetGameObject()
         {
             Logger.Debug($"[FishFramework] Initializing fish: {ClassID}");

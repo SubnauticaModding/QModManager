@@ -27,6 +27,11 @@
         /// </summary>
         public string KeyName { get; }
 
+        /// <summary>
+        /// Creates a new instance of <see cref="KeybindChangedEventArgs"/>
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="key"></param>
         public KeybindChangedEventArgs(string id, KeyCode key)
         {
             Id = id;
@@ -81,7 +86,13 @@
     /// </summary>
     public class ModKeybindOption : ModOption
     {
+        /// <summary>
+        /// The current <see cref="KeyCode"/> value
+        /// </summary>
         public KeyCode Key { get; }
+        /// <summary>
+        /// The <see cref="GameInput.Device"/> that this option is applied to
+        /// </summary>
         public GameInput.Device Device { get; }
 
         /// <summary>
