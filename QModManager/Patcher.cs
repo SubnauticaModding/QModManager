@@ -56,7 +56,7 @@ namespace QModManager
 
                 try
                 {
-                    Logger.Info($"Folder structure:\n{IOUtilities.GetFolderStructureAsTree()}\n");
+                    IOUtilities.LogFolderStructureAsTree();
                 }
                 catch (Exception e)
                 {
@@ -212,7 +212,7 @@ namespace QModManager
 
         internal static void LoadAllMods()
         {
-            string toWrite = "Loaded mods:\n";
+            List<string> toWrite = new List<string> { "Loaded mods:" };
 
             List<QMod> loadingErrorMods = new List<QMod>();
 
@@ -232,7 +232,7 @@ namespace QModManager
                     }
                     else
                     {
-                        toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
+                        toWrite.Add($"- {mod.DisplayName} ({mod.Id})");
                         loadedMods.Add(mod);
                     }
                 }
@@ -240,17 +240,17 @@ namespace QModManager
 
             if (loadingErrorMods.Count != 0)
             {
-                string write = "The following mods could not be loaded:\n";
+                List<string> write = new List<string> { "The following mods could not be loaded:" };
 
                 foreach (QMod mod in loadingErrorMods)
                 {
-                    write += $"- {mod.DisplayName} ({mod.Id})\n";
+                    write.Add($"- {mod.DisplayName} ({mod.Id})");
                 }
 
-                Logger.Error(write);
+                Logger.Error(write.ToArray());
             }
 
-            Logger.Info(toWrite);
+            Logger.Info(toWrite.ToArray());
 
             CheckOldHarmony();
         }
@@ -320,14 +320,14 @@ namespace QModManager
 
             if (duplicateModIDs.Count > 0)
             {
-                string toWrite = $"Multiple mods with the same ID found:\n";
+                List<string> toWrite = new List<string> { $"Multiple mods with the same ID found:" };
                 foreach (QMod mod in duplicateModIDs)
                 {
                     if (sortedMods.Contains(mod)) sortedMods.Remove(mod);
-                    toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
+                    toWrite.Add($"- {mod.DisplayName} ({mod.Id})");
                 }
 
-                Logger.Error(toWrite);
+                Logger.Error(toWrite.ToArray());
             }
         }
 
@@ -487,13 +487,13 @@ namespace QModManager
 
             if (nonApplicableMods.Count > 0)
             {
-                string toWrite = $"The following {GetOtherGame()} mods were not loaded because {game.ToString()} was detected:\n";
+                List<string> toWrite = new List<string> { $"The following {GetOtherGame()} mods were not loaded because {game.ToString()} was detected:" };
                 foreach (QMod mod in nonApplicableMods)
                 {
-                    toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
+                    toWrite.Add($"- {mod.DisplayName} ({mod.Id})");
                 }
 
-                Logger.Warn(toWrite);
+                Logger.Warn(toWrite.ToArray());
             }
         }
 
@@ -550,7 +550,7 @@ namespace QModManager
 
             if (sortingErrorLoops.Count != 0)
             {
-                Logger.Error("There was en error while sorting some mods!\nPlease check the 'LoadAfter' and 'LoadBefore' properties of these mods:\n");
+                Logger.Error("There was en error while sorting some mods!", "Please check the 'LoadAfter' and 'LoadBefore' properties of these mods:");
 
                 foreach (List<QMod> list in sortingErrorLoops)
                 {

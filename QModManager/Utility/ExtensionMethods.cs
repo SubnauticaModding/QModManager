@@ -28,5 +28,12 @@ namespace QModManager.Utility
             if (!behaviour.gameObject) throw new ArgumentException($"The provided component is not attached to a GameObject!");
             return behaviour.gameObject.GetOrAddComponent<T>();
         }
+
+        internal static string Repeat(this char c, int count)
+        {
+            string s = "";
+            for (int i = 0; i < count; i++) s += c;
+            return s;
+        }
     }
 }

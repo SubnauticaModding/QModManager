@@ -17,13 +17,20 @@ namespace QModManager.Utility
             "Subnautica_Data/StreamingAssets",
         };
 
+        internal static void LogFolderStructureAsTree(string directory = null)
+        {
+            Logger.Info($"Folder structure:");
+            Console.WriteLine(GetFolderStructureAsTree(directory));
+            Console.WriteLine();
+        }
+
         internal static string GetFolderStructureAsTree(string directory = null)
         {
             try
             {
                 directory = directory ?? Environment.CurrentDirectory;
 
-                return GenerateFolderStructure(directory) + "\n";
+                return GenerateFolderStructure(directory) + Environment.NewLine;
             }
             catch (Exception e)
             {
@@ -35,7 +42,7 @@ namespace QModManager.Utility
         {
             try
             {
-                string toWrite = $"+ {new DirectoryInfo(directory).Name}\n";
+                string toWrite = $"+ {new DirectoryInfo(directory).Name}{Environment.NewLine}";
 
                 foreach (string dir in Directory.GetDirectories(directory))
                 {
@@ -47,9 +54,9 @@ namespace QModManager.Utility
                 {
                     FileInfo fileinfo = new FileInfo(files[i - 1]);
                     if (i != files.Length)
-                        toWrite += $"{GenerateSpaces(0)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})\n";
+                        toWrite += $"{GenerateSpaces(0)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)}){Environment.NewLine}";
                     else 
-                        toWrite += $"{GenerateSpaces(0)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})\n";
+                        toWrite += $"{GenerateSpaces(0)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)}){Environment.NewLine}";
                 }
 
                 return toWrite;
@@ -64,11 +71,11 @@ namespace QModManager.Utility
             try
             {
                 DirectoryInfo dirInfo = new DirectoryInfo(directory);
-                string toWrite = $"{GenerateSpaces(spaces)}|---+ {dirInfo.Name}\n";
+                string toWrite = $"{GenerateSpaces(spaces)}|---+ {dirInfo.Name}{Environment.NewLine}";
 
                 if (BannedFolders.Contains(dirInfo.Name) || BannedFolders.Contains($"{dirInfo.Parent.Name}/{dirInfo.Name}"))
                 {
-                    toWrite += $"{GenerateSpaces(spaces + 4)}`---- ({GetFileCountRecursively(directory)} elements not shown...)\n";
+                    toWrite += $"{GenerateSpaces(spaces + 4)}`---- ({GetFileCountRecursively(directory)} elements not shown...){Environment.NewLine}";
                     return toWrite;
                 }
 
@@ -82,9 +89,9 @@ namespace QModManager.Utility
                 {
                     FileInfo fileinfo = new FileInfo(files[i - 1]);
                     if (i != files.Length)
-                        toWrite += $"{GenerateSpaces(spaces + 4)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})\n";
+                        toWrite += $"{GenerateSpaces(spaces + 4)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)}){Environment.NewLine}";
                     else
-                        toWrite += $"{GenerateSpaces(spaces + 4)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})\n";
+                        toWrite += $"{GenerateSpaces(spaces + 4)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)}){Environment.NewLine}";
                 }
 
                 return toWrite;

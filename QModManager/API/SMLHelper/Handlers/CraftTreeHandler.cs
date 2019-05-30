@@ -328,8 +328,7 @@
                 case CraftTree.Type.Unused2:                    
                 case CraftTree.Type.None:
                 default:
-                    throw new ArgumentException($"{nameof(craftTree)} value of '{craftTree}' does not correspond to a standard crafting tree.{Environment.NewLine}" +
-                                            $"This method is intended for use only with standard crafting trees, not custom ones or unused ones.");
+                    throw new ArgumentException($"{nameof(craftTree)} value of '{craftTree}' does not correspond to a standard crafting tree. This method is intended for use only with standard crafting trees, not custom ones or unused ones.");
             }   
         }
     }

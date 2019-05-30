@@ -107,7 +107,8 @@
             }
             catch (Exception exception)
             {
-                Logger.Error($"Caught exception while reading cache!{Environment.NewLine}{exception}");
+                Logger.Error($"Caught exception while reading cache!");
+                Logger.Exception(exception);
             }
 
             cacheLoaded = true;
@@ -131,7 +132,8 @@
             }
             catch (Exception exception)
             {
-                Logger.Error($"Caught exception while saving cache!{Environment.NewLine}{exception}");
+                Logger.Error($"Caught exception while saving cache!");
+                Logger.Exception(exception);
             }
         }
 

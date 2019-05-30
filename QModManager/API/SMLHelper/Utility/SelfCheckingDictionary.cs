@@ -136,8 +136,8 @@
         /// <param name="key">The no longer unique key.</param>
         private void DupFoundAllDiscardedLog(TKey key)
         {
-            Logger.Warn($"{CollectionName} already exists for '{key}'.{Environment.NewLine}" +
-                        $"All entries will be removed so conflict can be noted and resolved.{Environment.NewLine}" +
+            Logger.Warn($"{CollectionName} already exists for '{key}'",
+                        $"All entries will be removed so conflict can be noted and resolved.",
                         $"So far we have discarded or overwritten {DuplicatesDiscarded[key]} entries for '{key}'.");
         }
 
@@ -147,8 +147,8 @@
         /// <param name="key">The no longer unique key.</param>
         private void DupFoundLastDiscardedLog(TKey key)
         {
-            Logger.Warn($"{CollectionName} already exists for '{key}'.{Environment.NewLine}" +
-                        $"Original value has been overwritten by later entry.{Environment.NewLine}" +
+            Logger.Warn($"{CollectionName} already exists for '{key}'.",
+                        $"Original value has been overwritten by later entry.",
                         $"So far we have discarded or overwritten {DuplicatesDiscarded[key]} entries for '{key}'.");
         }
     }

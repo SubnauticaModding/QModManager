@@ -125,16 +125,16 @@
             }
             catch (Exception ex)
             {
-                Logger.Error($"RetrictedIDs folder was not found. Failed to create folder.{Environment.NewLine}");
+                Logger.Error($"RetrictedIDs folder was not found. Failed to create folder.");
                 Logger.Exception(ex);
             }
         }
 
         private static void LogBadEntry(string filePath, string line)
         {
-            Logger.Warn($"Badly formatted entry for Retricted IDs\n" +
-                       $"        File: '{filePath}\n'" +
-                       $"        Line: '{line}'\n" +
+            Logger.Warn($"Badly formatted entry for Retricted IDs",
+                       $"        File: '{filePath}'",
+                       $"        Line: '{line}'",
                        $"        This entry has been skipped.");
         }
     }
