@@ -8,8 +8,8 @@
 | `Assembly-CSharp-firstpass.dll` |            https://github.com/unknownworlds            |           &#9744; <br>Game file          |
 |      `AssetsTools.NET.dll`      |       https://github.com/nesrak1/AssetsTools.NET       |                  &#9745;                 |
 |           `Carbon.vsf`          |       https://github.com/RRUZ/vcl-styles-plugins       |  &#9744; <br>Bundled with the installer  |
-|            `cldb.dat`           |             https://github.com/DerPopo/UABE            | &#9745; <br>Only for Subnautica installs |
-|          `cldb2018.dat`         |             https://github.com/DerPopo/UABE            | &#9745; <br>Only for Below Zero installs |
+|            `cldb.dat`           |             https://github.com/DerPopo/UABE            | &#9745; |
+|          `cldb2018.dat`         |             https://github.com/DerPopo/UABE            | &#9745; |
 | `doorstop_config.ini` | https://github.com/NeighTools/UnityDoorstop | &#9745; |
 |         `Mono.Cecil.dll`        |            https://github.com/jbevain/cecil            |                  &#9745;                 |
 |      `Netwonsoft.Json.dll`      |       https://github.com/JamesNK/Newtonsoft.Json       |           &#9744; <br>Game file          |
