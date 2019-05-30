@@ -42,7 +42,7 @@ namespace QModManager
         internal static List<QMod> loadedMods = new List<QMod>();
         internal static List<QMod> erroredMods = new List<QMod>();
 
-        internal static void Patch()
+        public static void Main()
         {
             try
             {
@@ -125,7 +125,9 @@ namespace QModManager
             AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
             {
                 FileInfo[] allDlls = new DirectoryInfo(QModBaseDir).GetFiles("*.dll", SearchOption.AllDirectories);
-                foreach (FileInfo dll in allDlls)
+                FileInfo[] qmmDlls = new DirectoryInfo(Path.Combine(QModBaseDir, "../QModManager")).GetFiles("*.dll", SearchOption.AllDirectories);
+
+                foreach (FileInfo dll in allDlls.AddRangeToArray(qmmDlls))
                 {
                     if (args.Name.Contains(Path.GetFileNameWithoutExtension(dll.Name)))
                     {

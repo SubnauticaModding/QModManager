@@ -14,6 +14,6 @@ namespace QModInstaller
         /// NOT FOR MANUAL USAGE!
         /// </summary>
         [Obsolete("NOT FOR MANUAL USAGE!", true)]
-        public static void Patch() => QModManager.Patcher.Patch();
+        public static void Patch() => QModManager.Patcher.Main();
     }
 }
