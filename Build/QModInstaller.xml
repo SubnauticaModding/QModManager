@@ -3189,6 +3189,11 @@
             <param name="enumName">Name of the enum.</param>
             <returns>An <see cref="T:System.Collections.IEnumerable"/> of banned indexes not to be issued for new entries of the specified enum.</returns>
         </member>
+        <member name="T:QModManager.API.SMLHelper.Utility.ImageUtils">
+            <summary>
+            Utilities for image files
+            </summary>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Utility.ImageUtils.LoadTextureFromFile(System.String,UnityEngine.TextureFormat)">
             <summary>
             Creates a new <see cref="T:UnityEngine.Texture2D" /> from an image file.
@@ -3422,6 +3427,11 @@
             The collection of techtypes allowed in the container.
             </returns>
         </member>
+        <member name="T:QModManager.API.SMLHelper.Utility.KeyCodeUtils">
+            <summary>
+            Utilities for <see cref="T:UnityEngine.KeyCode"/>s
+            </summary>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Utility.KeyCodeUtils.KeyCodeToString(UnityEngine.KeyCode)">
             <summary>
             Turn a <seealso cref="T:UnityEngine.KeyCode"/> into a <seealso cref="T:System.String"/>
@@ -3435,6 +3445,23 @@
             </summary>
             <param name="s"></param>
             <returns></returns>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Utility.PrefabUtils">
+            <summary>
+            Utilities for prefabs
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PrefabUtils.AddBasicComponents(UnityEngine.GameObject,System.String)">
+            <summary>
+            Adds basic components to a <see cref="T:UnityEngine.GameObject"/>
+            </summary>
+            <param name="_object">The <see cref="T:UnityEngine.GameObject"/> to which the components should be added</param>
+            <param name="classId">The desired class ID</param>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Utility.SaveUtils">
+            <summary>
+            Utilities for saved games
+            </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Utility.SaveUtils.GetCurrentSaveDataDir">
             <summary>

@@ -4,6 +4,9 @@
     using UnityEngine;
     using Logger = QModManager.Utility.Logger;
 
+    /// <summary>
+    /// Utilities for image files
+    /// </summary>
     public static class ImageUtils
     {
         /// <summary>

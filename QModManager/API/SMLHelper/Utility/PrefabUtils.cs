@@ -2,10 +2,17 @@
 {
     using UnityEngine;
 
-    // TODO: Maybe more Prefab-related functions here?
+    /// <summary>
+    /// Utilities for prefabs
+    /// </summary>
     public static class PrefabUtils
     {
-        public static void AddBasicComponents(ref GameObject _object, string classId)
+        /// <summary>
+        /// Adds basic components to a <see cref="GameObject"/>
+        /// </summary>
+        /// <param name="_object">The <see cref="GameObject"/> to which the components should be added</param>
+        /// <param name="classId">The desired class ID</param>
+        public static void AddBasicComponents(GameObject _object, string classId)
         {
             Rigidbody rb = _object.AddComponent<Rigidbody>();
             _object.AddComponent<PrefabIdentifier>().ClassId = classId;

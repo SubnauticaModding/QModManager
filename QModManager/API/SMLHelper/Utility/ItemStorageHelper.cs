@@ -8,11 +8,11 @@
     /// <seealso cref="IItemStorageHelper" />
     public class ItemStorageHelper : IItemStorageHelper
     {
-        private readonly Dictionary<ItemsContainer, Dictionary<Vector2int, bool>> HasRoomCacheCollection = new Dictionary<ItemsContainer, Dictionary<Vector2int, bool>>();
-
         internal static readonly ItemStorageHelper Singleton = new ItemStorageHelper();
 
         public static IItemStorageHelper Main => Singleton;
+
+        private readonly Dictionary<ItemsContainer, Dictionary<Vector2int, bool>> HasRoomCacheCollection = new Dictionary<ItemsContainer, Dictionary<Vector2int, bool>>();
 
         private ItemStorageHelper() { }
 

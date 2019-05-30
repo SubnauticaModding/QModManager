@@ -1,9 +1,9 @@
 namespace QModManager.API.SMLHelper.MonoBehaviours
 {
-    using UnityEngine;
-    using System.Reflection;
-    using Logger = QModManager.Utility.Logger;
     using Harmony;
+    using System.Reflection;
+    using UnityEngine;
+    using Logger = QModManager.Utility.Logger;
 
     public class Fixer : MonoBehaviour, IProtoEventListener
     {

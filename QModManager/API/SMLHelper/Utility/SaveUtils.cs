@@ -2,8 +2,9 @@
 {
     using System.IO;
 
-    /* TODO: Maybe add more saving related functions here,
-       such as those related to serializing? */
+    /// <summary>
+    /// Utilities for saved games
+    /// </summary>
     public static class SaveUtils
     {
         /// <summary>

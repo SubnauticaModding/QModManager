@@ -4,6 +4,9 @@
     using UnityEngine;
     using Logger = QModManager.Utility.Logger;
 
+    /// <summary>
+    /// Utilities for <see cref="KeyCode"/>s
+    /// </summary>
     public static class KeyCodeUtils
     {
         /// <summary>
