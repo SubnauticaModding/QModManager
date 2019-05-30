@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace QModManager.Tests.QModManager
 {
     [TestFixture]
-    public class Sorting
+    public class SortingTests
     {
         [Test]
         public void FourModTest()

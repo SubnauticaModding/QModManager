@@ -3,8 +3,7 @@ using System.Collections.Generic;
 
 namespace QModManager.Tests.QModManager
 {
-    [TestFixture]
-    public class VersionDependencies
+    public class VersionDependenciesTests
     {
         public class ExactMatches
         {
@@ -29,16 +28,16 @@ namespace QModManager.Tests.QModManager
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
-                    {
-                        { "Mod1", "Release" }
-                    }
+                        {
+                            { "Mod1", "Release" }
+                        }
                     };
 
                     Patcher.foundMods = new List<QMod>
-                {
-                    mod1,
-                    mod2,
-                };
+                    {
+                        mod1,
+                        mod2,
+                    };
 
                     Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
 
@@ -64,16 +63,16 @@ namespace QModManager.Tests.QModManager
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
-                    {
-                        { "Mod1", "=Release" }
-                    }
+                        {
+                            { "Mod1", "=Release" }
+                        }
                     };
 
                     Patcher.foundMods = new List<QMod>
-                {
-                    mod1,
-                    mod2,
-                };
+                    {
+                        mod1,
+                        mod2,
+                    };
 
                     Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
 
@@ -99,16 +98,16 @@ namespace QModManager.Tests.QModManager
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
-                    {
-                        { "Mod1", " = Release" }
-                    }
+                        {
+                            { "Mod1", " = Release" }
+                        }
                     };
 
                     Patcher.foundMods = new List<QMod>
-                {
-                    mod1,
-                    mod2,
-                };
+                    {
+                        mod1,
+                        mod2,
+                    };
 
                     Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
 
@@ -134,16 +133,16 @@ namespace QModManager.Tests.QModManager
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
-                    {
-                        { "Mod1", "AnotherVersion" }
-                    }
+                        {
+                            { "Mod1", "AnotherVersion" }
+                        }
                     };
 
                     Patcher.foundMods = new List<QMod>
-                {
-                    mod1,
-                    mod2,
-                };
+                    {
+                        mod1,
+                        mod2,
+                    };
 
                     Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
 
@@ -169,16 +168,16 @@ namespace QModManager.Tests.QModManager
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
-                    {
-                        { "Mod1", "=AnotherVersion" }
-                    }
+                        {
+                            { "Mod1", "=AnotherVersion" }
+                        }
                     };
 
                     Patcher.foundMods = new List<QMod>
-                {
-                    mod1,
-                    mod2,
-                };
+                    {
+                        mod1,
+                        mod2,
+                    };
 
                     Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
 
@@ -204,16 +203,16 @@ namespace QModManager.Tests.QModManager
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
-                    {
-                        { "Mod1", " = AnotherVersion" }
-                    }
+                        {
+                            { "Mod1", " = AnotherVersion" }
+                        }
                     };
 
                     Patcher.foundMods = new List<QMod>
-                {
-                    mod1,
-                    mod2,
-                };
+                    {
+                        mod1,
+                        mod2,
+                    };
 
                     Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
 
@@ -244,16 +243,16 @@ namespace QModManager.Tests.QModManager
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
-                    {
-                        { "Mod1", "1.0" }
-                    }
+                        {
+                            { "Mod1", "1.0" }
+                        }
                     };
 
                     Patcher.foundMods = new List<QMod>
-                {
-                    mod1,
-                    mod2,
-                };
+                    {
+                        mod1,
+                        mod2,
+                    };
 
                     Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
 
@@ -285,10 +284,10 @@ namespace QModManager.Tests.QModManager
                     };
 
                     Patcher.foundMods = new List<QMod>
-                {
-                    mod1,
-                    mod2,
-                };
+                    {
+                        mod1,
+                        mod2,
+                    };
 
                     Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
 
@@ -314,16 +313,16 @@ namespace QModManager.Tests.QModManager
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
-                    {
-                        { "Mod1", " = 1.0" }
-                    }
+                        {
+                            { "Mod1", " = 1.0" }
+                        }
                     };
 
                     Patcher.foundMods = new List<QMod>
-                {
-                    mod1,
-                    mod2,
-                };
+                    {
+                        mod1,
+                        mod2,
+                    };
 
                     Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
 
@@ -349,16 +348,16 @@ namespace QModManager.Tests.QModManager
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
-                    {
-                        { "Mod1", "1.0" }
-                    }
+                        {
+                            { "Mod1", "1.0" }
+                        }
                     };
 
                     Patcher.foundMods = new List<QMod>
-                {
-                    mod1,
-                    mod2,
-                };
+                    {
+                        mod1,
+                        mod2,
+                    };
 
                     Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
 
@@ -384,16 +383,16 @@ namespace QModManager.Tests.QModManager
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
-                    {
-                        { "Mod1", "=1.0" }
-                    }
+                        {
+                            { "Mod1", "=1.0" }
+                        }
                     };
 
                     Patcher.foundMods = new List<QMod>
-                {
-                    mod1,
-                    mod2,
-                };
+                    {
+                        mod1,
+                        mod2,
+                    };
 
                     Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
 
@@ -419,16 +418,16 @@ namespace QModManager.Tests.QModManager
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
-                    {
-                        { "Mod1", " = 1.0" }
-                    }
+                        {
+                            { "Mod1", " = 1.0" }
+                        }
                     };
 
                     Patcher.foundMods = new List<QMod>
-                {
-                    mod1,
-                    mod2,
-                };
+                    {
+                        mod1,
+                        mod2,
+                    };
 
                     Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
 

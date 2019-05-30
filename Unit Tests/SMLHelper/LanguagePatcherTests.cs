@@ -1,12 +1,11 @@
 ﻿using NUnit.Framework;
-using QModManager.API.SMLHelper.Patchers;
 using System;
 using System.Collections.Generic;
 
 namespace QModManager.Tests.SMLHelper
 {
     [TestFixture]
-    public class LanguagePatcher
+    public class LanguagePatcherTests
     {
         private static readonly IEnumerable<string> Keys = new string[]
         {
