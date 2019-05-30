@@ -12,16 +12,20 @@ namespace QModManager.Executable
         {
             if (game != Patcher.Game.Subnautica && game != Patcher.Game.BelowZero)
                 throw new ArgumentException("Neither Subnautica nor Below Zero detected!");
+
             AssetsManager am = new AssetsManager();
             AssetsFileInstance afi = am.LoadAssetsFile(path, false);
+
             if (game == Patcher.Game.Subnautica)
                 am.LoadClassPackage("cldb.dat");
             else
                 am.LoadClassPackage("cldb2018.dat");
+
             AssetFileInfoEx audioInfo = afi.table.getAssetInfo(4);
             AssetTypeInstance audioAti = am.GetATI(afi.file, audioInfo);
             AssetTypeValueField audioBaseField = audioAti.GetBaseField();
             audioBaseField.Get("m_DisableAudio").GetValue().Set(newValue);
+
             byte[] audioAsset;
             using (MemoryStream memStream = new MemoryStream())
             using (AssetsFileWriter writer = new AssetsFileWriter(memStream))
@@ -30,6 +34,7 @@ namespace QModManager.Executable
                 audioBaseField.Write(writer);
                 audioAsset = memStream.ToArray();
             }
+
             List<AssetsReplacer> rep = new List<AssetsReplacer>() { new AssetsReplacerFromMemory(0, 4, 0x0B, 0xFFFF, audioAsset) };
             using (MemoryStream memStream = new MemoryStream())
             using (AssetsFileWriter writer = new AssetsFileWriter(memStream))
