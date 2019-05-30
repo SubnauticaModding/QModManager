@@ -5,7 +5,7 @@ namespace QModManager.API.SMLHelper.MonoBehaviours
     using UnityEngine;
     using Logger = QModManager.Utility.Logger;
 
-    public class Fixer : MonoBehaviour, IProtoEventListener
+    internal class Fixer : MonoBehaviour, IProtoEventListener
     {
         [SerializeField]
         public TechType techType;
