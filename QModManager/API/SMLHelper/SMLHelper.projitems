@@ -30,7 +30,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IPrefabHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ISpriteHandler.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Interfaces\ITechTypeHandler.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IStorageHelper.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Interfaces\IItemStorageHelper.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Assets\ModPrefab.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Assets\ModSprite.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Crafting\ModCraftTreeFamily.cs" />

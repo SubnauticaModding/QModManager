@@ -2,7 +2,11 @@
 {
     using System.Collections.Generic;
 
-    public interface IStorageHelper
+    /// <summary>
+    /// Interface for <see cref="ItemStorageHelper"/> <para/>
+    /// Can be used for dependency injection
+    /// </summary>
+    public interface IItemStorageHelper
     {
         /// <summary>
         /// Using the cached container info, determines whether the specified container has room for an item of the specified size.

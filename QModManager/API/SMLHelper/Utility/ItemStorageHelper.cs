@@ -5,14 +5,14 @@
     /// <summary>
     /// A utility class that offers additional info about <see cref="ItemsContainer"/> instances.
     /// </summary>
-    /// <seealso cref="IStorageHelper" />
-    public class ItemStorageHelper : IStorageHelper
+    /// <seealso cref="IItemStorageHelper" />
+    public class ItemStorageHelper : IItemStorageHelper
     {
         private readonly Dictionary<ItemsContainer, Dictionary<Vector2int, bool>> HasRoomCacheCollection = new Dictionary<ItemsContainer, Dictionary<Vector2int, bool>>();
 
         internal static readonly ItemStorageHelper Singleton = new ItemStorageHelper();
 
-        public static IStorageHelper Main => Singleton;
+        public static IItemStorageHelper Main => Singleton;
 
         private ItemStorageHelper() { }
 
@@ -235,7 +235,7 @@
         /// <returns>
         ///   <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
         /// </returns>
-        bool IStorageHelper.HasRoomForCached(ItemsContainer container, int width, int height)
+        bool IItemStorageHelper.HasRoomForCached(ItemsContainer container, int width, int height)
         {
             return Main.HasRoomForCached(container, new Vector2int(width, height));
         }
@@ -248,7 +248,7 @@
         /// <returns>
         ///   <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
         /// </returns>
-        bool IStorageHelper.HasRoomForCached(ItemsContainer container, Vector2int itemSize)
+        bool IItemStorageHelper.HasRoomForCached(ItemsContainer container, Vector2int itemSize)
         {
             if (HasRoomCacheCollection.TryGetValue(container, out Dictionary<Vector2int, bool> cache)
                 && cache.TryGetValue(itemSize, out bool hasRoom))
@@ -270,7 +270,7 @@
         /// <returns>
         ///   <c>true</c> if the specified container is empty; otherwise, <c>false</c>.
         /// </returns>
-        bool IStorageHelper.IsEmpty(ItemsContainer container)
+        bool IItemStorageHelper.IsEmpty(ItemsContainer container)
         {
             // This method exists for StorageContainer, but strangely not for ItemsContainer
             return container.count <= 0;
@@ -283,7 +283,7 @@
         /// <returns>
         ///   <c>true</c> if the specified container is full; otherwise, <c>false</c>.
         /// </returns>
-        bool IStorageHelper.IsFull(ItemsContainer container)
+        bool IItemStorageHelper.IsFull(ItemsContainer container)
         {
             return !Main.HasRoomForCached(container, Size1x1);
         }
@@ -293,7 +293,7 @@
         /// </summary>
         /// <param name="container">The container.</param>
         /// <returns></returns>
-        int IStorageHelper.GetTotalSlots(ItemsContainer container)
+        int IItemStorageHelper.GetTotalSlots(ItemsContainer container)
         {
             return container.sizeX * container.sizeY;
         }
@@ -305,7 +305,7 @@
         /// <returns>
         /// The label used and displayed in-game for the container.
         /// </returns>
-        string IStorageHelper.GetStorageLabel(ItemsContainer container)
+        string IItemStorageHelper.GetStorageLabel(ItemsContainer container)
         {
             return container._label;
         }
@@ -318,7 +318,7 @@
         /// <returns>
         /// The collection of techtypes allowed in the container.
         /// </returns>
-        HashSet<TechType> IStorageHelper.GetAllowedTechTypes(ItemsContainer container)
+        HashSet<TechType> IItemStorageHelper.GetAllowedTechTypes(ItemsContainer container)
         {
             return container.allowedTech;
         }
