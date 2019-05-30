@@ -11,7 +11,7 @@ namespace QModManager.Checks
     {
         internal const string snNexus = "https://nexusmods.com/subnautica/mods/201";
         internal const string bzNexus = "https://nexusmods.com/subnauticabelowzero/mods/1";
-        internal const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/master/Data/latest-version.txt";
+        private const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/master/Data/latest-version.txt";
 
         internal static void CheckForUpdates()
         {
@@ -46,7 +46,8 @@ namespace QModManager.Checks
                 client.DownloadStringAsync(new Uri(VersionURL));
             }
         }
-        internal static void Parse(string versionStr)
+
+        private static void Parse(string versionStr)
         {
             try
             {
@@ -69,7 +70,7 @@ namespace QModManager.Checks
                     {
                         Dialog.Show(
                             $"There is a newer version of QModManager available: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()})",
-                            Dialog.Button.download, Dialog.Button.close, true);
+                            Dialog.Button.Download, Dialog.Button.Close, true);
                     }
                 }
                 else

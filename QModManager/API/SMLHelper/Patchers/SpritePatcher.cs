@@ -20,7 +20,7 @@
                 }
             }
 
-            Logger.Log("SpritePatcher is done.");
+            Logger.Debug("SpritePatcher is done.");
         }
     }
 }

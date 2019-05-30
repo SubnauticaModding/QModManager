@@ -39,27 +39,27 @@ namespace QModManager
         }
 
         [HarmonyPatch(typeof(DevConsole), "Start")]
-        internal static class AddComponentPatch
+        private static class AddComponentPatch
         {
-            internal static bool hooksLoaded = false;
+            private static bool hooksLoaded = false;
 
             [HarmonyPostfix]
-            internal static void Postfix(DevConsole __instance)
+            private static void Postfix(DevConsole __instance)
             {
                 if (hooksLoaded) return;
                 hooksLoaded = true;
                 
                 __instance.gameObject.AddComponent<QMMHooks>();
 
-                Logger.Debug("Old hooks loaded");
+                Logger.Debug("Legacy hooks loaded");
 
                 Start?.Invoke();
             }
         }
 
-        internal class QMMHooks : MonoBehaviour
+        private class QMMHooks : MonoBehaviour
         {
-            internal void FixedUpdate()
+            private void FixedUpdate()
             {
                 if (!LateStartInvoked)
                 {
@@ -68,9 +68,9 @@ namespace QModManager
                 }
                 Hooks.FixedUpdate?.Invoke();
             }
-            internal void Update() => Hooks.Update?.Invoke();
-            internal void LateUpdate() => Hooks.LateUpdate?.Invoke();
-            internal void OnApplicationQuit() => Hooks.OnApplicationQuit?.Invoke();
+            private void Update() => Hooks.Update?.Invoke();
+            private void LateUpdate() => Hooks.LateUpdate?.Invoke();
+            private void OnApplicationQuit() => Hooks.OnApplicationQuit?.Invoke();
         }
 
         [Obsolete("Use QModManager.API.QModHooks instead")]

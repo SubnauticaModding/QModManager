@@ -10,9 +10,9 @@ namespace QModManager.Checks
         internal static bool IsInstalled { get; set; } = false;
 
         [HarmonyPatch(typeof(GameInput), "Awake")]
-        internal static class AwakePatch
+        private static class DetectorPatch
         {
-            internal static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+            private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
             {
                 // Loop through all IL instructions
                 foreach (CodeInstruction instruction in instructions)

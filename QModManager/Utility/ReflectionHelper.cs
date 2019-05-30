@@ -1,6 +1,4 @@
-﻿// Taken from https://github.com/SMLHelper/SMLHelper/blob/DevMar2019/SMLHelper/Utility/ReflectionHelper.cs#L177-L190
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
 
 namespace QModManager.Utility

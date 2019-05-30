@@ -3,9 +3,17 @@ using UnityEngine;
 
 namespace QModManager.Utility
 {
-    internal static class ExtensionMethods
+    /// <summary>
+    /// Miscellaneous extension methods to make your life easier
+    /// </summary>
+    public static class ExtensionMethods
     {
-        internal static string ToStringParsed(this Version version)
+        /// <summary>
+        /// Turns a <see cref="Version"/> into its <see cref="string"/> representation and removes all leading zeroes
+        /// </summary>
+        /// <param name="version"></param>
+        /// <returns></returns>
+        public static string ToStringParsed(this Version version)
         {
             if (version == null) throw new ArgumentNullException(nameof(version));
 
@@ -17,23 +25,29 @@ namespace QModManager.Utility
             return text;
         }
 
-        internal static T GetOrAddComponent<T>(this GameObject gameObject) where T : Component
+        /// <summary>
+        /// Gets a component from a <see cref="GameObject"/>, or adds it if it doesn't exist
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="gameObject"></param>
+        /// <returns></returns>
+        public static T GetOrAddComponent<T>(this GameObject gameObject) where T : Component
         {
             if (!gameObject) throw new ArgumentNullException(nameof(gameObject));
             return gameObject.GetComponent<T>() ?? gameObject.AddComponent<T>();
         }
-        internal static T GetOrAddComponent<T>(this MonoBehaviour behaviour) where T : Component
+
+        /// <summary>
+        /// Gets a component from a <see cref="GameObject"/>, or adds it if it doesn't exist
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="behaviour"></param>
+        /// <returns></returns>
+        public static T GetOrAddComponent<T>(this MonoBehaviour behaviour) where T : Component
         {
             if (!behaviour) throw new ArgumentNullException(nameof(behaviour));
             if (!behaviour.gameObject) throw new ArgumentException($"The provided component is not attached to a GameObject!");
             return behaviour.gameObject.GetOrAddComponent<T>();
-        }
-
-        internal static string Repeat(this char c, int count)
-        {
-            string s = "";
-            for (int i = 0; i < count; i++) s += c;
-            return s;
         }
     }
 }

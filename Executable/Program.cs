@@ -24,11 +24,11 @@ namespace QModManager.Executable
 
     internal static class Program
     {
-        internal static Action action = Action.RunByUser;
-        internal static OS os;
+        private static Action action = Action.RunByUser;
+        private static OS os;
         internal static Patcher.Game game;
 
-        internal static void Main(string[] args)
+        private static void Main(string[] args)
         {
             try
             {
@@ -181,7 +181,7 @@ namespace QModManager.Executable
             }
         }
 
-        internal static void GetInfo(out OS os, out string directory, out Patcher.Game game)
+        private static void GetInfo(out OS os, out string directory, out Patcher.Game game)
         {
             string windowsDirectory = Path.Combine(Environment.CurrentDirectory, "../..");
             string macDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../..");
@@ -255,18 +255,18 @@ namespace QModManager.Executable
 
         #region Disable exit
 
-        internal static void DisableExit()
+        private static void DisableExit()
         {
             DisableExitButton();
             Console.CancelKeyPress += CancelKeyPress;
             Console.TreatControlCAsInput = true;
         }
 
-        internal static void DisableExitButton() => EnableMenuItem(GetSystemMenu(GetConsoleWindow(), false), 0xF060, 0x1);
-        internal static void CancelKeyPress(object sender, ConsoleCancelEventArgs e) => e.Cancel = true;
-        [DllImport("user32.dll")] internal static extern int EnableMenuItem(IntPtr tMenu, int targetItem, int targetStatus);
-        [DllImport("user32.dll")] internal static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
-        [DllImport("kernel32.dll", ExactSpelling = true)] internal static extern IntPtr GetConsoleWindow();
+        private static void DisableExitButton() => EnableMenuItem(GetSystemMenu(GetConsoleWindow(), false), 0xF060, 0x1);
+        private static void CancelKeyPress(object sender, ConsoleCancelEventArgs e) => e.Cancel = true;
+        [DllImport("user32.dll")] private static extern int EnableMenuItem(IntPtr tMenu, int targetItem, int targetStatus);
+        [DllImport("user32.dll")] private static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+        [DllImport("kernel32.dll", ExactSpelling = true)] private static extern IntPtr GetConsoleWindow();
 
         #endregion
     }

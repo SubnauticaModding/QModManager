@@ -4,8 +4,39 @@ using System.IO;
 
 namespace QModManager.Utility
 {
-    internal static class IOUtilities
+    /// <summary>
+    /// Utilities for files and paths
+    /// </summary>
+    public static class IOUtilities
     {
+        /// <summary>
+        /// Works like <see cref="Path.Combine(string, string)"/>, but can have more than 2 paths
+        /// </summary>
+        /// <param name="one"></param>
+        /// <param name="two"></param>
+        /// <param name="rest"></param>
+        /// <returns></returns>
+        public static string Combine(string one, string two, params string[] rest)
+        {
+            string path = Path.Combine(one, two);
+
+            foreach (string str in rest)
+            {
+                path = Path.Combine(path, str);
+            }
+
+            return path;
+        }
+
+        #region Folder structure
+
+        internal static void LogFolderStructureAsTree(string directory = null)
+        {
+            Logger.Info($"Folder structure:");
+            Console.WriteLine(GetFolderStructureAsTree(directory));
+            Console.WriteLine();
+        }
+
         private static readonly HashSet<string> BannedFolders = new HashSet<string>()
         {
             "OST",
@@ -17,14 +48,7 @@ namespace QModManager.Utility
             "Subnautica_Data/StreamingAssets",
         };
 
-        internal static void LogFolderStructureAsTree(string directory = null)
-        {
-            Logger.Info($"Folder structure:");
-            Console.WriteLine(GetFolderStructureAsTree(directory));
-            Console.WriteLine();
-        }
-
-        internal static string GetFolderStructureAsTree(string directory = null)
+        private static string GetFolderStructureAsTree(string directory = null)
         {
             try
             {
@@ -66,6 +90,7 @@ namespace QModManager.Utility
                 throw e;
             }
         }
+
         private static string GetFolderStructureRecursively(string directory, int spaces = 0)
         {
             try
@@ -102,7 +127,15 @@ namespace QModManager.Utility
             }
         }
 
-        internal static string ParseSize(long lsize)
+        private static int GetFileCountRecursively(string directory)
+        {
+            int c = 0;
+            foreach (string file in Directory.GetFiles(directory)) c++;
+            foreach (string dir in Directory.GetDirectories(directory)) c += GetFileCountRecursively(dir);
+            return c;
+        }
+
+        private static string ParseSize(long lsize)
         {
             string[] units = new[] { "B", "KB", "MB", "GB" };
             float size = lsize;
@@ -129,24 +162,6 @@ namespace QModManager.Utility
             return s;
         }
 
-        private static int GetFileCountRecursively(string directory)
-        {
-            int c = 0;
-            foreach (string file in Directory.GetFiles(directory)) c++;
-            foreach (string dir in Directory.GetDirectories(directory)) c += GetFileCountRecursively(dir);
-            return c;
-        }
-
-        internal static string Combine(string one, string two, params string[] rest)
-        {
-            string path = Path.Combine(one, two);
-
-            foreach (string str in rest)
-            {
-                path = Path.Combine(path, str);
-            }
-
-            return path;
-        }
+        #endregion
     }
 }

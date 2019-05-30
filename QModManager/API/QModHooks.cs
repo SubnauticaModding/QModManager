@@ -62,12 +62,12 @@ namespace QModManager.API
         }
 
         [HarmonyPatch(typeof(DevConsole), "Start")]
-        internal static class AddComponentPatch
+        private static class AddComponentPatch
         {
-            internal static bool hooksLoaded = false;
+            private static bool hooksLoaded = false;
 
             [HarmonyPostfix]
-            internal static void Postfix(DevConsole __instance)
+            private static void Postfix(DevConsole __instance)
             {
                 if (hooksLoaded) return;
                 hooksLoaded = true;
@@ -80,9 +80,9 @@ namespace QModManager.API
             }
         }
 
-        internal class QMMHooks : MonoBehaviour
+        private class QMMHooks : MonoBehaviour
         {
-            internal void FixedUpdate()
+            private void FixedUpdate()
             {
                 if (!LateStartInvoked)
                 {
@@ -91,9 +91,9 @@ namespace QModManager.API
                 }
                 QModHooks.FixedUpdate?.Invoke();
             }
-            internal void Update() => QModHooks.Update?.Invoke();
-            internal void LateUpdate() => QModHooks.LateUpdate?.Invoke();
-            internal void OnApplicationQuit() => QModHooks.OnApplicationQuit?.Invoke();
+            private void Update() => QModHooks.Update?.Invoke();
+            private void LateUpdate() => QModHooks.LateUpdate?.Invoke();
+            private void OnApplicationQuit() => QModHooks.OnApplicationQuit?.Invoke();
         }
 
         /// <summary>

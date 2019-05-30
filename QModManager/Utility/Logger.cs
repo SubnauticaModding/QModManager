@@ -1,13 +1,12 @@
 ﻿using QModManager.API.SMLHelper.Utility;
 using System;
 using System.Diagnostics;
-using System.Reflection;
 
 namespace QModManager.Utility
 {
     internal static class Logger
     {
-        internal static bool EnableDebugging
+        private static bool EnableDebugging
         {
             get
             {
@@ -19,7 +18,7 @@ namespace QModManager.Utility
             }
         }
 
-        internal static void Log(string logLevel, params string[] text)
+        private static void Log(string logLevel, params string[] text)
         {
             if (text == null || text.Length < 1) return;
 
@@ -84,7 +83,7 @@ namespace QModManager.Utility
             Log("Fatal", text);
         }
 
-        internal static Type GetCallingClass()
+        private static Type GetCallingClass()
         {
             StackTrace stackTrace = new StackTrace();
             StackFrame[] frames = stackTrace.GetFrames();

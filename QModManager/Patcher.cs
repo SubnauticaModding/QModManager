@@ -21,12 +21,21 @@ namespace QModManager
     /// </summary>
     public static class Patcher
     {
-        internal static HarmonyInstance harmony;
+        internal static HarmonyInstance Harmony;
 
         internal static readonly Regex IDRegex = new Regex("[^0-9a-z_]", RegexOptions.IgnoreCase);
 
-        internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? null : Path.Combine(Environment.CurrentDirectory, "QMods");
-        internal static bool patched = false;
+        internal static string QModBaseDir
+        {
+            get
+            {
+                if (Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows"))
+                    return null;
+                else
+                    return Path.Combine(Environment.CurrentDirectory, "QMods");
+            }
+        }
+        private static bool Patched = false;
 
         internal static List<QMod> foundMods = new List<QMod>();
         internal static List<QMod> sortedMods = new List<QMod>();
@@ -37,12 +46,12 @@ namespace QModManager
         {
             try
             {
-                if (patched)
+                if (Patched)
                 {
                     Logger.Warn("Patch method was called multiple times!");
                     return;
                 }
-                patched = true;
+                Patched = true;
 
                 Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}...");
 
@@ -75,7 +84,7 @@ namespace QModManager
                 if (NitroxCheck.IsInstalled)
                 {
                     Logger.Fatal($"Nitrox was detected!");
-                    Dialog.Show("Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.", Dialog.Button.disabled, Dialog.Button.disabled, false);
+                    Dialog.Show("Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.", Dialog.Button.Disabled, Dialog.Button.Disabled, false);
                     return;
                 }
 
@@ -100,16 +109,16 @@ namespace QModManager
             }
         }
 
-        internal static void PatchHarmony()
+        private static void PatchHarmony()
         {
-            harmony = HarmonyInstance.Create("qmodmanager");
-            harmony.PatchAll();
+            Harmony = HarmonyInstance.Create("qmodmanager");
+            Harmony.PatchAll();
             Logger.Debug("Patched!");
         }
 
         #region Mod loading
 
-        internal static void StartLoadingMods()
+        private static void StartLoadingMods()
         {
             Logger.Info("Started loading mods");
 
@@ -210,7 +219,7 @@ namespace QModManager
             LoadAllMods();
         }
 
-        internal static void LoadAllMods()
+        private static void LoadAllMods()
         {
             List<string> toWrite = new List<string> { "Loaded mods:" };
 
@@ -255,7 +264,7 @@ namespace QModManager
             CheckOldHarmony();
         }
 
-        internal static bool LoadMod(QMod mod)
+        private static bool LoadMod(QMod mod)
         {
             if (mod == null || mod.Loaded) return false;
 
@@ -301,7 +310,7 @@ namespace QModManager
             return true;
         }
 
-        internal static void RemoveDuplicateModIDs()
+        private static void RemoveDuplicateModIDs()
         {
             List<QMod> duplicateModIDs = new List<QMod>();
 
@@ -331,7 +340,7 @@ namespace QModManager
             }
         }
 
-        internal static void UpdateSMLHelper()
+        private static void UpdateSMLHelper()
         {
             string oldPath = IOUtilities.Combine(".", "QMods", "Modding Helper");
             if (File.Exists(Path.Combine(oldPath, "SMLHelper.dll")))
@@ -437,7 +446,7 @@ namespace QModManager
 
         internal static Game game;
 
-        internal static bool DetectGame()
+        private static bool DetectGame()
         {
             bool sn = Directory.GetFiles(Environment.CurrentDirectory, "Subnautica.exe", SearchOption.TopDirectoryOnly).Length > 0
                 || Directory.GetFiles(Environment.CurrentDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0
@@ -473,7 +482,7 @@ namespace QModManager
             return false;
         }
 
-        internal static void DisableNonApplicableMods()
+        private static void DisableNonApplicableMods()
         {
             List<QMod> nonApplicableMods = new List<QMod>();
             sortedMods = sortedMods.Where(mod =>
@@ -497,7 +506,7 @@ namespace QModManager
             }
         }
 
-        internal static string GetOtherGame()
+        private static string GetOtherGame()
         {
             if (game == Game.Subnautica) return "BelowZero";
             else return "Subnautica";
@@ -509,7 +518,7 @@ namespace QModManager
 
         internal static List<QMod> modSortingChain = new List<QMod>();
 
-        internal static void SortMods()
+        private static void SortMods()
         {
             // Contains all the mods that errored out during the sorting process.
             List<List<QMod>> sortingErrorLoops = new List<List<QMod>>();
@@ -679,7 +688,7 @@ namespace QModManager
             return true;
         }
 
-        internal static List<QMod> GetLoadBefore(QMod mod)
+        private static List<QMod> GetLoadBefore(QMod mod)
         {
             if (mod == null) return null;
 
@@ -697,7 +706,7 @@ namespace QModManager
             return mods;
         }
 
-        internal static List<QMod> GetLoadAfter(QMod mod)
+        private static List<QMod> GetLoadAfter(QMod mod)
         {
             if (mod == null) return null;
 
@@ -775,7 +784,7 @@ namespace QModManager
             }
         }
 
-        internal static List<QMod> GetPresentDependencies(QMod mod)
+        private static List<QMod> GetPresentDependencies(QMod mod)
         {
             if (mod == null) return null;
 
@@ -792,7 +801,30 @@ namespace QModManager
 
             return dependencies;
         }
-        internal static List<QMod> GetPresentVersionDependencies(QMod mod)
+
+        private static List<string> GetMissingDependencies(QMod mod, List<QMod> presentDependencies)
+        {
+            if (mod == null) return null;
+            if (presentDependencies == null || presentDependencies.Count() == 0) return mod.Dependencies.ToList();
+
+            List<string> dependenciesMissing = new List<string>(mod.Dependencies);
+
+            dependenciesMissing = dependenciesMissing.Where(dep => dep != "QModManager").ToList();
+            dependenciesMissing = dependenciesMissing.Where(dep => dep != "SMLHelper").ToList();
+
+            foreach (string dependencyId in mod.Dependencies)
+            {
+                foreach (QMod presentDependency in presentDependencies)
+                {
+                    if (dependencyId == presentDependency.Id)
+                        dependenciesMissing.Remove(dependencyId);
+                }
+            }
+
+            return dependenciesMissing;
+        }
+
+        private static List<QMod> GetPresentVersionDependencies(QMod mod)
         {
             if (mod == null) return null;
 
@@ -844,28 +876,7 @@ namespace QModManager
             return dependencies;
         }
 
-        internal static List<string> GetMissingDependencies(QMod mod, List<QMod> presentDependencies)
-        {
-            if (mod == null) return null;
-            if (presentDependencies == null || presentDependencies.Count() == 0) return mod.Dependencies.ToList();
-
-            List<string> dependenciesMissing = new List<string>(mod.Dependencies);
-
-            dependenciesMissing = dependenciesMissing.Where(dep => dep != "QModManager").ToList();
-            dependenciesMissing = dependenciesMissing.Where(dep => dep != "SMLHelper").ToList();
-
-            foreach (string dependencyId in mod.Dependencies)
-            {
-                foreach (QMod presentDependency in presentDependencies)
-                {
-                    if (dependencyId == presentDependency.Id)
-                        dependenciesMissing.Remove(dependencyId);
-                }
-            }
-
-            return dependenciesMissing;
-        }
-        internal static List<KeyValuePair<string, string>> GetMissingVersionDependencies(QMod mod, List<QMod> presentDependencies)
+        private static List<KeyValuePair<string, string>> GetMissingVersionDependencies(QMod mod, List<QMod> presentDependencies)
         {
             if (mod == null) return null;
             if (presentDependencies == null || presentDependencies.Count() == 0) return mod.VersionDependencies.ToList();
@@ -886,7 +897,7 @@ namespace QModManager
             return dependenciesMissing;
         }
 
-        internal static Dictionary<QMod, List<string>> MergeDependencyDictionaries(Dictionary<QMod, List<string>> normalDependencies, Dictionary<QMod, List<KeyValuePair<string, string>>> versionDependencies)
+        private static Dictionary<QMod, List<string>> MergeDependencyDictionaries(Dictionary<QMod, List<string>> normalDependencies, Dictionary<QMod, List<KeyValuePair<string, string>>> versionDependencies)
         {
             Dictionary<QMod, List<string>> dependencies = new Dictionary<QMod, List<string>>(normalDependencies);
 
@@ -906,7 +917,7 @@ namespace QModManager
 
         #region Old harmony detection
 
-        internal static void CheckOldHarmony()
+        private static void CheckOldHarmony()
         {
             List<QMod> modsThatUseOldHarmony = new List<QMod>();
 
@@ -937,7 +948,7 @@ namespace QModManager
 
         #region Errored mods
 
-        internal static void ShowErroredMods()
+        private static void ShowErroredMods()
         {
             if (erroredMods.Count <= 0) return;
 
@@ -952,7 +963,7 @@ namespace QModManager
 
             display += ". Check the log for details.";
 
-            Dialog.Show(display, Dialog.Button.seeLog, Dialog.Button.close, false);
+            Dialog.Show(display, Dialog.Button.SeeLog, Dialog.Button.Close, false);
         }
 
         #endregion

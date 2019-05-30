@@ -3905,6 +3905,48 @@
             Whether or not the game is pirated
             </summary>
         </member>
+        <member name="T:QModManager.Utility.IOUtilities">
+            <summary>
+            Utilities for files and paths
+            </summary>
+        </member>
+        <member name="M:QModManager.Utility.IOUtilities.Combine(System.String,System.String,System.String[])">
+            <summary>
+            Works like <see cref="M:System.IO.Path.Combine(System.String,System.String)"/>, but can have more than 2 paths
+            </summary>
+            <param name="one"></param>
+            <param name="two"></param>
+            <param name="rest"></param>
+            <returns></returns>
+        </member>
+        <member name="T:QModManager.Utility.ExtensionMethods">
+            <summary>
+            Miscellaneous extension methods to make your life easier
+            </summary>
+        </member>
+        <member name="M:QModManager.Utility.ExtensionMethods.ToStringParsed(System.Version)">
+            <summary>
+            Turns a <see cref="T:System.Version"/> into its <see cref="T:System.String"/> representation and removes all leading zeroes
+            </summary>
+            <param name="version"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.Utility.ExtensionMethods.GetOrAddComponent``1(UnityEngine.GameObject)">
+            <summary>
+            Gets a component from a <see cref="T:UnityEngine.GameObject"/>, or adds it if it doesn't exist
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="gameObject"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.Utility.ExtensionMethods.GetOrAddComponent``1(UnityEngine.MonoBehaviour)">
+            <summary>
+            Gets a component from a <see cref="T:UnityEngine.GameObject"/>, or adds it if it doesn't exist
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="behaviour"></param>
+            <returns></returns>
+        </member>
         <member name="T:QModManager.QMod">
             <summary>
             A class containing information about a mod
@@ -4136,12 +4178,14 @@
         </member>
         <member name="T:QModInstaller.QModPatcher">
             <summary>
-            Container class for the entry point
+            Container class for the entry point <para/>
+            NOT FOR MANUAL USAGE!
             </summary>
         </member>
         <member name="M:QModInstaller.QModPatcher.Patch">
             <summary>
-            QModManager entry point
+            QModManager entry point <para/>
+            NOT FOR MANUAL USAGE!
             </summary>
         </member>
     </members>

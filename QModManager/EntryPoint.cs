@@ -3,15 +3,17 @@
 namespace QModInstaller
 {
     /// <summary>
-    /// Container class for the entry point
+    /// Container class for the entry point <para/>
+    /// NOT FOR MANUAL USAGE!
     /// </summary>
-    [Obsolete("Should not be used!", true)]
+    [Obsolete("NOT FOR MANUAL USAGE!", true)]
     public class QModPatcher
     {
         /// <summary>
-        /// QModManager entry point
+        /// QModManager entry point <para/>
+        /// NOT FOR MANUAL USAGE!
         /// </summary>
-        [Obsolete("Should not be used!", true)]
+        [Obsolete("NOT FOR MANUAL USAGE!", true)]
         public static void Patch() => QModManager.Patcher.Patch();
     }
 }
