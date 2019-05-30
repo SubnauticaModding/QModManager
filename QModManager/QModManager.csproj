@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\QModHooks.cs" />
+    <Compile Include="Checks\PirateCheck.cs" />
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Dialog.cs" />
     <Compile Include="Obsolete\Hooks.cs" />
@@ -124,7 +125,6 @@
     <Compile Include="Utility\IOUtilities.cs" />
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="OptionsManager.cs" />
-    <Compile Include="Checks\PirateCheck.cs" />
     <Compile Include="Prefab Debugger\HierarchyItem.cs" />
     <Compile Include="Prefab Debugger\LogMessage.cs" />
     <Compile Include="Prefab Debugger\PrefabDebugger.cs" />
