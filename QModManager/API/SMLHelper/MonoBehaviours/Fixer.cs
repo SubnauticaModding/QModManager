@@ -16,8 +16,6 @@ namespace QModManager.API.SMLHelper.MonoBehaviours
         private float time;
         private bool initalized;
 
-        private static FieldInfo BuilderPrefab = AccessTools.Field(typeof(Builder), "prefab");
-
         private void Update()
         {
             if (!initalized)
@@ -26,7 +24,7 @@ namespace QModManager.API.SMLHelper.MonoBehaviours
                 initalized = true;
             }
 
-            GameObject prefab = (GameObject)BuilderPrefab.GetValue(null);
+            GameObject prefab = Builder.prefab;
 
             if (transform.position == new Vector3(-5000, -5000, -5000) && gameObject != prefab && Time.time > time)
             {
