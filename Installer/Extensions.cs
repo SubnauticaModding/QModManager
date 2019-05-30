@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace QModManager.Installer.Extensions
+namespace QModManager.Installer
 {
     public static class Extensions
     {

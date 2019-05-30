@@ -78,6 +78,7 @@ namespace QModManager.Executable
                 Environment.Exit(1);
             }
         }
+
         internal void Remove()
         {
             try

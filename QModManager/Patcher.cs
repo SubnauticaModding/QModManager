@@ -82,7 +82,7 @@ namespace QModManager
                 StartLoadingMods();
                 ShowErroredMods();
 
-                VersionCheck.Check();
+                VersionCheck.CheckForUpdates();
 
                 //QModHooks.Start += PrefabDebugger.Main;
 
