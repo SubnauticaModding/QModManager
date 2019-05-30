@@ -36,7 +36,7 @@
 
         /// <summary>
         /// Message which should be shown when the item is unlocked. <para/>
-        /// If not overridden, the message will default to "<see langword="{FriendlyName} blueprint discovered!"/>"
+        /// If not overridden, the message will default to Subnautica's (language key "<see langword="NotificationBlueprintUnlocked"/>").
         /// </summary>
         public virtual string DiscoverMessage => null;
 
