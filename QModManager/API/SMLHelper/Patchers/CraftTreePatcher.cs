@@ -77,35 +77,35 @@
 
         private static void FabricatorSchemePostfix(ref CraftNode __result)
         {
-            SchemePostfix(ref __result, CraftTree.Type.Fabricator);
+            PatchCraftTree(ref __result, CraftTree.Type.Fabricator);
         }
 
         private static void ConstructorSchemePostfix(ref CraftNode __result)
         {
-            SchemePostfix(ref __result, CraftTree.Type.Constructor);
+            PatchCraftTree(ref __result, CraftTree.Type.Constructor);
         }
 
         private static void WorkbenchSchemePostfix(ref CraftNode __result)
         {
-            SchemePostfix(ref __result, CraftTree.Type.Workbench);
+            PatchCraftTree(ref __result, CraftTree.Type.Workbench);
         }
 
         private static void SeamothUpgradesSchemePostfix(ref CraftNode __result)
         {
-            SchemePostfix(ref __result, CraftTree.Type.SeamothUpgrades);
+            PatchCraftTree(ref __result, CraftTree.Type.SeamothUpgrades);
         }
 
         private static void MapRoomSchemePostfix(ref CraftNode __result)
         {
-            SchemePostfix(ref __result, CraftTree.Type.MapRoom);
+            PatchCraftTree(ref __result, CraftTree.Type.MapRoom);
         }
 
         private static void CyclopsFabricatorSchemePostfix(ref CraftNode __result)
         {
-            SchemePostfix(ref __result, CraftTree.Type.CyclopsFabricator);
+            PatchCraftTree(ref __result, CraftTree.Type.CyclopsFabricator);
         }
 
-        private static void SchemePostfix(ref CraftNode __result, CraftTree.Type type)
+        private static void PatchCraftTree(ref CraftNode __result, CraftTree.Type type)
         {
             RemoveNodes(ref __result, NodesToRemove, type);
             AddCustomTabs(ref __result, TabNodes, type);
