@@ -8,6 +8,9 @@
     /// </summary>
     public class PDAHandler : IPDAHandler
     {
+        /// <summary>
+        /// Main entry point for all calls to this handler.
+        /// </summary>
         public static IPDAHandler Main { get; } = new PDAHandler();
 
         private PDAHandler() { }

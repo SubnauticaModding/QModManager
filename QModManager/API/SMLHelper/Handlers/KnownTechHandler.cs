@@ -11,8 +11,11 @@
     /// </summary>
     public class KnownTechHandler : IKnownTechHandler
     {
-        private static readonly KnownTechHandler Singleton = new KnownTechHandler();
+        /// <summary>
+        /// Main entry point for all calls to this handler.
+        /// </summary>
         public static IKnownTechHandler Main => Singleton;
+        private static readonly KnownTechHandler Singleton = new KnownTechHandler();
 
         private KnownTechHandler() { }
 

@@ -9,6 +9,9 @@
     /// </summary>
     public class OptionsPanelHandler : IOptionsPanelHandler
     {
+        /// <summary>
+        /// Main entry point for all calls to this handler.
+        /// </summary>
         public static IOptionsPanelHandler Main { get; } = new OptionsPanelHandler();
 
         private OptionsPanelHandler() { }

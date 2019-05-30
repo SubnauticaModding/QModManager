@@ -9,6 +9,9 @@
     /// </summary>
     public class ItemActionHandler : IItemActionHandler
     {
+        /// <summary>
+        /// Main entry point for all calls to this handler.
+        /// </summary>
         public static IItemActionHandler Main { get; } = new ItemActionHandler();
 
         private ItemActionHandler()

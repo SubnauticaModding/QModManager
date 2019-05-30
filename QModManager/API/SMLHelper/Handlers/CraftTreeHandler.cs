@@ -13,6 +13,9 @@
     /// </summary>
     public class CraftTreeHandler : ICraftTreeHandler
     {
+        /// <summary>
+        /// Main entry point for all calls to this handler.
+        /// </summary>
         public static ICraftTreeHandler Main { get; } = new CraftTreeHandler();
 
         private CraftTreeHandler() { }

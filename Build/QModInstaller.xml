@@ -1163,6 +1163,11 @@
             Class to manage registering of fish into the game
             </summary>
         </member>
+        <member name="P:QModManager.API.SMLHelper.Handlers.CustomFishHandler.Main">
+            <summary>
+            Main entry point for all calls to this handler.
+            </summary>
+        </member>
         <member name="F:QModManager.API.SMLHelper.Handlers.CustomFishHandler.fishTechTypes">
             <summary>
             A list of all the custom fish that have so far been registered into the game. This includes ones from mods that may have been loaded earlier.
@@ -1186,6 +1191,11 @@
         <member name="T:QModManager.API.SMLHelper.Handlers.ItemActionHandler">
             <summary>
             A handler class for registering your custom middle click actions for items
+            </summary>
+        </member>
+        <member name="P:QModManager.API.SMLHelper.Handlers.ItemActionHandler.Main">
+            <summary>
+            Main entry point for all calls to this handler.
             </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.ItemActionHandler.QModManager#API#SMLHelper#Interfaces#IItemActionHandler#RegisterLeftClickAction(TechType,System.Action{InventoryItem},System.String,System.Predicate{InventoryItem})">
@@ -1227,6 +1237,11 @@
         <member name="T:QModManager.API.SMLHelper.Handlers.LanguageHandler">
             <summary>
             A handler class for managing language lines
+            </summary>
+        </member>
+        <member name="P:QModManager.API.SMLHelper.Handlers.LanguageHandler.Main">
+            <summary>
+            Main entry point for all calls to this handler.
             </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.LanguageHandler.SetLanguageLine(System.String,System.String)">
@@ -1276,6 +1291,11 @@
             A handler class for registering your custom in-game mod options.
             </summary>
         </member>
+        <member name="P:QModManager.API.SMLHelper.Handlers.OptionsPanelHandler.Main">
+            <summary>
+            Main entry point for all calls to this handler.
+            </summary>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.OptionsPanelHandler.RegisterModOptions(QModManager.API.SMLHelper.Options.ModOptions)">
             <summary>
             Registers your mod options to the in-game menu.
@@ -1293,6 +1313,11 @@
         <member name="T:QModManager.API.SMLHelper.Handlers.PDAHandler">
             <summary>
             A handler class for various scanner related data.
+            </summary>
+        </member>
+        <member name="P:QModManager.API.SMLHelper.Handlers.PDAHandler.Main">
+            <summary>
+            Main entry point for all calls to this handler.
             </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.PDAHandler.QModManager#API#SMLHelper#Interfaces#IPDAHandler#EditFragmentsToScan(TechType,System.Int32)">
@@ -1328,6 +1353,11 @@
             A handler class for managing Bio Reactor fuels
             </summary>
         </member>
+        <member name="P:QModManager.API.SMLHelper.Handlers.BioReactorHandler.Main">
+            <summary>
+            Main entry point for all calls to this handler.
+            </summary>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.BioReactorHandler.QModManager#API#SMLHelper#Interfaces#IBioReactorHandler#SetBioReactorCharge(TechType,System.Single)">
             <summary>
             <para>Allows you to specify the quantity of energy that a TechType will produce with bio reactors.</para>
@@ -1347,6 +1377,11 @@
         <member name="T:QModManager.API.SMLHelper.Handlers.CraftDataHandler">
             <summary>
             A handler class for adding and editing crafted items.
+            </summary>
+        </member>
+        <member name="P:QModManager.API.SMLHelper.Handlers.CraftDataHandler.Main">
+            <summary>
+            Main entry point for all calls to this handler.
             </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.CraftDataHandler.SetTechData(TechType,ITechData)">
@@ -1636,6 +1671,11 @@
             A handler class for creating and editing of crafting trees.
             </summary>
         </member>
+        <member name="P:QModManager.API.SMLHelper.Handlers.CraftTreeHandler.Main">
+            <summary>
+            Main entry point for all calls to this handler.
+            </summary>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.CraftTreeHandler.CreateCustomCraftTreeAndType(System.String,CraftTree.Type@)">
             <summary>
             <para>Your first method call to start a new custom crafting tree.</para>
@@ -1857,6 +1897,11 @@
             A handler class for configuring custom unlocking conditions for item blueprints.
             </summary>
         </member>
+        <member name="P:QModManager.API.SMLHelper.Handlers.KnownTechHandler.Main">
+            <summary>
+            Main entry point for all calls to this handler.
+            </summary>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.KnownTechHandler.UnlockOnStart(TechType)">
             <summary>
             Allows you to unlock a TechType on game start.
@@ -1958,6 +2003,11 @@
             A handler class adding custom prefabs into the game
             </summary>
         </member>
+        <member name="P:QModManager.API.SMLHelper.Handlers.PrefabHandler.Main">
+            <summary>
+            Main entry point for all calls to this handler.
+            </summary>
+        </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.PrefabHandler.QModManager#API#SMLHelper#Interfaces#IPrefabHandler#RegisterPrefab(QModManager.API.SMLHelper.Assets.ModPrefab)">
             <summary>
             Registers a ModPrefab into the game.
@@ -1975,6 +2025,11 @@
         <member name="T:QModManager.API.SMLHelper.Handlers.SpriteHandler">
             <summary>
             A handler class for adding custom sprites into the game.
+            </summary>
+        </member>
+        <member name="P:QModManager.API.SMLHelper.Handlers.SpriteHandler.Main">
+            <summary>
+            Main entry point for all calls to this handler.
             </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.SpriteHandler.RegisterSprite(TechType,Atlas.Sprite)">
@@ -2120,6 +2175,11 @@
         <member name="T:QModManager.API.SMLHelper.Handlers.TechTypeHandler">
             <summary>
             A handler class for everything related to creating new TechTypes.
+            </summary>
+        </member>
+        <member name="P:QModManager.API.SMLHelper.Handlers.TechTypeHandler.Main">
+            <summary>
+            Main entry point for all calls to this handler.
             </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.TechTypeHandler.AddTechType(System.String,System.String,System.String)">
@@ -3296,6 +3356,11 @@
             A utility class that offers additional info about <see cref="T:ItemsContainer"/> instances.
             </summary>
             <seealso cref="T:QModManager.API.SMLHelper.Utility.IItemStorageHelper" />
+        </member>
+        <member name="P:QModManager.API.SMLHelper.Utility.ItemStorageHelper.Main">
+            <summary>
+            Main entry point for all calls to this handler.
+            </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.HasRoomCached(ItemsContainer,System.Int32,System.Int32)">
             <summary>

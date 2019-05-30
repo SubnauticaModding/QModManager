@@ -14,8 +14,11 @@
     /// </summary>
     public class TechTypeHandler : ITechTypeHandler
     {
-        internal static readonly TechTypeHandler Singleton = new TechTypeHandler();
+        /// <summary>
+        /// Main entry point for all calls to this handler.
+        /// </summary>
         public static ITechTypeHandler Main => Singleton;
+        internal static readonly TechTypeHandler Singleton = new TechTypeHandler();
 
         internal static readonly Dictionary<TechType, Assembly> TechTypesAddedBy = new Dictionary<TechType, Assembly>();
 

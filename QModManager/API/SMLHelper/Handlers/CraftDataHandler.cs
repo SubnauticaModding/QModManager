@@ -9,6 +9,9 @@
     /// </summary>
     public class CraftDataHandler : ICraftDataHandler
     {
+        /// <summary>
+        /// Main entry point for all calls to this handler.
+        /// </summary>
         public static ICraftDataHandler Main { get; } = new CraftDataHandler();
 
         private CraftDataHandler() { }

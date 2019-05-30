@@ -9,6 +9,9 @@
     /// </summary>
     public class LanguageHandler : ILanguageHandler
     {
+        /// <summary>
+        /// Main entry point for all calls to this handler.
+        /// </summary>
         public static ILanguageHandler Main { get; } = new LanguageHandler();
 
         private LanguageHandler() { }

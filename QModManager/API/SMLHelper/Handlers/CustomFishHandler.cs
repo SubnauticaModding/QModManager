@@ -12,6 +12,9 @@
     /// </summary>
     public class CustomFishHandler : ICustomFishHandler
     {
+        /// <summary>
+        /// Main entry point for all calls to this handler.
+        /// </summary>
         public static ICustomFishHandler Main { get; } = new CustomFishHandler();
 
         private CustomFishHandler() { }

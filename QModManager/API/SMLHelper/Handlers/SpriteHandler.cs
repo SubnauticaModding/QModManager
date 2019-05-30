@@ -10,6 +10,9 @@
     /// </summary>
     public class SpriteHandler : ISpriteHandler
     {
+        /// <summary>
+        /// Main entry point for all calls to this handler.
+        /// </summary>
         public static ISpriteHandler Main { get; } = new SpriteHandler();
 
         private SpriteHandler() { }
