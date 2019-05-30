@@ -44,8 +44,9 @@ namespace QModManager.Executable
                     else if (arg == "-u") action = Action.Uninstall;
                 }
 
-                string managedDirectory = Environment.CurrentDirectory;
-                string globalgamemanagers = Path.Combine(managedDirectory, "../globalgamemanagers");
+                GetInfo(out os, out string directory, out game);
+
+                string managedDirectory = Path.Combine(Environment.CurrentDirectory, game == Patcher.Game.Subnautica ? "Subnautica_Data/Managed" : "SubnauticaZero_Data/Managed");
 
                 if (!File.Exists(Path.Combine(managedDirectory, "Assembly-CSharp.dll")))
                 {
@@ -57,8 +58,6 @@ namespace QModManager.Executable
                     Console.ReadKey();
                     Environment.Exit(1);
                 }
-
-                GetInfo(out os, out string directory, out game);
 
                 Injector injector;
 
@@ -76,7 +75,7 @@ namespace QModManager.Executable
                 }
                 else if (os == OS.Windows || os == OS.Mac)
                 {
-                    injector = new Injector(directory, managedDirectory);
+                    injector = new Injector(directory);
                 }
                 else
                 {
@@ -104,12 +103,6 @@ namespace QModManager.Executable
                     {
                         Console.WriteLine("QModManager is already installed!");
                         Console.WriteLine("Skipping installation");
-                        Console.WriteLine();
-                        Console.WriteLine("Trying to enable Unity sound...");
-
-                        AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, game);
-
-                        Console.WriteLine("Unity sound enabled successfully");
                         Environment.Exit(0);
                     }
                 }
@@ -124,12 +117,6 @@ namespace QModManager.Executable
                     {
                         Console.WriteLine("QModManager is already uninstalled!");
                         Console.WriteLine("Skipping uninstallation");
-                        Console.WriteLine();
-                        Console.WriteLine("Trying to disable Unity sound...");
-
-                        AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, game);
-
-                        Console.WriteLine("Unity sound disabled successfully");
                         Environment.Exit(0);
                     }
                 }
@@ -183,8 +170,8 @@ namespace QModManager.Executable
 
         private static void GetInfo(out OS os, out string directory, out Patcher.Game game)
         {
-            string windowsDirectory = Path.Combine(Environment.CurrentDirectory, "../..");
-            string macDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../..");
+            string windowsDirectory = Path.Combine(Environment.CurrentDirectory, "..");
+            string macDirectory = Path.Combine(Environment.CurrentDirectory, "../../../..");
 
             bool subnautica = false, belowzero = false;
 
