@@ -1,7 +1,11 @@
 ﻿namespace QModManager.API.SMLHelper.Assets
 {
+    using Handlers;
     using UnityEngine;
 
+    /// <summary>
+    /// "A wrapper class that uses <see cref="CustomFishHandler"/> and <see cref="CustomFishPrefab"/> to quickly create a custom fish
+    /// </summary>
     public class CustomFish
     {
         /// <summary>

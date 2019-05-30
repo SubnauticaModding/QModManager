@@ -710,6 +710,11 @@
             </summary>
             <param name="techType"></param>
         </member>
+        <member name="T:QModManager.API.SMLHelper.Assets.CustomFish">
+            <summary>
+            "A wrapper class that uses <see cref="T:QModManager.API.SMLHelper.Handlers.CustomFishHandler"/> and <see cref="T:QModManager.API.SMLHelper.Assets.CustomFishPrefab"/> to quickly create a custom fish
+            </summary>
+        </member>
         <member name="F:QModManager.API.SMLHelper.Assets.CustomFish.id">
             <summary>
             The id to use to create the creature. This should be unique
