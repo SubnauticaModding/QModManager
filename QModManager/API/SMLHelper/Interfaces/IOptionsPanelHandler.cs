@@ -1,7 +1,12 @@
 ﻿namespace QModManager.API.SMLHelper.Interfaces
 {
+    using Handlers;
     using Options;
 
+    /// <summary>
+    /// Interface for <see cref="OptionsPanelHandler"/> <para/>
+    /// Can be used for dependency injection
+    /// </summary>
     public interface IOptionsPanelHandler
     {
         /// <summary>

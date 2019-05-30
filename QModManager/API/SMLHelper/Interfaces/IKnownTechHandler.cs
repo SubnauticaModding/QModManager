@@ -1,7 +1,12 @@
 ﻿namespace QModManager.API.SMLHelper.Interfaces
 {
+    using Handlers;
     using System.Collections.Generic;
 
+    /// <summary>
+    /// Interface for <see cref="KnownTechHandler"/> <para/>
+    /// Can be used for dependency injection
+    /// </summary>
     public interface IKnownTechHandler
     {
         /// <summary>

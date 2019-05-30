@@ -1,7 +1,12 @@
 ﻿namespace QModManager.API.SMLHelper.Interfaces
 {
     using Crafting;
+    using Handlers;
 
+    /// <summary>
+    /// Interface for <see cref="CraftDataHandler"/> <para/>
+    /// Can be used for dependency injection
+    /// </summary>
     public interface ICraftDataHandler
     {
         /// <summary>

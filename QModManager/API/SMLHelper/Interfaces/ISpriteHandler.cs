@@ -1,8 +1,13 @@
 ﻿namespace QModManager.API.SMLHelper.Interfaces
 {
-    using Utility;
+    using Handlers;
     using UnityEngine;
+    using Utility;
 
+    /// <summary>
+    /// Interface for <see cref="SpriteHandler"/> <para/>
+    /// Can be used for dependency injection
+    /// </summary>
     public interface ISpriteHandler
     {
         /// <summary>

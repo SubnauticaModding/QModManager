@@ -1,7 +1,12 @@
 ﻿namespace QModManager.API.SMLHelper.Interfaces
 {
     using System;
+    using Handlers;
 
+    /// <summary>
+    /// Interface for <see cref="ItemActionHandler"/> <para/>
+    /// Can be used for dependency injection
+    /// </summary>
     public interface IItemActionHandler
     {
         /// <summary>

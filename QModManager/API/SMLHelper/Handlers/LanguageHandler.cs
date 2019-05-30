@@ -3,8 +3,10 @@
     using Interfaces;
     using Patchers;
     using QModManager.Utility;
-    using Utility;
 
+    /// <summary>
+    /// A handler class for managing language lines
+    /// </summary>
     public class LanguageHandler : ILanguageHandler
     {
         public static ILanguageHandler Main { get; } = new LanguageHandler();

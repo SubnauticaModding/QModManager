@@ -3,6 +3,9 @@
     using Assets;
     using Interfaces;
 
+    /// <summary>
+    /// A handler class adding custom prefabs into the game
+    /// </summary>
     public class PrefabHandler : IPrefabHandler
     {
         public static IPrefabHandler Main { get; } = new PrefabHandler();

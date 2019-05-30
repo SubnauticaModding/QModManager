@@ -1,5 +1,11 @@
 ﻿namespace QModManager.API.SMLHelper.Interfaces
 {
+    using Handlers;
+
+    /// <summary>
+    /// Interface for <see cref="TechTypeHandler"/> <para/>
+    /// Can be used for dependency injection
+    /// </summary>
     public interface ITechTypeHandler
     {
         /// <summary>

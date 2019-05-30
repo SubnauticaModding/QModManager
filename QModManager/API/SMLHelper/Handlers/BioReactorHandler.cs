@@ -3,6 +3,9 @@
     using Patchers;
     using Interfaces;
 
+    /// <summary>
+    /// A handler class for managing Bio Reactor fuels
+    /// </summary>
     public class BioReactorHandler : IBioReactorHandler
     {
         public static IBioReactorHandler Main { get; } = new BioReactorHandler();

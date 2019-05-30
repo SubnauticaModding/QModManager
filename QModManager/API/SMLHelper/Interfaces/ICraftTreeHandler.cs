@@ -1,8 +1,13 @@
 ﻿namespace QModManager.API.SMLHelper.Interfaces
 {
     using Crafting;
+    using Handlers;
     using UnityEngine;
 
+    /// <summary>
+    /// Interface for <see cref="CraftTreeHandler"/> <para/>
+    /// Can be used for dependency injection
+    /// </summary>
     public interface ICraftTreeHandler
     {
         /// <summary>

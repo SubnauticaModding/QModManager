@@ -1,7 +1,12 @@
 ﻿namespace QModManager.API.SMLHelper.Interfaces
 {
-    using QModManager.API.SMLHelper.Assets;
+    using Assets;
+    using Handlers;
 
+    /// <summary>
+    /// Interface for <see cref="CustomFishHandler"/> <para/>
+    /// Can be used for dependency injection
+    /// </summary>
     public interface ICustomFishHandler
     {
         /// <summary>

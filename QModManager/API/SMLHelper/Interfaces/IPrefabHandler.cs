@@ -1,7 +1,12 @@
 ﻿namespace QModManager.API.SMLHelper.Interfaces
 {
     using Assets;
+    using Handlers;
 
+    /// <summary>
+    /// Interface for <see cref="PrefabHandler"/> <para/>
+    /// Can be used for dependency injection
+    /// </summary>
     public interface IPrefabHandler
     {
         /// <summary>
