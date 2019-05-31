@@ -67,7 +67,7 @@ Source: "..\Dependencies\SemVer.dll"; DestDir: "{app}\QModManager"; Flags: Ignor
 Source: "..\Dependencies\SMLHelper.dll"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
 Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
 Source: "..\Build\QModInstaller.xml"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
-Source: "..\Build\QModManager.exe"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
+Source: "..\Build\QModManager.exe"; DestDir: "{app}"; Flags: IgnoreVersion
 Source: "..\Assets\QModManagerAssets.unity3d"; DestDir: "{app}\QModManager"; Flags: IgnoreVersion
 Source: "..\Dependencies\version.dll"; DestDir: "{app}\QModManager"; DestName: "version.dll.doorstop"; Flags: IgnoreVersion
 
@@ -95,10 +95,10 @@ Type: files; Name: "{app}\SubnauticaZero_Data\Managed\QModManager.exe"; Check: I
 Type: files; Name: "{app}\SubnauticaZero_Data\Managed\QModManagerAssets.unity3d"; Check: IsBelowZeroApp
 
 [Run]
-Filename: "{app}\QModManager\QModManager.exe"; Parameters: "-i"
+Filename: "{app}\QModManager.exe"; Parameters: "-i"
 
 [UninstallRun]
-Filename: "{app}\QModManager\QModManager.exe"; Parameters: "-u"
+Filename: "{app}\QModManager.exe"; Parameters: "-u"
 
 [Messages]
 ; BeveledLabel={#Name} {#Version}
