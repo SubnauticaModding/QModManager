@@ -114,6 +114,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\QModHooks.cs" />
+    <Compile Include="API\SMLHelper\Crafting\ModCraftTreeCraft.cs" />
+    <Compile Include="API\SMLHelper\Crafting\ModCraftTreeLinkingNode.cs" />
+    <Compile Include="API\SMLHelper\Crafting\ModCraftTreeNode.cs" />
+    <Compile Include="API\SMLHelper\Crafting\ModCraftTreeRoot.cs" />
+    <Compile Include="API\SMLHelper\Crafting\ModCraftTreeTab.cs" />
     <Compile Include="API\SMLHelper\Interfaces\ICustomFishHandler.cs" />
     <Compile Include="API\SMLHelper\Interfaces\IItemStorageHelper.cs" />
     <Compile Include="Checks\PirateCheck.cs" />
@@ -155,7 +160,6 @@
     <Compile Include="API\SMLHelper\Interfaces\ITechTypeHandler.cs" />
     <Compile Include="API\SMLHelper\Assets\ModPrefab.cs" />
     <Compile Include="API\SMLHelper\Assets\ModSprite.cs" />
-    <Compile Include="API\SMLHelper\Crafting\ModCraftTreeFamily.cs" />
     <Compile Include="API\SMLHelper\Crafting\TechData.cs" />
     <Compile Include="API\SMLHelper\Handlers\BioReactorHandler.cs" />
     <Compile Include="API\SMLHelper\Handlers\CraftDataHandler.cs" />
