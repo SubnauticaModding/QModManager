@@ -63,6 +63,26 @@ namespace QModManager
                     return;
                 }
 
+                if (args.Length == 0)
+                {
+                    Logger.Error("Mono injection detected!");
+                }
+                else
+                {
+                    Logger.Debug("Trying to enable Unity audio...");
+
+                    try
+                    {
+                        AudioFixer.ChangeDisableUnityAudio(Path.Combine(Environment.CurrentDirectory, $"{Application.productName}_Data/globalgamemanagers"), false);
+                        Logger.Info("Unity Audio enabled successfully!");
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error("An exception has occurred while trying to enable Unity audio!");
+                        Logger.Exception(e);
+                    }
+                }
+
                 try
                 {
                     IOUtilities.LogFolderStructureAsTree();
@@ -92,8 +112,6 @@ namespace QModManager
                 ShowErroredMods();
 
                 VersionCheck.CheckForUpdates();
-
-                //QModHooks.Start += PrefabDebugger.Main;
 
                 UpdateSMLHelper();
                 Initializer.PostPostInit();
