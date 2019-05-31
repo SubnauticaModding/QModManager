@@ -69,10 +69,13 @@
 
             CraftDataHandler.AddToGroup(this.GroupForPDA, this.CategoryForPDA, this.TechType);
 
-            if (this.UnlockedAtStart)
-                KnownTechHandler.UnlockOnStart(this.TechType);
-            else
+            if (!this.UnlockedAtStart)
                 KnownTechHandler.SetAnalysisTechEntry(this.RequiredForUnlock, new TechType[1] { this.TechType }, this.DiscoverMessageKey);
+        }
+
+        internal override sealed void PatchTechType()
+        {
+            this.TechType = TechTypeHandler.Singleton.AddTechType(ModName, this.ClassID, this.FriendlyName, this.Description, this.UnlockedAtStart);
         }
     }
 }

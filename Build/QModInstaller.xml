@@ -99,359 +99,11 @@
             Delegate for <see cref="F:QModManager.API.QModHooks.OnLoadEnd"/>
             </summary>
         </member>
-        <member name="T:QModManager.API.QModAPI">
+        <member name="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeCraft">
             <summary>
-            The main class for the QModManager API
+            A crafting node of a CraftTree. This is the last node on a tree; The one that actually crafts something.
             </summary>
-        </member>
-        <member name="P:QModManager.API.QModAPI.Main">
-            <summary>
-            The main instance of this class <para/>
-            Used for dependency injection
-            </summary>
-        </member>
-        <member name="M:QModManager.API.QModAPI.MarkAsErrored(System.Reflection.Assembly)">
-            <summary>
-            Marks a mod as errored <para/>
-            The mod will appear in the red pop-up which is shows when the game starts
-            </summary>
-            <param name="modAssembly">
-            The assembly of the mod to mark as errored. <para/>
-            If omitted, it will use the calling <see cref="T:System.Reflection.Assembly"/>
-            </param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.GetAllMods(System.Boolean,System.Boolean)">
-            <summary>
-            Returns a list of all of the mods
-            </summary>
-            <param name="includeUnloaded">Set to <see langword="true"/> to also include unloaded mods</param>
-            <param name="includeErrored">Set to <see langword="true"/> to also include errored mods</param>
-            <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded/errored mods</returns>
-        </member>
-        <member name="M:QModManager.API.QModAPI.GetMyMod">
-            <summary>
-            Returns the mod from the assembly which called this method
-            </summary>
-        </member>
-        <member name="M:QModManager.API.QModAPI.GetMod(System.Reflection.Assembly,System.Boolean,System.Boolean)">
-            <summary>
-            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.GetMod(System.String,System.Boolean,System.Boolean)">
-            <summary>
-            Returns a mod from an ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.ModPresent(System.Reflection.Assembly,System.Boolean,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.ModPresent(System.String,System.Boolean,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#MarkAsErrored">
-            <summary>
-            Marks a mod as errored <para/>
-            The mod will appear in the red pop-up which is shows when the game starts
-            </summary>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#MarkAsErrored(System.Reflection.Assembly)">
-            <summary>
-            Marks a mod as errored <para/>
-            The mod will appear in the red pop-up which is shows when the game starts
-            </summary>
-            <param name="modAssembly">
-            The assembly of the mod to mark as errored. <para/>
-            </param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetAllMods">
-            <summary>
-            Returns a list of all of the mods
-            </summary>
-            <returns>A read only list of mods containing all of the loaded mods</returns>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetAllMods(System.Boolean)">
-            <summary>
-            Returns a list of all of the mods
-            </summary>
-            <param name="includeUnloaded">Set to <see langword="true"/> to also include unloaded mods</param>
-            <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded mods</returns>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetAllMods(System.Boolean,System.Boolean)">
-            <summary>
-            Returns a list of all of the mods
-            </summary>
-            <param name="includeUnloaded">Set to <see langword="true"/> to also include unloaded mods</param>
-            <param name="includeErrored">Set to <see langword="true"/> to also include errored mods</param>
-            <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded/errored mods</returns>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMyMod">
-            <summary>
-            Returns the mod from the assembly which called this method
-            </summary>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMod(System.Reflection.Assembly)">
-            <summary>
-            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMod(System.Reflection.Assembly,System.Boolean)">
-            <summary>
-            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMod(System.Reflection.Assembly,System.Boolean,System.Boolean)">
-            <summary>
-            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMod(System.String)">
-            <summary>
-            Returns a mod from an ID
-            </summary>
-            <param name="id"></param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMod(System.String,System.Boolean)">
-            <summary>
-            Returns a mod from an ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMod(System.String,System.Boolean,System.Boolean)">
-            <summary>
-            Returns a mod from an ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#ModPresent(System.Reflection.Assembly)">
-            <summary>
-            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#ModPresent(System.Reflection.Assembly,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#ModPresent(System.Reflection.Assembly,System.Boolean,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#ModPresent(System.String)">
-            <summary>
-            Checks whether or not a mod is present based on its ID
-            </summary>
-            <param name="id"></param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#ModPresent(System.String,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#ModPresent(System.String,System.Boolean,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="T:QModManager.API.IQModAPI">
-            <summary>
-            The interface used by <see cref="T:QModManager.API.QModAPI"/> <para/>
-            Designed for dependency injection
-            </summary>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.MarkAsErrored">
-            <summary>
-            Marks a mod as errored <para/>
-            The mod will appear in the red pop-up which is shows when the game starts
-            </summary>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.MarkAsErrored(System.Reflection.Assembly)">
-            <summary>
-            Marks a mod as errored <para/>
-            The mod will appear in the red pop-up which is shows when the game starts
-            </summary>
-            <param name="modAssembly">
-            The assembly of the mod to mark as errored. <para/>
-            </param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetAllMods">
-            <summary>
-            Returns a list of all of the mods
-            </summary>
-            <returns>A read only list of mods containing all of the loaded mods</returns>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetAllMods(System.Boolean)">
-            <summary>
-            Returns a list of all of the mods
-            </summary>
-            <param name="includeUnloaded">Set to <see langword="true"/> to also include unloaded mods</param>
-            <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded mods</returns>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetAllMods(System.Boolean,System.Boolean)">
-            <summary>
-            Returns a list of all of the mods
-            </summary>
-            <param name="includeUnloaded">Set to <see langword="true"/> to also include unloaded mods</param>
-            <param name="includeErrored">Set to <see langword="true"/> to also include errored mods</param>
-            <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded/errored mods</returns>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetMyMod">
-            <summary>
-            Returns the mod from the assembly which called this method
-            </summary>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetMod(System.Reflection.Assembly)">
-            <summary>
-            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetMod(System.Reflection.Assembly,System.Boolean)">
-            <summary>
-            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetMod(System.Reflection.Assembly,System.Boolean,System.Boolean)">
-            <summary>
-            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetMod(System.String)">
-            <summary>
-            Returns a mod from an ID
-            </summary>
-            <param name="id"></param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetMod(System.String,System.Boolean)">
-            <summary>
-            Returns a mod from an ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetMod(System.String,System.Boolean,System.Boolean)">
-            <summary>
-            Returns a mod from an ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.ModPresent(System.Reflection.Assembly)">
-            <summary>
-            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.ModPresent(System.Reflection.Assembly,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.ModPresent(System.Reflection.Assembly,System.Boolean,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.ModPresent(System.String)">
-            <summary>
-            Checks whether or not a mod is present based on its ID
-            </summary>
-            <param name="id"></param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.ModPresent(System.String,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.ModPresent(System.String,System.Boolean,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeNode">
-            <summary>
-            Basic data structure of a crafting tree node.
-            </summary>
-        </member>
-        <member name="F:QModManager.API.SMLHelper.Crafting.ModCraftTreeNode.Action">
-            <summary>
-            The action this node takes in the crafting tree.
-            </summary>
-        </member>
-        <member name="F:QModManager.API.SMLHelper.Crafting.ModCraftTreeNode.TechType">
-            <summary>
-            The tech type ID associated to this node.
-            For item nodes, it is the item ID to be crafted.
-            For root and tab nodes, this is always <see cref="F:TechType.None"/>.
-            </summary>
-        </member>
-        <member name="F:QModManager.API.SMLHelper.Crafting.ModCraftTreeNode.Name">
-            <summary>
-            The name ID for this tab node.
-            </summary>
-        </member>
-        <member name="F:QModManager.API.SMLHelper.Crafting.ModCraftTreeNode.CraftNode">
-            <summary>
-            The the in-game representation of this node.
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Crafting.ModCraftTreeNode.RemoveNode">
-            <summary>
-            Removes the calling node from parent. 
-            </summary>
+            <seealso cref="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeNode" />
         </member>
         <member name="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeLinkingNode">
             <summary>
@@ -538,6 +190,38 @@
             If the player doesn't have the mod for this TechType installed, then nothing will happen.
             </remarks>
         </member>
+        <member name="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeNode">
+            <summary>
+            Basic data structure of a crafting tree node.
+            </summary>
+        </member>
+        <member name="F:QModManager.API.SMLHelper.Crafting.ModCraftTreeNode.Action">
+            <summary>
+            The action this node takes in the crafting tree.
+            </summary>
+        </member>
+        <member name="F:QModManager.API.SMLHelper.Crafting.ModCraftTreeNode.TechType">
+            <summary>
+            The tech type ID associated to this node.
+            For item nodes, it is the item ID to be crafted.
+            For root and tab nodes, this is always <see cref="F:TechType.None"/>.
+            </summary>
+        </member>
+        <member name="F:QModManager.API.SMLHelper.Crafting.ModCraftTreeNode.Name">
+            <summary>
+            The name ID for this tab node.
+            </summary>
+        </member>
+        <member name="F:QModManager.API.SMLHelper.Crafting.ModCraftTreeNode.CraftNode">
+            <summary>
+            The the in-game representation of this node.
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Crafting.ModCraftTreeNode.RemoveNode">
+            <summary>
+            Removes the calling node from parent. 
+            </summary>
+        </member>
         <member name="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeRoot">
             <summary>
             The root node of a CraftTree. The whole tree starts here.
@@ -584,12 +268,6 @@
             A tab node of a CraftTree. Tab nodes help organize crafting nodes by grouping them into categories.
             </summary>
             <seealso cref="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeLinkingNode" />
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeCraft">
-            <summary>
-            A crafting node of a CraftTree. This is the last node on a tree; The one that actually crafts something.
-            </summary>
-            <seealso cref="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeNode" />
         </member>
         <member name="T:QModManager.API.SMLHelper.Crafting.TechData">
             <summary>
@@ -709,6 +387,1181 @@
             Turn a <see cref="T:TechType"/> into an <see cref="T:QModManager.API.SMLHelper.Crafting.Ingredient"/> with amount of 1
             </summary>
             <param name="techType"></param>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.ICustomFishHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.CustomFishHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICustomFishHandler.RegisterFish(QModManager.API.SMLHelper.Assets.CustomFish)">
+            <summary>
+            Registers a CustomFish object into the game
+            </summary>
+            <param name="fish">The CustomFish that you are registering</param>
+            <returns>The TechType created using the info from your CustomFish object</returns>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.IBioReactorHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.BioReactorHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.IBioReactorHandler.SetBioReactorCharge(TechType,System.Single)">
+            <summary>
+            <para>Allows you to specify the quantity of energy that a TechType will produce with bio reactors.</para>
+            </summary>
+            <param name="techType">The TechType that you want to use with bioreactors.</param>
+            <param name="charge">The quantity of energy that will be produced by this TechType.</param>
+            <seealso cref="T:CraftData.BackgroundType"/>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.CraftDataHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetTechData(TechType,ITechData)">
+            <summary>
+            <para>Allows you to edit recipes, i.e. TechData for TechTypes.</para>
+            <para>Can be used for existing TechTypes too.</para>
+            </summary>
+            <param name="techType">The TechType whose TechData you want to edit.</param>
+            <param name="techData">The TechData for that TechType.</param>
+            <seealso cref="T:QModManager.API.SMLHelper.Crafting.TechData"/>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetTechData(TechType,QModManager.API.SMLHelper.Crafting.TechData)">
+            <summary>
+            <para>Allows you to edit recipes, i.e. TechData for TechTypes.</para>
+            <para>Can be used for existing TechTypes too.</para>
+            </summary>
+            <param name="techType">The TechType whose TechData you want to edit.</param>
+            <param name="techData">The TechData for that TechType.</param>
+            <seealso cref="T:QModManager.API.SMLHelper.Crafting.TechData"/>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetEquipmentType(TechType,EquipmentType)">
+            <summary>
+            <para>Allows you to edit EquipmentTypes for TechTypes.</para>
+            <para>Can be used for existing TechTypes too.</para>
+            </summary>
+            <param name="techType">The TechType whose EqiupmentType you want to edit.</param>
+            <param name="equipmentType">The EquipmentType for that TechType.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetQuickSlotType(TechType,QuickSlotType)">
+            <summary>
+            <para>Allows you to edit QuickSlotType for TechTypes.</para>
+            <para>Can be used for existing TechTypes too.</para>
+            </summary>
+            <param name="techType">The TechType whose QuickSlotType you want to edit.</param>
+            <param name="slotType">The QuickSlotType for that TechType.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetHarvestOutput(TechType,TechType)">
+            <summary>
+            <para>Allows you to edit harvest output, i.e. what TechType you get when you "harvest" a TechType.</para>
+            <para>Can be used for existing TechTypes too.</para>
+            </summary>
+            <param name="techType">The TechType whose harvest output you want to edit.</param>
+            <param name="harvestOutput">The harvest output for that TechType.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetHarvestType(TechType,HarvestType)">
+            <summary>
+            <para>Allows you to edit how TechTypes are harvested.</para>
+            <para>Can be used for existing TechTypes too.</para>
+            </summary>
+            <param name="techType">The TechType whose HarvestType you want to edit.</param>
+            <param name="harvestType">The HarvestType for that TechType.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetHarvestFinalCutBonus(TechType,System.Int32)">
+            <summary>
+            <para>Allows you to edit how much additional slices/seeds are given upon last knife hit.</para>
+            <para>Can be used for existing TechTypes too.</para>
+            </summary>
+            <param name="techType">The TechType whose final cut bonus you want to edit.</param>
+            <param name="bonus">The number of additional slices/seeds you'll receive on last cut.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetItemSize(TechType,Vector2int)">
+            <summary>
+            <para>Allows you to edit item sizes for TechTypes.</para>
+            <para>Can be used for existing TechTypes too.</para>
+            </summary>
+            <param name="techType">The TechType whose item size you want to edit.</param>
+            <param name="size">The item size for that TechType.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetItemSize(TechType,System.Int32,System.Int32)">
+            <summary>
+            <para>Allows you to edit item sizes for TechTypes.</para>
+            <para>Can be used for existing TechTypes too.</para>
+            </summary>
+            <param name="techType">The TechType whose item size you want to edit.</param>
+            <param name="x">The width of the item</param>
+            <param name="y">The height of the item</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetCraftingTime(TechType,System.Single)">
+            <summary>
+            <para>Allows you to edit crafting times for TechTypes.</para>
+            <para>Can be used for existing TechTypes too.</para>
+            </summary>
+            <param name="techType">The TechType whose crafting time you want to edit.</param>
+            <param name="time">The crafting time, in seconds, for that TechType.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetCookedVariant(TechType,TechType)">
+            <summary>
+            <para>Allows you to edit the cooked creature list, i.e. associate the unedible TechType to the cooked TechType.</para>
+            <para>Can be used for existing TechTypes too.</para>
+            </summary>
+            <param name="uncooked">The TechType whose cooked creature counterpart to edit.</param>
+            <param name="cooked">The cooked creature counterpart for that TechType.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetBackgroundType(TechType,CraftData.BackgroundType)">
+            <summary>
+            <para>Allows you to edit inventory background colors for TechTypes.</para>
+            </summary>
+            <param name="techType">The TechType whose BackgroundType you want to edit.</param>
+            <param name="backgroundColor">The background color for that TechType.</param>
+            <seealso cref="T:CraftData.BackgroundType"/>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.AddBuildable(TechType)">
+            <summary>
+            Allows you to add items to the buildable list.
+            </summary>
+            <param name="techType">The TechType which you want to add to the buildable list.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.AddToGroup(TechGroup,TechCategory,TechType)">
+            <summary>
+            Allows you to add items to the game's internal grouping system.
+            Required if you want to make buildable items show up in the Habitat Builder.
+            </summary>
+            <param name="group">The TechGroup you want to add your TechType to.</param>
+            <param name="category">The TechCategory (in the TechGroup) you want to add your TechType to.</param>
+            <param name="techType">The TechType you want to add.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.AddToGroup(TechGroup,TechCategory,TechType,TechType)">
+            <summary>
+            Allows you to add items to the game's internal grouping system.
+            Required if you want to make buildable items show up in the Habitat Builder.
+            </summary>
+            <param name="group">The TechGroup you want to add your TechType to.</param>
+            <param name="category">The TechCategory (in the TechGroup) you want to add your TechType to.</param>
+            <param name="techType">The TechType you want to add.</param>
+            <param name="after">Added TechType will be added after this TechType, for sorting purposes.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.RemoveFromGroup(TechGroup,TechCategory,TechType)">
+            <summary>
+            Allows you to remove an existing TechType from the game's internal group system.
+            </summary>
+            <param name="group">The TechGroup in which the TechType is located.</param>
+            <param name="category">The TechCategory in which the TechType is located.</param>
+            <param name="techType">The TechType which you want to remove.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.GetModdedTechData(TechType)">
+            <summary>
+            Safely accesses the crafting data from a modded item.<para/>
+            WARNING: This method is highly dependent on mod load order. 
+            Make sure your mod is loading after the mod whose TechData you are trying to access.
+            </summary>
+            <param name="techType">The TechType whose TechData you want to access.</param>
+            <returns>The ITechData from the modded item if it exists; Otherwise, returns <c>null</c>.</returns>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.CraftTreeHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.CreateCustomCraftTreeAndType(System.String,CraftTree.Type@)">
+            <summary>
+            <para>Your first method call to start a new custom crafting tree.</para>
+            <para>Creating a new CraftTree only makes sense if you're going to use it in a new type of <see cref="T:GhostCrafter"/>.</para>
+            </summary>
+            <param name="name">The name for the new <see cref="T:CraftTree.Type" /> enum.</param>
+            <param name="craftTreeType">The new enum instance for your custom craft tree type.</param>
+            <returns>
+            <para>Returns the root node for your custom craft tree, as a new <see cref="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeRoot"/> instance.</para>
+            <para>Build up your custom crafting tree from this root node.</para>
+            <para>This tree will be automatically patched into the game. No further calls into <see cref="T:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler"/> required.</para>
+            </returns>
+            <seealso cref="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeNode"/>
+            <seealso cref="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeLinkingNode"/>
+            <seealso cref="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeTab"/>
+            <seealso cref="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeCraft"/>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.ModdedCraftTreeTypeExists(System.String)">
+            <summary>
+            Safely looks for a modded CraftTree Type from another mod in the SMLHelper CraftTreeTypeCache.
+            </summary>
+            <param name="craftTreeString">The string used to define the modded item's new techtype.</param>
+            <returns>
+              <c>True</c> if the craft tree was found; Otherwise <c>false</c>.
+            </returns>
+            <remarks>
+            There's no guarantee in which order SMLHelper dependent mods are loaded,
+            so if two mods are added at the same time, it may take a second game load for both to be visible to each other.
+            </remarks>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.AddCraftingNode(CraftTree.Type,TechType,System.String[])">
+            <summary>
+            Adds a new crafting node to the root of the specified crafting tree, at the provided tab location.
+            </summary>
+            <param name="craftTree">The target craft tree to edit.</param>
+            <param name="craftingItem">The item to craft.</param>
+            <param name="stepsToTab">
+            <para>The steps to the target tab.</para>
+            <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
+            <para>Do not include "root" in this path.</para>
+            </param>        
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.AddCraftingNode(CraftTree.Type,TechType)">
+            <summary>
+            Adds a new crafting node to the root of the specified crafting tree
+            </summary>
+            <param name="craftTree">The target craft tree to edit.</param>
+            <param name="craftingItem">The item to craft.</param>        
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.AddTabNode(CraftTree.Type,System.String,System.String,Atlas.Sprite)">
+            <summary>
+            Adds a new tab node to the root of the specified crafting tree.
+            </summary>
+            <param name="craftTree">The target craft tree to edit.</param>
+            <param name="name">The ID of the tab node. Must be unique!</param>
+            <param name="displayName">The display name of the tab, which will show up when you hover your mouse on the tab.</param>
+            <param name="sprite">The sprite of the tab.</param>        
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.AddTabNode(CraftTree.Type,System.String,System.String,UnityEngine.Sprite)">
+            <summary>
+            Adds a new tab node to the root of the specified crafting tree.
+            </summary>
+            <param name="craftTree">The target craft tree to edit.</param>
+            <param name="name">The ID of the tab node. Must be unique!</param>
+            <param name="displayName">The display name of the tab, which will show up when you hover your mouse on the tab.</param>
+            <param name="sprite">The sprite of the tab.</param>        
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.AddTabNode(CraftTree.Type,System.String,System.String,Atlas.Sprite,System.String[])">
+            <summary>
+            Adds a new tab node to the root of the specified crafting tree, at the specified tab location.
+            </summary>
+            <param name="craftTree">The target craft tree to edit.</param>
+            <param name="name">The ID of the tab node. Must be unique!</param>
+            <param name="displayName">The display name of the tab, which will show up when you hover your mouse on the tab.</param>
+            <param name="sprite">The sprite of the tab.</param>
+            <param name="stepsToTab">
+            <para>The steps to the target tab.</para>
+            <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
+            <para>Do not include "root" in this path.</para>
+            </param>        
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.AddTabNode(CraftTree.Type,System.String,System.String,UnityEngine.Sprite,System.String[])">
+            <summary>
+            Adds a new tab node to the root of the specified crafting tree, at the specified tab location.
+            </summary>
+            <param name="craftTree">The target craft tree to edit.</param>
+            <param name="name">The ID of the tab node. Must be unique!</param>
+            <param name="displayName">The display name of the tab, which will show up when you hover your mouse on the tab.</param>
+            <param name="sprite">The sprite of the tab.</param>
+            <param name="stepsToTab">
+            <para>The steps to the target tab.</para>
+            <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
+            <para>Do not include "root" in this path.</para>
+            </param>        
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.RemoveNode(CraftTree.Type,System.String[])">
+            <summary>
+            <para>Removes a node at the specified node location. Can be used to remove either tabs or craft nodes.</para>
+            <para>If a tab node is selected, all child nodes to it will also be removed.</para>
+            </summary>
+            <param name="craftTree">The target craft tree to edit.</param>
+            <param name="stepsToNode">
+            <para>The steps to the target node.</para>
+            <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
+            <para>This means matching the id of the crafted item or the id of the tab name.</para>
+            <para>Do not include "root" in this path.</para>
+            </param>        
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.IItemActionHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.ItemActionHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.IItemActionHandler.RegisterLeftClickAction(TechType,System.Action{InventoryItem},System.String,System.Predicate{InventoryItem})">
+            <summary>
+            Registers a custom left click action for a <see cref="T:TechType"/>
+            </summary>
+            <param name="targetTechType">The <see cref="T:TechType"/> to which the left click action will be assigned</param>
+            <param name="callback">The method which will be called when a matching <see cref="T:InventoryItem"/> with the specified <see cref="T:TechType"/> was left-clicked</param>
+            <param name="tooltip">The secondary tooltip which will appear in the description of the item</param>
+            <param name="condition">The condition which must return <see langword="true"/> for the action to be called when the item is clicked<para/>If ommited, the action will always be called</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.IItemActionHandler.RegisterMiddleClickAction(TechType,System.Action{InventoryItem},System.String,System.Predicate{InventoryItem})">
+            <summary>
+            Registers a custom middle click action for a <see cref="T:TechType"/>
+            </summary>
+            <param name="targetTechType">The <see cref="T:TechType"/> which the middle click action will be assigned</param>
+            <param name="callback">The method which will be called when a matching <see cref="T:InventoryItem"/> with the specified <see cref="T:TechType"/> was middle-clicked</param>
+            <param name="tooltip">The secondary tooltip which will appear in the description of the item</param>
+            <param name="condition">The condition which must return <see langword="true"/> for the action to be called when the item is clicked<para/>If ommited, the action will always be called</param>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.KnownTechHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler.UnlockOnStart(TechType)">
+            <summary>
+            Allows you to unlock a TechType on game start.
+            </summary>
+            <param name="techType"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler.SetAnalysisTechEntry(TechType,System.Collections.Generic.IEnumerable{TechType})">
+            <summary>
+            Allows you to define which TechTypes are unlocked when a certain TechType is unlocked, i.e., "analysed".
+            If there is already an exisitng AnalysisTech entry for a TechType, all the TechTypes in "techTypesToUnlock" will be
+            added to the existing AnalysisTech entry unlocks.
+            </summary>
+            <param name="techTypeToBeAnalysed">This TechType is the criteria for all of the "unlock TechTypes"; when this TechType is unlocked, so are all the ones in that list</param>
+            <param name="techTypesToUnlock">The TechTypes that will be unlocked when "techTypeToSet" is unlocked.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler.SetAnalysisTechEntry(TechType,System.Collections.Generic.IEnumerable{TechType},System.String)">
+            <summary>
+            Allows you to define which TechTypes are unlocked when a certain TechType is unlocked, i.e., "analysed".
+            If there is already an exisitng AnalysisTech entry for a TechType, all the TechTypes in "techTypesToUnlock" will be
+            added to the existing AnalysisTech entry unlocks.
+            </summary>
+            <param name="techTypeToBeAnalysed">This TechType is the criteria for all of the "unlock TechTypes"; when this TechType is unlocked, so are all the ones in that list</param>
+            <param name="techTypesToUnlock">The TechTypes that will be unlocked when "techTypeToSet" is unlocked.</param>
+            <param name="UnlockMessage">The message that shows up on the right when the blueprint is unlocked. </param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler.SetAnalysisTechEntry(TechType,System.Collections.Generic.IEnumerable{TechType},FMODAsset)">
+            <summary>
+            Allows you to define which TechTypes are unlocked when a certain TechType is unlocked, i.e., "analysed".
+            If there is already an exisitng AnalysisTech entry for a TechType, all the TechTypes in "techTypesToUnlock" will be
+            added to the existing AnalysisTech entry unlocks.
+            </summary>
+            <param name="techTypeToBeAnalysed">This TechType is the criteria for all of the "unlock TechTypes"; when this TechType is unlocked, so are all the ones in that list</param>
+            <param name="techTypesToUnlock">The TechTypes that will be unlocked when "techTypeToSet" is unlocked.</param>
+            <param name="UnlockSound">The sound that plays when you unlock the blueprint.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler.SetAnalysisTechEntry(TechType,System.Collections.Generic.IEnumerable{TechType},UnityEngine.Sprite)">
+            <summary>
+            Allows you to define which TechTypes are unlocked when a certain TechType is unlocked, i.e., "analysed".
+            If there is already an exisitng AnalysisTech entry for a TechType, all the TechTypes in "techTypesToUnlock" will be
+            added to the existing AnalysisTech entry unlocks.
+            </summary>
+            <param name="techTypeToBeAnalysed">This TechType is the criteria for all of the "unlock TechTypes"; when this TechType is unlocked, so are all the ones in that list</param>
+            <param name="techTypesToUnlock">The TechTypes that will be unlocked when "techTypeToSet" is unlocked.</param>
+            <param name="UnlockSprite">The sprite that shows up when you unlock the blueprint.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler.SetAnalysisTechEntry(TechType,System.Collections.Generic.IEnumerable{TechType},System.String,FMODAsset)">
+            <summary>
+            Allows you to define which TechTypes are unlocked when a certain TechType is unlocked, i.e., "analysed".
+            If there is already an exisitng AnalysisTech entry for a TechType, all the TechTypes in "techTypesToUnlock" will be
+            added to the existing AnalysisTech entry unlocks.
+            </summary>
+            <param name="techTypeToBeAnalysed">This TechType is the criteria for all of the "unlock TechTypes"; when this TechType is unlocked, so are all the ones in that list</param>
+            <param name="techTypesToUnlock">The TechTypes that will be unlocked when "techTypeToSet" is unlocked.</param>
+            <param name="UnlockMessage">The message that shows up on the right when the blueprint is unlocked. </param>
+            <param name="UnlockSound">The sound that plays when you unlock the blueprint.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler.SetAnalysisTechEntry(TechType,System.Collections.Generic.IEnumerable{TechType},System.String,UnityEngine.Sprite)">
+            <summary>
+            Allows you to define which TechTypes are unlocked when a certain TechType is unlocked, i.e., "analysed".
+            If there is already an exisitng AnalysisTech entry for a TechType, all the TechTypes in "techTypesToUnlock" will be
+            added to the existing AnalysisTech entry unlocks.
+            </summary>
+            <param name="techTypeToBeAnalysed">This TechType is the criteria for all of the "unlock TechTypes"; when this TechType is unlocked, so are all the ones in that list</param>
+            <param name="techTypesToUnlock">The TechTypes that will be unlocked when "techTypeToSet" is unlocked.</param>
+            <param name="UnlockMessage">The message that shows up on the right when the blueprint is unlocked. </param>
+            <param name="UnlockSprite">The sprite that shows up when you unlock the blueprint.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler.SetAnalysisTechEntry(TechType,System.Collections.Generic.IEnumerable{TechType},FMODAsset,UnityEngine.Sprite)">
+            <summary>
+            Allows you to define which TechTypes are unlocked when a certain TechType is unlocked, i.e., "analysed".
+            If there is already an exisitng AnalysisTech entry for a TechType, all the TechTypes in "techTypesToUnlock" will be
+            added to the existing AnalysisTech entry unlocks.
+            </summary>
+            <param name="techTypeToBeAnalysed">This TechType is the criteria for all of the "unlock TechTypes"; when this TechType is unlocked, so are all the ones in that list</param>
+            <param name="techTypesToUnlock">The TechTypes that will be unlocked when "techTypeToSet" is unlocked.</param>
+            <param name="UnlockSound">The sound that plays when you unlock the blueprint.</param>
+            <param name="UnlockSprite">The sprite that shows up when you unlock the blueprint.</param>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.ILanguageHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.LanguageHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ILanguageHandler.SetLanguageLine(System.String,System.String)">
+            <summary>
+            Allows you to define a language entry into the game.
+            </summary>
+            <param name="lineId">The ID of the entry, this is what is used to get the actual text.</param>
+            <param name="text">The actual text related to the entry.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ILanguageHandler.SetTechTypeName(TechType,System.String)">
+            <summary>
+            Allows you to set the display name of a specific <see cref="T:TechType"/>.
+            </summary>
+            <param name="techType">The <see cref="T:TechType"/> whose display name that is to be changed.</param>
+            <param name="text">The new display name for the chosen <see cref="T:TechType"/>.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ILanguageHandler.SetTechTypeTooltip(TechType,System.String)">
+            <summary>
+            Allows you to set the tooltip of a specific <see cref="T:TechType"/>.
+            </summary>
+            <param name="techType">The <see cref="T:TechType"/> whose tooltip that is to be changed.</param>
+            <param name="text">The new tooltip for the chosen <see cref="T:TechType"/>.</param>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.IOptionsPanelHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.OptionsPanelHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.IOptionsPanelHandler.RegisterModOptions(QModManager.API.SMLHelper.Options.ModOptions)">
+            <summary>
+            Registers your mod options to the in-game menu.
+            </summary>
+            <param name="options">The mod options. Create a new child class inheriting from this one and add your options to it.</param>
+            <seealso cref="T:QModManager.API.SMLHelper.Options.ModOptions"/>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.IPDAHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.PDAHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.IPDAHandler.EditFragmentsToScan(TechType,System.Int32)">
+            <summary>
+            Edits how many fragments must be scanned before unlocking the techtype's blueprint.
+            </summary>
+            <param name="techType">Can be either techtype of the fragment or the crafted item.</param>
+            <param name="fragmentCount">The number of fragments to scan.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.IPDAHandler.EditFragmentScanTime(TechType,System.Single)">
+            <summary>
+            Edits the time it takes to finish scanning a fragment.
+            </summary>
+            <param name="techType">Can be either techtype of the fragment or the crafted item.</param>
+            <param name="scanTime">The relative time spent on scanning. Default value is 1.</param>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.IPrefabHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.PrefabHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.IPrefabHandler.RegisterPrefab(QModManager.API.SMLHelper.Assets.ModPrefab)">
+            <summary>
+            Registers a ModPrefab into the game.
+            </summary>
+            <param name="prefab">The mod prefab to register. Create a child class inheriting off this one and configure as needed.</param>
+            <seealso cref="T:QModManager.API.SMLHelper.Assets.ModPrefab"/>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.ISpriteHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.SpriteHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ISpriteHandler.RegisterSprite(TechType,Atlas.Sprite)">
+            <summary>
+            Registers a new sprite to the game.
+            </summary>
+            <param name="type">The techtype paired to this sprite.</param>
+            <param name="sprite">The sprite to be added.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ISpriteHandler.RegisterSprite(SpriteManager.Group,System.String,Atlas.Sprite)">
+            <summary>
+            Registers a new sprite to the game.
+            </summary>
+            <param name="group">The sprite group.</param>
+            <param name="id">The sprite internal identifier.</param>
+            <param name="sprite">The sprite to be added.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ISpriteHandler.RegisterSprite(SpriteManager.Group,System.String,UnityEngine.Sprite)">
+            <summary>
+            Registers a new sprite to the game.
+            </summary>
+            <param name="group">The sprite group this sprite will be added to.</param>
+            <param name="id">The sprite internal identifier.</param>
+            <param name="sprite">The sprite to be added.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ISpriteHandler.RegisterSprite(TechType,UnityEngine.Sprite)">
+            <summary>
+            Registers a new sprite to the game.
+            </summary>
+            <param name="type">The techtype paired to this sprite.</param>
+            <param name="sprite">The sprite to be added.</param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ISpriteHandler.RegisterSprite(TechType,System.String,UnityEngine.TextureFormat)">
+            <summary>
+            Registers a new sprite to the game.
+            </summary>
+            <param name="type">The techtype paired to this sprite.</param>
+            <param name="filePathToImage">The file path to image to be converted into a sprite.</param>
+            <param name="format"><para>The texture format. By default, this uses <see cref="F:UnityEngine.TextureFormat.BC7" />.</para>
+            <para>https://docs.unity3d.com/ScriptReference/TextureFormat.BC7.html</para>
+            <para>Don't change this unless you really know what you're doing.</para></param>
+            <seealso cref="M:QModManager.API.SMLHelper.Utility.ImageUtils.LoadSpriteFromFile(System.String,UnityEngine.TextureFormat)" />
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ISpriteHandler.RegisterSprite(TechType,System.String)">
+            <summary>
+            Registers a new sprite to the game.
+            </summary>
+            <param name="type">The techtype paired to this sprite.</param>
+            <param name="filePathToImage">The file path to image to be converted into a sprite.</param>
+            <seealso cref="M:QModManager.API.SMLHelper.Utility.ImageUtils.LoadSpriteFromFile(System.String,UnityEngine.TextureFormat)" />
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ISpriteHandler.RegisterSprite(SpriteManager.Group,System.String,System.String,UnityEngine.TextureFormat)">
+            <summary>
+            Registers a new sprite to the game.
+            </summary>
+            <param name="group">The sprite group.</param>
+            <param name="id">The sprite internal identifier.</param>
+            <param name="filePathToImage">The file path to image.</param>
+            <param name="format"><para>The texture format. By default, this uses <see cref="F:UnityEngine.TextureFormat.BC7" />.</para>
+            <para>https://docs.unity3d.com/ScriptReference/TextureFormat.BC7.html</para>
+            <para>Don't change this unless you really know what you're doing.</para></param>
+            <seealso cref="M:QModManager.API.SMLHelper.Utility.ImageUtils.LoadSpriteFromFile(System.String,UnityEngine.TextureFormat)" />
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ISpriteHandler.RegisterSprite(SpriteManager.Group,System.String,System.String)">
+            <summary>
+            Registers a new sprite to the game.
+            </summary>
+            <param name="group">The sprite group.</param>
+            <param name="id">The sprite internal identifier.</param>
+            <param name="filePathToImage">The file path to image.</param>
+            <seealso cref="M:QModManager.API.SMLHelper.Utility.ImageUtils.LoadSpriteFromFile(System.String,UnityEngine.TextureFormat)" />
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.TechTypeHandler"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler.AddTechType(System.String,System.String,System.String)">
+            <summary>
+            Adds a new <see cref="T:TechType"/> into the game. This new techtype will be unlocked at the start of a the game.
+            </summary>
+            <param name="internalName">The internal name of the TechType. Should not contain special characters.</param>
+            <param name="displayName">The display name of the TechType. Can be anything.</param>
+            <param name="tooltip">The tooltip, displayed when hovered in an inventory. Can be anything.</param>
+            <returns>The new <see cref="T:TechType"/> that is created.</returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler.AddTechType(System.String,System.String,System.String,System.Boolean)">
+            <summary>
+            Adds a new <see cref="T:TechType"/> into the game.
+            </summary>
+            <param name="internalName">The internal name of the TechType. Should not contain special characters.</param>
+            <param name="displayName">The display name of the TechType. Can be anything.</param>
+            <param name="tooltip">The tooltip, displayed when hovered in an inventory. Can be anything.</param>
+            <param name="unlockAtStart">Whether this TechType should be unlocked on game start, or not. By default, <c>true</c>.</param>
+            <returns>The new <see cref="T:TechType"/> that is created.</returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler.AddTechType(System.String,System.String,System.String,Atlas.Sprite)">
+            <summary>
+            Adds a new <see cref="T:TechType"/> into the game, with a sprite. This new techtype will be unlocked at the start of a the game.
+            </summary>
+            <param name="internalName">The internal name of the TechType. Should not contain special characters.</param>
+            <param name="displayName">The display name of the TechType. Can be anything.</param>
+            <param name="tooltip">The tooltip, displayed when hovered in an inventory. Can be anything.</param>
+            <param name="sprite">The sprite that will related to this TechType.</param>
+            <returns>The new <see cref="T:TechType"/> that is created.</returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler.AddTechType(System.String,System.String,System.String,Atlas.Sprite,System.Boolean)">
+            <summary>
+            Adds a new <see cref="T:TechType"/> into the game, with a sprite.
+            </summary>
+            <param name="internalName">The internal name of the TechType. Should not contain special characters.</param>
+            <param name="displayName">The display name of the TechType. Can be anything.</param>
+            <param name="tooltip">The tooltip, displayed when hovered in an inventory. Can be anything.</param>
+            <param name="sprite">The sprite that will related to this TechType.</param>
+            <param name="unlockAtStart">Whether this TechType should be unlocked on game start, or not. By default, <c>true</c>.</param>
+            <returns>The new <see cref="T:TechType"/> that is created.</returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler.AddTechType(System.String,System.String,System.String,UnityEngine.Sprite)">
+            <summary>
+            Adds a new <see cref="T:TechType"/> into the game, with a sprite. This new techtype will be unlocked at the start of a the game.
+            </summary>
+            <param name="internalName">The internal name of the TechType. Should not contain special characters.</param>
+            <param name="displayName">The display name of the TechType. Can be anything.</param>
+            <param name="tooltip">The tooltip, displayed when hovered in an inventory. Can be anything.</param>
+            <param name="sprite">The sprite that will related to this TechType.</param>
+            <returns>The new <see cref="T:TechType"/> that is created.</returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler.AddTechType(System.String,System.String,System.String,UnityEngine.Sprite,System.Boolean)">
+            <summary>
+            Adds a new <see cref="T:TechType"/> into the game, with a sprite.
+            </summary>
+            <param name="internalName">The internal name of the TechType. Should not contain special characters.</param>
+            <param name="displayName">The display name of the TechType. Can be anything.</param>
+            <param name="tooltip">The tooltip, displayed when hovered in an inventory. Can be anything.</param>
+            <param name="sprite">The sprite that will related to this TechType.</param>
+            <param name="unlockAtStart">Whether this TechType should be unlocked on game start, or not. By default, <c>true</c>.</param>
+            <returns>The new <see cref="T:TechType"/> that is created.</returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler.TryGetModdedTechType(System.String,TechType@)">
+            <summary>
+            Safely looks for a modded item from another mod in the SMLHelper TechTypeCache and outputs its <see cref="T:TechType" /> value when found.
+            </summary>
+            <param name="techtypeString">The string used to define the modded item's new techtype.</param>
+            <param name="modTechType">The TechType enum value of the modded. Defaults to <see cref="F:TechType.None" /> when the item was not found.</param>
+            <returns>
+              <c>True</c> if the item was found; Otherwise <c>false</c>.
+            </returns>
+            <remarks>
+            There's no guarantee in which order SMLHelper dependent mods are loaded,
+            so if two mods are added at the same time, it may take a second game load for both to be visible to each other.
+            </remarks>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler.ModdedTechTypeExists(System.String)">
+            <summary>
+            Safely looks for a modded item from another mod in the SMLHelper TechTypeCache.
+            </summary>
+            <param name="techtypeString">The string used to define the modded item's new techtype.</param>
+            <returns>
+              <c>True</c> if the item was found; Otherwise <c>false</c>.
+            </returns>
+            <remarks>
+            There's no guarantee in which order SMLHelper dependent mods are loaded,
+            so if two mods are added at the same time, it may take a second game load for both to be visible to each other.
+            </remarks>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Utility.IItemStorageHelper">
+            <summary>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Utility.ItemStorageHelper"/> <para/>
+            Can be used for dependency injection
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.HasRoomForCached(ItemsContainer,System.Int32,System.Int32)">
+            <summary>
+            Using the cached container info, determines whether the specified container has room for an item of the specified size.
+            </summary>
+            <param name="container">The container to check.</param>
+            <param name="width">The item width.</param>
+            <param name="height">The item height.</param>
+            <returns>
+              <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.HasRoomForCached(ItemsContainer,Vector2int)">
+            <summary>
+            Using the cached container info, determines whether the specified container has room for an item of the specified size.
+            </summary>
+            <param name="container">The container to check.</param>
+            <param name="itemSize">Size of the item.</param>
+            <returns>
+              <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.IsEmpty(ItemsContainer)">
+            <summary>
+            Determines whether the specified container is empty.
+            </summary>
+            <param name="container">The items container to check.</param>
+            <returns>
+              <c>true</c> if the specified container is empty; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.IsFull(ItemsContainer)">
+            <summary>
+            Determines whether the specified container is full.
+            </summary>
+            <param name="container">The items container to check.</param>
+            <returns>
+              <c>true</c> if the specified container is full; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.GetTotalSlots(ItemsContainer)">
+            <summary>
+            Get the totals number of 1x1 slots in the container, as calculated by the container's width and height.
+            </summary>
+            <param name="container">The container.</param>
+            <returns>The total number of slots in the container.</returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.GetStorageLabel(ItemsContainer)">
+            <summary>
+            Get the inernal label for the storage container.
+            </summary>
+            <param name="container">The container.</param>
+            <returns>The label used and displayed in-game for the container.</returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.GetAllowedTechTypes(ItemsContainer)">
+            <summary>
+            Gets the set of techtypes allowed in this container. This set can be altered.
+            If the set is null or empty, then all items can be added.
+            </summary>
+            <param name="container">The container to check.</param>
+            <returns>The collection of techtypes allowed in the container.</returns>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Utility.ExtBannedIdManager">
+            <summary>
+            This class is tasked with checking external txt files for banned IDs that are not to be isssued when patching in new enum entries.
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.ExtBannedIdManager.GetBannedIdsFor(System.String,System.Collections.Generic.IList{System.Int32}[])">
+            <summary>
+            Gets the banned ids, reported by the external files, for the specified enum.
+            </summary>
+            <param name="enumName">Name of the enum.</param>
+            <param name="combineWith">Any previously known banned IDs for this enum can be combined into the final list.</param>
+            <returns>An <see cref="T:System.Collections.IEnumerable"/> of banned indexes not to be issued for new entries of the specified enum.</returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.ExtBannedIdManager.GetBannedIdsFor(System.String)">
+            <summary>
+            Gets the banned ids, reported by the external files, for the specified enum.
+            </summary>
+            <param name="enumName">Name of the enum.</param>
+            <returns>An <see cref="T:System.Collections.IEnumerable"/> of banned indexes not to be issued for new entries of the specified enum.</returns>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Utility.ImageUtils">
+            <summary>
+            Utilities for image files
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.ImageUtils.LoadTextureFromFile(System.String,UnityEngine.TextureFormat)">
+            <summary>
+            Creates a new <see cref="T:UnityEngine.Texture2D" /> from an image file.
+            </summary>
+            <param name="filePathToImage">The path to the image file.</param>
+            <param name="format">
+            <para>The texture format. By default, this uses <see cref="F:UnityEngine.TextureFormat.BC7" />.</para>
+            <para>https://docs.unity3d.com/ScriptReference/TextureFormat.BC7.html</para>
+            <para>Don't change this unless you really know what you're doing.</para>
+            </param>
+            <returns>Will return a new <see cref="T:UnityEngine.Texture2D"/> instance if the file exists; Otherwise returns null.</returns>
+            <remarks>
+            Ripped from: https://github.com/RandyKnapp/SubnauticaModSystem/blob/master/SubnauticaModSystem/Common/Utility/ImageUtils.cs
+            </remarks>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.ImageUtils.LoadSpriteFromFile(System.String,UnityEngine.TextureFormat)">
+            <summary>
+            Creates a new <see cref="T:Atlas.Sprite" /> from an image file.
+            </summary>
+            <param name="filePathToImage">The path to the image file.</param>
+            <param name="format">
+            <para>The texture format. By default, this uses <see cref="F:UnityEngine.TextureFormat.BC7" />.</para>
+            <para>https://docs.unity3d.com/ScriptReference/TextureFormat.BC7.html</para>
+            <para>Don't change this unless you really know what you're doing.</para>
+            </param>
+            <returns>Will return a new <see cref="T:Atlas.Sprite"/> instance if the file exists; Otherwise returns null.</returns>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Utility.StorageHelperExtensions">
+            <summary>
+            Extension methods to provide static calls for <see cref="T:ItemsContainer"/> into <see cref="T:QModManager.API.SMLHelper.Utility.ItemStorageHelper"/> methods.
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.StorageHelperExtensions.HasRoomCached(ItemsContainer,System.Int32,System.Int32)">
+            <summary>
+            Using the cached container info, determines whether the specified container has room for an item of the specified size.
+            </summary>
+            <param name="container">The container to check.</param>
+            <param name="width">The item width.</param>
+            <param name="height">The item height.</param>
+            <returns>
+              <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.StorageHelperExtensions.HasRoomCached(ItemsContainer,Vector2int)">
+            <summary>
+            Using the cached container info, determines whether the specified container has room for an item of the specified size.
+            </summary>
+            <param name="container">The container to check.</param>
+            <param name="itemSize">Size of the item.</param>
+            <returns>
+              <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.StorageHelperExtensions.IsEmpty(ItemsContainer)">
+            <summary>
+            Determines whether the specified container is empty.
+            </summary>
+            <param name="container">The items container to check.</param>
+            <returns>
+              <c>true</c> if the specified container is empty; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.StorageHelperExtensions.IsFull(ItemsContainer)">
+            <summary>
+            Determines whether the specified container is full.
+            </summary>
+            <param name="container">The items container to check.</param>
+            <returns>
+              <c>true</c> if the specified container is full; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.StorageHelperExtensions.GetTotalSlots(ItemsContainer)">
+            <summary>
+            The totals number of 1x1 slots in the container, as calculated by the container's width and height.
+            </summary>
+            <param name="container">The container.</param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.StorageHelperExtensions.GetStorageLabel(ItemsContainer)">
+            <summary>
+            Get the inernal label for the storage container.
+            </summary>
+            <param name="container">The container.</param>
+            <returns>
+            The label used and displayed in-game for the container.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.StorageHelperExtensions.GetAllowedTechTypes(ItemsContainer)">
+            <summary>
+            Gets the set of techtypes allowed in this container. This set can be altered.
+            If the set is null or empty, then all items can be added.
+            </summary>
+            <param name="container">The container to check.</param>
+            <returns>
+            The collection of techtypes allowed in the container.
+            </returns>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Utility.ItemStorageHelper">
+            <summary>
+            A utility class that offers additional info about <see cref="T:ItemsContainer"/> instances.
+            </summary>
+            <seealso cref="T:QModManager.API.SMLHelper.Utility.IItemStorageHelper" />
+        </member>
+        <member name="P:QModManager.API.SMLHelper.Utility.ItemStorageHelper.Main">
+            <summary>
+            Main entry point for all calls to this handler.
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.HasRoomCached(ItemsContainer,System.Int32,System.Int32)">
+            <summary>
+            Using the cached container info, determines whether the specified container has room for an item of the specified size.
+            </summary>
+            <param name="container">The container to check.</param>
+            <param name="width">The item width.</param>
+            <param name="height">The item height.</param>
+            <returns>
+              <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.HasRoomCached(ItemsContainer,Vector2int)">
+            <summary>
+            Using the cached container info, determines whether the specified container has room for an item of the specified size.
+            </summary>
+            <param name="container">The container to check.</param>
+            <param name="itemSize">Size of the item.</param>
+            <returns>
+              <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.IsEmpty(ItemsContainer)">
+            <summary>
+            Determines whether the specified container is empty.
+            </summary>
+            <param name="container">The items container to check.</param>
+            <returns>
+              <c>true</c> if the specified container is empty; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.IsFull(ItemsContainer)">
+            <summary>
+            Determines whether the specified container is full.
+            </summary>
+            <param name="container">The items container to check.</param>
+            <returns>
+              <c>true</c> if the specified container is full; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.GetTotalSlots(ItemsContainer)">
+            <summary>
+            The totals number of 1x1 slots in the container, as calculated by the container's width and height.
+            </summary>
+            <param name="container">The container.</param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.GetStorageLabel(ItemsContainer)">
+            <summary>
+            Get the inernal label for the storage container.
+            </summary>
+            <param name="container">The container.</param>
+            <returns>
+            The label used and displayed in-game for the container.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.GetAllowedTechTypes(ItemsContainer)">
+            <summary>
+            Gets the set of techtypes allowed in  container. This set can be altered.
+            If the set is null or empty, then all items can be added.
+            </summary>
+            <param name="container">The container to check.</param>
+            <returns>
+            The collection of techtypes allowed in the container.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#HasRoomForCached(ItemsContainer,System.Int32,System.Int32)">
+            <summary>
+            Using the cached container info, determines whether the specified container has room for an item of the specified size.
+            </summary>
+            <param name="container">The container to check.</param>
+            <param name="width">The item width.</param>
+            <param name="height">The item height.</param>
+            <returns>
+              <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#HasRoomForCached(ItemsContainer,Vector2int)">
+            <summary>
+            Using the cached container info, determines whether the specified container has room for an item of the specified size.
+            </summary>
+            <param name="container">The container to check.</param>
+            <param name="itemSize">Size of the item.</param>
+            <returns>
+              <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#IsEmpty(ItemsContainer)">
+            <summary>
+            Determines whether the specified container is empty.
+            </summary>
+            <param name="container">The items container to check.</param>
+            <returns>
+              <c>true</c> if the specified container is empty; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#IsFull(ItemsContainer)">
+            <summary>
+            Determines whether the specified container is full.
+            </summary>
+            <param name="container">The items container to check.</param>
+            <returns>
+              <c>true</c> if the specified container is full; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#GetTotalSlots(ItemsContainer)">
+            <summary>
+            The totals number of 1x1 slots in the container, as calculated by the container's width and height.
+            </summary>
+            <param name="container">The container.</param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#GetStorageLabel(ItemsContainer)">
+            <summary>
+            Get the inernal label for the storage container.
+            </summary>
+            <param name="container">The container.</param>
+            <returns>
+            The label used and displayed in-game for the container.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#GetAllowedTechTypes(ItemsContainer)">
+            <summary>
+            Gets the set of techtypes allowed in this container. This set can be altered.
+            If the set is null or empty, then all items can be added.
+            </summary>
+            <param name="container">The container to check.</param>
+            <returns>
+            The collection of techtypes allowed in the container.
+            </returns>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Utility.KeyCodeUtils">
+            <summary>
+            Utilities for <see cref="T:UnityEngine.KeyCode"/>s
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.KeyCodeUtils.KeyCodeToString(UnityEngine.KeyCode)">
+            <summary>
+            Turn a <seealso cref="T:UnityEngine.KeyCode"/> into a <seealso cref="T:System.String"/>
+            </summary>
+            <param name="keyCode"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.KeyCodeUtils.StringToKeyCode(System.String)">
+            <summary>
+            Turn a <seealso cref="T:System.String"/> into a <seealso cref="T:UnityEngine.KeyCode"/>
+            </summary>
+            <param name="s"></param>
+            <returns></returns>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra">
+            <summary>
+            Additional methods for <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetBool(System.String,System.Boolean)">
+            <summary>
+            Get a <see cref="T:System.Boolean"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetBool(System.String,System.Boolean)">
+            <summary>
+            Set a <see cref="T:System.Boolean"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetKeyCode(System.String,UnityEngine.KeyCode)">
+            <summary>
+            Get a <see cref="T:UnityEngine.KeyCode"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetKeyCode(System.String,UnityEngine.KeyCode)">
+            <summary>
+            Set a <see cref="T:UnityEngine.KeyCode"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetColor(System.String)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Color"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetColor(System.String,UnityEngine.Color)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Color"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetColor(System.String,UnityEngine.Color)">
+            <summary>
+            Set a <see cref="T:UnityEngine.Color"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector2(System.String)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Vector2"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector2(System.String,UnityEngine.Vector2)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Vector2"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetVector2(System.String,UnityEngine.Vector2)">
+            <summary>
+            Set a <see cref="T:UnityEngine.Vector2"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector2int(System.String)">
+            <summary>
+            Get a <see cref="T:Vector2int"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector2int(System.String,Vector2int)">
+            <summary>
+            Get a <see cref="T:Vector2int"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetVector2int(System.String,Vector2int)">
+            <summary>
+            Set a <see cref="T:Vector2int"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector3(System.String)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Vector3"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector3(System.String,UnityEngine.Vector3)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Vector3"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetVector3(System.String,UnityEngine.Vector3)">
+            <summary>
+            Set a <see cref="T:UnityEngine.Vector3"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector4(System.String)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Vector4"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector4(System.String,UnityEngine.Vector4)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Vector4"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetVector4(System.String,UnityEngine.Vector4)">
+            <summary>
+            Set a <see cref="T:UnityEngine.Vector4"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetQuaternion(System.String)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Quaternion"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetQuaternion(System.String,UnityEngine.Quaternion)">
+            <summary>
+            Get a <see cref="T:UnityEngine.Quaternion"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="defaultValue"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetQuaternion(System.String,UnityEngine.Quaternion)">
+            <summary>
+            Set a <see cref="T:UnityEngine.Quaternion"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
+            </summary>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Utility.PrefabUtils">
+            <summary>
+            Utilities for prefabs
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.PrefabUtils.AddBasicComponents(UnityEngine.GameObject,System.String)">
+            <summary>
+            Adds basic components to a <see cref="T:UnityEngine.GameObject"/>
+            </summary>
+            <param name="_object">The <see cref="T:UnityEngine.GameObject"/> to which the components should be added</param>
+            <param name="classId">The desired class ID</param>
+        </member>
+        <member name="T:QModManager.API.SMLHelper.Utility.SaveUtils">
+            <summary>
+            Utilities for saved games
+            </summary>
+        </member>
+        <member name="M:QModManager.API.SMLHelper.Utility.SaveUtils.GetCurrentSaveDataDir">
+            <summary>
+            Returns the path to the current save slot's directory.
+            </summary>
         </member>
         <member name="T:QModManager.API.SMLHelper.Assets.CustomFish">
             <summary>
@@ -929,11 +1782,6 @@
             </summary>
             <seealso cref="T:QModManager.API.SMLHelper.Assets.PDAItem" />
             <seealso cref="T:QModManager.API.SMLHelper.Assets.Spawnable"/>
-        </member>
-        <member name="P:QModManager.API.SMLHelper.Assets.Buildable.HandOverText">
-            <summary>
-            Override with the text to be displayed when your hover the cursor over the built item.
-            </summary>
         </member>
         <member name="M:QModManager.API.SMLHelper.Assets.Buildable.#ctor(System.String,System.String,System.String)">
             <summary>
@@ -2363,1181 +3211,6 @@
             so if two mods are added at the same time, it may take a second game load for both to be visible to each other.
             </remarks>
         </member>
-        <member name="T:QModManager.API.SMLHelper.Interfaces.ICustomFishHandler">
-            <summary>
-            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.CustomFishHandler"/> <para/>
-            Can be used for dependency injection
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICustomFishHandler.RegisterFish(QModManager.API.SMLHelper.Assets.CustomFish)">
-            <summary>
-            Registers a CustomFish object into the game
-            </summary>
-            <param name="fish">The CustomFish that you are registering</param>
-            <returns>The TechType created using the info from your CustomFish object</returns>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Interfaces.IBioReactorHandler">
-            <summary>
-            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.BioReactorHandler"/> <para/>
-            Can be used for dependency injection
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.IBioReactorHandler.SetBioReactorCharge(TechType,System.Single)">
-            <summary>
-            <para>Allows you to specify the quantity of energy that a TechType will produce with bio reactors.</para>
-            </summary>
-            <param name="techType">The TechType that you want to use with bioreactors.</param>
-            <param name="charge">The quantity of energy that will be produced by this TechType.</param>
-            <seealso cref="T:CraftData.BackgroundType"/>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler">
-            <summary>
-            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.CraftDataHandler"/> <para/>
-            Can be used for dependency injection
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetTechData(TechType,ITechData)">
-            <summary>
-            <para>Allows you to edit recipes, i.e. TechData for TechTypes.</para>
-            <para>Can be used for existing TechTypes too.</para>
-            </summary>
-            <param name="techType">The TechType whose TechData you want to edit.</param>
-            <param name="techData">The TechData for that TechType.</param>
-            <seealso cref="T:QModManager.API.SMLHelper.Crafting.TechData"/>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetTechData(TechType,QModManager.API.SMLHelper.Crafting.TechData)">
-            <summary>
-            <para>Allows you to edit recipes, i.e. TechData for TechTypes.</para>
-            <para>Can be used for existing TechTypes too.</para>
-            </summary>
-            <param name="techType">The TechType whose TechData you want to edit.</param>
-            <param name="techData">The TechData for that TechType.</param>
-            <seealso cref="T:QModManager.API.SMLHelper.Crafting.TechData"/>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetEquipmentType(TechType,EquipmentType)">
-            <summary>
-            <para>Allows you to edit EquipmentTypes for TechTypes.</para>
-            <para>Can be used for existing TechTypes too.</para>
-            </summary>
-            <param name="techType">The TechType whose EqiupmentType you want to edit.</param>
-            <param name="equipmentType">The EquipmentType for that TechType.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetQuickSlotType(TechType,QuickSlotType)">
-            <summary>
-            <para>Allows you to edit QuickSlotType for TechTypes.</para>
-            <para>Can be used for existing TechTypes too.</para>
-            </summary>
-            <param name="techType">The TechType whose QuickSlotType you want to edit.</param>
-            <param name="slotType">The QuickSlotType for that TechType.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetHarvestOutput(TechType,TechType)">
-            <summary>
-            <para>Allows you to edit harvest output, i.e. what TechType you get when you "harvest" a TechType.</para>
-            <para>Can be used for existing TechTypes too.</para>
-            </summary>
-            <param name="techType">The TechType whose harvest output you want to edit.</param>
-            <param name="harvestOutput">The harvest output for that TechType.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetHarvestType(TechType,HarvestType)">
-            <summary>
-            <para>Allows you to edit how TechTypes are harvested.</para>
-            <para>Can be used for existing TechTypes too.</para>
-            </summary>
-            <param name="techType">The TechType whose HarvestType you want to edit.</param>
-            <param name="harvestType">The HarvestType for that TechType.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetHarvestFinalCutBonus(TechType,System.Int32)">
-            <summary>
-            <para>Allows you to edit how much additional slices/seeds are given upon last knife hit.</para>
-            <para>Can be used for existing TechTypes too.</para>
-            </summary>
-            <param name="techType">The TechType whose final cut bonus you want to edit.</param>
-            <param name="bonus">The number of additional slices/seeds you'll receive on last cut.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetItemSize(TechType,Vector2int)">
-            <summary>
-            <para>Allows you to edit item sizes for TechTypes.</para>
-            <para>Can be used for existing TechTypes too.</para>
-            </summary>
-            <param name="techType">The TechType whose item size you want to edit.</param>
-            <param name="size">The item size for that TechType.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetItemSize(TechType,System.Int32,System.Int32)">
-            <summary>
-            <para>Allows you to edit item sizes for TechTypes.</para>
-            <para>Can be used for existing TechTypes too.</para>
-            </summary>
-            <param name="techType">The TechType whose item size you want to edit.</param>
-            <param name="x">The width of the item</param>
-            <param name="y">The height of the item</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetCraftingTime(TechType,System.Single)">
-            <summary>
-            <para>Allows you to edit crafting times for TechTypes.</para>
-            <para>Can be used for existing TechTypes too.</para>
-            </summary>
-            <param name="techType">The TechType whose crafting time you want to edit.</param>
-            <param name="time">The crafting time, in seconds, for that TechType.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetCookedVariant(TechType,TechType)">
-            <summary>
-            <para>Allows you to edit the cooked creature list, i.e. associate the unedible TechType to the cooked TechType.</para>
-            <para>Can be used for existing TechTypes too.</para>
-            </summary>
-            <param name="uncooked">The TechType whose cooked creature counterpart to edit.</param>
-            <param name="cooked">The cooked creature counterpart for that TechType.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.SetBackgroundType(TechType,CraftData.BackgroundType)">
-            <summary>
-            <para>Allows you to edit inventory background colors for TechTypes.</para>
-            </summary>
-            <param name="techType">The TechType whose BackgroundType you want to edit.</param>
-            <param name="backgroundColor">The background color for that TechType.</param>
-            <seealso cref="T:CraftData.BackgroundType"/>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.AddBuildable(TechType)">
-            <summary>
-            Allows you to add items to the buildable list.
-            </summary>
-            <param name="techType">The TechType which you want to add to the buildable list.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.AddToGroup(TechGroup,TechCategory,TechType)">
-            <summary>
-            Allows you to add items to the game's internal grouping system.
-            Required if you want to make buildable items show up in the Habitat Builder.
-            </summary>
-            <param name="group">The TechGroup you want to add your TechType to.</param>
-            <param name="category">The TechCategory (in the TechGroup) you want to add your TechType to.</param>
-            <param name="techType">The TechType you want to add.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.AddToGroup(TechGroup,TechCategory,TechType,TechType)">
-            <summary>
-            Allows you to add items to the game's internal grouping system.
-            Required if you want to make buildable items show up in the Habitat Builder.
-            </summary>
-            <param name="group">The TechGroup you want to add your TechType to.</param>
-            <param name="category">The TechCategory (in the TechGroup) you want to add your TechType to.</param>
-            <param name="techType">The TechType you want to add.</param>
-            <param name="after">Added TechType will be added after this TechType, for sorting purposes.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.RemoveFromGroup(TechGroup,TechCategory,TechType)">
-            <summary>
-            Allows you to remove an existing TechType from the game's internal group system.
-            </summary>
-            <param name="group">The TechGroup in which the TechType is located.</param>
-            <param name="category">The TechCategory in which the TechType is located.</param>
-            <param name="techType">The TechType which you want to remove.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.GetModdedTechData(TechType)">
-            <summary>
-            Safely accesses the crafting data from a modded item.<para/>
-            WARNING: This method is highly dependent on mod load order. 
-            Make sure your mod is loading after the mod whose TechData you are trying to access.
-            </summary>
-            <param name="techType">The TechType whose TechData you want to access.</param>
-            <returns>The ITechData from the modded item if it exists; Otherwise, returns <c>null</c>.</returns>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler">
-            <summary>
-            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.CraftTreeHandler"/> <para/>
-            Can be used for dependency injection
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.CreateCustomCraftTreeAndType(System.String,CraftTree.Type@)">
-            <summary>
-            <para>Your first method call to start a new custom crafting tree.</para>
-            <para>Creating a new CraftTree only makes sense if you're going to use it in a new type of <see cref="T:GhostCrafter"/>.</para>
-            </summary>
-            <param name="name">The name for the new <see cref="T:CraftTree.Type" /> enum.</param>
-            <param name="craftTreeType">The new enum instance for your custom craft tree type.</param>
-            <returns>
-            <para>Returns the root node for your custom craft tree, as a new <see cref="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeRoot"/> instance.</para>
-            <para>Build up your custom crafting tree from this root node.</para>
-            <para>This tree will be automatically patched into the game. No further calls into <see cref="T:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler"/> required.</para>
-            </returns>
-            <seealso cref="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeNode"/>
-            <seealso cref="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeLinkingNode"/>
-            <seealso cref="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeTab"/>
-            <seealso cref="T:QModManager.API.SMLHelper.Crafting.ModCraftTreeCraft"/>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.ModdedCraftTreeTypeExists(System.String)">
-            <summary>
-            Safely looks for a modded CraftTree Type from another mod in the SMLHelper CraftTreeTypeCache.
-            </summary>
-            <param name="craftTreeString">The string used to define the modded item's new techtype.</param>
-            <returns>
-              <c>True</c> if the craft tree was found; Otherwise <c>false</c>.
-            </returns>
-            <remarks>
-            There's no guarantee in which order SMLHelper dependent mods are loaded,
-            so if two mods are added at the same time, it may take a second game load for both to be visible to each other.
-            </remarks>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.AddCraftingNode(CraftTree.Type,TechType,System.String[])">
-            <summary>
-            Adds a new crafting node to the root of the specified crafting tree, at the provided tab location.
-            </summary>
-            <param name="craftTree">The target craft tree to edit.</param>
-            <param name="craftingItem">The item to craft.</param>
-            <param name="stepsToTab">
-            <para>The steps to the target tab.</para>
-            <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
-            <para>Do not include "root" in this path.</para>
-            </param>        
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.AddCraftingNode(CraftTree.Type,TechType)">
-            <summary>
-            Adds a new crafting node to the root of the specified crafting tree
-            </summary>
-            <param name="craftTree">The target craft tree to edit.</param>
-            <param name="craftingItem">The item to craft.</param>        
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.AddTabNode(CraftTree.Type,System.String,System.String,Atlas.Sprite)">
-            <summary>
-            Adds a new tab node to the root of the specified crafting tree.
-            </summary>
-            <param name="craftTree">The target craft tree to edit.</param>
-            <param name="name">The ID of the tab node. Must be unique!</param>
-            <param name="displayName">The display name of the tab, which will show up when you hover your mouse on the tab.</param>
-            <param name="sprite">The sprite of the tab.</param>        
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.AddTabNode(CraftTree.Type,System.String,System.String,UnityEngine.Sprite)">
-            <summary>
-            Adds a new tab node to the root of the specified crafting tree.
-            </summary>
-            <param name="craftTree">The target craft tree to edit.</param>
-            <param name="name">The ID of the tab node. Must be unique!</param>
-            <param name="displayName">The display name of the tab, which will show up when you hover your mouse on the tab.</param>
-            <param name="sprite">The sprite of the tab.</param>        
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.AddTabNode(CraftTree.Type,System.String,System.String,Atlas.Sprite,System.String[])">
-            <summary>
-            Adds a new tab node to the root of the specified crafting tree, at the specified tab location.
-            </summary>
-            <param name="craftTree">The target craft tree to edit.</param>
-            <param name="name">The ID of the tab node. Must be unique!</param>
-            <param name="displayName">The display name of the tab, which will show up when you hover your mouse on the tab.</param>
-            <param name="sprite">The sprite of the tab.</param>
-            <param name="stepsToTab">
-            <para>The steps to the target tab.</para>
-            <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
-            <para>Do not include "root" in this path.</para>
-            </param>        
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.AddTabNode(CraftTree.Type,System.String,System.String,UnityEngine.Sprite,System.String[])">
-            <summary>
-            Adds a new tab node to the root of the specified crafting tree, at the specified tab location.
-            </summary>
-            <param name="craftTree">The target craft tree to edit.</param>
-            <param name="name">The ID of the tab node. Must be unique!</param>
-            <param name="displayName">The display name of the tab, which will show up when you hover your mouse on the tab.</param>
-            <param name="sprite">The sprite of the tab.</param>
-            <param name="stepsToTab">
-            <para>The steps to the target tab.</para>
-            <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
-            <para>Do not include "root" in this path.</para>
-            </param>        
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftTreeHandler.RemoveNode(CraftTree.Type,System.String[])">
-            <summary>
-            <para>Removes a node at the specified node location. Can be used to remove either tabs or craft nodes.</para>
-            <para>If a tab node is selected, all child nodes to it will also be removed.</para>
-            </summary>
-            <param name="craftTree">The target craft tree to edit.</param>
-            <param name="stepsToNode">
-            <para>The steps to the target node.</para>
-            <para>These must match the id value of the CraftNode in the crafting tree you're targeting.</para>
-            <para>This means matching the id of the crafted item or the id of the tab name.</para>
-            <para>Do not include "root" in this path.</para>
-            </param>        
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Interfaces.IItemActionHandler">
-            <summary>
-            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.ItemActionHandler"/> <para/>
-            Can be used for dependency injection
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.IItemActionHandler.RegisterLeftClickAction(TechType,System.Action{InventoryItem},System.String,System.Predicate{InventoryItem})">
-            <summary>
-            Registers a custom left click action for a <see cref="T:TechType"/>
-            </summary>
-            <param name="targetTechType">The <see cref="T:TechType"/> to which the left click action will be assigned</param>
-            <param name="callback">The method which will be called when a matching <see cref="T:InventoryItem"/> with the specified <see cref="T:TechType"/> was left-clicked</param>
-            <param name="tooltip">The secondary tooltip which will appear in the description of the item</param>
-            <param name="condition">The condition which must return <see langword="true"/> for the action to be called when the item is clicked<para/>If ommited, the action will always be called</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.IItemActionHandler.RegisterMiddleClickAction(TechType,System.Action{InventoryItem},System.String,System.Predicate{InventoryItem})">
-            <summary>
-            Registers a custom middle click action for a <see cref="T:TechType"/>
-            </summary>
-            <param name="targetTechType">The <see cref="T:TechType"/> which the middle click action will be assigned</param>
-            <param name="callback">The method which will be called when a matching <see cref="T:InventoryItem"/> with the specified <see cref="T:TechType"/> was middle-clicked</param>
-            <param name="tooltip">The secondary tooltip which will appear in the description of the item</param>
-            <param name="condition">The condition which must return <see langword="true"/> for the action to be called when the item is clicked<para/>If ommited, the action will always be called</param>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler">
-            <summary>
-            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.KnownTechHandler"/> <para/>
-            Can be used for dependency injection
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler.UnlockOnStart(TechType)">
-            <summary>
-            Allows you to unlock a TechType on game start.
-            </summary>
-            <param name="techType"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler.SetAnalysisTechEntry(TechType,System.Collections.Generic.IEnumerable{TechType})">
-            <summary>
-            Allows you to define which TechTypes are unlocked when a certain TechType is unlocked, i.e., "analysed".
-            If there is already an exisitng AnalysisTech entry for a TechType, all the TechTypes in "techTypesToUnlock" will be
-            added to the existing AnalysisTech entry unlocks.
-            </summary>
-            <param name="techTypeToBeAnalysed">This TechType is the criteria for all of the "unlock TechTypes"; when this TechType is unlocked, so are all the ones in that list</param>
-            <param name="techTypesToUnlock">The TechTypes that will be unlocked when "techTypeToSet" is unlocked.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler.SetAnalysisTechEntry(TechType,System.Collections.Generic.IEnumerable{TechType},System.String)">
-            <summary>
-            Allows you to define which TechTypes are unlocked when a certain TechType is unlocked, i.e., "analysed".
-            If there is already an exisitng AnalysisTech entry for a TechType, all the TechTypes in "techTypesToUnlock" will be
-            added to the existing AnalysisTech entry unlocks.
-            </summary>
-            <param name="techTypeToBeAnalysed">This TechType is the criteria for all of the "unlock TechTypes"; when this TechType is unlocked, so are all the ones in that list</param>
-            <param name="techTypesToUnlock">The TechTypes that will be unlocked when "techTypeToSet" is unlocked.</param>
-            <param name="UnlockMessage">The message that shows up on the right when the blueprint is unlocked. </param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler.SetAnalysisTechEntry(TechType,System.Collections.Generic.IEnumerable{TechType},FMODAsset)">
-            <summary>
-            Allows you to define which TechTypes are unlocked when a certain TechType is unlocked, i.e., "analysed".
-            If there is already an exisitng AnalysisTech entry for a TechType, all the TechTypes in "techTypesToUnlock" will be
-            added to the existing AnalysisTech entry unlocks.
-            </summary>
-            <param name="techTypeToBeAnalysed">This TechType is the criteria for all of the "unlock TechTypes"; when this TechType is unlocked, so are all the ones in that list</param>
-            <param name="techTypesToUnlock">The TechTypes that will be unlocked when "techTypeToSet" is unlocked.</param>
-            <param name="UnlockSound">The sound that plays when you unlock the blueprint.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler.SetAnalysisTechEntry(TechType,System.Collections.Generic.IEnumerable{TechType},UnityEngine.Sprite)">
-            <summary>
-            Allows you to define which TechTypes are unlocked when a certain TechType is unlocked, i.e., "analysed".
-            If there is already an exisitng AnalysisTech entry for a TechType, all the TechTypes in "techTypesToUnlock" will be
-            added to the existing AnalysisTech entry unlocks.
-            </summary>
-            <param name="techTypeToBeAnalysed">This TechType is the criteria for all of the "unlock TechTypes"; when this TechType is unlocked, so are all the ones in that list</param>
-            <param name="techTypesToUnlock">The TechTypes that will be unlocked when "techTypeToSet" is unlocked.</param>
-            <param name="UnlockSprite">The sprite that shows up when you unlock the blueprint.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler.SetAnalysisTechEntry(TechType,System.Collections.Generic.IEnumerable{TechType},System.String,FMODAsset)">
-            <summary>
-            Allows you to define which TechTypes are unlocked when a certain TechType is unlocked, i.e., "analysed".
-            If there is already an exisitng AnalysisTech entry for a TechType, all the TechTypes in "techTypesToUnlock" will be
-            added to the existing AnalysisTech entry unlocks.
-            </summary>
-            <param name="techTypeToBeAnalysed">This TechType is the criteria for all of the "unlock TechTypes"; when this TechType is unlocked, so are all the ones in that list</param>
-            <param name="techTypesToUnlock">The TechTypes that will be unlocked when "techTypeToSet" is unlocked.</param>
-            <param name="UnlockMessage">The message that shows up on the right when the blueprint is unlocked. </param>
-            <param name="UnlockSound">The sound that plays when you unlock the blueprint.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler.SetAnalysisTechEntry(TechType,System.Collections.Generic.IEnumerable{TechType},System.String,UnityEngine.Sprite)">
-            <summary>
-            Allows you to define which TechTypes are unlocked when a certain TechType is unlocked, i.e., "analysed".
-            If there is already an exisitng AnalysisTech entry for a TechType, all the TechTypes in "techTypesToUnlock" will be
-            added to the existing AnalysisTech entry unlocks.
-            </summary>
-            <param name="techTypeToBeAnalysed">This TechType is the criteria for all of the "unlock TechTypes"; when this TechType is unlocked, so are all the ones in that list</param>
-            <param name="techTypesToUnlock">The TechTypes that will be unlocked when "techTypeToSet" is unlocked.</param>
-            <param name="UnlockMessage">The message that shows up on the right when the blueprint is unlocked. </param>
-            <param name="UnlockSprite">The sprite that shows up when you unlock the blueprint.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.IKnownTechHandler.SetAnalysisTechEntry(TechType,System.Collections.Generic.IEnumerable{TechType},FMODAsset,UnityEngine.Sprite)">
-            <summary>
-            Allows you to define which TechTypes are unlocked when a certain TechType is unlocked, i.e., "analysed".
-            If there is already an exisitng AnalysisTech entry for a TechType, all the TechTypes in "techTypesToUnlock" will be
-            added to the existing AnalysisTech entry unlocks.
-            </summary>
-            <param name="techTypeToBeAnalysed">This TechType is the criteria for all of the "unlock TechTypes"; when this TechType is unlocked, so are all the ones in that list</param>
-            <param name="techTypesToUnlock">The TechTypes that will be unlocked when "techTypeToSet" is unlocked.</param>
-            <param name="UnlockSound">The sound that plays when you unlock the blueprint.</param>
-            <param name="UnlockSprite">The sprite that shows up when you unlock the blueprint.</param>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Interfaces.ILanguageHandler">
-            <summary>
-            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.LanguageHandler"/> <para/>
-            Can be used for dependency injection
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ILanguageHandler.SetLanguageLine(System.String,System.String)">
-            <summary>
-            Allows you to define a language entry into the game.
-            </summary>
-            <param name="lineId">The ID of the entry, this is what is used to get the actual text.</param>
-            <param name="text">The actual text related to the entry.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ILanguageHandler.SetTechTypeName(TechType,System.String)">
-            <summary>
-            Allows you to set the display name of a specific <see cref="T:TechType"/>.
-            </summary>
-            <param name="techType">The <see cref="T:TechType"/> whose display name that is to be changed.</param>
-            <param name="text">The new display name for the chosen <see cref="T:TechType"/>.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ILanguageHandler.SetTechTypeTooltip(TechType,System.String)">
-            <summary>
-            Allows you to set the tooltip of a specific <see cref="T:TechType"/>.
-            </summary>
-            <param name="techType">The <see cref="T:TechType"/> whose tooltip that is to be changed.</param>
-            <param name="text">The new tooltip for the chosen <see cref="T:TechType"/>.</param>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Interfaces.IOptionsPanelHandler">
-            <summary>
-            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.OptionsPanelHandler"/> <para/>
-            Can be used for dependency injection
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.IOptionsPanelHandler.RegisterModOptions(QModManager.API.SMLHelper.Options.ModOptions)">
-            <summary>
-            Registers your mod options to the in-game menu.
-            </summary>
-            <param name="options">The mod options. Create a new child class inheriting from this one and add your options to it.</param>
-            <seealso cref="T:QModManager.API.SMLHelper.Options.ModOptions"/>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Interfaces.IPDAHandler">
-            <summary>
-            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.PDAHandler"/> <para/>
-            Can be used for dependency injection
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.IPDAHandler.EditFragmentsToScan(TechType,System.Int32)">
-            <summary>
-            Edits how many fragments must be scanned before unlocking the techtype's blueprint.
-            </summary>
-            <param name="techType">Can be either techtype of the fragment or the crafted item.</param>
-            <param name="fragmentCount">The number of fragments to scan.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.IPDAHandler.EditFragmentScanTime(TechType,System.Single)">
-            <summary>
-            Edits the time it takes to finish scanning a fragment.
-            </summary>
-            <param name="techType">Can be either techtype of the fragment or the crafted item.</param>
-            <param name="scanTime">The relative time spent on scanning. Default value is 1.</param>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Interfaces.IPrefabHandler">
-            <summary>
-            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.PrefabHandler"/> <para/>
-            Can be used for dependency injection
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.IPrefabHandler.RegisterPrefab(QModManager.API.SMLHelper.Assets.ModPrefab)">
-            <summary>
-            Registers a ModPrefab into the game.
-            </summary>
-            <param name="prefab">The mod prefab to register. Create a child class inheriting off this one and configure as needed.</param>
-            <seealso cref="T:QModManager.API.SMLHelper.Assets.ModPrefab"/>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Interfaces.ISpriteHandler">
-            <summary>
-            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.SpriteHandler"/> <para/>
-            Can be used for dependency injection
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ISpriteHandler.RegisterSprite(TechType,Atlas.Sprite)">
-            <summary>
-            Registers a new sprite to the game.
-            </summary>
-            <param name="type">The techtype paired to this sprite.</param>
-            <param name="sprite">The sprite to be added.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ISpriteHandler.RegisterSprite(SpriteManager.Group,System.String,Atlas.Sprite)">
-            <summary>
-            Registers a new sprite to the game.
-            </summary>
-            <param name="group">The sprite group.</param>
-            <param name="id">The sprite internal identifier.</param>
-            <param name="sprite">The sprite to be added.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ISpriteHandler.RegisterSprite(SpriteManager.Group,System.String,UnityEngine.Sprite)">
-            <summary>
-            Registers a new sprite to the game.
-            </summary>
-            <param name="group">The sprite group this sprite will be added to.</param>
-            <param name="id">The sprite internal identifier.</param>
-            <param name="sprite">The sprite to be added.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ISpriteHandler.RegisterSprite(TechType,UnityEngine.Sprite)">
-            <summary>
-            Registers a new sprite to the game.
-            </summary>
-            <param name="type">The techtype paired to this sprite.</param>
-            <param name="sprite">The sprite to be added.</param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ISpriteHandler.RegisterSprite(TechType,System.String,UnityEngine.TextureFormat)">
-            <summary>
-            Registers a new sprite to the game.
-            </summary>
-            <param name="type">The techtype paired to this sprite.</param>
-            <param name="filePathToImage">The file path to image to be converted into a sprite.</param>
-            <param name="format"><para>The texture format. By default, this uses <see cref="F:UnityEngine.TextureFormat.BC7" />.</para>
-            <para>https://docs.unity3d.com/ScriptReference/TextureFormat.BC7.html</para>
-            <para>Don't change this unless you really know what you're doing.</para></param>
-            <seealso cref="M:QModManager.API.SMLHelper.Utility.ImageUtils.LoadSpriteFromFile(System.String,UnityEngine.TextureFormat)" />
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ISpriteHandler.RegisterSprite(TechType,System.String)">
-            <summary>
-            Registers a new sprite to the game.
-            </summary>
-            <param name="type">The techtype paired to this sprite.</param>
-            <param name="filePathToImage">The file path to image to be converted into a sprite.</param>
-            <seealso cref="M:QModManager.API.SMLHelper.Utility.ImageUtils.LoadSpriteFromFile(System.String,UnityEngine.TextureFormat)" />
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ISpriteHandler.RegisterSprite(SpriteManager.Group,System.String,System.String,UnityEngine.TextureFormat)">
-            <summary>
-            Registers a new sprite to the game.
-            </summary>
-            <param name="group">The sprite group.</param>
-            <param name="id">The sprite internal identifier.</param>
-            <param name="filePathToImage">The file path to image.</param>
-            <param name="format"><para>The texture format. By default, this uses <see cref="F:UnityEngine.TextureFormat.BC7" />.</para>
-            <para>https://docs.unity3d.com/ScriptReference/TextureFormat.BC7.html</para>
-            <para>Don't change this unless you really know what you're doing.</para></param>
-            <seealso cref="M:QModManager.API.SMLHelper.Utility.ImageUtils.LoadSpriteFromFile(System.String,UnityEngine.TextureFormat)" />
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ISpriteHandler.RegisterSprite(SpriteManager.Group,System.String,System.String)">
-            <summary>
-            Registers a new sprite to the game.
-            </summary>
-            <param name="group">The sprite group.</param>
-            <param name="id">The sprite internal identifier.</param>
-            <param name="filePathToImage">The file path to image.</param>
-            <seealso cref="M:QModManager.API.SMLHelper.Utility.ImageUtils.LoadSpriteFromFile(System.String,UnityEngine.TextureFormat)" />
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler">
-            <summary>
-            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.TechTypeHandler"/> <para/>
-            Can be used for dependency injection
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler.AddTechType(System.String,System.String,System.String)">
-            <summary>
-            Adds a new <see cref="T:TechType"/> into the game. This new techtype will be unlocked at the start of a the game.
-            </summary>
-            <param name="internalName">The internal name of the TechType. Should not contain special characters.</param>
-            <param name="displayName">The display name of the TechType. Can be anything.</param>
-            <param name="tooltip">The tooltip, displayed when hovered in an inventory. Can be anything.</param>
-            <returns>The new <see cref="T:TechType"/> that is created.</returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler.AddTechType(System.String,System.String,System.String,System.Boolean)">
-            <summary>
-            Adds a new <see cref="T:TechType"/> into the game.
-            </summary>
-            <param name="internalName">The internal name of the TechType. Should not contain special characters.</param>
-            <param name="displayName">The display name of the TechType. Can be anything.</param>
-            <param name="tooltip">The tooltip, displayed when hovered in an inventory. Can be anything.</param>
-            <param name="unlockAtStart">Whether this TechType should be unlocked on game start, or not. By default, <c>true</c>.</param>
-            <returns>The new <see cref="T:TechType"/> that is created.</returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler.AddTechType(System.String,System.String,System.String,Atlas.Sprite)">
-            <summary>
-            Adds a new <see cref="T:TechType"/> into the game, with a sprite. This new techtype will be unlocked at the start of a the game.
-            </summary>
-            <param name="internalName">The internal name of the TechType. Should not contain special characters.</param>
-            <param name="displayName">The display name of the TechType. Can be anything.</param>
-            <param name="tooltip">The tooltip, displayed when hovered in an inventory. Can be anything.</param>
-            <param name="sprite">The sprite that will related to this TechType.</param>
-            <returns>The new <see cref="T:TechType"/> that is created.</returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler.AddTechType(System.String,System.String,System.String,Atlas.Sprite,System.Boolean)">
-            <summary>
-            Adds a new <see cref="T:TechType"/> into the game, with a sprite.
-            </summary>
-            <param name="internalName">The internal name of the TechType. Should not contain special characters.</param>
-            <param name="displayName">The display name of the TechType. Can be anything.</param>
-            <param name="tooltip">The tooltip, displayed when hovered in an inventory. Can be anything.</param>
-            <param name="sprite">The sprite that will related to this TechType.</param>
-            <param name="unlockAtStart">Whether this TechType should be unlocked on game start, or not. By default, <c>true</c>.</param>
-            <returns>The new <see cref="T:TechType"/> that is created.</returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler.AddTechType(System.String,System.String,System.String,UnityEngine.Sprite)">
-            <summary>
-            Adds a new <see cref="T:TechType"/> into the game, with a sprite. This new techtype will be unlocked at the start of a the game.
-            </summary>
-            <param name="internalName">The internal name of the TechType. Should not contain special characters.</param>
-            <param name="displayName">The display name of the TechType. Can be anything.</param>
-            <param name="tooltip">The tooltip, displayed when hovered in an inventory. Can be anything.</param>
-            <param name="sprite">The sprite that will related to this TechType.</param>
-            <returns>The new <see cref="T:TechType"/> that is created.</returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler.AddTechType(System.String,System.String,System.String,UnityEngine.Sprite,System.Boolean)">
-            <summary>
-            Adds a new <see cref="T:TechType"/> into the game, with a sprite.
-            </summary>
-            <param name="internalName">The internal name of the TechType. Should not contain special characters.</param>
-            <param name="displayName">The display name of the TechType. Can be anything.</param>
-            <param name="tooltip">The tooltip, displayed when hovered in an inventory. Can be anything.</param>
-            <param name="sprite">The sprite that will related to this TechType.</param>
-            <param name="unlockAtStart">Whether this TechType should be unlocked on game start, or not. By default, <c>true</c>.</param>
-            <returns>The new <see cref="T:TechType"/> that is created.</returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler.TryGetModdedTechType(System.String,TechType@)">
-            <summary>
-            Safely looks for a modded item from another mod in the SMLHelper TechTypeCache and outputs its <see cref="T:TechType" /> value when found.
-            </summary>
-            <param name="techtypeString">The string used to define the modded item's new techtype.</param>
-            <param name="modTechType">The TechType enum value of the modded. Defaults to <see cref="F:TechType.None" /> when the item was not found.</param>
-            <returns>
-              <c>True</c> if the item was found; Otherwise <c>false</c>.
-            </returns>
-            <remarks>
-            There's no guarantee in which order SMLHelper dependent mods are loaded,
-            so if two mods are added at the same time, it may take a second game load for both to be visible to each other.
-            </remarks>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ITechTypeHandler.ModdedTechTypeExists(System.String)">
-            <summary>
-            Safely looks for a modded item from another mod in the SMLHelper TechTypeCache.
-            </summary>
-            <param name="techtypeString">The string used to define the modded item's new techtype.</param>
-            <returns>
-              <c>True</c> if the item was found; Otherwise <c>false</c>.
-            </returns>
-            <remarks>
-            There's no guarantee in which order SMLHelper dependent mods are loaded,
-            so if two mods are added at the same time, it may take a second game load for both to be visible to each other.
-            </remarks>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Utility.IItemStorageHelper">
-            <summary>
-            Interface for <see cref="T:QModManager.API.SMLHelper.Utility.ItemStorageHelper"/> <para/>
-            Can be used for dependency injection
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.HasRoomForCached(ItemsContainer,System.Int32,System.Int32)">
-            <summary>
-            Using the cached container info, determines whether the specified container has room for an item of the specified size.
-            </summary>
-            <param name="container">The container to check.</param>
-            <param name="width">The item width.</param>
-            <param name="height">The item height.</param>
-            <returns>
-              <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.HasRoomForCached(ItemsContainer,Vector2int)">
-            <summary>
-            Using the cached container info, determines whether the specified container has room for an item of the specified size.
-            </summary>
-            <param name="container">The container to check.</param>
-            <param name="itemSize">Size of the item.</param>
-            <returns>
-              <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.IsEmpty(ItemsContainer)">
-            <summary>
-            Determines whether the specified container is empty.
-            </summary>
-            <param name="container">The items container to check.</param>
-            <returns>
-              <c>true</c> if the specified container is empty; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.IsFull(ItemsContainer)">
-            <summary>
-            Determines whether the specified container is full.
-            </summary>
-            <param name="container">The items container to check.</param>
-            <returns>
-              <c>true</c> if the specified container is full; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.GetTotalSlots(ItemsContainer)">
-            <summary>
-            Get the totals number of 1x1 slots in the container, as calculated by the container's width and height.
-            </summary>
-            <param name="container">The container.</param>
-            <returns>The total number of slots in the container.</returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.GetStorageLabel(ItemsContainer)">
-            <summary>
-            Get the inernal label for the storage container.
-            </summary>
-            <param name="container">The container.</param>
-            <returns>The label used and displayed in-game for the container.</returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.IItemStorageHelper.GetAllowedTechTypes(ItemsContainer)">
-            <summary>
-            Gets the set of techtypes allowed in this container. This set can be altered.
-            If the set is null or empty, then all items can be added.
-            </summary>
-            <param name="container">The container to check.</param>
-            <returns>The collection of techtypes allowed in the container.</returns>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra">
-            <summary>
-            Additional methods for <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetBool(System.String,System.Boolean)">
-            <summary>
-            Get a <see cref="T:System.Boolean"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="defaultValue"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetBool(System.String,System.Boolean)">
-            <summary>
-            Set a <see cref="T:System.Boolean"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetKeyCode(System.String,UnityEngine.KeyCode)">
-            <summary>
-            Get a <see cref="T:UnityEngine.KeyCode"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="defaultValue"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetKeyCode(System.String,UnityEngine.KeyCode)">
-            <summary>
-            Set a <see cref="T:UnityEngine.KeyCode"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetColor(System.String)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Color"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetColor(System.String,UnityEngine.Color)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Color"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="defaultValue"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetColor(System.String,UnityEngine.Color)">
-            <summary>
-            Set a <see cref="T:UnityEngine.Color"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector2(System.String)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Vector2"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector2(System.String,UnityEngine.Vector2)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Vector2"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="defaultValue"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetVector2(System.String,UnityEngine.Vector2)">
-            <summary>
-            Set a <see cref="T:UnityEngine.Vector2"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector2int(System.String)">
-            <summary>
-            Get a <see cref="T:Vector2int"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector2int(System.String,Vector2int)">
-            <summary>
-            Get a <see cref="T:Vector2int"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="defaultValue"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetVector2int(System.String,Vector2int)">
-            <summary>
-            Set a <see cref="T:Vector2int"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector3(System.String)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Vector3"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector3(System.String,UnityEngine.Vector3)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Vector3"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="defaultValue"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetVector3(System.String,UnityEngine.Vector3)">
-            <summary>
-            Set a <see cref="T:UnityEngine.Vector3"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector4(System.String)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Vector4"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetVector4(System.String,UnityEngine.Vector4)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Vector4"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="defaultValue"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetVector4(System.String,UnityEngine.Vector4)">
-            <summary>
-            Set a <see cref="T:UnityEngine.Vector4"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetQuaternion(System.String)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Quaternion"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.GetQuaternion(System.String,UnityEngine.Quaternion)">
-            <summary>
-            Get a <see cref="T:UnityEngine.Quaternion"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="defaultValue"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PlayerPrefsExtra.SetQuaternion(System.String,UnityEngine.Quaternion)">
-            <summary>
-            Set a <see cref="T:UnityEngine.Quaternion"/> value using <see cref="T:UnityEngine.PlayerPrefs"/>
-            </summary>
-            <param name="key"></param>
-            <param name="value"></param>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Utility.ExtBannedIdManager">
-            <summary>
-            This class is tasked with checking external txt files for banned IDs that are not to be isssued when patching in new enum entries.
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ExtBannedIdManager.GetBannedIdsFor(System.String,System.Collections.Generic.IList{System.Int32}[])">
-            <summary>
-            Gets the banned ids, reported by the external files, for the specified enum.
-            </summary>
-            <param name="enumName">Name of the enum.</param>
-            <param name="combineWith">Any previously known banned IDs for this enum can be combined into the final list.</param>
-            <returns>An <see cref="T:System.Collections.IEnumerable"/> of banned indexes not to be issued for new entries of the specified enum.</returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ExtBannedIdManager.GetBannedIdsFor(System.String)">
-            <summary>
-            Gets the banned ids, reported by the external files, for the specified enum.
-            </summary>
-            <param name="enumName">Name of the enum.</param>
-            <returns>An <see cref="T:System.Collections.IEnumerable"/> of banned indexes not to be issued for new entries of the specified enum.</returns>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Utility.ImageUtils">
-            <summary>
-            Utilities for image files
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ImageUtils.LoadTextureFromFile(System.String,UnityEngine.TextureFormat)">
-            <summary>
-            Creates a new <see cref="T:UnityEngine.Texture2D" /> from an image file.
-            </summary>
-            <param name="filePathToImage">The path to the image file.</param>
-            <param name="format">
-            <para>The texture format. By default, this uses <see cref="F:UnityEngine.TextureFormat.BC7" />.</para>
-            <para>https://docs.unity3d.com/ScriptReference/TextureFormat.BC7.html</para>
-            <para>Don't change this unless you really know what you're doing.</para>
-            </param>
-            <returns>Will return a new <see cref="T:UnityEngine.Texture2D"/> instance if the file exists; Otherwise returns null.</returns>
-            <remarks>
-            Ripped from: https://github.com/RandyKnapp/SubnauticaModSystem/blob/master/SubnauticaModSystem/Common/Utility/ImageUtils.cs
-            </remarks>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ImageUtils.LoadSpriteFromFile(System.String,UnityEngine.TextureFormat)">
-            <summary>
-            Creates a new <see cref="T:Atlas.Sprite" /> from an image file.
-            </summary>
-            <param name="filePathToImage">The path to the image file.</param>
-            <param name="format">
-            <para>The texture format. By default, this uses <see cref="F:UnityEngine.TextureFormat.BC7" />.</para>
-            <para>https://docs.unity3d.com/ScriptReference/TextureFormat.BC7.html</para>
-            <para>Don't change this unless you really know what you're doing.</para>
-            </param>
-            <returns>Will return a new <see cref="T:Atlas.Sprite"/> instance if the file exists; Otherwise returns null.</returns>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Utility.StorageHelperExtensions">
-            <summary>
-            Extension methods to provide static calls for <see cref="T:ItemsContainer"/> into <see cref="T:QModManager.API.SMLHelper.Utility.ItemStorageHelper"/> methods.
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.StorageHelperExtensions.HasRoomCached(ItemsContainer,System.Int32,System.Int32)">
-            <summary>
-            Using the cached container info, determines whether the specified container has room for an item of the specified size.
-            </summary>
-            <param name="container">The container to check.</param>
-            <param name="width">The item width.</param>
-            <param name="height">The item height.</param>
-            <returns>
-              <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.StorageHelperExtensions.HasRoomCached(ItemsContainer,Vector2int)">
-            <summary>
-            Using the cached container info, determines whether the specified container has room for an item of the specified size.
-            </summary>
-            <param name="container">The container to check.</param>
-            <param name="itemSize">Size of the item.</param>
-            <returns>
-              <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.StorageHelperExtensions.IsEmpty(ItemsContainer)">
-            <summary>
-            Determines whether the specified container is empty.
-            </summary>
-            <param name="container">The items container to check.</param>
-            <returns>
-              <c>true</c> if the specified container is empty; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.StorageHelperExtensions.IsFull(ItemsContainer)">
-            <summary>
-            Determines whether the specified container is full.
-            </summary>
-            <param name="container">The items container to check.</param>
-            <returns>
-              <c>true</c> if the specified container is full; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.StorageHelperExtensions.GetTotalSlots(ItemsContainer)">
-            <summary>
-            The totals number of 1x1 slots in the container, as calculated by the container's width and height.
-            </summary>
-            <param name="container">The container.</param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.StorageHelperExtensions.GetStorageLabel(ItemsContainer)">
-            <summary>
-            Get the inernal label for the storage container.
-            </summary>
-            <param name="container">The container.</param>
-            <returns>
-            The label used and displayed in-game for the container.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.StorageHelperExtensions.GetAllowedTechTypes(ItemsContainer)">
-            <summary>
-            Gets the set of techtypes allowed in this container. This set can be altered.
-            If the set is null or empty, then all items can be added.
-            </summary>
-            <param name="container">The container to check.</param>
-            <returns>
-            The collection of techtypes allowed in the container.
-            </returns>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Utility.ItemStorageHelper">
-            <summary>
-            A utility class that offers additional info about <see cref="T:ItemsContainer"/> instances.
-            </summary>
-            <seealso cref="T:QModManager.API.SMLHelper.Utility.IItemStorageHelper" />
-        </member>
-        <member name="P:QModManager.API.SMLHelper.Utility.ItemStorageHelper.Main">
-            <summary>
-            Main entry point for all calls to this handler.
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.HasRoomCached(ItemsContainer,System.Int32,System.Int32)">
-            <summary>
-            Using the cached container info, determines whether the specified container has room for an item of the specified size.
-            </summary>
-            <param name="container">The container to check.</param>
-            <param name="width">The item width.</param>
-            <param name="height">The item height.</param>
-            <returns>
-              <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.HasRoomCached(ItemsContainer,Vector2int)">
-            <summary>
-            Using the cached container info, determines whether the specified container has room for an item of the specified size.
-            </summary>
-            <param name="container">The container to check.</param>
-            <param name="itemSize">Size of the item.</param>
-            <returns>
-              <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.IsEmpty(ItemsContainer)">
-            <summary>
-            Determines whether the specified container is empty.
-            </summary>
-            <param name="container">The items container to check.</param>
-            <returns>
-              <c>true</c> if the specified container is empty; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.IsFull(ItemsContainer)">
-            <summary>
-            Determines whether the specified container is full.
-            </summary>
-            <param name="container">The items container to check.</param>
-            <returns>
-              <c>true</c> if the specified container is full; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.GetTotalSlots(ItemsContainer)">
-            <summary>
-            The totals number of 1x1 slots in the container, as calculated by the container's width and height.
-            </summary>
-            <param name="container">The container.</param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.GetStorageLabel(ItemsContainer)">
-            <summary>
-            Get the inernal label for the storage container.
-            </summary>
-            <param name="container">The container.</param>
-            <returns>
-            The label used and displayed in-game for the container.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.GetAllowedTechTypes(ItemsContainer)">
-            <summary>
-            Gets the set of techtypes allowed in  container. This set can be altered.
-            If the set is null or empty, then all items can be added.
-            </summary>
-            <param name="container">The container to check.</param>
-            <returns>
-            The collection of techtypes allowed in the container.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#HasRoomForCached(ItemsContainer,System.Int32,System.Int32)">
-            <summary>
-            Using the cached container info, determines whether the specified container has room for an item of the specified size.
-            </summary>
-            <param name="container">The container to check.</param>
-            <param name="width">The item width.</param>
-            <param name="height">The item height.</param>
-            <returns>
-              <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#HasRoomForCached(ItemsContainer,Vector2int)">
-            <summary>
-            Using the cached container info, determines whether the specified container has room for an item of the specified size.
-            </summary>
-            <param name="container">The container to check.</param>
-            <param name="itemSize">Size of the item.</param>
-            <returns>
-              <c>true</c> if there is room for the item in the container,; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#IsEmpty(ItemsContainer)">
-            <summary>
-            Determines whether the specified container is empty.
-            </summary>
-            <param name="container">The items container to check.</param>
-            <returns>
-              <c>true</c> if the specified container is empty; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#IsFull(ItemsContainer)">
-            <summary>
-            Determines whether the specified container is full.
-            </summary>
-            <param name="container">The items container to check.</param>
-            <returns>
-              <c>true</c> if the specified container is full; otherwise, <c>false</c>.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#GetTotalSlots(ItemsContainer)">
-            <summary>
-            The totals number of 1x1 slots in the container, as calculated by the container's width and height.
-            </summary>
-            <param name="container">The container.</param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#GetStorageLabel(ItemsContainer)">
-            <summary>
-            Get the inernal label for the storage container.
-            </summary>
-            <param name="container">The container.</param>
-            <returns>
-            The label used and displayed in-game for the container.
-            </returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.ItemStorageHelper.QModManager#API#SMLHelper#Utility#IItemStorageHelper#GetAllowedTechTypes(ItemsContainer)">
-            <summary>
-            Gets the set of techtypes allowed in this container. This set can be altered.
-            If the set is null or empty, then all items can be added.
-            </summary>
-            <param name="container">The container to check.</param>
-            <returns>
-            The collection of techtypes allowed in the container.
-            </returns>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Utility.KeyCodeUtils">
-            <summary>
-            Utilities for <see cref="T:UnityEngine.KeyCode"/>s
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.KeyCodeUtils.KeyCodeToString(UnityEngine.KeyCode)">
-            <summary>
-            Turn a <seealso cref="T:UnityEngine.KeyCode"/> into a <seealso cref="T:System.String"/>
-            </summary>
-            <param name="keyCode"></param>
-            <returns></returns>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.KeyCodeUtils.StringToKeyCode(System.String)">
-            <summary>
-            Turn a <seealso cref="T:System.String"/> into a <seealso cref="T:UnityEngine.KeyCode"/>
-            </summary>
-            <param name="s"></param>
-            <returns></returns>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Utility.PrefabUtils">
-            <summary>
-            Utilities for prefabs
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.PrefabUtils.AddBasicComponents(UnityEngine.GameObject,System.String)">
-            <summary>
-            Adds basic components to a <see cref="T:UnityEngine.GameObject"/>
-            </summary>
-            <param name="_object">The <see cref="T:UnityEngine.GameObject"/> to which the components should be added</param>
-            <param name="classId">The desired class ID</param>
-        </member>
-        <member name="T:QModManager.API.SMLHelper.Utility.SaveUtils">
-            <summary>
-            Utilities for saved games
-            </summary>
-        </member>
-        <member name="M:QModManager.API.SMLHelper.Utility.SaveUtils.GetCurrentSaveDataDir">
-            <summary>
-            Returns the path to the current save slot's directory.
-            </summary>
-        </member>
         <member name="T:QModManager.API.SMLHelper.Options.ChoiceChangedEventArgs">
             <summary>
             Contains all the information about a choice changed event.
@@ -3964,6 +3637,328 @@
             <param name="id">The internal ID of this option.</param>
             <param name="label">The display text to show on the in-game menus.</param>
             <param name="value">The starting value.</param>
+        </member>
+        <member name="T:QModManager.API.QModAPI">
+            <summary>
+            The main class for the QModManager API
+            </summary>
+        </member>
+        <member name="P:QModManager.API.QModAPI.Main">
+            <summary>
+            The main instance of this class <para/>
+            Used for dependency injection
+            </summary>
+        </member>
+        <member name="M:QModManager.API.QModAPI.MarkAsErrored(System.Reflection.Assembly)">
+            <summary>
+            Marks a mod as errored <para/>
+            The mod will appear in the red pop-up which is shows when the game starts
+            </summary>
+            <param name="modAssembly">
+            The assembly of the mod to mark as errored. <para/>
+            If omitted, it will use the calling <see cref="T:System.Reflection.Assembly"/>
+            </param>
+        </member>
+        <member name="M:QModManager.API.QModAPI.GetAllMods(System.Boolean,System.Boolean)">
+            <summary>
+            Returns a list of all of the mods
+            </summary>
+            <param name="includeUnloaded">Set to <see langword="true"/> to also include unloaded mods</param>
+            <param name="includeErrored">Set to <see langword="true"/> to also include errored mods</param>
+            <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded/errored mods</returns>
+        </member>
+        <member name="M:QModManager.API.QModAPI.GetMyMod">
+            <summary>
+            Returns the mod from the assembly which called this method
+            </summary>
+        </member>
+        <member name="M:QModManager.API.QModAPI.GetMod(System.Reflection.Assembly,System.Boolean,System.Boolean)">
+            <summary>
+            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
+            </summary>
+            <param name="modAssembly"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+            <param name="includeErrored">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="M:QModManager.API.QModAPI.GetMod(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Returns a mod from an ID
+            </summary>
+            <param name="id"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+            <param name="includeErrored">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="M:QModManager.API.QModAPI.ModPresent(System.Reflection.Assembly,System.Boolean,System.Boolean)">
+            <summary>
+            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
+            </summary>
+            <param name="modAssembly"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+            <param name="includeErrored">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="M:QModManager.API.QModAPI.ModPresent(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Checks whether or not a mod is present based on its ID
+            </summary>
+            <param name="id"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+            <param name="includeErrored">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#MarkAsErrored">
+            <summary>
+            Marks a mod as errored <para/>
+            The mod will appear in the red pop-up which is shows when the game starts
+            </summary>
+        </member>
+        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#MarkAsErrored(System.Reflection.Assembly)">
+            <summary>
+            Marks a mod as errored <para/>
+            The mod will appear in the red pop-up which is shows when the game starts
+            </summary>
+            <param name="modAssembly">
+            The assembly of the mod to mark as errored. <para/>
+            </param>
+        </member>
+        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetAllMods">
+            <summary>
+            Returns a list of all of the mods
+            </summary>
+            <returns>A read only list of mods containing all of the loaded mods</returns>
+        </member>
+        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetAllMods(System.Boolean)">
+            <summary>
+            Returns a list of all of the mods
+            </summary>
+            <param name="includeUnloaded">Set to <see langword="true"/> to also include unloaded mods</param>
+            <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded mods</returns>
+        </member>
+        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetAllMods(System.Boolean,System.Boolean)">
+            <summary>
+            Returns a list of all of the mods
+            </summary>
+            <param name="includeUnloaded">Set to <see langword="true"/> to also include unloaded mods</param>
+            <param name="includeErrored">Set to <see langword="true"/> to also include errored mods</param>
+            <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded/errored mods</returns>
+        </member>
+        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMyMod">
+            <summary>
+            Returns the mod from the assembly which called this method
+            </summary>
+        </member>
+        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMod(System.Reflection.Assembly)">
+            <summary>
+            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
+            </summary>
+            <param name="modAssembly"></param>
+        </member>
+        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMod(System.Reflection.Assembly,System.Boolean)">
+            <summary>
+            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
+            </summary>
+            <param name="modAssembly"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMod(System.Reflection.Assembly,System.Boolean,System.Boolean)">
+            <summary>
+            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
+            </summary>
+            <param name="modAssembly"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+            <param name="includeErrored">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMod(System.String)">
+            <summary>
+            Returns a mod from an ID
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMod(System.String,System.Boolean)">
+            <summary>
+            Returns a mod from an ID
+            </summary>
+            <param name="id"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMod(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Returns a mod from an ID
+            </summary>
+            <param name="id"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+            <param name="includeErrored">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#ModPresent(System.Reflection.Assembly)">
+            <summary>
+            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
+            </summary>
+            <param name="modAssembly"></param>
+        </member>
+        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#ModPresent(System.Reflection.Assembly,System.Boolean)">
+            <summary>
+            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
+            </summary>
+            <param name="modAssembly"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#ModPresent(System.Reflection.Assembly,System.Boolean,System.Boolean)">
+            <summary>
+            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
+            </summary>
+            <param name="modAssembly"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+            <param name="includeErrored">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#ModPresent(System.String)">
+            <summary>
+            Checks whether or not a mod is present based on its ID
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#ModPresent(System.String,System.Boolean)">
+            <summary>
+            Checks whether or not a mod is present based on its ID
+            </summary>
+            <param name="id"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#ModPresent(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Checks whether or not a mod is present based on its ID
+            </summary>
+            <param name="id"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+            <param name="includeErrored">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="T:QModManager.API.IQModAPI">
+            <summary>
+            The interface used by <see cref="T:QModManager.API.QModAPI"/> <para/>
+            Designed for dependency injection
+            </summary>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.MarkAsErrored">
+            <summary>
+            Marks a mod as errored <para/>
+            The mod will appear in the red pop-up which is shows when the game starts
+            </summary>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.MarkAsErrored(System.Reflection.Assembly)">
+            <summary>
+            Marks a mod as errored <para/>
+            The mod will appear in the red pop-up which is shows when the game starts
+            </summary>
+            <param name="modAssembly">
+            The assembly of the mod to mark as errored. <para/>
+            </param>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.GetAllMods">
+            <summary>
+            Returns a list of all of the mods
+            </summary>
+            <returns>A read only list of mods containing all of the loaded mods</returns>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.GetAllMods(System.Boolean)">
+            <summary>
+            Returns a list of all of the mods
+            </summary>
+            <param name="includeUnloaded">Set to <see langword="true"/> to also include unloaded mods</param>
+            <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded mods</returns>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.GetAllMods(System.Boolean,System.Boolean)">
+            <summary>
+            Returns a list of all of the mods
+            </summary>
+            <param name="includeUnloaded">Set to <see langword="true"/> to also include unloaded mods</param>
+            <param name="includeErrored">Set to <see langword="true"/> to also include errored mods</param>
+            <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded/errored mods</returns>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.GetMyMod">
+            <summary>
+            Returns the mod from the assembly which called this method
+            </summary>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.GetMod(System.Reflection.Assembly)">
+            <summary>
+            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
+            </summary>
+            <param name="modAssembly"></param>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.GetMod(System.Reflection.Assembly,System.Boolean)">
+            <summary>
+            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
+            </summary>
+            <param name="modAssembly"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.GetMod(System.Reflection.Assembly,System.Boolean,System.Boolean)">
+            <summary>
+            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
+            </summary>
+            <param name="modAssembly"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+            <param name="includeErrored">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.GetMod(System.String)">
+            <summary>
+            Returns a mod from an ID
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.GetMod(System.String,System.Boolean)">
+            <summary>
+            Returns a mod from an ID
+            </summary>
+            <param name="id"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.GetMod(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Returns a mod from an ID
+            </summary>
+            <param name="id"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+            <param name="includeErrored">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.ModPresent(System.Reflection.Assembly)">
+            <summary>
+            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
+            </summary>
+            <param name="modAssembly"></param>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.ModPresent(System.Reflection.Assembly,System.Boolean)">
+            <summary>
+            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
+            </summary>
+            <param name="modAssembly"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.ModPresent(System.Reflection.Assembly,System.Boolean,System.Boolean)">
+            <summary>
+            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
+            </summary>
+            <param name="modAssembly"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+            <param name="includeErrored">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.ModPresent(System.String)">
+            <summary>
+            Checks whether or not a mod is present based on its ID
+            </summary>
+            <param name="id"></param>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.ModPresent(System.String,System.Boolean)">
+            <summary>
+            Checks whether or not a mod is present based on its ID
+            </summary>
+            <param name="id"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.ModPresent(System.String,System.Boolean,System.Boolean)">
+            <summary>
+            Checks whether or not a mod is present based on its ID
+            </summary>
+            <param name="id"></param>
+            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
+            <param name="includeErrored">Whether or not to include unloaded mods</param>
         </member>
         <member name="T:QModManager.Checks.PirateCheck">
             <summary>
