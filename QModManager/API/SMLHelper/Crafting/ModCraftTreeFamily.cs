@@ -39,12 +39,12 @@
         /// </summary>
         public CraftNode CraftNode;
 
-        protected ModCraftTreeLinkingNode Parent = null;
+        internal ModCraftTreeLinkingNode Parent = null;
 
-        protected virtual CraftTree.Type Scheme => this.Parent.Scheme;
-        protected virtual string SchemeAsString => this.Parent.SchemeAsString;
+        internal virtual CraftTree.Type Scheme => this.Parent.Scheme;
+        internal virtual string SchemeAsString => this.Parent.SchemeAsString;
 
-        protected ModCraftTreeNode(string name, TreeAction action, TechType techType)
+        internal ModCraftTreeNode(string name, TreeAction action, TechType techType)
         {
             Name = name;
             Action = action;
@@ -94,7 +94,7 @@
         /// </summary>
         public readonly List<ModCraftTreeNode> ChildNodes = new List<ModCraftTreeNode>();
 
-        protected ModCraftTreeLinkingNode(string name, TreeAction action, TechType techType) : base(name, action, techType) { }
+        internal ModCraftTreeLinkingNode(string name, TreeAction action, TechType techType) : base(name, action, techType) { }
 
         /// <summary>
         /// Creates a new tab node for the crafting tree and links it to the calling node.
@@ -276,8 +276,8 @@
         private readonly string _schemeAsString;
         private readonly CraftTree.Type _scheme;
 
-        protected override string SchemeAsString => _schemeAsString;
-        protected override CraftTree.Type Scheme => _scheme;
+        internal override string SchemeAsString => _schemeAsString;
+        internal override CraftTree.Type Scheme => _scheme;
 
         internal ModCraftTreeRoot(CraftTree.Type scheme, string schemeAsString)
             : base("Root", TreeAction.None, TechType.None)
