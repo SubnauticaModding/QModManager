@@ -114,6 +114,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\QModHooks.cs" />
+    <Compile Include="API\SMLHelper\Crafting\CraftingNode.cs" />
+    <Compile Include="API\SMLHelper\Crafting\ModCraftTreeCraft.cs" />
+    <Compile Include="API\SMLHelper\Crafting\ModCraftTreeLinkingNode.cs" />
+    <Compile Include="API\SMLHelper\Crafting\ModCraftTreeNode.cs" />
+    <Compile Include="API\SMLHelper\Crafting\ModCraftTreeRoot.cs" />
+    <Compile Include="API\SMLHelper\Crafting\ModCraftTreeTab.cs" />
+    <Compile Include="API\SMLHelper\Crafting\Node.cs" />
+    <Compile Include="API\SMLHelper\Crafting\TabNode.cs" />
     <Compile Include="API\SMLHelper\Interfaces\ICustomFishHandler.cs" />
     <Compile Include="API\SMLHelper\Interfaces\IItemStorageHelper.cs" />
     <Compile Include="Checks\PirateCheck.cs" />
@@ -133,7 +141,6 @@
     <Compile Include="Utility\NetworkUtilities.cs" />
     <Compile Include="Utility\ReflectionHelper.cs" />
     <Compile Include="Checks\VersionCheck.cs" />
-    <Compile Include="API\SMLHelper\Crafting\NodeFamily.cs" />
     <Compile Include="API\SMLHelper\Assets\CustomFish.cs" />
     <Compile Include="API\SMLHelper\Assets\CustomFishPrefab.cs" />
     <Compile Include="API\SMLHelper\Patchers\CustomFishPatcher.cs" />
@@ -155,7 +162,6 @@
     <Compile Include="API\SMLHelper\Interfaces\ITechTypeHandler.cs" />
     <Compile Include="API\SMLHelper\Assets\ModPrefab.cs" />
     <Compile Include="API\SMLHelper\Assets\ModSprite.cs" />
-    <Compile Include="API\SMLHelper\Crafting\ModCraftTreeFamily.cs" />
     <Compile Include="API\SMLHelper\Crafting\TechData.cs" />
     <Compile Include="API\SMLHelper\Handlers\BioReactorHandler.cs" />
     <Compile Include="API\SMLHelper\Handlers\CraftDataHandler.cs" />
