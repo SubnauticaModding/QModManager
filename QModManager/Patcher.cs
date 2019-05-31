@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.AccessControl;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using Logger = QModManager.Utility.Logger;
@@ -95,7 +96,7 @@ namespace QModManager
 
                 QModHooks.Load();
 
-                PirateCheck.CheckIfPirate(Environment.CurrentDirectory);
+                PirateCheck.CheckIfPirate();
 
                 if (!DetectGame()) return;
 
@@ -109,6 +110,7 @@ namespace QModManager
                 }
 
                 StartLoadingMods();
+
                 ShowErroredMods();
 
                 VersionCheck.CheckForUpdates();
@@ -132,6 +134,40 @@ namespace QModManager
             Harmony = HarmonyInstance.Create("qmodmanager");
             Harmony.PatchAll();
             Logger.Debug("Patched!");
+        }
+
+
+        private static void UpdateSMLHelper()
+        {
+            try
+            {
+                string oldPath = IOUtilities.Combine(Environment.CurrentDirectory, "QMods", "Modding Helper");
+                string newPath = IOUtilities.Combine(Environment.CurrentDirectory, "QModManager", "SMLHelper");
+
+                if (!Directory.Exists(oldPath)) return;
+
+                if (!Directory.Exists(newPath))
+                    Directory.CreateDirectory(newPath);
+
+                if (File.Exists(Path.Combine(oldPath, "SMLHelper.dll")))
+                    File.Delete(Path.Combine(oldPath, "SMLHelper.dll"));
+                if (File.Exists(Path.Combine(oldPath, "SMLHelper.xml")))
+                    File.Delete(Path.Combine(oldPath, "SMLHelper.xml"));
+                if (File.Exists(Path.Combine(oldPath, "mod.json")))
+                    File.Delete(Path.Combine(oldPath, "mod.json"));
+
+                if (File.Exists(IOUtilities.Combine(Environment.CurrentDirectory, "QModManager", "SMLHelper", ".moved")))
+                    Directory.Delete(oldPath);
+                else
+                {
+                    File.Move(Path.Combine(oldPath, "EnableDebugLogs.txt"), Path.Combine(newPath, "EnableDebugLogs.txt"));
+                    File.Move(Path.Combine(oldPath, "ExtraItemInfo.txt"), Path.Combine(newPath, "ExtraItemInfo.txt"));
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Fatal("There was an error trying to update SMLHelper!")
+            }
         }
 
         #region Mod loading
@@ -359,80 +395,6 @@ namespace QModManager
                 Logger.Error(toWrite.ToArray());
             }
         }
-
-        private static void UpdateSMLHelper()
-        {
-            string oldPath = IOUtilities.Combine(".", "QMods", "Modding Helper");
-            if (File.Exists(Path.Combine(oldPath, "SMLHelper.dll")))
-                File.Delete(Path.Combine(oldPath, "SMLHelper.dll"));
-            if (File.Exists(Path.Combine(oldPath, "mod.json")))
-                File.Delete(Path.Combine(oldPath, "mod.json"));
-
-            // To do in #81
-        }
-
-        /*
-        internal static Dictionary<IQMod, List<MethodInfo>> GetMessageRecievers(Assembly assembly)
-        {
-            IEnumerable<Type> messageReceivers = assembly.GetTypes()
-                           .Where(t => t.IsSubclassOf(typeof(MessageReceiver)));
-
-            IEnumerable<KeyValuePair<IQMod, List<MethodInfo>>> groupedMessageReceivers = messageReceivers
-                           .GroupBy(t =>
-                           {
-                               object instance;
-                               try
-                               {
-                                   instance = t.GetConstructor(Type.EmptyTypes).Invoke(new object[] { });
-                               }
-                               catch
-                               {
-                                   instance = null;
-                               }
-
-                               IQMod From;
-                               if (instance == null)
-                               {
-                                   Logger.Error($"Could not get the targeted QMod from a MessageReceiver in mod \"{QModAPI.GetMod(assembly, true, true).DisplayName}\". The constructor could not be invoked.");
-                                   Logger.Warn($"That MessageReceiver has been turned into a GlobalMessageReceiver.");
-
-                                   From = QMod.QModManagerQMod;
-                               }
-                               else
-                               {
-                                   try
-                                   {
-                                       From = t.GetField("From").GetValue(instance) as IQMod;
-                                   }
-                                   catch
-                                   {
-                                       From = null;
-                                   }
-                               }
-
-                               if (From == null)
-                               {
-                                   Logger.Error($"Could not get the targeted QMod from a MessageReceiver in mod \"{QModAPI.GetMod(assembly, true, true).DisplayName}\". The value of the property \"From\" could not be obtained.");
-                                   Logger.Warn($"That MessageReceiver has been turned into a GlobalMessageReceiver.");
-
-                                   From = QMod.QModManagerQMod;
-                               }
-
-                               return From;
-                           })
-                           .Select(g => new KeyValuePair<IQMod, List<MethodInfo>>(g.Key, g.Select(t => t.GetMethod("OnMessageReceived"))
-                               .ToList()));
-
-            KeyValuePair<IQMod, List<MethodInfo>> globalMessageReceivers = new KeyValuePair<IQMod, List<MethodInfo>>(QMod.QModManagerQMod, assembly.GetTypes()
-                .Where(t => t.IsSubclassOf(typeof(GlobalMessageReceiver)))
-                .Select(t => t.GetMethod("OnMessageReceived"))
-                .ToList());
-
-            Dictionary<IQMod, List<MethodInfo>> finalReceivers = groupedMessageReceivers.Add(globalMessageReceivers).ToDictionary(k => k.Key, v => v.Value);
-
-            return finalReceivers;
-        }
-        */
 
         #endregion
 

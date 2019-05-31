@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Logger = QModManager.Utility.Logger;
 
@@ -32,8 +33,10 @@ namespace QModManager.Checks
             "Subnautica_Data/Plugins/steam_emu.ini",
         };
 
-        internal static void CheckIfPirate(string folder)
+        internal static void CheckIfPirate(string folder = null)
         {
+            folder = folder ?? Environment.CurrentDirectory;
+
             string steamDll = Path.Combine(folder, "steam_api64.dll");
             if (File.Exists(steamDll))
             {
