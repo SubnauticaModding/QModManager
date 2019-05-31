@@ -203,6 +203,12 @@ namespace QModManager.API
 
         public bool Loaded { get; set; }
 
+        public State PreInit() => State.OK;
+
+        public State Init() => State.OK;
+
+        public State PostInit() => State.OK;
+
         internal static JsonQMod FromJsonFile(string file)
         {
             try
