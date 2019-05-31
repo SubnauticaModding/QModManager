@@ -35,6 +35,25 @@ namespace QModManager.API
     }
 
     /// <summary>
+    /// An enum which can be used by modders to tell QModManager about the state of their mod
+    /// </summary>
+    public enum State
+    {
+        /// <summary>
+        /// The mod loaded successfully
+        /// </summary>
+        OK,
+        /// <summary>
+        /// The mod encountered an error and was not loaded
+        /// </summary>
+        Error,
+        /// <summary>
+        /// The mod decided to cancel its load process
+        /// </summary>
+        Cancel,
+    }
+
+    /// <summary>
     /// An interface containing all of the properties of a mod
     /// </summary>
     public interface IQMod : IQModBase, IQModDependencies, IQModLoadOrder { }
@@ -96,6 +115,27 @@ namespace QModManager.API
         /// The game of this mod
         /// </summary>
         Game Game { get; }
+
+        /// <summary>
+        /// Stage one of mod loading <para/>
+        /// Do all your initialization here
+        /// </summary>
+        /// <returns>The state of the mod after pre-initialization</returns>
+        State PreInit();
+
+        /// <summary>
+        /// Stage two of mod loading <para/>
+        /// Do all your API calls and cross-mod stuff here
+        /// </summary>
+        /// <returns>The state of the mod after initialization</returns>
+        State Init();
+
+        /// <summary>
+        /// Final stage of mod loading <para/>
+        /// Finish up loading here
+        /// </summary>
+        /// <returns>The state of the mod after post-initialization</returns>
+        State PostInit();
     }
 
     /// <summary>
