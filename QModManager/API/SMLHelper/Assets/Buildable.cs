@@ -10,11 +10,6 @@
     public abstract class Buildable : PDAItem
     {
         /// <summary>
-        /// Override with the text to be displayed when your hover the cursor over the built item.
-        /// </summary>
-        public virtual string HandOverText => null;
-
-        /// <summary>
         /// Initializes a new <see cref="Buildable"/>, the basic class for any item that can built using the Habitat Builder Tool.
         /// </summary>
         /// <param name="classId">The main internal identifier for this item. Your item's <see cref="TechType" /> will be created using this name.</param>
@@ -29,11 +24,6 @@
         private void PatchBuildable()
         {
             CraftDataHandler.AddBuildable(this.TechType);
-
-            if (!string.IsNullOrEmpty(HandOverText))
-            {
-                LanguageHandler.SetLanguageLine($"{this.ClassID}HandOver", this.HandOverText);
-            }
         }
     }
 }

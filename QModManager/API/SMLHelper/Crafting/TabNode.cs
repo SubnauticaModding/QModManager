@@ -3,28 +3,6 @@
     using Assets;
     using Patchers;
 
-    internal class Node
-    {
-        internal string[] Path { get; set; }
-        internal CraftTree.Type Scheme { get; set; }
-
-        internal Node(string[] path, CraftTree.Type scheme)
-        {
-            Path = path;
-            Scheme = scheme;
-        }
-    }
-
-    internal class CraftingNode : Node
-    {
-        internal TechType TechType { get; set; }
-
-        internal CraftingNode(string[] path, CraftTree.Type scheme, TechType techType) : base(path, scheme)
-        {
-            TechType = techType;
-        }
-    }
-
     internal class TabNode : Node
     {
         internal Atlas.Sprite Sprite { get; set; }
