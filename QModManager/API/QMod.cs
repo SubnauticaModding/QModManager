@@ -1,22 +1,49 @@
 ﻿using Oculus.Newtonsoft.Json;
-using QModManager.API;
 using QModManager.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
-using UnityEngine;
-using Logger = QModManager.Utility.Logger;
 
-namespace QModManager
+namespace QModManager.API
 {
     /// <summary>
-    /// A class containing information about a mod
+    /// An enum which contains possible values for <see cref="QMod.Game"/>
     /// </summary>
-    public class QMod : IQMod
+    [Flags]
+    public enum Game
     {
+        /// <summary>
+        /// No game was detected <para/>
+        /// In theory, this should never be the case
+        /// </summary>
+        None = 0b00,
+        /// <summary>
+        /// Subnautica was detected
+        /// </summary>
+        Subnautica = 0b01,
+        /// <summary>
+        /// Below Zero was detected
+        /// </summary>
+        BelowZero = 0b10,
+        /// <summary>
+        /// Both games were detected <para/>
+        /// In theory, this should never be the case
+        /// </summary>
+        Both = Subnautica | BelowZero,
+    }
+
+    /// <summary>
+    /// An interface containing all of the properties of a mod
+    /// </summary>
+    public interface IQMod : IQModBase, IQModDependencies, IQModLoadOrder { }
+
+    /// <summary>
+    /// An interface containing properties related to a mod's base fields
+    /// </summary>
+    public interface IQModBase
+    {
+        /*
         /// <summary>
         /// The dummy <see cref="QMod"/> which is used to represent QModManager
         /// </summary>
@@ -41,106 +68,101 @@ namespace QModManager
             Version = Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed(),
             VersionDependencies = new Dictionary<string, string>(),
         };
-
-        internal QMod() { }
+        */
 
         /// <summary>
         /// The ID of the mod <para/>
         /// Can only contain alphanumeric characters and underscores: (<see langword="a-z"/>, <see langword="A-Z"/>, <see langword="0-9"/>, <see langword="_"/>)
         /// </summary>
-        public string Id { get; set; } = "";
+        string Id { get; }
 
         /// <summary>
         /// The display name of the mod
         /// </summary>
-        public string DisplayName { get; set; } = "";
+        string DisplayName { get; }
 
         /// <summary>
         /// The author of the mod
         /// </summary>
-        public string Author { get; set; } = "";
+        string Author { get; }
 
         /// <summary>
-        /// The version of the mod <para/>
-        /// Should be have this form: <see langword="MAJOR"/>.<see langword="MINOR"/>.<see langword="BUILD"/>.<see langword="REVISION"/>
+        /// The version of the mod
         /// </summary>
-        public string Version { get; set; } = "";
+        Version Version { get; }
 
+        /// <summary>
+        /// The game of this mod
+        /// </summary>
+        Game Game { get; }
+    }
+
+    /// <summary>
+    /// An interface containing properties related to a mod's dependencies
+    /// </summary>
+    public interface IQModDependencies
+    {
         /// <summary>
         /// The dependencies of the mod <para/>
         /// If you also want to specify the version of required dependencies, see <see cref="VersionDependencies"/>
         /// </summary>
-        public string[] Dependencies { get; set; } = new string[] { };
+        IEnumerable<string> Dependencies { get; }
 
         /// <summary>
         /// The version dependencies of the mod <para/>
         /// </summary>
-        public Dictionary<string, string> VersionDependencies { get; set; } = new Dictionary<string, string>();
+        IDictionary<string, string> VersionDependencies { get; }
+    }
 
+    /// <summary>
+    /// An interface containing properties related to a mod's loading order
+    /// </summary>
+    public interface IQModLoadOrder
+    {
         /// <summary>
         /// A list of mods before which this mod will load
         /// </summary>
-        public string[] LoadBefore { get; set; } = new string[] { };
+        IEnumerable<string> LoadBefore { get; }
 
         /// <summary>
         /// A list of mods after which this mod will load
         /// </summary>
-        public string[] LoadAfter { get; set; } = new string[] { };
+        IEnumerable<string> LoadAfter { get; }
+    }
 
-        /// <summary>
-        /// Whether or not this mod is enabled
-        /// </summary>
-        public bool Enable { get; set; } = true;
+    internal class JsonQMod : IQMod
+    {
+        public string Id { get; set; }
 
-        /// <summary>
-        /// The game of this mod <para/>
-        /// Should be <see langword="Subnautica"/>, <see langword="BelowZero"/>, or <see langword="Both"/>
-        /// </summary>
-        public string Game { get; set; } = "Subnautica";
+        public string DisplayName { get; set; }
 
-        /// <summary>
-        /// The assembly name of the mod (including <see langword=".dll"/>)
-        /// </summary>
-        public string AssemblyName { get; set; } = "";
+        public string Author { get; set; }
 
-        /// <summary>
-        /// The entry method of the mod <para/>
-        /// Should have this form: <see langword="NAMESPACE"/>.<see langword="CLASS"/>.<see langword="METHOD"/>
-        /// </summary>
-        public string EntryMethod { get; set; } = "";
+        public Version Version { get; set; }
 
-        /// <summary>
-        /// The assembly of this mod <para/>
-        /// Check if <see langword="null"/> before using
-        /// </summary>
-        [JsonIgnore] public Assembly LoadedAssembly { get; set; }
+        public Game Game { get; set; }
 
-        /// <summary>
-        /// The parsed <see cref="Version"/> of this mod
-        /// </summary>
-        [JsonIgnore] public Version ParsedVersion { get; set; }
+        public IEnumerable<string> LoadBefore { get; set; }
 
-        /// <summary>
-        /// The parsed <see cref="Patcher.Game"/> of this mod
-        /// </summary>
-        [JsonIgnore] public Patcher.Game ParsedGame { get; set; }
+        public IEnumerable<string> LoadAfter { get; set; }
 
-        /// <summary>
-        /// The dll path of this mod
-        /// </summary>
-        [JsonIgnore] public string ModAssemblyPath { get; set; }
+        public IEnumerable<string> Dependencies { get; set; }
 
-        /// <summary>
-        /// Whether or not this mod is loaded
-        /// </summary>
-        [JsonIgnore] public bool Loaded { get; set; }
+        public IDictionary<string, string> VersionDependencies { get; set; }
 
-        //// <summary>
-        //// The <see cref="MessageReceiver"/>s and <see cref="GlobalMessageReceiver"/>s defined in this mod
-        //// </summary>
-        //[JsonIgnore] public Dictionary<IQMod, List<MethodInfo>> MessageReceivers { get; set; }
+        public string AssemblyName { get; set; }
 
-        internal static QMod FromJsonFile(string file)
+        public string EntryMethod { get; set; }
+
+        public bool Enable { get; set; }
+
+        public Assembly LoadedAssembly { get; set; }
+
+        public string ModAssemblyPath { get; set; }
+
+        public bool Loaded { get; set; }
+
+        internal static IQMod FromJsonFile(string file)
         {
             try
             {
@@ -150,23 +172,129 @@ namespace QModManager
                 };
 
                 string json = File.ReadAllText(file);
-                QMod mod = JsonConvert.DeserializeObject<QMod>(json);
+                Dictionary<string, dynamic> dict = JsonConvert.DeserializeObject<Dictionary<string, dynamic>>(json);
 
-                if (mod == null) return null;
+                if (dict == null) return null;
 
-                if (mod.Game == "BelowZero") mod.ParsedGame = Patcher.Game.BelowZero;
-                else if (mod.Game == "Both") mod.ParsedGame = Patcher.Game.Both;
-                else mod.ParsedGame = Patcher.Game.Subnautica;
+                JsonQMod mod = new JsonQMod();
 
-                try
+                if (dict.TryGetValue("Id", out dynamic id) && id is string)
                 {
-                    mod.ParsedVersion = new Version(mod.Version);
+                    mod.Id = id;
                 }
-                catch (Exception e)
+                else
                 {
-                    Logger.Error($"There was an error parsing version \"{mod.Version}\" for mod \"{mod.DisplayName}\"");
-                    Logger.Exception(e);
-                    mod.ParsedVersion = null;
+                    mod.Id = null;
+                }
+
+                if (dict.TryGetValue("DisplayName", out dynamic displayName) && displayName is string)
+                {
+                    mod.DisplayName = displayName;
+                }
+                else
+                {
+                    mod.DisplayName = null;
+                }
+
+                if (dict.TryGetValue("Author", out dynamic author) && author is string)
+                {
+                    mod.Author = author;
+                }
+                else
+                {
+                    mod.Author = null;
+                }
+
+                if (dict.TryGetValue("Version", out dynamic version) && version is string)
+                {
+                    try
+                    {
+                        mod.Version = new Version(version);
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error($"There was an error parsing version \"{version}\" for mod \"{mod.DisplayName}\"");
+                        Logger.Exception(e);
+                        mod.Version = null;
+                    }
+                }
+                else
+                {
+                    mod.Version = null;
+                }
+
+                if (dict.TryGetValue("Dependencies", out dynamic dependencies) && dependencies is string[])
+                {
+                    mod.Dependencies = dependencies;
+                }
+                else
+                {
+                    mod.Dependencies = new string[0];
+                }
+
+                if (dict.TryGetValue("VersionDependencies", out dynamic versionDependencies) && versionDependencies is Dictionary<string, string>)
+                {
+                    mod.VersionDependencies = versionDependencies;
+                }
+                else
+                {
+                    mod.VersionDependencies = new Dictionary<string, string>();
+                }
+
+                if (dict.TryGetValue("LoadBefore", out dynamic loadBefore) && loadBefore is string[])
+                {
+                    mod.LoadBefore = loadBefore;
+                }
+                else
+                {
+                    mod.LoadBefore = new string[0];
+                }
+
+                if (dict.TryGetValue("LoadAfter", out dynamic loadAfter) && loadAfter is string[])
+                {
+                    mod.LoadAfter = loadAfter;
+                }
+                else
+                {
+                    mod.LoadAfter = new string[0];
+                }
+
+                if (dict.TryGetValue("Enable", out dynamic enable) && enable is bool)
+                {
+                    mod.Enable = enable;
+                }
+                else
+                {
+                    mod.Enable = true;
+                }
+
+                if (dict.TryGetValue("Game", out dynamic game) && game is string)
+                {
+                    if (game == "BelowZero") mod.Game = Game.BelowZero;
+                    else if (game == "Both") mod.Game = Game.Both;
+                    else mod.Game = Game.Subnautica;
+                }
+                else
+                {
+                    mod.Game = Game.Subnautica;
+                }
+
+                if (dict.TryGetValue("AssemblyName", out dynamic assemblyName) && assemblyName is string)
+                {
+                    mod.AssemblyName = assemblyName;
+                }
+                else
+                {
+                    mod.AssemblyName = null;
+                }
+
+                if (dict.TryGetValue("EntryMethod", out dynamic entryMethod) && entryMethod is string)
+                {
+                    mod.EntryMethod = entryMethod;
+                }
+                else
+                {
+                    mod.EntryMethod = null;
                 }
 
                 return mod;
@@ -301,107 +429,5 @@ namespace QModManager
 
             return success;
         }
-    }
-
-    /// <summary>
-    /// A read-only <see cref="QMod"/>
-    /// </summary>
-    public interface IQMod
-    {
-        /// <summary>
-        /// The ID of the mod <para/>
-        /// Can only contain alphanumeric characters and underscores: (<see langword="a-z"/>, <see langword="A-Z"/>, <see langword="0-9"/>, <see langword="_"/>)
-        /// </summary>
-        string Id { get; }
-
-        /// <summary>
-        /// The display name of the mod
-        /// </summary>
-        string DisplayName { get; }
-
-        /// <summary>
-        /// The author of the mod
-        /// </summary>
-        string Author { get; }
-
-        /// <summary>
-        /// The version of the mod <para/>
-        /// Should be have this form: <see langword="MAJOR"/>.<see langword="MINOR"/>.<see langword="BUILD"/>.<see langword="REVISION"/>
-        /// </summary>
-        string Version { get; }
-
-        /// <summary>
-        /// The dependencies of the mod <para/>
-        /// If you also want to specify the version of required dependencies, see <see cref="VersionDependencies"/>
-        /// </summary>
-        string[] Dependencies { get; }
-
-        /// <summary>
-        /// The version dependencies of the mod <para/>
-        /// </summary>
-        Dictionary<string, string> VersionDependencies { get; }
-
-        /// <summary>
-        /// A list of mods before which this mod will load
-        /// </summary>
-        string[] LoadBefore { get; }
-
-        /// <summary>
-        /// A list of mods after which this mod will load
-        /// </summary>
-        string[] LoadAfter { get; }
-
-        /// <summary>
-        /// Whether or not this mod is enabled
-        /// </summary>
-        bool Enable { get; }
-
-        /// <summary>
-        /// The game of this mod <para/>
-        /// Should be <see langword="Subnautica"/>, <see langword="BelowZero"/>, or <see langword="Both"/>
-        /// </summary>
-        string Game { get; }
-
-        /// <summary>
-        /// The assembly name of the mod (including <see langword=".dll"/>)
-        /// </summary>
-        string AssemblyName { get; }
-
-        /// <summary>
-        /// The entry method of the mod <para/>
-        /// Should have this form: <see langword="NAMESPACE"/>.<see langword="CLASS"/>.<see langword="METHOD"/>
-        /// </summary>
-        string EntryMethod { get; }
-
-        /// <summary>
-        /// The assembly of this mod <para/>
-        /// Check if <see langword="null"/> before using
-        /// </summary>
-        Assembly LoadedAssembly { get; }
-
-        /// <summary>
-        /// The parsed <see cref="Version"/> of this mod
-        /// </summary>
-        Version ParsedVersion { get; }
-
-        /// <summary>
-        /// The parsed <see cref="Patcher.game"/> of this mod
-        /// </summary>
-        Patcher.Game ParsedGame { get; }
-
-        /// <summary>
-        /// The dll path of this mod
-        /// </summary>
-        string ModAssemblyPath { get; }
-
-        /// <summary>
-        /// Whether or not this mod is loaded
-        /// </summary>
-        bool Loaded { get; }
-
-        //// <summary>
-        //// The <see cref="MessageReceiver"/>s and <see cref="GlobalMessageReceiver"/>s defined in this mod
-        //// </summary>
-        //Dictionary<IQMod, List<MethodInfo>> MessageReceivers { get; }
     }
 }
