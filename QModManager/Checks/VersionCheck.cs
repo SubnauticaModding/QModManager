@@ -5,15 +5,15 @@ using System.Reflection;
 using UnityEngine;
 using Logger = QModManager.Utility.Logger;
 
-namespace QModManager
+namespace QModManager.Checks
 {
     internal static class VersionCheck
     {
         internal const string snNexus = "https://nexusmods.com/subnautica/mods/201";
         internal const string bzNexus = "https://nexusmods.com/subnauticabelowzero/mods/1";
-        internal const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/master/Data/latest-version.txt";
+        private const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/master/Data/latest-version.txt";
 
-        internal static void Check()
+        internal static void CheckForUpdates()
         {
             if (PlayerPrefs.GetInt("QModManager_EnableUpdateCheck", 1) == 0)
             {
@@ -46,7 +46,8 @@ namespace QModManager
                 client.DownloadStringAsync(new Uri(VersionURL));
             }
         }
-        internal static void Parse(string versionStr)
+
+        private static void Parse(string versionStr)
         {
             try
             {
@@ -69,7 +70,7 @@ namespace QModManager
                     {
                         Dialog.Show(
                             $"There is a newer version of QModManager available: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()})",
-                            Dialog.Button.download, Dialog.Button.close, true);
+                            Dialog.Button.Download, Dialog.Button.Close, true);
                     }
                 }
                 else

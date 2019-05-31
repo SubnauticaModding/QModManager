@@ -1,38 +1,52 @@
 ﻿using Harmony;
-using QModManager.Utility;
+using QModManager.API.SMLHelper.Utility;
 using UnityEngine.Events;
 
 namespace QModManager
 {
     internal static class OptionsManager
     {
-        internal static bool DebuggerEnabled { get => PlayerPrefsExtra.GetBool("QModManager_PrefabDebugger_EnableExperimental", false); }
+        internal static int ModsTab;
 
         [HarmonyPatch(typeof(uGUI_OptionsPanel), "AddTabs")]
-        internal static class OptionsPatch
+        private static class OptionsPatch
         {
             [HarmonyPostfix]
-            internal static void Postfix(uGUI_OptionsPanel __instance)
+            private static void Postfix(uGUI_OptionsPanel __instance)
             {
-                int modsTab = __instance.AddTab("Mods");
-                __instance.AddHeading(modsTab, "QModManager");
+                ModsTab = __instance.AddTab("Mods");
+                __instance.AddHeading(ModsTab, "QModManager");
 
-                bool enableDebugLogs = PlayerPrefsExtra.GetBool("QModManager_EnableDebugLogs", false);
-                __instance.AddToggleOption(modsTab, "Enable debug logs", enableDebugLogs,
-                    new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_EnableDebugLogs", toggleVal)));
-
-                bool updateCheck = PlayerPrefsExtra.GetBool("QModManager_EnableUpdateCheck", true);
-                __instance.AddToggleOption(modsTab, "Check for updates", updateCheck,
-                    new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_EnableUpdateCheck", toggleVal)));
-
-                bool enableDebugger = PlayerPrefsExtra.GetBool("QModManager_PrefabDebugger_EnableExperimental", false);
-                __instance.AddToggleOption(modsTab, "Enable prefab debugger (experimental)", enableDebugger,
-                    new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_PrefabDebugger_EnableExperimental", toggleVal)));
-
-                /*bool enableDebugger = PlayerPrefsExtra.GetBool("QModManager_PrefabDebugger_Enable", true);
-                __instance.AddToggleOption(modsTab, "Enable prefab debugger", enableDebugger,
-                    new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_PrefabDebugger_Enable", toggleVal)));*/
+                AddOptions(__instance);
             }
         }
+
+        private static void AddOptions(uGUI_OptionsPanel options)
+        {
+            bool enableDebugLogs = PlayerPrefsExtra.GetBool("QModManager_EnableDebugLogs", false);
+            options.AddToggleOption(ModsTab, "Enable debug logs", enableDebugLogs,
+                new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_EnableDebugLogs", toggleVal)));
+
+            bool updateCheck = PlayerPrefsExtra.GetBool("QModManager_EnableUpdateCheck", true);
+            options.AddToggleOption(ModsTab, "Check for updates", updateCheck,
+                new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_EnableUpdateCheck", toggleVal)));
+        }
+
+        /*
+        
+        internal static bool DebuggerEnabled { get => PlayerPrefsExtra.GetBool("QModManager_PrefabDebugger_EnableExperimental", false); }
+        
+        private static void AddDebuggerOptions(uGUI_OptionsPanel options)
+        {
+            bool enableDebugger = PlayerPrefsExtra.GetBool("QModManager_PrefabDebugger_EnableExperimental", false);
+            options.AddToggleOption(ModsTab, "Enable prefab debugger (experimental)", enableDebugger,
+                new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_PrefabDebugger_EnableExperimental", toggleVal)));
+
+            bool enableDebuggerOld = PlayerPrefsExtra.GetBool("QModManager_PrefabDebugger_Enable", true);
+            options.AddToggleOption(ModsTab, "Enable prefab debugger", enableDebuggerOld,
+                new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_PrefabDebugger_Enable", toggleVal)));
+        }
+        
+        */
     }
 }

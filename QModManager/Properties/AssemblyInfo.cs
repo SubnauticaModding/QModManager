@@ -11,11 +11,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
+[assembly: AssemblyVersion("3.0")]
+[assembly: AssemblyFileVersion("3.0")]
+
+[assembly: InternalsVisibleTo("QModManager")] // Executable
+[assembly: InternalsVisibleTo("QMMTests")] // Unit Tests
+
 [assembly: ComVisible(false)]
-
-[assembly: AssemblyVersion("2.1")]
-[assembly: AssemblyFileVersion("2.1")]
-
-[assembly: InternalsVisibleTo("QMMTests")]
-[assembly: InternalsVisibleTo("QModManager")]
-[assembly: InternalsVisibleTo("SMLHelper")]

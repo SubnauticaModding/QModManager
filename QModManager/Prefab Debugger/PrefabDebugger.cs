@@ -80,7 +80,7 @@ namespace QModManager.Debugger
 
         internal static void Main()
         {
-            var debugger = new GameObject("PrefabDebugger");
+            GameObject debugger = new GameObject("PrefabDebugger");
             debugger.AddComponent<PrefabDebugger>();
             debuggerRectTransform = debugger.AddComponent<RectTransform>();
             inputGroup = debugger.AddComponent<uGUI_InputGroup>();
@@ -139,7 +139,7 @@ namespace QModManager.Debugger
 
         internal void LateUpdate()
         {
-            if (Input.GetKeyDown(KeyCode.F9) && OptionsManager.DebuggerEnabled || showDebugger && Input.GetKeyDown(KeyCode.Escape))
+            if ((Input.GetKeyDown(KeyCode.F9) && OptionsManager.DebuggerEnabled) || (showDebugger && Input.GetKeyDown(KeyCode.Escape)))
             {
                 showDebugger = !showDebugger;
                 UWE.Utils.alwaysLockCursor = false;
@@ -184,7 +184,7 @@ namespace QModManager.Debugger
             }
             if (draggedGameObject != null)
             {
-                var mousePos = Event.current.mousePosition;
+                Vector2 mousePos = Event.current.mousePosition;
                 dragRect = GUILayout.Window(1, new Rect(mousePos.x + 10, mousePos.y - 10, 200, 20), ShowChangeParentWindow, "", "Blank", GUILayout.ExpandWidth(true));
             }
             if (colorProperty != null && component != null)
@@ -354,7 +354,6 @@ namespace QModManager.Debugger
 
                 pauseWhenWindowOpen = GUILayout.Toggle(pauseWhenWindowOpen, "Pause When Prefab Debugger is Open");
 
-
                 GUILayout.Label("Property Settings", "HeaderLabel");
 
                 showReadonlyProperties = GUILayout.Toggle(showReadonlyProperties, "Show Readonly Properties");
@@ -508,9 +507,7 @@ namespace QModManager.Debugger
                 trans.eulerAngles = ShowVectorField(trans.eulerAngles, "Rotation");
                 trans.localScale = ShowVectorField(trans.localScale, "Scale");
 
-
                 GUILayout.EndVertical();
-
 
                 //By calling GetComponents with the Behaviour class, we can get every component that can 100% be disabled. 
                 //Needs to be refactored because this code is super bad
@@ -540,7 +537,7 @@ namespace QModManager.Debugger
                     GUILayout.BeginVertical();
                     GUILayout.BeginHorizontal();
                     GUILayout.Label(comp.GetType().Name, GUILayout.ExpandWidth(false));
-                    var property = comp.GetType().GetProperty("enabled");
+                    PropertyInfo property = comp.GetType().GetProperty("enabled");
                     if (property != null)
                     {
                         property.SetValue(comp, GUILayout.Toggle((bool)(property.GetValue(comp, null)), "", "SmallToggle"), null);
@@ -573,7 +570,7 @@ namespace QModManager.Debugger
                         {
                             if (showBlacklistedProperties || Array.IndexOf(propertyBlacklist, property.Name) == -1)
                             {
-                                var value = property.GetValue(comp, null);
+                                object value = property.GetValue(comp, null);
                                 if ((property.GetSetMethod() == null || !property.GetSetMethod().IsPublic))
                                 {
                                     GUILayout.Label(property.Name + " (Read Only)", "NormalLabel", GUILayout.ExpandHeight(false), GUILayout.Width(300));
@@ -653,7 +650,7 @@ namespace QModManager.Debugger
                                 }
                                 else if (value.GetType() == typeof(Color))
                                 {
-                                    var val = (Color)value;
+                                    Color val = (Color)value;
                                     if (GUILayout.Button(MakeTex(200, 20, val), "Blank"))
                                     {
                                         if (Input.GetMouseButtonUp(0))
@@ -739,7 +736,6 @@ namespace QModManager.Debugger
                     }
 
                     GUILayout.EndHorizontal();
-
                 }
                 else if (node.Item.source == null && depth == 0)
                 {
@@ -810,7 +806,7 @@ namespace QModManager.Debugger
                 opened = false
             };
 
-            var child = parent.AddChild(node);
+            TreeNode<HierarchyItem> child = parent.AddChild(node);
             for (int i = 0; i < target.transform.childCount; i++)
             {
                 PopulateTreeRecursively(target.transform.GetChild(i).gameObject, child);
@@ -823,7 +819,7 @@ namespace QModManager.Debugger
         [Obsolete("Broken", true)]
         internal void RepopulateTreeRecursively()
         {
-            var updatedSceneTree = new TreeNode<HierarchyItem>();
+            TreeNode<HierarchyItem> updatedSceneTree = new TreeNode<HierarchyItem>();
 
             Scene scene = SceneManager.GetActiveScene();
             //Get an updated version of the Scene to merge with
@@ -839,7 +835,7 @@ namespace QModManager.Debugger
         {
             foreach (TreeNode<HierarchyItem> item in source.Children)
             {
-                var match = target.Children.Find(x => x.Item.source = item.Item.source);
+                TreeNode<HierarchyItem> match = target.Children.Find(x => x.Item.source = item.Item.source);
                 if (match == null)
                 {
                     target.Children.Add(item);

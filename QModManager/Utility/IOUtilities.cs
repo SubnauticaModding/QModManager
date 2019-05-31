@@ -4,9 +4,40 @@ using System.IO;
 
 namespace QModManager.Utility
 {
-    internal static class IOUtilities
+    /// <summary>
+    /// Utilities for files and paths
+    /// </summary>
+    public static class IOUtilities
     {
-        internal static readonly HashSet<string> BannedFolders = new HashSet<string>()
+        /// <summary>
+        /// Works like <see cref="Path.Combine(string, string)"/>, but can have more than 2 paths
+        /// </summary>
+        /// <param name="one"></param>
+        /// <param name="two"></param>
+        /// <param name="rest"></param>
+        /// <returns></returns>
+        public static string Combine(string one, string two, params string[] rest)
+        {
+            string path = Path.Combine(one, two);
+
+            foreach (string str in rest)
+            {
+                path = Path.Combine(path, str);
+            }
+
+            return path;
+        }
+
+        #region Folder structure
+
+        internal static void LogFolderStructureAsTree(string directory = null)
+        {
+            Logger.Info($"Folder structure:");
+            Console.WriteLine(GetFolderStructureAsTree(directory));
+            Console.WriteLine();
+        }
+
+        private static readonly HashSet<string> BannedFolders = new HashSet<string>()
         {
             "OST",
             "SNAppData",
@@ -17,13 +48,13 @@ namespace QModManager.Utility
             "Subnautica_Data/StreamingAssets",
         };
 
-        internal static string GetFolderStructureAsTree(string directory = null)
+        private static string GetFolderStructureAsTree(string directory = null)
         {
             try
             {
                 directory = directory ?? Environment.CurrentDirectory;
 
-                return GenerateFolderStructure(directory) + "\n";
+                return GenerateFolderStructure(directory) + Environment.NewLine;
             }
             catch (Exception e)
             {
@@ -31,11 +62,11 @@ namespace QModManager.Utility
             }
         }
 
-        internal static string GenerateFolderStructure(string directory)
+        private static string GenerateFolderStructure(string directory)
         {
             try
             {
-                string toWrite = $"+ {new DirectoryInfo(directory).Name}\n";
+                string toWrite = $"+ {new DirectoryInfo(directory).Name}{Environment.NewLine}";
 
                 foreach (string dir in Directory.GetDirectories(directory))
                 {
@@ -47,9 +78,9 @@ namespace QModManager.Utility
                 {
                     FileInfo fileinfo = new FileInfo(files[i - 1]);
                     if (i != files.Length)
-                        toWrite += $"{GenerateSpaces(0)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})\n";
+                        toWrite += $"{GenerateSpaces(0)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)}){Environment.NewLine}";
                     else 
-                        toWrite += $"{GenerateSpaces(0)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})\n";
+                        toWrite += $"{GenerateSpaces(0)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)}){Environment.NewLine}";
                 }
 
                 return toWrite;
@@ -59,16 +90,17 @@ namespace QModManager.Utility
                 throw e;
             }
         }
-        internal static string GetFolderStructureRecursively(string directory, int spaces = 0)
+
+        private static string GetFolderStructureRecursively(string directory, int spaces = 0)
         {
             try
             {
                 DirectoryInfo dirInfo = new DirectoryInfo(directory);
-                string toWrite = $"{GenerateSpaces(spaces)}|---+ {dirInfo.Name}\n";
+                string toWrite = $"{GenerateSpaces(spaces)}|---+ {dirInfo.Name}{Environment.NewLine}";
 
                 if (BannedFolders.Contains(dirInfo.Name) || BannedFolders.Contains($"{dirInfo.Parent.Name}/{dirInfo.Name}"))
                 {
-                    toWrite += $"{GenerateSpaces(spaces + 4)}`---- ({GetFileCountRecursively(directory)} elements not shown...)\n";
+                    toWrite += $"{GenerateSpaces(spaces + 4)}`---- ({GetFileCountRecursively(directory)} elements not shown...){Environment.NewLine}";
                     return toWrite;
                 }
 
@@ -82,9 +114,9 @@ namespace QModManager.Utility
                 {
                     FileInfo fileinfo = new FileInfo(files[i - 1]);
                     if (i != files.Length)
-                        toWrite += $"{GenerateSpaces(spaces + 4)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})\n";
+                        toWrite += $"{GenerateSpaces(spaces + 4)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)}){Environment.NewLine}";
                     else
-                        toWrite += $"{GenerateSpaces(spaces + 4)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})\n";
+                        toWrite += $"{GenerateSpaces(spaces + 4)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)}){Environment.NewLine}";
                 }
 
                 return toWrite;
@@ -95,7 +127,15 @@ namespace QModManager.Utility
             }
         }
 
-        internal static string ParseSize(long lsize)
+        private static int GetFileCountRecursively(string directory)
+        {
+            int c = 0;
+            foreach (string file in Directory.GetFiles(directory)) c++;
+            foreach (string dir in Directory.GetDirectories(directory)) c += GetFileCountRecursively(dir);
+            return c;
+        }
+
+        private static string ParseSize(long lsize)
         {
             string[] units = new[] { "B", "KB", "MB", "GB" };
             float size = lsize;
@@ -114,7 +154,7 @@ namespace QModManager.Utility
             return number + units[unit];
         }
 
-        internal static string GenerateSpaces(int spaces)
+        private static string GenerateSpaces(int spaces)
         {
             string s = "";
             for (int i = 1; i <= spaces; i += 4)
@@ -122,12 +162,6 @@ namespace QModManager.Utility
             return s;
         }
 
-        internal static int GetFileCountRecursively(string directory)
-        {
-            int c = 0;
-            foreach (string file in Directory.GetFiles(directory)) c++;
-            foreach (string dir in Directory.GetDirectories(directory)) c += GetFileCountRecursively(dir);
-            return c;
-        }
+        #endregion
     }
 }

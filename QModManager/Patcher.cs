@@ -1,7 +1,8 @@
 using Harmony;
 using Oculus.Newtonsoft.Json;
 using QModManager.API;
-using QModManager.Debugger;
+using QModManager.API.SMLHelper;
+using QModManager.Checks;
 using QModManager.Utility;
 using SemVer;
 using System;
@@ -9,6 +10,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using Logger = QModManager.Utility.Logger;
 
@@ -19,10 +21,21 @@ namespace QModManager
     /// </summary>
     public static class Patcher
     {
-        internal const string IDRegex = "[^0-9a-z_]";
+        internal static HarmonyInstance Harmony;
 
-        internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? null : Path.Combine(Environment.CurrentDirectory, "QMods");
-        internal static bool patched = false;
+        internal static readonly Regex IDRegex = new Regex("[^0-9a-z_]", RegexOptions.IgnoreCase);
+
+        internal static string QModBaseDir
+        {
+            get
+            {
+                if (Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows"))
+                    return null;
+                else
+                    return Path.Combine(Environment.CurrentDirectory, "QMods");
+            }
+        }
+        private static bool Patched = false;
 
         internal static List<QMod> foundMods = new List<QMod>();
         internal static List<QMod> sortedMods = new List<QMod>();
@@ -33,12 +46,12 @@ namespace QModManager
         {
             try
             {
-                if (patched)
+                if (Patched)
                 {
                     Logger.Warn("Patch method was called multiple times!");
                     return;
                 }
-                patched = true;
+                Patched = true;
 
                 Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}...");
 
@@ -52,7 +65,7 @@ namespace QModManager
 
                 try
                 {
-                    Logger.Info($"Folder structure:\n{IOUtilities.GetFolderStructureAsTree()}\n");
+                    IOUtilities.LogFolderStructureAsTree();
                 }
                 catch (Exception e)
                 {
@@ -61,11 +74,8 @@ namespace QModManager
                 }
 
                 QModHooks.Load();
-#pragma warning disable CS0618 // Type or member is obsolete
-                Hooks.Load();
-#pragma warning restore CS0618 // Type or member is obsolete
 
-                PirateCheck.IsPirate(Environment.CurrentDirectory);
+                PirateCheck.CheckIfPirate(Environment.CurrentDirectory);
 
                 if (!DetectGame()) return;
 
@@ -74,23 +84,23 @@ namespace QModManager
                 if (NitroxCheck.IsInstalled)
                 {
                     Logger.Fatal($"Nitrox was detected!");
-                    Dialog.Show("Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.", Dialog.Button.disabled, Dialog.Button.disabled, false);
+                    Dialog.Show("Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.", Dialog.Button.Disabled, Dialog.Button.Disabled, false);
                     return;
                 }
 
                 StartLoadingMods();
                 ShowErroredMods();
 
-                VersionCheck.Check();
+                VersionCheck.CheckForUpdates();
 
-                QModHooks.Start += PrefabDebugger.Main;
+                //QModHooks.Start += PrefabDebugger.Main;
+
+                UpdateSMLHelper();
+                Initializer.PostPostInit();
 
                 QModHooks.OnLoadEnd?.Invoke();
-#pragma warning disable CS0618 // Type or member is obsolete
-                Hooks.OnLoadEnd?.Invoke();
-#pragma warning restore CS0618 // Type or member is obsolete
 
-                Logger.Info($"Finished loading QModManager. Loaded {loadedMods.Count} mods");
+                Logger.Info($"Finished loading QModManager. Loaded {loadedMods.Count} mods.");
             }
             catch (Exception e)
             {
@@ -99,15 +109,16 @@ namespace QModManager
             }
         }
 
-        internal static void PatchHarmony()
+        private static void PatchHarmony()
         {
-            HarmonyInstance.Create("qmodmanager").PatchAll();
+            Harmony = HarmonyInstance.Create("qmodmanager");
+            Harmony.PatchAll();
             Logger.Debug("Patched!");
         }
 
         #region Mod loading
 
-        internal static void StartLoadingMods()
+        private static void StartLoadingMods()
         {
             Logger.Info("Started loading mods");
 
@@ -208,76 +219,52 @@ namespace QModManager
             LoadAllMods();
         }
 
-        internal static void LoadAllMods()
+        private static void LoadAllMods()
         {
-            string toWrite = "Loaded mods:\n";
+            List<string> toWrite = new List<string> { "Loaded mods:" };
 
             List<QMod> loadingErrorMods = new List<QMod>();
-            QMod smlHelper = null;
 
             foreach (QMod mod in sortedMods)
             {
                 if (mod != null && !mod.Loaded)
                 {
-                    if (mod.Id != "SMLHelper")
+                    if (!LoadMod(mod))
                     {
-                        if (!LoadMod(mod))
-                        {
-                            if (!erroredMods.Contains(mod))
-                                erroredMods.Add(mod);
+                        if (!erroredMods.Contains(mod))
+                            erroredMods.Add(mod);
 
-                            if (!loadingErrorMods.Contains(mod))
-                                loadingErrorMods.Add(mod);
+                        if (!loadingErrorMods.Contains(mod))
+                            loadingErrorMods.Add(mod);
 
-                            continue;
-                        }
-                        else
-                        {
-                            toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
-                            loadedMods.Add(mod);
-                        }
+                        continue;
                     }
                     else
                     {
-                        smlHelper = mod;
+                        toWrite.Add($"- {mod.DisplayName} ({mod.Id})");
+                        loadedMods.Add(mod);
                     }
-                }
-            }
-            if (smlHelper != null)
-            {
-                if (!LoadMod(smlHelper))
-                {
-                    if (!erroredMods.Contains(smlHelper))
-                        erroredMods.Add(smlHelper);
-
-                    if (!loadingErrorMods.Contains(smlHelper))
-                        loadingErrorMods.Add(smlHelper);
-                }
-                else
-                {
-                    toWrite += $"- {smlHelper.DisplayName} ({smlHelper.Id})\n";
-                    loadedMods.Add(smlHelper);
                 }
             }
 
             if (loadingErrorMods.Count != 0)
             {
-                string write = "The following mods could not be loaded:\n";
+                List<string> write = new List<string> { "The following mods could not be loaded:" };
 
                 foreach (QMod mod in loadingErrorMods)
                 {
-                    write += $"- {mod.DisplayName} ({mod.Id})\n";
+                    write.Add($"- {mod.DisplayName} ({mod.Id})");
                 }
 
-                Logger.Error(write);
+                Logger.Error(write.ToArray());
             }
 
-            Logger.Info(toWrite);
+            Logger.Info(toWrite.ToArray());
 
             CheckOldHarmony();
         }
 
-        internal static bool LoadMod(QMod mod)
+        private static bool LoadMod(QMod mod)
         {
             if (mod == null || mod.Loaded) return false;
 
@@ -323,7 +310,7 @@ namespace QModManager
             return true;
         }
 
-        internal static void RemoveDuplicateModIDs()
+        private static void RemoveDuplicateModIDs()
         {
             List<QMod> duplicateModIDs = new List<QMod>();
 
@@ -342,15 +329,26 @@ namespace QModManager
 
             if (duplicateModIDs.Count > 0)
             {
-                string toWrite = $"Multiple mods with the same ID found:\n";
+                List<string> toWrite = new List<string> { $"Multiple mods with the same ID found:" };
                 foreach (QMod mod in duplicateModIDs)
                 {
                     if (sortedMods.Contains(mod)) sortedMods.Remove(mod);
-                    toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
+                    toWrite.Add($"- {mod.DisplayName} ({mod.Id})");
                 }
 
-                Logger.Error(toWrite);
+                Logger.Error(toWrite.ToArray());
             }
+        }
+
+        private static void UpdateSMLHelper()
+        {
+            string oldPath = IOUtilities.Combine(".", "QMods", "Modding Helper");
+            if (File.Exists(Path.Combine(oldPath, "SMLHelper.dll")))
+                File.Delete(Path.Combine(oldPath, "SMLHelper.dll"));
+            if (File.Exists(Path.Combine(oldPath, "mod.json")))
+                File.Delete(Path.Combine(oldPath, "mod.json"));
+
+            // To do in #81
         }
 
         /*
@@ -448,7 +446,7 @@ namespace QModManager
 
         internal static Game game;
 
-        internal static bool DetectGame()
+        private static bool DetectGame()
         {
             bool sn = Directory.GetFiles(Environment.CurrentDirectory, "Subnautica.exe", SearchOption.TopDirectoryOnly).Length > 0
                 || Directory.GetFiles(Environment.CurrentDirectory, "Subnautica.app", SearchOption.TopDirectoryOnly).Length > 0
@@ -484,7 +482,7 @@ namespace QModManager
             return false;
         }
 
-        internal static void DisableNonApplicableMods()
+        private static void DisableNonApplicableMods()
         {
             List<QMod> nonApplicableMods = new List<QMod>();
             sortedMods = sortedMods.Where(mod =>
@@ -498,17 +496,17 @@ namespace QModManager
 
             if (nonApplicableMods.Count > 0)
             {
-                string toWrite = $"The following {GetOtherGame()} mods were not loaded because {game.ToString()} was detected:\n";
+                List<string> toWrite = new List<string> { $"The following {GetOtherGame()} mods were not loaded because {game.ToString()} was detected:" };
                 foreach (QMod mod in nonApplicableMods)
                 {
-                    toWrite += $"- {mod.DisplayName} ({mod.Id})\n";
+                    toWrite.Add($"- {mod.DisplayName} ({mod.Id})");
                 }
 
-                Logger.Warn(toWrite);
+                Logger.Warn(toWrite.ToArray());
             }
         }
 
-        internal static string GetOtherGame()
+        private static string GetOtherGame()
         {
             if (game == Game.Subnautica) return "BelowZero";
             else return "Subnautica";
@@ -520,7 +518,7 @@ namespace QModManager
 
         internal static List<QMod> modSortingChain = new List<QMod>();
 
-        internal static void SortMods()
+        private static void SortMods()
         {
             // Contains all the mods that errored out during the sorting process.
             List<List<QMod>> sortingErrorLoops = new List<List<QMod>>();
@@ -561,7 +559,7 @@ namespace QModManager
 
             if (sortingErrorLoops.Count != 0)
             {
-                Logger.Error("There was en error while sorting some mods!\nPlease check the 'LoadAfter' and 'LoadBefore' properties of these mods:\n");
+                Logger.Error("There was en error while sorting some mods!", "Please check the 'LoadAfter' and 'LoadBefore' properties of these mods:");
 
                 foreach (List<QMod> list in sortingErrorLoops)
                 {
@@ -588,7 +586,7 @@ namespace QModManager
             modSortingChain.Add(mod);
 
             // Get all the duplicates present in the chain
-            var duplicates = modSortingChain.GroupBy(s => s)
+            List<QMod> duplicates = modSortingChain.GroupBy(s => s)
                 .SelectMany(grp => grp.Skip(1))
                 .ToList();
 
@@ -690,7 +688,7 @@ namespace QModManager
             return true;
         }
 
-        internal static List<QMod> GetLoadBefore(QMod mod)
+        private static List<QMod> GetLoadBefore(QMod mod)
         {
             if (mod == null) return null;
 
@@ -708,7 +706,7 @@ namespace QModManager
             return mods;
         }
 
-        internal static List<QMod> GetLoadAfter(QMod mod)
+        private static List<QMod> GetLoadAfter(QMod mod)
         {
             if (mod == null) return null;
 
@@ -786,7 +784,7 @@ namespace QModManager
             }
         }
 
-        internal static List<QMod> GetPresentDependencies(QMod mod)
+        private static List<QMod> GetPresentDependencies(QMod mod)
         {
             if (mod == null) return null;
 
@@ -794,12 +792,6 @@ namespace QModManager
 
             foreach (string dependencyId in mod.Dependencies)
             {
-                if (dependencyId == "QModManager")
-                {
-                    dependencies.Add(QMod.QModManagerQMod);
-                    continue;
-                }
-
                 foreach (QMod dependencyMod in sortedMods)
                 {
                     if (dependencyId == dependencyMod.Id)
@@ -809,7 +801,30 @@ namespace QModManager
 
             return dependencies;
         }
-        internal static List<QMod> GetPresentVersionDependencies(QMod mod)
+
+        private static List<string> GetMissingDependencies(QMod mod, List<QMod> presentDependencies)
+        {
+            if (mod == null) return null;
+            if (presentDependencies == null || presentDependencies.Count() == 0) return mod.Dependencies.ToList();
+
+            List<string> dependenciesMissing = new List<string>(mod.Dependencies);
+
+            dependenciesMissing = dependenciesMissing.Where(dep => dep != "QModManager").ToList();
+            dependenciesMissing = dependenciesMissing.Where(dep => dep != "SMLHelper").ToList();
+
+            foreach (string dependencyId in mod.Dependencies)
+            {
+                foreach (QMod presentDependency in presentDependencies)
+                {
+                    if (dependencyId == presentDependency.Id)
+                        dependenciesMissing.Remove(dependencyId);
+                }
+            }
+
+            return dependenciesMissing;
+        }
+
+        private static List<QMod> GetPresentVersionDependencies(QMod mod)
         {
             if (mod == null) return null;
 
@@ -861,30 +876,14 @@ namespace QModManager
             return dependencies;
         }
 
-        internal static List<string> GetMissingDependencies(QMod mod, List<QMod> presentDependencies)
-        {
-            if (mod == null) return null;
-            if (presentDependencies == null || presentDependencies.Count() == 0) return mod.Dependencies.ToList();
-
-            List<string> dependenciesMissing = new List<string>(mod.Dependencies);
-
-            foreach (string dependencyId in mod.Dependencies)
-            {
-                foreach (QMod presentDependency in presentDependencies)
-                {
-                    if (dependencyId == presentDependency.Id)
-                        dependenciesMissing.Remove(dependencyId);
-                }
-            }
-
-            return dependenciesMissing;
-        }
-        internal static List<KeyValuePair<string, string>> GetMissingVersionDependencies(QMod mod, List<QMod> presentDependencies)
+        private static List<KeyValuePair<string, string>> GetMissingVersionDependencies(QMod mod, List<QMod> presentDependencies)
         {
             if (mod == null) return null;
             if (presentDependencies == null || presentDependencies.Count() == 0) return mod.VersionDependencies.ToList();
 
             List<KeyValuePair<string, string>> dependenciesMissing = new List<KeyValuePair<string, string>>(mod.VersionDependencies);
+
+            dependenciesMissing = dependenciesMissing.Where(kvp => kvp.Key != "SMLHelper").ToList();
 
             foreach (KeyValuePair<string, string> dependency in mod.VersionDependencies)
             {
@@ -898,7 +897,7 @@ namespace QModManager
             return dependenciesMissing;
         }
 
-        internal static Dictionary<QMod, List<string>> MergeDependencyDictionaries(Dictionary<QMod, List<string>> normalDependencies, Dictionary<QMod, List<KeyValuePair<string, string>>> versionDependencies)
+        private static Dictionary<QMod, List<string>> MergeDependencyDictionaries(Dictionary<QMod, List<string>> normalDependencies, Dictionary<QMod, List<KeyValuePair<string, string>>> versionDependencies)
         {
             Dictionary<QMod, List<string>> dependencies = new Dictionary<QMod, List<string>>(normalDependencies);
 
@@ -918,7 +917,7 @@ namespace QModManager
 
         #region Old harmony detection
 
-        internal static void CheckOldHarmony()
+        private static void CheckOldHarmony()
         {
             List<QMod> modsThatUseOldHarmony = new List<QMod>();
 
@@ -949,7 +948,7 @@ namespace QModManager
 
         #region Errored mods
 
-        internal static void ShowErroredMods()
+        private static void ShowErroredMods()
         {
             if (erroredMods.Count <= 0) return;
 
@@ -964,7 +963,7 @@ namespace QModManager
 
             display += ". Check the log for details.";
 
-            Dialog.Show(display, Dialog.Button.seeLog, Dialog.Button.close, false);
+            Dialog.Show(display, Dialog.Button.SeeLog, Dialog.Button.Close, false);
         }
 
         #endregion

@@ -1,0 +1,9 @@
+{
+  "Id": "ExampleMod",
+  "DisplayName": "Example Mod",
+  "Author": "the QModManager dev team",
+  "Version": "1.0",
+  "Enable": true,
+  "AssemblyName": "Examples.dll",
+  "EntryMethod": "QModManager.Examples.ExampleMod.Patch"
+}

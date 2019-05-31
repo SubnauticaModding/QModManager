@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace QModManager
+namespace QModManager.Executable
 {
     internal static class AudioFixer
     {

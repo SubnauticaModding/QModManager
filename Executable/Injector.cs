@@ -4,15 +4,15 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace QModManager
+namespace QModManager.Executable
 {
     internal class Injector
     {
-        internal readonly string gameDirectory;
-        internal readonly string managedDirectory;
-        internal readonly string globalgamemanagers;
-        internal readonly string mainFilename = "Assembly-CSharp.dll";
-        internal const string installerFilename = "QModInstaller.dll";
+        private readonly string gameDirectory;
+        private readonly string managedDirectory;
+        private readonly string globalgamemanagers;
+        private readonly string mainFilename = "Assembly-CSharp.dll";
+        private const string installerFilename = "QModInstaller.dll";
 
         internal Injector(string dir, string managedDir)
         {
@@ -33,7 +33,7 @@ namespace QModManager
                     Console.WriteLine();
                     Console.WriteLine("Trying to enable Unity sound...");
 
-                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, Executable.game);
+                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, Program.game);
 
                     Console.WriteLine("Unity sound enabled successfully");
                     Environment.Exit(0);
@@ -64,7 +64,7 @@ namespace QModManager
                 Console.WriteLine();
                 Console.WriteLine("Trying to enable Unity sound...");
 
-                AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, Executable.game);
+                AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, Program.game);
 
                 Console.WriteLine("Unity sound enabled successfully");
                 Environment.Exit(0);
@@ -78,6 +78,7 @@ namespace QModManager
                 Environment.Exit(1);
             }
         }
+
         internal void Remove()
         {
             try
@@ -89,7 +90,7 @@ namespace QModManager
                     Console.WriteLine();
                     Console.WriteLine("Trying to disable Unity sound...");
 
-                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, Executable.game);
+                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, Program.game);
 
                     Console.WriteLine("Unity sound disabled successfully");
                     Environment.Exit(0);
@@ -135,7 +136,7 @@ namespace QModManager
                 Console.WriteLine();
                 Console.WriteLine("Trying to disable Unity sound...");
 
-                AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, Executable.game);
+                AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, Program.game);
 
                 Console.WriteLine("Unity sound disabled successfully");
                 Environment.Exit(0);

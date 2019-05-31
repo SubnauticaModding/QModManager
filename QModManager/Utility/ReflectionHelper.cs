@@ -1,6 +1,4 @@
-﻿// Taken from https://github.com/SMLHelper/SMLHelper/blob/DevMar2019/SMLHelper/Utility/ReflectionHelper.cs#L177-L190
-
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Reflection;
 
 namespace QModManager.Utility
@@ -9,7 +7,7 @@ namespace QModManager.Utility
     {
         internal static Assembly CallingAssemblyByStackTrace()
         {
-            var stackTrace = new StackTrace();
+            StackTrace stackTrace = new StackTrace();
             StackFrame[] frames = stackTrace.GetFrames();
 
             foreach (StackFrame stackFrame in frames)

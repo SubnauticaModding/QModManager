@@ -1,4 +1,5 @@
 ﻿using Harmony;
+using QModManager.Checks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,11 +17,11 @@ namespace QModManager
     {
         internal class Button
         {
-            internal string text = null;
-            internal Action action = null;
+            internal readonly string Text = null;
+            internal readonly Action Action = null;
 
-            internal static readonly Button disabled = new Button();
-            internal static readonly Button seeLog = new Button("See Log", () =>
+            internal static readonly Button Disabled = new Button();
+            internal static readonly Button SeeLog = new Button("See Log", () =>
             {
                 string logPath;
                 if (Patcher.game == Patcher.Game.Subnautica)
@@ -33,8 +34,8 @@ namespace QModManager
                 else
                     Logger.Error($"Expected log file at: \"{logPath}\" but none was found.");
             });
-            internal static readonly Button close = new Button("Close", () => { });
-            internal static readonly Button download = new Button("Download", () =>
+            internal static readonly Button Close = new Button("Close", () => { });
+            internal static readonly Button Download = new Button("Download", () =>
             {
                 if (Patcher.game == Patcher.Game.Subnautica)
                     Process.Start(VersionCheck.snNexus);
@@ -42,26 +43,28 @@ namespace QModManager
                     Process.Start(VersionCheck.bzNexus);
             });
 
-            internal Button() { }
+            private Button() { }
             internal Button(string text, Action action)
             {
-                this.text = text;
-                this.action = action;
+                this.Text = text;
+                this.Action = action;
             }
         }
 
         internal static void Show(string error, Button leftButton, Button rightButton, bool blue)
         {
+            // Create a dummy GameObject to handle the coroutine
             GameObject couroutineHandler = new GameObject("QModManager Dialog Coroutine");
-            couroutineHandler.AddComponent<DummyBehaviour>().StartCoroutine(ShowDialogEnumerator(error, leftButton?.action, rightButton?.action, leftButton?.text, rightButton?.text, blue, couroutineHandler));
+            couroutineHandler.AddComponent<DummyBehaviour>().StartCoroutine(
+                ShowDialogEnumerator(error, leftButton?.Action, rightButton?.Action, leftButton?.Text, rightButton?.Text, blue, couroutineHandler));
         }
 
-        internal static IEnumerator ShowDialogEnumerator(string error, Action onLeftButtonPressed, Action onRightButtonPressed, string leftButtonText, string rightButtonText, bool blue, GameObject couroutineHandler)
+        private static IEnumerator ShowDialogEnumerator(string error, Action onLeftButtonPressed, Action onRightButtonPressed, string leftButtonText, string rightButtonText, bool blue, GameObject couroutineHandler)
         {
-            while (typeof(uGUI).GetField("_main", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) == null)
+            while (AccessTools.Field(typeof(uGUI), "_main").GetValue(null) == null)
                 yield return null;
 
-            yield return new WaitForSecondsRealtime(2);
+            yield return new WaitForSecondsRealtime(3);
 
             uGUI_SceneConfirmation confirmation = uGUI.main.confirmation;
 
@@ -78,31 +81,35 @@ namespace QModManager
             // Turn the dialog blue if the blue parameter is true
             Sprite sprite = confirmation.gameObject.GetComponentInChildren<Image>().sprite;
             if (blue)
-            {
                 confirmation.gameObject.GetComponentInChildren<Image>().sprite = confirmation.gameObject.GetComponentsInChildren<Image>()[1].sprite;
-            }
 
             // Reduce the text size on the buttons by two pts
             List<Text> texts = confirmation.gameObject.GetComponentsInChildren<Text>().ToList();
             texts.RemoveAt(0);
             texts.Do(t => t.fontSize = t.fontSize - 2);
 
-            // Revert everything after the popup was closed
+            // Show the dialog
             confirmation.Show(error, delegate (bool leftButtonClicked)
             {
+                // Invoke the corresponding action after a button has been pressed
                 if (leftButtonClicked) onLeftButtonPressed?.Invoke();
                 else onRightButtonPressed?.Invoke();
 
+                // Enable buttons after the dialog was closed
                 confirmation.yes.gameObject.SetActive(true);
                 confirmation.no.gameObject.SetActive(true);
 
+                // Reset button text after the dialog was closed
                 confirmation.yes.gameObject.GetComponentInChildren<Text>().text = "Yes";
                 confirmation.no.gameObject.GetComponentInChildren<Text>().text = "No";
 
+                // Reset color after the dialog was closed
                 confirmation.gameObject.GetComponentInChildren<Image>().sprite = sprite;
 
+                // Reset button text size after the dialog was closed
                 texts.Do(t => t.fontSize = t.fontSize + 2);
 
+                // Destroy the coroutine handler after the dialog was closed
                 UnityEngine.Object.Destroy(couroutineHandler);
             });
 
