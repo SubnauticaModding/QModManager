@@ -24,6 +24,7 @@ AppSupportURL={#SupportURL}
 AppUpdatesURL={code:GetURL}
 AppVerName={#Name} {#Version}
 AppVersion={#Version}
+CloseApplications=False
 Compression=lzma
 DefaultDirName=.
 DirExistsWarning=no
@@ -32,6 +33,7 @@ DisableProgramGroupPage=yes
 DisableWelcomePage=no
 EnableDirDoesntExistWarning=yes
 InfoBeforeFile=Info.txt
+LicenseFile=License.txt
 OutputBaseFilename=QModManager_Setup
 OutputDir=..\Build
 PrivilegesRequired=admin
@@ -41,11 +43,10 @@ UninstallDisplayIcon={app}\{code:GetUninstallIcon}
 UninstallDisplayName={code:GetName}
 UsePreviousAppDir=no
 UsePreviousLanguage=no
-WizardImageFile=WizardImage.bmp
-WizardSmallImageFile=WizardSmallImageTransparent.bmp
 UsePreviousSetupType=False
 UsePreviousTasks=False
-CloseApplications=False
+WizardImageFile=WizardImage.bmp
+WizardSmallImageFile=WizardSmallImageTransparent.bmp
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
