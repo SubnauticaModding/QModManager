@@ -149,9 +149,14 @@ namespace QModManager
 
             foreach (string subDir in subDirs)
             {
-                bool forceOld = false;
-
                 string folderName = new DirectoryInfo(subDir).Name;
+
+                string disabledFile = Path.Combine(subDir, "disabled");
+                if (File.Exists(disabledFile))
+                {
+                    Logger.Info($"Mod in folder \"{folderName}\" is disabled, skipping.");
+                    continue;
+                }
 
                 string[] dlls = Directory.GetFiles(subDir, "*.dll", SearchOption.TopDirectoryOnly);
                 if (dlls.Length < 1) continue;
@@ -159,19 +164,9 @@ namespace QModManager
                 {
                     Logger.Warn($"Found multiple dlls in folder \"{folderName}\". That mod will be loaded using the old system.");
 
-                    forceOld = true;
+                    goto old;
                 }
-
                 string dll = dlls[0];
-
-                string disabledFile = Path.Combine(subDir, "disabled");
-                if (File.Exists(disabledFile))
-                {
-                    Logger.Error($"Mod in folder \"{folderName}\" is disabled, skipping.");
-                    continue;
-                }
-
-                if (forceOld) goto old;
 
                 Assembly assembly = null;
                 try
@@ -180,7 +175,7 @@ namespace QModManager
                 }
                 catch (Exception e)
                 {
-                    Logger.Error($"Could not load dll from folder \"{folderName}\"");
+                    Logger.Error($"Could not load dll file from folder \"{folderName}\"");
                     Logger.Exception(e);
 
                     erroredMods.Add(JsonQMod.CreateFakeQMod(folderName));                
@@ -190,13 +185,38 @@ namespace QModManager
 
                 Type[] types = assembly.GetTypes();
                 Type[] validTypes = new Type[0];
-                foreach (Type type in types)
+                foreach (Type t in types)
                 {
-                    if (type.GetInterfaces().Contains(typeof(IQModBase)))
-                        validTypes.Add(type);
+                    if (t.GetInterfaces().Contains(typeof(IQModBase)))
+                        validTypes.Add(t);
                 }
 
+                if (validTypes.Length < 1)
+                {
+                    Logger.Error($"Could not find a suitable QMod class for mod in folder \"{folderName}\"");
+
+                    erroredMods.Add(JsonQMod.CreateFakeQMod(folderName));
+                    continue;
+                }
+                else if (validTypes.Length > 1)
+                {
+                    Logger.Error($"Found multiple suitable QMod classes for mod in folder \"{folderName}\"");
+
+                    erroredMods.Add(JsonQMod.CreateFakeQMod(folderName));
+                    continue;
+                }
+                Type type = validTypes[0];
+
                 old:;
+
+                if (!File.Exists(Path.Combine(subDir, "mod.json")))
+                {
+                    Logger.Error("No \"mod.json\" file found in folder \"{folderName}\". Skipping");
+
+                    erroredMods.Add(JsonQMod.CreateFakeQMod(folderName));
+                    continue;
+                }
+
                 JsonQMod mod = JsonQMod.FromJsonFile(Path.Combine(subDir, "mod.json"));
 
                 if (!JsonQMod.QModValid(mod, folderName))
