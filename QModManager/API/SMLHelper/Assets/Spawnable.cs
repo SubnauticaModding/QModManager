@@ -100,13 +100,18 @@
 
             // Because invocation order isn't guaranteed by event handlers,
             // we make sure the TechType is patched first before anything else that might require it.
-            this.TechType = TechTypeHandler.Singleton.AddTechType(ModName, this.ClassID, this.FriendlyName, this.Description, false);
+            PatchTechType();
 
             CorePatchEvents.Invoke();
 
             this.IsPatched = true;
 
             OnFinishedPatching?.Invoke();
+        }
+
+        internal virtual void PatchTechType()
+        {
+            this.TechType = TechTypeHandler.Singleton.AddTechType(ModName, this.ClassID, this.FriendlyName, this.Description, false);
         }
 
         private void RegisterBasics()
