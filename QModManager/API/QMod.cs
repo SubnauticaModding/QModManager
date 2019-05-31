@@ -3,6 +3,7 @@ using QModManager.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace QModManager.API
@@ -150,11 +151,11 @@ namespace QModManager.API
 
         public IDictionary<string, string> VersionDependencies { get; set; }
 
+        public bool Enable { get; set; }
+
         public string AssemblyName { get; set; }
 
         public string EntryMethod { get; set; }
-
-        public bool Enable { get; set; }
 
         public Assembly LoadedAssembly { get; set; }
 
@@ -162,7 +163,7 @@ namespace QModManager.API
 
         public bool Loaded { get; set; }
 
-        internal static IQMod FromJsonFile(string file)
+        internal static JsonQMod FromJsonFile(string file)
         {
             try
             {
@@ -308,26 +309,27 @@ namespace QModManager.API
             }
         }
 
-        internal static QMod CreateFakeQMod(string name)
+        internal static IQMod CreateFakeQMod(string name)
         {
-            return new QMod()
+            return new JsonQMod()
             {
                 Id = Patcher.IDRegex.Replace(name, ""),
                 DisplayName = name,
                 Author = "None",
-                Version = "None",
+                Version = new Version(1, 0, 0),
+                Game = Game.Subnautica,
                 Dependencies = new string[] { },
                 VersionDependencies = new Dictionary<string, string>(),
                 LoadBefore = new string[] { },
                 LoadAfter = new string[] { },
                 Enable = false,
-                Game = "",
                 AssemblyName = "None",
                 EntryMethod = "None",
+                Loaded = false,
             };
         }
 
-        internal static bool QModValid(QMod mod, string folderName)
+        internal static bool QModValid(JsonQMod mod, string folderName)
         {
             bool success = true;
 
@@ -364,16 +366,10 @@ namespace QModManager.API
                 success = false;
             }
 
-            if (string.IsNullOrEmpty(mod.Version))
+            if (mod.Version == null)
             {
-                Logger.Error($"Mod found in folder \"{folderName}\" is missing a version!");
-
-                success = false;
-            }
-
-            if (mod.ParsedVersion == null)
-            {
-                Logger.Warn($"Mod found in folder \"{folderName}\" has an invalid version!");
+                Logger.Error($"Mod found in folder \"{folderName}\" has an invalid version! Defaulting to 1.0.0");
+                mod.Version = new Version(1, 0, 0);
             }
 
             if (string.IsNullOrEmpty(mod.AssemblyName))
@@ -384,7 +380,7 @@ namespace QModManager.API
             }
             else if (!mod.AssemblyName.EndsWith(".dll"))
             {
-                Logger.Error($"Mod found in folder \"{folderName}\" is has an invalid assembly name!");
+                Logger.Error($"Mod found in folder \"{folderName}\" has an invalid assembly name!");
 
                 success = false;
             }
@@ -402,19 +398,23 @@ namespace QModManager.API
                 success = false;
             }
 
-            for (int i = 0; i < mod.LoadAfter.Length; i++)
+            string[] loadBefore = mod.LoadBefore.ToArray();
+            for (int i = 0; i < loadBefore.Length; i++)
             {
-                string good = Patcher.IDRegex.Replace(mod.LoadAfter[i], "");
-                if (mod.LoadAfter[i] != good)
-                    mod.LoadAfter[i] = good;
+                string good = Patcher.IDRegex.Replace(loadBefore[i], "");
+                if (loadBefore[i] != good)
+                    loadBefore[i] = good;
             }
+            mod.LoadBefore = loadBefore.AsEnumerable();
 
-            for (int i = 0; i < mod.LoadBefore.Length; i++)
+            string[] loadAfter = mod.LoadAfter.ToArray();
+            for (int i = 0; i < loadAfter.Length; i++)
             {
-                string good = Patcher.IDRegex.Replace(mod.LoadBefore[i], "");
-                if (mod.LoadBefore[i] != good)
-                    mod.LoadBefore[i] = good;
+                string good = Patcher.IDRegex.Replace(loadAfter[i], "");
+                if (loadAfter[i] != good)
+                    loadAfter[i] = good;
             }
+            mod.LoadAfter = loadAfter.AsEnumerable();
 
             Dictionary<string, string> versionDependenciesLoop = new Dictionary<string, string>(mod.VersionDependencies);
             foreach (KeyValuePair<string, string> kvp in versionDependenciesLoop)
