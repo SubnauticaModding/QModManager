@@ -37,7 +37,7 @@
                 }
                 catch (UnityException uex)
                 {
-                    Logger.Error("Error on LoadTextureFromFile call. Texture cannot be loaded: " + filePathToImage + uex);
+                    Logger.Exception(uex);
                 }
             }
             else
