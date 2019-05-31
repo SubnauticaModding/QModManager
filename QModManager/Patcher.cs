@@ -37,10 +37,10 @@ namespace QModManager
         }
         private static bool Patched = false;
 
-        internal static List<QMod> foundMods = new List<QMod>();
-        internal static List<QMod> sortedMods = new List<QMod>();
-        internal static List<QMod> loadedMods = new List<QMod>();
-        internal static List<QMod> erroredMods = new List<QMod>();
+        internal static List<IQMod> foundMods = new List<IQMod>();
+        internal static List<IQMod> sortedMods = new List<IQMod>();
+        internal static List<IQMod> loadedMods = new List<IQMod>();
+        internal static List<IQMod> erroredMods = new List<IQMod>();
 
         internal static void Main(string[] args)
         {
@@ -92,8 +92,6 @@ namespace QModManager
                 ShowErroredMods();
 
                 VersionCheck.CheckForUpdates();
-
-                //QModHooks.Start += PrefabDebugger.Main;
 
                 UpdateSMLHelper();
                 Initializer.PostPostInit();
@@ -151,31 +149,65 @@ namespace QModManager
 
             foreach (string subDir in subDirs)
             {
-                if (Directory.GetFiles(subDir, "*.dll", SearchOption.TopDirectoryOnly).Length < 1) continue;
+                bool forceOld = false;
 
                 string folderName = new DirectoryInfo(subDir).Name;
-                string jsonFile = Path.Combine(subDir, "mod.json");
 
-                if (!File.Exists(jsonFile))
+                string[] dlls = Directory.GetFiles(subDir, "*.dll", SearchOption.TopDirectoryOnly);
+                if (dlls.Length < 1) continue;
+                else if (dlls.Length > 1)
                 {
-                    Logger.Error($"No \"mod.json\" file found for mod located in folder \"{subDir}\". A template file will be created");
-                    File.WriteAllText(jsonFile, JsonConvert.SerializeObject(new QMod()));
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
+                    Logger.Warn($"Found multiple dlls in folder \"{folderName}\". That mod will be loaded using the old system.");
+
+                    forceOld = true;
+                }
+
+                string dll = dlls[0];
+
+                string disabledFile = Path.Combine(subDir, "disabled");
+                if (File.Exists(disabledFile))
+                {
+                    Logger.Error($"Mod in folder \"{folderName}\" is disabled, skipping.");
                     continue;
                 }
 
-                QMod mod = QMod.FromJsonFile(Path.Combine(subDir, "mod.json"));
+                if (forceOld) goto old;
 
-                if (!QMod.QModValid(mod, folderName))
+                Assembly assembly = null;
+                try
                 {
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
+                    assembly = Assembly.LoadFrom(dll);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error($"Could not load dll from folder \"{folderName}\"");
+                    Logger.Exception(e);
 
+                    erroredMods.Add(JsonQMod.CreateFakeQMod(folderName));                
+                    continue;
+                }
+                if (assembly == null) goto old;
+
+                Type[] types = assembly.GetTypes();
+                Type[] validTypes = new Type[0];
+                foreach (Type type in types)
+                {
+                    if (type.GetInterfaces().Contains(typeof(IQModBase)))
+                        validTypes.Add(type);
+                }
+
+                old:;
+                JsonQMod mod = JsonQMod.FromJsonFile(Path.Combine(subDir, "mod.json"));
+
+                if (!JsonQMod.QModValid(mod, folderName))
+                {
+                    erroredMods.Add(JsonQMod.CreateFakeQMod(folderName));
                     continue;
                 }
 
                 if (mod.Enable == false)
                 {
-                    Logger.Info($"Mod \"{mod.DisplayName}\" is disabled via config, skipping...");
+                    Logger.Info($"Mod \"{mod.DisplayName}\" is disabled, skipping...");
 
                     continue;
                 }
@@ -185,14 +217,25 @@ namespace QModManager
                 if (!File.Exists(modAssemblyPath))
                 {
                     Logger.Error($"No matching dll found at \"{modAssemblyPath}\" for mod \"{mod.DisplayName}\"");
-                    erroredMods.Add(mod);
 
+                    erroredMods.Add(mod);
                     continue;
                 }
 
-                mod.LoadedAssembly = Assembly.LoadFrom(modAssemblyPath);
+                try
+                {
+                    mod.LoadedAssembly = Assembly.LoadFrom(modAssemblyPath);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error($"Could not load dll \"{mod.AssemblyName}\" from folder \"{folderName}\"");
+                    Logger.Exception(e);
+
+                    erroredMods.Add(mod);
+                    continue;
+                }
+
                 mod.ModAssemblyPath = modAssemblyPath;
-                //mod.MessageReceivers = GetMessageRecievers(mod.LoadedAssembly);
 
                 foundMods.Add(mod);
             }
