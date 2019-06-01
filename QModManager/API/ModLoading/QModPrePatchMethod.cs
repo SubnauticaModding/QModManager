@@ -4,23 +4,23 @@
     using System;
 
     /// <summary>
-    /// Identifies a normal patch method for a QMod.<para/>
+    /// Identifies a pre-patch method for a QMod.<para/>
     /// ALERT: The class that defines this method must have a <seealso cref="QModCoreInfo"/> attribute.
     /// </summary>
     /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    public class QModPatchMethod : Attribute, IPatchMethod
+    public class QModPrePatchMethod : Attribute, IPatchMethod
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="QModPatchMethod"/> class for normal patching.        
+        /// Initializes a new instance of the <see cref="QModPrePatchMethod"/> class for pre-patching.
         /// </summary>
-        public QModPatchMethod()
+        public QModPrePatchMethod()
         {
         }
 
         /// <summary>
         /// Gets the patch method's meta patch order.
         /// </summary>
-        public PatchingOrder PatchOrder { get; } = PatchingOrder.NormalInitialize;
+        public PatchingOrder PatchOrder { get; } = PatchingOrder.PreInitialize;
     }
 }

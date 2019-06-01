@@ -1,4 +1,6 @@
-﻿using QModManager.Utility;
+﻿using QModManager.API.ModLoading;
+using QModManager.API.ModLoading.Internal;
+using QModManager.Utility;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -9,7 +11,7 @@ namespace QModManager.API
     /// <summary>
     /// The main class for the QModManager API
     /// </summary>
-    public partial class QModAPI : IQModAPI
+    public class QModAPI : IQModAPI
     {
         /// <summary>
         /// The main instance of this class <para/>
@@ -166,9 +168,9 @@ namespace QModManager.API
         {
             if (modAssembly == null) return null;
 
-            if (modAssembly == Assembly.GetExecutingAssembly()) return QModFromJson.QModManagerQMod;
+            if (modAssembly == Assembly.GetExecutingAssembly()) return QMod.QModManager;
 
-            foreach (QModFromJson mod in GetAllMods(includeUnloaded, includeErrored))
+            foreach (IQMod mod in GetAllMods(includeUnloaded, includeErrored))
             {
                 if (mod.LoadedAssembly == modAssembly)
                     return mod;
@@ -202,9 +204,9 @@ namespace QModManager.API
 
             string regexedID = Patcher.IDRegex.Replace(id, "");
 
-            if (regexedID == "QModManager") return QModFromJson.QModManagerQMod;
+            if (regexedID == "QModManager") return QMod.QModManager;
 
-            foreach (QModFromJson mod in GetAllMods(includeUnloaded, includeErrored))
+            foreach (QMod mod in GetAllMods(includeUnloaded, includeErrored))
             {
                 if (mod.Id == regexedID)
                     return mod;

@@ -1,26 +1,26 @@
 ﻿namespace QModManager.API.ModLoading
 {
-    using Internal;
+    using QModManager.API.ModLoading.Internal;
     using System;
 
     /// <summary>
-    /// Identifies a normal patch method for a QMod.<para/>
+    /// Identifies a post-patch method for a QMod.<para/>
     /// ALERT: The class that defines this method must have a <seealso cref="QModCoreInfo"/> attribute.
     /// </summary>
     /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    public class QModPatchMethod : Attribute, IPatchMethod
+    public class QModPostPatchMethod : Attribute, IPatchMethod
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="QModPatchMethod"/> class for normal patching.        
+        /// Initializes a new instance of the <see cref="QModPostPatchMethod"/> class for post-patching.
         /// </summary>
-        public QModPatchMethod()
+        public QModPostPatchMethod()
         {
         }
 
         /// <summary>
         /// Gets the patch method's meta patch order.
         /// </summary>
-        public PatchingOrder PatchOrder { get; } = PatchingOrder.NormalInitialize;
+        public PatchingOrder PatchOrder { get; } = PatchingOrder.PostInitialize;
     }
 }
