@@ -122,6 +122,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\ModLoading\DevelopedFor.cs" />
+    <Compile Include="API\ModLoading\Internal\QMod.cs" />
+    <Compile Include="API\ModLoading\QModCoreInfo.cs" />
+    <Compile Include="API\ModLoading\QModDependency.cs" />
+    <Compile Include="API\ModLoading\QModLoadAfter.cs" />
+    <Compile Include="API\ModLoading\QModLoadBefore.cs" />
     <Compile Include="API\QModHooks.cs" />
     <Compile Include="API\SMLHelper\Crafting\CraftingNode.cs" />
     <Compile Include="API\SMLHelper\Crafting\ModCraftTreeCraft.cs" />
@@ -219,6 +225,7 @@
     <Compile Include="API\SMLHelper\Utility\PatchUtils.cs" />
     <Compile Include="API\SMLHelper\Utility\SaveUtils.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

@@ -7,7 +7,7 @@
 
     internal static class Initializer
     {
-        private static HarmonyInstance Harmony { get => Patcher.Harmony; }
+        private static HarmonyInstance Harmony => Patcher.Harmony;
 
         internal static void PostPostInit()
         {

@@ -4,6 +4,131 @@
         <name>QModInstaller</name>
     </assembly>
     <members>
+        <member name="T:QModManager.API.ModLoading.DevelopedFor">
+            <summary>
+            Defines what game a QMod can run on.
+            </summary>
+        </member>
+        <member name="F:QModManager.API.ModLoading.DevelopedFor.Subnautica">
+            <summary>
+            Mod developed exclusively for Subnautica
+            </summary>
+        </member>
+        <member name="F:QModManager.API.ModLoading.DevelopedFor.BelowZero">
+            <summary>
+            Mod developed exclusively for Below Zero
+            </summary>
+        </member>
+        <member name="F:QModManager.API.ModLoading.DevelopedFor.BothGames">
+            <summary>
+            Mod that can be loaded on both Subnautica and Below Zero
+            </summary>
+        </member>
+        <member name="T:QModManager.API.ModLoading.QModCoreInfo">
+            <summary>
+            Provides important custom meta data about your QMod.
+            </summary>
+            <seealso cref="T:System.Attribute" />
+        </member>
+        <member name="M:QModManager.API.ModLoading.QModCoreInfo.#ctor(System.String,System.String,System.String,QModManager.API.ModLoading.DevelopedFor,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModCoreInfo" /> class.
+            </summary>
+            <param name="id">The mod identifier.</param>
+            <param name="displayName">The mod display name.</param>
+            <param name="author">The mod author or team name.</param>
+            <param name="developedFor">The game the mod was developed for.</param>
+            <param name="patchMethod">The patch method.</param>
+        </member>
+        <member name="P:QModManager.API.ModLoading.QModCoreInfo.Id">
+            <summary>
+            The ID of the mod <para/>
+            Can only contain alphanumeric characters and underscores: (<see langword="a-z"/>, <see langword="A-Z"/>, <see langword="0-9"/>, <see langword="_"/>)
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.QModCoreInfo.DisplayName">
+            <summary>
+            The display name of the mod
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.QModCoreInfo.Author">
+            <summary>
+            The author of the mod
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.QModCoreInfo.DevelopedFor">
+            <summary>
+            The game this mod was developed for.
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.QModCoreInfo.PatchMethod">
+            <summary>
+            Identifies the patch method. <c>WARNING</c>: This method must be defined in the class using this attribute.
+            </summary>
+        </member>
+        <member name="T:QModManager.API.ModLoading.QModDependency">
+            <summary>
+            Identifies other QMods that this mod requires.
+            </summary>
+            <seealso cref="T:System.Attribute" />
+        </member>
+        <member name="M:QModManager.API.ModLoading.QModDependency.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModDependency"/> class.
+            </summary>
+            <param name="requiredMod">The other mod required by this one to function.</param>
+        </member>
+        <member name="M:QModManager.API.ModLoading.QModDependency.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModDependency"/> class.
+            </summary>
+            <param name="requiredMod">The other mod required by this one to function.</param>
+            <param name="requiredVersion">The minimum version the other mod should be at.</param>
+        </member>
+        <member name="P:QModManager.API.ModLoading.QModDependency.RequiredMod">
+            <summary>
+            Identifies another QMod, by Id, that this mod requires to function.
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.QModDependency.MinimumVersion">
+            <summary>
+            Identifies what minimum version the other mod should be at.
+            </summary>
+        </member>
+        <member name="T:QModManager.API.ModLoading.QModLoadAfter">
+            <summary>
+            Identifies another QMod that must be loaded before this mod.
+            </summary>
+            <seealso cref="T:System.Attribute" />
+        </member>
+        <member name="M:QModManager.API.ModLoading.QModLoadAfter.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModLoadBefore"/> class.
+            </summary>
+            <param name="otherMod">The other mod that must be loaded before this mod can be.</param>
+        </member>
+        <member name="P:QModManager.API.ModLoading.QModLoadAfter.OtherMod">
+            <summary>
+            Identifies another QMod, by Id. If this other mod is present, your mod will be loaded after it.
+            </summary>
+        </member>
+        <member name="T:QModManager.API.ModLoading.QModLoadBefore">
+            <summary>
+            Identifies another QMod that cannot be loaded before this mod.
+            </summary>
+            <seealso cref="T:System.Attribute" />
+        </member>
+        <member name="M:QModManager.API.ModLoading.QModLoadBefore.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModLoadBefore"/> class.
+            </summary>
+            <param name="otherMod">The other mod that must wait to load until after this mod does.</param>
+        </member>
+        <member name="P:QModManager.API.ModLoading.QModLoadBefore.OtherMod">
+            <summary>
+            Identifies another QMod, by Id. If this other mod is present, your mod will be loaded before it.
+            </summary>
+        </member>
         <member name="T:QModManager.API.QModHooks">
             <summary>
             Contains some handy delegates to default Unity methods

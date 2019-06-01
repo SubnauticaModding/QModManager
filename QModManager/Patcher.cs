@@ -162,6 +162,7 @@ namespace QModManager
                     continue;
                 }
 
+                // TODO - Look for mods via API here
                 QMod mod = QMod.FromJsonFile(Path.Combine(subDir, "mod.json"));
 
                 if (!QMod.QModValid(mod, folderName))
