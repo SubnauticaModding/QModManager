@@ -166,9 +166,9 @@ namespace QModManager.API
         {
             if (modAssembly == null) return null;
 
-            if (modAssembly == Assembly.GetExecutingAssembly()) return QMod.QModManagerQMod;
+            if (modAssembly == Assembly.GetExecutingAssembly()) return QModFromJson.QModManagerQMod;
 
-            foreach (QMod mod in GetAllMods(includeUnloaded, includeErrored))
+            foreach (QModFromJson mod in GetAllMods(includeUnloaded, includeErrored))
             {
                 if (mod.LoadedAssembly == modAssembly)
                     return mod;
@@ -202,9 +202,9 @@ namespace QModManager.API
 
             string regexedID = Patcher.IDRegex.Replace(id, "");
 
-            if (regexedID == "QModManager") return QMod.QModManagerQMod;
+            if (regexedID == "QModManager") return QModFromJson.QModManagerQMod;
 
-            foreach (QMod mod in GetAllMods(includeUnloaded, includeErrored))
+            foreach (QModFromJson mod in GetAllMods(includeUnloaded, includeErrored))
             {
                 if (mod.Id == regexedID)
                     return mod;

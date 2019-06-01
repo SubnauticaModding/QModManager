@@ -18,13 +18,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "Release",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -33,13 +33,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -53,13 +53,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "Release",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -68,13 +68,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -88,13 +88,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "Release",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -103,13 +103,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -123,13 +123,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "Release",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -138,13 +138,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -158,13 +158,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "Release",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -173,13 +173,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -193,13 +193,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "Release",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -208,13 +208,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -233,13 +233,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.0",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -248,13 +248,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -268,13 +268,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.0",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -283,13 +283,13 @@ namespace QModManager.Tests.QModManager
                     }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -303,13 +303,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.0",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -318,13 +318,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -338,13 +338,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.1",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -353,13 +353,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -373,13 +373,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.1",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -388,13 +388,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -408,13 +408,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.1",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -423,13 +423,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -451,13 +451,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -466,13 +466,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -486,13 +486,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -501,13 +501,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -521,13 +521,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -536,13 +536,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -556,13 +556,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.2",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -571,13 +571,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -591,13 +591,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -606,13 +606,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -626,13 +626,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -641,13 +641,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -661,13 +661,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -676,13 +676,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -696,13 +696,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -711,13 +711,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -731,13 +731,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.2",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -746,13 +746,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -766,13 +766,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -781,13 +781,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -801,13 +801,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.1.9",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -816,13 +816,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -836,13 +836,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "2.0",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -851,13 +851,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -871,13 +871,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.4",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -886,13 +886,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -906,13 +906,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.0",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -921,13 +921,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -941,13 +941,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.1",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -956,13 +956,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -976,13 +976,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.1.9",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -991,13 +991,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1011,13 +1011,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "2.0",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1026,13 +1026,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1046,13 +1046,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.4",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1061,13 +1061,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1081,13 +1081,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.0",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1096,13 +1096,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1116,13 +1116,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.1",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1131,13 +1131,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1156,13 +1156,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1171,13 +1171,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1191,13 +1191,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1206,13 +1206,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1226,13 +1226,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1241,13 +1241,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1261,13 +1261,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1276,13 +1276,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1296,13 +1296,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1311,13 +1311,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1331,13 +1331,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1346,13 +1346,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1366,13 +1366,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.4.1",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1381,13 +1381,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1401,13 +1401,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "2.0",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1416,13 +1416,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1436,13 +1436,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.4.1",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1451,13 +1451,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1471,13 +1471,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.4.1",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1486,13 +1486,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1506,13 +1506,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "2.0",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1521,13 +1521,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1541,13 +1541,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.4",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1556,13 +1556,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1581,13 +1581,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1596,13 +1596,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1616,13 +1616,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1631,13 +1631,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1651,13 +1651,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1666,13 +1666,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1686,13 +1686,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1701,13 +1701,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1721,13 +1721,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1736,13 +1736,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1756,13 +1756,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.2.3",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1771,13 +1771,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1791,13 +1791,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.1.9",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1806,13 +1806,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1826,13 +1826,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "2.0",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1841,13 +1841,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1861,13 +1861,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "2.0",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1876,13 +1876,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1896,13 +1896,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "1.1.9",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1911,13 +1911,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1931,13 +1931,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "2.0",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1946,13 +1946,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 
@@ -1966,13 +1966,13 @@ namespace QModManager.Tests.QModManager
                     Patcher.sortedMods.Clear();
                     Patcher.erroredMods.Clear();
 
-                    QMod mod1 = new QMod
+                    QModFromJson mod1 = new QModFromJson
                     {
                         Id = "Mod1",
                         Version = "2.0",
                     };
 
-                    QMod mod2 = new QMod
+                    QModFromJson mod2 = new QModFromJson
                     {
                         Id = "Mod2",
                         VersionDependencies = new Dictionary<string, string>()
@@ -1981,13 +1981,13 @@ namespace QModManager.Tests.QModManager
                         }
                     };
 
-                    Patcher.foundMods = new List<QMod>
+                    Patcher.foundMods = new List<QModFromJson>
                     {
                         mod1,
                         mod2,
                     };
 
-                    Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+                    Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
                     Patcher.CheckForDependencies();
 

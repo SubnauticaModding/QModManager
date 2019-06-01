@@ -37,10 +37,10 @@ namespace QModManager
         }
         private static bool Patched = false;
 
-        internal static List<QMod> foundMods = new List<QMod>();
-        internal static List<QMod> sortedMods = new List<QMod>();
-        internal static List<QMod> loadedMods = new List<QMod>();
-        internal static List<QMod> erroredMods = new List<QMod>();
+        internal static List<QModFromJson> foundMods = new List<QModFromJson>();
+        internal static List<QModFromJson> sortedMods = new List<QModFromJson>();
+        internal static List<QModFromJson> loadedMods = new List<QModFromJson>();
+        internal static List<QModFromJson> erroredMods = new List<QModFromJson>();
 
         internal static void Patch()
         {
@@ -157,17 +157,17 @@ namespace QModManager
                 if (!File.Exists(jsonFile))
                 {
                     Logger.Error($"No \"mod.json\" file found for mod located in folder \"{subDir}\". A template file will be created");
-                    File.WriteAllText(jsonFile, JsonConvert.SerializeObject(new QMod()));
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
+                    File.WriteAllText(jsonFile, JsonConvert.SerializeObject(new QModFromJson()));
+                    erroredMods.Add(QModFromJson.CreateFakeQMod(folderName));
                     continue;
                 }
 
                 // TODO - Look for mods via API here
-                QMod mod = QMod.FromJsonFile(Path.Combine(subDir, "mod.json"));
+                QModFromJson mod = QModFromJson.FromJsonFile(Path.Combine(subDir, "mod.json"));
 
-                if (!QMod.QModValid(mod, folderName))
+                if (!QModFromJson.QModValid(mod, folderName))
                 {
-                    erroredMods.Add(QMod.CreateFakeQMod(folderName));
+                    erroredMods.Add(QModFromJson.CreateFakeQMod(folderName));
 
                     continue;
                 }
@@ -224,9 +224,9 @@ namespace QModManager
         {
             List<string> toWrite = new List<string> { "Loaded mods:" };
 
-            List<QMod> loadingErrorMods = new List<QMod>();
+            List<QModFromJson> loadingErrorMods = new List<QModFromJson>();
 
-            foreach (QMod mod in sortedMods)
+            foreach (QModFromJson mod in sortedMods)
             {
                 if (mod != null && !mod.Loaded)
                 {
@@ -252,7 +252,7 @@ namespace QModManager
             {
                 List<string> write = new List<string> { "The following mods could not be loaded:" };
 
-                foreach (QMod mod in loadingErrorMods)
+                foreach (QModFromJson mod in loadingErrorMods)
                 {
                     write.Add($"- {mod.DisplayName} ({mod.Id})");
                 }
@@ -265,7 +265,7 @@ namespace QModManager
             CheckOldHarmony();
         }
 
-        private static bool LoadMod(QMod mod)
+        private static bool LoadMod(QModFromJson mod)
         {
             if (mod == null || mod.Loaded) return false;
 
@@ -313,14 +313,14 @@ namespace QModManager
 
         private static void RemoveDuplicateModIDs()
         {
-            List<QMod> duplicateModIDs = new List<QMod>();
+            List<QModFromJson> duplicateModIDs = new List<QModFromJson>();
 
-            foreach (QMod mod in sortedMods)
+            foreach (QModFromJson mod in sortedMods)
             {
-                List<QMod> matchingMods = sortedMods.Where((QMod qmod) => qmod.Id == mod.Id).ToList();
+                List<QModFromJson> matchingMods = sortedMods.Where((QModFromJson qmod) => qmod.Id == mod.Id).ToList();
                 if (matchingMods.Count > 1)
                 {
-                    foreach (QMod duplicateMod in matchingMods)
+                    foreach (QModFromJson duplicateMod in matchingMods)
                     {
                         if (!duplicateModIDs.Contains(duplicateMod)) duplicateModIDs.Add(duplicateMod);
                         if (!erroredMods.Contains(duplicateMod)) erroredMods.Add(duplicateMod);
@@ -331,7 +331,7 @@ namespace QModManager
             if (duplicateModIDs.Count > 0)
             {
                 List<string> toWrite = new List<string> { $"Multiple mods with the same ID found:" };
-                foreach (QMod mod in duplicateModIDs)
+                foreach (QModFromJson mod in duplicateModIDs)
                 {
                     if (sortedMods.Contains(mod)) sortedMods.Remove(mod);
                     toWrite.Add($"- {mod.DisplayName} ({mod.Id})");
@@ -459,7 +459,7 @@ namespace QModManager
 
         private static void DisableNonApplicableMods()
         {
-            List<QMod> nonApplicableMods = new List<QMod>();
+            List<QModFromJson> nonApplicableMods = new List<QModFromJson>();
             sortedMods = sortedMods.Where(mod =>
             {
                 if (mod.ParsedGame == Game.Both || mod.ParsedGame == game) return true;
@@ -472,7 +472,7 @@ namespace QModManager
             if (nonApplicableMods.Count > 0)
             {
                 List<string> toWrite = new List<string> { $"The following {GetOtherGame()} mods were not loaded because {game.ToString()} was detected:" };
-                foreach (QMod mod in nonApplicableMods)
+                foreach (QModFromJson mod in nonApplicableMods)
                 {
                     toWrite.Add($"- {mod.DisplayName} ({mod.Id})");
                 }
@@ -491,12 +491,12 @@ namespace QModManager
 
         #region Load order
 
-        internal static List<QMod> modSortingChain = new List<QMod>();
+        internal static List<QModFromJson> modSortingChain = new List<QModFromJson>();
 
         private static void SortMods()
         {
             // Contains all the mods that errored out during the sorting process.
-            List<List<QMod>> sortingErrorLoops = new List<List<QMod>>();
+            List<List<QModFromJson>> sortingErrorLoops = new List<List<QModFromJson>>();
 
             for (int i = 0; i < foundMods.Count; i++)
             {
@@ -504,16 +504,16 @@ namespace QModManager
                 modSortingChain.Clear();
 
                 // Sort the current loop mod, recursively.
-                QMod mod = foundMods[i];
+                QModFromJson mod = foundMods[i];
                 bool success = SortMod(mod);
 
                 // If it wasn't a success (that is, something messed up with the order, print it out)
                 if (!success)
                 {
-                    QMod duplicateMod = modSortingChain[modSortingChain.Count - 1];
+                    QModFromJson duplicateMod = modSortingChain[modSortingChain.Count - 1];
                     int firstIndex = modSortingChain.IndexOf(duplicateMod);
 
-                    List<QMod> loop = new List<QMod>();
+                    List<QModFromJson> loop = new List<QModFromJson>();
 
                     for (int j = 0; j < modSortingChain.Count; j++)
                     {
@@ -536,11 +536,11 @@ namespace QModManager
             {
                 Logger.Error("There was en error while sorting some mods!", "Please check the 'LoadAfter' and 'LoadBefore' properties of these mods:");
 
-                foreach (List<QMod> list in sortingErrorLoops)
+                foreach (List<QModFromJson> list in sortingErrorLoops)
                 {
                     string outputStr = "- ";
 
-                    foreach (QMod mod in list)
+                    foreach (QModFromJson mod in list)
                     {
                         // Remove it from list to prevent it from being loaded
                         if (sortedMods.Contains(mod))
@@ -555,13 +555,13 @@ namespace QModManager
             }
         }
 
-        internal static bool SortMod(QMod mod)
+        internal static bool SortMod(QModFromJson mod)
         {
             // Add the mod passed into this method to the chain
             modSortingChain.Add(mod);
 
             // Get all the duplicates present in the chain
-            List<QMod> duplicates = modSortingChain.GroupBy(s => s)
+            List<QModFromJson> duplicates = modSortingChain.GroupBy(s => s)
                 .SelectMany(grp => grp.Skip(1))
                 .ToList();
 
@@ -578,10 +578,10 @@ namespace QModManager
             // I say it like this: load this (where this is the mod that is passed in) after these
             // Thus the variable name.
             // If anyone else can come up with better variable names, I'll be all for it
-            List<QMod> loadThisAfterThese = GetLoadAfter(mod);
+            List<QModFromJson> loadThisAfterThese = GetLoadAfter(mod);
 
             // Loop through this list
-            foreach (QMod loadModAfterThis in loadThisAfterThese)
+            foreach (QModFromJson loadModAfterThis in loadThisAfterThese)
             {
                 // Get the index of the current mod we're looping through.
                 int index = sortedMods.IndexOf(loadModAfterThis);
@@ -624,10 +624,10 @@ namespace QModManager
             // I say it like this: load this (where this is the mod that is passed in) before these
             // Thus the variable name.
             // If anyone else can come up with better variable names, I'll be all for it
-            List<QMod> loadThisBeforeThese = GetLoadBefore(mod);
+            List<QModFromJson> loadThisBeforeThese = GetLoadBefore(mod);
 
             // Loop through this list
-            foreach (QMod loadAfter in loadThisBeforeThese)
+            foreach (QModFromJson loadAfter in loadThisBeforeThese)
             {
                 // Get the current index
                 int index = sortedMods.IndexOf(loadAfter);
@@ -663,15 +663,15 @@ namespace QModManager
             return true;
         }
 
-        private static List<QMod> GetLoadBefore(QMod mod)
+        private static List<QModFromJson> GetLoadBefore(QModFromJson mod)
         {
             if (mod == null) return null;
 
-            List<QMod> mods = new List<QMod>();
+            List<QModFromJson> mods = new List<QModFromJson>();
 
             foreach (string loadBeforeId in mod.LoadBefore)
             {
-                foreach (QMod loadBeforeMod in foundMods)
+                foreach (QModFromJson loadBeforeMod in foundMods)
                 {
                     if (loadBeforeId == loadBeforeMod.Id)
                         mods.Add(loadBeforeMod);
@@ -681,15 +681,15 @@ namespace QModManager
             return mods;
         }
 
-        private static List<QMod> GetLoadAfter(QMod mod)
+        private static List<QModFromJson> GetLoadAfter(QModFromJson mod)
         {
             if (mod == null) return null;
 
-            List<QMod> mods = new List<QMod>();
+            List<QModFromJson> mods = new List<QModFromJson>();
 
             foreach (string loadAfterId in mod.LoadAfter)
             {
-                foreach (QMod loadAfterMod in foundMods)
+                foreach (QModFromJson loadAfterMod in foundMods)
                 {
                     if (loadAfterId == loadAfterMod.Id)
                         mods.Add(loadAfterMod);
@@ -705,12 +705,12 @@ namespace QModManager
 
         internal static void CheckForDependencies()
         {
-            Dictionary<QMod, List<string>> missingDependenciesByMod = new Dictionary<QMod, List<string>>();
-            Dictionary<QMod, List<KeyValuePair<string, string>>> missingVersionDependenciesByMod = new Dictionary<QMod, List<KeyValuePair<string, string>>>();
+            Dictionary<QModFromJson, List<string>> missingDependenciesByMod = new Dictionary<QModFromJson, List<string>>();
+            Dictionary<QModFromJson, List<KeyValuePair<string, string>>> missingVersionDependenciesByMod = new Dictionary<QModFromJson, List<KeyValuePair<string, string>>>();
 
-            foreach (QMod mod in foundMods)
+            foreach (QModFromJson mod in foundMods)
             {
-                List<QMod> presentDependencies = GetPresentDependencies(mod);
+                List<QModFromJson> presentDependencies = GetPresentDependencies(mod);
                 List<string> missingDependencies = GetMissingDependencies(mod, presentDependencies);
 
                 if (missingDependencies.Count > 0)
@@ -721,7 +721,7 @@ namespace QModManager
                         erroredMods.Add(mod);
                 }
 
-                List<QMod> presentVersionDependencies = GetPresentVersionDependencies(mod);
+                List<QModFromJson> presentVersionDependencies = GetPresentVersionDependencies(mod);
                 List<KeyValuePair<string, string>> missingVersionDependencies = GetMissingVersionDependencies(mod, presentVersionDependencies);
 
                 if (missingVersionDependencies.Count > 0)
@@ -733,7 +733,7 @@ namespace QModManager
                 }
             }
 
-            Dictionary<QMod, List<string>> finalDependencies = MergeDependencyDictionaries(missingDependenciesByMod, missingVersionDependenciesByMod);
+            Dictionary<QModFromJson, List<string>> finalDependencies = MergeDependencyDictionaries(missingDependenciesByMod, missingVersionDependenciesByMod);
 
             if (finalDependencies.Count > 0)
             {
@@ -759,15 +759,15 @@ namespace QModManager
             }
         }
 
-        private static List<QMod> GetPresentDependencies(QMod mod)
+        private static List<QModFromJson> GetPresentDependencies(QModFromJson mod)
         {
             if (mod == null) return null;
 
-            List<QMod> dependencies = new List<QMod>();
+            List<QModFromJson> dependencies = new List<QModFromJson>();
 
             foreach (string dependencyId in mod.Dependencies)
             {
-                foreach (QMod dependencyMod in sortedMods)
+                foreach (QModFromJson dependencyMod in sortedMods)
                 {
                     if (dependencyId == dependencyMod.Id)
                         dependencies.Add(dependencyMod);
@@ -777,7 +777,7 @@ namespace QModManager
             return dependencies;
         }
 
-        private static List<string> GetMissingDependencies(QMod mod, List<QMod> presentDependencies)
+        private static List<string> GetMissingDependencies(QModFromJson mod, List<QModFromJson> presentDependencies)
         {
             if (mod == null) return null;
             if (presentDependencies == null || presentDependencies.Count() == 0) return mod.Dependencies.ToList();
@@ -789,7 +789,7 @@ namespace QModManager
 
             foreach (string dependencyId in mod.Dependencies)
             {
-                foreach (QMod presentDependency in presentDependencies)
+                foreach (QModFromJson presentDependency in presentDependencies)
                 {
                     if (dependencyId == presentDependency.Id)
                         dependenciesMissing.Remove(dependencyId);
@@ -799,11 +799,11 @@ namespace QModManager
             return dependenciesMissing;
         }
 
-        private static List<QMod> GetPresentVersionDependencies(QMod mod)
+        private static List<QModFromJson> GetPresentVersionDependencies(QModFromJson mod)
         {
             if (mod == null) return null;
 
-            List<QMod> dependencies = new List<QMod>();
+            List<QModFromJson> dependencies = new List<QModFromJson>();
 
             foreach (KeyValuePair<string, string> dependency in mod.VersionDependencies)
             {
@@ -811,8 +811,8 @@ namespace QModManager
                 {
                     try
                     {
-                        if (dependency.Value.Trim() == QMod.QModManagerQMod.Version.Trim() || dependency.Value.Trim(' ', '=') == QMod.QModManagerQMod.Version.Trim() || Range.IsSatisfied(dependency.Value.Trim(), QMod.QModManagerQMod.Version.Trim(), true))
-                            dependencies.Add(QMod.QModManagerQMod);
+                        if (dependency.Value.Trim() == QModFromJson.QModManagerQMod.Version.Trim() || dependency.Value.Trim(' ', '=') == QModFromJson.QModManagerQMod.Version.Trim() || Range.IsSatisfied(dependency.Value.Trim(), QModFromJson.QModManagerQMod.Version.Trim(), true))
+                            dependencies.Add(QModFromJson.QModManagerQMod);
                     }
                     catch (ArgumentException)
                     {
@@ -826,7 +826,7 @@ namespace QModManager
                     continue;
                 }
 
-                foreach (QMod dependencyMod in sortedMods)
+                foreach (QModFromJson dependencyMod in sortedMods)
                 {
                     if (dependency.Key.Trim() == dependencyMod.Id.Trim())
                     {
@@ -851,7 +851,7 @@ namespace QModManager
             return dependencies;
         }
 
-        private static List<KeyValuePair<string, string>> GetMissingVersionDependencies(QMod mod, List<QMod> presentDependencies)
+        private static List<KeyValuePair<string, string>> GetMissingVersionDependencies(QModFromJson mod, List<QModFromJson> presentDependencies)
         {
             if (mod == null) return null;
             if (presentDependencies == null || presentDependencies.Count() == 0) return mod.VersionDependencies.ToList();
@@ -862,7 +862,7 @@ namespace QModManager
 
             foreach (KeyValuePair<string, string> dependency in mod.VersionDependencies)
             {
-                foreach (QMod presentDependency in presentDependencies)
+                foreach (QModFromJson presentDependency in presentDependencies)
                 {
                     if (dependency.Key == presentDependency.Id)
                         dependenciesMissing.Remove(dependency);
@@ -872,11 +872,11 @@ namespace QModManager
             return dependenciesMissing;
         }
 
-        private static Dictionary<QMod, List<string>> MergeDependencyDictionaries(Dictionary<QMod, List<string>> normalDependencies, Dictionary<QMod, List<KeyValuePair<string, string>>> versionDependencies)
+        private static Dictionary<QModFromJson, List<string>> MergeDependencyDictionaries(Dictionary<QModFromJson, List<string>> normalDependencies, Dictionary<QModFromJson, List<KeyValuePair<string, string>>> versionDependencies)
         {
-            Dictionary<QMod, List<string>> dependencies = new Dictionary<QMod, List<string>>(normalDependencies);
+            Dictionary<QModFromJson, List<string>> dependencies = new Dictionary<QModFromJson, List<string>>(normalDependencies);
 
-            foreach (KeyValuePair<QMod, List<KeyValuePair<string, string>>> dependency in versionDependencies)
+            foreach (KeyValuePair<QModFromJson, List<KeyValuePair<string, string>>> dependency in versionDependencies)
             {
                 List<string> parsed = dependency.Value.Select(kvp => kvp.Key + "@" + kvp.Value).ToList();
                 if (dependencies.ContainsKey(dependency.Key))
@@ -894,9 +894,9 @@ namespace QModManager
 
         private static void CheckOldHarmony()
         {
-            List<QMod> modsThatUseOldHarmony = new List<QMod>();
+            List<QModFromJson> modsThatUseOldHarmony = new List<QModFromJson>();
 
-            foreach (QMod mod in loadedMods)
+            foreach (QModFromJson mod in loadedMods)
             {
                 AssemblyName[] references = mod.LoadedAssembly.GetReferencedAssemblies();
                 foreach (AssemblyName reference in references)
@@ -912,7 +912,7 @@ namespace QModManager
             if (modsThatUseOldHarmony.Count > 0)
             {
                 Logger.Warn($"Some mods are using an old version of harmony! This will NOT cause any problems, but it's not recommended:");
-                foreach (QMod mod in modsThatUseOldHarmony)
+                foreach (QModFromJson mod in modsThatUseOldHarmony)
                 {
                     Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");
                 }

@@ -4202,110 +4202,110 @@
             <param name="behaviour"></param>
             <returns></returns>
         </member>
-        <member name="T:QModManager.QMod">
+        <member name="T:QModManager.QModFromJson">
             <summary>
             A class containing information about a mod
             </summary>
         </member>
-        <member name="P:QModManager.QMod.QModManagerQMod">
+        <member name="P:QModManager.QModFromJson.QModManagerQMod">
             <summary>
-            The dummy <see cref="T:QModManager.QMod"/> which is used to represent QModManager
+            The dummy <see cref="T:QModManager.QModFromJson"/> which is used to represent QModManager
             </summary>
         </member>
-        <member name="P:QModManager.QMod.Id">
+        <member name="P:QModManager.QModFromJson.Id">
             <summary>
             The ID of the mod <para/>
             Can only contain alphanumeric characters and underscores: (<see langword="a-z"/>, <see langword="A-Z"/>, <see langword="0-9"/>, <see langword="_"/>)
             </summary>
         </member>
-        <member name="P:QModManager.QMod.DisplayName">
+        <member name="P:QModManager.QModFromJson.DisplayName">
             <summary>
             The display name of the mod
             </summary>
         </member>
-        <member name="P:QModManager.QMod.Author">
+        <member name="P:QModManager.QModFromJson.Author">
             <summary>
             The author of the mod
             </summary>
         </member>
-        <member name="P:QModManager.QMod.Version">
+        <member name="P:QModManager.QModFromJson.Version">
             <summary>
             The version of the mod <para/>
             Should be have this form: <see langword="MAJOR"/>.<see langword="MINOR"/>.<see langword="BUILD"/>.<see langword="REVISION"/>
             </summary>
         </member>
-        <member name="P:QModManager.QMod.Dependencies">
+        <member name="P:QModManager.QModFromJson.Dependencies">
             <summary>
             The dependencies of the mod <para/>
-            If you also want to specify the version of required dependencies, see <see cref="P:QModManager.QMod.VersionDependencies"/>
+            If you also want to specify the version of required dependencies, see <see cref="P:QModManager.QModFromJson.VersionDependencies"/>
             </summary>
         </member>
-        <member name="P:QModManager.QMod.VersionDependencies">
+        <member name="P:QModManager.QModFromJson.VersionDependencies">
             <summary>
             The version dependencies of the mod <para/>
             </summary>
         </member>
-        <member name="P:QModManager.QMod.LoadBefore">
+        <member name="P:QModManager.QModFromJson.LoadBefore">
             <summary>
             A list of mods before which this mod will load
             </summary>
         </member>
-        <member name="P:QModManager.QMod.LoadAfter">
+        <member name="P:QModManager.QModFromJson.LoadAfter">
             <summary>
             A list of mods after which this mod will load
             </summary>
         </member>
-        <member name="P:QModManager.QMod.Enable">
+        <member name="P:QModManager.QModFromJson.Enable">
             <summary>
             Whether or not this mod is enabled
             </summary>
         </member>
-        <member name="P:QModManager.QMod.Game">
+        <member name="P:QModManager.QModFromJson.Game">
             <summary>
             The game of this mod <para/>
             Should be <see langword="Subnautica"/>, <see langword="BelowZero"/>, or <see langword="Both"/>
             </summary>
         </member>
-        <member name="P:QModManager.QMod.AssemblyName">
+        <member name="P:QModManager.QModFromJson.AssemblyName">
             <summary>
             The assembly name of the mod (including <see langword=".dll"/>)
             </summary>
         </member>
-        <member name="P:QModManager.QMod.EntryMethod">
+        <member name="P:QModManager.QModFromJson.EntryMethod">
             <summary>
             The entry method of the mod <para/>
             Should have this form: <see langword="NAMESPACE"/>.<see langword="CLASS"/>.<see langword="METHOD"/>
             </summary>
         </member>
-        <member name="P:QModManager.QMod.LoadedAssembly">
+        <member name="P:QModManager.QModFromJson.LoadedAssembly">
             <summary>
             The assembly of this mod <para/>
             Check if <see langword="null"/> before using
             </summary>
         </member>
-        <member name="P:QModManager.QMod.ParsedVersion">
+        <member name="P:QModManager.QModFromJson.ParsedVersion">
             <summary>
-            The parsed <see cref="P:QModManager.QMod.Version"/> of this mod
+            The parsed <see cref="P:QModManager.QModFromJson.Version"/> of this mod
             </summary>
         </member>
-        <member name="P:QModManager.QMod.ParsedGame">
+        <member name="P:QModManager.QModFromJson.ParsedGame">
             <summary>
-            The parsed <see cref="P:QModManager.QMod.Game"/> of this mod
+            The parsed <see cref="P:QModManager.QModFromJson.Game"/> of this mod
             </summary>
         </member>
-        <member name="P:QModManager.QMod.ModAssemblyPath">
+        <member name="P:QModManager.QModFromJson.ModAssemblyPath">
             <summary>
             The dll path of this mod
             </summary>
         </member>
-        <member name="P:QModManager.QMod.Loaded">
+        <member name="P:QModManager.QModFromJson.Loaded">
             <summary>
             Whether or not this mod is loaded
             </summary>
         </member>
         <member name="T:QModManager.IQMod">
             <summary>
-            A read-only <see cref="T:QModManager.QMod"/>
+            A read-only <see cref="T:QModManager.QModFromJson"/>
             </summary>
         </member>
         <member name="P:QModManager.IQMod.Id">

@@ -6,9 +6,9 @@
     using System.Reflection;
     using Utility;
 
-    internal class QMod : IQMod
+    internal class QModFromAttribute : IQMod
     {
-        internal QMod(QModCoreInfo modInfo, Type originatingType, Assembly loadedAssembly)
+        internal QModFromAttribute(QModCoreInfo modInfo, Type originatingType, Assembly loadedAssembly)
         {
             // Basic mod info
             this.Id = modInfo.Id;

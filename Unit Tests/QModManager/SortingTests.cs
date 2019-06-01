@@ -15,7 +15,7 @@ namespace QModManager.Tests.QModManager
             Patcher.sortedMods.Clear();
             Patcher.erroredMods.Clear();
 
-            QMod mod1 = new QMod
+            QModFromJson mod1 = new QModFromJson
             {
                 Id = "Mod1",
                 LoadBefore = new string[2]
@@ -29,7 +29,7 @@ namespace QModManager.Tests.QModManager
                 }
             };
 
-            QMod mod2 = new QMod
+            QModFromJson mod2 = new QModFromJson
             {
                 Id = "Mod2",
                 LoadAfter = new string[2]
@@ -39,17 +39,17 @@ namespace QModManager.Tests.QModManager
                 }
             };
 
-            QMod mod3 = new QMod
+            QModFromJson mod3 = new QModFromJson
             {
                 Id = "Mod3"
             };
 
-            QMod mod4 = new QMod
+            QModFromJson mod4 = new QModFromJson
             {
                 Id = "Mod4"
             };
 
-            Patcher.foundMods = new List<QMod>
+            Patcher.foundMods = new List<QModFromJson>
             {
                 mod1,
                 mod2,
@@ -57,16 +57,16 @@ namespace QModManager.Tests.QModManager
                 mod4
             };
 
-            Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+            Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
-            foreach (QMod mod in Patcher.foundMods)
+            foreach (QModFromJson mod in Patcher.foundMods)
             {
                 Console.WriteLine("Now Loading: " + mod.Id);
                 Patcher.modSortingChain.Clear();
                 Assert.IsTrue(Patcher.SortMod(mod));
             }
 
-            foreach (QMod mod in Patcher.sortedMods)
+            foreach (QModFromJson mod in Patcher.sortedMods)
             {
                 Console.WriteLine(mod.Id);
             }
@@ -90,7 +90,7 @@ namespace QModManager.Tests.QModManager
             Patcher.sortedMods.Clear();
             Patcher.erroredMods.Clear();
 
-            QMod mod1 = new QMod
+            QModFromJson mod1 = new QModFromJson
             {
                 Id = "Mod1",
                 LoadBefore = new string[1]
@@ -99,7 +99,7 @@ namespace QModManager.Tests.QModManager
                 }
             };
 
-            QMod mod2 = new QMod
+            QModFromJson mod2 = new QModFromJson
             {
                 Id = "Mod2",
                 LoadAfter = new string[1]
@@ -108,21 +108,21 @@ namespace QModManager.Tests.QModManager
                 }
             };
 
-            Patcher.foundMods = new List<QMod>
+            Patcher.foundMods = new List<QModFromJson>
             {
                 mod2, mod1 // Simulate being picked up in the wrong order
             };
 
-            Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+            Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
-            foreach (QMod mod in Patcher.foundMods)
+            foreach (QModFromJson mod in Patcher.foundMods)
             {
                 Console.WriteLine("Now Loading: " + mod.Id);
                 Patcher.modSortingChain.Clear();
                 Assert.IsTrue(Patcher.SortMod(mod));
             }
 
-            foreach (QMod mod in Patcher.sortedMods)
+            foreach (QModFromJson mod in Patcher.sortedMods)
             {
                 Console.WriteLine(mod.Id);
             }
@@ -142,12 +142,12 @@ namespace QModManager.Tests.QModManager
             Patcher.sortedMods.Clear();
             Patcher.erroredMods.Clear();
 
-            QMod mod1 = new QMod
+            QModFromJson mod1 = new QModFromJson
             {
                 Id = "Mod1"
             };
 
-            QMod mod2 = new QMod
+            QModFromJson mod2 = new QModFromJson
             {
                 Id = "Mod2",
                 LoadAfter = new string[1]
@@ -156,21 +156,21 @@ namespace QModManager.Tests.QModManager
                 }
             };
 
-            Patcher.foundMods = new List<QMod>
+            Patcher.foundMods = new List<QModFromJson>
             {
                 mod2, mod1 // Simulate being picked up in the wrong order
             };
 
-            Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+            Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
-            foreach (QMod mod in Patcher.foundMods)
+            foreach (QModFromJson mod in Patcher.foundMods)
             {
                 Console.WriteLine("Now Loading: " + mod.Id);
                 Patcher.modSortingChain.Clear();
                 Assert.IsTrue(Patcher.SortMod(mod));
             }
 
-            foreach (QMod mod in Patcher.sortedMods)
+            foreach (QModFromJson mod in Patcher.sortedMods)
             {
                 Console.WriteLine(mod.Id);
             }
@@ -190,7 +190,7 @@ namespace QModManager.Tests.QModManager
             Patcher.sortedMods.Clear();
             Patcher.erroredMods.Clear();
 
-            QMod mod1 = new QMod
+            QModFromJson mod1 = new QModFromJson
             {
                 Id = "Mod1",
                 LoadBefore = new string[1]
@@ -199,26 +199,26 @@ namespace QModManager.Tests.QModManager
                 }
             };
 
-            QMod mod2 = new QMod
+            QModFromJson mod2 = new QModFromJson
             {
                 Id = "Mod2",
             };
 
-            Patcher.foundMods = new List<QMod>
+            Patcher.foundMods = new List<QModFromJson>
             {
                 mod2, mod1 // Simulate being picked up in the wrong order
             };
 
-            Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+            Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
-            foreach (QMod mod in Patcher.foundMods)
+            foreach (QModFromJson mod in Patcher.foundMods)
             {
                 Console.WriteLine("Now Loading: " + mod.Id);
                 Patcher.modSortingChain.Clear();
                 Assert.IsTrue(Patcher.SortMod(mod));
             }
 
-            foreach (QMod mod in Patcher.sortedMods)
+            foreach (QModFromJson mod in Patcher.sortedMods)
             {
                 Console.WriteLine(mod.Id);
             }
@@ -238,7 +238,7 @@ namespace QModManager.Tests.QModManager
             Patcher.sortedMods.Clear();
             Patcher.erroredMods.Clear();
 
-            QMod mod1 = new QMod
+            QModFromJson mod1 = new QModFromJson
             {
                 Id = "Mod1",
                 LoadBefore = new string[1]
@@ -247,7 +247,7 @@ namespace QModManager.Tests.QModManager
                 }
             };
 
-            QMod mod2 = new QMod
+            QModFromJson mod2 = new QModFromJson
             {
                 Id = "Mod2",
                 LoadBefore = new string[1]
@@ -256,12 +256,12 @@ namespace QModManager.Tests.QModManager
                 }
             };
 
-            Patcher.foundMods = new List<QMod>
+            Patcher.foundMods = new List<QModFromJson>
             {
                 mod2, mod1 // Simulate being picked up in the wrong order
             };
 
-            Patcher.sortedMods = new List<QMod>(Patcher.foundMods);
+            Patcher.sortedMods = new List<QModFromJson>(Patcher.foundMods);
 
             // Mod 1
             Console.WriteLine("Now Loading: " + Patcher.foundMods[0].Id);

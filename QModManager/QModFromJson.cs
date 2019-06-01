@@ -15,12 +15,12 @@ namespace QModManager
     /// <summary>
     /// A class containing information about a mod
     /// </summary>
-    public class QMod : IQMod
+    public class QModFromJson : IQMod
     {
         /// <summary>
-        /// The dummy <see cref="QMod"/> which is used to represent QModManager
+        /// The dummy <see cref="QModFromJson"/> which is used to represent QModManager
         /// </summary>
-        public static QMod QModManagerQMod { get; } = new QMod()
+        public static QModFromJson QModManagerQMod { get; } = new QModFromJson()
         {
             AssemblyName = "QModInstaller.dll",
             Author = "the QModManager dev team",
@@ -42,7 +42,7 @@ namespace QModManager
             VersionDependencies = new Dictionary<string, string>(),
         };
 
-        internal QMod() { }
+        internal QModFromJson() { }
 
         /// <summary>
         /// The ID of the mod <para/>
@@ -140,7 +140,7 @@ namespace QModManager
         //// </summary>
         //[JsonIgnore] public Dictionary<IQMod, List<MethodInfo>> MessageReceivers { get; set; }
 
-        internal static QMod FromJsonFile(string file)
+        internal static QModFromJson FromJsonFile(string file)
         {
             try
             {
@@ -150,7 +150,7 @@ namespace QModManager
                 };
 
                 string json = File.ReadAllText(file);
-                QMod mod = JsonConvert.DeserializeObject<QMod>(json);
+                QModFromJson mod = JsonConvert.DeserializeObject<QModFromJson>(json);
 
                 if (mod == null) return null;
 
@@ -180,9 +180,9 @@ namespace QModManager
             }
         }
 
-        internal static QMod CreateFakeQMod(string name)
+        internal static QModFromJson CreateFakeQMod(string name)
         {
-            return new QMod()
+            return new QModFromJson()
             {
                 Id = Patcher.IDRegex.Replace(name, ""),
                 DisplayName = name,
@@ -199,7 +199,7 @@ namespace QModManager
             };
         }
 
-        internal static bool QModValid(QMod mod, string folderName)
+        internal static bool QModValid(QModFromJson mod, string folderName)
         {
             bool success = true;
 
@@ -304,7 +304,7 @@ namespace QModManager
     }
 
     /// <summary>
-    /// A read-only <see cref="QMod"/>
+    /// A read-only <see cref="QModFromJson"/>
     /// </summary>
     public interface IQMod
     {
