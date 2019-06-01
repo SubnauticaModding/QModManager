@@ -1,10 +1,21 @@
-﻿using System;
-
-namespace QModManager.Utility
+﻿namespace QModManager.Utility
 {
+    using QModManager.API.SMLHelper.Utility;
+    using System;
+    using System.Diagnostics;
+
     internal static class Logger
     {
-        internal static bool EnableDebugging
+        internal enum Level
+        {
+            Debug,
+            Info,
+            Warn,
+            Error,
+            Fatal
+        }
+
+        private static bool EnableDebugging
         {
             get
             {
@@ -16,13 +27,106 @@ namespace QModManager.Utility
             }
         }
 
-        internal static void Log(string prefix, string text) => Console.WriteLine($"[QModManager{prefix}] {text}");
-        internal static void Log(string text) => Log("", text);
-        internal static void Debug(string text) { if (EnableDebugging) Log("/DEBUG", text); }
-        internal static void Info(string text) => Log("/INFO", text);
-        internal static void Warn(string text) => Log("/WARN", text);
-        internal static void Error(string text) => Log("/ERROR", text);
-        internal static void Exception(Exception e) => Log("/EXCEPTION", e.ToString());
-        internal static void Fatal(string text) => Log("/FATAL", text);
+        private static void Log(string logLevel, params string[] text)
+        {
+            if (text == null || text.Length < 1) return;
+
+            string from;
+            Type classType = GetCallingClass();
+
+            if (classType == null) from = null;
+            else if (classType.Namespace.Contains("SMLHelper")) from = "SMLHelper";
+            else from = classType.Name;
+
+            string toWrite = "[QModManager] ";
+            if (!string.IsNullOrEmpty(from)) toWrite += $"[{from}] ";
+            if (!string.IsNullOrEmpty(logLevel)) toWrite += $"[{logLevel}] ";
+
+            int length = toWrite.Length;
+
+            Console.WriteLine($"{toWrite}{text[0]}");
+
+            for (int i = 1; i < text.Length; i++)
+                Console.WriteLine($"{text[i]}");
+                //Console.WriteLine($"{' '.Repeat(toWrite.Length)}{text[i]}");
+        }
+
+        internal static void Log(params string[] text)
+        {
+            Log("", text);
+        }
+
+        internal static void Log(Level logLevel, params string[] text)
+        {
+            switch (logLevel)
+            {
+                case Level.Debug:
+                    Debug(text);
+                    break;
+                case Level.Info:
+                    Info(text);
+                    break;
+                case Level.Warn:
+                    Warn(text);
+                    break;
+                case Level.Error:
+                    Error(text);
+                    break;
+                case Level.Fatal:
+                    Fatal(text);
+                    break;
+            }
+        }
+
+        internal static void Debug(params string[] text)
+        {
+            if (EnableDebugging)
+                Log("Debug", text);
+        }
+
+        internal static void DebugForce(params string[] text)
+        {
+            Log("Debug", text);
+        }
+
+        internal static void Info(params string[] text)
+        {
+            Log("Info", text);
+        }
+
+        internal static void Warn(params string[] text)
+        {
+            Log("Warn", text);
+        }
+
+        internal static void Error(params string[] text)
+        {
+            Log("Error", text);
+        }
+
+        internal static void Exception(Exception e)
+        {
+            Log("Exception", e.ToString());
+        }
+
+        internal static void Fatal(params string[] text)
+        {
+            Log("Fatal", text);
+        }
+
+        private static Type GetCallingClass()
+        {
+            StackTrace stackTrace = new StackTrace();
+            StackFrame[] frames = stackTrace.GetFrames();
+
+            foreach (StackFrame stackFrame in frames)
+            {
+                Type declaringClass = stackFrame.GetMethod().DeclaringType;
+                if (declaringClass != typeof(Logger))
+                    return declaringClass;
+            }
+
+            return null;
+        }
     }
 }

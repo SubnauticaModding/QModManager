@@ -133,7 +133,36 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="API\ModLoading\Internal\IModOrder.cs" />
+    <Compile Include="API\ModLoading\Internal\IQModSerialiable.cs" />
+    <Compile Include="API\ModLoading\Internal\ModLoadingResults.cs" />
+    <Compile Include="API\ModLoading\Internal\PatchingOrder.cs" />
+    <Compile Include="API\ModLoading\Internal\QMod.cs" />
+    <Compile Include="API\ModLoading\Internal\QModCore.cs" />
+    <Compile Include="API\ModLoading\Internal\QModFactory.cs" />
+    <Compile Include="API\ModLoading\Internal\QModLegacy.cs" />
+    <Compile Include="API\ModLoading\Internal\QModPatchAttributeBase.cs" />
+    <Compile Include="API\ModLoading\Internal\QModPlaceholder.cs" />
+    <Compile Include="API\ModLoading\Internal\QPatchMethod.cs" />
+    <Compile Include="API\ModLoading\IQMod.cs" />
+    <Compile Include="API\ModLoading\ModStatus.cs" />
+    <Compile Include="API\ModLoading\PatchResults.cs" />
+    <Compile Include="API\ModLoading\QModCoreInfo.cs" />
+    <Compile Include="API\ModLoading\QModDependency.cs" />
+    <Compile Include="API\ModLoading\QModLoadAfter.cs" />
+    <Compile Include="API\ModLoading\QModLoadBefore.cs" />
+    <Compile Include="API\ModLoading\QModPatchMethod.cs" />
+    <Compile Include="API\ModLoading\QModPostPatchMethod.cs" />
+    <Compile Include="API\ModLoading\QModPrePatchMethod.cs" />
+    <Compile Include="API\ModLoading\RequiredQMod.cs" />
+    <Compile Include="API\QModGame.cs" />
     <Compile Include="API\QModHooks.cs" />
+    <Compile Include="DataStructures\ErrorTypes.cs" />
+    <Compile Include="DataStructures\ISortable.cs" />
+    <Compile Include="DataStructures\PairedList.cs" />
+    <Compile Include="DataStructures\SortedTree.cs" />
+    <Compile Include="DataStructures\SortedTreeNode.cs" />
+    <Compile Include="DataStructures\SortResults.cs" />
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Dialog.cs" />
     <Compile Include="Obsolete\Hooks.cs" />
@@ -141,6 +170,10 @@
     <Compile Include="API\Messages.cs" />
     <Compile Include="API\QModAPI.cs" />
     <Compile Include="NitroxCheck.cs" />
+    <Compile Include="Patching\FatalPatchingException.cs" />
+    <Compile Include="Patching\GameDetector.cs" />
+    <Compile Include="Patching\Patcher.cs" />
+    <Compile Include="SummaryLogger.cs" />
     <Compile Include="Utility\IOUtilities.cs" />
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="OptionsManager.cs" />
@@ -151,13 +184,14 @@
     <Compile Include="Prefab Debugger\Tree.cs" />
     <Compile Include="QMod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Patcher.cs" />
     <Compile Include="Utility\ExtensionMethods.cs" />
     <Compile Include="Utility\NetworkUtilities.cs" />
     <Compile Include="Utility\PlayerPrefsExtra.cs" />
     <Compile Include="Utility\ReflectionHelper.cs" />
-    <Compile Include="VersionCheck.cs" />
+    <Compile Include="Checks\VersionCheck.cs" />
+    <Compile Include="API\ModLoading\Internal\Initializer.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

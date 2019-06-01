@@ -1,11 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-
-namespace QModManager
+﻿namespace QModManager
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Runtime.InteropServices;
+    using QModManager.API;
+
     internal enum Action
     {
         Install,
@@ -26,13 +27,13 @@ namespace QModManager
     {
         internal static Action action = Action.RunByUser;
         internal static OS os;
-        internal static Patcher.Game game;
+        internal static QModGame game;
 
         internal static void Main(string[] args)
         {
             try
             {
-                Dictionary<string, string> parsedArgs = new Dictionary<string, string>();
+                var parsedArgs = new Dictionary<string, string>();
 
                 foreach (string arg in args)
                 {
@@ -40,8 +41,10 @@ namespace QModManager
                     {
                         parsedArgs = args.Select(s => s.Split(new[] { '=' }, 1)).ToDictionary(s => s[0], s => s[1]);
                     }
-                    else if (arg == "-i") action = Action.Install;
-                    else if (arg == "-u") action = Action.Uninstall;
+                    else if (arg == "-i")
+                        action = Action.Install;
+                    else if (arg == "-u")
+                        action = Action.Uninstall;
                 }
 
                 string managedDirectory = Environment.CurrentDirectory;
@@ -181,7 +184,7 @@ namespace QModManager
             }
         }
 
-        internal static void GetInfo(out OS os, out string directory, out Patcher.Game game)
+        private static void GetInfo(out OS os, out string directory, out QModGame game)
         {
             string windowsDirectory = Path.Combine(Environment.CurrentDirectory, "../..");
             string macDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../..");
@@ -248,9 +251,11 @@ namespace QModManager
                 directory = windowsDirectory;
             }
 
-            game = Patcher.Game.None;
-            if (subnautica) game |= Patcher.Game.Subnautica;
-            if (belowzero) game |= Patcher.Game.BelowZero;
+            game = QModGame.None;
+            if (subnautica)
+                game |= QModGame.Subnautica;
+            if (belowzero)
+                game |= QModGame.BelowZero;
         }
 
         #region Disable exit
@@ -262,11 +267,19 @@ namespace QModManager
             Console.TreatControlCAsInput = true;
         }
 
-        internal static void DisableExitButton() => EnableMenuItem(GetSystemMenu(GetConsoleWindow(), false), 0xF060, 0x1);
-        internal static void CancelKeyPress(object sender, ConsoleCancelEventArgs e) => e.Cancel = true;
-        [DllImport("user32.dll")] internal static extern int EnableMenuItem(IntPtr tMenu, int targetItem, int targetStatus);
-        [DllImport("user32.dll")] internal static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
-        [DllImport("kernel32.dll", ExactSpelling = true)] internal static extern IntPtr GetConsoleWindow();
+        private static void DisableExitButton()
+        {
+            EnableMenuItem(GetSystemMenu(GetConsoleWindow(), false), 0xF060, 0x1);
+        }
+
+        private static void CancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        {
+            e.Cancel = true;
+        }
+
+        [DllImport("user32.dll")] private static extern int EnableMenuItem(IntPtr tMenu, int targetItem, int targetStatus);
+        [DllImport("user32.dll")] private static extern IntPtr GetSystemMenu(IntPtr hWnd, bool bRevert);
+        [DllImport("kernel32.dll", ExactSpelling = true)] private static extern IntPtr GetConsoleWindow();
 
         #endregion
     }

@@ -1,0 +1,167 @@
+namespace QModManager
+{
+    using System;
+    using System.IO;
+    using System.Reflection;
+    using System.Text.RegularExpressions;
+    using API;
+    using API.ModLoading;
+    using API.ModLoading.Internal;
+    using Checks;
+    using Harmony;
+    using QModManager.DataStructures;
+    using QModManager.Patching;
+    using Utility;
+
+    /// <summary>
+    /// The main class which handles all of QModManager's patching
+    /// </summary>
+    public static class Patcher
+    {
+        internal const string IDRegex = "[^0-9a-z_]";
+
+        internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? null : Path.Combine(Environment.CurrentDirectory, "QMods");
+        internal static bool patched = false;
+
+        internal static string QModBaseDir
+        {
+            get
+            {
+                if (Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows"))
+                    return null;
+                else
+                    return Path.Combine(Environment.CurrentDirectory, "QMods");
+            }
+        }
+
+        private static bool Patched = false;
+        internal static QModGame CurrentlyRunningGame { get; private set; } = QModGame.None;
+        internal static int ErrorModCount { get; private set; }
+
+        internal static void Patch()
+        {
+            try
+            {
+                if (patched)
+                {
+                    Logger.Warn("Patch method was called multiple times!");
+                    return; // Halt patching
+                }
+
+                Patched = true;
+
+                Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}...");
+
+                if (QModBaseDir == null)
+                {
+                    Logger.Fatal("A fatal error has occurred.");
+                    Logger.Fatal("There was an error with the QMods directory");
+                    Logger.Fatal("Please make sure that you ran Subnautica from Steam/Epic/Discord, and not from the executable file!");
+                    return; // Halt patching
+                }
+
+                try
+                {
+                    Logger.Info($"Folder structure:\n{IOUtilities.GetFolderStructureAsTree()}\n");
+                }
+                catch (Exception e)
+                {
+                    Logger.Error("There was an error while trying to display the folder structure.");
+                    Logger.Exception(e);
+                }
+
+                QModHooks.Load();
+#pragma warning disable CS0618 // Type or member is obsolete
+                Hooks.Load();
+#pragma warning restore CS0618 // Type or member is obsolete
+
+                PirateCheck.IsPirate(Environment.CurrentDirectory);
+
+                var gameDetector = new GameDetector();
+
+                if (!gameDetector.IsValidGameRunning)
+                    return;
+
+                CurrentlyRunningGame = gameDetector.CurrentlyRunningGame;
+
+                PatchHarmony();
+
+                if (NitroxCheck.IsInstalled)
+                {
+                    Logger.Fatal($"Nitrox was detected!");
+                    Dialog.Show("Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.", Dialog.Button.disabled, Dialog.Button.disabled, false);
+                    return;
+                }
+
+                VersionCheck.Check();
+
+                Logger.Info("Started loading mods");
+
+                AddAssemblyResolveEvent();
+
+                var modFactory = new QModFactory();
+                PairedList<QMod, ModStatus> modsToLoad = modFactory.BuildModLoadingList(QModBaseDir);
+
+                var initializer = new Initializer(CurrentlyRunningGame);
+                initializer.InitializeMods(modsToLoad);
+
+                QModHooks.OnLoadEnd?.Invoke();
+
+                int loadedMods = 0;
+                int erroredMods = 0;
+                foreach (Pair<QMod, ModStatus> mod in modsToLoad)
+                {
+                    if (mod.Key.IsLoaded)
+                        loadedMods++;
+                    else
+                        erroredMods++;
+                }
+
+                ErrorModCount = erroredMods;
+
+                Logger.Info($"Finished loading QModManager. Loaded {loadedMods} mods");
+
+                if (ErrorModCount > 0)
+                    Logger.Info($"A total of {ErrorModCount} mods failed to load");
+
+                SummaryLogger.LogSummaries(modsToLoad);
+            }
+            catch (FatalPatchingException pEx)
+            {
+                Logger.Fatal($"FATAL PATCHING EXCEPTION! - Patching ended - {pEx.Message}");
+                Logger.Exception(pEx);
+            }
+            catch (Exception e)
+            {
+                Logger.Fatal("UNHANDLED EXCEPTION CAUGHT! - Patching ended");
+                Logger.Exception(e);
+            }
+        }
+
+        private static void AddAssemblyResolveEvent()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
+            {
+                FileInfo[] allDlls = new DirectoryInfo(QModBaseDir).GetFiles("*.dll", SearchOption.AllDirectories);
+                foreach (FileInfo dll in allDlls)
+                {
+                    if (args.Name.Contains(Path.GetFileNameWithoutExtension(dll.Name)))
+                    {
+                        return Assembly.LoadFrom(dll.FullName);
+                    }
+                }
+
+                return null;
+            };
+
+            Logger.Debug("Added AssemblyResolve event");
+        }
+
+        private static void PatchHarmony()
+        {
+            Harmony = HarmonyInstance.Create("qmodmanager");
+            Harmony.PatchAll();
+            Logger.Debug("Patched!");
+        }
+    }
+}

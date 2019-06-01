@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 using Logger = QModManager.Utility.Logger;
@@ -23,7 +22,7 @@ namespace QModManager
             internal static readonly Button seeLog = new Button("See Log", () =>
             {
                 string logPath;
-                if (Patcher.game == Patcher.Game.Subnautica)
+                if (Patcher.CurrentlyRunningGame == API.QModGame.Subnautica)
                     logPath = Path.Combine(Patcher.QModBaseDir, "../Subnautica_Data/output_log.txt");
                 else
                     logPath = Path.Combine(Application.persistentDataPath, "output_log.txt");
@@ -36,7 +35,7 @@ namespace QModManager
             internal static readonly Button close = new Button("Close", () => { });
             internal static readonly Button download = new Button("Download", () =>
             {
-                if (Patcher.game == Patcher.Game.Subnautica)
+                if (Patcher.CurrentlyRunningGame == API.QModGame.Subnautica)
                     Process.Start(VersionCheck.snNexus);
                 else
                     Process.Start(VersionCheck.bzNexus);

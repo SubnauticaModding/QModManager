@@ -1,12 +1,12 @@
-﻿using QModManager.Utility;
-using System;
-using System.Net;
-using System.Reflection;
-using UnityEngine;
-using Logger = QModManager.Utility.Logger;
-
-namespace QModManager
+﻿namespace QModManager
 {
+    using System;
+    using System.Net;
+    using System.Reflection;
+    using QModManager.Utility;
+    using UnityEngine;
+    using Logger = Utility.Logger;
+
     internal static class VersionCheck
     {
         internal const string snNexus = "https://nexusmods.com/subnautica/mods/201";
@@ -29,7 +29,7 @@ namespace QModManager
 
             ServicePointManager.ServerCertificateValidationCallback = NetworkUtilities.CustomSCVC;
 
-            using (WebClient client = new WebClient())
+            using (var client = new WebClient())
             {
                 client.DownloadStringCompleted += (sender, e) =>
                 {
@@ -56,7 +56,7 @@ namespace QModManager
                     Logger.Error("There was an error retrieving the latest version from GitHub!");
                     return;
                 }
-                Version latestVersion = new Version(versionStr);
+                var latestVersion = new Version(versionStr);
                 if (latestVersion == null)
                 {
                     Logger.Error("There was an error retrieving the latest version from GitHub!");
@@ -65,7 +65,7 @@ namespace QModManager
                 if (latestVersion > currentVersion)
                 {
                     Logger.Info($"Newer version found: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()}");
-                    if (Patcher.erroredMods.Count <= 0)
+                    if (Patcher.ErrorModCount <= 0)
                     {
                         Dialog.Show(
                             $"There is a newer version of QModManager available: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()})",

@@ -1,4 +1,7 @@
-﻿using QModManager.Utility;
+﻿using QModManager.API.ModLoading;
+using QModManager.API.ModLoading.Internal;
+using QModManager.Utility;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -7,7 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace QModManager.API
 {
-    public partial class QModAPI : IQModAPI
+    public class QModAPI : IQModAPI
     {
         /// <summary>
         /// The main instance of this class <para/>
@@ -127,12 +130,13 @@ namespace QModManager.API
         /// <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded/errored mods</returns>
         ReadOnlyCollection<IQMod> IQModAPI.GetAllMods(bool includeUnloaded, bool includeErrored)
         {
-            if (includeErrored)
-                return Patcher.foundMods.Select(qmod => (IQMod)qmod).ToList().AsReadOnly();
-            else if (includeUnloaded)
-                return Patcher.sortedMods.Select(qmod => (IQMod)qmod).ToList().AsReadOnly();
-            else
-                return Patcher.loadedMods.Select(qmod => (IQMod)qmod).ToList().AsReadOnly();
+            throw new NotImplementedException();
+            //if (includeErrored)
+            //    return Patcher.foundMods.Select(qmod => (IQMod)qmod).ToList().AsReadOnly();
+            //else if (includeUnloaded)
+            //    return Patcher.sortedMods.Select(qmod => (IQMod)qmod).ToList().AsReadOnly();
+            //else
+            //    return Patcher.loadedMods.Select(qmod => (IQMod)qmod).ToList().AsReadOnly();
         }
 
         /// <summary>
@@ -164,9 +168,9 @@ namespace QModManager.API
         {
             if (modAssembly == null) return null;
 
-            if (modAssembly == Assembly.GetExecutingAssembly()) return QMod.QModManagerQMod;
+            if (modAssembly == Assembly.GetExecutingAssembly()) return QModPlaceholder.QModManager;
 
-            foreach (QMod mod in GetAllMods(includeUnloaded, includeErrored))
+            foreach (IQMod mod in GetAllMods(includeUnloaded, includeErrored))
             {
                 if (mod.LoadedAssembly == modAssembly)
                     return mod;
@@ -200,9 +204,9 @@ namespace QModManager.API
 
             string regexedID = Regex.Replace(id, Patcher.IDRegex, "", RegexOptions.IgnoreCase);
 
-            if (regexedID == "QModManager") return QMod.QModManagerQMod;
+            if (regexedID == "QModManager") return QModPlaceholder.QModManager;
 
-            foreach (QMod mod in GetAllMods(includeUnloaded, includeErrored))
+            foreach (IQMod mod in GetAllMods(includeUnloaded, includeErrored))
             {
                 if (mod.Id == regexedID)
                     return mod;

@@ -1,9 +1,8 @@
-﻿using Harmony;
-using QModManager.Utility;
-using UnityEngine.Events;
-
-namespace QModManager
+﻿namespace QModManager
 {
+    using Harmony;
+    using UnityEngine.Events;
+
     internal static class OptionsManager
     {
         internal static bool DebuggerEnabled { get => PlayerPrefsExtra.GetBool("QModManager_PrefabDebugger_EnableExperimental", false); }
