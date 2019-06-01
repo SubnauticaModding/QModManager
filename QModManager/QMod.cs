@@ -36,7 +36,7 @@ namespace QModManager
             LoadedAssembly = Assembly.GetExecutingAssembly(),
             //MessageReceivers = new Dictionary<IQMod, List<MethodInfo>>(),
             ModAssemblyPath = Assembly.GetExecutingAssembly().Location,
-            ParsedGame = Patcher.Game.Both,
+            ParsedGame = API.Game.Both,
             ParsedVersion = Assembly.GetExecutingAssembly().GetName().Version,
             Version = Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed(),
             VersionDependencies = new Dictionary<string, string>(),
@@ -121,9 +121,9 @@ namespace QModManager
         [JsonIgnore] public Version ParsedVersion { get; set; }
 
         /// <summary>
-        /// The parsed <see cref="Patcher.Game"/> of this mod
+        /// The parsed <see cref="Game"/> of this mod
         /// </summary>
-        [JsonIgnore] public Patcher.Game ParsedGame { get; set; }
+        [JsonIgnore] public Game ParsedGame { get; set; }
 
         /// <summary>
         /// The dll path of this mod
@@ -154,9 +154,9 @@ namespace QModManager
 
                 if (mod == null) return null;
 
-                if (mod.Game == "BelowZero") mod.ParsedGame = Patcher.Game.BelowZero;
-                else if (mod.Game == "Both") mod.ParsedGame = Patcher.Game.Both;
-                else mod.ParsedGame = Patcher.Game.Subnautica;
+                if (mod.Game == "BelowZero") mod.ParsedGame = API.Game.BelowZero;
+                else if (mod.Game == "Both") mod.ParsedGame = API.Game.Both;
+                else mod.ParsedGame = API.Game.Subnautica;
 
                 try
                 {
@@ -387,7 +387,7 @@ namespace QModManager
         /// <summary>
         /// The parsed <see cref="Patcher.game"/> of this mod
         /// </summary>
-        Patcher.Game ParsedGame { get; }
+        Game ParsedGame { get; }
 
         /// <summary>
         /// The dll path of this mod

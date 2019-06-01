@@ -4,6 +4,7 @@
 
     /// <summary>
     /// Provides important custom meta data about your QMod.
+    /// ALERT: This class must contain a method with a <seealso cref="QModPatchMethod"/> attribute.
     /// </summary>
     /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
@@ -15,16 +16,13 @@
         /// <param name="id">The mod identifier.</param>
         /// <param name="displayName">The mod display name.</param>
         /// <param name="author">The mod author or team name.</param>
-        /// <param name="developedFor">The game the mod was developed for.</param>
-        /// <param name="patchMethod">The patch method.</param>
-        public QModCoreInfo(string id, string displayName, string author, DevelopedFor developedFor, string patchMethod)
+        /// <param name="supportedGame">The game the mod was developed for.</param>
+        public QModCoreInfo(string id, string displayName, string author, Game supportedGame)
         {
             this.Id = id;
             this.DisplayName = displayName;
             this.Author = author;
-            this.DevelopedFor = developedFor;
-            this.Game = (Patcher.Game)this.DevelopedFor;
-            this.PatchMethod = patchMethod;
+            this.SupportedGame = supportedGame;
         }
 
         /// <summary>
@@ -46,13 +44,6 @@
         /// <summary>
         /// The game this mod was developed for.
         /// </summary>
-        public DevelopedFor DevelopedFor { get; set; }
-
-        /// <summary>
-        /// Identifies the patch method. <c>WARNING</c>: This method must be defined in the class using this attribute.
-        /// </summary>
-        public string PatchMethod { get; set; }
-
-        internal Patcher.Game Game { get; set; }
+        public Game SupportedGame { get; set; }
     }
 }

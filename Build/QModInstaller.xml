@@ -4,41 +4,70 @@
         <name>QModInstaller</name>
     </assembly>
     <members>
-        <member name="T:QModManager.API.ModLoading.DevelopedFor">
+        <member name="T:QModManager.API.Game">
             <summary>
-            Defines what game a QMod can run on.
+            Identifies the Subnautica games.
             </summary>
         </member>
-        <member name="F:QModManager.API.ModLoading.DevelopedFor.Subnautica">
+        <member name="F:QModManager.API.Game.None">
             <summary>
-            Mod developed exclusively for Subnautica
+            No game.
             </summary>
         </member>
-        <member name="F:QModManager.API.ModLoading.DevelopedFor.BelowZero">
+        <member name="F:QModManager.API.Game.Subnautica">
             <summary>
-            Mod developed exclusively for Below Zero
+            Subnautica.
             </summary>
         </member>
-        <member name="F:QModManager.API.ModLoading.DevelopedFor.BothGames">
+        <member name="F:QModManager.API.Game.BelowZero">
             <summary>
-            Mod that can be loaded on both Subnautica and Below Zero
+            Subnautica: Below.
+            </summary>
+        </member>
+        <member name="F:QModManager.API.Game.Both">
+            <summary>
+            Both Subnautica and Below Zero.
+            </summary>
+        </member>
+        <member name="T:QModManager.API.ModLoading.Advanced.MetaPatchOrder">
+            <summary>
+            <c>WARNING:</c> For advanced users only!<para/>
+            Use this only if you absolutely know what you are doing.
+            </summary>
+        </member>
+        <member name="F:QModManager.API.ModLoading.Advanced.MetaPatchOrder.Early">
+            <summary>
+            Informs that the patch method should be executed before <see cref="F:QModManager.API.ModLoading.Advanced.MetaPatchOrder.Normal"/> patch methods.<para/>
+            <c>WARNING:</c> Do not use unless you absolutely have to.        
+            </summary>
+        </member>
+        <member name="F:QModManager.API.ModLoading.Advanced.MetaPatchOrder.Normal">
+            <summary>
+            Informs that the patch method should be executed at the normal patching time.<para/>
+            For 99.9% of mods out there, this is what you want to use.
+            </summary>
+        </member>
+        <member name="F:QModManager.API.ModLoading.Advanced.MetaPatchOrder.Late">
+            <summary>
+            Informs that the patch method should be executed after <see cref="F:QModManager.API.ModLoading.Advanced.MetaPatchOrder.Normal"/> patch methods.<para/>
+            <c>WARNING:</c> Do not use unless you absolutely have to.
             </summary>
         </member>
         <member name="T:QModManager.API.ModLoading.QModCoreInfo">
             <summary>
             Provides important custom meta data about your QMod.
+            ALERT: This class must contain a method with a <seealso cref="T:QModManager.API.ModLoading.QModPatchMethod"/> attribute.
             </summary>
             <seealso cref="T:System.Attribute" />
         </member>
-        <member name="M:QModManager.API.ModLoading.QModCoreInfo.#ctor(System.String,System.String,System.String,QModManager.API.ModLoading.DevelopedFor,System.String)">
+        <member name="M:QModManager.API.ModLoading.QModCoreInfo.#ctor(System.String,System.String,System.String,QModManager.API.Game)">
             <summary>
             Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModCoreInfo" /> class.
             </summary>
             <param name="id">The mod identifier.</param>
             <param name="displayName">The mod display name.</param>
             <param name="author">The mod author or team name.</param>
-            <param name="developedFor">The game the mod was developed for.</param>
-            <param name="patchMethod">The patch method.</param>
+            <param name="supportedGame">The game the mod was developed for.</param>
         </member>
         <member name="P:QModManager.API.ModLoading.QModCoreInfo.Id">
             <summary>
@@ -56,14 +85,9 @@
             The author of the mod
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.QModCoreInfo.DevelopedFor">
+        <member name="P:QModManager.API.ModLoading.QModCoreInfo.SupportedGame">
             <summary>
             The game this mod was developed for.
-            </summary>
-        </member>
-        <member name="P:QModManager.API.ModLoading.QModCoreInfo.PatchMethod">
-            <summary>
-            Identifies the patch method. <c>WARNING</c>: This method must be defined in the class using this attribute.
             </summary>
         </member>
         <member name="T:QModManager.API.ModLoading.QModDependency">
@@ -78,12 +102,29 @@
             </summary>
             <param name="requiredMod">The other mod required by this one to function.</param>
         </member>
-        <member name="M:QModManager.API.ModLoading.QModDependency.#ctor(System.String,System.String)">
+        <member name="M:QModManager.API.ModLoading.QModDependency.#ctor(System.String,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModDependency" /> class.
+            </summary>
+            <param name="requiredMod">The other mod required by this one to function.</param>
+            <param name="major">The minimum major version of the mod required.</param>
+        </member>
+        <member name="M:QModManager.API.ModLoading.QModDependency.#ctor(System.String,System.Int32,System.Int32)">
             <summary>
             Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModDependency"/> class.
             </summary>
             <param name="requiredMod">The other mod required by this one to function.</param>
-            <param name="requiredVersion">The minimum version the other mod should be at.</param>
+            <param name="major">The minimum major version of the mod required.</param>
+            <param name="minor">The specific minimum minor version.</param>
+        </member>
+        <member name="M:QModManager.API.ModLoading.QModDependency.#ctor(System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModDependency"/> class.
+            </summary>
+            <param name="requiredMod">The other mod required by this one to function.</param>
+            <param name="major">The minimum major version of the mod required.</param>
+            <param name="minor">The specific minimum minor update of the major version.</param>
+            <param name="build">The specific build update of the minor version.</param>
         </member>
         <member name="P:QModManager.API.ModLoading.QModDependency.RequiredMod">
             <summary>
@@ -127,6 +168,30 @@
         <member name="P:QModManager.API.ModLoading.QModLoadBefore.OtherMod">
             <summary>
             Identifies another QMod, by Id. If this other mod is present, your mod will be loaded before it.
+            </summary>
+        </member>
+        <member name="T:QModManager.API.ModLoading.QModPatchMethod">
+            <summary>
+            Identifies a patch method for a QMod.<para/>
+            ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreInfo"/> attribute.
+            </summary>
+            <seealso cref="T:System.Attribute" />
+        </member>
+        <member name="M:QModManager.API.ModLoading.QModPatchMethod.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPatchMethod"/> class for normal patching.        
+            </summary>
+        </member>
+        <member name="M:QModManager.API.ModLoading.QModPatchMethod.#ctor(QModManager.API.ModLoading.Advanced.MetaPatchOrder)">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPatchMethod"/> class for advanced patching.<para/>
+            WARNING: Do not use this unless you know exactly why you are attempting to change the patch order.
+            </summary>
+            <param name="patchOrder">The patch order.</param>
+        </member>
+        <member name="P:QModManager.API.ModLoading.QModPatchMethod.PatchOrder">
+            <summary>
+            Gets the patch method's meta patch order.
             </summary>
         </member>
         <member name="T:QModManager.API.QModHooks">
@@ -4225,7 +4290,7 @@
         </member>
         <member name="P:QModManager.QMod.ParsedGame">
             <summary>
-            The parsed <see cref="T:QModManager.Patcher.Game"/> of this mod
+            The parsed <see cref="P:QModManager.QMod.Game"/> of this mod
             </summary>
         </member>
         <member name="P:QModManager.QMod.ModAssemblyPath">
@@ -4337,33 +4402,6 @@
         <member name="T:QModManager.Patcher">
             <summary>
             The main class which handles all of QModManager's patching
-            </summary>
-        </member>
-        <member name="T:QModManager.Patcher.Game">
-            <summary>
-            An enum which contains possible values for <see cref="P:QModManager.IQMod.ParsedGame"/>
-            </summary>
-        </member>
-        <member name="F:QModManager.Patcher.Game.None">
-            <summary>
-            No game was detected <para/>
-            In theory, this should never be the case
-            </summary>
-        </member>
-        <member name="F:QModManager.Patcher.Game.Subnautica">
-            <summary>
-            Subnautica was detected
-            </summary>
-        </member>
-        <member name="F:QModManager.Patcher.Game.BelowZero">
-            <summary>
-            Below Zero was detected
-            </summary>
-        </member>
-        <member name="F:QModManager.Patcher.Game.Both">
-            <summary>
-            Both games were detected <para/>
-            In theory, this should never be the case
             </summary>
         </member>
         <member name="T:QModInstaller.QModPatcher">

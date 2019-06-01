@@ -419,32 +419,6 @@ namespace QModManager
 
         #region Game detection
 
-        /// <summary>
-        /// An enum which contains possible values for <see cref="IQMod.ParsedGame"/>
-        /// </summary>
-        [Flags]
-        public enum Game
-        {
-            /// <summary>
-            /// No game was detected <para/>
-            /// In theory, this should never be the case
-            /// </summary>
-            None = 0b00,
-            /// <summary>
-            /// Subnautica was detected
-            /// </summary>
-            Subnautica = 0b01,
-            /// <summary>
-            /// Below Zero was detected
-            /// </summary>
-            BelowZero = 0b10,
-            /// <summary>
-            /// Both games were detected <para/>
-            /// In theory, this should never be the case
-            /// </summary>
-            Both = Subnautica | BelowZero,
-        }
-
         internal static Game game;
 
         private static bool DetectGame()

@@ -24,7 +24,7 @@ namespace QModManager
             internal static readonly Button SeeLog = new Button("See Log", () =>
             {
                 string logPath;
-                if (Patcher.game == Patcher.Game.Subnautica)
+                if (Patcher.game == API.Game.Subnautica)
                     logPath = Path.Combine(Patcher.QModBaseDir, "../Subnautica_Data/output_log.txt");
                 else
                     logPath = Path.Combine(Application.persistentDataPath, "output_log.txt");
@@ -37,7 +37,7 @@ namespace QModManager
             internal static readonly Button Close = new Button("Close", () => { });
             internal static readonly Button Download = new Button("Download", () =>
             {
-                if (Patcher.game == Patcher.Game.Subnautica)
+                if (Patcher.game == API.Game.Subnautica)
                     Process.Start(VersionCheck.snNexus);
                 else
                     Process.Start(VersionCheck.bzNexus);

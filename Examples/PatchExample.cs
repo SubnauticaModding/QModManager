@@ -2,18 +2,15 @@
 {
     using QModManager.API.ModLoading;
 
-    [QModCoreInfo(id: "QExampleMod", 
-                  displayName: "Example Mod", 
-                  author: "QModManager Dev Team",
-                  developedFor: DevelopedFor.Subnautica,
-                  patchMethod: nameof(PatchMyMod))]
+    [QModCoreInfo("QExampleMod", "Example Mod", "QModManager Dev Team", API.Game.Subnautica)]
     [QModLoadBefore("SomeMod")]
     [QModLoadBefore("SomeMod2")]
     [QModLoadAfter("SomeOtherMod")]
     [QModDependency("ApiMod")]
-    [QModDependency("OtherAPIMod", "2.2.1")]
+    [QModDependency("OtherAPIMod", 2, 2, 1)]
     internal static class PatchExample
     {
+        [QModPatchMethod]
         public static void PatchMyMod()
         {
             // Mod patching happens here

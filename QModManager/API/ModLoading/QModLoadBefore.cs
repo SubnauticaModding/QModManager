@@ -1,5 +1,6 @@
 ﻿namespace QModManager.API.ModLoading
 {
+    using Internal;
     using System;
 
     /// <summary>
@@ -7,7 +8,7 @@
     /// </summary>
     /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
-    public class QModLoadBefore : Attribute
+    public class QModLoadBefore : Attribute, IModOrder
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="QModLoadBefore"/> class.

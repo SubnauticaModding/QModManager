@@ -1,5 +1,6 @@
 ﻿namespace QModManager.API.ModLoading
 {
+    using Internal;
     using System;
 
     /// <summary>
@@ -7,7 +8,7 @@
     /// </summary>
     /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
-    public class QModLoadAfter : Attribute
+    public class QModLoadAfter : Attribute, IModOrder
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="QModLoadBefore"/> class.
@@ -17,7 +18,6 @@
         {
             this.OtherMod = otherMod;
         }
-
 
         /// <summary>
         /// Identifies another QMod, by Id. If this other mod is present, your mod will be loaded after it.
