@@ -130,7 +130,7 @@
     <Compile Include="API\ModLoading\Internal\ModLoadingResults.cs" />
     <Compile Include="API\ModLoading\Internal\PatchingOrder.cs" />
     <Compile Include="API\ModLoading\Internal\PatchMethod.cs" />
-    <Compile Include="API\ModLoading\Internal\QModcs.cs" />
+    <Compile Include="API\ModLoading\Internal\QMod.cs" />
     <Compile Include="API\ModLoading\Internal\QModFactory.cs" />
     <Compile Include="API\ModLoading\IQMod.cs" />
     <Compile Include="API\ModLoading\QModCoreInfo.cs" />
