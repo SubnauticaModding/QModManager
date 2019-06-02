@@ -29,28 +29,112 @@
             Both Subnautica and Below Zero.
             </summary>
         </member>
-        <member name="T:QModManager.API.ModLoading.Advanced.MetaPatchOrder">
+        <member name="T:QModManager.API.ModLoading.Internal.IQModLoadable">
             <summary>
-            <c>WARNING:</c> For advanced users only!<para/>
-            Use this only if you absolutely know what you are doing.
+            Enforces all the elements required to load a QMod.
             </summary>
         </member>
-        <member name="F:QModManager.API.ModLoading.Advanced.MetaPatchOrder.Early">
+        <member name="T:QModManager.API.ModLoading.Internal.IQModSerialiable">
             <summary>
-            Informs that the patch method should be executed before <see cref="F:QModManager.API.ModLoading.Advanced.MetaPatchOrder.Normal"/> patch methods.<para/>
-            <c>WARNING:</c> Do not use unless you absolutely have to.        
+            Enforces the requirements of the mod.json file for legacy mod loading.
             </summary>
         </member>
-        <member name="F:QModManager.API.ModLoading.Advanced.MetaPatchOrder.Normal">
+        <member name="T:QModManager.API.ModLoading.Internal.PatchingOrder">
             <summary>
-            Informs that the patch method should be executed at the normal patching time.<para/>
-            For 99.9% of mods out there, this is what you want to use.
+            FOR INTERNAL USE ONLY.
             </summary>
         </member>
-        <member name="F:QModManager.API.ModLoading.Advanced.MetaPatchOrder.Late">
+        <member name="F:QModManager.API.ModLoading.Internal.PatchingOrder.PreInitialize">
             <summary>
-            Informs that the patch method should be executed after <see cref="F:QModManager.API.ModLoading.Advanced.MetaPatchOrder.Normal"/> patch methods.<para/>
-            <c>WARNING:</c> Do not use unless you absolutely have to.
+            For pre-initialize patch methods. FOR INTERNAL USE ONLY.
+            </summary>
+        </member>
+        <member name="F:QModManager.API.ModLoading.Internal.PatchingOrder.NormalInitialize">
+            <summary>
+            For normal patch methods. FOR INTERNAL USE ONLY.
+            </summary>
+        </member>
+        <member name="F:QModManager.API.ModLoading.Internal.PatchingOrder.PostInitialize">
+            <summary>
+            For post-initialize patch methods. FOR INTERNAL USE ONLY.
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.Internal.QMod.QModManager">
+            <summary>
+            The dummy <see cref="T:QModManager.API.ModLoading.Internal.QMod"/> which is used to represent QModManager
+            </summary>
+        </member>
+        <member name="T:QModManager.API.ModLoading.IQMod">
+            <summary>
+            All public data about a QMod.
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.IQMod.Id">
+            <summary>
+            The ID of the mod <para/>
+            Can only contain alphanumeric characters and underscores: (<see langword="a-z"/>, <see langword="A-Z"/>, <see langword="0-9"/>, <see langword="_"/>)
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.IQMod.DisplayName">
+            <summary>
+            The display name of the mod
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.IQMod.Author">
+            <summary>
+            The author of the mod
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.IQMod.ParsedGame">
+            <summary>
+            The game this mod was developed for.
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.IQMod.RequiredMods">
+            <summary>
+            The dependencies of the mod and their optional minimum required version
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.IQMod.LoadBefore">
+            <summary>
+            A list of mods, before which, this mod will load
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.IQMod.LoadAfter">
+            <summary>
+            A list of mods, after which, this mod will load
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.IQMod.LoadedAssembly">
+            <summary>
+            The assembly of this mod <para/>
+            Check if <see langword="null"/> before using
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.IQMod.AssemblyName">
+            <summary>
+            The assembly name of the mod
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.IQMod.ParsedVersion">
+            <summary>
+            The version of the mod <para/>
+            Should be have this form: <see langword="MAJOR"/>.<see langword="MINOR"/>.<see langword="BUILD"/>.<see langword="REVISION"/>
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.IQMod.Enable">
+            <summary>
+            Whether or not this mod is enabled
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.IQMod.IsLoaded">
+            <summary>
+            Whether or not this mod has been loaded
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.IQMod.IsValid">
+            <summary>
+            Returns true if the mod's meta data is valid.
             </summary>
         </member>
         <member name="T:QModManager.API.ModLoading.QModCoreInfo">
@@ -172,7 +256,7 @@
         </member>
         <member name="T:QModManager.API.ModLoading.QModPatchMethod">
             <summary>
-            Identifies a patch method for a QMod.<para/>
+            Identifies a normal patch method for a QMod.<para/>
             ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreInfo"/> attribute.
             </summary>
             <seealso cref="T:System.Attribute" />
@@ -182,14 +266,41 @@
             Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPatchMethod"/> class for normal patching.        
             </summary>
         </member>
-        <member name="M:QModManager.API.ModLoading.QModPatchMethod.#ctor(QModManager.API.ModLoading.Advanced.MetaPatchOrder)">
-            <summary>
-            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPatchMethod"/> class for advanced patching.<para/>
-            WARNING: Do not use this unless you know exactly why you are attempting to change the patch order.
-            </summary>
-            <param name="patchOrder">The patch order.</param>
-        </member>
         <member name="P:QModManager.API.ModLoading.QModPatchMethod.PatchOrder">
+            <summary>
+            Gets the patch method's meta patch order.
+            </summary>
+        </member>
+        <member name="T:QModManager.API.ModLoading.QModPostPatchMethod">
+            <summary>
+            Identifies a post-patch method for a QMod.<para/>
+            ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreInfo"/> attribute.
+            </summary>
+            <seealso cref="T:System.Attribute" />
+        </member>
+        <member name="M:QModManager.API.ModLoading.QModPostPatchMethod.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPostPatchMethod"/> class for post-patching.
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.QModPostPatchMethod.PatchOrder">
+            <summary>
+            Gets the patch method's meta patch order.
+            </summary>
+        </member>
+        <member name="T:QModManager.API.ModLoading.QModPrePatchMethod">
+            <summary>
+            Identifies a pre-patch method for a QMod.<para/>
+            ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreInfo"/> attribute.
+            </summary>
+            <seealso cref="T:System.Attribute" />
+        </member>
+        <member name="M:QModManager.API.ModLoading.QModPrePatchMethod.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPrePatchMethod"/> class for pre-patching.
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.QModPrePatchMethod.PatchOrder">
             <summary>
             Gets the patch method's meta patch order.
             </summary>
@@ -4160,6 +4271,12 @@
             Whether or not the game is pirated
             </summary>
         </member>
+        <member name="T:QModManager.DataStructures.ISortable`1">
+            <summary>
+            Requirements to function within the <seealso cref="T:QModManager.DataStructures.SortedTree`2"/>
+            </summary>
+            <typeparam name="IdType">The ID type.</typeparam>
+        </member>
         <member name="T:QModManager.Utility.IOUtilities">
             <summary>
             Utilities for files and paths
@@ -4201,203 +4318,6 @@
             <typeparam name="T"></typeparam>
             <param name="behaviour"></param>
             <returns></returns>
-        </member>
-        <member name="T:QModManager.QModFromJson">
-            <summary>
-            A class containing information about a mod
-            </summary>
-        </member>
-        <member name="P:QModManager.QModFromJson.QModManagerQMod">
-            <summary>
-            The dummy <see cref="T:QModManager.QModFromJson"/> which is used to represent QModManager
-            </summary>
-        </member>
-        <member name="P:QModManager.QModFromJson.Id">
-            <summary>
-            The ID of the mod <para/>
-            Can only contain alphanumeric characters and underscores: (<see langword="a-z"/>, <see langword="A-Z"/>, <see langword="0-9"/>, <see langword="_"/>)
-            </summary>
-        </member>
-        <member name="P:QModManager.QModFromJson.DisplayName">
-            <summary>
-            The display name of the mod
-            </summary>
-        </member>
-        <member name="P:QModManager.QModFromJson.Author">
-            <summary>
-            The author of the mod
-            </summary>
-        </member>
-        <member name="P:QModManager.QModFromJson.Version">
-            <summary>
-            The version of the mod <para/>
-            Should be have this form: <see langword="MAJOR"/>.<see langword="MINOR"/>.<see langword="BUILD"/>.<see langword="REVISION"/>
-            </summary>
-        </member>
-        <member name="P:QModManager.QModFromJson.Dependencies">
-            <summary>
-            The dependencies of the mod <para/>
-            If you also want to specify the version of required dependencies, see <see cref="P:QModManager.QModFromJson.VersionDependencies"/>
-            </summary>
-        </member>
-        <member name="P:QModManager.QModFromJson.VersionDependencies">
-            <summary>
-            The version dependencies of the mod <para/>
-            </summary>
-        </member>
-        <member name="P:QModManager.QModFromJson.LoadBefore">
-            <summary>
-            A list of mods before which this mod will load
-            </summary>
-        </member>
-        <member name="P:QModManager.QModFromJson.LoadAfter">
-            <summary>
-            A list of mods after which this mod will load
-            </summary>
-        </member>
-        <member name="P:QModManager.QModFromJson.Enable">
-            <summary>
-            Whether or not this mod is enabled
-            </summary>
-        </member>
-        <member name="P:QModManager.QModFromJson.Game">
-            <summary>
-            The game of this mod <para/>
-            Should be <see langword="Subnautica"/>, <see langword="BelowZero"/>, or <see langword="Both"/>
-            </summary>
-        </member>
-        <member name="P:QModManager.QModFromJson.AssemblyName">
-            <summary>
-            The assembly name of the mod (including <see langword=".dll"/>)
-            </summary>
-        </member>
-        <member name="P:QModManager.QModFromJson.EntryMethod">
-            <summary>
-            The entry method of the mod <para/>
-            Should have this form: <see langword="NAMESPACE"/>.<see langword="CLASS"/>.<see langword="METHOD"/>
-            </summary>
-        </member>
-        <member name="P:QModManager.QModFromJson.LoadedAssembly">
-            <summary>
-            The assembly of this mod <para/>
-            Check if <see langword="null"/> before using
-            </summary>
-        </member>
-        <member name="P:QModManager.QModFromJson.ParsedVersion">
-            <summary>
-            The parsed <see cref="P:QModManager.QModFromJson.Version"/> of this mod
-            </summary>
-        </member>
-        <member name="P:QModManager.QModFromJson.ParsedGame">
-            <summary>
-            The parsed <see cref="P:QModManager.QModFromJson.Game"/> of this mod
-            </summary>
-        </member>
-        <member name="P:QModManager.QModFromJson.ModAssemblyPath">
-            <summary>
-            The dll path of this mod
-            </summary>
-        </member>
-        <member name="P:QModManager.QModFromJson.Loaded">
-            <summary>
-            Whether or not this mod is loaded
-            </summary>
-        </member>
-        <member name="T:QModManager.IQMod">
-            <summary>
-            A read-only <see cref="T:QModManager.QModFromJson"/>
-            </summary>
-        </member>
-        <member name="P:QModManager.IQMod.Id">
-            <summary>
-            The ID of the mod <para/>
-            Can only contain alphanumeric characters and underscores: (<see langword="a-z"/>, <see langword="A-Z"/>, <see langword="0-9"/>, <see langword="_"/>)
-            </summary>
-        </member>
-        <member name="P:QModManager.IQMod.DisplayName">
-            <summary>
-            The display name of the mod
-            </summary>
-        </member>
-        <member name="P:QModManager.IQMod.Author">
-            <summary>
-            The author of the mod
-            </summary>
-        </member>
-        <member name="P:QModManager.IQMod.Version">
-            <summary>
-            The version of the mod <para/>
-            Should be have this form: <see langword="MAJOR"/>.<see langword="MINOR"/>.<see langword="BUILD"/>.<see langword="REVISION"/>
-            </summary>
-        </member>
-        <member name="P:QModManager.IQMod.Dependencies">
-            <summary>
-            The dependencies of the mod <para/>
-            If you also want to specify the version of required dependencies, see <see cref="P:QModManager.IQMod.VersionDependencies"/>
-            </summary>
-        </member>
-        <member name="P:QModManager.IQMod.VersionDependencies">
-            <summary>
-            The version dependencies of the mod <para/>
-            </summary>
-        </member>
-        <member name="P:QModManager.IQMod.LoadBefore">
-            <summary>
-            A list of mods before which this mod will load
-            </summary>
-        </member>
-        <member name="P:QModManager.IQMod.LoadAfter">
-            <summary>
-            A list of mods after which this mod will load
-            </summary>
-        </member>
-        <member name="P:QModManager.IQMod.Enable">
-            <summary>
-            Whether or not this mod is enabled
-            </summary>
-        </member>
-        <member name="P:QModManager.IQMod.Game">
-            <summary>
-            The game of this mod <para/>
-            Should be <see langword="Subnautica"/>, <see langword="BelowZero"/>, or <see langword="Both"/>
-            </summary>
-        </member>
-        <member name="P:QModManager.IQMod.AssemblyName">
-            <summary>
-            The assembly name of the mod (including <see langword=".dll"/>)
-            </summary>
-        </member>
-        <member name="P:QModManager.IQMod.EntryMethod">
-            <summary>
-            The entry method of the mod <para/>
-            Should have this form: <see langword="NAMESPACE"/>.<see langword="CLASS"/>.<see langword="METHOD"/>
-            </summary>
-        </member>
-        <member name="P:QModManager.IQMod.LoadedAssembly">
-            <summary>
-            The assembly of this mod <para/>
-            Check if <see langword="null"/> before using
-            </summary>
-        </member>
-        <member name="P:QModManager.IQMod.ParsedVersion">
-            <summary>
-            The parsed <see cref="P:QModManager.IQMod.Version"/> of this mod
-            </summary>
-        </member>
-        <member name="P:QModManager.IQMod.ParsedGame">
-            <summary>
-            The parsed <see cref="F:QModManager.Patcher.game"/> of this mod
-            </summary>
-        </member>
-        <member name="P:QModManager.IQMod.ModAssemblyPath">
-            <summary>
-            The dll path of this mod
-            </summary>
-        </member>
-        <member name="P:QModManager.IQMod.Loaded">
-            <summary>
-            Whether or not this mod is loaded
-            </summary>
         </member>
         <member name="T:QModManager.Patcher">
             <summary>

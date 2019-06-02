@@ -64,11 +64,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PreferenceSortedTree\SortedTreeTests.cs" />
+    <Compile Include="DataStructures\SortedTreeTests.cs" />
     <Compile Include="SMLHelper\LanguagePatcherTests.cs" />
     <Compile Include="SMLHelper\SelfCheckingDictionaryTests.cs" />
-    <Compile Include="QModManager\VersionDependenciesTests.cs" />
-    <Compile Include="QModManager\SortingTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +77,9 @@
       <Project>{da63f59d-4676-4726-afec-bd9d3682733f}</Project>
       <Name>QModManager</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="QModManager\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

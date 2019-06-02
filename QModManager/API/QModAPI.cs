@@ -1,6 +1,7 @@
 ﻿using QModManager.API.ModLoading;
 using QModManager.API.ModLoading.Internal;
 using QModManager.Utility;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -131,12 +132,13 @@ namespace QModManager.API
         /// <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded/errored mods</returns>
         ReadOnlyCollection<IQMod> IQModAPI.GetAllMods(bool includeUnloaded, bool includeErrored)
         {
-            if (includeErrored)
-                return Patcher.foundMods.Select(qmod => (IQMod)qmod).ToList().AsReadOnly();
-            else if (includeUnloaded)
-                return Patcher.sortedMods.Select(qmod => (IQMod)qmod).ToList().AsReadOnly();
-            else
-                return Patcher.loadedMods.Select(qmod => (IQMod)qmod).ToList().AsReadOnly();
+            throw new NotImplementedException();
+            //if (includeErrored)
+            //    return Patcher.foundMods.Select(qmod => (IQMod)qmod).ToList().AsReadOnly();
+            //else if (includeUnloaded)
+            //    return Patcher.sortedMods.Select(qmod => (IQMod)qmod).ToList().AsReadOnly();
+            //else
+            //    return Patcher.loadedMods.Select(qmod => (IQMod)qmod).ToList().AsReadOnly();
         }
 
         /// <summary>
