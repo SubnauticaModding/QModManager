@@ -11,7 +11,7 @@
         private readonly IDictionary<IdType, SortedTreeNode<IdType, DataType>> SortedElements;
         private readonly ICollection<IdType> KnownKeys = new HashSet<IdType>();
         private List<IdType> erroredIds = new List<IdType>();
-        
+
         internal int NodesInError;
         internal int NodeCount => SortedElements.Count - NodesInError;
 
@@ -213,7 +213,5 @@
 
             return errors;
         }
-
-
     }
 }

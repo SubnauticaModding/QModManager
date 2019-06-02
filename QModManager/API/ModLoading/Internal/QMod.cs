@@ -214,7 +214,6 @@
             try
             {
                 patchMethod.Method.Invoke(this.LoadedAssembly, new object[] { });
-
             }
             catch (ArgumentNullException e)
             {
@@ -247,7 +246,6 @@
             patchMethod.IsPatched = true;
 
             return ModLoadingResults.Success;
-
         }
 
         public bool TryCompletingJsonLoading(string subDirectory)

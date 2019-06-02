@@ -98,7 +98,7 @@
                 return SortResults.SortAfter;
             }
 
-            if (entity.RequiresBefore(other.Id) && other.RequiresBefore(entity.Id) ||
+            if ((entity.RequiresBefore(other.Id) && other.RequiresBefore(entity.Id)) ||
                 entity.RequiresAfter(other.Id) && other.RequiresAfter(entity.Id))
             {
                 entity.Error = ErrorTypes.CircularLoadOrder;

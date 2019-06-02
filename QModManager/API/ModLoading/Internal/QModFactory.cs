@@ -28,7 +28,7 @@
 
             subDirectories = Directory.GetDirectories(qmodsDirectory);
             sortedMods = new SortedTree<string, QMod>(subDirectories.Length);
-            unloadedMods = new List<QMod>(subDirectories.Length / 2 + 1);
+            unloadedMods = new List<QMod>((subDirectories.Length / 2) + 1);
 
             foreach (string subDir in subDirectories)
             {

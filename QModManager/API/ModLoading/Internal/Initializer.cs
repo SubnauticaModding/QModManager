@@ -66,7 +66,6 @@
 
             try
             {
-
                 PatchSMLHelper();
             }
             catch (Exception e)
