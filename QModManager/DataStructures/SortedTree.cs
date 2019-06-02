@@ -3,110 +3,78 @@
     using System;
     using System.Collections.Generic;
 
-    internal class SortedTree<IdType, DataType, Priority>
+    internal class SortedTree<IdType, DataType>
         where IdType : IEquatable<IdType>, IComparable<IdType>
-        where DataType : ISortable<IdType, Priority>
-        where Priority : Enum
+        where DataType : ISortable<IdType>
     {
-        private class MetaSortTree
-        {
-            internal SortedTreeNode<IdType, DataType, Priority> Root;
-            internal readonly IDictionary<IdType, SortedTreeNode<IdType, DataType, Priority>> SortedElements = new Dictionary<IdType, SortedTreeNode<IdType, DataType, Priority>>();
-            internal int NodesInError;
-            internal int NodeCount => SortedElements.Count - NodesInError;
-        }
-        private readonly SortedList<Priority, MetaSortTree> SubTrees;
-        private readonly IDictionary<IdType, Priority> KnownKeys = new Dictionary<IdType, Priority>();
-
-        internal int Count
-        {
-            get
-            {
-                int total = 0;
-                foreach (MetaSortTree tree in SubTrees.Values)
-                {
-                    total += tree.NodeCount;
-                }
-
-                return total;
-            }
-        }
-
-        internal int NodesInError
-        {
-            get
-            {
-                int total = 0;
-                foreach (MetaSortTree tree in SubTrees.Values)
-                {
-                    total += tree.NodesInError;
-                }
-
-                return total;
-            }
-        }
+        private SortedTreeNode<IdType, DataType> Root;
+        private readonly IDictionary<IdType, SortedTreeNode<IdType, DataType>> SortedElements;
+        private readonly ICollection<IdType> KnownKeys = new HashSet<IdType>();
+        private List<IdType> erroredIds = new List<IdType>();
+        
+        internal int NodesInError;
+        internal int NodeCount => SortedElements.Count - NodesInError;
 
         public SortedTree()
         {
-            Array priorityValues = Enum.GetValues(typeof(Priority));
-            SubTrees = new SortedList<Priority, MetaSortTree>(priorityValues.Length);
-
-            foreach (Priority priority in priorityValues)
-            {
-                SubTrees.Add(priority, new MetaSortTree());
-            };
+            SortedElements = new Dictionary<IdType, SortedTreeNode<IdType, DataType>>();
         }
 
-        public SortResults Add(ISortable<IdType, Priority> data)
+        public SortedTree(int capacity)
+        {
+            SortedElements = new Dictionary<IdType, SortedTreeNode<IdType, DataType>>(capacity);
+        }
+
+        public SortResults Add(DataType data)
         {
             if (IsDuplicateId(data.Id))
             {
                 return SortResults.DuplicateId;
             }
 
-            KnownKeys.Add(data.Id, data.LoadPriority);
+            KnownKeys.Add(data.Id);
 
-            var entity = new SortedTreeNode<IdType, DataType, Priority>(data.Id, data, this);
+            var entity = new SortedTreeNode<IdType, DataType>(data.Id, data, this);
 
-            MetaSortTree subTree = SubTrees[data.LoadPriority];
-
-            if (subTree.Root == null)
+            if (Root == null)
             {
-                subTree.Root = entity;
-                subTree.SortedElements.Add(entity.Id, entity);
+                Root = entity;
+                SortedElements.Add(entity.Id, entity);
                 return SortResults.SortAfter;
             }
 
-            SortResults sortResult = subTree.Root.Sort(entity);
+            SortResults sortResult = Root.Sort(entity);
 
             switch (sortResult)
             {
                 case SortResults.SortBefore:
                 case SortResults.SortAfter:
-                    subTree.SortedElements.Add(entity.Id, entity);
+                    SortedElements.Add(entity.Id, entity);
                     break;
                 default:
-                    subTree.NodesInError++;
+                    NodesInError++;
                     break;
             }
 
             return sortResult;
         }
 
+        public List<IdType> GetErrors()
+        {
+            return erroredIds;
+        }
+
         public List<IdType> CreateFlatIndexList()
         {
-            var list = new List<IdType>(this.Count);
+            var list = new List<IdType>(this.NodeCount);
 
-            foreach (MetaSortTree subTree in SubTrees.Values)
-            {
-                ClearErrorsCleanTree(subTree);
-                CreateFlatIndexList(subTree.Root, list);
-            }
+            erroredIds = ClearErrorsCleanTree();
+            CreateFlatIndexList(Root, list);
 
             return list;
         }
 
-        private static void CreateFlatIndexList(SortedTreeNode<IdType, DataType, Priority> node, ICollection<IdType> list)
+        private static void CreateFlatIndexList(SortedTreeNode<IdType, DataType> node, ICollection<IdType> list)
         {
             if (node is null)
             {
@@ -135,17 +103,55 @@
             }
         }
 
+        public List<DataType> CreateFlatValueList()
+        {
+            var list = new List<DataType>(this.NodeCount);
+
+            erroredIds = ClearErrorsCleanTree();
+            CreateFlatValueList(Root, list);
+
+            return list;
+        }
+
+        private static void CreateFlatValueList(SortedTreeNode<IdType, DataType> node, ICollection<DataType> list)
+        {
+            if (node is null)
+            {
+                return;
+            }
+
+            while (true)
+            {
+                if (node.LoadBefore != null)
+                {
+                    CreateFlatValueList(node.LoadBefore, list);
+                }
+
+                if (!node.HasError)
+                {
+                    list.Add(node.Data);
+                }
+
+                if (node.LoadAfter != null)
+                {
+                    node = node.LoadAfter;
+                    continue;
+                }
+
+                break;
+            }
+        }
+
         private bool IsDuplicateId(IdType id)
         {
-            if (KnownKeys.ContainsKey(id))
+            if (KnownKeys.Contains(id))
             {
-                MetaSortTree subTree = SubTrees[KnownKeys[id]];
-                if (subTree.SortedElements.TryGetValue(id, out SortedTreeNode<IdType, DataType, Priority> dup))
+                if (SortedElements.TryGetValue(id, out SortedTreeNode<IdType, DataType> dup))
                 {
                     dup.Error = ErrorTypes.DuplicateId;
-                    subTree.SortedElements.Remove(id);
+                    SortedElements.Remove(id);
 
-                    subTree.NodesInError++;
+                    NodesInError++;
                     return true;
                 }
             }
@@ -153,7 +159,7 @@
             return false;
         }
 
-        private bool AllDependenciesArePresent(SortedTreeNode<IdType, DataType, Priority> node)
+        private bool AllDependenciesArePresent(SortedTreeNode<IdType, DataType> node)
         {
             if (!node.HasDependencies)
             {
@@ -164,12 +170,9 @@
 
             foreach (IdType nodeDependency in node.Dependencies)
             {
-                foreach (MetaSortTree subTree in SubTrees.Values)
+                if (SortedElements.ContainsKey(nodeDependency))
                 {
-                    if (subTree.SortedElements.ContainsKey(nodeDependency))
-                    {
-                        dependenciesPresent = true;
-                    }
+                    dependenciesPresent = true;
                 }
             }
 
@@ -181,11 +184,12 @@
             return dependenciesPresent;
         }
 
-        private void ClearErrorsCleanTree(MetaSortTree subTree)
+        private List<IdType> ClearErrorsCleanTree()
         {
-            var cleanList = new List<SortedTreeNode<IdType, DataType, Priority>>();
+            var errors = new List<IdType>(erroredIds);
+            var cleanList = new List<SortedTreeNode<IdType, DataType>>();
 
-            foreach (SortedTreeNode<IdType, DataType, Priority> entity in subTree.SortedElements.Values)
+            foreach (SortedTreeNode<IdType, DataType> entity in SortedElements.Values)
             {
                 if (entity.HasError || !AllDependenciesArePresent(entity))
                 {
@@ -194,17 +198,22 @@
 
                 entity.ClearLinks();
                 cleanList.Add(entity);
+                errors.Add(entity.Id);
                 KnownKeys.Remove(entity.Id);
             }
 
-            subTree.SortedElements.Clear();
-            subTree.Root = null;
-            subTree.NodesInError = 0;
+            SortedElements.Clear();
+            Root = null;
+            NodesInError = 0;
 
-            foreach (SortedTreeNode<IdType, DataType, Priority> entity in cleanList)
+            foreach (SortedTreeNode<IdType, DataType> entity in cleanList)
             {
                 Add(entity.Data);
             }
+
+            return errors;
         }
+
+
     }
 }

@@ -6,17 +6,18 @@
     using System.Linq;
     using System.Reflection;
     using Oculus.Newtonsoft.Json;
+    using QModManager.DataStructures;
     using QModManager.Utility;
 
     [JsonObject(MemberSerialization.OptIn)]
-    internal class QMod : IQMod, IQModSerialiable, IQModLoadable
+    internal class QMod : IQMod, IQModSerialiable, IQModLoadable, ISortable<string>
     {
         /// <summary>
         /// The dummy <see cref="QMod"/> which is used to represent QModManager
         /// </summary>
         internal static QMod QModManager { get; } = new QMod
         {
-            Id = "QModManager",            
+            Id = "QModManager",
             DisplayName = "QModManager",
             Author = "QModManager Dev Team",
             LoadedAssembly = Assembly.GetExecutingAssembly(),
@@ -198,6 +199,10 @@
 
         public Dictionary<PatchingOrder, PatchMethod> PatchMethods { get; } = new Dictionary<PatchingOrder, PatchMethod>();
 
+        public ICollection<string> DependencyCollection { get; private set; }
+        public ICollection<string> LoadBeforeCollection { get; private set; }
+        public ICollection<string> LoadAfterCollection { get; private set; }
+
         public ModLoadingResults TryLoading(PatchingOrder order)
         {
             if (!this.PatchMethods.TryGetValue(order, out PatchMethod patchMethod))
@@ -303,7 +308,14 @@
             if (patchMethod != null)
                 this.PatchMethods.Add(PatchingOrder.NormalInitialize, new PatchMethod(patchMethod));
 
-            return this.PatchMethods.Count > 0;
+            if (this.PatchMethods.Count == 0)
+                return false;
+
+            this.DependencyCollection = new HashSet<string>(this.Dependencies);
+            this.LoadBeforeCollection = new HashSet<string>(this.LoadBefore);
+            this.LoadAfterCollection = new HashSet<string>(this.LoadAfter);
+
+            return true;
         }
 
         private bool Validate()

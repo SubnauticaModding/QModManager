@@ -8,11 +8,11 @@
     [TestFixture]
     internal class SortedTreeTests
     {
-        private class TestData : ISortable<string, PatchingOrder>
+        private class TestData : ISortable<string>
         {
-            private readonly List<string> Depends = new List<string>();
-            private readonly List<string> LoadBefore = new List<string>();
-            private readonly List<string> LoadAfter = new List<string>();
+            private readonly List<string> depends = new List<string>();
+            private readonly List<string> loadBefore = new List<string>();
+            private readonly List<string> loadAfter = new List<string>();
 
             public TestData(string id)
             {
@@ -26,11 +26,11 @@
 
             public string Id { get; }
 
-            public ICollection<string> Dependencies => Depends;
+            public ICollection<string> DependencyCollection => depends;
 
-            public ICollection<string> LoadBeforeRequirements => LoadBefore;
+            public ICollection<string> LoadBeforeCollection => loadBefore;
 
-            public ICollection<string> LoadAfterRequirements => LoadAfter;
+            public ICollection<string> LoadAfterCollection => loadAfter;
 
             public PatchingOrder LoadPriority { get; } = PatchingOrder.NormalInitialize;
         }
@@ -38,7 +38,7 @@
         [Test]
         public void Test_NoPreferences_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             tree.Add(new TestData(0));
             tree.Add(new TestData(1));
@@ -58,7 +58,7 @@
         [Test]
         public void Test_DupId_A_GetError()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             tree.Add(new TestData(0));
             tree.Add(new TestData(0));
@@ -77,7 +77,7 @@
         [Test]
         public void Test_DupId_B_GetError()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             tree.Add(new TestData(0));
             tree.Add(new TestData(1));
@@ -96,7 +96,7 @@
         [Test]
         public void Test_DupId_C_GetError()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var i1 = new TestData(1);
             var i0 = new TestData(0);
@@ -119,10 +119,10 @@
         [Test]
         public void Test_MissingDependency_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var entity = new TestData(0);
-            entity.Dependencies.Add("1");
+            entity.DependencyCollection.Add("1");
 
             tree.Add(entity);
 
@@ -139,13 +139,13 @@
         [Test]
         public void Test_MutualSortPrefrence_AB_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeRequirements.Add("1");
+            iA.LoadBeforeCollection.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadAfterRequirements.Add("0");
+            iB.LoadAfterCollection.Add("0");
 
             tree.Add(iA);
             tree.Add(iB);
@@ -164,13 +164,13 @@
         [Test]
         public void Test_MutualSortPrefrence_BA_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeRequirements.Add("1");
+            iA.LoadBeforeCollection.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadAfterRequirements.Add("0");
+            iB.LoadAfterCollection.Add("0");
 
             tree.Add(iB);
             tree.Add(iA);
@@ -189,13 +189,13 @@
         [Test]
         public void Test_MutualSortPrefrence_ACB_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeRequirements.Add("1");
+            iA.LoadBeforeCollection.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadAfterRequirements.Add("0");
+            iB.LoadAfterCollection.Add("0");
 
             tree.Add(iA);
             tree.Add(new TestData(2));
@@ -214,13 +214,13 @@
         [Test]
         public void Test_MutualSortPrefrence_BCA_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeRequirements.Add("1");
+            iA.LoadBeforeCollection.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadAfterRequirements.Add("0");
+            iB.LoadAfterCollection.Add("0");
 
             tree.Add(iB);
             tree.Add(new TestData(2));
@@ -241,10 +241,10 @@
         [Test]
         public void Test_BeforeOnlySortPrefrence_AB_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeRequirements.Add("1");
+            iA.LoadBeforeCollection.Add("1");
 
             var iB = new TestData(1);
 
@@ -265,10 +265,10 @@
         [Test]
         public void Test_BeforeOnlySortPrefrence_BA_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeRequirements.Add("1");
+            iA.LoadBeforeCollection.Add("1");
 
             var iB = new TestData(1);
 
@@ -289,10 +289,10 @@
         [Test]
         public void Test_BeforeOnlySortPrefrence_ACB_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeRequirements.Add("1");
+            iA.LoadBeforeCollection.Add("1");
 
             var iB = new TestData(1);
 
@@ -313,10 +313,10 @@
         [Test]
         public void Test_BeforeOnlySortPrefrence_BCA_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeRequirements.Add("1");
+            iA.LoadBeforeCollection.Add("1");
 
             var iB = new TestData(1);
 
@@ -339,12 +339,12 @@
         [Test]
         public void Test_AfterOnlySortPrefrence_AB_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
 
             var iB = new TestData(1);
-            iB.LoadAfterRequirements.Add("0");
+            iB.LoadAfterCollection.Add("0");
 
             tree.Add(iA);
             tree.Add(iB);
@@ -363,12 +363,12 @@
         [Test]
         public void Test_AfterOnlySortPrefrence_BA_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
 
             var iB = new TestData(1);
-            iB.LoadAfterRequirements.Add("0");
+            iB.LoadAfterCollection.Add("0");
 
             tree.Add(iB);
             tree.Add(iA);
@@ -389,13 +389,13 @@
         [Test]
         public void Test_CircularLoadOrder_BothLoadBeforeRequirements_AB_GetError()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeRequirements.Add("1");
+            iA.LoadBeforeCollection.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadBeforeRequirements.Add("0");
+            iB.LoadBeforeCollection.Add("0");
 
             tree.Add(iA);
             SortResults result = tree.Add(iB);
@@ -413,13 +413,13 @@
         [Test]
         public void Test_CircularLoadOrder_BothLoadBeforeRequirements_BA_GetError()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeRequirements.Add("1");
+            iA.LoadBeforeCollection.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadBeforeRequirements.Add("0");
+            iB.LoadBeforeCollection.Add("0");
 
             tree.Add(iB);
             SortResults result = tree.Add(iA);
@@ -437,13 +437,13 @@
         [Test]
         public void Test_CircularLoadOrder_BothLoadBeforeRequirements_ACB_GetError()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeRequirements.Add("1");
+            iA.LoadBeforeCollection.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadBeforeRequirements.Add("0");
+            iB.LoadBeforeCollection.Add("0");
 
             tree.Add(iA);
             tree.Add(new TestData(2));
@@ -462,13 +462,13 @@
         [Test]
         public void Test_CircularLoadOrder_BothLoadBeforeRequirements_BCA_GetError()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeRequirements.Add("1");
+            iA.LoadBeforeCollection.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadBeforeRequirements.Add("0");
+            iB.LoadBeforeCollection.Add("0");
 
             tree.Add(iA);
             tree.Add(new TestData(2));
@@ -489,13 +489,13 @@
         [Test]
         public void Test_CircularLoadOrder_BothLoadAfterRequirements_AB_GetError()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadAfterRequirements.Add("1");
+            iA.LoadAfterCollection.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadAfterRequirements.Add("0");
+            iB.LoadAfterCollection.Add("0");
 
             tree.Add(iA);
             SortResults result = tree.Add(iB);
@@ -513,13 +513,13 @@
         [Test]
         public void Test_CircularLoadOrder_BothLoadAfterRequirements_BA_GetError()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadAfterRequirements.Add("1");
+            iA.LoadAfterCollection.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadAfterRequirements.Add("0");
+            iB.LoadAfterCollection.Add("0");
 
             tree.Add(iB);
             SortResults result = tree.Add(iA);
@@ -537,13 +537,13 @@
         [Test]
         public void Test_CircularLoadOrder_BothLoadAfterRequirements_ACB_GetError()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadAfterRequirements.Add("1");
+            iA.LoadAfterCollection.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadAfterRequirements.Add("0");
+            iB.LoadAfterCollection.Add("0");
 
             tree.Add(iA);
             tree.Add(new TestData(2));
@@ -562,13 +562,13 @@
         [Test]
         public void Test_CircularLoadOrder_BothLoadAfterRequirements_BCA_GetError()
         {
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadAfterRequirements.Add("1");
+            iA.LoadAfterCollection.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadAfterRequirements.Add("0");
+            iB.LoadAfterCollection.Add("0");
 
             tree.Add(iA);
             tree.Add(new TestData(2));
@@ -590,16 +590,16 @@
         public void Test_CircularLoadOrder_DependencyChain3inLoop_AllLoadAfterRequirements_GetError()
         {
             // A -> B ~ B -> C ~ C -> A
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadAfterRequirements.Add("1");
+            iA.LoadAfterCollection.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadAfterRequirements.Add("2");
+            iB.LoadAfterCollection.Add("2");
 
             var iC = new TestData(2);
-            iC.LoadAfterRequirements.Add("0");
+            iC.LoadAfterCollection.Add("0");
 
             tree.Add(iA);
             tree.Add(iB);
@@ -617,19 +617,19 @@
         public void Test_CircularLoadOrder_DependencyChain4inLoop_AllLoadAfterRequirements_GetError()
         {
             // A -> B ~ B -> C ~ C -> D ~ D -> A
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadAfterRequirements.Add("1");
+            iA.LoadAfterCollection.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadAfterRequirements.Add("2");
+            iB.LoadAfterCollection.Add("2");
 
             var iC = new TestData(2);
-            iC.LoadAfterRequirements.Add("3");
+            iC.LoadAfterCollection.Add("3");
 
             var iD = new TestData(3);
-            iD.LoadAfterRequirements.Add("0");
+            iD.LoadAfterCollection.Add("0");
 
             tree.Add(iA);
             tree.Add(iB);
@@ -648,16 +648,16 @@
         public void Test_CircularLoadOrder_DependencyChain3inLoop_AllLoadBeforeRequirements_GetError()
         {
             // A -> B ~ B -> C ~ C -> A
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeRequirements.Add("1");
+            iA.LoadBeforeCollection.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadBeforeRequirements.Add("2");
+            iB.LoadBeforeCollection.Add("2");
 
             var iC = new TestData(2);
-            iC.LoadBeforeRequirements.Add("0");
+            iC.LoadBeforeCollection.Add("0");
 
             tree.Add(iA);
             tree.Add(iB);
@@ -675,19 +675,19 @@
         public void Test_CircularLoadOrder_DependencyChain4inLoop_AllLoadBeforeRequirements_GetError()
         {
             // A -> B ~ B -> C ~ C -> D ~ D -> A
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeRequirements.Add("1");
+            iA.LoadBeforeCollection.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadBeforeRequirements.Add("2");
+            iB.LoadBeforeCollection.Add("2");
 
             var iC = new TestData(2);
-            iC.LoadBeforeRequirements.Add("3");
+            iC.LoadBeforeCollection.Add("3");
 
             var iD = new TestData(3);
-            iD.LoadBeforeRequirements.Add("0");
+            iD.LoadBeforeCollection.Add("0");
 
             tree.Add(iA);
             tree.Add(iB);
@@ -708,16 +708,16 @@
         public void Test_CircularLoadOrder_DependencyChain3inLoop_NonDependentEntitiesIncluded()
         {
             // A -> B ~ B -> C ~ C -> A
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadAfterRequirements.Add("1");
+            iA.LoadAfterCollection.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadAfterRequirements.Add("2");
+            iB.LoadAfterCollection.Add("2");
 
             var iC = new TestData(2);
-            iC.LoadAfterRequirements.Add("0");
+            iC.LoadAfterCollection.Add("0");
 
             tree.Add(new TestData(3));
             tree.Add(iA);
@@ -747,27 +747,27 @@
         public void Test_CircularLoadOrder_DependencyChain3inLoop_NonLoopChainEntitiesIncluded()
         {
             // A -> B ~ B -> C ~ C -> A
-            var tree = new SortedTree<string, TestData, PatchingOrder>();
+            var tree = new SortedTree<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadAfterRequirements.Add("1");
+            iA.LoadAfterCollection.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadAfterRequirements.Add("2");
+            iB.LoadAfterCollection.Add("2");
 
             var iC = new TestData(2);
-            iC.LoadAfterRequirements.Add("0");
+            iC.LoadAfterCollection.Add("0");
 
             // -- 
 
             var i3 = new TestData(3);
-            i3.LoadAfterRequirements.Add("4");
+            i3.LoadAfterCollection.Add("4");
 
             var i4 = new TestData(4);
-            i4.LoadAfterRequirements.Add("5");
+            i4.LoadAfterCollection.Add("5");
 
             var i5 = new TestData(5);
-            i5.LoadAfterRequirements.Add("6");
+            i5.LoadAfterCollection.Add("6");
 
             var i6 = new TestData(6);
 

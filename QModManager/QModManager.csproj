@@ -163,6 +163,7 @@
     <Compile Include="Obsolete\PatchManager.cs" />
     <Compile Include="API\QModAPI.cs" />
     <Compile Include="Checks\NitroxCheck.cs" />
+    <Compile Include="Patching\GameDetector.cs" />
     <Compile Include="Utility\IOUtilities.cs" />
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="OptionsManager.cs" />
@@ -201,7 +202,7 @@
     <Compile Include="API\SMLHelper\Handlers\PrefabHandler.cs" />
     <Compile Include="API\SMLHelper\Handlers\SpriteHandler.cs" />
     <Compile Include="API\SMLHelper\Handlers\TechTypeHandler.cs" />
-    <Compile Include="API\SMLHelper\Initializer.cs" />
+    <Compile Include="API\ModLoading\Internal\Initializer.cs" />
     <Compile Include="API\SMLHelper\Options\ChoiceModOption.cs" />
     <Compile Include="API\SMLHelper\Options\KeybindModOption.cs" />
     <Compile Include="API\SMLHelper\Options\ModOptions.cs" />

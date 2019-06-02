@@ -3,16 +3,17 @@
     using System;
     using System.Collections.Generic;
 
-    internal interface ISortable<IdType, Priority>
+    /// <summary>
+    /// Requirements to function within the <seealso cref="SortedTree{IdType, DataType}"/>
+    /// </summary>
+    /// <typeparam name="IdType">The ID type.</typeparam>
+    internal interface ISortable<IdType>
         where IdType : IEquatable<IdType>, IComparable<IdType>
-        where Priority : Enum
     {
         IdType Id { get; }
 
-        ICollection<IdType> Dependencies { get; }
-        ICollection<IdType> LoadBeforeRequirements { get; }
-        ICollection<IdType> LoadAfterRequirements { get; }
-
-        Priority LoadPriority { get; }
+        ICollection<IdType> DependencyCollection { get; }
+        ICollection<IdType> LoadBeforeCollection { get; }
+        ICollection<IdType> LoadAfterCollection { get; }
     }
 }

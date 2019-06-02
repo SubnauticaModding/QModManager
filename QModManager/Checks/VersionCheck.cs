@@ -66,7 +66,7 @@ namespace QModManager.Checks
                 if (latestVersion > currentVersion)
                 {
                     Logger.Info($"Newer version found: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()}");
-                    if (Patcher.erroredMods.Count <= 0)
+                    if (Patcher.ErrorModCount <= 0)
                     {
                         Dialog.Show(
                             $"There is a newer version of QModManager available: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()})",

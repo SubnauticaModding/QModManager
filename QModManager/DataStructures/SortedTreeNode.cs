@@ -3,12 +3,11 @@
     using System;
     using System.Collections.Generic;
 
-    internal class SortedTreeNode<IdType, DataType, Priority>
+    internal class SortedTreeNode<IdType, DataType>
         where IdType : IEquatable<IdType>, IComparable<IdType>
-        where DataType : ISortable<IdType, Priority>
-        where Priority : Enum
+        where DataType : ISortable<IdType>
     {
-        public SortedTreeNode(IdType id, ISortable<IdType, Priority> data, SortedTree<IdType, DataType, Priority> tree)
+        public SortedTreeNode(IdType id, DataType data, SortedTree<IdType, DataType> tree)
         {
             Id = id;
             Data = data;
@@ -17,19 +16,19 @@
 
         public readonly IdType Id;
 
-        public readonly ISortable<IdType, Priority> Data;
+        public readonly DataType Data;
 
-        public readonly SortedTree<IdType, DataType, Priority> Tree;
+        public readonly SortedTree<IdType, DataType> Tree;
 
         public ErrorTypes Error { get; set; } = ErrorTypes.None;
 
         public bool HasError => this.Error != ErrorTypes.None;
 
-        public ICollection<IdType> Dependencies => Data.Dependencies;
+        public ICollection<IdType> Dependencies => Data.DependencyCollection;
 
-        public ICollection<IdType> LoadBeforeRequirements => Data.LoadBeforeRequirements;
+        public ICollection<IdType> LoadBeforeRequirements => Data.LoadBeforeCollection;
 
-        public ICollection<IdType> LoadAfterRequirements => Data.LoadAfterRequirements;
+        public ICollection<IdType> LoadAfterRequirements => Data.LoadAfterCollection;
 
         internal bool HasOrdering => this.Dependencies.Count > 0 || this.LoadBeforeRequirements.Count > 0 || this.LoadAfterRequirements.Count > 0;
 
@@ -38,10 +37,10 @@
         public int NodesAddedBefore { get; private set; }
         public int NodesAddedAfter { get; private set; }
 
-        public SortedTreeNode<IdType, DataType, Priority> Parent { get; protected set; }
+        public SortedTreeNode<IdType, DataType> Parent { get; protected set; }
 
-        public SortedTreeNode<IdType, DataType, Priority> LoadBefore { get; protected set; }
-        public SortedTreeNode<IdType, DataType, Priority> LoadAfter { get; protected set; }
+        public SortedTreeNode<IdType, DataType> LoadBefore { get; protected set; }
+        public SortedTreeNode<IdType, DataType> LoadAfter { get; protected set; }
 
         public void ClearLinks()
         {
@@ -65,7 +64,7 @@
             return this.Dependencies.Contains(other);
         }
 
-        internal static SortResults CompareLoadOrder(SortedTreeNode<IdType, DataType, Priority> entity, SortedTreeNode<IdType, DataType, Priority> other)
+        internal static SortResults CompareLoadOrder(SortedTreeNode<IdType, DataType> entity, SortedTreeNode<IdType, DataType> other)
         {
             if (entity.HasError || other.HasError)
             {
@@ -137,7 +136,7 @@
                 : SortResults.CircularLoadOrder;
         }
 
-        private static SortResults NextLevelCompareAfter(SortedTreeNode<IdType, DataType, Priority> entity, SortedTreeNode<IdType, DataType, Priority> other)
+        private static SortResults NextLevelCompareAfter(SortedTreeNode<IdType, DataType> entity, SortedTreeNode<IdType, DataType> other)
         {
             if (entity.LoadBefore != null)
             {
@@ -159,7 +158,7 @@
             return SortResults.SortAfter;
         }
 
-        private static SortResults NextLevelCompareBefore(SortedTreeNode<IdType, DataType, Priority> entity, SortedTreeNode<IdType, DataType, Priority> other)
+        private static SortResults NextLevelCompareBefore(SortedTreeNode<IdType, DataType> entity, SortedTreeNode<IdType, DataType> other)
         {
             if (entity.LoadAfter != null)
             {
@@ -181,7 +180,7 @@
             return SortResults.SortBefore;
         }
 
-        public SortResults Sort(SortedTreeNode<IdType, DataType, Priority> other, bool testing = false)
+        public SortResults Sort(SortedTreeNode<IdType, DataType> other, bool testing = false)
         {
             SortResults topLevelResult = CompareLoadOrder(this, other);
 
@@ -268,7 +267,7 @@
             return midLevelResult;
         }
 
-        public SortResults SortAfter(SortedTreeNode<IdType, DataType, Priority> other, bool testing)
+        public SortResults SortAfter(SortedTreeNode<IdType, DataType> other, bool testing)
         {
             if (this.LoadAfter == null)
             {
@@ -284,7 +283,7 @@
             return this.LoadAfter.Sort(other);
         }
 
-        public SortResults SortBefore(SortedTreeNode<IdType, DataType, Priority> other, bool testing)
+        public SortResults SortBefore(SortedTreeNode<IdType, DataType> other, bool testing)
         {
             if (this.LoadBefore == null)
             {
