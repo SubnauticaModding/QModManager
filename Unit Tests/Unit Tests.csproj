@@ -64,6 +64,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PreferenceSortedTree\SortedTreeTests.cs" />
     <Compile Include="SMLHelper\LanguagePatcherTests.cs" />
     <Compile Include="SMLHelper\SelfCheckingDictionaryTests.cs" />
     <Compile Include="QModManager\VersionDependenciesTests.cs" />

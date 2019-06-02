@@ -152,6 +152,11 @@
     <Compile Include="API\SMLHelper\Interfaces\ICustomFishHandler.cs" />
     <Compile Include="API\SMLHelper\Interfaces\IItemStorageHelper.cs" />
     <Compile Include="Checks\PirateCheck.cs" />
+    <Compile Include="DataStructures\ErrorTypes.cs" />
+    <Compile Include="DataStructures\ISortable.cs" />
+    <Compile Include="DataStructures\SortedTree.cs" />
+    <Compile Include="DataStructures\SortedTreeNode.cs" />
+    <Compile Include="DataStructures\SortResults.cs" />
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Dialog.cs" />
     <Compile Include="Obsolete\Hooks.cs" />
