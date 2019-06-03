@@ -92,27 +92,13 @@ namespace QModManager
 
                 Logger.Info("Started loading mods");
 
-                AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
-                {
-                    FileInfo[] allDlls = new DirectoryInfo(QModBaseDir).GetFiles("*.dll", SearchOption.AllDirectories);
-                    foreach (FileInfo dll in allDlls)
-                    {
-                        if (args.Name.Contains(Path.GetFileNameWithoutExtension(dll.Name)))
-                        {
-                            return Assembly.LoadFrom(dll.FullName);
-                        }
-                    }
-
-                    return null;
-                };
-
-                Logger.Debug("Added AssemblyResolve event");
+                AddAssemblyResolveEvent();
 
                 var modFactory = new QModFactory();
                 List<QMod> modsToLoad = modFactory.BuildModLoadingList(QModBaseDir);
                 ErrorModCount = modFactory.FailedToCreate;
 
-                var initializer = new Initializer(modsToLoad);
+                var initializer = new Initializer(modsToLoad, CurrentlyRunningGame);
                 initializer.Initialize();
                 ErrorModCount += initializer.FailedToLoad;
 
@@ -125,13 +111,36 @@ namespace QModManager
                         loadedMods++;
                 }
 
-                Logger.Info($"Finished loading QModManager. Loaded {loadedMods} mods.");
+                Logger.Info($"Finished loading QModManager. Loaded {loadedMods} mods");
+
+                if (ErrorModCount > 0)
+                    Logger.Info($"A total of {ErrorModCount} mods failed to load");
+
             }
             catch (Exception e)
             {
                 Logger.Error("EXCEPTION CAUGHT!");
                 Logger.Exception(e);
             }
+        }
+
+        private static void AddAssemblyResolveEvent()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
+            {
+                FileInfo[] allDlls = new DirectoryInfo(QModBaseDir).GetFiles("*.dll", SearchOption.AllDirectories);
+                foreach (FileInfo dll in allDlls)
+                {
+                    if (args.Name.Contains(Path.GetFileNameWithoutExtension(dll.Name)))
+                    {
+                        return Assembly.LoadFrom(dll.FullName);
+                    }
+                }
+
+                return null;
+            };
+
+            Logger.Debug("Added AssemblyResolve event");
         }
 
         private static void PatchHarmony()

@@ -17,6 +17,6 @@
         string AssemblyName { get; }
         Version ParsedVersion { get; }
         Dictionary<PatchingOrder, PatchMethod> PatchMethods { get; }
-        ModLoadingResults TryLoading(PatchingOrder order);
+        ModLoadingResults TryLoading(PatchingOrder order, Game currentGame);
     }
 }

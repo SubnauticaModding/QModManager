@@ -11,85 +11,60 @@
     internal class Initializer
     {
         private readonly IEnumerable<QMod> modsToLoad;
+        private readonly Game currentGame;
 
         internal int FailedToLoad { get; private set; }
 
-        internal Initializer(IEnumerable<QMod> modsToInitialize)
+        internal Initializer(IEnumerable<QMod> modsToInitialize, Game currentlyRunningGame)
         {
             modsToLoad = modsToInitialize;
+            currentGame = currentlyRunningGame;
         }
 
         internal void Initialize()
         {
-            PreInitialize();
-            NormalInitialize();
-            PostInitialize();
+            InitializeMods(PatchingOrder.PreInitialize);
+            InitializeMods(PatchingOrder.NormalInitialize);
+            InitializeMods(PatchingOrder.PostInitialize);
             FinalInitialize();
 
+            this.FailedToLoad = CountModsFailedToLoad();
+        }
+
+        private int CountModsFailedToLoad()
+        {
             int failedToLoad = 0;
             foreach (QMod mod in modsToLoad)
             {
                 if (mod.IsLoaded)
                     failedToLoad++;
             }
-            this.FailedToLoad = failedToLoad;
-        }
 
-        private void PreInitialize()
-        {
-            InitializeMods(modsToLoad, PatchingOrder.PreInitialize);
-        }
-
-        private void NormalInitialize()
-        {
-            InitializeMods(modsToLoad, PatchingOrder.NormalInitialize);
-        }
-
-        private void PostInitialize()
-        {
-            InitializeMods(modsToLoad, PatchingOrder.PostInitialize);
+            return failedToLoad;
         }
 
         private void FinalInitialize()
         {
-            try
-            {
-                UpdateSMLHelper();
-            }
-            catch (Exception e)
-            {
-                Logger.Error($"Caught an exception while trying to update SMLHelper");
-                Logger.Exception(e);
-            }
-
-            Logger.Info($"Loading SMLHelper...");
-
-            try
-            {
-                PatchSMLHelper();
-            }
-            catch (Exception e)
-            {
-                Logger.Error($"Caught an exception while trying to initialize SMLHelper");
-                Logger.Exception(e);
-            }
+            UpdateSMLHelper();
+            PatchSMLHelper();
         }
 
-        private static void InitializeMods(IEnumerable<QMod> mods, PatchingOrder order)
+        private void InitializeMods(PatchingOrder order)
         {
-            foreach (QMod mod in mods)
+            foreach (QMod mod in modsToLoad)
             {
-                ModLoadingResults results = mod.TryLoading(order);
+                ModLoadingResults results = mod.TryLoading(order, currentGame);
                 switch (results)
                 {
-                    case ModLoadingResults.Success:
-                        // TODO - Report status
-                        break;
+                    case ModLoadingResults.Success:                        
+                        break;// TODO - Report status
                     case ModLoadingResults.NoMethodToExecute:
                         break;
                     case ModLoadingResults.Failure:
                         break;
                     case ModLoadingResults.AlreadyLoaded:
+                        break;
+                    case ModLoadingResults.CurrentGameNotSupported:
                         break;
                 }
             }
@@ -97,36 +72,54 @@
 
         private static void UpdateSMLHelper()
         {
-            string oldPath = IOUtilities.Combine(".", "QMods", "Modding Helper");
-            if (File.Exists(Path.Combine(oldPath, "SMLHelper.dll")))
-                File.Delete(Path.Combine(oldPath, "SMLHelper.dll"));
-            if (File.Exists(Path.Combine(oldPath, "mod.json")))
-                File.Delete(Path.Combine(oldPath, "mod.json"));
+            Logger.Info($"Checking for legacy SMLHelper files");
+            try
+            {
+                string oldPath = IOUtilities.Combine(".", "QMods", "Modding Helper");
+                if (File.Exists(Path.Combine(oldPath, "SMLHelper.dll")))
+                    File.Delete(Path.Combine(oldPath, "SMLHelper.dll"));
+                if (File.Exists(Path.Combine(oldPath, "mod.json")))
+                    File.Delete(Path.Combine(oldPath, "mod.json"));
 
-            // TODO in #81
+                // TODO in #81
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Caught an exception while trying to update legacy SMLHelper");
+                Logger.Exception(e);
+            }
         }
 
         private static void PatchSMLHelper()
         {
-            HarmonyInstance Harmony = Patcher.Harmony;
+            Logger.Info($"Loading SMLHelper...");
+            try
+            {
+                HarmonyInstance Harmony = Patcher.Harmony;
 
-            CustomFishPatcher.Patch(Harmony);
-            TechTypePatcher.Patch(Harmony);
-            CraftTreeTypePatcher.Patch(Harmony);
-            CraftDataPatcher.Patch(Harmony);
-            CraftTreePatcher.Patch(Harmony);
-            DevConsolePatcher.Patch(Harmony);
-            LanguagePatcher.Patch(Harmony);
-            ResourcesPatcher.Patch(Harmony);
-            PrefabDatabasePatcher.Patch(Harmony);
-            SpritePatcher.Patch();
-            KnownTechPatcher.Patch(Harmony);
-            BioReactorPatcher.Patch(Harmony);
-            OptionsPanelPatcher.Patch(Harmony);
-            ItemsContainerPatcher.Patch(Harmony);
-            PDAPatcher.Patch(Harmony);
-            ItemActionPatcher.Patch(Harmony);
-            TooltipPatcher.Patch(Harmony);
+                CustomFishPatcher.Patch(Harmony);
+                TechTypePatcher.Patch(Harmony);
+                CraftTreeTypePatcher.Patch(Harmony);
+                CraftDataPatcher.Patch(Harmony);
+                CraftTreePatcher.Patch(Harmony);
+                DevConsolePatcher.Patch(Harmony);
+                LanguagePatcher.Patch(Harmony);
+                ResourcesPatcher.Patch(Harmony);
+                PrefabDatabasePatcher.Patch(Harmony);
+                SpritePatcher.Patch();
+                KnownTechPatcher.Patch(Harmony);
+                BioReactorPatcher.Patch(Harmony);
+                OptionsPanelPatcher.Patch(Harmony);
+                ItemsContainerPatcher.Patch(Harmony);
+                PDAPatcher.Patch(Harmony);
+                ItemActionPatcher.Patch(Harmony);
+                TooltipPatcher.Patch(Harmony);
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"Caught an exception while trying to initialize SMLHelper");
+                Logger.Exception(e);
+            }
         }
     }
 }

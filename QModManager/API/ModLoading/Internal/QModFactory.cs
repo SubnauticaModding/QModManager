@@ -50,7 +50,7 @@
 
                 if (mod == null)
                 {
-                    Logger.Error($"Skipped a null this found in folder \"{folderName}\"");
+                    Logger.Error($"Unable to set up mod in folder \"{folderName}\"");
 
                     continue;
                 }

@@ -26,8 +26,6 @@
             Enable = true
         };
 
-        private bool _isValidChecked = false;
-        private bool _validationResults = false;
         private Assembly _loadedAssembly;
         private Version _modVersion;
         private Game _moddedGame = API.Game.None;
@@ -35,6 +33,7 @@
 
         public QMod()
         {
+            // Empty public constructor for JSON
         }
 
         internal QMod(QModCoreInfo modInfo, Type originatingType, Assembly loadedAssembly, string subDirectory)
@@ -157,22 +156,7 @@
             }
         }
 
-        public bool IsValid
-        {
-            get
-            {
-                if (_isValidChecked)
-                    return _validationResults;
-
-                _isValidChecked = true;
-                return _validationResults = Validate();
-            }
-            private set
-            {
-                _isValidChecked = true;
-                _validationResults = value;
-            }
-        }
+        public bool IsValid { get; private set; } = true;
 
         public Assembly LoadedAssembly
         {
@@ -203,48 +187,24 @@
         public ICollection<string> LoadBeforeCollection { get; private set; }
         public ICollection<string> LoadAfterCollection { get; private set; }
 
-        public ModLoadingResults TryLoading(PatchingOrder order)
+        public ModLoadingResults TryLoading(PatchingOrder order, Game currentGame)
         {
+            if ((this.ParsedGame | currentGame) == API.Game.None)
+                return ModLoadingResults.CurrentGameNotSupported;
+
             if (!this.PatchMethods.TryGetValue(order, out PatchMethod patchMethod))
                 return ModLoadingResults.NoMethodToExecute;
 
             if (patchMethod.IsPatched)
                 return ModLoadingResults.AlreadyLoaded;
 
-            try
+            if (!patchMethod.TryInvoke())
             {
-                patchMethod.Method.Invoke(this.LoadedAssembly, new object[] { });
-            }
-            catch (ArgumentNullException e)
-            {
-                Logger.Error($"Could not parse entry method \"{this.AssemblyName}\" for mod \"{this.Id}\"");
-                Logger.Exception(e);
-
-                return ModLoadingResults.Failure;
-            }
-            catch (TargetInvocationException e)
-            {
-                Logger.Error($"Invoking the specified entry method \"{patchMethod.Method.Name}\" failed for mod \"{this.Id}\"");
-                Logger.Exception(e);
-                return ModLoadingResults.Failure;
-            }
-            catch (Exception e)
-            {
-                Logger.Error($"An unexpected error occurred whilst trying to load mod \"{this.Id}\"");
-                Logger.Exception(e);
+                this.PatchMethods.Clear(); // Do not attempt any other patch methods
                 return ModLoadingResults.Failure;
             }
 
-            if (QModAPI.ErroredMods.Contains(this?.LoadedAssembly))
-            {
-                Logger.Error($"Mod \"{this.Id}\" could not be loaded.");
-                QModAPI.ErroredMods.Remove(this?.LoadedAssembly);
-                return ModLoadingResults.Failure;
-            }
-
-            Logger.Info($"Loaded mod \"{this.Id}\"");
-            patchMethod.IsPatched = true;
-
+            Logger.Info($"Loaded mod \"{this.Id}\" at {order}");
             return ModLoadingResults.Success;
         }
 
@@ -304,7 +264,7 @@
             MethodInfo patchMethod = GetPatchMethod(this.EntryMethod, this.LoadedAssembly);
 
             if (patchMethod != null)
-                this.PatchMethods.Add(PatchingOrder.NormalInitialize, new PatchMethod(patchMethod));
+                this.PatchMethods.Add(PatchingOrder.NormalInitialize, new PatchMethod(patchMethod, this));
 
             if (this.PatchMethods.Count == 0)
                 return false;
@@ -316,12 +276,7 @@
             return true;
         }
 
-        private bool Validate()
-        {
-            throw new NotImplementedException();
-        }
-
-        private static Dictionary<string, Version> GetDependencies(Type originatingType)
+        private Dictionary<string, Version> GetDependencies(Type originatingType)
         {
             var dependencies = (QModDependency[])originatingType.GetCustomAttributes(typeof(QModDependency), false);
             var dictionary = new Dictionary<string, Version>();
@@ -333,7 +288,7 @@
             return dictionary;
         }
 
-        private static string[] GetOrderedMods<T>(Type originatingType) where T : IModOrder
+        private string[] GetOrderedMods<T>(Type originatingType) where T : IModOrder
         {
             object[] others = originatingType.GetCustomAttributes(typeof(T), false);
 
@@ -346,7 +301,7 @@
             return array;
         }
 
-        private static Dictionary<PatchingOrder, PatchMethod> GetPatchMethods(Type originatingType)
+        private Dictionary<PatchingOrder, PatchMethod> GetPatchMethods(Type originatingType)
         {
             var dictionary = new Dictionary<PatchingOrder, PatchMethod>(3);
 
@@ -356,19 +311,19 @@
                 var patchMethods = (QModPatchMethod[])method.GetCustomAttributes(typeof(QModPatchMethod), false);
                 foreach (QModPatchMethod patchmethod in patchMethods)
                 {
-                    dictionary.Add(patchmethod.PatchOrder, new PatchMethod(method));
+                    dictionary.Add(patchmethod.PatchOrder, new PatchMethod(method, this));
                 }
             }
 
             return dictionary;
         }
 
-        private static bool IsDefaultVersion(Version version)
+        private bool IsDefaultVersion(Version version)
         {
             return version.Major == 0 && version.Minor == 0 && version.Revision == 0 && version.Build == 0;
         }
 
-        private static MethodInfo GetPatchMethod(string methodPath, Assembly assembly)
+        private MethodInfo GetPatchMethod(string methodPath, Assembly assembly)
         {
             string[] entryMethodSig = methodPath.Split('.');
             string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());

@@ -5,6 +5,7 @@
         Success,
         NoMethodToExecute,
         Failure,
-        AlreadyLoaded
+        AlreadyLoaded,
+        CurrentGameNotSupported,        
     }
 }

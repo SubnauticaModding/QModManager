@@ -1,9 +1,9 @@
-﻿using Harmony;
-using QModManager.API.SMLHelper.Utility;
-using UnityEngine.Events;
-
-namespace QModManager
+﻿namespace QModManager
 {
+    using Harmony;
+    using QModManager.API.SMLHelper.Utility;
+    using UnityEngine.Events;
+
     internal static class OptionsManager
     {
         internal static int ModsTab;
