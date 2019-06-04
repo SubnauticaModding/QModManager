@@ -1,10 +1,8 @@
 ﻿namespace QModManager.Patching
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using QModManager.API;
-    using QModManager.API.ModLoading;
     using QModManager.Utility;
 
     internal class GameDetector
@@ -41,33 +39,6 @@
             {
                 Logger.Fatal("A fatal error has occurred.", "No game executable was found!");
                 CurrentlyRunningGame = Game.None;
-            }
-        }
-
-        internal void LogNonApplicableGames(ICollection<IQMod> nonApplicableMods)
-        {
-            if (nonApplicableMods.Count > 0)
-            {
-                var toWrite = new List<string> { $"The following {GetOtherGame()} mods were not loaded because {CurrentlyRunningGame} was detected:" };
-                foreach (IQMod mod in nonApplicableMods)
-                {
-                    toWrite.Add($"- {mod.DisplayName} ({mod.Id})");
-                }
-
-                Logger.Warn(toWrite.ToArray());
-            }
-        }
-
-        private string GetOtherGame()
-        {
-            switch (CurrentlyRunningGame)
-            {
-                case Game.Subnautica:
-                    return "BelowZero";
-                case Game.BelowZero:
-                    return "Subnautica";
-                default:
-                    return "Unknown";
             }
         }
     }

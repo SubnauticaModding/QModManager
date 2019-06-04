@@ -190,7 +190,10 @@
         public ModLoadingResults TryLoading(PatchingOrder order, Game currentGame)
         {
             if ((this.ParsedGame | currentGame) == API.Game.None)
+            {
+                this.PatchMethods.Clear(); // Do not attempt any other patch methods
                 return ModLoadingResults.CurrentGameNotSupported;
+            }
 
             if (!this.PatchMethods.TryGetValue(order, out PatchMethod patchMethod))
                 return ModLoadingResults.NoMethodToExecute;

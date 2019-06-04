@@ -10,34 +10,46 @@
 
     internal class Initializer
     {
-        private readonly IEnumerable<QMod> modsToLoad;
         private readonly Game currentGame;
+        private readonly IDictionary<string, ModLoadingResults> errors = new Dictionary<string, ModLoadingResults>();
+        private readonly IDictionary<ModLoadingResults, int> errorsTotals = new Dictionary<ModLoadingResults, int>
+        {
+            { ModLoadingResults.Failure, 0 },
+            { ModLoadingResults.AlreadyLoaded, 0 },
+            { ModLoadingResults.CurrentGameNotSupported, 0 },
+        };
 
         internal int FailedToLoad { get; private set; }
 
-        internal Initializer(IEnumerable<QMod> modsToInitialize, Game currentlyRunningGame)
+        internal Initializer(Game currentlyRunningGame)
         {
-            modsToLoad = modsToInitialize;
             currentGame = currentlyRunningGame;
         }
 
-        internal void Initialize()
+        internal void InitializeMods<Q>(ICollection<Q> modsToInitialize)
+            where Q : IQModLoadable
         {
-            InitializeMods(PatchingOrder.PreInitialize);
-            InitializeMods(PatchingOrder.NormalInitialize);
-            InitializeMods(PatchingOrder.PostInitialize);
+            InitializeMods(modsToInitialize, PatchingOrder.PreInitialize);
+            InitializeMods(modsToInitialize, PatchingOrder.NormalInitialize);
+            InitializeMods(modsToInitialize, PatchingOrder.PostInitialize);
             FinalInitialize();
 
-            this.FailedToLoad = CountModsFailedToLoad();
+            LogResults(ModLoadingResults.Failure, "The following mods failed to load to the errors during their initialization");
+            LogResults(ModLoadingResults.AlreadyLoaded, "The following mods encountered duplicate initialization attempts");
+            LogResults(ModLoadingResults.CurrentGameNotSupported, $"The following mods for '{GetOtherGame()}' were skipped");
+
+            this.FailedToLoad = CountModsFailedToLoad(modsToInitialize);
         }
 
-        private int CountModsFailedToLoad()
+        private int CountModsFailedToLoad<Q>(ICollection<Q> mods)
         {
             int failedToLoad = 0;
-            foreach (QMod mod in modsToLoad)
+            foreach (IQModLoadable mod in mods)
             {
-                if (mod.IsLoaded)
+                if (!mod.IsLoaded)
+                {
                     failedToLoad++;
+                }
             }
 
             return failedToLoad;
@@ -49,22 +61,28 @@
             PatchSMLHelper();
         }
 
-        private void InitializeMods(PatchingOrder order)
+        private void InitializeMods<Q>(ICollection<Q> modsToInitialize, PatchingOrder order)
+            where Q : IQModLoadable
         {
-            foreach (QMod mod in modsToLoad)
+            foreach (IQModLoadable mod in modsToInitialize)
             {
-                ModLoadingResults results = mod.TryLoading(order, currentGame);
-                switch (results)
+                ModLoadingResults result = mod.TryLoading(order, currentGame);
+                switch (result)
                 {
-                    case ModLoadingResults.Success:                        
-                        break;// TODO - Report status
-                    case ModLoadingResults.NoMethodToExecute:
-                        break;
+                    case ModLoadingResults.Success:
+                        Logger.Info($"Successfully completed {order}Patch for [{mod.Id}]");
+                        break;                    
                     case ModLoadingResults.Failure:
+                        errors[mod.Id] = ModLoadingResults.Failure;
+                        errorsTotals[ModLoadingResults.Failure]++;
                         break;
                     case ModLoadingResults.AlreadyLoaded:
+                        errors[mod.Id] = ModLoadingResults.AlreadyLoaded;
+                        errorsTotals[ModLoadingResults.AlreadyLoaded]++;
                         break;
                     case ModLoadingResults.CurrentGameNotSupported:
+                        errors[mod.Id] = ModLoadingResults.CurrentGameNotSupported;
+                        errorsTotals[ModLoadingResults.CurrentGameNotSupported]++;
                         break;
                 }
             }
@@ -119,6 +137,37 @@
             {
                 Logger.Error($"Caught an exception while trying to initialize SMLHelper");
                 Logger.Exception(e);
+            }
+        }
+
+        internal void LogResults(ModLoadingResults result, string firstLogLine)
+        {
+            if (errorsTotals[result] > 0)
+            {
+                var toWrite = new List<string> { firstLogLine };
+
+                foreach (KeyValuePair<string, ModLoadingResults> mod in errors)
+                {
+                    if (mod.Value != result)
+                        continue;
+
+                    toWrite.Add($"[{mod.Key}]");
+                }
+
+                Logger.Warn(toWrite.ToArray());
+            }
+        }
+
+        private string GetOtherGame()
+        {
+            switch (currentGame)
+            {
+                case Game.Subnautica:
+                    return "BelowZero";
+                case Game.BelowZero:
+                    return "Subnautica";
+                default:
+                    return "Unknown";
             }
         }
     }

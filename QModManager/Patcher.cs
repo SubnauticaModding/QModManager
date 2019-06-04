@@ -98,8 +98,8 @@ namespace QModManager
                 List<QMod> modsToLoad = modFactory.BuildModLoadingList(QModBaseDir);
                 ErrorModCount = modFactory.FailedToCreate;
 
-                var initializer = new Initializer(modsToLoad, CurrentlyRunningGame);
-                initializer.Initialize();
+                var initializer = new Initializer(CurrentlyRunningGame);
+                initializer.InitializeMods(modsToLoad);
                 ErrorModCount += initializer.FailedToLoad;
 
                 QModHooks.OnLoadEnd?.Invoke();
