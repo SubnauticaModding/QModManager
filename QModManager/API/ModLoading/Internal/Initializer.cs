@@ -11,8 +11,8 @@
     internal class Initializer
     {
         private readonly Game currentGame;
-        private readonly IDictionary<string, ModLoadingResults> errors = new Dictionary<string, ModLoadingResults>();
-        private readonly IDictionary<ModLoadingResults, int> errorsTotals = new Dictionary<ModLoadingResults, int>
+        internal readonly IDictionary<string, ModLoadingResults> NonLoadedMods = new Dictionary<string, ModLoadingResults>();
+        internal readonly IDictionary<ModLoadingResults, int> ErrorTotals = new Dictionary<ModLoadingResults, int>
         {
             { ModLoadingResults.Failure, 0 },
             { ModLoadingResults.AlreadyLoaded, 0 },
@@ -42,6 +42,7 @@
         }
 
         private int CountModsFailedToLoad<Q>(ICollection<Q> mods)
+            where Q : IQModLoadable
         {
             int failedToLoad = 0;
             foreach (IQModLoadable mod in mods)
@@ -57,6 +58,9 @@
 
         private void FinalInitialize()
         {
+            if (currentGame == Game.None)
+                return; // Test mode
+
             UpdateSMLHelper();
             PatchSMLHelper();
         }
@@ -73,16 +77,16 @@
                         Logger.Info($"Successfully completed {order}Patch for [{mod.Id}]");
                         break;                    
                     case ModLoadingResults.Failure:
-                        errors[mod.Id] = ModLoadingResults.Failure;
-                        errorsTotals[ModLoadingResults.Failure]++;
+                        NonLoadedMods[mod.Id] = ModLoadingResults.Failure;
+                        ErrorTotals[ModLoadingResults.Failure]++;
                         break;
                     case ModLoadingResults.AlreadyLoaded:
-                        errors[mod.Id] = ModLoadingResults.AlreadyLoaded;
-                        errorsTotals[ModLoadingResults.AlreadyLoaded]++;
+                        NonLoadedMods[mod.Id] = ModLoadingResults.AlreadyLoaded;
+                        ErrorTotals[ModLoadingResults.AlreadyLoaded]++;
                         break;
                     case ModLoadingResults.CurrentGameNotSupported:
-                        errors[mod.Id] = ModLoadingResults.CurrentGameNotSupported;
-                        errorsTotals[ModLoadingResults.CurrentGameNotSupported]++;
+                        NonLoadedMods[mod.Id] = ModLoadingResults.CurrentGameNotSupported;
+                        ErrorTotals[ModLoadingResults.CurrentGameNotSupported]++;
                         break;
                 }
             }
@@ -142,11 +146,11 @@
 
         internal void LogResults(ModLoadingResults result, string firstLogLine)
         {
-            if (errorsTotals[result] > 0)
+            if (ErrorTotals[result] > 0)
             {
                 var toWrite = new List<string> { firstLogLine };
 
-                foreach (KeyValuePair<string, ModLoadingResults> mod in errors)
+                foreach (KeyValuePair<string, ModLoadingResults> mod in NonLoadedMods)
                 {
                     if (mod.Value != result)
                         continue;

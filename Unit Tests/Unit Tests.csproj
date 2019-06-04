@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataStructures\SortedTreeTests.cs" />
+    <Compile Include="QModManager\InitializerTests.cs" />
     <Compile Include="QModManager\QModTests.cs" />
     <Compile Include="SMLHelper\LanguagePatcherTests.cs" />
     <Compile Include="SMLHelper\SelfCheckingDictionaryTests.cs" />
