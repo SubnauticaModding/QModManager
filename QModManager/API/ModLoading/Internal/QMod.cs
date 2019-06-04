@@ -189,7 +189,7 @@
 
         public ModLoadingResults TryLoading(PatchingOrder order, Game currentGame)
         {
-            if ((this.ParsedGame | currentGame) == API.Game.None)
+            if ((this.ParsedGame & currentGame) == API.Game.None)
             {
                 this.PatchMethods.Clear(); // Do not attempt any other patch methods
                 return ModLoadingResults.CurrentGameNotSupported;
@@ -334,5 +334,6 @@
 
             return assembly.GetType(entryType).GetMethod(entryMethod);
         }
+
     }
 }
