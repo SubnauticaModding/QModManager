@@ -122,9 +122,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\Game.cs" />
     <Compile Include="API\ModLoading\Internal\IModOrder.cs" />
-    <Compile Include="API\ModLoading\Internal\IPatchMethod.cs" />
     <Compile Include="API\ModLoading\Internal\IQModLoadable.cs" />
     <Compile Include="API\ModLoading\Internal\IQModSerialiable.cs" />
     <Compile Include="API\ModLoading\Internal\ModLoadingResults.cs" />
@@ -132,7 +130,10 @@
     <Compile Include="API\ModLoading\Internal\PatchMethod.cs" />
     <Compile Include="API\ModLoading\Internal\QMod.cs" />
     <Compile Include="API\ModLoading\Internal\QModFactory.cs" />
+    <Compile Include="API\ModLoading\Internal\QModPatchAttributeBase.cs" />
     <Compile Include="API\ModLoading\IQMod.cs" />
+    <Compile Include="API\ModLoading\ModStatus.cs" />
+    <Compile Include="API\ModLoading\PatchResults.cs" />
     <Compile Include="API\ModLoading\QModCoreInfo.cs" />
     <Compile Include="API\ModLoading\QModDependency.cs" />
     <Compile Include="API\ModLoading\QModLoadAfter.cs" />
@@ -140,6 +141,7 @@
     <Compile Include="API\ModLoading\QModPatchMethod.cs" />
     <Compile Include="API\ModLoading\QModPostPatchMethod.cs" />
     <Compile Include="API\ModLoading\QModPrePatchMethod.cs" />
+    <Compile Include="API\QModGame.cs" />
     <Compile Include="API\QModHooks.cs" />
     <Compile Include="API\SMLHelper\Crafting\CraftingNode.cs" />
     <Compile Include="API\SMLHelper\Crafting\ModCraftTreeCraft.cs" />
@@ -154,6 +156,7 @@
     <Compile Include="Checks\PirateCheck.cs" />
     <Compile Include="DataStructures\ErrorTypes.cs" />
     <Compile Include="DataStructures\ISortable.cs" />
+    <Compile Include="DataStructures\PairedList.cs" />
     <Compile Include="DataStructures\SortedTree.cs" />
     <Compile Include="DataStructures\SortedTreeNode.cs" />
     <Compile Include="DataStructures\SortResults.cs" />

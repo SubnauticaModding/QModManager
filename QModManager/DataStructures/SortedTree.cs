@@ -10,7 +10,6 @@
         private SortedTreeNode<IdType, DataType> Root;
         private readonly IDictionary<IdType, SortedTreeNode<IdType, DataType>> SortedElements;
         private readonly ICollection<IdType> KnownKeys = new HashSet<IdType>();
-        private List<IdType> erroredIds = new List<IdType>();
 
         internal int NodesInError;
         internal int NodeCount => SortedElements.Count - NodesInError;
@@ -59,61 +58,30 @@
             return sortResult;
         }
 
-        public List<IdType> GetErrors()
+        public List<IdType> CreateFlatIndexList(out PairedList<DataType, ErrorTypes> erroredList)
         {
-            return erroredIds;
-        }
+            List<DataType> list = CreateFlatList(out erroredList);
 
-        public List<IdType> CreateFlatIndexList()
-        {
-            var list = new List<IdType>(this.NodeCount);
-
-            erroredIds = ClearErrorsCleanTree();
-            CreateFlatIndexList(Root, list);
-
-            return list;
-        }
-
-        private static void CreateFlatIndexList(SortedTreeNode<IdType, DataType> node, ICollection<IdType> list)
-        {
-            if (node is null)
+            var retList = new List<IdType>(list.Count);
+            foreach (DataType data in list)
             {
-                return;
+                retList.Add(data.Id);
             }
 
-            while (true)
-            {
-                if (node.LoadBefore != null)
-                {
-                    CreateFlatIndexList(node.LoadBefore, list);
-                }
-
-                if (!node.HasError)
-                {
-                    list.Add(node.Id);
-                }
-
-                if (node.LoadAfter != null)
-                {
-                    node = node.LoadAfter;
-                    continue;
-                }
-
-                break;
-            }
+            return retList;
         }
 
-        public List<DataType> CreateFlatValueList()
+        public List<DataType> CreateFlatList(out PairedList<DataType, ErrorTypes> erroredList)
         {
             var list = new List<DataType>(this.NodeCount);
 
-            erroredIds = ClearErrorsCleanTree();
-            CreateFlatValueList(Root, list);
+            erroredList = ClearErrorsCleanTree();
+            CreateFlatList(Root, list);
 
             return list;
         }
 
-        private static void CreateFlatValueList(SortedTreeNode<IdType, DataType> node, ICollection<DataType> list)
+        private static void CreateFlatList(SortedTreeNode<IdType, DataType> node, List<DataType> list)
         {
             if (node is null)
             {
@@ -124,7 +92,7 @@
             {
                 if (node.LoadBefore != null)
                 {
-                    CreateFlatValueList(node.LoadBefore, list);
+                    CreateFlatList(node.LoadBefore, list);
                 }
 
                 if (!node.HasError)
@@ -141,6 +109,8 @@
                 break;
             }
         }
+
+
 
         private bool IsDuplicateId(IdType id)
         {
@@ -184,9 +154,9 @@
             return dependenciesPresent;
         }
 
-        private List<IdType> ClearErrorsCleanTree()
+        private PairedList<DataType, ErrorTypes> ClearErrorsCleanTree()
         {
-            var errors = new List<IdType>(erroredIds);
+            var errors = new PairedList<DataType, ErrorTypes>();
             var cleanList = new List<SortedTreeNode<IdType, DataType>>();
 
             foreach (SortedTreeNode<IdType, DataType> entity in SortedElements.Values)
@@ -198,7 +168,7 @@
 
                 entity.ClearLinks();
                 cleanList.Add(entity);
-                errors.Add(entity.Id);
+                errors.Add(entity.Data, entity.Error);
                 KnownKeys.Remove(entity.Id);
             }
 

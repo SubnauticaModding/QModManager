@@ -28,7 +28,7 @@
         /// <summary>
         /// The game this mod was developed for.
         /// </summary>
-        Game ParsedGame { get; }
+        QModGame ParsedGame { get; }
 
         /// <summary>
         /// The dependencies of the mod and their optional minimum required version
@@ -71,10 +71,5 @@
         /// Whether or not this mod has been loaded
         /// </summary>
         bool IsLoaded { get; }
-
-        /// <summary>
-        /// Returns true if the mod's meta data is valid.
-        /// </summary>
-        bool IsValid { get; }
     }
 }

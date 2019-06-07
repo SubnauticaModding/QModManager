@@ -1,12 +1,12 @@
-﻿using QModManager.Utility;
-using System;
-using System.Net;
-using System.Reflection;
-using UnityEngine;
-using Logger = QModManager.Utility.Logger;
-
-namespace QModManager.Checks
+﻿namespace QModManager.Checks
 {
+    using System;
+    using System.Net;
+    using System.Reflection;
+    using QModManager.Utility;
+    using UnityEngine;
+    using Logger = Utility.Logger;
+
     internal static class VersionCheck
     {
         internal const string snNexus = "https://nexusmods.com/subnautica/mods/201";
@@ -29,7 +29,7 @@ namespace QModManager.Checks
 
             ServicePointManager.ServerCertificateValidationCallback = NetworkUtilities.CustomSCVC;
 
-            using (WebClient client = new WebClient())
+            using (var client = new WebClient())
             {
                 client.DownloadStringCompleted += (sender, e) =>
                 {
@@ -57,7 +57,7 @@ namespace QModManager.Checks
                     Logger.Error("There was an error retrieving the latest version from GitHub!");
                     return;
                 }
-                Version latestVersion = new Version(versionStr);
+                var latestVersion = new Version(versionStr);
                 if (latestVersion == null)
                 {
                     Logger.Error("There was an error retrieving the latest version from GitHub!");

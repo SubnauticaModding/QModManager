@@ -6,7 +6,7 @@
     /// Identifies the Subnautica games.
     /// </summary>
     [Flags]
-    public enum Game
+    public enum QModGame
     {
         /// <summary>
         /// No game.
@@ -19,7 +19,7 @@
         Subnautica = 0b01,
 
         /// <summary>
-        /// Subnautica: Below.
+        /// Subnautica: Below Zero.
         /// </summary>
         BelowZero = 0b10,
 

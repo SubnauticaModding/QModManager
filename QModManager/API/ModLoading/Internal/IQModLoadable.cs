@@ -12,11 +12,10 @@
         string Id { get; }
         string ModDirectory { get; }
         bool IsLoaded { get; }
-        bool IsValid { get; }
         Assembly LoadedAssembly { get; }
         string AssemblyName { get; }
         Version ParsedVersion { get; }
         Dictionary<PatchingOrder, PatchMethod> PatchMethods { get; }
-        ModLoadingResults TryLoading(PatchingOrder order, Game currentGame);
+        ModLoadingResults TryLoading(PatchingOrder order, QModGame currentGame);
     }
 }

@@ -10,6 +10,7 @@ namespace QModManager
     using API.ModLoading.Internal;
     using Checks;
     using Harmony;
+    using QModManager.DataStructures;
     using QModManager.Patching;
     using Utility;
 
@@ -34,7 +35,7 @@ namespace QModManager
         }
 
         private static bool Patched = false;
-        internal static Game CurrentlyRunningGame { get; private set; } = Game.None;
+        internal static QModGame CurrentlyRunningGame { get; private set; } = QModGame.None;
         internal static int ErrorModCount { get; private set; }
 
         internal static void Patch()
@@ -95,21 +96,24 @@ namespace QModManager
                 AddAssemblyResolveEvent();
 
                 var modFactory = new QModFactory();
-                List<QMod> modsToLoad = modFactory.BuildModLoadingList(QModBaseDir);
-                ErrorModCount = modFactory.FailedToCreate;
+                PairedList<QMod, ModStatus> modsToLoad = modFactory.BuildModLoadingList(QModBaseDir);
 
                 var initializer = new Initializer(CurrentlyRunningGame);
                 initializer.InitializeMods(modsToLoad);
-                ErrorModCount += initializer.FailedToLoad;
 
                 QModHooks.OnLoadEnd?.Invoke();
 
                 int loadedMods = 0;
-                foreach (QMod mod in modsToLoad)
+                int erroredMods = 0;
+                foreach (Pair<QMod, ModStatus> mod in modsToLoad)
                 {
-                    if (mod.IsLoaded)
+                    if (mod.Key.IsLoaded)
                         loadedMods++;
+                    else
+                        erroredMods++;
                 }
+
+                ErrorModCount = erroredMods;
 
                 Logger.Info($"Finished loading QModManager. Loaded {loadedMods} mods");
 

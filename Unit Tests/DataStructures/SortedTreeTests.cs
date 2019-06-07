@@ -44,7 +44,7 @@
             tree.Add(new TestData(1));
             tree.Add(new TestData(2));
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -64,7 +64,7 @@
             tree.Add(new TestData(0));
             tree.Add(new TestData(1));
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(1, list.Count);
@@ -83,7 +83,7 @@
             tree.Add(new TestData(1));
             tree.Add(new TestData(0));
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(1, list.Count);
@@ -106,7 +106,7 @@
             tree.Add(i0);
             tree.Add(i02);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(1, list.Count);
@@ -126,7 +126,7 @@
 
             tree.Add(entity);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(0, list.Count);
@@ -151,7 +151,7 @@
             tree.Add(iB);
             tree.Add(new TestData(2));
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -176,7 +176,7 @@
             tree.Add(iA);
             tree.Add(new TestData(2));
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -201,7 +201,7 @@
             tree.Add(new TestData(2));
             tree.Add(iB);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -226,7 +226,7 @@
             tree.Add(new TestData(2));
             tree.Add(iA);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -252,7 +252,7 @@
             tree.Add(iB);
             tree.Add(new TestData(2));
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -276,7 +276,7 @@
             tree.Add(iA);
             tree.Add(new TestData(2));
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -300,7 +300,7 @@
             tree.Add(new TestData(2));
             tree.Add(iB);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -324,7 +324,7 @@
             tree.Add(new TestData(2));
             tree.Add(iA);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -350,7 +350,7 @@
             tree.Add(iB);
             tree.Add(new TestData(2));
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -374,7 +374,7 @@
             tree.Add(iA);
             tree.Add(new TestData(2));
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -402,7 +402,7 @@
 
             Assert.AreEqual(SortResults.CircularLoadOrder, result);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(0, list.Count);
@@ -426,7 +426,7 @@
 
             Assert.AreEqual(SortResults.CircularLoadOrder, result);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(0, list.Count);
@@ -451,7 +451,7 @@
 
             Assert.AreEqual(SortResults.CircularLoadOrder, result);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(1, list.Count);
@@ -476,7 +476,7 @@
 
             Assert.AreEqual(SortResults.CircularLoadOrder, result);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(1, list.Count);
@@ -502,7 +502,7 @@
 
             Assert.AreEqual(SortResults.CircularLoadOrder, result);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(0, list.Count);
@@ -526,7 +526,7 @@
 
             Assert.AreEqual(SortResults.CircularLoadOrder, result);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(0, list.Count);
@@ -551,7 +551,7 @@
 
             Assert.AreEqual(SortResults.CircularLoadOrder, result);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(1, list.Count);
@@ -576,7 +576,7 @@
 
             Assert.AreEqual(SortResults.CircularLoadOrder, result);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(1, list.Count);
@@ -605,7 +605,7 @@
             tree.Add(iB);
             tree.Add(iC);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(0, list.Count);
@@ -636,7 +636,7 @@
             tree.Add(iC);
             tree.Add(iD);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(0, list.Count);
@@ -663,7 +663,7 @@
             tree.Add(iB);
             tree.Add(iC);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(0, list.Count);
@@ -694,7 +694,7 @@
             tree.Add(iC);
             tree.Add(iD);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(0, list.Count);
@@ -727,7 +727,7 @@
             tree.Add(iC);
             tree.Add(new TestData(6));
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(4, list.Count);
@@ -779,7 +779,7 @@
             tree.Add(iC);
             tree.Add(i3);
 
-            List<string> list = tree.CreateFlatIndexList();
+            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(4, list.Count);

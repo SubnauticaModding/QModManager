@@ -10,25 +10,19 @@
 
     internal class QModFactory
     {
-        private SortedTree<string, QMod> sortedMods;
-        private List<QMod> unloadedMods;
-        private string[] subDirectories;
-
-        internal int FailedToCreate { get; private set; }
-
-        internal List<QMod> BuildModLoadingList(string qmodsDirectory)
+        internal PairedList<QMod, ModStatus> BuildModLoadingList(string qmodsDirectory)
         {
             if (!Directory.Exists(qmodsDirectory))
             {
                 Logger.Info("QMods directory was not found! Creating...");
                 Directory.CreateDirectory(qmodsDirectory);
 
-                return new List<QMod>(0);
+                return new PairedList<QMod, ModStatus>(0);
             }
 
-            subDirectories = Directory.GetDirectories(qmodsDirectory);
-            sortedMods = new SortedTree<string, QMod>(subDirectories.Length);
-            unloadedMods = new List<QMod>((subDirectories.Length / 2) + 1);
+            string[] subDirectories = Directory.GetDirectories(qmodsDirectory);
+            var modSorter = new SortedTree<string, QMod>(subDirectories.Length);
+            var earlyErrors = new PairedList<QMod, ModStatus>(subDirectories.Length);
 
             foreach (string subDir in subDirectories)
             {
@@ -50,70 +44,93 @@
 
                 if (mod == null)
                 {
-                    Logger.Error($"Unable to set up mod in folder \"{folderName}\"");
-
-                    continue;
-                }
-                else if (!mod.IsValid)
-                {
-                    unloadedMods.Add(mod);
-
+                    //Logger.Error($"Unable to set up mod in folder \"{folderName}\"");
+                    earlyErrors.Add(new QMod(folderName), ModStatus.InvalidCoreData);
                     continue;
                 }
 
                 if (!mod.Enable)
                 {
                     Logger.Info($"Mod \"{mod.DisplayName}\" is disabled via config, skipping...");
-
                     continue;
                 }
 
-                SortResults result = sortedMods.Add(mod);
-
-                switch (result)
+                SortResults sortResult = modSorter.Add(mod);
+                switch (sortResult)
                 {
                     case SortResults.CircularLoadOrder:
-
+                        earlyErrors.Add(mod, ModStatus.CircularLoadOrder);
                         break;
                     case SortResults.CircularDependency:
-
+                        earlyErrors.Add(mod, ModStatus.CircularDependency);
                         break;
                     case SortResults.DuplicateId:
-                        // TODO Report error
+                        earlyErrors.Add(mod, ModStatus.DuplicateIdDetected);
                         break;
                 }
             }
+            List<QMod> modsToLoad = modSorter.CreateFlatList(out PairedList<QMod, ErrorTypes> lateErrors);
 
-            List<QMod> modsToLoad = sortedMods.CreateFlatValueList();
+            var modList = new PairedList<QMod, ModStatus>(modsToLoad.Count + earlyErrors.Count + lateErrors.Count);
 
-            this.FailedToCreate = ReportErrors(sortedMods.GetErrors());
-            CheckOldHarmony(modsToLoad);
-
-            return modsToLoad;
-        }
-
-        private static int ReportErrors(List<string> erroredMods)
-        {
-            if (erroredMods.Count == 0)
-                return 0;
-
-            string display = "The following mods could not be loaded: ";
-            int maxDisplay = Math.Min(5, erroredMods.Count);
-
-            for (int i = 0; i < maxDisplay; i++)
+            foreach (QMod mod in modsToLoad)
             {
-                display += $", {erroredMods[i]}";
+                modList.Add(mod, ModStatus.Success);
             }
 
-            if (erroredMods.Count > 5)
-                display += $", and {erroredMods.Count - 5} others";
+            foreach (Pair<QMod, ModStatus> erroredMod in earlyErrors)
+            {
+                modList.Add(erroredMod.Key, erroredMod.Value);
+            }
 
-            display += ". Check the log for details.";
+            foreach (Pair<QMod, ErrorTypes> erroredMod in lateErrors)
+            {
+                switch (erroredMod.Value)
+                {
+                    case ErrorTypes.DuplicateId:
+                        modList.Add(erroredMod.Key, ModStatus.DuplicateIdDetected);
+                        break;
+                    case ErrorTypes.CircularDependency:
+                        modList.Add(erroredMod.Key, ModStatus.CircularDependency);
+                        break;
+                    case ErrorTypes.CircularLoadOrder:
+                        modList.Add(erroredMod.Key, ModStatus.CircularLoadOrder);
+                        break;
+                    case ErrorTypes.MissingDepency:
+                        modList.Add(erroredMod.Key, ModStatus.MissingDependency);
+                        break;
+                    default:
+                        throw new InvalidOperationException("Invalid error reported by mod sorter");
+                }
+            }
 
-            Dialog.Show(display, Dialog.Button.SeeLog, Dialog.Button.Close, false);
+            CheckOldHarmony(modsToLoad);
 
-            return erroredMods.Count;
+            return modList;
         }
+
+        //private static int ReportErrors(List<string> erroredMods)
+        //{
+        //    if (erroredMods.Count == 0)
+        //        return 0;
+
+        //    string display = "The following mods could not be loaded: ";
+        //    int maxDisplay = Math.Min(5, erroredMods.Count);
+
+        //    for (int i = 0; i < maxDisplay; i++)
+        //    {
+        //        display += $", {erroredMods[i]}";
+        //    }
+
+        //    if (erroredMods.Count > 5)
+        //        display += $", and {erroredMods.Count - 5} others";
+
+        //    display += ". Check the log for details.";
+
+        //    Dialog.Show(display, Dialog.Button.SeeLog, Dialog.Button.Close, false);
+
+        //    return erroredMods.Count;
+        //}
 
         private static void CheckOldHarmony(List<QMod> loadedMods)
         {
@@ -156,7 +173,7 @@
                     {
                         var mod = new QMod((QModCoreInfo)coreInfos[0], type, assembly, subDirectory);
 
-                        if (mod.IsValid)
+                        if (mod.IsValid) // TODO - Redo after QMod class split
                             return mod;
                     }
                 }
@@ -187,7 +204,7 @@
                 if (mod == null)
                     return null;
 
-                bool success = mod.TryCompletingJsonLoading(subDirectory) && mod.IsValid;
+                bool success = mod.TryCompletingJsonLoading(subDirectory) && mod.IsValid;  // TODO - Redo after QMod class split
 
                 if (!success)
                     return null;

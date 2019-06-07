@@ -6,6 +6,7 @@
         NoMethodToExecute,
         Failure,
         AlreadyLoaded,
-        CurrentGameNotSupported,        
+        CurrentGameNotSupported,
+        CancledByModAuthor
     }
 }

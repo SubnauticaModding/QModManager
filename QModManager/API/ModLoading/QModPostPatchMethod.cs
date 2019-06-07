@@ -9,18 +9,13 @@
     /// </summary>
     /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    public class QModPostPatchMethod : Attribute, IPatchMethod
+    public class QModPostPatchMethod : QModPatchAttributeBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="QModPostPatchMethod"/> class for post-patching.
         /// </summary>
-        public QModPostPatchMethod()
+        public QModPostPatchMethod() : base(PatchingOrder.PostInitialize)
         {
         }
-
-        /// <summary>
-        /// Gets the patch method's meta patch order.
-        /// </summary>
-        public PatchingOrder PatchOrder { get; } = PatchingOrder.PostInitialize;
     }
 }

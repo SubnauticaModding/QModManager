@@ -20,6 +20,6 @@
         string AssemblyName { get; set; }
         string EntryMethod { get; set; }
 
-        bool TryCompletingJsonLoading(string subDirectory);
+        ModStatus TryCompletingJsonLoading(string subDirectory);
     }
 }

@@ -8,19 +8,13 @@
     /// ALERT: The class that defines this method must have a <seealso cref="QModCoreInfo"/> attribute.
     /// </summary>
     /// <seealso cref="Attribute" />
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    public class QModPatchMethod : Attribute, IPatchMethod
+    public class QModPatchMethod : QModPatchAttributeBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="QModPatchMethod"/> class for normal patching.        
         /// </summary>
-        public QModPatchMethod()
+        public QModPatchMethod() : base(PatchingOrder.NormalInitialize)
         {
         }
-
-        /// <summary>
-        /// Gets the patch method's meta patch order.
-        /// </summary>
-        public PatchingOrder PatchOrder { get; } = PatchingOrder.NormalInitialize;
     }
 }

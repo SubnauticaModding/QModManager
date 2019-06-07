@@ -193,10 +193,11 @@
                     return topLevelResult;
                 case SortResults.NoSortPreference:
 
+                    const bool TestSort = true;
                     if (this.LoadBefore != null && this.LoadAfter != null)
                     {
-                        SortResults testAfterResult = SortAfter(other, true);
-                        SortResults testBeforeResult = SortBefore(other, true);
+                        SortResults testAfterResult = SortAfter(other, TestSort);
+                        SortResults testBeforeResult = SortBefore(other, TestSort);
 
                         if (testAfterResult > SortResults.NoSortPreference)
                         {
@@ -214,7 +215,7 @@
                     }
                     else if (this.LoadBefore == null && this.LoadAfter != null)
                     {
-                        SortResults testAfterResult = SortAfter(other, true);
+                        SortResults testAfterResult = SortAfter(other, TestSort);
 
                         if (testAfterResult > SortResults.NoSortPreference)
                         {
@@ -225,7 +226,7 @@
                     }
                     else if (this.LoadAfter == null && this.LoadBefore != null)
                     {
-                        SortResults testBeforeResult = SortBefore(other, true);
+                        SortResults testBeforeResult = SortBefore(other, TestSort);
 
                         if (testBeforeResult > SortResults.NoSortPreference)
                         {

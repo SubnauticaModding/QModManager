@@ -27,7 +27,7 @@
     {
         private static Action action = Action.RunByUser;
         private static OS os;
-        internal static Game game;
+        internal static QModGame game;
 
         private static void Main(string[] args)
         {
@@ -184,7 +184,7 @@
             }
         }
 
-        private static void GetInfo(out OS os, out string directory, out Game game)
+        private static void GetInfo(out OS os, out string directory, out QModGame game)
         {
             string windowsDirectory = Path.Combine(Environment.CurrentDirectory, "../..");
             string macDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../..");
@@ -251,11 +251,11 @@
                 directory = windowsDirectory;
             }
 
-            game = Game.None;
+            game = QModGame.None;
             if (subnautica)
-                game |= Game.Subnautica;
+                game |= QModGame.Subnautica;
             if (belowzero)
-                game |= Game.BelowZero;
+                game |= QModGame.BelowZero;
         }
 
         #region Disable exit

@@ -21,14 +21,13 @@
             DisplayName = "QModManager",
             Author = "QModManager Dev Team",
             LoadedAssembly = Assembly.GetExecutingAssembly(),
-            ParsedGame = API.Game.Both,
-            IsValid = true,
+            ParsedGame = QModGame.Both,
             Enable = true
         };
 
         private Assembly _loadedAssembly;
         private Version _modVersion;
-        private Game _moddedGame = API.Game.None;
+        private QModGame _moddedGame = QModGame.None;
         private Dictionary<string, Version> _requiredMods;
 
         public QMod()
@@ -65,9 +64,8 @@
             this.Id = Patcher.IDRegex.Replace(name, "");
             this.DisplayName = name;
             this.Author = "Unknown";
-            this.ParsedGame = API.Game.None;
+            this.ParsedGame = QModGame.None;
             this.Enable = false;
-            this.IsValid = false;
         }
 
         [JsonProperty(Required = Required.Always)]
@@ -95,7 +93,7 @@
         public string[] LoadAfter { get; set; } = new string[0];
 
         [JsonProperty(Required = Required.DisallowNull)]
-        public string Game { get; set; } = $"{API.Game.Subnautica}";
+        public string Game { get; set; } = $"{QModGame.Subnautica}";
 
         [JsonProperty(Required = Required.Always)]
         public string AssemblyName { get; set; }
@@ -129,7 +127,7 @@
             }
         }
 
-        public Game ParsedGame
+        public QModGame ParsedGame
         {
             get => _moddedGame;
             private set
@@ -155,8 +153,6 @@
                 return true;
             }
         }
-
-        public bool IsValid { get; private set; } = true;
 
         public Assembly LoadedAssembly
         {
@@ -187,9 +183,9 @@
         public ICollection<string> LoadBeforeCollection { get; private set; }
         public ICollection<string> LoadAfterCollection { get; private set; }
 
-        public ModLoadingResults TryLoading(PatchingOrder order, Game currentGame)
+        public ModLoadingResults TryLoading(PatchingOrder order, QModGame currentGame)
         {
-            if ((this.ParsedGame & currentGame) == API.Game.None)
+            if ((this.ParsedGame & currentGame) == QModGame.None)
             {
                 this.PatchMethods.Clear(); // Do not attempt any other patch methods
                 return ModLoadingResults.CurrentGameNotSupported;
@@ -201,30 +197,37 @@
             if (patchMethod.IsPatched)
                 return ModLoadingResults.AlreadyLoaded;
 
-            if (!patchMethod.TryInvoke())
+            PatchResults result = patchMethod.TryInvoke();
+            switch (result)
             {
-                this.PatchMethods.Clear(); // Do not attempt any other patch methods
-                return ModLoadingResults.Failure;
+                case PatchResults.OK:
+                    Logger.Info($"Loaded mod \"{this.Id}\" at {order}");
+                    return ModLoadingResults.Success;
+                case PatchResults.Error:
+                    this.PatchMethods.Clear(); // Do not attempt any other patch methods
+                    return ModLoadingResults.Failure;
+                case PatchResults.ModderCanceled:
+                    return ModLoadingResults.CancledByModAuthor;
             }
 
-            Logger.Info($"Loaded mod \"{this.Id}\" at {order}");
-            return ModLoadingResults.Success;
+            return ModLoadingResults.Failure;
         }
 
-        public bool TryCompletingJsonLoading(string subDirectory)
+        public ModStatus TryCompletingJsonLoading(string subDirectory)
         {
             switch (this.Game)
             {
                 case "BelowZero":
-                    _moddedGame = API.Game.BelowZero;
+                    _moddedGame = QModGame.BelowZero;
                     break;
                 case "Both":
-                    _moddedGame = API.Game.Both;
+                    _moddedGame = QModGame.Both;
                     break;
                 case "Subnautica":
-                default:
-                    _moddedGame = API.Game.Subnautica;
+                    _moddedGame = QModGame.Subnautica;
                     break;
+                default:
+                    return ModStatus.FailedIdentifyingGame;
             }
 
             try
@@ -236,9 +239,7 @@
                 Logger.Error($"There was an error parsing version \"{this.Version}\" for mod \"{this.DisplayName}\"");
                 Logger.Exception(vEx);
 
-                this.IsValid = false;
-
-                return false;
+                return ModStatus.MissingCoreData;
             }
 
             string modAssemblyPath = Path.Combine(subDirectory, this.AssemblyName);
@@ -246,9 +247,7 @@
             if (string.IsNullOrEmpty(modAssemblyPath) || !File.Exists(modAssemblyPath))
             {
                 Logger.Error($"No matching dll found at \"{modAssemblyPath}\" for mod \"{this.DisplayName}\"");
-                this.IsValid = false;
-
-                return false;
+                return ModStatus.MissingAssemblyFile;
             }
             else
             {
@@ -260,7 +259,7 @@
                 {
                     Logger.Error($"Failed loading the dll found at \"{modAssemblyPath}\" for mod \"{this.DisplayName}\"");
                     Logger.Exception(aEx);
-                    return false;
+                    return ModStatus.FailedLoadingAssemblyFile;
                 }
             }
 
@@ -270,13 +269,13 @@
                 this.PatchMethods.Add(PatchingOrder.NormalInitialize, new PatchMethod(patchMethod, this));
 
             if (this.PatchMethods.Count == 0)
-                return false;
+                return ModStatus.MissingPatchMethod;
 
             this.DependencyCollection = new HashSet<string>(this.Dependencies);
             this.LoadBeforeCollection = new HashSet<string>(this.LoadBefore);
             this.LoadAfterCollection = new HashSet<string>(this.LoadAfter);
 
-            return true;
+            return ModStatus.Success;
         }
 
         private Dictionary<string, Version> GetDependencies(Type originatingType)
@@ -311,9 +310,16 @@
             MethodInfo[] methods = originatingType.GetMethods(BindingFlags.Public);
             foreach (MethodInfo method in methods)
             {
-                var patchMethods = (QModPatchMethod[])method.GetCustomAttributes(typeof(QModPatchMethod), false);
-                foreach (QModPatchMethod patchmethod in patchMethods)
+                object[] patchMethods = method.GetCustomAttributes(typeof(QModPatchAttributeBase), false);
+                foreach (QModPatchAttributeBase patchmethod in patchMethods)
                 {
+                    if (dictionary.ContainsKey(patchmethod.PatchOrder))
+                    {
+                        // Duplicate method found
+                        dictionary[patchmethod.PatchOrder] = null;
+                        return dictionary;
+                    }
+
                     dictionary.Add(patchmethod.PatchOrder, new PatchMethod(method, this));
                 }
             }

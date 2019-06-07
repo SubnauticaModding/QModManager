@@ -9,13 +9,13 @@
 
     internal static class AudioFixer
     {
-        internal static void ChangeDisableUnityAudio(string path, bool newValue, Game game)
+        internal static void ChangeDisableUnityAudio(string path, bool newValue, QModGame game)
         {
-            if (game != Game.Subnautica && game != Game.BelowZero)
+            if (game != QModGame.Subnautica && game != QModGame.BelowZero)
                 throw new ArgumentException("Neither Subnautica nor Below Zero detected!");
             AssetsManager am = new AssetsManager();
             AssetsFileInstance afi = am.LoadAssetsFile(path, false);
-            if (game == Game.Subnautica)
+            if (game == QModGame.Subnautica)
                 am.LoadClassPackage("cldb.dat");
             else
                 am.LoadClassPackage("cldb2018.dat");

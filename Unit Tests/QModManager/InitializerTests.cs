@@ -24,7 +24,7 @@ namespace QMMTests.QModManager
             public Version ParsedVersion { get; set; }
             public Dictionary<PatchingOrder, PatchMethod> PatchMethods { get; set; }
 
-            public ModLoadingResults TryLoading(PatchingOrder order, Game currentGame)
+            public ModLoadingResults TryLoading(PatchingOrder order, QModGame currentGame)
             {
                 if (this.PatchMethods.ContainsKey(order))
                     return this.ResultOnLoad;
@@ -68,7 +68,7 @@ namespace QMMTests.QModManager
                 }
             };
 
-            var initializer = new Initializer(Game.None);
+            var initializer = new Initializer(QModGame.None);
 
             initializer.InitializeMods(list);
 
@@ -97,7 +97,7 @@ namespace QMMTests.QModManager
             public Version ParsedVersion { get; set; }
             public Dictionary<PatchingOrder, PatchMethod> PatchMethods { get; } = new Dictionary<PatchingOrder, PatchMethod>();
 
-            public ModLoadingResults TryLoading(PatchingOrder order, Game currentGame)
+            public ModLoadingResults TryLoading(PatchingOrder order, QModGame currentGame)
             {
                 if (this.PatchMethods.ContainsKey(order))
                 {
@@ -144,7 +144,7 @@ namespace QMMTests.QModManager
                 testMod1, testMod2, testMod3
             };
 
-            var initializer = new Initializer(Game.None);
+            var initializer = new Initializer(QModGame.None);
 
             initializer.InitializeMods(list);
             Assert.AreEqual(2, testMod1.TryLoadingCalls);

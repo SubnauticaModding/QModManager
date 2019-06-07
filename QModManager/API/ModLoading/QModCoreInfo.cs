@@ -17,7 +17,7 @@
         /// <param name="displayName">The mod display name.</param>
         /// <param name="author">The mod author or team name.</param>
         /// <param name="supportedGame">The game the mod was developed for.</param>
-        public QModCoreInfo(string id, string displayName, string author, Game supportedGame)
+        public QModCoreInfo(string id, string displayName, string author, QModGame supportedGame)
         {
             this.Id = id;
             this.DisplayName = displayName;
@@ -44,6 +44,6 @@
         /// <summary>
         /// The game this mod was developed for.
         /// </summary>
-        public Game SupportedGame { get; set; }
+        public QModGame SupportedGame { get; set; }
     }
 }

@@ -9,18 +9,13 @@
     /// </summary>
     /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    public class QModPrePatchMethod : Attribute, IPatchMethod
+    public class QModPrePatchMethod : QModPatchAttributeBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="QModPrePatchMethod"/> class for pre-patching.
         /// </summary>
-        public QModPrePatchMethod()
+        public QModPrePatchMethod() : base(PatchingOrder.PreInitialize)
         {
         }
-
-        /// <summary>
-        /// Gets the patch method's meta patch order.
-        /// </summary>
-        public PatchingOrder PatchOrder { get; } = PatchingOrder.PreInitialize;
     }
 }

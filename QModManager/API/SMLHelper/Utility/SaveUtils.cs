@@ -12,7 +12,7 @@
         /// </summary>
         public static string GetCurrentSaveDataDir()
         {
-            if (Patcher.CurrentlyRunningGame == Game.Subnautica)
+            if (Patcher.CurrentlyRunningGame == QModGame.Subnautica)
                 return Path.Combine(SNUtils.savedGamesDir, Utils.GetSavegameDir());
             else
                 return SaveLoadManager.temporarySavePath;

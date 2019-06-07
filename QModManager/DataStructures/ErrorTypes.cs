@@ -7,6 +7,5 @@
         CircularDependency,
         CircularLoadOrder,
         MissingDepency,
-        MetaOrderConflict,
     }
 }
