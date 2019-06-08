@@ -17,8 +17,7 @@
             currentGame = currentlyRunningGame;
         }
 
-        internal void InitializeMods<Q>(PairedList<Q, ModStatus> modsToInitialize)
-            where Q : IQModLoadable
+        internal void InitializeMods(PairedList<QMod, ModStatus> modsToInitialize)
         {
             InitializeMods(modsToInitialize, PatchingOrder.PreInitialize);
             InitializeMods(modsToInitialize, PatchingOrder.NormalInitialize);
@@ -39,12 +38,11 @@
             PatchSMLHelper();
         }
 
-        private void InitializeMods<Q>(PairedList<Q, ModStatus> modsToInitialize, PatchingOrder order)
-            where Q : IQModLoadable
+        private void InitializeMods(PairedList<QMod, ModStatus> modsToInitialize, PatchingOrder order)
         {
-            foreach (Pair<Q, ModStatus> pair in modsToInitialize)
+            foreach (Pair<QMod, ModStatus> pair in modsToInitialize)
             {
-                Q mod = pair.Key;
+                QMod mod = pair.Key;
                 ModLoadingResults result = mod.TryLoading(order, currentGame);
                 switch (result)
                 {

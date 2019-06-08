@@ -26,7 +26,7 @@ namespace QMMTests.QModManager
                 Game = $"{supportedByMod}"
             };
             qmod.TryCompletingJsonLoading("");
-            qmod.PatchMethods.Add(PatchingOrder.NormalInitialize, new PatchMethod(null, qmod));
+            qmod.PatchMethods.Add(PatchingOrder.NormalInitialize, new QPatchMethod(null, qmod));
 
             ModLoadingResults result = qmod.TryLoading(PatchingOrder.NormalInitialize, currentGame);
             Assert.AreEqual(ModLoadingResults.CurrentGameNotSupported, result);
@@ -42,7 +42,7 @@ namespace QMMTests.QModManager
             };
             qmod.TryCompletingJsonLoading("");
 
-            qmod.PatchMethods.Add(PatchingOrder.NormalInitialize, new PatchMethod(null, qmod));
+            qmod.PatchMethods.Add(PatchingOrder.NormalInitialize, new QPatchMethod(null, qmod));
 
             ModLoadingResults result = qmod.TryLoading(PatchingOrder.PreInitialize, QModGame.Subnautica);
             Assert.AreEqual(ModLoadingResults.NoMethodToExecute, result);
@@ -60,7 +60,7 @@ namespace QMMTests.QModManager
 
             MethodInfo testMethodInfo = typeof(QModTests).GetMethod(nameof(TestMethodSuccessfull));
 
-            qmod.PatchMethods.Add(PatchingOrder.NormalInitialize, new PatchMethod(testMethodInfo, qmod));
+            qmod.PatchMethods.Add(PatchingOrder.NormalInitialize, new QPatchMethod(testMethodInfo, qmod));
 
             // First call
             ModLoadingResults result = qmod.TryLoading(PatchingOrder.NormalInitialize, QModGame.Subnautica);
@@ -83,7 +83,7 @@ namespace QMMTests.QModManager
 
             MethodInfo testMethodInfo = typeof(QModTests).GetMethod(nameof(TestMethodFailure));
 
-            qmod.PatchMethods.Add(PatchingOrder.NormalInitialize, new PatchMethod(testMethodInfo, qmod));
+            qmod.PatchMethods.Add(PatchingOrder.NormalInitialize, new QPatchMethod(testMethodInfo, qmod));
 
             // First call
             ModLoadingResults result = qmod.TryLoading(PatchingOrder.NormalInitialize, QModGame.Subnautica);

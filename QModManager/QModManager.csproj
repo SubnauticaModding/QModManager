@@ -123,14 +123,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\ModLoading\Internal\IModOrder.cs" />
-    <Compile Include="API\ModLoading\Internal\IQModLoadable.cs" />
     <Compile Include="API\ModLoading\Internal\IQModSerialiable.cs" />
     <Compile Include="API\ModLoading\Internal\ModLoadingResults.cs" />
     <Compile Include="API\ModLoading\Internal\PatchingOrder.cs" />
-    <Compile Include="API\ModLoading\Internal\PatchMethod.cs" />
     <Compile Include="API\ModLoading\Internal\QMod.cs" />
+    <Compile Include="API\ModLoading\Internal\QModCore.cs" />
     <Compile Include="API\ModLoading\Internal\QModFactory.cs" />
+    <Compile Include="API\ModLoading\Internal\QModLegacy.cs" />
     <Compile Include="API\ModLoading\Internal\QModPatchAttributeBase.cs" />
+    <Compile Include="API\ModLoading\Internal\QModPlaceholder.cs" />
+    <Compile Include="API\ModLoading\Internal\QPatchMethod.cs" />
     <Compile Include="API\ModLoading\IQMod.cs" />
     <Compile Include="API\ModLoading\ModStatus.cs" />
     <Compile Include="API\ModLoading\PatchResults.cs" />
@@ -141,6 +143,7 @@
     <Compile Include="API\ModLoading\QModPatchMethod.cs" />
     <Compile Include="API\ModLoading\QModPostPatchMethod.cs" />
     <Compile Include="API\ModLoading\QModPrePatchMethod.cs" />
+    <Compile Include="API\ModLoading\RequiredQMod.cs" />
     <Compile Include="API\QModGame.cs" />
     <Compile Include="API\QModHooks.cs" />
     <Compile Include="API\SMLHelper\Crafting\CraftingNode.cs" />

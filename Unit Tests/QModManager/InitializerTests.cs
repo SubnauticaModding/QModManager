@@ -22,7 +22,7 @@ namespace QMMTests.QModManager
             public Assembly LoadedAssembly { get; set; }
             public string AssemblyName { get; set; }
             public Version ParsedVersion { get; set; }
-            public Dictionary<PatchingOrder, PatchMethod> PatchMethods { get; set; }
+            public Dictionary<PatchingOrder, QPatchMethod> PatchMethods { get; set; }
 
             public ModLoadingResults TryLoading(PatchingOrder order, QModGame currentGame)
             {
@@ -42,28 +42,28 @@ namespace QMMTests.QModManager
                 {
                     Id = "TestMod1",
                     ResultOnLoad = ModLoadingResults.Success,
-                    PatchMethods = new Dictionary<PatchingOrder, PatchMethod>(1){ {PatchingOrder.NormalInitialize, null} },
+                    PatchMethods = new Dictionary<PatchingOrder, QPatchMethod>(1){ {PatchingOrder.NormalInitialize, null} },
                     IsLoaded = true,
                 },
                 new TestMod
                 {
                     Id = "TestMod2",
                     ResultOnLoad = ModLoadingResults.Failure,
-                    PatchMethods = new Dictionary<PatchingOrder, PatchMethod>(1){ {PatchingOrder.NormalInitialize, null} },
+                    PatchMethods = new Dictionary<PatchingOrder, QPatchMethod>(1){ {PatchingOrder.NormalInitialize, null} },
                     IsLoaded = false,
                 },
                 new TestMod
                 {
                     Id = "TestMod3",
                     ResultOnLoad = ModLoadingResults.AlreadyLoaded,
-                    PatchMethods = new Dictionary<PatchingOrder, PatchMethod>(1){ {PatchingOrder.NormalInitialize, null} },
+                    PatchMethods = new Dictionary<PatchingOrder, QPatchMethod>(1){ {PatchingOrder.NormalInitialize, null} },
                     IsLoaded = false,
                 },
                 new TestMod
                 {
                     Id = "TestMod4",
                     ResultOnLoad = ModLoadingResults.CurrentGameNotSupported,
-                    PatchMethods = new Dictionary<PatchingOrder, PatchMethod>(1){ {PatchingOrder.NormalInitialize, null} },
+                    PatchMethods = new Dictionary<PatchingOrder, QPatchMethod>(1){ {PatchingOrder.NormalInitialize, null} },
                     IsLoaded = false,
                 }
             };
@@ -95,7 +95,7 @@ namespace QMMTests.QModManager
             public Assembly LoadedAssembly { get; set; }
             public string AssemblyName { get; set; }
             public Version ParsedVersion { get; set; }
-            public Dictionary<PatchingOrder, PatchMethod> PatchMethods { get; } = new Dictionary<PatchingOrder, PatchMethod>();
+            public Dictionary<PatchingOrder, QPatchMethod> PatchMethods { get; } = new Dictionary<PatchingOrder, QPatchMethod>();
 
             public ModLoadingResults TryLoading(PatchingOrder order, QModGame currentGame)
             {

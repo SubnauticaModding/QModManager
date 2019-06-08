@@ -110,8 +110,6 @@
             }
         }
 
-
-
         private bool IsDuplicateId(IdType id)
         {
             if (KnownKeys.Contains(id))

@@ -19,7 +19,5 @@
         string Game { get; set; }
         string AssemblyName { get; set; }
         string EntryMethod { get; set; }
-
-        ModStatus TryCompletingJsonLoading(string subDirectory);
     }
 }

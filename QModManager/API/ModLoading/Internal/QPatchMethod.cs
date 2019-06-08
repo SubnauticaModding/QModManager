@@ -4,16 +4,18 @@
     using System.Reflection;
     using QModManager.Utility;
 
-    internal class PatchMethod
+    internal class QPatchMethod
     {
-        public PatchMethod(MethodInfo method, IQModLoadable qmod)
+        internal QPatchMethod(MethodInfo method, IQMod qmod, PatchingOrder order)
         {
             this.ModId = qmod.Id;
+            this.Order = order;
             this.Method = method;
             this.LoadedAssembly = qmod.LoadedAssembly;
         }
 
         internal string ModId { get; }
+        internal PatchingOrder Order { get; }
         internal MethodInfo Method { get; }
         internal Assembly LoadedAssembly { get; }
         internal bool IsPatched { get; private set; }
@@ -34,7 +36,7 @@
                     this.Method.Invoke(null, new object[] { });
                     this.IsPatched = true;
                     return PatchResults.OK;
-                } 
+                }
             }
             catch (ArgumentNullException e)
             {

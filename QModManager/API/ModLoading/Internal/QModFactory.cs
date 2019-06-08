@@ -31,21 +31,30 @@
                 if (dllFiles.Length < 1)
                     continue;
 
-                QMod mod;
+                QMod mod = FromDll(subDir, dllFiles);
 
-                string jsonFile = Path.Combine(subDir, "mod.json");
+                if (mod == null)
+                {
+                    string jsonFile = Path.Combine(subDir, "mod.json");
 
-                if (File.Exists(jsonFile))
-                    mod = FromJsonFile(subDir);
-                else
-                    mod = FromDll(subDir, dllFiles);
-
+                    if (File.Exists(jsonFile))
+                        mod = FromJsonFile(subDir);
+                }
+                
                 string folderName = new DirectoryInfo(subDir).Name;
 
                 if (mod == null)
                 {
                     //Logger.Error($"Unable to set up mod in folder \"{folderName}\"");
-                    earlyErrors.Add(new QMod(folderName), ModStatus.InvalidCoreData);
+                    earlyErrors.Add(new QModPlaceholder(folderName), ModStatus.InvalidCoreInfo);
+                    continue;
+                }
+
+                ModStatus status = mod.IsValidForLoading(folderName);
+
+                if (status != ModStatus.Success)
+                {
+                    earlyErrors.Add(mod, status);
                     continue;
                 }
 
@@ -159,7 +168,7 @@
             }
         }
 
-        private static QMod FromDll(string subDirectory, string[] dllFilePaths)
+        private static QModCore FromDll(string subDirectory, string[] dllFilePaths)
         {
             foreach (string dllFile in dllFilePaths)
             {
@@ -171,10 +180,7 @@
                     object[] coreInfos = type.GetCustomAttributes(typeof(QModCoreInfo), false);
                     if (coreInfos.Length == 1)
                     {
-                        var mod = new QMod((QModCoreInfo)coreInfos[0], type, assembly, subDirectory);
-
-                        if (mod.IsValid) // TODO - Redo after QMod class split
-                            return mod;
+                        return new QModCore((QModCoreInfo)coreInfos[0], type, assembly);
                     }
                 }
             }
@@ -182,7 +188,7 @@
             return null;
         }
 
-        private static QMod FromJsonFile(string subDirectory)
+        private static QModLegacy FromJsonFile(string subDirectory)
         {
             string jsonFile = Path.Combine(subDirectory, "mod.json");
 
@@ -199,17 +205,7 @@
                 };
 
                 string jsonText = File.ReadAllText(jsonFile);
-                QMod mod = JsonConvert.DeserializeObject<QMod>(jsonText);
-
-                if (mod == null)
-                    return null;
-
-                bool success = mod.TryCompletingJsonLoading(subDirectory) && mod.IsValid;  // TODO - Redo after QMod class split
-
-                if (!success)
-                    return null;
-
-                return mod;
+                return JsonConvert.DeserializeObject<QModLegacy>(jsonText);
             }
             catch (Exception e)
             {
@@ -218,11 +214,6 @@
 
                 return null;
             }
-        }
-
-        private static QMod FakePlaceholder(string name)
-        {
-            return new QMod(name);
         }
     }
 }

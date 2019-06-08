@@ -28,22 +28,22 @@
         /// <summary>
         /// The game this mod was developed for.
         /// </summary>
-        QModGame ParsedGame { get; }
+        QModGame SupportedGame { get; }
 
         /// <summary>
         /// The dependencies of the mod and their optional minimum required version
         /// </summary>
-        Dictionary<string, Version> RequiredMods { get; }
+        IEnumerable<RequiredQMod> RequiredMods { get; }
 
         /// <summary>
         /// A list of mods, before which, this mod will load
         /// </summary>
-        string[] LoadBefore { get; }
+        IEnumerable<string> ModsToLoadBefore { get; }
 
         /// <summary>
         /// A list of mods, after which, this mod will load
         /// </summary>
-        string[] LoadAfter { get; }
+        IEnumerable<string> ModsToLoadAfter { get; }
 
         /// <summary>
         /// The assembly of this mod <para/>
@@ -57,8 +57,7 @@
         string AssemblyName { get; }
 
         /// <summary>
-        /// The version of the mod <para/>
-        /// Should be have this form: <see langword="MAJOR"/>.<see langword="MINOR"/>.<see langword="BUILD"/>.<see langword="REVISION"/>
+        /// The version of the mod.
         /// </summary>
         Version ParsedVersion { get; }
 
