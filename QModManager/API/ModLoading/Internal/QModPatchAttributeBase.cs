@@ -13,7 +13,7 @@
         /// Initializes a new instance of the <see cref="QModPatchAttributeBase"/> class.
         /// </summary>
         /// <param name="patchOrder">The patch order.</param>
-        protected QModPatchAttributeBase(PatchingOrder patchOrder)
+        internal QModPatchAttributeBase(PatchingOrder patchOrder)
         {
             this.PatchOrder = patchOrder;
         }

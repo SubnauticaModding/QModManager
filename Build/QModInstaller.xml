@@ -4,44 +4,9 @@
         <name>QModInstaller</name>
     </assembly>
     <members>
-        <member name="T:QModManager.API.Game">
-            <summary>
-            Identifies the Subnautica games.
-            </summary>
-        </member>
-        <member name="F:QModManager.API.Game.None">
-            <summary>
-            No game.
-            </summary>
-        </member>
-        <member name="F:QModManager.API.Game.Subnautica">
-            <summary>
-            Subnautica.
-            </summary>
-        </member>
-        <member name="F:QModManager.API.Game.BelowZero">
-            <summary>
-            Subnautica: Below.
-            </summary>
-        </member>
-        <member name="F:QModManager.API.Game.Both">
-            <summary>
-            Both Subnautica and Below Zero.
-            </summary>
-        </member>
-        <member name="T:QModManager.API.ModLoading.Internal.IQModLoadable">
-            <summary>
-            Enforces all the elements required to load a QMod.
-            </summary>
-        </member>
         <member name="T:QModManager.API.ModLoading.Internal.IQModSerialiable">
             <summary>
             Enforces the requirements of the mod.json file for legacy mod loading.
-            </summary>
-        </member>
-        <member name="T:QModManager.API.ModLoading.Internal.PatchingOrder">
-            <summary>
-            FOR INTERNAL USE ONLY.
             </summary>
         </member>
         <member name="F:QModManager.API.ModLoading.Internal.PatchingOrder.PreInitialize">
@@ -59,7 +24,19 @@
             For post-initialize patch methods. FOR INTERNAL USE ONLY.
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.Internal.QMod.QModManager">
+        <member name="T:QModManager.API.ModLoading.Internal.QModPatchAttributeBase">
+            <summary>
+            Base class to all attributes that identify QMod patch methods.
+            </summary>
+            <seealso cref="T:System.Attribute" />
+        </member>
+        <member name="M:QModManager.API.ModLoading.Internal.QModPatchAttributeBase.#ctor(QModManager.API.ModLoading.Internal.PatchingOrder)">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.Internal.QModPatchAttributeBase"/> class.
+            </summary>
+            <param name="patchOrder">The patch order.</param>
+        </member>
+        <member name="P:QModManager.API.ModLoading.Internal.QModPlaceholder.QModManager">
             <summary>
             The dummy <see cref="T:QModManager.API.ModLoading.Internal.QMod"/> which is used to represent QModManager
             </summary>
@@ -85,7 +62,7 @@
             The author of the mod
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.ParsedGame">
+        <member name="P:QModManager.API.ModLoading.IQMod.SupportedGame">
             <summary>
             The game this mod was developed for.
             </summary>
@@ -95,12 +72,12 @@
             The dependencies of the mod and their optional minimum required version
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.LoadBefore">
+        <member name="P:QModManager.API.ModLoading.IQMod.ModsToLoadBefore">
             <summary>
             A list of mods, before which, this mod will load
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.LoadAfter">
+        <member name="P:QModManager.API.ModLoading.IQMod.ModsToLoadAfter">
             <summary>
             A list of mods, after which, this mod will load
             </summary>
@@ -118,8 +95,7 @@
         </member>
         <member name="P:QModManager.API.ModLoading.IQMod.ParsedVersion">
             <summary>
-            The version of the mod <para/>
-            Should be have this form: <see langword="MAJOR"/>.<see langword="MINOR"/>.<see langword="BUILD"/>.<see langword="REVISION"/>
+            The version of the mod.
             </summary>
         </member>
         <member name="P:QModManager.API.ModLoading.IQMod.Enable">
@@ -132,9 +108,28 @@
             Whether or not this mod has been loaded
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.IsValid">
+        <member name="T:QModManager.API.ModLoading.PatchResults">
             <summary>
-            Returns true if the mod's meta data is valid.
+            An optional value that can be returned from a mod patching method.
+            </summary>
+        </member>
+        <member name="F:QModManager.API.ModLoading.PatchResults.OK">
+            <summary>
+            The patch method ran successfully.<para/>
+            A method that returns <seealso cref="T:System.Void"/> and does not through an exception will default to this value.
+            </summary>
+        </member>
+        <member name="F:QModManager.API.ModLoading.PatchResults.Error">
+            <summary>
+            The patch method encountered an error.<para/>
+            Execution of any further patch methods this mod implements will be skipped.
+            </summary>
+        </member>
+        <member name="F:QModManager.API.ModLoading.PatchResults.ModderCanceled">
+            <summary>
+            Informs that the mod author has requested that patching be halted for this mod.<para/>
+            Execution of any further patch methods this mod implements will be skipped.<para/>
+            This doesn't necessarily imply that and error happened, so it will be handled silently.
             </summary>
         </member>
         <member name="T:QModManager.API.ModLoading.QModCoreInfo">
@@ -144,7 +139,7 @@
             </summary>
             <seealso cref="T:System.Attribute" />
         </member>
-        <member name="M:QModManager.API.ModLoading.QModCoreInfo.#ctor(System.String,System.String,System.String,QModManager.API.Game)">
+        <member name="M:QModManager.API.ModLoading.QModCoreInfo.#ctor(System.String,System.String,System.String,QModManager.API.QModGame)">
             <summary>
             Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModCoreInfo" /> class.
             </summary>
@@ -266,11 +261,6 @@
             Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPatchMethod"/> class for normal patching.        
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.QModPatchMethod.PatchOrder">
-            <summary>
-            Gets the patch method's meta patch order.
-            </summary>
-        </member>
         <member name="T:QModManager.API.ModLoading.QModPostPatchMethod">
             <summary>
             Identifies a post-patch method for a QMod.<para/>
@@ -281,11 +271,6 @@
         <member name="M:QModManager.API.ModLoading.QModPostPatchMethod.#ctor">
             <summary>
             Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPostPatchMethod"/> class for post-patching.
-            </summary>
-        </member>
-        <member name="P:QModManager.API.ModLoading.QModPostPatchMethod.PatchOrder">
-            <summary>
-            Gets the patch method's meta patch order.
             </summary>
         </member>
         <member name="T:QModManager.API.ModLoading.QModPrePatchMethod">
@@ -300,9 +285,50 @@
             Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPrePatchMethod"/> class for pre-patching.
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.QModPrePatchMethod.PatchOrder">
+        <member name="T:QModManager.API.ModLoading.RequiredQMod">
             <summary>
-            Gets the patch method's meta patch order.
+            Identifies a required mod and an optional minimum version.
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.RequiredQMod.Id">
+            <summary>
+            Gets the required mod's ID.
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.RequiredQMod.RequiresMinimumVersion">
+            <summary>
+            Gets a value indicating whether the mod must be at a minimum version for compatibility.
+            </summary>
+        </member>
+        <member name="P:QModManager.API.ModLoading.RequiredQMod.MinimumVersion">
+            <summary>
+            Gets the minimum version this mod should be at.<para/>
+            If <see cref="P:QModManager.API.ModLoading.RequiredQMod.RequiresMinimumVersion"/> is <c>false</c>, this will return a default value.
+            </summary>
+        </member>
+        <member name="T:QModManager.API.QModGame">
+            <summary>
+            Identifies the Subnautica games.
+            </summary>
+        </member>
+        <member name="F:QModManager.API.QModGame.None">
+            <summary>
+            No game.
+            </summary>
+        </member>
+        <member name="F:QModManager.API.QModGame.Subnautica">
+            <summary>
+            Subnautica.
+            </summary>
+        </member>
+        <member name="F:QModManager.API.QModGame.BelowZero">
+            <summary>
+            Subnautica: Below Zero.
+            </summary>
+        </member>
+        <member name="F:QModManager.API.QModGame.Both">
+            <summary>
+            Both Subnautica and Below Zero.
             </summary>
         </member>
         <member name="T:QModManager.API.QModHooks">

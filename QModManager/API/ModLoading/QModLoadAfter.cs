@@ -8,7 +8,7 @@
     /// </summary>
     /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
-    public class QModLoadAfter : Attribute, IModOrder
+    public sealed class QModLoadAfter : Attribute, IModOrder
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="QModLoadBefore"/> class.

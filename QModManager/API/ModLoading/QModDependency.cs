@@ -7,7 +7,7 @@
     /// </summary>
     /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
-    public class QModDependency : Attribute
+    public sealed class QModDependency : Attribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="QModDependency"/> class.

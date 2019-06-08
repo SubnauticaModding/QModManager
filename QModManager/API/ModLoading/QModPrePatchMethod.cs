@@ -9,7 +9,7 @@
     /// </summary>
     /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
-    public class QModPrePatchMethod : QModPatchAttributeBase
+    public sealed class QModPrePatchMethod : QModPatchAttributeBase
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="QModPrePatchMethod"/> class for pre-patching.

@@ -1,9 +1,6 @@
 ﻿namespace QModManager.API.ModLoading.Internal
 {
-    /// <summary>
-    /// FOR INTERNAL USE ONLY.
-    /// </summary>
-    public enum PatchingOrder
+    internal enum PatchingOrder
     {
         /// <summary>
         /// For pre-initialize patch methods. FOR INTERNAL USE ONLY.

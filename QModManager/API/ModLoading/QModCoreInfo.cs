@@ -8,7 +8,7 @@
     /// </summary>
     /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public class QModCoreInfo : Attribute
+    public sealed class QModCoreInfo : Attribute
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="QModCoreInfo" /> class.
