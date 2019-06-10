@@ -17,25 +17,20 @@
             currentGame = currentlyRunningGame;
         }
 
-        internal void InitializeMods(PairedList<QMod, ModStatus> modsToInitialize)
+        internal bool InitializeMods(PairedList<QMod, ModStatus> modsToInitialize)
         {
             InitializeMods(modsToInitialize, PatchingOrder.PreInitialize);
             InitializeMods(modsToInitialize, PatchingOrder.NormalInitialize);
             InitializeMods(modsToInitialize, PatchingOrder.PostInitialize);
-            FinalInitialize();
-
-            //LogResults(ModLoadingResults.Failure, "The following mods failed to load to the errors during their initialization");
-            //LogResults(ModLoadingResults.AlreadyLoaded, "The following mods encountered duplicate initialization attempts");
-            //LogResults(ModLoadingResults.CurrentGameNotSupported, $"The following mods for '{GetOtherGame()}' were skipped");
+            return FinalInitialize();            
         }
 
-        private void FinalInitialize()
+        private bool FinalInitialize()
         {
             if (currentGame == QModGame.None)
-                return; // Test mode
+                return true; // Test mode
 
-            UpdateSMLHelper();
-            PatchSMLHelper();
+            return UpdateSMLHelper() && PatchSMLHelper();
         }
 
         private void InitializeMods(PairedList<QMod, ModStatus> modsToInitialize, PatchingOrder order)
@@ -47,7 +42,6 @@
                 switch (result)
                 {
                     case ModLoadingResults.Success:
-                        Logger.Info($"Successfully completed {order}Patch for [{mod.Id}]");
                         break;
                     case ModLoadingResults.Failure:
                         pair.Value = ModStatus.PatchMethodFailed;
@@ -62,7 +56,7 @@
             }
         }
 
-        private static void UpdateSMLHelper()
+        private static bool UpdateSMLHelper()
         {
             Logger.Info($"Checking for legacy SMLHelper files");
             try
@@ -74,15 +68,18 @@
                     File.Delete(Path.Combine(oldPath, "mod.json"));
 
                 // TODO in #81
+
+                return true;
             }
             catch (Exception e)
             {
-                Logger.Error($"Caught an exception while trying to update legacy SMLHelper");
+                Logger.Fatal($"Caught an exception while trying to update legacy SMLHelper");
                 Logger.Exception(e);
+                return false;
             }
         }
 
-        private static void PatchSMLHelper()
+        private static bool PatchSMLHelper()
         {
             Logger.Info($"Loading SMLHelper...");
             try
@@ -104,11 +101,14 @@
                 PDAPatcher.Patch(Patcher.Harmony);
                 ItemActionPatcher.Patch(Patcher.Harmony);
                 TooltipPatcher.Patch(Patcher.Harmony);
+
+                return true;
             }
             catch (Exception e)
             {
-                Logger.Error($"Caught an exception while trying to initialize SMLHelper");
+                Logger.Fatal($"Caught an exception while trying to initialize SMLHelper");
                 Logger.Exception(e);
+                return false;
             }
         }
 

@@ -47,6 +47,26 @@
             }
         }
 
+        public bool HarmonyOutdated
+        {
+            get
+            {
+                if (this.LoadedAssembly != null)
+                {
+                    AssemblyName[] references = this.LoadedAssembly.GetReferencedAssemblies();
+                    foreach (AssemblyName reference in references)
+                    {
+                        if (reference.FullName == "0Harmony, Version=1.0.9.1, Culture=neutral, PublicKeyToken=null")
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                return false;
+            }
+        }
+
         public Dictionary<PatchingOrder, QPatchMethod> PatchMethods { get; } = new Dictionary<PatchingOrder, QPatchMethod>();
 
         public ICollection<string> DependencyCollection { get; } = new List<string>();
@@ -60,7 +80,7 @@
             if (string.IsNullOrEmpty(this.Id) ||
                 string.IsNullOrEmpty(this.DisplayName) ||
                 string.IsNullOrEmpty(this.Author))
-                return ModStatus.MissingCoreInfo;            
+                return ModStatus.MissingCoreInfo;
 
             return Validate(subDirectory);
         }
@@ -81,11 +101,12 @@
             if (patchMethod.IsPatched)
                 return ModLoadingResults.AlreadyLoaded;
 
+            Logger.Debug($"Starting patch method for mod \"{this.Id}\" at {order}");
             PatchResults result = patchMethod.TryInvoke();
             switch (result)
             {
                 case PatchResults.OK:
-                    Logger.Info($"Loaded mod \"{this.Id}\" at {order}");
+                    Logger.Debug($"Completed patch method for mod \"{this.Id}\" at {order}");
                     return ModLoadingResults.Success;
 
                 case PatchResults.Error:

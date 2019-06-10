@@ -120,10 +120,11 @@ namespace QModManager
                 if (ErrorModCount > 0)
                     Logger.Info($"A total of {ErrorModCount} mods failed to load");
 
+                SummaryLogger.LogSummaries(modsToLoad);
             }
             catch (Exception e)
             {
-                Logger.Error("EXCEPTION CAUGHT!");
+                Logger.Fatal("EXCEPTION CAUGHT!");
                 Logger.Exception(e);
             }
         }

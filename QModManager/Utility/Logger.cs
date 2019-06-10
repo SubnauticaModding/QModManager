@@ -1,11 +1,20 @@
-﻿using QModManager.API.SMLHelper.Utility;
-using System;
-using System.Diagnostics;
-
-namespace QModManager.Utility
+﻿namespace QModManager.Utility
 {
+    using QModManager.API.SMLHelper.Utility;
+    using System;
+    using System.Diagnostics;
+
     internal static class Logger
     {
+        internal enum Level
+        {
+            Debug,
+            Info,
+            Warn,
+            Error,
+            Fatal
+        }
+
         private static bool EnableDebugging
         {
             get
@@ -45,6 +54,28 @@ namespace QModManager.Utility
         internal static void Log(params string[] text)
         {
             Log("", text);
+        }
+
+        internal static void Log(Level logLevel, params string[] text)
+        {
+            switch (logLevel)
+            {
+                case Level.Debug:
+                    Debug(text);
+                    break;
+                case Level.Info:
+                    Info(text);
+                    break;
+                case Level.Warn:
+                    Warn(text);
+                    break;
+                case Level.Error:
+                    Error(text);
+                    break;
+                case Level.Fatal:
+                    Fatal(text);
+                    break;
+            }
         }
 
         internal static void Debug(params string[] text)

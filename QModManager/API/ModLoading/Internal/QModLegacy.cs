@@ -78,14 +78,13 @@
                 Logger.Error($"There was an error parsing version \"{this.Version}\" for mod \"{this.DisplayName}\"");
                 Logger.Exception(vEx);
 
-                return ModStatus.MissingCoreInfo;
+                return ModStatus.InvalidCoreInfo;
             }
 
             string modAssemblyPath = Path.Combine(subDirectory, this.AssemblyName);
 
             if (string.IsNullOrEmpty(modAssemblyPath) || !File.Exists(modAssemblyPath))
             {
-                Logger.Error($"No matching dll found at \"{modAssemblyPath}\" for mod \"{this.DisplayName}\"");
                 return ModStatus.MissingAssemblyFile;
             }
             else

@@ -170,6 +170,7 @@
     <Compile Include="API\QModAPI.cs" />
     <Compile Include="Checks\NitroxCheck.cs" />
     <Compile Include="Patching\GameDetector.cs" />
+    <Compile Include="SummaryLogger.cs" />
     <Compile Include="Utility\IOUtilities.cs" />
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="OptionsManager.cs" />

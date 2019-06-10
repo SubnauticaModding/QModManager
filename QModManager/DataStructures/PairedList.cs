@@ -16,6 +16,8 @@
 
     internal class PairedList<KeyType, ValueType> : List<Pair<KeyType, ValueType>>
     {
+        private readonly Dictionary<ValueType, int> valueCounts = new Dictionary<ValueType, int>();
+
         public PairedList()
         {
         }
@@ -27,6 +29,11 @@
         public void Add(KeyType key, ValueType value)
         {
             Add(new Pair<KeyType, ValueType>(key, value));
+
+            if (valueCounts.TryGetValue(value, out int count))
+                count++;
+            else
+                valueCounts.Add(value, 1);
         }
 
         public bool Contains(KeyType key)
@@ -38,6 +45,25 @@
             }
 
             return false;
+        }
+
+        public IEnumerable<KeyType> Keys
+        {
+            get
+            {
+                foreach (Pair<KeyType, ValueType> item in this)
+                {
+                    yield return item.Key;
+                }
+            }
+        }
+
+        public int ValueCount(ValueType value)
+        {
+            if (valueCounts.TryGetValue(value, out int count))
+                return count;
+            else
+                return 0;
         }
     }
 }

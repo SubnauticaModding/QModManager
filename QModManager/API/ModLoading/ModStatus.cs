@@ -4,6 +4,7 @@
     {
         Success,
         CanceledByAuthor,
+        CanceledByUser,
         PatchMethodFailed,
         TooManyPatchMethods,
         MissingPatchMethod,

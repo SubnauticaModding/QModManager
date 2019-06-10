@@ -45,7 +45,7 @@
 
                 if (mod == null)
                 {
-                    //Logger.Error($"Unable to set up mod in folder \"{folderName}\"");
+                    Logger.Warn($"Unable to set up mod in folder \"{folderName}\"");
                     earlyErrors.Add(new QModPlaceholder(folderName), ModStatus.InvalidCoreInfo);
                     continue;
                 }
@@ -60,7 +60,7 @@
 
                 if (!mod.Enable)
                 {
-                    Logger.Info($"Mod \"{mod.DisplayName}\" is disabled via config, skipping...");
+                    earlyErrors.Add(mod, ModStatus.CanceledByUser);
                     continue;
                 }
 
@@ -113,60 +113,8 @@
                 }
             }
 
-            CheckOldHarmony(modsToLoad);
-
             return modList;
-        }
-
-        //private static int ReportErrors(List<string> erroredMods)
-        //{
-        //    if (erroredMods.Count == 0)
-        //        return 0;
-
-        //    string display = "The following mods could not be loaded: ";
-        //    int maxDisplay = Math.Min(5, erroredMods.Count);
-
-        //    for (int i = 0; i < maxDisplay; i++)
-        //    {
-        //        display += $", {erroredMods[i]}";
-        //    }
-
-        //    if (erroredMods.Count > 5)
-        //        display += $", and {erroredMods.Count - 5} others";
-
-        //    display += ". Check the log for details.";
-
-        //    Dialog.Show(display, Dialog.Button.SeeLog, Dialog.Button.Close, false);
-
-        //    return erroredMods.Count;
-        //}
-
-        private static void CheckOldHarmony(List<QMod> loadedMods)
-        {
-            var modsThatUseOldHarmony = new List<QMod>();
-
-            foreach (QMod mod in loadedMods)
-            {
-                AssemblyName[] references = mod.LoadedAssembly.GetReferencedAssemblies();
-                foreach (AssemblyName reference in references)
-                {
-                    if (reference.FullName == "0Harmony, Version=1.0.9.1, Culture=neutral, PublicKeyToken=null")
-                    {
-                        modsThatUseOldHarmony.Add(mod);
-                        break;
-                    }
-                }
-            }
-
-            if (modsThatUseOldHarmony.Count > 0)
-            {
-                Logger.Warn($"Some mods are using an old version of harmony! This will NOT cause any problems, but it's not recommended:");
-                foreach (IQMod mod in modsThatUseOldHarmony)
-                {
-                    Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");
-                }
-            }
-        }
+        }        
 
         private static QModCore FromDll(string subDirectory, string[] dllFilePaths)
         {

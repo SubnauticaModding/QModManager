@@ -31,7 +31,7 @@
             else if (isSubnautica && isBelowZero)
             {
                 Logger.Fatal("A fatal error has occurred.", "Both Subnautica and Below Zero files detected!");
-                CurrentlyRunningGame = QModGame.Both;
+                CurrentlyRunningGame = QModGame.Both;                
             }
             else
             {
