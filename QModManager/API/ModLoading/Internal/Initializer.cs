@@ -1,16 +1,16 @@
 ﻿namespace QModManager.API.ModLoading
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using QModManager.API.ModLoading.Internal;
     using QModManager.API.SMLHelper.Patchers;
     using QModManager.DataStructures;
+    using QModManager.Patching;
     using QModManager.Utility;
 
     internal class Initializer
     {
-        private readonly QModGame currentGame;        
+        private readonly QModGame currentGame;
 
         internal Initializer(QModGame currentlyRunningGame)
         {
@@ -22,7 +22,7 @@
             InitializeMods(modsToInitialize, PatchingOrder.PreInitialize);
             InitializeMods(modsToInitialize, PatchingOrder.NormalInitialize);
             InitializeMods(modsToInitialize, PatchingOrder.PostInitialize);
-            return FinalInitialize();            
+            return FinalInitialize();
         }
 
         private bool FinalInitialize()
@@ -73,9 +73,7 @@
             }
             catch (Exception e)
             {
-                Logger.Fatal($"Caught an exception while trying to update legacy SMLHelper");
-                Logger.Exception(e);
-                return false;
+                throw new FatalPatchingException("Caught an exception while trying to update legacy SMLHelper", e);
             }
         }
 
@@ -106,9 +104,7 @@
             }
             catch (Exception e)
             {
-                Logger.Fatal($"Caught an exception while trying to initialize SMLHelper");
-                Logger.Exception(e);
-                return false;
+                throw new FatalPatchingException($"Caught an exception while trying to initialize SMLHelper", e);
             }
         }
 

@@ -169,13 +169,14 @@
     <Compile Include="Obsolete\PatchManager.cs" />
     <Compile Include="API\QModAPI.cs" />
     <Compile Include="Checks\NitroxCheck.cs" />
+    <Compile Include="Patching\FatalPatchingException.cs" />
     <Compile Include="Patching\GameDetector.cs" />
+    <Compile Include="Patching\Patcher.cs" />
     <Compile Include="SummaryLogger.cs" />
     <Compile Include="Utility\IOUtilities.cs" />
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="OptionsManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Patcher.cs" />
     <Compile Include="Utility\ExtensionMethods.cs" />
     <Compile Include="Utility\NetworkUtilities.cs" />
     <Compile Include="Utility\ReflectionHelper.cs" />

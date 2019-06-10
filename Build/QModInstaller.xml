@@ -4303,6 +4303,11 @@
             </summary>
             <typeparam name="IdType">The ID type.</typeparam>
         </member>
+        <member name="T:QModManager.Patcher">
+            <summary>
+            The main class which handles all of QModManager's patching
+            </summary>
+        </member>
         <member name="T:QModManager.Utility.IOUtilities">
             <summary>
             Utilities for files and paths
@@ -4344,11 +4349,6 @@
             <typeparam name="T"></typeparam>
             <param name="behaviour"></param>
             <returns></returns>
-        </member>
-        <member name="T:QModManager.Patcher">
-            <summary>
-            The main class which handles all of QModManager's patching
-            </summary>
         </member>
         <member name="T:QModInstaller.QModPatcher">
             <summary>

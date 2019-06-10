@@ -1,7 +1,6 @@
 namespace QModManager
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
     using System.Text.RegularExpressions;
@@ -45,8 +44,9 @@ namespace QModManager
                 if (Patched)
                 {
                     Logger.Warn("Patch method was called multiple times!");
-                    return;
+                    return; // Halt patching
                 }
+
                 Patched = true;
 
                 Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}...");
@@ -56,7 +56,7 @@ namespace QModManager
                     Logger.Fatal("A fatal error has occurred.");
                     Logger.Fatal("There was an error with the QMods directory");
                     Logger.Fatal("Please make sure that you ran Subnautica from Steam/Epic/Discord, and not from the executable file!");
-                    return;
+                    return; // Halt patching
                 }
 
                 try
@@ -122,9 +122,14 @@ namespace QModManager
 
                 SummaryLogger.LogSummaries(modsToLoad);
             }
+            catch (FatalPatchingException pEx)
+            {
+                Logger.Fatal($"FATAL PATCHING EXCEPTION! - Patching ended - {pEx.Message}");
+                Logger.Exception(pEx);
+            }
             catch (Exception e)
             {
-                Logger.Fatal("EXCEPTION CAUGHT!");
+                Logger.Fatal("UNHANDLED EXCEPTION CAUGHT! - Patching ended");
                 Logger.Exception(e);
             }
         }
