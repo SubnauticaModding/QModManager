@@ -12,7 +12,7 @@
         {
             Id = "QModManager",
             DisplayName = "QModManager",
-            Author = "The QModManager Dev Team",
+            Author = "QModManager",
             LoadedAssembly = Assembly.GetExecutingAssembly(),
             SupportedGame = QModGame.Both,
         };

@@ -143,7 +143,7 @@
     <Compile Include="API\ModLoading\Internal\QModLegacy.cs" />
     <Compile Include="API\ModLoading\Internal\QModPatchAttributeBase.cs" />
     <Compile Include="API\ModLoading\Internal\QModPlaceholder.cs" />
-    <Compile Include="API\ModLoading\Internal\QPatchMethod.cs" />
+    <Compile Include="API\ModLoading\Internal\QModPatchMethod.cs" />
     <Compile Include="API\ModLoading\IQMod.cs" />
     <Compile Include="API\ModLoading\ModStatus.cs" />
     <Compile Include="API\ModLoading\PatchResults.cs" />

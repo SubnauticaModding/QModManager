@@ -45,7 +45,7 @@
 
                 if (mod == null)
                 {
-                    Logger.Warn($"Unable to set up mod in folder \"{folderName}\"");
+                    Logger.Error($"Unable to set up mod in folder \"{folderName}\"");
                     earlyErrors.Add(new QModPlaceholder(folderName), ModStatus.InvalidCoreInfo);
                     continue;
                 }
@@ -120,7 +120,15 @@
         {
             foreach (string dllFile in dllFilePaths)
             {
+                AppDomainSetup info = AppDomain.CurrentDomain.SetupInformation;
+
+                AppDomain domain = AppDomain.CreateDomain("QModManagerModLoading", null, info);
+
+
+
                 var assembly = Assembly.LoadFrom(dllFile);
+
+                AppDomain.Unload(domain);
 
                 Type[] types = assembly.GetTypes();
                 foreach (Type type in types)

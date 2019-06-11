@@ -57,6 +57,9 @@ namespace QModManager
                     Logger.Fatal("A fatal error has occurred.");
                     Logger.Fatal("There was an error with the QMods directory");
                     Logger.Fatal("Please make sure that you ran Subnautica from Steam/Epic/Discord, and not from the executable file!");
+
+                    Dialog.Show("A fatal error has occurred. QModManager could not be initialized.", Dialog.Button.SeeLog, Dialog.Button.Disabled, false);
+
                     return; // Halt patching
                 }
 
@@ -89,7 +92,9 @@ namespace QModManager
                 if (NitroxCheck.IsInstalled)
                 {
                     Logger.Fatal($"Nitrox was detected!");
-                    Dialog.Show("Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.", Dialog.Button.disabled, Dialog.Button.disabled, false);
+
+                    Dialog.Show("Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.", Dialog.Button.Disabled, Dialog.Button.Disabled, false);
+
                     return;
                 }
 
@@ -128,13 +133,17 @@ namespace QModManager
             }
             catch (FatalPatchingException pEx)
             {
-                Logger.Fatal($"FATAL PATCHING EXCEPTION! - Patching ended - {pEx.Message}");
+                Logger.Fatal($"FATAL PATCHING EXCEPTION! - Patching ended");
                 Logger.Exception(pEx);
+
+                Dialog.Show("A fatal patching exception has been caught. QModManager could not be initialized.", Dialog.Button.SeeLog, Dialog.Button.Disabled, false);
             }
             catch (Exception e)
             {
                 Logger.Fatal("UNHANDLED EXCEPTION CAUGHT! - Patching ended");
                 Logger.Exception(e);
+
+                Dialog.Show("An unhandled exception has been caught. QModManager could not be initialized.", Dialog.Button.SeeLog, Dialog.Button.Disabled, false);
             }
         }
 

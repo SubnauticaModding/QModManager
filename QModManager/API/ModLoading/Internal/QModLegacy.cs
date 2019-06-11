@@ -104,7 +104,7 @@
             MethodInfo patchMethod = GetPatchMethod(this.EntryMethod, this.LoadedAssembly);
 
             if (patchMethod != null)
-                this.PatchMethods.Add(PatchingOrder.NormalInitialize, new QPatchMethod(patchMethod, this, PatchingOrder.NormalInitialize));
+                this.PatchMethods.Add(PatchingOrder.NormalInitialize, new QModPatchMethod(patchMethod, this, PatchingOrder.NormalInitialize));
 
             if (this.PatchMethods.Count == 0)
                 return ModStatus.MissingPatchMethod;

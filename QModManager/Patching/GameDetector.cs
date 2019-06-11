@@ -30,12 +30,12 @@
             }
             else if (isSubnautica && isBelowZero)
             {
-                Logger.Fatal("A fatal error has occurred.", "Both Subnautica and Below Zero files detected!");
+                Logger.Fatal("A fatal error has occurred. Both Subnautica and Below Zero files detected!");
                 throw new FatalPatchingException("Both Subnautica and Below Zero files detected!");
             }
             else
             {
-                Logger.Fatal("A fatal error has occurred.", "No game executable was found!");
+                Logger.Fatal("A fatal error has occurred. No game executable was found!");
                 throw new FatalPatchingException("No game executable was found!");
             }
         }

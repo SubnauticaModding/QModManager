@@ -37,7 +37,7 @@
                 if (this.PatchMethods.Count == 0)
                     return false;
 
-                foreach (QPatchMethod patchingMethod in this.PatchMethods.Values)
+                foreach (QModPatchMethod patchingMethod in this.PatchMethods.Values)
                 {
                     if (!patchingMethod.IsPatched)
                         return false;
@@ -67,7 +67,7 @@
             }
         }
 
-        public Dictionary<PatchingOrder, QPatchMethod> PatchMethods { get; } = new Dictionary<PatchingOrder, QPatchMethod>();
+        public Dictionary<PatchingOrder, QModPatchMethod> PatchMethods { get; } = new Dictionary<PatchingOrder, QModPatchMethod>();
 
         public ICollection<string> DependencyCollection { get; } = new List<string>();
 
@@ -95,7 +95,7 @@
                 return ModLoadingResults.CurrentGameNotSupported;
             }
 
-            if (this.PatchMethods.Count == 0 || !this.PatchMethods.TryGetValue(order, out QPatchMethod patchMethod))
+            if (this.PatchMethods.Count == 0 || !this.PatchMethods.TryGetValue(order, out QModPatchMethod patchMethod))
                 return ModLoadingResults.NoMethodToExecute;
 
             if (patchMethod.IsPatched)
