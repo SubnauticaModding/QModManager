@@ -45,7 +45,7 @@
 
                 if (mod == null)
                 {
-                    Logger.Warn($"Unable to set up mod in folder \"{folderName}\"");
+                    Logger.Error($"Unable to set up mod in folder \"{folderName}\"");
                     earlyErrors.Add(new QModPlaceholder(folderName), ModStatus.InvalidCoreInfo);
                     continue;
                 }

@@ -11,17 +11,17 @@
         </member>
         <member name="F:QModManager.API.ModLoading.Internal.PatchingOrder.PreInitialize">
             <summary>
-            For pre-initialize patch methods. FOR INTERNAL USE ONLY.
+            For pre-initialize patch methods
             </summary>
         </member>
         <member name="F:QModManager.API.ModLoading.Internal.PatchingOrder.NormalInitialize">
             <summary>
-            For normal patch methods. FOR INTERNAL USE ONLY.
+            For normal patch methods
             </summary>
         </member>
         <member name="F:QModManager.API.ModLoading.Internal.PatchingOrder.PostInitialize">
             <summary>
-            For post-initialize patch methods. FOR INTERNAL USE ONLY.
+            For post-initialize patch methods
             </summary>
         </member>
         <member name="T:QModManager.API.ModLoading.Internal.QModPatchAttributeBase">
