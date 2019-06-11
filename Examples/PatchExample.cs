@@ -18,12 +18,14 @@
         }
 
         [QModPatchMethod]
-        public static void PatchMyMod()
+        public static PatchResults PatchMyMod()
         {
             // Mod patching happens here
+            return PatchResults.OK;
         }
 
         [QModPostPatchMethod]
+        // Patch methods can return either 'void' or 'PatchResults'. If void is returned, 'PatchResults.OK' is assumed 
         public static void PatchMyModLate()
         {
             // Late mod patching happens here

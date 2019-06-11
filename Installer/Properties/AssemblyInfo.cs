@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("QModManagerInstallerExtensions")]
 [assembly: AssemblyDescription("Config based patch management for Subnautica and Subnautica: Below Zero")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("the QModManager dev team")]
+[assembly: AssemblyCompany("QModManager")]
 [assembly: AssemblyProduct("QModManagerInstallerExtensions")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]

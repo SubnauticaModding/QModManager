@@ -120,7 +120,15 @@
         {
             foreach (string dllFile in dllFilePaths)
             {
+                AppDomainSetup info = AppDomain.CurrentDomain.SetupInformation;
+
+                AppDomain domain = AppDomain.CreateDomain("QModManagerModLoading", null, info);
+
+
+
                 var assembly = Assembly.LoadFrom(dllFile);
+
+                AppDomain.Unload(domain);
 
                 Type[] types = assembly.GetTypes();
                 foreach (Type type in types)
