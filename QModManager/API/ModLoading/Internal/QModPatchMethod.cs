@@ -4,9 +4,9 @@
     using System.Reflection;
     using QModManager.Utility;
 
-    internal class QPatchMethod
+    internal class QModPatchMethod
     {
-        internal QPatchMethod(MethodInfo method, IQMod qmod, PatchingOrder order)
+        internal QModPatchMethod(MethodInfo method, IQMod qmod, PatchingOrder order)
         {
             this.ModId = qmod.Id;
             this.Order = order;
@@ -24,16 +24,22 @@
         {
             try
             {
-                // TODO - Add handling for non-static methods
+                object instance = null;
+
+                if (!this.Method.IsStatic)
+                {
+                    instance = Activator.CreateInstance(this.Method.DeclaringType);
+                }
+
                 if (this.Method.ReturnType == typeof(PatchResults))
                 {
-                    var value = (PatchResults)this.Method.Invoke(null, new object[] { });
+                    var value = (PatchResults)this.Method.Invoke(instance, new object[] { });
                     this.IsPatched = value == PatchResults.OK;
                     return value;
                 }
                 else
                 {
-                    this.Method.Invoke(null, new object[] { });
+                    this.Method.Invoke(instance, new object[] { });
                     this.IsPatched = true;
                     return PatchResults.OK;
                 }

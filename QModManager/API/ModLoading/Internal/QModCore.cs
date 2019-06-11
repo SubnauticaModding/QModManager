@@ -28,7 +28,7 @@
                 this.LoadAfterCollection.Add(item);
 
             // Patch methods
-            foreach (QPatchMethod qpatch in GetPatchMethods(originatingType))
+            foreach (QModPatchMethod qpatch in GetPatchMethods(originatingType))
             {
                 if (this.PatchMethods.ContainsKey(qpatch.Order))
                 {
@@ -90,7 +90,7 @@
             }
         }
 
-        private IEnumerable<QPatchMethod> GetPatchMethods(Type originatingType)
+        private IEnumerable<QModPatchMethod> GetPatchMethods(Type originatingType)
         {
             MethodInfo[] methods = originatingType.GetMethods(BindingFlags.Public);
             foreach (MethodInfo method in methods)
@@ -98,7 +98,7 @@
                 object[] patchMethods = method.GetCustomAttributes(typeof(QModPatchAttributeBase), false);
                 foreach (QModPatchAttributeBase attribute in patchMethods)
                 {
-                    yield return new QPatchMethod(method, this, attribute.PatchOrder);
+                    yield return new QModPatchMethod(method, this, attribute.PatchOrder);
                 }
             }
         }
