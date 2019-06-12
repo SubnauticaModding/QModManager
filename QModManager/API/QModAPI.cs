@@ -1,5 +1,6 @@
 ﻿using QModManager.API.ModLoading;
 using QModManager.API.ModLoading.Internal;
+using QModManager.Patching;
 using QModManager.Utility;
 using System;
 using System.Collections.Generic;

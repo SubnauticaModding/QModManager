@@ -11,6 +11,7 @@
         CircularLoadOrder,
         CircularDependency,
         MissingDependency,
+        OutOfDateDependency,
         CurrentGameNotSupported,
         FailedIdentifyingGame,
         DuplicateIdDetected,

@@ -20,6 +20,7 @@
             LogStatus(mods, ModStatus.CircularLoadOrder, "The following mods could not be loaded due to circular load order", Logger.Level.Warn);
             LogStatus(mods, ModStatus.CircularDependency, "The following mods could not be loaded due to circular dependencies", Logger.Level.Warn);
             LogStatus(mods, ModStatus.MissingDependency, "The following mods could not be loaded due to missing dependencies", Logger.Level.Warn);
+            LogStatus(mods, ModStatus.OutOfDateDependency, "The following mods could not be loaded due to outdated dependencies", Logger.Level.Warn);
             LogStatus(mods, ModStatus.CurrentGameNotSupported, "The following mods do not support the current game", Logger.Level.Warn);
             LogStatus(mods, ModStatus.FailedIdentifyingGame, "Could not identify the supported game for the following mods did not ", Logger.Level.Warn);
             LogStatus(mods, ModStatus.DuplicateIdDetected, "Found the following duplicate mods", Logger.Level.Warn);

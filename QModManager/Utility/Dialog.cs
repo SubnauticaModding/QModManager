@@ -1,16 +1,16 @@
-﻿using Harmony;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using UnityEngine;
-using UnityEngine.UI;
-using Logger = QModManager.Utility.Logger;
-
-namespace QModManager
+﻿namespace QModManager.Utility
 {
+    using System;
+    using System.Collections;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using Harmony;
+    using QModManager.Checks;
+    using QModManager.Patching;
+    using UnityEngine;
+    using UnityEngine.UI;
+
     internal static class Dialog
     {
         internal class Button
@@ -44,14 +44,14 @@ namespace QModManager
             internal Button() { }
             internal Button(string text, Action action)
             {
-                this.text = text;
-                this.action = action;
+                Text = text;
+                Action = action;
             }
         }
 
         internal static void Show(string error, Button leftButton, Button rightButton, bool blue)
         {
-            GameObject couroutineHandler = new GameObject("QModManager Dialog Coroutine");
+            var couroutineHandler = new GameObject("QModManager Dialog Coroutine");
             couroutineHandler.AddComponent<DummyBehaviour>().StartCoroutine(ShowDialogEnumerator(error, leftButton?.action, rightButton?.action, leftButton?.text, rightButton?.text, blue, couroutineHandler));
         }
 
@@ -65,14 +65,20 @@ namespace QModManager
             uGUI_SceneConfirmation confirmation = uGUI.main.confirmation;
 
             // Disable buttons if their action is null
-            if (onLeftButtonPressed == null) confirmation.yes.gameObject.SetActive(false);
-            if (onRightButtonPressed == null) confirmation.no.gameObject.SetActive(false);
+            if (onLeftButtonPressed == null)
+                confirmation.yes.gameObject.SetActive(false);
+            if (onRightButtonPressed == null)
+                confirmation.no.gameObject.SetActive(false);
 
             // Disable buttons if their text is null, otherwise set their button text
-            if (string.IsNullOrEmpty(leftButtonText)) confirmation.yes.gameObject.SetActive(false);
-            else confirmation.yes.gameObject.GetComponentInChildren<Text>().text = leftButtonText;
-            if (string.IsNullOrEmpty(rightButtonText)) confirmation.no.gameObject.SetActive(false);
-            else confirmation.no.gameObject.GetComponentInChildren<Text>().text = rightButtonText;
+            if (string.IsNullOrEmpty(leftButtonText))
+                confirmation.yes.gameObject.SetActive(false);
+            else
+                confirmation.yes.gameObject.GetComponentInChildren<Text>().text = leftButtonText;
+            if (string.IsNullOrEmpty(rightButtonText))
+                confirmation.no.gameObject.SetActive(false);
+            else
+                confirmation.no.gameObject.GetComponentInChildren<Text>().text = rightButtonText;
 
             // Turn the dialog blue if the blue parameter is true
             Sprite sprite = confirmation.gameObject.GetComponentInChildren<Image>().sprite;
@@ -82,15 +88,17 @@ namespace QModManager
             }
 
             // Reduce the text size on the buttons by two pts
-            List<Text> texts = confirmation.gameObject.GetComponentsInChildren<Text>().ToList();
+            var texts = confirmation.gameObject.GetComponentsInChildren<Text>().ToList();
             texts.RemoveAt(0);
             texts.Do(t => t.fontSize = t.fontSize - 2);
 
             // Revert everything after the popup was closed
             confirmation.Show(error, delegate (bool leftButtonClicked)
             {
-                if (leftButtonClicked) onLeftButtonPressed?.Invoke();
-                else onRightButtonPressed?.Invoke();
+                if (leftButtonClicked)
+                    onLeftButtonPressed?.Invoke();
+                else
+                    onRightButtonPressed?.Invoke();
 
                 confirmation.yes.gameObject.SetActive(true);
                 confirmation.no.gameObject.SetActive(true);

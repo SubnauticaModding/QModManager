@@ -37,6 +37,9 @@
         {
             foreach (Pair<QMod, ModStatus> pair in modsToInitialize)
             {
+                if (pair.Value != ModStatus.Success)
+                    continue;
+
                 QMod mod = pair.Key;
                 ModLoadingResults result = mod.TryLoading(order, currentGame);
                 switch (result)

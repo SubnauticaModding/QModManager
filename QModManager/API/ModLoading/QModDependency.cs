@@ -23,7 +23,7 @@
         /// </summary>
         /// <param name="requiredMod">The other mod required by this one to function.</param>
         /// <param name="major">The minimum major version of the mod required.</param>
-        public QModDependency(string requiredMod, int major)
+        public QModDependency(string requiredMod, ushort major)
             : this(requiredMod, new Version(major, 0))
         {
         }
@@ -34,7 +34,7 @@
         /// <param name="requiredMod">The other mod required by this one to function.</param>
         /// <param name="major">The minimum major version of the mod required.</param>
         /// <param name="minor">The specific minimum minor version.</param>
-        public QModDependency(string requiredMod, int major, int minor)
+        public QModDependency(string requiredMod, ushort major, ushort minor)
             : this(requiredMod, new Version(major, minor))
         {
         }
@@ -46,7 +46,7 @@
         /// <param name="major">The minimum major version of the mod required.</param>
         /// <param name="minor">The specific minimum minor update of the major version.</param>
         /// <param name="build">The specific build update of the minor version.</param>
-        public QModDependency(string requiredMod, int major, int minor, int build)
+        public QModDependency(string requiredMod, ushort major, ushort minor, ushort build)
             : this(requiredMod, new Version(major, minor, build))
         {
         }

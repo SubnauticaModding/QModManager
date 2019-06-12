@@ -5,7 +5,7 @@
     /// <summary>
     /// Base class to all attributes that identify QMod patch methods.
     /// </summary>
-    /// <seealso cref="System.Attribute" />
+    /// <seealso cref="Attribute" />
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
     public abstract class QModPatchAttributeBase : Attribute
     {
