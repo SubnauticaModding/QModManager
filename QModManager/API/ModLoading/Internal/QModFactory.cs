@@ -6,6 +6,7 @@
     using System.Reflection;
     using Oculus.Newtonsoft.Json;
     using QModManager.DataStructures;
+    using QModManager.Patching;
     using QModManager.Utility;
 
     internal class QModFactory
@@ -40,7 +41,7 @@
                     if (File.Exists(jsonFile))
                         mod = FromJsonFile(subDir);
                 }
-                
+
                 string folderName = new DirectoryInfo(subDir).Name;
 
                 if (mod == null)
@@ -78,8 +79,16 @@
                         break;
                 }
             }
+
             List<QMod> modsToLoad = modSorter.CreateFlatList(out PairedList<QMod, ErrorTypes> lateErrors);
 
+            PairedList<QMod, ModStatus> modList = CreateModStatusList(earlyErrors, modsToLoad, lateErrors);
+
+            return modList;
+        }
+
+        private static PairedList<QMod, ModStatus> CreateModStatusList(PairedList<QMod, ModStatus> earlyErrors, List<QMod> modsToLoad, PairedList<QMod, ErrorTypes> lateErrors)
+        {
             var modList = new PairedList<QMod, ModStatus>(modsToLoad.Count + earlyErrors.Count + lateErrors.Count);
 
             foreach (QMod mod in modsToLoad)
@@ -109,12 +118,35 @@
                         modList.Add(erroredMod.Key, ModStatus.MissingDependency);
                         break;
                     default:
-                        throw new InvalidOperationException("Invalid error reported by mod sorter");
+                        throw new FatalPatchingException("Invalid error reported by mod sorter");
+                }
+            }
+
+            foreach (Pair<QMod, ModStatus> pair in modList)
+            {
+                if (pair.Value != ModStatus.Success)
+                    continue;
+
+                QMod mod = pair.Key;
+                foreach (RequiredQMod requiredMod in mod.RequiredMods)
+                {
+                    Pair<QMod, ModStatus> dependency = modList.Find(d => d.Key.Id == requiredMod.Id);
+
+                    if (dependency == null || dependency.Value != ModStatus.Success)
+                    {
+                        pair.Value = ModStatus.MissingDependency;
+                        break;
+                    }
+                    else if (dependency.Key.ParsedVersion < requiredMod.MinimumVersion)
+                    {
+                        pair.Value = ModStatus.OutOfDateDependency;
+                        break;
+                    }
                 }
             }
 
             return modList;
-        }        
+        }
 
         private static QModCore FromDll(string subDirectory, string[] dllFilePaths)
         {

@@ -1,4 +1,4 @@
-namespace QModManager
+namespace QModManager.Patching
 {
     using System;
     using System.IO;
@@ -10,7 +10,6 @@ namespace QModManager
     using Checks;
     using Harmony;
     using QModManager.DataStructures;
-    using QModManager.Patching;
     using Utility;
 
     /// <summary>
