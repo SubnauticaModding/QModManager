@@ -1,7 +1,8 @@
-﻿using System;
-
-namespace QModInstaller
+﻿namespace QModInstaller
 {
+    using System;
+    using QModManager.Patching;
+
     /// <summary>
     /// Container class for the entry point <para/>
     /// NOT FOR MANUAL USAGE!
@@ -14,6 +15,6 @@ namespace QModInstaller
         /// NOT FOR MANUAL USAGE!
         /// </summary>
         [Obsolete("NOT FOR MANUAL USAGE!", true)]
-        public static void Patch() => QModManager.Patcher.Patch();
+        public static void Patch() => Patcher.Patch();
     }
 }

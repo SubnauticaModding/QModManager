@@ -181,14 +181,14 @@
             </summary>
             <param name="requiredMod">The other mod required by this one to function.</param>
         </member>
-        <member name="M:QModManager.API.ModLoading.QModDependency.#ctor(System.String,System.Int32)">
+        <member name="M:QModManager.API.ModLoading.QModDependency.#ctor(System.String,System.UInt16)">
             <summary>
             Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModDependency" /> class.
             </summary>
             <param name="requiredMod">The other mod required by this one to function.</param>
             <param name="major">The minimum major version of the mod required.</param>
         </member>
-        <member name="M:QModManager.API.ModLoading.QModDependency.#ctor(System.String,System.Int32,System.Int32)">
+        <member name="M:QModManager.API.ModLoading.QModDependency.#ctor(System.String,System.UInt16,System.UInt16)">
             <summary>
             Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModDependency"/> class.
             </summary>
@@ -196,7 +196,7 @@
             <param name="major">The minimum major version of the mod required.</param>
             <param name="minor">The specific minimum minor version.</param>
         </member>
-        <member name="M:QModManager.API.ModLoading.QModDependency.#ctor(System.String,System.Int32,System.Int32,System.Int32)">
+        <member name="M:QModManager.API.ModLoading.QModDependency.#ctor(System.String,System.UInt16,System.UInt16,System.UInt16)">
             <summary>
             Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModDependency"/> class.
             </summary>
@@ -4303,7 +4303,7 @@
             </summary>
             <typeparam name="IdType">The ID type.</typeparam>
         </member>
-        <member name="T:QModManager.Patcher">
+        <member name="T:QModManager.Patching.Patcher">
             <summary>
             The main class which handles all of QModManager's patching
             </summary>

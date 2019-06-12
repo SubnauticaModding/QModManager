@@ -1,6 +1,7 @@
 ﻿namespace QModManager.API.SMLHelper.Utility
 {
     using System.IO;
+    using QModManager.Patching;
 
     /// <summary>
     /// Utilities for saved games
