@@ -103,7 +103,7 @@
 
             MethodInfo patchMethod = GetPatchMethod(this.EntryMethod, this.LoadedAssembly);
 
-            if (patchMethod != null)
+            if (patchMethod != null && patchMethod.GetParameters().Length == 0)
                 this.PatchMethods.Add(PatchingOrder.NormalInitialize, new QModPatchMethod(patchMethod, this, PatchingOrder.NormalInitialize));
 
             if (this.PatchMethods.Count == 0)

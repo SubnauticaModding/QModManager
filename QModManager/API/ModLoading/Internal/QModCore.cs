@@ -98,7 +98,8 @@
                 object[] patchMethods = method.GetCustomAttributes(typeof(QModPatchAttributeBase), false);
                 foreach (QModPatchAttributeBase attribute in patchMethods)
                 {
-                    yield return new QModPatchMethod(method, this, attribute.PatchOrder);
+                    if (method.GetParameters().Length == 0)
+                        yield return new QModPatchMethod(method, this, attribute.PatchOrder);
                 }
             }
         }
