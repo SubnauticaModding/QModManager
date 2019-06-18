@@ -37,7 +37,7 @@ LicenseFile=License.txt
 OutputBaseFilename=QModManager_Setup
 OutputDir=..\Build
 PrivilegesRequired=admin
-SetupIconFile=QModsIcon.ico
+SetupIconFile=..\Assets\Icon.ico
 SolidCompression=yes
 UninstallDisplayIcon={app}\{code:GetUninstallIcon}
 UninstallDisplayName={code:GetName}
@@ -45,8 +45,8 @@ UsePreviousAppDir=no
 UsePreviousLanguage=no
 UsePreviousSetupType=False
 UsePreviousTasks=False
-WizardImageFile=WizardImage.bmp
-WizardSmallImageFile=WizardSmallImageTransparent.bmp
+WizardImageFile=..\Assets\InstallerImage.bmp
+WizardSmallImageFile=..\Assets\InstallerSmallImage.bmp
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -70,7 +70,6 @@ Source: "..\Dependencies\SMLHelper.dll"; DestDir: "{app}\Subnautica_Data\Managed
 Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 Source: "..\Build\QModInstaller.xml"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 Source: "..\Build\QModManager.exe"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Assets\QModManagerAssets.unity3d"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 ; Below Zero
 Source: "..\Dependencies\0Harmony.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 Source: "..\Dependencies\0Harmony-1.2.0.1.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
@@ -82,7 +81,6 @@ Source: "..\Dependencies\SMLHelper.dll"; DestDir: "{app}\SubnauticaZero_Data\Man
 Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 Source: "..\Build\QModInstaller.xml"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 Source: "..\Build\QModManager.exe"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Assets\QModManagerAssets.unity3d"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 
 [Run]
 ; Subnautica
