@@ -57,9 +57,9 @@ namespace QModManager.Patching
                     Logger.Fatal("There was an error with the QMods directory");
                     Logger.Fatal("Please make sure that you ran Subnautica from Steam/Epic/Discord, and not from the executable file!");
 
-                    Dialog.Show("A fatal error has occurred. QModManager could not be initialized.", Dialog.Button.SeeLog, Dialog.Button.Disabled, false);
+                    Dialog.Show("A fatal error has occurred. QModManager could not be initialized.", Dialog.Button.SeeLog, Dialog.Button.Disabled, false, true);
 
-                    return; // Halt patching
+                    return;
                 }
 
                 try
@@ -92,7 +92,7 @@ namespace QModManager.Patching
                 {
                     Logger.Fatal($"Nitrox was detected!");
 
-                    Dialog.Show("Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.", Dialog.Button.Disabled, Dialog.Button.Disabled, false);
+                    Dialog.Show("Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.", Dialog.Button.Disabled, Dialog.Button.Disabled, false, true);
 
                     return;
                 }
@@ -126,23 +126,23 @@ namespace QModManager.Patching
                 Logger.Info($"Finished loading QModManager. Loaded {loadedMods} mods");
 
                 if (ErrorModCount > 0)
-                    Logger.Info($"A total of {ErrorModCount} mods failed to load");
+                    Logger.Warn($"A total of {ErrorModCount} mods failed to load");
 
                 SummaryLogger.LogSummaries(modsToLoad);
             }
             catch (FatalPatchingException pEx)
             {
-                Logger.Fatal($"FATAL PATCHING EXCEPTION! - Patching ended");
+                Logger.Fatal($"A fatal patching exception has been caught! Patching ended prematurely!");
                 Logger.Exception(pEx);
 
-                Dialog.Show("A fatal patching exception has been caught. QModManager could not be initialized.", Dialog.Button.SeeLog, Dialog.Button.Disabled, false);
+                Dialog.Show("A fatal patching exception has been caught. QModManager could not be initialized.", Dialog.Button.SeeLog, Dialog.Button.Disabled, false, true);
             }
             catch (Exception e)
             {
-                Logger.Fatal("UNHANDLED EXCEPTION CAUGHT! - Patching ended");
+                Logger.Fatal("An unhandled exception has been caught! - Patching ended prematurely!");
                 Logger.Exception(e);
 
-                Dialog.Show("An unhandled exception has been caught. QModManager could not be initialized.", Dialog.Button.SeeLog, Dialog.Button.Disabled, false);
+                Dialog.Show("An unhandled exception has been caught. QModManager could not be initialized.", Dialog.Button.SeeLog, Dialog.Button.Disabled, false, true);
             }
         }
 

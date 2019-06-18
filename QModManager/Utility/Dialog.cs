@@ -8,6 +8,7 @@
     using Harmony;
     using QModManager.Checks;
     using QModManager.Patching;
+    using QModManager.API;
     using UnityEngine;
     using UnityEngine.UI;
 
@@ -22,15 +23,26 @@
             internal static readonly Button seeLog = new Button("See Log", () =>
             {
                 string logPath;
-                if (Patcher.CurrentlyRunningGame == API.QModGame.Subnautica)
+
+                if (Patcher.CurrentlyRunningGame == QModGame.Subnautica)
+                {
                     logPath = Path.Combine(Patcher.QModBaseDir, "../Subnautica_Data/output_log.txt");
+                }
                 else
+                {
                     logPath = Path.Combine(Application.persistentDataPath, "output_log.txt");
+                }
+
                 Logger.Debug($"Opening log file located in: \"{logPath}\"");
+
                 if (File.Exists(logPath))
+                {
                     Process.Start(logPath);
+                }
                 else
+                {
                     Logger.Error($"Expected log file at: \"{logPath}\" but none was found.");
+                }
             });
             internal static readonly Button close = new Button("Close", () => { });
             internal static readonly Button download = new Button("Download", () =>
@@ -49,36 +61,37 @@
             }
         }
 
-        internal static void Show(string error, Button leftButton, Button rightButton, bool blue)
+        internal static void Show(string error, Button leftButton, Button rightButton, bool blue, bool cannotClose = false, float waitTime = 3f)
         {
             var couroutineHandler = new GameObject("QModManager Dialog Coroutine");
-            couroutineHandler.AddComponent<DummyBehaviour>().StartCoroutine(ShowDialogEnumerator(error, leftButton?.action, rightButton?.action, leftButton?.text, rightButton?.text, blue, couroutineHandler));
+            couroutineHandler.AddComponent<DummyBehaviour>().StartCoroutine(
+                ShowDialogEnumerator(error, leftButton, rightButton, blue, cannotClose, waitTime, couroutineHandler));
         }
 
-        internal static IEnumerator ShowDialogEnumerator(string error, Action onLeftButtonPressed, Action onRightButtonPressed, string leftButtonText, string rightButtonText, bool blue, GameObject couroutineHandler)
+        private static IEnumerator ShowDialogEnumerator(string error, Button leftButton, Button rightButton, bool blue, bool cannotClose, float waitTime, GameObject couroutineHandler)
         {
             while (typeof(uGUI).GetField("_main", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) == null)
                 yield return null;
 
-            yield return new WaitForSecondsRealtime(2);
+            yield return new WaitForSecondsRealtime(waitTime);
 
             uGUI_SceneConfirmation confirmation = uGUI.main.confirmation;
 
             // Disable buttons if their action is null
-            if (onLeftButtonPressed == null)
+            if (leftButton.Action == null)
                 confirmation.yes.gameObject.SetActive(false);
-            if (onRightButtonPressed == null)
+            if (rightButton.Action == null)
                 confirmation.no.gameObject.SetActive(false);
 
             // Disable buttons if their text is null, otherwise set their button text
-            if (string.IsNullOrEmpty(leftButtonText))
+            if (string.IsNullOrEmpty(leftButton.Text))
                 confirmation.yes.gameObject.SetActive(false);
             else
-                confirmation.yes.gameObject.GetComponentInChildren<Text>().text = leftButtonText;
-            if (string.IsNullOrEmpty(rightButtonText))
+                confirmation.yes.gameObject.GetComponentInChildren<Text>().text = leftButton.Text;
+            if (string.IsNullOrEmpty(rightButton.Text))
                 confirmation.no.gameObject.SetActive(false);
             else
-                confirmation.no.gameObject.GetComponentInChildren<Text>().text = rightButtonText;
+                confirmation.no.gameObject.GetComponentInChildren<Text>().text = rightButton.Text;
 
             // Turn the dialog blue if the blue parameter is true
             Sprite sprite = confirmation.gameObject.GetComponentInChildren<Image>().sprite;
@@ -96,9 +109,9 @@
             confirmation.Show(error, delegate (bool leftButtonClicked)
             {
                 if (leftButtonClicked)
-                    onLeftButtonPressed?.Invoke();
+                    leftButton.Action?.Invoke();
                 else
-                    onRightButtonPressed?.Invoke();
+                    rightButton.Action?.Invoke();
 
                 confirmation.yes.gameObject.SetActive(true);
                 confirmation.no.gameObject.SetActive(true);
@@ -111,6 +124,10 @@
                 texts.Do(t => t.fontSize = t.fontSize + 2);
 
                 UnityEngine.Object.Destroy(couroutineHandler);
+
+                // Re-open the dialog if it is not closeable
+                if (cannotClose)
+                    Show(error, leftButton, rightButton, blue, cannotClose, .25f);
             });
 
             yield return null;

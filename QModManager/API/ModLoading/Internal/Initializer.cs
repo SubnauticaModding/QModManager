@@ -70,7 +70,7 @@
                 if (File.Exists(Path.Combine(oldPath, "mod.json")))
                     File.Delete(Path.Combine(oldPath, "mod.json"));
 
-                // TODO in #81
+                // TODO
 
                 return true;
             }
@@ -85,7 +85,7 @@
             Logger.Info($"Loading SMLHelper...");
             try
             {
-                CustomFishPatcher.Patch(Patcher.Harmony);
+                FishPatcher.Patch(Patcher.Harmony);
                 TechTypePatcher.Patch(Patcher.Harmony);
                 CraftTreeTypePatcher.Patch(Patcher.Harmony);
                 CraftDataPatcher.Patch(Patcher.Harmony);

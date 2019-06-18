@@ -35,7 +35,7 @@ InfoBeforeFile=Info.txt
 OutputBaseFilename=QModManager_Setup
 OutputDir=..\Build
 PrivilegesRequired=admin
-SetupIconFile=QModsIcon.ico
+SetupIconFile=..\Assets\Icon.ico
 SolidCompression=yes
 UninstallDisplayIcon={app}\{code:GetUninstallIcon}
 UninstallDisplayName={code:GetName}
@@ -46,6 +46,8 @@ WizardSmallImageFile=WizardSmallImageTransparent.bmp
 UsePreviousSetupType=False
 UsePreviousTasks=False
 CloseApplications=False
+WizardImageFile=..\Assets\InstallerImage.bmp
+WizardSmallImageFile=..\Assets\InstallerSmallImage.bmp
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -68,7 +70,6 @@ Source: "..\Dependencies\SemVer.dll"; DestDir: "{app}\Subnautica_Data\Managed"; 
 Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 Source: "..\Build\QModInstaller.xml"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 Source: "..\Build\QModManager.exe"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Assets\QModManagerAssets.unity3d"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 ; Below Zero
 Source: "..\Dependencies\0Harmony.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 Source: "..\Dependencies\0Harmony-1.2.0.1.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
@@ -79,7 +80,6 @@ Source: "..\Dependencies\SemVer.dll"; DestDir: "{app}\SubnauticaZero_Data\Manage
 Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 Source: "..\Build\QModInstaller.xml"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 Source: "..\Build\QModManager.exe"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Assets\QModManagerAssets.unity3d"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 
 [Run]
 ; Subnautica
