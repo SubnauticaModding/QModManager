@@ -67,7 +67,7 @@
         {
             CraftDataHandler.SetTechData(this.TechType, GetBlueprintRecipe());
 
-            CraftDataHandler.AddToGroup(this.GroupForPDA, this.CategoryForPDA, this.TechType);
+            CraftDataHandler.AddToGroup(this.TechType, this.GroupForPDA, this.CategoryForPDA);
 
             if (!this.UnlockedAtStart)
                 KnownTechHandler.SetAnalysisTechEntry(this.RequiredForUnlock, new TechType[1] { this.TechType }, this.DiscoverMessageKey);

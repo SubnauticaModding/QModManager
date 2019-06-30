@@ -104,9 +104,9 @@
         /// <para>Allows you to edit inventory background colors for TechTypes.</para>
         /// </summary>
         /// <param name="techType">The TechType whose BackgroundType you want to edit.</param>
-        /// <param name="backgroundColor">The background color for that TechType.</param>
+        /// <param name="backgroundType">The background color for that TechType.</param>
         /// <seealso cref="CraftData.BackgroundType"/>
-        void SetBackgroundType(TechType techType, CraftData.BackgroundType backgroundColor);
+        void SetBackgroundType(TechType techType, CraftData.BackgroundType backgroundType);
 
         /// <summary>
         /// Allows you to add items to the buildable list.
@@ -118,20 +118,20 @@
         /// Allows you to add items to the game's internal grouping system.
         /// Required if you want to make buildable items show up in the Habitat Builder.
         /// </summary>
+        /// <param name="techType">The TechType you want to add.</param>
         /// <param name="group">The TechGroup you want to add your TechType to.</param>
         /// <param name="category">The TechCategory (in the TechGroup) you want to add your TechType to.</param>
-        /// <param name="techType">The TechType you want to add.</param>
-        void AddToGroup(TechGroup group, TechCategory category, TechType techType);
+        void AddToGroup(TechType techType, TechGroup group, TechCategory category);
 
         /// <summary>
         /// Allows you to add items to the game's internal grouping system.
         /// Required if you want to make buildable items show up in the Habitat Builder.
         /// </summary>
+        /// <param name="techType">The TechType you want to add.</param>
         /// <param name="group">The TechGroup you want to add your TechType to.</param>
         /// <param name="category">The TechCategory (in the TechGroup) you want to add your TechType to.</param>
-        /// <param name="techType">The TechType you want to add.</param>
         /// <param name="after">Added TechType will be added after this TechType, for sorting purposes.</param>
-        void AddToGroup(TechGroup group, TechCategory category, TechType techType, TechType after);
+        void AddToGroup(TechType techType, TechGroup group, TechCategory category, TechType after);
 
         /// <summary>
         /// Allows you to remove an existing TechType from the game's internal group system.

@@ -8,7 +8,7 @@
     /// Class used by CustomFish for constructing a prefab based on the values provided by the user.
     /// You can use this yourself if you want, but you will need to manually provide a TechType
     /// </summary>
-    public class CustomFishPrefab : ModPrefab
+    public class FishPrefab : ModPrefab
     {
         /// <summary>
         /// The model to use to create the creature. This would ideally only have renderer/collider components attached, but will still work if it has behaviours
@@ -37,12 +37,12 @@
         public float swimInterval;
 
         /// <summary>
-        /// Creates a new <see cref="CustomFishPrefab"/> with the given values
+        /// Creates a new <see cref="FishPrefab"/> with the given values
         /// </summary>
         /// <param name="classId"></param>
         /// <param name="prefabFileName"></param>
         /// <param name="techType"></param>
-        public CustomFishPrefab(string classId, string prefabFileName, TechType techType = TechType.None) : base(classId, prefabFileName, techType) { }
+        public FishPrefab(string classId, string prefabFileName, TechType techType = TechType.None) : base(classId, prefabFileName, techType) { }
 
         /// <summary>
         /// Gets the prefab game object

@@ -4,16 +4,16 @@
     using Handlers;
 
     /// <summary>
-    /// Interface for <see cref="CustomFishHandler"/> <para/>
+    /// Interface for <see cref="FishHandler"/> <para/>
     /// Can be used for dependency injection
     /// </summary>
-    public interface ICustomFishHandler
+    public interface IFishHandler
     {
         /// <summary>
         /// Registers a CustomFish object into the game
         /// </summary>
         /// <param name="fish">The CustomFish that you are registering</param>
         /// <returns>The TechType created using the info from your CustomFish object</returns>
-        TechType RegisterFish(CustomFish fish);
+        TechType RegisterFish(Fish fish);
     }
 }
