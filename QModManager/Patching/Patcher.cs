@@ -58,7 +58,7 @@ namespace QModManager.Patching
 
                     Dialog.Show("A fatal error has occurred. QModManager could not be initialized.", Dialog.Button.SeeLog, Dialog.Button.Disabled, false);
 
-                    return; // Halt patching
+                    return;
                 }
 
                 try

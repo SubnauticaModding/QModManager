@@ -85,7 +85,7 @@
             Logger.Info($"Loading SMLHelper...");
             try
             {
-                CustomFishPatcher.Patch(Patcher.Harmony);
+                FishPatcher.Patch(Patcher.Harmony);
                 TechTypePatcher.Patch(Patcher.Harmony);
                 CraftTreeTypePatcher.Patch(Patcher.Harmony);
                 CraftDataPatcher.Patch(Patcher.Harmony);
