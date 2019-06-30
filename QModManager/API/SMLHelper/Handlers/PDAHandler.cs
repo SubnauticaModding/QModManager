@@ -37,7 +37,7 @@
         /// <param name="scanTime">The relative time spent on scanning. Default value is 1.</param>
         void IPDAHandler.EditFragmentScanTime(TechType techType, float scanTime)
         {
-            if (scanTime <= 0f)
+            if (scanTime <= 1f)
             {
                 scanTime = 1f;
             }

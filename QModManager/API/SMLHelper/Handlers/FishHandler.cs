@@ -10,33 +10,33 @@
     /// <summary>
     /// Class to manage registering of fish into the game
     /// </summary>
-    public class CustomFishHandler : ICustomFishHandler
+    public class FishHandler : IFishHandler
     {
         /// <summary>
         /// Main entry point for all calls to this handler.
         /// </summary>
-        public static ICustomFishHandler Main { get; } = new CustomFishHandler();
+        public static IFishHandler Main { get; } = new FishHandler();
 
-        private CustomFishHandler() { }
+        private FishHandler() { }
 
         /// <summary>
         /// A list of all the custom fish that have so far been registered into the game. This includes ones from mods that may have been loaded earlier.
         /// It is mainly used by CustomFishPatcher to spawn fish in
         /// </summary>
-        public static List<TechType> fishTechTypes = new List<TechType>();
+        internal static List<TechType> fishTechTypes = new List<TechType>();
 
         /// <summary>
         /// Registers a CustomFish object into the game
         /// </summary>
         /// <param name="fish">The CustomFish that you are registering</param>
         /// <returns>The TechType created using the info from your CustomFish object</returns>
-        TechType ICustomFishHandler.RegisterFish(CustomFish fish)
+        TechType IFishHandler.RegisterFish(Fish fish)
         {
             TechType type = TechTypeHandler.AddTechType(fish.id, fish.displayName, fish.tooltip);
 
             fishTechTypes.Add(type);
 
-            CustomFishPrefab fishPrefab = new CustomFishPrefab(fish.id, $"WorldEntities/Tools/{fish.id}", type)
+            FishPrefab fishPrefab = new FishPrefab(fish.id, $"WorldEntities/Tools/{fish.id}", type)
             {
                 modelPrefab = fish.modelPrefab,
                 swimSpeed = fish.swimSpeed,
@@ -63,7 +63,7 @@
         /// </summary>
         /// <param name="fish">The CustomFish that you are registering</param>
         /// <returns>The TechType created using the info from your CustomFish object</returns>
-        public static TechType RegisterFish(CustomFish fish)
+        public static TechType RegisterFish(Fish fish)
         {
             return Main.RegisterFish(fish);
         }

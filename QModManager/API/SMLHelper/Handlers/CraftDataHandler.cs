@@ -146,11 +146,11 @@
         /// <para>Allows you to edit inventory background colors for TechTypes.</para>
         /// </summary>
         /// <param name="techType">The TechType whose BackgroundType you want to edit.</param>
-        /// <param name="backgroundColor">The background color for that TechType.</param>
+        /// <param name="backgroundType">The background color for that TechType.</param>
         /// <seealso cref="CraftData.BackgroundType"/>
-        public static void SetBackgroundType(TechType techType, CraftData.BackgroundType backgroundColor)
+        public static void SetBackgroundType(TechType techType, CraftData.BackgroundType backgroundType)
         {
-            Main.SetBackgroundType(techType, backgroundColor);
+            Main.SetBackgroundType(techType, backgroundType);
         }
 
         /// <summary>
@@ -166,25 +166,25 @@
         /// Allows you to add items to the game's internal grouping system.
         /// Required if you want to make buildable items show up in the Habitat Builder.
         /// </summary>
+        /// <param name="techType">The TechType you want to add.</param>
         /// <param name="group">The TechGroup you want to add your TechType to.</param>
         /// <param name="category">The TechCategory (in the TechGroup) you want to add your TechType to.</param>
-        /// <param name="techType">The TechType you want to add.</param>
-        public static void AddToGroup(TechGroup group, TechCategory category, TechType techType)
+        public static void AddToGroup(TechType techType, TechGroup group, TechCategory category)
         {
-            Main.AddToGroup(group, category, techType, TechType.None);
+            Main.AddToGroup(techType, group, category, TechType.None);
         }
 
         /// <summary>
         /// Allows you to add items to the game's internal grouping system.
         /// Required if you want to make buildable items show up in the Habitat Builder.
         /// </summary>
+        /// <param name="techType">The TechType you want to add.</param>
         /// <param name="group">The TechGroup you want to add your TechType to.</param>
         /// <param name="category">The TechCategory (in the TechGroup) you want to add your TechType to.</param>
-        /// <param name="techType">The TechType you want to add.</param>
         /// <param name="after">Added TechType will be added after this TechType, for sorting purposes.</param>
-        public static void AddToGroup(TechGroup group, TechCategory category, TechType techType, TechType after)
+        public static void AddToGroup(TechType techType, TechGroup group, TechCategory category, TechType after)
         {
-            Main.AddToGroup(group, category, techType, after);
+            Main.AddToGroup(techType, group, category, after);
         }
 
         /// <summary>
@@ -342,11 +342,11 @@
         /// <para>Allows you to edit inventory background colors for TechTypes.</para>
         /// </summary>
         /// <param name="techType">The TechType whose BackgroundType you want to edit.</param>
-        /// <param name="backgroundColor">The background color for that TechType.</param>
+        /// <param name="backgroundType">The background color for that TechType.</param>
         /// <seealso cref="CraftData.BackgroundType"/>
-        void ICraftDataHandler.SetBackgroundType(TechType techType, CraftData.BackgroundType backgroundColor)
+        void ICraftDataHandler.SetBackgroundType(TechType techType, CraftData.BackgroundType backgroundType)
         {
-            CraftDataPatcher.CustomBackgroundTypes[techType] = backgroundColor;
+            CraftDataPatcher.CustomBackgroundTypes[techType] = backgroundType;
         }
 
         /// <summary>
@@ -362,10 +362,10 @@
         /// Allows you to add items to the game's internal grouping system.
         /// Required if you want to make buildable items show up in the Habitat Builder.
         /// </summary>
+        /// <param name="techType">The TechType you want to add.</param>
         /// <param name="group">The TechGroup you want to add your TechType to.</param>
         /// <param name="category">The TechCategory (in the TechGroup) you want to add your TechType to.</param>
-        /// <param name="techType">The TechType you want to add.</param>
-        void ICraftDataHandler.AddToGroup(TechGroup group, TechCategory category, TechType techType)
+        void ICraftDataHandler.AddToGroup(TechType techType, TechGroup group, TechCategory category)
         {
             CraftDataPatcher.AddToCustomGroup(group, category, techType, TechType.None);
         }
@@ -374,11 +374,11 @@
         /// Allows you to add items to the game's internal grouping system.
         /// Required if you want to make buildable items show up in the Habitat Builder.
         /// </summary>
+        /// <param name="techType">The TechType you want to add.</param>
         /// <param name="group">The TechGroup you want to add your TechType to.</param>
         /// <param name="category">The TechCategory (in the TechGroup) you want to add your TechType to.</param>
-        /// <param name="techType">The TechType you want to add.</param>
         /// <param name="after">Added TechType will be added after this TechType, for sorting purposes.</param>
-        void ICraftDataHandler.AddToGroup(TechGroup group, TechCategory category, TechType techType, TechType after)
+        void ICraftDataHandler.AddToGroup(TechType techType, TechGroup group, TechCategory category, TechType after)
         {
             CraftDataPatcher.AddToCustomGroup(group, category, techType, after);
         }

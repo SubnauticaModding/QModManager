@@ -154,7 +154,7 @@
     <Compile Include="API\SMLHelper\Crafting\ModCraftTreeTab.cs" />
     <Compile Include="API\SMLHelper\Crafting\Node.cs" />
     <Compile Include="API\SMLHelper\Crafting\TabNode.cs" />
-    <Compile Include="API\SMLHelper\Interfaces\ICustomFishHandler.cs" />
+    <Compile Include="API\SMLHelper\Interfaces\IFishHandler.cs" />
     <Compile Include="API\SMLHelper\Interfaces\IItemStorageHelper.cs" />
     <Compile Include="Checks\PirateCheck.cs" />
     <Compile Include="DataStructures\ErrorTypes.cs" />
@@ -181,10 +181,10 @@
     <Compile Include="Utility\NetworkUtilities.cs" />
     <Compile Include="Utility\ReflectionHelper.cs" />
     <Compile Include="Checks\VersionCheck.cs" />
-    <Compile Include="API\SMLHelper\Assets\CustomFish.cs" />
-    <Compile Include="API\SMLHelper\Assets\CustomFishPrefab.cs" />
-    <Compile Include="API\SMLHelper\Patchers\CustomFishPatcher.cs" />
-    <Compile Include="API\SMLHelper\Handlers\CustomFishHandler.cs" />
+    <Compile Include="API\SMLHelper\Assets\Fish.cs" />
+    <Compile Include="API\SMLHelper\Assets\FishPrefab.cs" />
+    <Compile Include="API\SMLHelper\Patchers\FishPatcher.cs" />
+    <Compile Include="API\SMLHelper\Handlers\FishHandler.cs" />
     <Compile Include="API\SMLHelper\Handlers\ItemActionHandler.cs" />
     <Compile Include="API\SMLHelper\Handlers\LanguageHandler.cs" />
     <Compile Include="API\SMLHelper\Handlers\OptionsPanelHandler.cs" />
