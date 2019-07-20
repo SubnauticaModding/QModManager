@@ -83,11 +83,11 @@
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\Dependencies\Assembly-CSharp.dll</HintPath>
-	  <Private>False</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\Dependencies\Assembly-CSharp-firstpass.dll</HintPath>
-	  <Private>False</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Dependencies\Newtonsoft.Json.dll</HintPath>
@@ -98,26 +98,12 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine">
-      <HintPath>..\Dependencies\UnityEngine.dll</HintPath>
-	  <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
       <HintPath>..\Dependencies\UnityEngine.AssetBundleModule.dll</HintPath>
 	  <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\Dependencies\UnityEngine.CoreModule.dll</HintPath>
-	  <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>..\Dependencies\UnityEngine.IMGUIModule.dll</HintPath>
-	  <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
       <HintPath>..\Dependencies\UnityEngine.InputLegacyModule.dll</HintPath>
@@ -133,45 +119,41 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\ModLoading\Internal\IModOrder.cs" />
-    <Compile Include="API\ModLoading\Internal\IQModSerialiable.cs" />
-    <Compile Include="API\ModLoading\Internal\ModLoadingResults.cs" />
-    <Compile Include="API\ModLoading\Internal\PatchingOrder.cs" />
-    <Compile Include="API\ModLoading\Internal\QMod.cs" />
-    <Compile Include="API\ModLoading\Internal\QModCore.cs" />
-    <Compile Include="API\ModLoading\Internal\QModFactory.cs" />
-    <Compile Include="API\ModLoading\Internal\QModLegacy.cs" />
-    <Compile Include="API\ModLoading\Internal\QModPatchAttributeBase.cs" />
-    <Compile Include="API\ModLoading\Internal\QModPlaceholder.cs" />
-    <Compile Include="API\ModLoading\Internal\QModPatchMethod.cs" />
-    <Compile Include="API\ModLoading\IQMod.cs" />
+    <Compile Include="API\IQMod.cs" />
+    <Compile Include="API\IQModServices.cs" />
     <Compile Include="API\ModLoading\ModStatus.cs" />
-    <Compile Include="API\ModLoading\PatchResults.cs" />
-    <Compile Include="API\ModLoading\QModCoreInfo.cs" />
-    <Compile Include="API\ModLoading\QModDependency.cs" />
-    <Compile Include="API\ModLoading\QModLoadAfter.cs" />
-    <Compile Include="API\ModLoading\QModLoadBefore.cs" />
-    <Compile Include="API\ModLoading\QModPatchMethod.cs" />
-    <Compile Include="API\ModLoading\QModPostPatchMethod.cs" />
-    <Compile Include="API\ModLoading\QModPrePatchMethod.cs" />
-    <Compile Include="API\ModLoading\RequiredQMod.cs" />
+    <Compile Include="API\ModLoading\QModCoreAttribute.cs" />
+    <Compile Include="API\ModLoading\QModPatch.cs" />
+    <Compile Include="API\ModLoading\QModPostPatch.cs" />
+    <Compile Include="API\ModLoading\QModPrePatch.cs" />
+    <Compile Include="API\QModServices.cs" />
+    <Compile Include="API\RequiredQMod.cs" />
     <Compile Include="API\QModGame.cs" />
-    <Compile Include="API\QModHooks.cs" />
     <Compile Include="DataStructures\ErrorTypes.cs" />
     <Compile Include="DataStructures\ISortable.cs" />
     <Compile Include="DataStructures\PairedList.cs" />
-    <Compile Include="DataStructures\SortedTree.cs" />
+    <Compile Include="DataStructures\SortedCollection.cs" />
     <Compile Include="DataStructures\SortedTreeNode.cs" />
+    <Compile Include="DataStructures\SortedTreeNodeCollection.cs" />
     <Compile Include="DataStructures\SortResults.cs" />
+    <Compile Include="DataStructures\WeightedList.cs" />
     <Compile Include="EntryPoint.cs" />
-    <Compile Include="Obsolete\Hooks.cs" />
-    <Compile Include="Obsolete\PatchManager.cs" />
-    <Compile Include="API\Messages.cs" />
-    <Compile Include="API\QModAPI.cs" />
     <Compile Include="NitroxCheck.cs" />
     <Compile Include="Patching\FatalPatchingException.cs" />
     <Compile Include="Patching\GameDetector.cs" />
+    <Compile Include="Patching\Initializer.cs" />
     <Compile Include="Patching\Patcher.cs" />
+    <Compile Include="Patching\IModOrder.cs" />
+    <Compile Include="Patching\IQModSerialiable.cs" />
+    <Compile Include="Patching\ModLoadingResults.cs" />
+    <Compile Include="Patching\PatchingOrder.cs" />
+    <Compile Include="Patching\PatchMethodFinder.cs" />
+    <Compile Include="Patching\QMod.cs" />
+    <Compile Include="Patching\QModFactory.cs" />
+    <Compile Include="Patching\QModJson.cs" />
+    <Compile Include="API\ModLoading\QModPatchAttributeBase.cs" />
+    <Compile Include="Patching\QModPlaceholder.cs" />
+    <Compile Include="Patching\QModPatchMethod.cs" />
     <Compile Include="SummaryLogger.cs" />
     <Compile Include="Utility\IOUtilities.cs" />
     <Compile Include="Utility\Logger.cs" />
@@ -189,7 +171,6 @@
     <Compile Include="Utility\PlayerPrefsExtra.cs" />
     <Compile Include="Utility\ReflectionHelper.cs" />
     <Compile Include="Checks\VersionCheck.cs" />
-    <Compile Include="API\ModLoading\Internal\Initializer.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -3,13 +3,13 @@
     internal enum ModStatus
     {
         Success,
-        CanceledByAuthor,
+        //CanceledByAuthor,
         CanceledByUser,
         PatchMethodFailed,
         TooManyPatchMethods,
         MissingPatchMethod,
-        CircularLoadOrder,
-        CircularDependency,
+        //CircularLoadOrder,
+        //CircularDependency,
         MissingDependency,
         OutOfDateDependency,
         CurrentGameNotSupported,

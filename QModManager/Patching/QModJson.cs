@@ -1,17 +1,18 @@
-﻿namespace QModManager.API.ModLoading.Internal
+﻿namespace QModManager.Patching
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using Oculus.Newtonsoft.Json;
+    using QModManager.API;
+    using QModManager.API.ModLoading;
     using QModManager.Utility;
 
     [JsonObject(MemberSerialization.OptIn)]
-    internal class QModLegacy : QMod, IQMod, IQModSerialiable
+    internal class QModJson : QMod, IQMod, IQModSerialiable
     {
-        public QModLegacy()
+        public QModJson()
         {
             // Empty public constructor for JSON
         }
@@ -49,7 +50,7 @@
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public override bool Enable { get; set; } = true;
 
-        [JsonProperty(Required = Required.Always)]
+        [JsonProperty(Required = Required.Default)]
         public string EntryMethod { get; set; }
 
         protected override ModStatus Validate(string subDirectory)
@@ -71,7 +72,8 @@
 
             try
             {
-                this.ParsedVersion = new Version(this.Version);
+                if (System.Version.TryParse(this.Version, out Version version))
+                    this.ParsedVersion = version;
             }
             catch (Exception vEx)
             {
@@ -85,6 +87,7 @@
 
             if (string.IsNullOrEmpty(modAssemblyPath) || !File.Exists(modAssemblyPath))
             {
+                Logger.Debug($"Did not find a DLL at {modAssemblyPath}");
                 return ModStatus.MissingAssemblyFile;
             }
             else
@@ -101,39 +104,40 @@
                 }
             }
 
-            MethodInfo patchMethod = GetPatchMethod(this.EntryMethod, this.LoadedAssembly);
+            ModStatus patchMethodResults = patchMethodFinder.LoadPatchMethods(this);
 
-            if (patchMethod != null && patchMethod.GetParameters().Length == 0)
-                this.PatchMethods.Add(PatchingOrder.NormalInitialize, new QModPatchMethod(patchMethod, this, PatchingOrder.NormalInitialize));
-
-            if (this.PatchMethods.Count == 0)
-                return ModStatus.MissingPatchMethod;
+            if (patchMethodResults != ModStatus.Success)
+                return patchMethodResults;
 
             foreach (string item in this.Dependencies)
-                this.DependencyCollection.Add(item);
+                this.RequiredDependencies.Add(item);
 
             foreach (string item in this.LoadBefore)
-                this.LoadBeforeCollection.Add(item);
+                this.LoadBeforePreferences.Add(item);
 
             foreach (string item in this.LoadAfter)
-                this.LoadAfterCollection.Add(item);
+                this.LoadAfterPreferences.Add(item);
 
             var versionedDependencies = new List<RequiredQMod>(this.VersionDependencies.Count);
             foreach (KeyValuePair<string, string> item in this.VersionDependencies)
             {
-                versionedDependencies.Add(new RequiredQMod(item.Key, new Version(item.Value)));
+                string cleanVersion = QMod.VersionRegex.Matches(item.Value)?[0]?.Value;
+
+                if (string.IsNullOrEmpty(cleanVersion))
+                {
+                    versionedDependencies.Add(new RequiredQMod(item.Key));
+                }
+                else if (System.Version.TryParse(cleanVersion, out Version version))
+                {
+                    versionedDependencies.Add(new RequiredQMod(item.Key, version));
+                }
+                else
+                {
+                    versionedDependencies.Add(new RequiredQMod(item.Key));
+                }
             }
 
             return ModStatus.Success;
-        }
-
-        private MethodInfo GetPatchMethod(string methodPath, Assembly assembly)
-        {
-            string[] entryMethodSig = methodPath.Split('.');
-            string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
-            string entryMethod = entryMethodSig[entryMethodSig.Length - 1];
-
-            return assembly.GetType(entryType).GetMethod(entryMethod);
         }
     }
 }

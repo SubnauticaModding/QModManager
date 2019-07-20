@@ -1,20 +1,20 @@
-﻿namespace QModManager.API.ModLoading.Internal
+﻿namespace QModManager.Patching
 {
     internal enum PatchingOrder
     {
         /// <summary>
         /// For pre-initialize patch methods
         /// </summary>
-        PreInitialize,
+        PreInitialize = -1,
 
         /// <summary>
         /// For normal patch methods
         /// </summary>
-        NormalInitialize,
+        NormalInitialize = 0,
 
         /// <summary>
         /// For post-initialize patch methods
         /// </summary>
-        PostInitialize
+        PostInitialize = 1
     }
 }

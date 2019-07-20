@@ -4,306 +4,182 @@
         <name>QModInstaller</name>
     </assembly>
     <members>
-        <member name="T:QModManager.API.ModLoading.Internal.IQModSerialiable">
-            <summary>
-            Enforces the requirements of the mod.json file for legacy mod loading.
-            </summary>
-        </member>
-        <member name="F:QModManager.API.ModLoading.Internal.PatchingOrder.PreInitialize">
-            <summary>
-            For pre-initialize patch methods
-            </summary>
-        </member>
-        <member name="F:QModManager.API.ModLoading.Internal.PatchingOrder.NormalInitialize">
-            <summary>
-            For normal patch methods
-            </summary>
-        </member>
-        <member name="F:QModManager.API.ModLoading.Internal.PatchingOrder.PostInitialize">
-            <summary>
-            For post-initialize patch methods
-            </summary>
-        </member>
-        <member name="T:QModManager.API.ModLoading.Internal.QModPatchAttributeBase">
-            <summary>
-            Base class to all attributes that identify QMod patch methods.
-            </summary>
-            <seealso cref="T:System.Attribute" />
-        </member>
-        <member name="M:QModManager.API.ModLoading.Internal.QModPatchAttributeBase.#ctor(QModManager.API.ModLoading.Internal.PatchingOrder)">
-            <summary>
-            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.Internal.QModPatchAttributeBase"/> class.
-            </summary>
-            <param name="patchOrder">The patch order.</param>
-        </member>
-        <member name="P:QModManager.API.ModLoading.Internal.QModPlaceholder.QModManager">
-            <summary>
-            The dummy <see cref="T:QModManager.API.ModLoading.Internal.QMod"/> which is used to represent QModManager
-            </summary>
-        </member>
-        <member name="T:QModManager.API.ModLoading.IQMod">
+        <member name="T:QModManager.API.IQMod">
             <summary>
             All public data about a QMod.
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.Id">
+        <member name="P:QModManager.API.IQMod.Id">
             <summary>
             The ID of the mod <para/>
             Can only contain alphanumeric characters and underscores: (<see langword="a-z"/>, <see langword="A-Z"/>, <see langword="0-9"/>, <see langword="_"/>)
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.DisplayName">
+        <member name="P:QModManager.API.IQMod.DisplayName">
             <summary>
             The display name of the mod
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.Author">
+        <member name="P:QModManager.API.IQMod.Author">
             <summary>
             The author of the mod
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.SupportedGame">
+        <member name="P:QModManager.API.IQMod.SupportedGame">
             <summary>
             The game this mod was developed for.
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.RequiredMods">
+        <member name="P:QModManager.API.IQMod.RequiredMods">
             <summary>
             The dependencies of the mod and their optional minimum required version
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.ModsToLoadBefore">
+        <member name="P:QModManager.API.IQMod.ModsToLoadBefore">
             <summary>
             A list of mods, before which, this mod will load
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.ModsToLoadAfter">
+        <member name="P:QModManager.API.IQMod.ModsToLoadAfter">
             <summary>
             A list of mods, after which, this mod will load
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.LoadedAssembly">
+        <member name="P:QModManager.API.IQMod.LoadedAssembly">
             <summary>
             The assembly of this mod <para/>
             Check if <see langword="null"/> before using
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.AssemblyName">
+        <member name="P:QModManager.API.IQMod.AssemblyName">
             <summary>
             The assembly name of the mod
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.ParsedVersion">
+        <member name="P:QModManager.API.IQMod.ParsedVersion">
             <summary>
             The version of the mod.
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.Enable">
+        <member name="P:QModManager.API.IQMod.Enable">
             <summary>
             Whether or not this mod is enabled
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.IsLoaded">
+        <member name="P:QModManager.API.IQMod.IsLoaded">
             <summary>
             Whether or not this mod has been loaded
             </summary>
         </member>
-        <member name="T:QModManager.API.ModLoading.PatchResults">
+        <member name="T:QModManager.API.IQModServices">
             <summary>
-            An optional value that can be returned from a mod patching method.
+            An interface of services that other mods can make use of.
             </summary>
         </member>
-        <member name="F:QModManager.API.ModLoading.PatchResults.OK">
+        <member name="M:QModManager.API.IQModServices.GetLoadedMods">
             <summary>
-            The patch method ran successfully.<para/>
-            A method that returns <seealso cref="T:System.Void"/> and does not through an exception will default to this value.
+            Gets a list successfully loaded mods.
             </summary>
+            <returns>
+            The loaded mods.
+            </returns>
         </member>
-        <member name="F:QModManager.API.ModLoading.PatchResults.Error">
+        <member name="T:QModManager.API.ModLoading.QModCoreAttribute">
             <summary>
-            The patch method encountered an error.<para/>
-            Execution of any further patch methods this mod implements will be skipped.
+            Identifies the patching class for your QMod.
             </summary>
-        </member>
-        <member name="F:QModManager.API.ModLoading.PatchResults.ModderCanceled">
-            <summary>
-            Informs that the mod author has requested that patching be halted for this mod.<para/>
-            Execution of any further patch methods this mod implements will be skipped.<para/>
-            This doesn't necessarily imply that and error happened, so it will be handled silently.
-            </summary>
-        </member>
-        <member name="T:QModManager.API.ModLoading.QModCoreInfo">
-            <summary>
-            Provides important custom meta data about your QMod.
-            ALERT: This class must contain a method with a <seealso cref="T:QModManager.API.ModLoading.QModPatchMethod"/> attribute.
-            </summary>
+            <seealso cref="T:QModManager.API.ModLoading.QModPatch"/>
+            <seealso cref="T:QModManager.API.ModLoading.QModPrePatch"/>
+            <seealso cref="T:QModManager.API.ModLoading.QModPostPatch"/>
             <seealso cref="T:System.Attribute" />
         </member>
-        <member name="M:QModManager.API.ModLoading.QModCoreInfo.#ctor(System.String,System.String,System.String,QModManager.API.QModGame)">
+        <member name="M:QModManager.API.ModLoading.QModCoreAttribute.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModCoreInfo" /> class.
-            </summary>
-            <param name="id">The mod identifier.</param>
-            <param name="displayName">The mod display name.</param>
-            <param name="author">The mod author or team name.</param>
-            <param name="supportedGame">The game the mod was developed for.</param>
-        </member>
-        <member name="P:QModManager.API.ModLoading.QModCoreInfo.Id">
-            <summary>
-            The ID of the mod <para/>
-            Can only contain alphanumeric characters and underscores: (<see langword="a-z"/>, <see langword="A-Z"/>, <see langword="0-9"/>, <see langword="_"/>)
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModCoreAttribute" /> class.
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.QModCoreInfo.DisplayName">
-            <summary>
-            The display name of the mod
-            </summary>
-        </member>
-        <member name="P:QModManager.API.ModLoading.QModCoreInfo.Author">
-            <summary>
-            The author of the mod
-            </summary>
-        </member>
-        <member name="P:QModManager.API.ModLoading.QModCoreInfo.SupportedGame">
-            <summary>
-            The game this mod was developed for.
-            </summary>
-        </member>
-        <member name="T:QModManager.API.ModLoading.QModDependency">
-            <summary>
-            Identifies other QMods that this mod requires.
-            </summary>
-            <seealso cref="T:System.Attribute" />
-        </member>
-        <member name="M:QModManager.API.ModLoading.QModDependency.#ctor(System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModDependency"/> class.
-            </summary>
-            <param name="requiredMod">The other mod required by this one to function.</param>
-        </member>
-        <member name="M:QModManager.API.ModLoading.QModDependency.#ctor(System.String,System.UInt16)">
-            <summary>
-            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModDependency" /> class.
-            </summary>
-            <param name="requiredMod">The other mod required by this one to function.</param>
-            <param name="major">The minimum major version of the mod required.</param>
-        </member>
-        <member name="M:QModManager.API.ModLoading.QModDependency.#ctor(System.String,System.UInt16,System.UInt16)">
-            <summary>
-            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModDependency"/> class.
-            </summary>
-            <param name="requiredMod">The other mod required by this one to function.</param>
-            <param name="major">The minimum major version of the mod required.</param>
-            <param name="minor">The specific minimum minor version.</param>
-        </member>
-        <member name="M:QModManager.API.ModLoading.QModDependency.#ctor(System.String,System.UInt16,System.UInt16,System.UInt16)">
-            <summary>
-            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModDependency"/> class.
-            </summary>
-            <param name="requiredMod">The other mod required by this one to function.</param>
-            <param name="major">The minimum major version of the mod required.</param>
-            <param name="minor">The specific minimum minor update of the major version.</param>
-            <param name="build">The specific build update of the minor version.</param>
-        </member>
-        <member name="P:QModManager.API.ModLoading.QModDependency.RequiredMod">
-            <summary>
-            Identifies another QMod, by Id, that this mod requires to function.
-            </summary>
-        </member>
-        <member name="P:QModManager.API.ModLoading.QModDependency.MinimumVersion">
-            <summary>
-            Identifies what minimum version the other mod should be at.
-            </summary>
-        </member>
-        <member name="T:QModManager.API.ModLoading.QModLoadAfter">
-            <summary>
-            Identifies another QMod that must be loaded before this mod.
-            </summary>
-            <seealso cref="T:System.Attribute" />
-        </member>
-        <member name="M:QModManager.API.ModLoading.QModLoadAfter.#ctor(System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModLoadBefore"/> class.
-            </summary>
-            <param name="otherMod">The other mod that must be loaded before this mod can be.</param>
-        </member>
-        <member name="P:QModManager.API.ModLoading.QModLoadAfter.OtherMod">
-            <summary>
-            Identifies another QMod, by Id. If this other mod is present, your mod will be loaded after it.
-            </summary>
-        </member>
-        <member name="T:QModManager.API.ModLoading.QModLoadBefore">
-            <summary>
-            Identifies another QMod that cannot be loaded before this mod.
-            </summary>
-            <seealso cref="T:System.Attribute" />
-        </member>
-        <member name="M:QModManager.API.ModLoading.QModLoadBefore.#ctor(System.String)">
-            <summary>
-            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModLoadBefore"/> class.
-            </summary>
-            <param name="otherMod">The other mod that must wait to load until after this mod does.</param>
-        </member>
-        <member name="P:QModManager.API.ModLoading.QModLoadBefore.OtherMod">
-            <summary>
-            Identifies another QMod, by Id. If this other mod is present, your mod will be loaded before it.
-            </summary>
-        </member>
-        <member name="T:QModManager.API.ModLoading.QModPatchMethod">
+        <member name="T:QModManager.API.ModLoading.QModPatch">
             <summary>
             Identifies a normal patch method for a QMod.<para/>
-            ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreInfo"/> attribute.
+            This method must be public, must take no parameters, and must return either <seealso cref="T:System.Void"/> or <seealso cref="!:PatchResults"/>.<para/>
+            ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreAttribute"/> attribute.
             </summary>
             <seealso cref="T:System.Attribute" />
         </member>
-        <member name="M:QModManager.API.ModLoading.QModPatchMethod.#ctor">
+        <member name="M:QModManager.API.ModLoading.QModPatch.#ctor">
             <summary>
-            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPatchMethod"/> class for normal patching.        
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPatch"/> class for normal patching.        
             </summary>
         </member>
-        <member name="T:QModManager.API.ModLoading.QModPostPatchMethod">
+        <member name="T:QModManager.API.ModLoading.QModPostPatch">
             <summary>
             Identifies a post-patch method for a QMod.<para/>
-            ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreInfo"/> attribute.
+            This method must be public, must take no parameters, and must return either <seealso cref="T:System.Void"/> or <seealso cref="!:PatchResults"/>.<para/>
+            ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreAttribute"/> attribute.
             </summary>
             <seealso cref="T:System.Attribute" />
         </member>
-        <member name="M:QModManager.API.ModLoading.QModPostPatchMethod.#ctor">
+        <member name="M:QModManager.API.ModLoading.QModPostPatch.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPostPatchMethod"/> class for post-patching.
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPostPatch" /> class.
             </summary>
+            <param name="secretPassword">The secret password that proves you read the documentation.</param>
         </member>
-        <member name="T:QModManager.API.ModLoading.QModPrePatchMethod">
+        <member name="T:QModManager.API.ModLoading.QModPrePatch">
             <summary>
             Identifies a pre-patch method for a QMod.<para/>
-            ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreInfo"/> attribute.
+            This method must be public, must take no parameters, and must return either <seealso cref="T:System.Void"/> or <seealso cref="!:PatchResults"/>.<para/>
+            ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreAttribute"/> attribute.
             </summary>
             <seealso cref="T:System.Attribute" />
         </member>
-        <member name="M:QModManager.API.ModLoading.QModPrePatchMethod.#ctor">
+        <member name="M:QModManager.API.ModLoading.QModPrePatch.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPrePatchMethod"/> class for pre-patching.
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPrePatch"/> class.
             </summary>
+            <param name="secretPassword">The secret password that proves you read the documentation.</param>
         </member>
-        <member name="T:QModManager.API.ModLoading.RequiredQMod">
+        <member name="T:QModManager.API.QModServices">
+            <summary>
+            Services offered to mods.
+            </summary>
+            <seealso cref="T:QModManager.API.IQModServices" />
+        </member>
+        <member name="P:QModManager.API.QModServices.Main">
+            <summary>
+            Gets the main entry point into the QMod Services.
+            </summary>
+            <value>
+            The main.
+            </value>
+        </member>
+        <member name="M:QModManager.API.QModServices.GetLoadedMods">
+            <summary>
+            Gets a list successfully loaded mods.
+            </summary>
+            <returns>
+            The loaded mods.
+            </returns>
+        </member>
+        <member name="T:QModManager.API.RequiredQMod">
             <summary>
             Identifies a required mod and an optional minimum version.
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.RequiredQMod.Id">
+        <member name="P:QModManager.API.RequiredQMod.Id">
             <summary>
             Gets the required mod's ID.
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.RequiredQMod.RequiresMinimumVersion">
+        <member name="P:QModManager.API.RequiredQMod.RequiresMinimumVersion">
             <summary>
             Gets a value indicating whether the mod must be at a minimum version for compatibility.
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.RequiredQMod.MinimumVersion">
+        <member name="P:QModManager.API.RequiredQMod.MinimumVersion">
             <summary>
             Gets the minimum version this mod should be at.<para/>
-            If <see cref="P:QModManager.API.ModLoading.RequiredQMod.RequiresMinimumVersion"/> is <c>false</c>, this will return a default value.
+            If <see cref="P:QModManager.API.RequiredQMod.RequiresMinimumVersion"/> is <c>false</c>, this will return a default value.
             </summary>
         </member>
         <member name="T:QModManager.API.QModGame">
@@ -331,411 +207,32 @@
             Both Subnautica and Below Zero.
             </summary>
         </member>
-        <member name="T:QModManager.API.QModHooks">
+        <member name="T:QModManager.API.QModPatchAttributeBase">
             <summary>
-            Contains some handy delegates to default Unity methods
+            Base class to all attributes that identify QMod patch methods.
             </summary>
+            <seealso cref="T:System.Attribute" />
         </member>
-        <member name="F:QModManager.API.QModHooks.Start">
+        <member name="M:QModManager.API.QModPatchAttributeBase.#ctor(QModManager.Patching.PatchingOrder)">
             <summary>
-            Hooks into the <see cref="T:UnityEngine.MonoBehaviour"/>.Start() method
+            Initializes a new instance of the <see cref="T:QModManager.API.QModPatchAttributeBase"/> class.
             </summary>
+            <param name="patchOrder">The patch order.</param>
         </member>
-        <member name="F:QModManager.API.QModHooks.FixedUpdate">
+        <member name="M:QModManager.API.QModPatchAttributeBase.#ctor(QModManager.Patching.PatchingOrder,System.String)">
             <summary>
-            Hooks into the <see cref="T:UnityEngine.MonoBehaviour"/>.FixedUpdate() method
+            Initializes a new instance of the <see cref="T:QModManager.API.QModPatchAttributeBase" /> class.
             </summary>
+            <param name="patchOrder">The patch order.</param>
+            <param name="secretPasword">The secret pasword.</param>
+            <exception cref="T:QModManager.Patching.FatalPatchingException">This modder has not read the documentation and should not be using prepatch/postpatch functions.</exception>
         </member>
-        <member name="F:QModManager.API.QModHooks.LateStart">
+        <member name="M:QModManager.API.QModPatchAttributeBase.ValidateThatModderHasReadTheDocumentation(System.Reflection.MethodInfo)">
             <summary>
-            Hooks into the <see cref="T:UnityEngine.MonoBehaviour"/>.Update() method, but is only called once and after <see cref="F:QModManager.API.QModHooks.Start"/>
+            Validates the that modder has read the documentation.
             </summary>
-        </member>
-        <member name="F:QModManager.API.QModHooks.Update">
-            <summary>
-            Hooks into the <see cref="T:UnityEngine.MonoBehaviour"/>.Update() method
-            </summary>
-        </member>
-        <member name="F:QModManager.API.QModHooks.LateUpdate">
-            <summary>
-            Hooks into the <see cref="T:UnityEngine.MonoBehaviour"/>.LateUpdate() method
-            </summary>
-        </member>
-        <member name="F:QModManager.API.QModHooks.OnApplicationQuit">
-            <summary>
-            Hooks into the <see cref="T:UnityEngine.MonoBehaviour"/>.OnApplicationQuit() method
-            </summary>
-        </member>
-        <member name="F:QModManager.API.QModHooks.SceneLoaded">
-            <summary>
-            Hooks into the <see cref="E:UnityEngine.SceneManagement.SceneManager.sceneLoaded"/> event
-            </summary>
-        </member>
-        <member name="F:QModManager.API.QModHooks.OnLoadEnd">
-            <summary>
-            Invoked after QModManager has finished loading
-            </summary>
-        </member>
-        <member name="P:QModManager.API.QModHooks.LateStartInvoked">
-            <summary>
-            Whether or not <see cref="F:QModManager.API.QModHooks.LateStart"/> has been invoked
-            </summary>
-        </member>
-        <member name="T:QModManager.API.QModHooks.Delegates">
-            <summary>
-            The class where all of the delegates are defined
-            </summary>
-        </member>
-        <member name="T:QModManager.API.QModHooks.Delegates.Start">
-            <summary>
-            Delegate for <see cref="F:QModManager.API.QModHooks.Start"/>
-            </summary>
-        </member>
-        <member name="T:QModManager.API.QModHooks.Delegates.FixedUpdate">
-            <summary>
-            Delegate for <see cref="F:QModManager.API.QModHooks.FixedUpdate"/>
-            </summary>
-        </member>
-        <member name="T:QModManager.API.QModHooks.Delegates.LateStart">
-            <summary>
-            Delegate for <see cref="F:QModManager.API.QModHooks.LateStart"/>
-            </summary>
-        </member>
-        <member name="T:QModManager.API.QModHooks.Delegates.Update">
-            <summary>
-            Delegate for <see cref="F:QModManager.API.QModHooks.Update"/>
-            </summary>
-        </member>
-        <member name="T:QModManager.API.QModHooks.Delegates.LateUpdate">
-            <summary>
-            Delegate for <see cref="F:QModManager.API.QModHooks.LateUpdate"/>
-            </summary>
-        </member>
-        <member name="T:QModManager.API.QModHooks.Delegates.OnApplicationQuit">
-            <summary>
-            Delegate for <see cref="F:QModManager.API.QModHooks.OnApplicationQuit"/>
-            </summary>
-        </member>
-        <member name="T:QModManager.API.QModHooks.Delegates.SceneLoaded">
-            <summary>
-            Delegate for <see cref="F:QModManager.API.QModHooks.SceneLoaded"/>
-            </summary>
-        </member>
-        <member name="T:QModManager.API.QModHooks.Delegates.OnLoadEnd">
-            <summary>
-            Delegate for <see cref="F:QModManager.API.QModHooks.OnLoadEnd"/>
-            </summary>
-        </member>
-        <member name="P:QModManager.API.QModAPI.Main">
-            <summary>
-            The main instance of this class <para/>
-            Used for dependency injection
-            </summary>
-        </member>
-        <member name="M:QModManager.API.QModAPI.MarkAsErrored(System.Reflection.Assembly)">
-            <summary>
-            Marks a mod as errored <para/>
-            The mod will appear in the red pop-up which is shows when the game starts
-            </summary>
-            <param name="modAssembly">
-            The assembly of the mod to mark as errored. <para/>
-            If omitted, it will use the calling <see cref="T:System.Reflection.Assembly"/>
-            </param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.GetAllMods(System.Boolean,System.Boolean)">
-            <summary>
-            Returns a list of all of the mods
-            </summary>
-            <param name="includeUnloaded">Set to <see langword="true"/> to also include unloaded mods</param>
-            <param name="includeErrored">Set to <see langword="true"/> to also include errored mods</param>
-            <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded/errored mods</returns>
-        </member>
-        <member name="M:QModManager.API.QModAPI.GetMyMod">
-            <summary>
-            Returns the mod from the assembly which called this method
-            </summary>
-        </member>
-        <member name="M:QModManager.API.QModAPI.GetMod(System.Reflection.Assembly,System.Boolean,System.Boolean)">
-            <summary>
-            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.GetMod(System.String,System.Boolean,System.Boolean)">
-            <summary>
-            Returns a mod from an ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.ModPresent(System.Reflection.Assembly,System.Boolean,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.ModPresent(System.String,System.Boolean,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#MarkAsErrored">
-            <summary>
-            Marks a mod as errored <para/>
-            The mod will appear in the red pop-up which is shows when the game starts
-            </summary>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#MarkAsErrored(System.Reflection.Assembly)">
-            <summary>
-            Marks a mod as errored <para/>
-            The mod will appear in the red pop-up which is shows when the game starts
-            </summary>
-            <param name="modAssembly">
-            The assembly of the mod to mark as errored. <para/>
-            </param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetAllMods">
-            <summary>
-            Returns a list of all of the mods
-            </summary>
-            <returns>A read only list of mods containing all of the loaded mods</returns>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetAllMods(System.Boolean)">
-            <summary>
-            Returns a list of all of the mods
-            </summary>
-            <param name="includeUnloaded">Set to <see langword="true"/> to also include unloaded mods</param>
-            <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded mods</returns>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetAllMods(System.Boolean,System.Boolean)">
-            <summary>
-            Returns a list of all of the mods
-            </summary>
-            <param name="includeUnloaded">Set to <see langword="true"/> to also include unloaded mods</param>
-            <param name="includeErrored">Set to <see langword="true"/> to also include errored mods</param>
-            <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded/errored mods</returns>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMyMod">
-            <summary>
-            Returns the mod from the assembly which called this method
-            </summary>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMod(System.Reflection.Assembly)">
-            <summary>
-            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMod(System.Reflection.Assembly,System.Boolean)">
-            <summary>
-            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMod(System.Reflection.Assembly,System.Boolean,System.Boolean)">
-            <summary>
-            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMod(System.String)">
-            <summary>
-            Returns a mod from an ID
-            </summary>
-            <param name="id"></param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMod(System.String,System.Boolean)">
-            <summary>
-            Returns a mod from an ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#GetMod(System.String,System.Boolean,System.Boolean)">
-            <summary>
-            Returns a mod from an ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#ModPresent(System.Reflection.Assembly)">
-            <summary>
-            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#ModPresent(System.Reflection.Assembly,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#ModPresent(System.Reflection.Assembly,System.Boolean,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#ModPresent(System.String)">
-            <summary>
-            Checks whether or not a mod is present based on its ID
-            </summary>
-            <param name="id"></param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#ModPresent(System.String,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.QModAPI.QModManager#API#IQModAPI#ModPresent(System.String,System.Boolean,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.MarkAsErrored">
-            <summary>
-            Marks a mod as errored <para/>
-            The mod will appear in the red pop-up which is shows when the game starts
-            </summary>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.MarkAsErrored(System.Reflection.Assembly)">
-            <summary>
-            Marks a mod as errored <para/>
-            The mod will appear in the red pop-up which is shows when the game starts
-            </summary>
-            <param name="modAssembly">
-            The assembly of the mod to mark as errored. <para/>
-            </param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetAllMods">
-            <summary>
-            Returns a list of all of the mods
-            </summary>
-            <returns>A read only list of mods containing all of the loaded mods</returns>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetAllMods(System.Boolean)">
-            <summary>
-            Returns a list of all of the mods
-            </summary>
-            <param name="includeUnloaded">Set to <see langword="true"/> to also include unloaded mods</param>
-            <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded mods</returns>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetAllMods(System.Boolean,System.Boolean)">
-            <summary>
-            Returns a list of all of the mods
-            </summary>
-            <param name="includeUnloaded">Set to <see langword="true"/> to also include unloaded mods</param>
-            <param name="includeErrored">Set to <see langword="true"/> to also include errored mods</param>
-            <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded/errored mods</returns>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetMyMod">
-            <summary>
-            Returns the mod from the assembly which called this method
-            </summary>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetMod(System.Reflection.Assembly)">
-            <summary>
-            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetMod(System.Reflection.Assembly,System.Boolean)">
-            <summary>
-            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetMod(System.Reflection.Assembly,System.Boolean,System.Boolean)">
-            <summary>
-            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetMod(System.String)">
-            <summary>
-            Returns a mod from an ID
-            </summary>
-            <param name="id"></param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetMod(System.String,System.Boolean)">
-            <summary>
-            Returns a mod from an ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.GetMod(System.String,System.Boolean,System.Boolean)">
-            <summary>
-            Returns a mod from an ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.ModPresent(System.Reflection.Assembly)">
-            <summary>
-            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.ModPresent(System.Reflection.Assembly,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.ModPresent(System.Reflection.Assembly,System.Boolean,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its <see cref="T:System.Reflection.Assembly"/>
-            </summary>
-            <param name="modAssembly"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.ModPresent(System.String)">
-            <summary>
-            Checks whether or not a mod is present based on its ID
-            </summary>
-            <param name="id"></param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.ModPresent(System.String,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-        </member>
-        <member name="M:QModManager.API.IQModAPI.ModPresent(System.String,System.Boolean,System.Boolean)">
-            <summary>
-            Checks whether or not a mod is present based on its ID
-            </summary>
-            <param name="id"></param>
-            <param name="includeUnloaded">Whether or not to include unloaded mods</param>
-            <param name="includeErrored">Whether or not to include unloaded mods</param>
+            <param name="method">The method.</param>
+            <exception cref="T:QModManager.Patching.FatalPatchingException">This modder has not read the documentation and should not be using prepatch/postpatch functions.</exception>
         </member>
         <member name="T:QModManager.Checks.PirateCheck">
             <summary>
@@ -749,13 +246,38 @@
         </member>
         <member name="T:QModManager.DataStructures.ISortable`1">
             <summary>
-            Requirements to function within the <seealso cref="T:QModManager.DataStructures.SortedTree`2"/>
+            Requirements to function within the <seealso cref="T:QModManager.DataStructures.SortedCollection`2"/>
             </summary>
             <typeparam name="IdType">The ID type.</typeparam>
         </member>
         <member name="T:QModManager.Patching.Patcher">
             <summary>
             The main class which handles all of QModManager's patching
+            </summary>
+        </member>
+        <member name="T:QModManager.Patching.IQModSerialiable">
+            <summary>
+            Enforces the requirements of the mod.json file for legacy mod loading.
+            </summary>
+        </member>
+        <member name="F:QModManager.Patching.PatchingOrder.PreInitialize">
+            <summary>
+            For pre-initialize patch methods
+            </summary>
+        </member>
+        <member name="F:QModManager.Patching.PatchingOrder.NormalInitialize">
+            <summary>
+            For normal patch methods
+            </summary>
+        </member>
+        <member name="F:QModManager.Patching.PatchingOrder.PostInitialize">
+            <summary>
+            For post-initialize patch methods
+            </summary>
+        </member>
+        <member name="P:QModManager.Patching.QModPlaceholder.QModManager">
+            <summary>
+            The dummy <see cref="T:QModManager.Patching.QMod"/> which is used to represent QModManager
             </summary>
         </member>
         <member name="T:QModManager.Utility.IOUtilities">
@@ -771,6 +293,15 @@
             <param name="two"></param>
             <param name="rest"></param>
             <returns></returns>
+        </member>
+        <member name="P:QModManager.Utility.Logger.EnableDebugLogging">
+            <summary>
+            Gets a value indicating whether debug logs are enabled.
+            To enable debug logs, simple create an empty file named <c>"QModDebug.txt"</c> within the Subnautica folder.
+            </summary>
+            <value>
+              <c>true</c> if debug logs are enabled; otherwise, <c>false</c>.
+            </value>
         </member>
         <member name="T:QModManager.Utility.ExtensionMethods">
             <summary>
@@ -802,12 +333,14 @@
         </member>
         <member name="T:QModInstaller.QModPatcher">
             <summary>
-            Container class for the entry point
+            Container class for the entry point <para/>
+            NOT FOR MANUAL USAGE!
             </summary>
         </member>
         <member name="M:QModInstaller.QModPatcher.Patch">
             <summary>
-            QModManager entry point
+            QModManager entry point <para/>
+            NOT FOR MANUAL USAGE!
             </summary>
         </member>
     </members>

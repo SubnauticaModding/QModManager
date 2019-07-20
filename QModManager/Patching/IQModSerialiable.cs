@@ -1,4 +1,4 @@
-﻿namespace QModManager.API.ModLoading.Internal
+﻿namespace QModManager.Patching
 {
     using System.Collections.Generic;
 

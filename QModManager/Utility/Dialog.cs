@@ -19,14 +19,14 @@
             internal string text = null;
             internal Action action = null;
 
-            internal static readonly Button disabled = new Button();
-            internal static readonly Button seeLog = new Button("See Log", () =>
+            internal static readonly Button Disabled = new Button();
+            internal static readonly Button SeeLog = new Button("See Log", () =>
             {
                 string logPath;
 
                 if (Patcher.CurrentlyRunningGame == QModGame.Subnautica)
                 {
-                    logPath = Path.Combine(Patcher.QModBaseDir, "../Subnautica_Data/output_log.txt");
+                    logPath = Path.Combine(Application.persistentDataPath, "Player.log");
                 }
                 else
                 {

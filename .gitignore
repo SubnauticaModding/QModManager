@@ -288,5 +288,7 @@ __pycache__/
 *.xsd.cs
 Dependencies/Assembly-CSharp-firstpass.dll
 Dependencies/Assembly-CSharp.dll
+Dependencies/Assembly-CSharp-firstpass_publicized.dll
+Dependencies/Assembly-CSharp_publicized.dll
 /Build/Assembly-CSharp-firstpass.dll
 /Build/Assembly-CSharp.dll

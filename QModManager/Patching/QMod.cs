@@ -1,13 +1,21 @@
-﻿namespace QModManager.API.ModLoading.Internal
+﻿namespace QModManager.Patching
 {
     using System;
     using System.Collections.Generic;
     using System.Reflection;
+    using System.Text.RegularExpressions;
+    using QModManager.API;
+    using QModManager.API.ModLoading;
     using QModManager.DataStructures;
     using QModManager.Utility;
 
-    internal abstract class QMod : ISortable<string>
+    internal abstract class QMod : ISortable<string>, IQMod
     {
+        internal static readonly Regex VersionRegex = new Regex(@"(((\d+)\.?)+)");
+        internal static readonly PatchMethodFinder patchMethodFinder = new PatchMethodFinder();
+
+        internal object instance = null;
+
         public virtual string Id { get; set; }
 
         public virtual string DisplayName { get; set; }
@@ -18,9 +26,9 @@
 
         public IEnumerable<RequiredQMod> RequiredMods { get; protected set; }
 
-        public IEnumerable<string> ModsToLoadBefore => this.LoadBeforeCollection;
+        public IEnumerable<string> ModsToLoadBefore => this.LoadBeforePreferences;
 
-        public IEnumerable<string> ModsToLoadAfter => this.LoadAfterCollection;
+        public IEnumerable<string> ModsToLoadAfter => this.LoadAfterPreferences;
 
         public Assembly LoadedAssembly { get; set; }
 
@@ -69,11 +77,11 @@
 
         public Dictionary<PatchingOrder, QModPatchMethod> PatchMethods { get; } = new Dictionary<PatchingOrder, QModPatchMethod>();
 
-        public ICollection<string> DependencyCollection { get; } = new List<string>();
+        public IList<string> RequiredDependencies { get; } = new List<string>();
 
-        public ICollection<string> LoadBeforeCollection { get; } = new List<string>();
+        public IList<string> LoadBeforePreferences { get; } = new List<string>();
 
-        public ICollection<string> LoadAfterCollection { get; } = new List<string>();
+        public IList<string> LoadAfterPreferences { get; } = new List<string>();
 
         public ModStatus IsValidForLoading(string subDirectory)
         {
@@ -102,23 +110,18 @@
                 return ModLoadingResults.AlreadyLoaded;
 
             Logger.Debug($"Starting patch method for mod \"{this.Id}\" at {order}");
-            PatchResults result = patchMethod.TryInvoke();
-            switch (result)
+
+
+            if (patchMethod.TryInvoke())
             {
-                case PatchResults.OK:
-                    Logger.Debug($"Completed patch method for mod \"{this.Id}\" at {order}");
-                    return ModLoadingResults.Success;
-
-                case PatchResults.Error:
-                    this.PatchMethods.Clear(); // Do not attempt any other patch methods
-                    return ModLoadingResults.Failure;
-
-                case PatchResults.ModderCanceled:
-                    this.PatchMethods.Clear(); // Do not attempt any other patch methods
-                    return ModLoadingResults.CancledByModAuthor;
+                Logger.Debug($"Completed patch method for mod \"{this.Id}\" at {order}");
+                return ModLoadingResults.Success;
             }
-
-            return ModLoadingResults.Failure;
+            else
+            {
+                this.PatchMethods.Clear(); // Do not attempt any other patch methods
+                return ModLoadingResults.Failure;
+            }
         }
 
         protected static bool IsDefaultVersion(Version version)

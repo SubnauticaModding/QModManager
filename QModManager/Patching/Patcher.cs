@@ -6,7 +6,6 @@ namespace QModManager.Patching
     using System.Text.RegularExpressions;
     using API;
     using API.ModLoading;
-    using API.ModLoading.Internal;
     using Checks;
     using Harmony;
     using QModManager.DataStructures;
@@ -15,7 +14,7 @@ namespace QModManager.Patching
     /// <summary>
     /// The main class which handles all of QModManager's patching
     /// </summary>
-    public static class Patcher
+    internal static class Patcher
     {
         internal const string IDRegex = "[^0-9a-z_]";
 
@@ -57,7 +56,7 @@ namespace QModManager.Patching
                     Logger.Fatal("There was an error with the QMods directory");
                     Logger.Fatal("Please make sure that you ran Subnautica from Steam/Epic/Discord, and not from the executable file!");
 
-                    Dialog.Show("A fatal error has occurred. QModManager could not be initialized.", Dialog.Button.SeeLog, Dialog.Button.Disabled, false, true);
+                    Dialog.Show("A fatal error has occurred. QModManager could not be initialized.", Dialog.Button.Close, Dialog.Button.Disabled, false);
 
                     return;
                 }
@@ -71,11 +70,6 @@ namespace QModManager.Patching
                     Logger.Error("There was an error while trying to display the folder structure.");
                     Logger.Exception(e);
                 }
-
-                QModHooks.Load();
-#pragma warning disable CS0618 // Type or member is obsolete
-                Hooks.Load();
-#pragma warning restore CS0618 // Type or member is obsolete
 
                 PirateCheck.IsPirate(Environment.CurrentDirectory);
 
@@ -92,7 +86,7 @@ namespace QModManager.Patching
                 {
                     Logger.Fatal($"Nitrox was detected!");
 
-                    Dialog.Show("Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.", Dialog.Button.Disabled, Dialog.Button.Disabled, false, true);
+                    Dialog.Show("Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.", Dialog.Button.Disabled, Dialog.Button.Disabled, false);
 
                     return;
                 }
@@ -109,14 +103,15 @@ namespace QModManager.Patching
                 var initializer = new Initializer(CurrentlyRunningGame);
                 initializer.InitializeMods(modsToLoad);
 
-                QModHooks.OnLoadEnd?.Invoke();
-
                 int loadedMods = 0;
                 int erroredMods = 0;
-                foreach (Pair<QMod, ModStatus> mod in modsToLoad)
+                foreach (QMod mod in modsToLoad.Keys)
                 {
-                    if (mod.Key.IsLoaded)
+                    if (mod.IsLoaded)
+                    {
                         loadedMods++;
+                        QModServices.successfullyLoadedMods.Add(mod);
+                    }
                     else
                         erroredMods++;
                 }
@@ -135,14 +130,14 @@ namespace QModManager.Patching
                 Logger.Fatal($"A fatal patching exception has been caught! Patching ended prematurely!");
                 Logger.Exception(pEx);
 
-                Dialog.Show("A fatal patching exception has been caught. QModManager could not be initialized.", Dialog.Button.SeeLog, Dialog.Button.Disabled, false, true);
+                Dialog.Show("A fatal patching exception has been caught. QModManager could not be initialized.", Dialog.Button.Close, Dialog.Button.Disabled, false);
             }
             catch (Exception e)
             {
                 Logger.Fatal("An unhandled exception has been caught! - Patching ended prematurely!");
                 Logger.Exception(e);
 
-                Dialog.Show("An unhandled exception has been caught. QModManager could not be initialized.", Dialog.Button.SeeLog, Dialog.Button.Disabled, false, true);
+                Dialog.Show("An unhandled exception has been caught. QModManager could not be initialized.", Dialog.Button.Close, Dialog.Button.Disabled, false);
             }
         }
 
