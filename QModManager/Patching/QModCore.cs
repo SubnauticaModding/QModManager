@@ -8,10 +8,29 @@
 
     internal class QModCore : QMod, IQMod
     {
-        private readonly bool tooManyPatchMethods = false;
+        private readonly bool tooManyPatchMethods = false;        
 
-        internal QModCore(QModCoreInfo modInfo, Type originatingType, Assembly loadedAssembly)
+        internal QModCore(string dllFile, string typeName)
         {
+            // Now we can load the assembly into the current domain
+            this.LoadedAssembly = Assembly.Load(dllFile);
+            this.ParsedVersion = this.LoadedAssembly.GetName().Version;
+
+            Type originatingType = this.LoadedAssembly.GetType(typeName);
+
+            if (originatingType == null)
+                throw new FatalPatchingException("QModCore somehow failed to find the originating type");
+
+            QModCoreInfo modInfo = null;
+
+            object[] coreInfos = originatingType.GetCustomAttributes(typeof(QModCoreInfo), false);
+
+            if (coreInfos.Length == 1)            
+                modInfo = (QModCoreInfo)coreInfos[0];            
+
+            if (modInfo == null)
+                throw new FatalPatchingException("QModCore somehow failed to find QModCoreInfo");
+
             // Basic mod info
             this.Id = modInfo.Id;
             this.DisplayName = modInfo.DisplayName;
@@ -41,10 +60,6 @@
 
                 this.PatchMethods.Add(qpatch.Order, qpatch);
             }
-
-            // Assembly info
-            this.LoadedAssembly = loadedAssembly;
-            this.ParsedVersion = loadedAssembly.GetName().Version;
         }
 
         protected override ModStatus Validate(string subDirectory)

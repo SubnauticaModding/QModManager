@@ -154,23 +154,30 @@
             {
                 AppDomainSetup info = AppDomain.CurrentDomain.SetupInformation;
 
-                var domain = AppDomain.CreateDomain("QModManagerModLoading", null, info);
+                // Using a temporary app domain to safely check the assembly.
+                // If it's not one we want, it can be unloaded without issues.
+                var tempDomain = AppDomain.CreateDomain("QModManagerModLoading", null, info);
 
+                tempDomain.ExecuteAssembly(dllFile);
 
-
-                var assembly = Assembly.LoadFrom(dllFile);
-
-                AppDomain.Unload(domain);
-
-                Type[] types = assembly.GetTypes();
-                foreach (Type type in types)
+                foreach (Assembly assembly in tempDomain.GetAssemblies())
                 {
-                    object[] coreInfos = type.GetCustomAttributes(typeof(QModCoreInfo), false);
-                    if (coreInfos.Length == 1)
+                    Type[] types = assembly.GetTypes();
+                    foreach (Type type in types)
                     {
-                        return new QModCore((QModCoreInfo)coreInfos[0], type, assembly);
+                        object[] coreInfos = type.GetCustomAttributes(typeof(QModCoreInfo), false);
+                        if (coreInfos.Length == 1)
+                        {
+                            // We found it! We don't need this temporary app domain anymore.
+                            AppDomain.Unload(tempDomain);
+
+                            // We will load the assembly into the current app domain in a moment.
+                            return new QModCore(dllFile, type.Name);
+                        }
                     }
                 }
+
+                AppDomain.Unload(tempDomain);
             }
 
             return null;
