@@ -54,11 +54,11 @@ namespace QModManager.API
         {
             SceneManager.sceneLoaded += (scene, loadSceneMode) => SceneLoaded?.Invoke(scene, loadSceneMode);
 
-#pragma warning disable CS0618 // Type or member is obsolete
-            Hooks.Load();
+//#pragma warning disable CS0618 // Type or member is obsolete
+//            Hooks.Load();
 
-            OnLoadEnd += () => Hooks.OnLoadEnd?.Invoke();
-#pragma warning restore CS0618 // Type or member is obsolete
+//            OnLoadEnd += () => Hooks.OnLoadEnd?.Invoke();
+//#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         [HarmonyPatch(typeof(DevConsole), "Start")]

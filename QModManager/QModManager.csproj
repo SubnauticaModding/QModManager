@@ -153,9 +153,6 @@
     <Compile Include="DataStructures\SortedTreeNode.cs" />
     <Compile Include="DataStructures\SortResults.cs" />
     <Compile Include="EntryPoint.cs" />
-    <Compile Include="Obsolete\Hooks.cs" />
-    <Compile Include="Obsolete\PatchManager.cs" />
-    <Compile Include="API\QModAPI.cs" />
     <Compile Include="Checks\NitroxCheck.cs" />
     <Compile Include="Patching\FatalPatchingException.cs" />
     <Compile Include="Patching\GameDetector.cs" />

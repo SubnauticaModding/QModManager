@@ -73,7 +73,7 @@
             {
                 if (TechTypeHandler.TechTypesAddedBy.TryGetValue(type, out Assembly assembly))
                 {
-                    string modName = QModAPI.GetMod(assembly).DisplayName;
+                    string modName = assembly.GetName().Name; // QModAPI.GetMod(assembly).DisplayName;
 
                     if (string.IsNullOrEmpty(modName))
                     {
