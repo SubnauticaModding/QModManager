@@ -1,7 +1,7 @@
 ﻿namespace QModManager.API.ModLoading
 {
-    using Internal;
     using System;
+    using QModManager.Patching;
 
     /// <summary>
     /// Identifies a pre-patch method for a QMod.<para/>

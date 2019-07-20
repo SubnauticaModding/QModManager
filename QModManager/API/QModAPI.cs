@@ -1,12 +1,10 @@
-﻿using QModManager.API.ModLoading;
-using QModManager.API.ModLoading.Internal;
-using QModManager.Patching;
-using QModManager.Utility;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reflection;
+using QModManager.API.ModLoading;
+using QModManager.Patching;
+using QModManager.Utility;
 
 namespace QModManager.API
 {
@@ -35,7 +33,9 @@ namespace QModManager.API
         /// If omitted, it will use the calling <see cref="Assembly"/>
         /// </param>
         public static void MarkAsErrored(Assembly modAssembly = null)
-            => Main.MarkAsErrored(modAssembly);
+        {
+            Main.MarkAsErrored(modAssembly);
+        }
 
         /// <summary>
         /// Returns a list of all of the mods
@@ -44,13 +44,17 @@ namespace QModManager.API
         /// <param name="includeErrored">Set to <see langword="true"/> to also include errored mods</param>
         /// <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded/errored mods</returns>
         public static ReadOnlyCollection<IQMod> GetAllMods(bool includeUnloaded = false, bool includeErrored = false)
-            => Main.GetAllMods(includeUnloaded, includeErrored);
+        {
+            return Main.GetAllMods(includeUnloaded, includeErrored);
+        }
 
         /// <summary>
         /// Returns the mod from the assembly which called this method
         /// </summary>
         public static IQMod GetMyMod()
-            => Main.GetMyMod();
+        {
+            return Main.GetMyMod();
+        }
 
         /// <summary>
         /// Returns a mod from an <see cref="Assembly"/>
@@ -59,7 +63,9 @@ namespace QModManager.API
         /// <param name="includeUnloaded">Whether or not to include unloaded mods</param>
         /// <param name="includeErrored">Whether or not to include unloaded mods</param>
         public static IQMod GetMod(Assembly modAssembly, bool includeUnloaded = false, bool includeErrored = false)
-            => Main.GetMod(modAssembly, includeUnloaded, includeErrored);
+        {
+            return Main.GetMod(modAssembly, includeUnloaded, includeErrored);
+        }
 
         /// <summary>
         /// Returns a mod from an ID
@@ -68,7 +74,9 @@ namespace QModManager.API
         /// <param name="includeUnloaded">Whether or not to include unloaded mods</param>
         /// <param name="includeErrored">Whether or not to include unloaded mods</param>
         public static IQMod GetMod(string id, bool includeUnloaded = false, bool includeErrored = false)
-            => Main.GetMod(id, includeUnloaded, includeErrored);
+        {
+            return Main.GetMod(id, includeUnloaded, includeErrored);
+        }
 
         /// <summary>
         /// Checks whether or not a mod is present based on its <see cref="Assembly"/>
@@ -77,7 +85,9 @@ namespace QModManager.API
         /// <param name="includeUnloaded">Whether or not to include unloaded mods</param>
         /// <param name="includeErrored">Whether or not to include unloaded mods</param>
         public static bool ModPresent(Assembly modAssembly, bool includeUnloaded = false, bool includeErrored = false)
-            => Main.ModPresent(modAssembly, includeUnloaded, includeErrored);
+        {
+            return Main.ModPresent(modAssembly, includeUnloaded, includeErrored);
+        }
 
         /// <summary>
         /// Checks whether or not a mod is present based on its ID
@@ -86,7 +96,9 @@ namespace QModManager.API
         /// <param name="includeUnloaded">Whether or not to include unloaded mods</param>
         /// <param name="includeErrored">Whether or not to include unloaded mods</param>
         public static bool ModPresent(string id, bool includeUnloaded = false, bool includeErrored = false)
-            => Main.ModPresent(id, includeUnloaded, includeErrored);
+        {
+            return Main.ModPresent(id, includeUnloaded, includeErrored);
+        }
 
         #endregion
 
@@ -95,7 +107,10 @@ namespace QModManager.API
         /// The mod will appear in the red pop-up which is shows when the game starts
         /// </summary>
         void IQModAPI.MarkAsErrored()
-            => MarkAsErrored(null);
+        {
+            MarkAsErrored(null);
+        }
+
         /// <summary>
         /// Marks a mod as errored <para/>
         /// The mod will appear in the red pop-up which is shows when the game starts
@@ -107,7 +122,8 @@ namespace QModManager.API
         {
             modAssembly = modAssembly ?? ReflectionHelper.CallingAssemblyByStackTrace();
 
-            if (ErroredMods.Contains(modAssembly)) return;
+            if (ErroredMods.Contains(modAssembly))
+                return;
 
             ErroredMods.Add(modAssembly);
         }
@@ -117,14 +133,20 @@ namespace QModManager.API
         /// </summary>
         /// <returns>A read only list of mods containing all of the loaded mods</returns>
         ReadOnlyCollection<IQMod> IQModAPI.GetAllMods()
-            => GetAllMods(false, false);
+        {
+            return GetAllMods(false, false);
+        }
+
         /// <summary>
         /// Returns a list of all of the mods
         /// </summary>
         /// <param name="includeUnloaded">Set to <see langword="true"/> to also include unloaded mods</param>
         /// <returns>A read only list of mods containing all of the loaded mods, and optionally unloaded mods</returns>
         ReadOnlyCollection<IQMod> IQModAPI.GetAllMods(bool includeUnloaded)
-            => GetAllMods(includeUnloaded, false);
+        {
+            return GetAllMods(includeUnloaded, false);
+        }
+
         /// <summary>
         /// Returns a list of all of the mods
         /// </summary>
@@ -146,21 +168,29 @@ namespace QModManager.API
         /// Returns the mod from the assembly which called this method
         /// </summary>
         IQMod IQModAPI.GetMyMod()
-            => GetMod(ReflectionHelper.CallingAssemblyByStackTrace(), true, true);
+        {
+            return GetMod(ReflectionHelper.CallingAssemblyByStackTrace(), true, true);
+        }
 
         /// <summary>
         /// Returns a mod from an <see cref="Assembly"/>
         /// </summary>
         /// <param name="modAssembly"></param>
         IQMod IQModAPI.GetMod(Assembly modAssembly)
-            => GetMod(modAssembly, false, false);
+        {
+            return GetMod(modAssembly, false, false);
+        }
+
         /// <summary>
         /// Returns a mod from an <see cref="Assembly"/>
         /// </summary>
         /// <param name="modAssembly"></param>
         /// <param name="includeUnloaded">Whether or not to include unloaded mods</param>
         IQMod IQModAPI.GetMod(Assembly modAssembly, bool includeUnloaded)
-            => GetMod(modAssembly, includeUnloaded, false);
+        {
+            return GetMod(modAssembly, includeUnloaded, false);
+        }
+
         /// <summary>
         /// Returns a mod from an <see cref="Assembly"/>
         /// </summary>
@@ -169,9 +199,11 @@ namespace QModManager.API
         /// <param name="includeErrored">Whether or not to include unloaded mods</param>
         IQMod IQModAPI.GetMod(Assembly modAssembly, bool includeUnloaded, bool includeErrored)
         {
-            if (modAssembly == null) return null;
+            if (modAssembly == null)
+                return null;
 
-            if (modAssembly == Assembly.GetExecutingAssembly()) return QModPlaceholder.QModManager;
+            if (modAssembly == Assembly.GetExecutingAssembly())
+                return QModPlaceholder.QModManager;
 
             foreach (IQMod mod in GetAllMods(includeUnloaded, includeErrored))
             {
@@ -187,14 +219,20 @@ namespace QModManager.API
         /// </summary>
         /// <param name="id"></param>
         IQMod IQModAPI.GetMod(string id)
-            => GetMod(id, false, false);
+        {
+            return GetMod(id, false, false);
+        }
+
         /// <summary>
         /// Returns a mod from an ID
         /// </summary>
         /// <param name="id"></param>
         /// <param name="includeUnloaded">Whether or not to include unloaded mods</param>
         IQMod IQModAPI.GetMod(string id, bool includeUnloaded)
-            => GetMod(id, includeUnloaded, false);
+        {
+            return GetMod(id, includeUnloaded, false);
+        }
+
         /// <summary>
         /// Returns a mod from an ID
         /// </summary>
@@ -203,11 +241,13 @@ namespace QModManager.API
         /// <param name="includeErrored">Whether or not to include unloaded mods</param>
         IQMod IQModAPI.GetMod(string id, bool includeUnloaded, bool includeErrored)
         {
-            if (string.IsNullOrEmpty(id)) return null;
+            if (string.IsNullOrEmpty(id))
+                return null;
 
             string regexedID = Patcher.IDRegex.Replace(id, "");
 
-            if (regexedID == "QModManager") return QModPlaceholder.QModManager;
+            if (regexedID == "QModManager")
+                return QModPlaceholder.QModManager;
 
             foreach (IQMod mod in GetAllMods(includeUnloaded, includeErrored))
             {
@@ -223,14 +263,20 @@ namespace QModManager.API
         /// </summary>
         /// <param name="modAssembly"></param>
         bool IQModAPI.ModPresent(Assembly modAssembly)
-            => ModPresent(modAssembly, false, false);
+        {
+            return ModPresent(modAssembly, false, false);
+        }
+
         /// <summary>
         /// Checks whether or not a mod is present based on its <see cref="Assembly"/>
         /// </summary>
         /// <param name="modAssembly"></param>
         /// <param name="includeUnloaded">Whether or not to include unloaded mods</param>
         bool IQModAPI.ModPresent(Assembly modAssembly, bool includeUnloaded)
-            => ModPresent(modAssembly, includeUnloaded, false);
+        {
+            return ModPresent(modAssembly, includeUnloaded, false);
+        }
+
         /// <summary>
         /// Checks whether or not a mod is present based on its <see cref="Assembly"/>
         /// </summary>
@@ -238,21 +284,29 @@ namespace QModManager.API
         /// <param name="includeUnloaded">Whether or not to include unloaded mods</param>
         /// <param name="includeErrored">Whether or not to include unloaded mods</param>
         bool IQModAPI.ModPresent(Assembly modAssembly, bool includeUnloaded, bool includeErrored)
-            => GetMod(modAssembly, includeUnloaded, includeErrored) != null;
+        {
+            return GetMod(modAssembly, includeUnloaded, includeErrored) != null;
+        }
 
         /// <summary>
         /// Checks whether or not a mod is present based on its ID
         /// </summary>
         /// <param name="id"></param>
         bool IQModAPI.ModPresent(string id)
-            => ModPresent(id, false, false);
+        {
+            return ModPresent(id, false, false);
+        }
+
         /// <summary>
         /// Checks whether or not a mod is present based on its ID
         /// </summary>
         /// <param name="id"></param>
         /// <param name="includeUnloaded">Whether or not to include unloaded mods</param>
         bool IQModAPI.ModPresent(string id, bool includeUnloaded)
-            => ModPresent(id, includeUnloaded, false);
+        {
+            return ModPresent(id, includeUnloaded, false);
+        }
+
         /// <summary>
         /// Checks whether or not a mod is present based on its ID
         /// </summary>
@@ -260,7 +314,9 @@ namespace QModManager.API
         /// <param name="includeUnloaded">Whether or not to include unloaded mods</param>
         /// <param name="includeErrored">Whether or not to include unloaded mods</param>
         bool IQModAPI.ModPresent(string id, bool includeUnloaded, bool includeErrored)
-            => GetMod(id, includeUnloaded, includeErrored) != null;
+        {
+            return GetMod(id, includeUnloaded, includeErrored) != null;
+        }
     }
 
     /// <summary>

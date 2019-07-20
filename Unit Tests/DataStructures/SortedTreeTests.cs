@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using NUnit.Framework;
-    using QModManager.API.ModLoading.Internal;
+    using QModManager.Patching;
 
     [TestFixture]
     internal class SortedTreeTests

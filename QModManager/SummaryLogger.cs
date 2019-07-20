@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using QModManager.API.ModLoading;
-    using QModManager.API.ModLoading.Internal;
     using QModManager.DataStructures;
+    using QModManager.Patching;
     using Logger = Utility.Logger;
 
     internal static class SummaryLogger

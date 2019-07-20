@@ -1,7 +1,8 @@
-﻿namespace QModManager.API.ModLoading.Internal
+﻿namespace QModManager.Patching
 {
     using System.Reflection;
-    using QModManager.Patching;
+    using QModManager.API;
+    using QModManager.API.ModLoading;
 
     internal class QModPlaceholder : QMod, IQMod
     {

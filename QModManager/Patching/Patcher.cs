@@ -6,7 +6,6 @@ namespace QModManager.Patching
     using System.Text.RegularExpressions;
     using API;
     using API.ModLoading;
-    using API.ModLoading.Internal;
     using Checks;
     using Harmony;
     using QModManager.DataStructures;

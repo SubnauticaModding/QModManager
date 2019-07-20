@@ -1,7 +1,8 @@
-﻿namespace QModManager.API.ModLoading.Internal
+﻿namespace QModManager.Patching
 {
     using System;
     using System.Reflection;
+    using QModManager.API.ModLoading;
     using QModManager.Utility;
 
     internal class QModPatchMethod

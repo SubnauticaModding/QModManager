@@ -2,7 +2,6 @@
 {
     using System;
     using System.IO;
-    using QModManager.API.ModLoading.Internal;
     using QModManager.API.SMLHelper.Patchers;
     using QModManager.DataStructures;
     using QModManager.Patching;

@@ -1,12 +1,12 @@
-﻿namespace QModManager.API.ModLoading.Internal
+﻿namespace QModManager.Patching
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
     using Oculus.Newtonsoft.Json;
+    using QModManager.API.ModLoading;
     using QModManager.DataStructures;
-    using QModManager.Patching;
     using QModManager.Utility;
 
     internal class QModFactory
@@ -154,7 +154,7 @@
             {
                 AppDomainSetup info = AppDomain.CurrentDomain.SetupInformation;
 
-                AppDomain domain = AppDomain.CreateDomain("QModManagerModLoading", null, info);
+                var domain = AppDomain.CreateDomain("QModManagerModLoading", null, info);
 
 
 

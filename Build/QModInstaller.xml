@@ -4,43 +4,6 @@
         <name>QModInstaller</name>
     </assembly>
     <members>
-        <member name="T:QModManager.API.ModLoading.Internal.IQModSerialiable">
-            <summary>
-            Enforces the requirements of the mod.json file for legacy mod loading.
-            </summary>
-        </member>
-        <member name="F:QModManager.API.ModLoading.Internal.PatchingOrder.PreInitialize">
-            <summary>
-            For pre-initialize patch methods
-            </summary>
-        </member>
-        <member name="F:QModManager.API.ModLoading.Internal.PatchingOrder.NormalInitialize">
-            <summary>
-            For normal patch methods
-            </summary>
-        </member>
-        <member name="F:QModManager.API.ModLoading.Internal.PatchingOrder.PostInitialize">
-            <summary>
-            For post-initialize patch methods
-            </summary>
-        </member>
-        <member name="T:QModManager.API.ModLoading.Internal.QModPatchAttributeBase">
-            <summary>
-            Base class to all attributes that identify QMod patch methods.
-            </summary>
-            <seealso cref="T:System.Attribute" />
-        </member>
-        <member name="M:QModManager.API.ModLoading.Internal.QModPatchAttributeBase.#ctor(QModManager.API.ModLoading.Internal.PatchingOrder)">
-            <summary>
-            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.Internal.QModPatchAttributeBase"/> class.
-            </summary>
-            <param name="patchOrder">The patch order.</param>
-        </member>
-        <member name="P:QModManager.API.ModLoading.Internal.QModPlaceholder.QModManager">
-            <summary>
-            The dummy <see cref="T:QModManager.API.ModLoading.Internal.QMod"/> which is used to represent QModManager
-            </summary>
-        </member>
         <member name="T:QModManager.API.ModLoading.IQMod">
             <summary>
             All public data about a QMod.
@@ -252,6 +215,7 @@
         <member name="T:QModManager.API.ModLoading.QModPatchMethod">
             <summary>
             Identifies a normal patch method for a QMod.<para/>
+            This method must be public, must take no parameters, and must return either <seealso cref="T:System.Void"/> or <seealso cref="T:QModManager.API.ModLoading.PatchResults"/>.<para/>
             ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreInfo"/> attribute.
             </summary>
             <seealso cref="T:System.Attribute" />
@@ -264,6 +228,7 @@
         <member name="T:QModManager.API.ModLoading.QModPostPatchMethod">
             <summary>
             Identifies a post-patch method for a QMod.<para/>
+            This method must be public, must take no parameters, and must return either <seealso cref="T:System.Void"/> or <seealso cref="T:QModManager.API.ModLoading.PatchResults"/>.<para/>
             ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreInfo"/> attribute.
             </summary>
             <seealso cref="T:System.Attribute" />
@@ -276,6 +241,7 @@
         <member name="T:QModManager.API.ModLoading.QModPrePatchMethod">
             <summary>
             Identifies a pre-patch method for a QMod.<para/>
+            This method must be public, must take no parameters, and must return either <seealso cref="T:System.Void"/> or <seealso cref="T:QModManager.API.ModLoading.PatchResults"/>.<para/>
             ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreInfo"/> attribute.
             </summary>
             <seealso cref="T:System.Attribute" />
@@ -715,13 +681,13 @@
             </summary>
             <param name="techType"></param>
         </member>
-        <member name="T:QModManager.API.SMLHelper.Interfaces.ICustomFishHandler">
+        <member name="T:QModManager.API.SMLHelper.Interfaces.IFishHandler">
             <summary>
-            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.CustomFishHandler"/> <para/>
+            Interface for <see cref="T:QModManager.API.SMLHelper.Handlers.FishHandler"/> <para/>
             Can be used for dependency injection
             </summary>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICustomFishHandler.RegisterFish(QModManager.API.SMLHelper.Assets.CustomFish)">
+        <member name="M:QModManager.API.SMLHelper.Interfaces.IFishHandler.RegisterFish(QModManager.API.SMLHelper.Assets.Fish)">
             <summary>
             Registers a CustomFish object into the game
             </summary>
@@ -844,7 +810,7 @@
             <para>Allows you to edit inventory background colors for TechTypes.</para>
             </summary>
             <param name="techType">The TechType whose BackgroundType you want to edit.</param>
-            <param name="backgroundColor">The background color for that TechType.</param>
+            <param name="backgroundType">The background color for that TechType.</param>
             <seealso cref="T:CraftData.BackgroundType"/>
         </member>
         <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.AddBuildable(TechType)">
@@ -853,23 +819,23 @@
             </summary>
             <param name="techType">The TechType which you want to add to the buildable list.</param>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.AddToGroup(TechGroup,TechCategory,TechType)">
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.AddToGroup(TechType,TechGroup,TechCategory)">
             <summary>
             Allows you to add items to the game's internal grouping system.
             Required if you want to make buildable items show up in the Habitat Builder.
             </summary>
+            <param name="techType">The TechType you want to add.</param>
             <param name="group">The TechGroup you want to add your TechType to.</param>
             <param name="category">The TechCategory (in the TechGroup) you want to add your TechType to.</param>
-            <param name="techType">The TechType you want to add.</param>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.AddToGroup(TechGroup,TechCategory,TechType,TechType)">
+        <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.AddToGroup(TechType,TechGroup,TechCategory,TechType)">
             <summary>
             Allows you to add items to the game's internal grouping system.
             Required if you want to make buildable items show up in the Habitat Builder.
             </summary>
+            <param name="techType">The TechType you want to add.</param>
             <param name="group">The TechGroup you want to add your TechType to.</param>
             <param name="category">The TechCategory (in the TechGroup) you want to add your TechType to.</param>
-            <param name="techType">The TechType you want to add.</param>
             <param name="after">Added TechType will be added after this TechType, for sorting purposes.</param>
         </member>
         <member name="M:QModManager.API.SMLHelper.Interfaces.ICraftDataHandler.RemoveFromGroup(TechGroup,TechCategory,TechType)">
@@ -1890,107 +1856,107 @@
             Returns the path to the current save slot's directory.
             </summary>
         </member>
-        <member name="T:QModManager.API.SMLHelper.Assets.CustomFish">
+        <member name="T:QModManager.API.SMLHelper.Assets.Fish">
             <summary>
-            "A wrapper class that uses <see cref="T:QModManager.API.SMLHelper.Handlers.CustomFishHandler"/> and <see cref="T:QModManager.API.SMLHelper.Assets.CustomFishPrefab"/> to quickly create a custom fish
+            "A wrapper class that uses <see cref="T:QModManager.API.SMLHelper.Handlers.FishHandler"/> and <see cref="T:QModManager.API.SMLHelper.Assets.FishPrefab"/> to quickly create a custom fish
             </summary>
         </member>
-        <member name="F:QModManager.API.SMLHelper.Assets.CustomFish.id">
+        <member name="F:QModManager.API.SMLHelper.Assets.Fish.id">
             <summary>
             The id to use to create the creature. This should be unique
             </summary>
         </member>
-        <member name="F:QModManager.API.SMLHelper.Assets.CustomFish.displayName">
+        <member name="F:QModManager.API.SMLHelper.Assets.Fish.displayName">
             <summary>
             The display name for your fish. This is shown in the inventory, and can be whatever you want
             </summary>
         </member>
-        <member name="F:QModManager.API.SMLHelper.Assets.CustomFish.tooltip">
+        <member name="F:QModManager.API.SMLHelper.Assets.Fish.tooltip">
             <summary>
             The short description of your fish in the inventory
             </summary>
         </member>
-        <member name="F:QModManager.API.SMLHelper.Assets.CustomFish.spriteFileName">
+        <member name="F:QModManager.API.SMLHelper.Assets.Fish.spriteFileName">
             <summary>
             The file name of your fish's sprite in the inventory. You can leave this null if your fish isn't pickupable. The file is relative
             from the QMods folder, e.g. "MinecraftFish/Assets/cod.png"
             </summary>
         </member>
-        <member name="F:QModManager.API.SMLHelper.Assets.CustomFish.modelPrefab">
+        <member name="F:QModManager.API.SMLHelper.Assets.Fish.modelPrefab">
             <summary>
             The model to use to create the creature. This would ideally only have renderer/collider components attached, but will still work if it has behaviours
             </summary>
         </member>
-        <member name="F:QModManager.API.SMLHelper.Assets.CustomFish.isPickupable">
+        <member name="F:QModManager.API.SMLHelper.Assets.Fish.isPickupable">
             <summary>
             Determines whether your creature can be picked up by the player
             </summary>
         </member>
-        <member name="F:QModManager.API.SMLHelper.Assets.CustomFish.isWaterCreature">
+        <member name="F:QModManager.API.SMLHelper.Assets.Fish.isWaterCreature">
             <summary>
             Determines whether the creature moves on land or in water. Default true, which is in water. Land creature AI does not work ATM.
             </summary>
         </member>
-        <member name="F:QModManager.API.SMLHelper.Assets.CustomFish.swimSpeed">
+        <member name="F:QModManager.API.SMLHelper.Assets.Fish.swimSpeed">
             <summary>
             The speed at which your creature will swim
             </summary>
         </member>
-        <member name="F:QModManager.API.SMLHelper.Assets.CustomFish.swimInterval">
+        <member name="F:QModManager.API.SMLHelper.Assets.Fish.swimInterval">
             <summary>
             The interval (in seconds) between when your fish will find a new position to swim to
             </summary>
         </member>
-        <member name="F:QModManager.API.SMLHelper.Assets.CustomFish.swimRadius">
+        <member name="F:QModManager.API.SMLHelper.Assets.Fish.swimRadius">
             <summary>
             The area in which your creature will look for a random position when swimming. This should be larger for larger creatures
             </summary>
         </member>
-        <member name="T:QModManager.API.SMLHelper.Assets.CustomFishPrefab">
+        <member name="T:QModManager.API.SMLHelper.Assets.FishPrefab">
             <summary>
             Class used by CustomFish for constructing a prefab based on the values provided by the user.
             You can use this yourself if you want, but you will need to manually provide a TechType
             </summary>
         </member>
-        <member name="F:QModManager.API.SMLHelper.Assets.CustomFishPrefab.modelPrefab">
+        <member name="F:QModManager.API.SMLHelper.Assets.FishPrefab.modelPrefab">
             <summary>
             The model to use to create the creature. This would ideally only have renderer/collider components attached, but will still work if it has behaviours
             </summary>
         </member>
-        <member name="F:QModManager.API.SMLHelper.Assets.CustomFishPrefab.pickupable">
+        <member name="F:QModManager.API.SMLHelper.Assets.FishPrefab.pickupable">
             <summary>
             Determines whether your creature can be picked up
             </summary>
         </member>
-        <member name="F:QModManager.API.SMLHelper.Assets.CustomFishPrefab.isWaterCreature">
+        <member name="F:QModManager.API.SMLHelper.Assets.FishPrefab.isWaterCreature">
             <summary>
             Determines whether your creature walks or swims. Only works for swimming at the moment, land will probably be fixed at a later time
             </summary>
         </member>
-        <member name="F:QModManager.API.SMLHelper.Assets.CustomFishPrefab.swimSpeed">
+        <member name="F:QModManager.API.SMLHelper.Assets.FishPrefab.swimSpeed">
             <summary>
             The speed at which your creature moves
             </summary>
         </member>
-        <member name="F:QModManager.API.SMLHelper.Assets.CustomFishPrefab.swimRadius">
+        <member name="F:QModManager.API.SMLHelper.Assets.FishPrefab.swimRadius">
             <summary>
             The area in which your creature's AI will look for a new spot to move to
             </summary>
         </member>
-        <member name="F:QModManager.API.SMLHelper.Assets.CustomFishPrefab.swimInterval">
+        <member name="F:QModManager.API.SMLHelper.Assets.FishPrefab.swimInterval">
             <summary>
             The interval in seconds between when your creature finds a new spot to move to
             </summary>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Assets.CustomFishPrefab.#ctor(System.String,System.String,TechType)">
+        <member name="M:QModManager.API.SMLHelper.Assets.FishPrefab.#ctor(System.String,System.String,TechType)">
             <summary>
-            Creates a new <see cref="T:QModManager.API.SMLHelper.Assets.CustomFishPrefab"/> with the given values
+            Creates a new <see cref="T:QModManager.API.SMLHelper.Assets.FishPrefab"/> with the given values
             </summary>
             <param name="classId"></param>
             <param name="prefabFileName"></param>
             <param name="techType"></param>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Assets.CustomFishPrefab.GetGameObject">
+        <member name="M:QModManager.API.SMLHelper.Assets.FishPrefab.GetGameObject">
             <summary>
             Gets the prefab game object
             </summary>
@@ -2338,30 +2304,30 @@
             </summary>
             <param name="key">The no longer unique key.</param>
         </member>
-        <member name="T:QModManager.API.SMLHelper.Handlers.CustomFishHandler">
+        <member name="T:QModManager.API.SMLHelper.Handlers.FishHandler">
             <summary>
             Class to manage registering of fish into the game
             </summary>
         </member>
-        <member name="P:QModManager.API.SMLHelper.Handlers.CustomFishHandler.Main">
+        <member name="P:QModManager.API.SMLHelper.Handlers.FishHandler.Main">
             <summary>
             Main entry point for all calls to this handler.
             </summary>
         </member>
-        <member name="F:QModManager.API.SMLHelper.Handlers.CustomFishHandler.fishTechTypes">
+        <member name="F:QModManager.API.SMLHelper.Handlers.FishHandler.fishTechTypes">
             <summary>
             A list of all the custom fish that have so far been registered into the game. This includes ones from mods that may have been loaded earlier.
             It is mainly used by CustomFishPatcher to spawn fish in
             </summary>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Handlers.CustomFishHandler.QModManager#API#SMLHelper#Interfaces#ICustomFishHandler#RegisterFish(QModManager.API.SMLHelper.Assets.CustomFish)">
+        <member name="M:QModManager.API.SMLHelper.Handlers.FishHandler.QModManager#API#SMLHelper#Interfaces#IFishHandler#RegisterFish(QModManager.API.SMLHelper.Assets.Fish)">
             <summary>
             Registers a CustomFish object into the game
             </summary>
             <param name="fish">The CustomFish that you are registering</param>
             <returns>The TechType created using the info from your CustomFish object</returns>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Handlers.CustomFishHandler.RegisterFish(QModManager.API.SMLHelper.Assets.CustomFish)">
+        <member name="M:QModManager.API.SMLHelper.Handlers.FishHandler.RegisterFish(QModManager.API.SMLHelper.Assets.Fish)">
             <summary>
             Registers a CustomFish object into the game
             </summary>
@@ -2660,7 +2626,7 @@
             <para>Allows you to edit inventory background colors for TechTypes.</para>
             </summary>
             <param name="techType">The TechType whose BackgroundType you want to edit.</param>
-            <param name="backgroundColor">The background color for that TechType.</param>
+            <param name="backgroundType">The background color for that TechType.</param>
             <seealso cref="T:CraftData.BackgroundType"/>
         </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.CraftDataHandler.AddBuildable(TechType)">
@@ -2669,23 +2635,23 @@
             </summary>
             <param name="techType">The TechType which you want to add to the buildable list.</param>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Handlers.CraftDataHandler.AddToGroup(TechGroup,TechCategory,TechType)">
+        <member name="M:QModManager.API.SMLHelper.Handlers.CraftDataHandler.AddToGroup(TechType,TechGroup,TechCategory)">
             <summary>
             Allows you to add items to the game's internal grouping system.
             Required if you want to make buildable items show up in the Habitat Builder.
             </summary>
+            <param name="techType">The TechType you want to add.</param>
             <param name="group">The TechGroup you want to add your TechType to.</param>
             <param name="category">The TechCategory (in the TechGroup) you want to add your TechType to.</param>
-            <param name="techType">The TechType you want to add.</param>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Handlers.CraftDataHandler.AddToGroup(TechGroup,TechCategory,TechType,TechType)">
+        <member name="M:QModManager.API.SMLHelper.Handlers.CraftDataHandler.AddToGroup(TechType,TechGroup,TechCategory,TechType)">
             <summary>
             Allows you to add items to the game's internal grouping system.
             Required if you want to make buildable items show up in the Habitat Builder.
             </summary>
+            <param name="techType">The TechType you want to add.</param>
             <param name="group">The TechGroup you want to add your TechType to.</param>
             <param name="category">The TechCategory (in the TechGroup) you want to add your TechType to.</param>
-            <param name="techType">The TechType you want to add.</param>
             <param name="after">Added TechType will be added after this TechType, for sorting purposes.</param>
         </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.CraftDataHandler.RemoveFromGroup(TechGroup,TechCategory,TechType)">
@@ -2801,7 +2767,7 @@
             <para>Allows you to edit inventory background colors for TechTypes.</para>
             </summary>
             <param name="techType">The TechType whose BackgroundType you want to edit.</param>
-            <param name="backgroundColor">The background color for that TechType.</param>
+            <param name="backgroundType">The background color for that TechType.</param>
             <seealso cref="T:CraftData.BackgroundType"/>
         </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.CraftDataHandler.QModManager#API#SMLHelper#Interfaces#ICraftDataHandler#AddBuildable(TechType)">
@@ -2810,23 +2776,23 @@
             </summary>
             <param name="techType">The TechType which you want to add to the buildable list.</param>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Handlers.CraftDataHandler.QModManager#API#SMLHelper#Interfaces#ICraftDataHandler#AddToGroup(TechGroup,TechCategory,TechType)">
+        <member name="M:QModManager.API.SMLHelper.Handlers.CraftDataHandler.QModManager#API#SMLHelper#Interfaces#ICraftDataHandler#AddToGroup(TechType,TechGroup,TechCategory)">
             <summary>
             Allows you to add items to the game's internal grouping system.
             Required if you want to make buildable items show up in the Habitat Builder.
             </summary>
+            <param name="techType">The TechType you want to add.</param>
             <param name="group">The TechGroup you want to add your TechType to.</param>
             <param name="category">The TechCategory (in the TechGroup) you want to add your TechType to.</param>
-            <param name="techType">The TechType you want to add.</param>
         </member>
-        <member name="M:QModManager.API.SMLHelper.Handlers.CraftDataHandler.QModManager#API#SMLHelper#Interfaces#ICraftDataHandler#AddToGroup(TechGroup,TechCategory,TechType,TechType)">
+        <member name="M:QModManager.API.SMLHelper.Handlers.CraftDataHandler.QModManager#API#SMLHelper#Interfaces#ICraftDataHandler#AddToGroup(TechType,TechGroup,TechCategory,TechType)">
             <summary>
             Allows you to add items to the game's internal grouping system.
             Required if you want to make buildable items show up in the Habitat Builder.
             </summary>
+            <param name="techType">The TechType you want to add.</param>
             <param name="group">The TechGroup you want to add your TechType to.</param>
             <param name="category">The TechCategory (in the TechGroup) you want to add your TechType to.</param>
-            <param name="techType">The TechType you want to add.</param>
             <param name="after">Added TechType will be added after this TechType, for sorting purposes.</param>
         </member>
         <member name="M:QModManager.API.SMLHelper.Handlers.CraftDataHandler.QModManager#API#SMLHelper#Interfaces#ICraftDataHandler#RemoveFromGroup(TechGroup,TechCategory,TechType)">
@@ -4306,6 +4272,43 @@
         <member name="T:QModManager.Patching.Patcher">
             <summary>
             The main class which handles all of QModManager's patching
+            </summary>
+        </member>
+        <member name="T:QModManager.Patching.IQModSerialiable">
+            <summary>
+            Enforces the requirements of the mod.json file for legacy mod loading.
+            </summary>
+        </member>
+        <member name="F:QModManager.Patching.PatchingOrder.PreInitialize">
+            <summary>
+            For pre-initialize patch methods
+            </summary>
+        </member>
+        <member name="F:QModManager.Patching.PatchingOrder.NormalInitialize">
+            <summary>
+            For normal patch methods
+            </summary>
+        </member>
+        <member name="F:QModManager.Patching.PatchingOrder.PostInitialize">
+            <summary>
+            For post-initialize patch methods
+            </summary>
+        </member>
+        <member name="T:QModManager.Patching.QModPatchAttributeBase">
+            <summary>
+            Base class to all attributes that identify QMod patch methods.
+            </summary>
+            <seealso cref="T:System.Attribute" />
+        </member>
+        <member name="M:QModManager.Patching.QModPatchAttributeBase.#ctor(QModManager.Patching.PatchingOrder)">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.Patching.QModPatchAttributeBase"/> class.
+            </summary>
+            <param name="patchOrder">The patch order.</param>
+        </member>
+        <member name="P:QModManager.Patching.QModPlaceholder.QModManager">
+            <summary>
+            The dummy <see cref="T:QModManager.Patching.QMod"/> which is used to represent QModManager
             </summary>
         </member>
         <member name="T:QModManager.Utility.IOUtilities">

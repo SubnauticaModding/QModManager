@@ -1,8 +1,10 @@
-﻿namespace QModManager.API.ModLoading.Internal
+﻿namespace QModManager.Patching
 {
     using System;
     using System.Collections.Generic;
     using System.Reflection;
+    using QModManager.API;
+    using QModManager.API.ModLoading;
 
     internal class QModCore : QMod, IQMod
     {
@@ -38,7 +40,7 @@
                 }
 
                 this.PatchMethods.Add(qpatch.Order, qpatch);
-            }            
+            }
 
             // Assembly info
             this.LoadedAssembly = loadedAssembly;

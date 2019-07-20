@@ -159,6 +159,7 @@
     <Compile Include="Checks\NitroxCheck.cs" />
     <Compile Include="Patching\FatalPatchingException.cs" />
     <Compile Include="Patching\GameDetector.cs" />
+    <Compile Include="Patching\Initializer.cs" />
     <Compile Include="Patching\Patcher.cs" />
     <Compile Include="Patching\IModOrder.cs" />
     <Compile Include="Patching\IQModSerialiable.cs" />
@@ -210,7 +211,6 @@
     <Compile Include="API\SMLHelper\Handlers\PrefabHandler.cs" />
     <Compile Include="API\SMLHelper\Handlers\SpriteHandler.cs" />
     <Compile Include="API\SMLHelper\Handlers\TechTypeHandler.cs" />
-    <Compile Include="API\ModLoading\Internal\Initializer.cs" />
     <Compile Include="API\SMLHelper\Options\ChoiceModOption.cs" />
     <Compile Include="API\SMLHelper\Options\KeybindModOption.cs" />
     <Compile Include="API\SMLHelper\Options\ModOptions.cs" />

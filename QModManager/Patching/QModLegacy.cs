@@ -1,4 +1,4 @@
-﻿namespace QModManager.API.ModLoading.Internal
+﻿namespace QModManager.Patching
 {
     using System;
     using System.Collections.Generic;
@@ -6,6 +6,8 @@
     using System.Linq;
     using System.Reflection;
     using Oculus.Newtonsoft.Json;
+    using QModManager.API;
+    using QModManager.API.ModLoading;
     using QModManager.Utility;
 
     [JsonObject(MemberSerialization.OptIn)]

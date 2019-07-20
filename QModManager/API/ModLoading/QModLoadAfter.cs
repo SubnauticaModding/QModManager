@@ -1,7 +1,7 @@
 ﻿namespace QModManager.API.ModLoading
 {
-    using Internal;
     using System;
+    using QModManager.Patching;
 
     /// <summary>
     /// Identifies another QMod that must be loaded before this mod.

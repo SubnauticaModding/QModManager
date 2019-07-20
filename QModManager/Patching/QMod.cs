@@ -1,8 +1,10 @@
-﻿namespace QModManager.API.ModLoading.Internal
+﻿namespace QModManager.Patching
 {
     using System;
     using System.Collections.Generic;
     using System.Reflection;
+    using QModManager.API;
+    using QModManager.API.ModLoading;
     using QModManager.DataStructures;
     using QModManager.Utility;
 
