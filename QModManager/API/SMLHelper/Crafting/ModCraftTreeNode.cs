@@ -28,7 +28,7 @@
         public readonly string Name;
 
         /// <summary>
-        /// The the in-game representation of this node.
+        /// The in-game representation of this node.
         /// </summary>
         public CraftNode CraftNode;
 
