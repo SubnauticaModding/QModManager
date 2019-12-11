@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>QModManager</RootNamespace>
     <AssemblyName>QModInstaller</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -81,13 +81,11 @@
       <HintPath>..\Dependencies\0Harmony-1.2.0.1.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass_publicized">
-      <HintPath>..\Dependencies\Assembly-CSharp-firstpass_publicized.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\Dependencies\Assembly-CSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Assembly-CSharp_publicized">
-      <HintPath>..\Dependencies\Assembly-CSharp_publicized.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\Dependencies\Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Dependencies\Newtonsoft.Json.dll</HintPath>
@@ -98,27 +96,11 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dependencies\UnityEngine.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\Dependencies\UnityEngine.CoreModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>..\Dependencies\UnityEngine.PhysicsModule.dll</HintPath>
-      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>..\Dependencies\UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -153,7 +135,6 @@
     <Compile Include="Patching\ModLoadingResults.cs" />
     <Compile Include="Patching\PatchingOrder.cs" />
     <Compile Include="Patching\QMod.cs" />
-    <Compile Include="Patching\QModCore.cs" />
     <Compile Include="Patching\QModFactory.cs" />
     <Compile Include="Patching\QModLegacy.cs" />
     <Compile Include="Patching\QModPatchAttributeBase.cs" />

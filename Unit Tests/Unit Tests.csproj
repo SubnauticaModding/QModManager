@@ -65,8 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataStructures\SortedTreeTests.cs" />
-    <Compile Include="SMLHelper\LanguagePatcherTests.cs" />
-    <Compile Include="SMLHelper\SelfCheckingDictionaryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

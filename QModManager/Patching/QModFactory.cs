@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Reflection;
     using Oculus.Newtonsoft.Json;
     using QModManager.API.ModLoading;
     using QModManager.DataStructures;
@@ -32,24 +31,18 @@
                 if (dllFiles.Length < 1)
                     continue;
 
-                QMod mod = FromDll(subDir, dllFiles);
-
-                if (mod == null)
-                {
-                    string jsonFile = Path.Combine(subDir, "mod.json");
-
-                    if (File.Exists(jsonFile))
-                        mod = FromJsonFile(subDir);
-                }
+                string jsonFile = Path.Combine(subDir, "mod.json");                    
 
                 string folderName = new DirectoryInfo(subDir).Name;
 
-                if (mod == null)
+                if (!File.Exists(jsonFile))
                 {
                     Logger.Error($"Unable to set up mod in folder \"{folderName}\"");
                     earlyErrors.Add(new QModPlaceholder(folderName), ModStatus.InvalidCoreInfo);
                     continue;
                 }
+
+                QMod mod = FromJsonFile(subDir);
 
                 ModStatus status = mod.IsValidForLoading(folderName);
 
@@ -146,41 +139,6 @@
             }
 
             return modList;
-        }
-
-        private static QModCore FromDll(string subDirectory, string[] dllFilePaths)
-        {
-            foreach (string dllFile in dllFilePaths)
-            {
-                AppDomainSetup info = AppDomain.CurrentDomain.SetupInformation;
-
-                // Using a temporary app domain to safely check the assembly.
-                // If it's not one we want, it can be unloaded without issues.
-                var tempDomain = AppDomain.CreateDomain("QModManagerModLoading", null, info);
-
-                tempDomain.ExecuteAssembly(dllFile);
-
-                foreach (Assembly assembly in tempDomain.GetAssemblies())
-                {
-                    Type[] types = assembly.GetTypes();
-                    foreach (Type type in types)
-                    {
-                        object[] coreInfos = type.GetCustomAttributes(typeof(QModCoreInfo), false);
-                        if (coreInfos.Length == 1)
-                        {
-                            // We found it! We don't need this temporary app domain anymore.
-                            AppDomain.Unload(tempDomain);
-
-                            // We will load the assembly into the current app domain in a moment.
-                            return new QModCore(dllFile, type.Name);
-                        }
-                    }
-                }
-
-                AppDomain.Unload(tempDomain);
-            }
-
-            return null;
         }
 
         private static QModLegacy FromJsonFile(string subDirectory)

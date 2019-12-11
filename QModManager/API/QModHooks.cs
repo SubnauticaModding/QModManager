@@ -69,7 +69,8 @@ namespace QModManager.API
             [HarmonyPostfix]
             private static void Postfix(DevConsole __instance)
             {
-                if (hooksLoaded) return;
+                if (hooksLoaded)
+                    return;
                 hooksLoaded = true;
 
                 __instance.gameObject.AddComponent<QMMHooks>();
