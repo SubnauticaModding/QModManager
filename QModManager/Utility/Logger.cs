@@ -1,6 +1,6 @@
 ﻿namespace QModManager.Utility
 {
-    using QModManager.API.SMLHelper.Utility;
+    //using QModManager.API.SMLHelper.Utility;
     using System;
     using System.Diagnostics;
 
@@ -15,17 +15,17 @@
             Fatal
         }
 
-        private static bool EnableDebugging
-        {
-            get
-            {
-                return PlayerPrefsExtra.GetBool("QModManager_EnableDebugLogs", false);
-            }
-            set
-            {
-                PlayerPrefsExtra.SetBool("QModManager_EnableDebugLogs", value);
-            }
-        }
+        //private static bool EnableDebugging
+        //{
+        //    get
+        //    {
+        //        return PlayerPrefsExtra.GetBool("QModManager_EnableDebugLogs", false);
+        //    }
+        //    set
+        //    {
+        //        PlayerPrefsExtra.SetBool("QModManager_EnableDebugLogs", value);
+        //    }
+        //}
 
         private static void Log(string logLevel, params string[] text)
         {
@@ -80,7 +80,7 @@
 
         internal static void Debug(params string[] text)
         {
-            if (EnableDebugging)
+            //if (EnableDebugging)
                 Log("Debug", text);
         }
 

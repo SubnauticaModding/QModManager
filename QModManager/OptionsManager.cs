@@ -1,36 +1,36 @@
 ﻿namespace QModManager
 {
     using Harmony;
-    using QModManager.API.SMLHelper.Utility;
+    //using QModManager.API.SMLHelper.Utility;
     using UnityEngine.Events;
 
     internal static class OptionsManager
     {
         internal static int ModsTab;
 
-        [HarmonyPatch(typeof(uGUI_OptionsPanel), "AddTabs")]
-        private static class OptionsPatch
-        {
-            [HarmonyPostfix]
-            private static void Postfix(uGUI_OptionsPanel __instance)
-            {
-                ModsTab = __instance.AddTab("Mods");
-                __instance.AddHeading(ModsTab, "QModManager");
+        //[HarmonyPatch(typeof(uGUI_OptionsPanel), "AddTabs")]
+        //private static class OptionsPatch
+        //{
+        //    [HarmonyPostfix]
+        //    private static void Postfix(uGUI_OptionsPanel __instance)
+        //    {
+        //        ModsTab = __instance.AddTab("Mods");
+        //        __instance.AddHeading(ModsTab, "QModManager");
 
-                AddOptions(__instance);
-            }
-        }
+        //        AddOptions(__instance);
+        //    }
+        //}
 
-        private static void AddOptions(uGUI_OptionsPanel options)
-        {
-            bool enableDebugLogs = PlayerPrefsExtra.GetBool("QModManager_EnableDebugLogs", false);
-            options.AddToggleOption(ModsTab, "Enable debug logs", enableDebugLogs,
-                new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_EnableDebugLogs", toggleVal)));
+        //private static void AddOptions(uGUI_OptionsPanel options)
+        //{
+        //    bool enableDebugLogs = PlayerPrefsExtra.GetBool("QModManager_EnableDebugLogs", false);
+        //    options.AddToggleOption(ModsTab, "Enable debug logs", enableDebugLogs,
+        //        new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_EnableDebugLogs", toggleVal)));
 
-            bool updateCheck = PlayerPrefsExtra.GetBool("QModManager_EnableUpdateCheck", true);
-            options.AddToggleOption(ModsTab, "Check for updates", updateCheck,
-                new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_EnableUpdateCheck", toggleVal)));
-        }
+        //    bool updateCheck = PlayerPrefsExtra.GetBool("QModManager_EnableUpdateCheck", true);
+        //    options.AddToggleOption(ModsTab, "Check for updates", updateCheck,
+        //        new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_EnableUpdateCheck", toggleVal)));
+        //}
 
         /*
         
