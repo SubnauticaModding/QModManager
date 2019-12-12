@@ -80,37 +80,6 @@
         //    }
         //}
 
-        //private static bool PatchSMLHelper()
-        //{
-        //    Logger.Info($"Loading SMLHelper...");
-        //    try
-        //    {
-        //        FishPatcher.Patch(Patcher.Harmony);
-        //        TechTypePatcher.Patch(Patcher.Harmony);
-        //        CraftTreeTypePatcher.Patch(Patcher.Harmony);
-        //        CraftDataPatcher.Patch(Patcher.Harmony);
-        //        CraftTreePatcher.Patch(Patcher.Harmony);
-        //        DevConsolePatcher.Patch(Patcher.Harmony);
-        //        LanguagePatcher.Patch(Patcher.Harmony);
-        //        ResourcesPatcher.Patch(Patcher.Harmony);
-        //        PrefabDatabasePatcher.Patch(Patcher.Harmony);
-        //        SpritePatcher.Patch();
-        //        KnownTechPatcher.Patch(Patcher.Harmony);
-        //        BioReactorPatcher.Patch(Patcher.Harmony);
-        //        OptionsPanelPatcher.Patch(Patcher.Harmony);
-        //        ItemsContainerPatcher.Patch(Patcher.Harmony);
-        //        PDAPatcher.Patch(Patcher.Harmony);
-        //        ItemActionPatcher.Patch(Patcher.Harmony);
-        //        TooltipPatcher.Patch(Patcher.Harmony);
-
-        //        return true;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw new FatalPatchingException($"Caught an exception while trying to initialize SMLHelper", e);
-        //    }
-        //}
-
         private string GetOtherGame()
         {
             switch (currentGame)

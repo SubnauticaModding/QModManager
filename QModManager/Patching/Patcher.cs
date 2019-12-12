@@ -70,8 +70,6 @@ namespace QModManager.Patching
                     Logger.Exception(e);
                 }
 
-                QModHooks.Load();
-
                 PirateCheck.CheckIfPirate(Environment.CurrentDirectory);
 
                 var gameDetector = new GameDetector();
@@ -103,8 +101,6 @@ namespace QModManager.Patching
 
                 var initializer = new Initializer(CurrentlyRunningGame);
                 initializer.InitializeMods(modsToLoad);
-
-                QModHooks.OnLoadEnd?.Invoke();
 
                 int loadedMods = 0;
                 int erroredMods = 0;
