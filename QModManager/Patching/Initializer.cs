@@ -22,16 +22,7 @@
             InitializeMods(modsToInitialize, PatchingOrder.NormalInitialize);
             InitializeMods(modsToInitialize, PatchingOrder.PostInitialize);
             return true;
-            //return FinalInitialize();
         }
-
-        //private bool FinalInitialize()
-        //{
-        //    if (currentGame == QModGame.None)
-        //        return true; // Test mode
-
-        //    return UpdateSMLHelper() && PatchSMLHelper();
-        //}
 
         private void InitializeMods(PairedList<QMod, ModStatus> modsToInitialize, PatchingOrder order)
         {
@@ -58,27 +49,6 @@
                 }
             }
         }
-
-        //private static bool UpdateSMLHelper()
-        //{
-        //    Logger.Info($"Checking for legacy SMLHelper files");
-        //    try
-        //    {
-        //        string oldPath = IOUtilities.Combine(".", "QMods", "Modding Helper");
-        //        if (File.Exists(Path.Combine(oldPath, "SMLHelper.dll")))
-        //            File.Delete(Path.Combine(oldPath, "SMLHelper.dll"));
-        //        if (File.Exists(Path.Combine(oldPath, "mod.json")))
-        //            File.Delete(Path.Combine(oldPath, "mod.json"));
-
-        //        // TODO
-
-        //        return true;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw new FatalPatchingException("Caught an exception while trying to update legacy SMLHelper", e);
-        //    }
-        //}
 
         private string GetOtherGame()
         {

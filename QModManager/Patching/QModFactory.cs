@@ -10,6 +10,9 @@
 
     internal class QModFactory
     {
+        private QMod smlHelper = null;
+        private QMod cc2 = null;
+
         internal PairedList<QMod, ModStatus> BuildModLoadingList(string qmodsDirectory)
         {
             if (!Directory.Exists(qmodsDirectory))
@@ -31,7 +34,7 @@
                 if (dllFiles.Length < 1)
                     continue;
 
-                string jsonFile = Path.Combine(subDir, "mod.json");                    
+                string jsonFile = Path.Combine(subDir, "mod.json");
 
                 string folderName = new DirectoryInfo(subDir).Name;
 
@@ -58,24 +61,43 @@
                     continue;
                 }
 
-                SortResults sortResult = modSorter.Add(mod);
-                switch (sortResult)
+                // TODO - Make this unnecessary
+                if (smlHelper == null && mod.Id == "SMLHelper")
                 {
-                    case SortResults.CircularLoadOrder:
-                        earlyErrors.Add(mod, ModStatus.CircularLoadOrder);
-                        break;
-                    case SortResults.CircularDependency:
-                        earlyErrors.Add(mod, ModStatus.CircularDependency);
-                        break;
-                    case SortResults.DuplicateId:
-                        earlyErrors.Add(mod, ModStatus.DuplicateIdDetected);
-                        break;
+                    smlHelper = mod;
+                }
+                else if (cc2 == null && mod.Id == "CustomCraft2SML")
+                {
+                    cc2 = mod;
+                }
+                else
+                {
+                    SortResults sortResult = modSorter.Add(mod);
+                    switch (sortResult)
+                    {
+                        case SortResults.CircularLoadOrder:
+                            earlyErrors.Add(mod, ModStatus.CircularLoadOrder);
+                            break;
+                        case SortResults.CircularDependency:
+                            earlyErrors.Add(mod, ModStatus.CircularDependency);
+                            break;
+                        case SortResults.DuplicateId:
+                            earlyErrors.Add(mod, ModStatus.DuplicateIdDetected);
+                            break;
+                    }
                 }
             }
 
             List<QMod> modsToLoad = modSorter.CreateFlatList(out PairedList<QMod, ErrorTypes> lateErrors);
 
             PairedList<QMod, ModStatus> modList = CreateModStatusList(earlyErrors, modsToLoad, lateErrors);
+
+            // TODO - Make this unnecessary
+            if (cc2 != null)
+                modList.Add(cc2, ModStatus.Success);
+
+            if (smlHelper != null)
+                modList.Add(smlHelper, ModStatus.Success);
 
             return modList;
         }
