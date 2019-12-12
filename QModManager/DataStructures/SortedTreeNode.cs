@@ -90,12 +90,12 @@
 
             if (entityIsDependentOnOther)
             {
-                return SortResults.SortBefore;
+                return SortResults.SortAfter;
             }
 
             if (otherIsDependentOnEntity)
             {
-                return SortResults.SortAfter;
+                return SortResults.SortBefore;
             }
 
             if ((entity.RequiresBefore(other.Id) && other.RequiresBefore(entity.Id)) ||
@@ -119,26 +119,27 @@
             SortResults subResultB = SortResults.NoSortPreference;
             SortResults subResultA = SortResults.NoSortPreference;
 
-            if (entity.LoadBefore != null)
+            if (entity.LoadBefore != null && entity.LoadBefore != other)
             {
                 subResultB = CompareLoadOrder(entity.LoadBefore, other);
             }
 
-            if (entity.LoadAfter != null)
+            if (entity.LoadAfter != null && entity.LoadAfter != other)
             {
                 subResultA = CompareLoadOrder(entity.LoadAfter, other);
             }
 
             SortResults splitCheckResult = subResultA + (int)subResultB;
 
-            return splitCheckResult <= SortResults.SortAfter
-                ? splitCheckResult
-                : SortResults.CircularLoadOrder;
+            if (splitCheckResult <= SortResults.SortAfter)
+                return splitCheckResult;
+
+            return SortResults.CircularLoadOrder;
         }
 
         private static SortResults NextLevelCompareAfter(SortedTreeNode<IdType, DataType> entity, SortedTreeNode<IdType, DataType> other)
         {
-            if (entity.LoadBefore != null)
+            if (entity.LoadBefore != null && entity.LoadBefore != other)
             {
                 SortResults subResult = CompareLoadOrder(entity.LoadBefore, other);
 
@@ -160,7 +161,7 @@
 
         private static SortResults NextLevelCompareBefore(SortedTreeNode<IdType, DataType> entity, SortedTreeNode<IdType, DataType> other)
         {
-            if (entity.LoadAfter != null)
+            if (entity.LoadAfter != null && entity.LoadAfter != other)
             {
                 SortResults subResult = CompareLoadOrder(entity.LoadAfter, other);
 
@@ -182,6 +183,11 @@
 
         public SortResults Sort(SortedTreeNode<IdType, DataType> other, bool testing = false)
         {
+            if (this == other)
+            {
+                return SortResults.NoSortPreference;
+            }
+
             SortResults topLevelResult = CompareLoadOrder(this, other);
 
             SortResults midLevelResult = SortResults.NoSortPreference;

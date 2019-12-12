@@ -20,30 +20,30 @@
             internal readonly Action Action = null;
 
             internal static readonly Button Disabled = new Button();
-            internal static readonly Button SeeLog = new Button("See Log", () =>
-            {
-                string logPath;
+            //internal static readonly Button SeeLog = new Button("See Log", () =>
+            //{
+            //    string logPath;
 
-                if (Patcher.CurrentlyRunningGame == QModGame.Subnautica)
-                {
-                    logPath = Path.Combine(Patcher.QModBaseDir, "../Subnautica_Data/output_log.txt");
-                }
-                else
-                {
-                    logPath = Path.Combine(Application.persistentDataPath, "output_log.txt");
-                }
+            //    if (Patcher.CurrentlyRunningGame == QModGame.Subnautica)
+            //    {
+            //        logPath = Path.Combine(Patcher.QModBaseDir, "../Subnautica_Data/output_log.txt");
+            //    }
+            //    else
+            //    {
+            //        logPath = Path.Combine(Application.persistentDataPath, "output_log.txt");
+            //    }
 
-                Logger.Debug($"Opening log file located in: \"{logPath}\"");
+            //    Logger.Debug($"Opening log file located in: \"{logPath}\"");
 
-                if (File.Exists(logPath))
-                {
-                    Process.Start(logPath);
-                }
-                else
-                {
-                    Logger.Error($"Expected log file at: \"{logPath}\" but none was found.");
-                }
-            });
+            //    if (File.Exists(logPath))
+            //    {
+            //        Process.Start(logPath);
+            //    }
+            //    else
+            //    {
+            //        Logger.Error($"Expected log file at: \"{logPath}\" but none was found.");
+            //    }
+            //});
             internal static readonly Button Close = new Button("Close", () => { });
             internal static readonly Button Download = new Button("Download", () =>
             {

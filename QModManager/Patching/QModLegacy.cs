@@ -73,7 +73,8 @@
 
             try
             {
-                this.ParsedVersion = new Version(this.Version);
+                if (System.Version.TryParse(this.Version, out Version version))
+                    this.ParsedVersion = version;
             }
             catch (Exception vEx)
             {
@@ -87,6 +88,7 @@
 
             if (string.IsNullOrEmpty(modAssemblyPath) || !File.Exists(modAssemblyPath))
             {
+                Logger.Debug($"Did not find a DLL at {modAssemblyPath}");
                 return ModStatus.MissingAssemblyFile;
             }
             else
@@ -123,9 +125,22 @@
             var versionedDependencies = new List<RequiredQMod>(this.VersionDependencies.Count);
             foreach (KeyValuePair<string, string> item in this.VersionDependencies)
             {
-                versionedDependencies.Add(new RequiredQMod(item.Key, new Version(item.Value)));
-            }
+                string cleanVersion = QMod.VersionRegex.Matches(item.Value)?[0]?.Value;
 
+                if (string.IsNullOrEmpty(cleanVersion))
+                {
+                    versionedDependencies.Add(new RequiredQMod(item.Key));
+                }
+                else if (System.Version.TryParse(cleanVersion, out Version version))
+                {
+                    versionedDependencies.Add(new RequiredQMod(item.Key, version));
+                }
+                else
+                {
+                    versionedDependencies.Add(new RequiredQMod(item.Key));
+                }
+            }
+            
             return ModStatus.Success;
         }
 

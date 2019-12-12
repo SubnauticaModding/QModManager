@@ -16,9 +16,9 @@
             AssetsManager am = new AssetsManager();
             AssetsFileInstance afi = am.LoadAssetsFile(path, false);
             if (game == QModGame.Subnautica)
-                am.LoadClassPackage("cldb.dat");
+                am.LoadClassDatabase("cldb.dat");
             else
-                am.LoadClassPackage("cldb2018.dat");
+                am.LoadClassDatabase("cldb2018.dat");
             AssetFileInfoEx audioInfo = afi.table.getAssetInfo(4);
             AssetTypeInstance audioAti = am.GetATI(afi.file, audioInfo);
             AssetTypeValueField audioBaseField = audioAti.GetBaseField();

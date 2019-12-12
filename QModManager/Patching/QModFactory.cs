@@ -47,10 +47,11 @@
 
                 QMod mod = FromJsonFile(subDir);
 
-                ModStatus status = mod.IsValidForLoading(folderName);
+                ModStatus status = mod.IsValidForLoading(subDir);
 
                 if (status != ModStatus.Success)
                 {
+                    Logger.Debug($"Mod '{mod.Id}' had invalid core data");
                     earlyErrors.Add(mod, status);
                     continue;
                 }
@@ -66,58 +67,78 @@
                 {
                     smlHelper = mod;
                 }
-                else if (cc2 == null && mod.Id == "CustomCraft2SML")
+
+                if (cc2 == null && mod.Id == "CustomCraft2SML")
                 {
                     cc2 = mod;
                 }
-                else
+
+                Logger.Debug($"Sorting mod {mod.Id}");
+                SortResults sortResult = modSorter.Add(mod);
+                switch (sortResult)
                 {
-                    SortResults sortResult = modSorter.Add(mod);
-                    switch (sortResult)
-                    {
-                        case SortResults.CircularLoadOrder:
-                            earlyErrors.Add(mod, ModStatus.CircularLoadOrder);
-                            break;
-                        case SortResults.CircularDependency:
-                            earlyErrors.Add(mod, ModStatus.CircularDependency);
-                            break;
-                        case SortResults.DuplicateId:
-                            earlyErrors.Add(mod, ModStatus.DuplicateIdDetected);
-                            break;
-                    }
+                    case SortResults.CircularLoadOrder:
+                        Logger.Debug($"CircularLoadOrder on mod {mod.Id}");
+                        earlyErrors.Add(mod, ModStatus.CircularLoadOrder);
+                        break;
+                    case SortResults.CircularDependency:
+                        Logger.Debug($"CircularDependency on mod {mod.Id}");
+                        earlyErrors.Add(mod, ModStatus.CircularDependency);
+                        break;
+                    case SortResults.DuplicateId:
+                        Logger.Debug($"DuplicateId on mod {mod.Id}");
+                        earlyErrors.Add(mod, ModStatus.DuplicateIdDetected);
+                        break;
                 }
+
             }
 
             List<QMod> modsToLoad = modSorter.CreateFlatList(out PairedList<QMod, ErrorTypes> lateErrors);
+
+            if (smlHelper != null)
+                modsToLoad.Remove(smlHelper);
+
+            if (cc2 != null)
+                modsToLoad.Remove(cc2);
 
             PairedList<QMod, ModStatus> modList = CreateModStatusList(earlyErrors, modsToLoad, lateErrors);
 
             // TODO - Make this unnecessary
             if (cc2 != null)
+            {                
                 modList.Add(cc2, ModStatus.Success);
+            }
 
             if (smlHelper != null)
+            {
                 modList.Add(smlHelper, ModStatus.Success);
+            }
 
             return modList;
         }
 
-        private static PairedList<QMod, ModStatus> CreateModStatusList(PairedList<QMod, ModStatus> earlyErrors, List<QMod> modsToLoad, PairedList<QMod, ErrorTypes> lateErrors)
+        private static PairedList<QMod, ModStatus> CreateModStatusList(
+            PairedList<QMod, ModStatus> earlyErrors,
+            List<QMod> modsToLoad,
+            PairedList<QMod, ErrorTypes> lateErrors)
         {
             var modList = new PairedList<QMod, ModStatus>(modsToLoad.Count + earlyErrors.Count + lateErrors.Count);
 
             foreach (QMod mod in modsToLoad)
             {
+                Logger.Debug($"{mod.Id} ready to load");
                 modList.Add(mod, ModStatus.Success);
             }
 
             foreach (Pair<QMod, ModStatus> erroredMod in earlyErrors)
             {
+                Logger.Debug($"{erroredMod.Key.Id} had an early error");
                 modList.Add(erroredMod.Key, erroredMod.Value);
             }
 
             foreach (Pair<QMod, ErrorTypes> erroredMod in lateErrors)
             {
+                Logger.Debug($"{erroredMod.Key.Id} had a late error {erroredMod.Value}");
                 switch (erroredMod.Value)
                 {
                     case ErrorTypes.DuplicateId:
@@ -133,7 +154,7 @@
                         modList.Add(erroredMod.Key, ModStatus.MissingDependency);
                         break;
                     default:
-                        throw new FatalPatchingException("Invalid error reported by mod sorter");
+                        throw new FatalPatchingException($"Invalid status of '{erroredMod.Value}' reported by mod sorter on mod '{erroredMod.Key.Id}'");
                 }
             }
 
@@ -143,16 +164,27 @@
                     continue;
 
                 QMod mod = pair.Key;
+
+                if (mod.RequiredMods == null)
+                    continue;
+
                 foreach (RequiredQMod requiredMod in mod.RequiredMods)
                 {
                     Pair<QMod, ModStatus> dependency = modList.Find(d => d.Key.Id == requiredMod.Id);
 
-                    if (dependency == null || dependency.Value != ModStatus.Success)
+                    if (dependency == null || dependency.Key == null)
                     {
                         pair.Value = ModStatus.MissingDependency;
                         break;
                     }
-                    else if (dependency.Key.ParsedVersion < requiredMod.MinimumVersion)
+
+                    if (dependency.Value != ModStatus.Success)
+                    {
+                        pair.Value = ModStatus.MissingDependency;
+                        break;
+                    }
+
+                    if (dependency.Key.ParsedVersion < requiredMod.MinimumVersion)
                     {
                         pair.Value = ModStatus.OutOfDateDependency;
                         break;

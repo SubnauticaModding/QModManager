@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using QModManager.Utility;
 
     internal class SortedTree<IdType, DataType>
         where IdType : IEquatable<IdType>, IComparable<IdType>
@@ -26,18 +27,17 @@
 
         public SortResults Add(DataType data)
         {
-            if (IsDuplicateId(data.Id))
+            if (IsDuplicate(data))
             {
                 return SortResults.DuplicateId;
             }
-
-            KnownKeys.Add(data.Id);
 
             var entity = new SortedTreeNode<IdType, DataType>(data.Id, data, this);
 
             if (Root == null)
             {
                 Root = entity;
+                KnownKeys.Add(data.Id);
                 SortedElements.Add(entity.Id, entity);
                 return SortResults.SortAfter;
             }
@@ -48,6 +48,7 @@
             {
                 case SortResults.SortBefore:
                 case SortResults.SortAfter:
+                    KnownKeys.Add(data.Id);
                     SortedElements.Add(entity.Id, entity);
                     break;
                 default:
@@ -73,8 +74,8 @@
 
         public List<DataType> CreateFlatList(out PairedList<DataType, ErrorTypes> erroredList)
         {
+            Logger.Debug($"CreateFlatList called with {NodesInError} early errors");
             var list = new List<DataType>(this.NodeCount);
-
             erroredList = ClearErrorsCleanTree();
             CreateFlatList(Root, list);
 
@@ -110,14 +111,17 @@
             }
         }
 
-        private bool IsDuplicateId(IdType id)
+        private bool IsDuplicate(DataType other)
         {
-            if (KnownKeys.Contains(id))
+            if (KnownKeys.Contains(other.Id))
             {
-                if (SortedElements.TryGetValue(id, out SortedTreeNode<IdType, DataType> dup))
+                if (SortedElements.TryGetValue(other.Id, out SortedTreeNode<IdType, DataType> dup))
                 {
+                    if (ReferenceEquals(dup, other))
+                        return false;
+
                     dup.Error = ErrorTypes.DuplicateId;
-                    SortedElements.Remove(id);
+                    SortedElements.Remove(other.Id);
 
                     NodesInError++;
                     return true;
@@ -134,22 +138,23 @@
                 return true;
             }
 
-            bool dependenciesPresent = false;
+            int missingDependencies = node.Dependencies.Count;
 
             foreach (IdType nodeDependency in node.Dependencies)
             {
                 if (SortedElements.ContainsKey(nodeDependency))
                 {
-                    dependenciesPresent = true;
+                    missingDependencies--;
                 }
             }
 
-            if (!dependenciesPresent)
+            if (missingDependencies > 0)
             {
                 node.Error = ErrorTypes.MissingDepency;
+                return false;
             }
 
-            return dependenciesPresent;
+            return true;
         }
 
         private PairedList<DataType, ErrorTypes> ClearErrorsCleanTree()
@@ -161,16 +166,17 @@
             {
                 if (entity.HasError || !AllDependenciesArePresent(entity))
                 {
-                    continue;
+                    entity.ClearLinks();
+                    errors.Add(entity.Data, entity.Error);
                 }
-
-                entity.ClearLinks();
-                cleanList.Add(entity);
-                errors.Add(entity.Data, entity.Error);
-                KnownKeys.Remove(entity.Id);
+                else
+                {
+                    cleanList.Add(entity);
+                }
             }
 
             SortedElements.Clear();
+            KnownKeys.Clear();
             Root = null;
             NodesInError = 0;
 

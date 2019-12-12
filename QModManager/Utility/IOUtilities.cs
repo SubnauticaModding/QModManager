@@ -39,9 +39,14 @@ namespace QModManager.Utility
 
         private static readonly HashSet<string> BannedFolders = new HashSet<string>()
         {
+            ".git",
             "OST",
+            "AssetBundles",
+            "MonoBleedingEdge",
             "SNAppData",
             "SNUnmanagedData",
+            "Subnautica_Data",
+            "_CommonRedist",
             "Subnautica_Data/Mono",
             "Subnautica_Data/Plugins",
             "Subnautica_Data/Resources",

@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Reflection;
+    using System.Text.RegularExpressions;
     using QModManager.API;
     using QModManager.API.ModLoading;
     using QModManager.DataStructures;
@@ -10,6 +11,8 @@
 
     internal abstract class QMod : ISortable<string>
     {
+        internal static readonly Regex VersionRegex = new Regex(@"(((\d+)\.?)+)");
+
         public virtual string Id { get; set; }
 
         public virtual string DisplayName { get; set; }

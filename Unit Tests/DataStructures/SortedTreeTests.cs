@@ -14,9 +14,17 @@
             private readonly List<string> loadBefore = new List<string>();
             private readonly List<string> loadAfter = new List<string>();
 
-            public TestData(string id)
+            public TestData(string id, params string[] dependencies)
             {
                 this.Id = id;
+
+                if (dependencies != null)
+                {
+                    foreach (string item in dependencies)
+                    {
+                        depends.Add(item);
+                    }
+                }
             }
 
             public TestData(int id)
@@ -800,6 +808,74 @@
         }
 
         // TODO - Meta priority tests
+
+        [Test]
+        public void Test_RealData()
+        {
+            var tree = new SortedTree<string, TestData>();
+            tree.Add(new TestData("AcceleratedStart"));
+            tree.Add(new TestData("AutosortLockers"));
+            tree.Add(new TestData("BaseLightSwitch", "SMLHelper"));
+            tree.Add(new TestData("BetterBioReactor"));
+            tree.Add(new TestData("BiomeHUDIndicator", "SMLHelper"));
+            tree.Add(new TestData("BuilderModule", "SMLHelper"));
+            tree.Add(new TestData("BuilderModuleInputFix", "SMLHelper"));
+            tree.Add(new TestData("CustomBatteries", "SMLHelper"));
+            tree.Add(new TestData("CustomCraft2SML", "SMLHelper"));
+            tree.Add(new TestData("CustomizedStorage"));
+            tree.Add(new TestData("CyclopsAutoZapper", "SMLHelper", "MoreCyclopsUpgrades"));
+            tree.Add(new TestData("CyclopsBioReactor", "SMLHelper", "MoreCyclopsUpgrades"));
+            tree.Add(new TestData("CyclopsEngineUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
+            tree.Add(new TestData("CyclopsLaserCannonModule", "SMLHelper", "MoreCyclopsUpgrades"));
+            tree.Add(new TestData("CyclopsNuclearReactor", "SMLHelper", "MoreCyclopsUpgrades"));
+            tree.Add(new TestData("CyclopsNuclearUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
+            tree.Add(new TestData("CyclopsSolarUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
+            tree.Add(new TestData("CyclopsSpeedUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
+            tree.Add(new TestData("CyclopsThermalUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
+            tree.Add(new TestData("DockedVehicleStorageAccess"));
+            tree.Add(new TestData("EasyCraft"));
+            tree.Add(new TestData("EnzymeChargedBattery", "SMLHelper"));
+            tree.Add(new TestData("ExteriorPlantPots", "SMLHelper"));
+            tree.Add(new TestData("FCSDeepDriller", "SMLHelper"));
+            tree.Add(new TestData("AIMarineTurbine", "SMLHelper"));
+            tree.Add(new TestData("MiniFountainFilter", "SMLHelper"));
+            tree.Add(new TestData("FCSAIPowerCellSocket", "SMLHelper"));
+            tree.Add(new TestData("FCSPowerStorage", "SMLHelper"));
+            tree.Add(new TestData("FCSTechFabricator", "SMLHelper"));
+            tree.Add(new TestData("snowrabbit007_subnautica_FishOverflowDistributor"));
+            tree.Add(new TestData("FloatingCargoCrate", "SMLHelper"));
+            tree.Add(new TestData("HabitatControlPanel"));
+            tree.Add(new TestData("InstantBulkheadAnimations"));
+            tree.Add(new TestData("IonCubeGenerator", "SMLHelper"));
+            tree.Add(new TestData("LaserCannon", "SMLHelper"));
+            tree.Add(new TestData("SMLHelper"));
+            tree.Add(new TestData("MoonpoolVehicleRepair"));
+            tree.Add(new TestData("MoreCyclopsUpgrades", "SMLHelper"));
+            tree.Add(new TestData("MoreQuickSlots"));
+            tree.Add(new TestData("MoreSeamothDepth", "SMLHelper"));
+            tree.Add(new TestData("PrawnSuitSonarUpgrade", "SMLHelper"));
+            tree.Add(new TestData("QPrawnUpgradeAccess"));
+            tree.Add(new TestData("QuitToDesktop"));
+            tree.Add(new TestData("AgonyRadialCraftingTabs"));
+            tree.Add(new TestData("RepairModule", "SMLHelper"));
+            tree.Add(new TestData("ResourceMonitor", "SMLHelper"));
+            tree.Add(new TestData("RunningWithTools"));
+            tree.Add(new TestData("ScannerModule", "SMLHelper"));
+            tree.Add(new TestData("SeamothArms", "SMLHelper"));
+            tree.Add(new TestData("SeamothEnergyShield", "SMLHelper"));
+            tree.Add(new TestData("SeamothStorageAccess"));
+            tree.Add(new TestData("SeamothThermal", "SMLHelper"));
+            tree.Add(new TestData("SlotExtender"));
+            tree.Add(new TestData("TimeCapsuleLogger"));
+            tree.Add(new TestData("UniversalChargingModule", "SMLHelper"));
+            tree.Add(new TestData("UpgradedVehicles", "SMLHelper"));
+            tree.Add(new TestData("VehicleUpgradesInCyclops", "SMLHelper"));
+
+            List<TestData> list = tree.CreateFlatList(out PairedList<TestData, ErrorTypes> errors);
+            Assert.AreEqual(0, tree.NodesInError);
+            Assert.AreNotEqual(0, list.Count);
+            Assert.AreEqual(0, errors.Count);
+        }
 
         private static string ListToString<T>(IList<T> list)
         {
