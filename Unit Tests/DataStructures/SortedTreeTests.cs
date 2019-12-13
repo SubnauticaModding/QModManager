@@ -41,6 +41,11 @@
             public ICollection<string> LoadAfterCollection => loadAfter;
 
             public PatchingOrder LoadPriority { get; } = PatchingOrder.NormalInitialize;
+
+            public override string ToString()
+            {
+                return Id.ToString();
+            }
         }
 
         [Test]
@@ -875,6 +880,7 @@
             Assert.AreEqual(0, tree.NodesInError);
             Assert.AreNotEqual(0, list.Count);
             Assert.AreEqual(0, errors.Count);
+            Console.WriteLine(ListToString(list));
         }
 
         private static string ListToString<T>(IList<T> list)
@@ -891,7 +897,7 @@
             for (int i = 0; i < lastIndex; i++)
             {
                 T item = list[i];
-                s += item;
+                s += item + Environment.NewLine;
                 s += ", ";
             }
 
