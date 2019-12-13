@@ -55,7 +55,7 @@ namespace QModManager.Patching
                     Logger.Fatal("There was an error with the QMods directory");
                     Logger.Fatal("Please make sure that you ran Subnautica from Steam/Epic/Discord, and not from the executable file!");
 
-                    Dialog.Show("A fatal error has occurred. QModManager could not be initialized.", Dialog.Button.Close, Dialog.Button.Disabled, false, true);
+                    Dialog.Show("A fatal error has occurred. QModManager could not be initialized.", Dialog.Button.Close, Dialog.Button.Disabled, false);
 
                     return;
                 }
@@ -85,7 +85,7 @@ namespace QModManager.Patching
                 {
                     Logger.Fatal($"Nitrox was detected!");
 
-                    Dialog.Show("Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.", Dialog.Button.Disabled, Dialog.Button.Disabled, false, true);
+                    Dialog.Show("Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.", Dialog.Button.Disabled, Dialog.Button.Disabled, false);
 
                     return;
                 }
@@ -126,14 +126,14 @@ namespace QModManager.Patching
                 Logger.Fatal($"A fatal patching exception has been caught! Patching ended prematurely!");
                 Logger.Exception(pEx);
 
-                //Dialog.Show("A fatal patching exception has been caught. QModManager could not be initialized.", Dialog.Button.Close, Dialog.Button.Disabled, false, true);
+                Dialog.Show("A fatal patching exception has been caught. QModManager could not be initialized.", Dialog.Button.Close, Dialog.Button.Disabled, false);
             }
             catch (Exception e)
             {
                 Logger.Fatal("An unhandled exception has been caught! - Patching ended prematurely!");
                 Logger.Exception(e);
 
-                //Dialog.Show("An unhandled exception has been caught. QModManager could not be initialized.", Dialog.Button.Close, Dialog.Button.Disabled, false, true);
+                Dialog.Show("An unhandled exception has been caught. QModManager could not be initialized.", Dialog.Button.Close, Dialog.Button.Disabled, false);
             }
         }
 
