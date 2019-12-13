@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>QModManager</RootNamespace>
     <AssemblyName>QModInstaller</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
@@ -83,11 +83,11 @@
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\Dependencies\Assembly-CSharp.dll</HintPath>
-      <Private>False</Private>
+	  <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\Dependencies\Assembly-CSharp-firstpass.dll</HintPath>
-      <Private>False</Private>
+	  <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Dependencies\Newtonsoft.Json.dll</HintPath>
@@ -105,11 +105,31 @@
     <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
       <HintPath>..\Dependencies\UnityEngine.dll</HintPath>
-      <Private>False</Private>
+	  <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AssetBundleModule">
+      <HintPath>..\Dependencies\UnityEngine.AssetBundleModule.dll</HintPath>
+	  <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\Dependencies\UnityEngine.CoreModule.dll</HintPath>
+	  <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>..\Dependencies\UnityEngine.IMGUIModule.dll</HintPath>
+	  <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>..\Dependencies\UnityEngine.InputLegacyModule.dll</HintPath>
+	  <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputModule">
+      <HintPath>..\Dependencies\UnityEngine.InputModule.dll</HintPath>
+	  <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>..\Dependencies\UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
+	  <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>

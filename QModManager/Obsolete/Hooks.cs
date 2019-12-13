@@ -48,7 +48,7 @@ namespace QModManager
             {
                 if (hooksLoaded) return;
                 hooksLoaded = true;
-                
+
                 __instance.gameObject.AddComponent<QMMHooks>();
 
                 Logger.Debug("Old hooks loaded");
