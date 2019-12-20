@@ -1,6 +1,5 @@
 ﻿namespace QModManager.Utility
 {
-    //using QModManager.API.SMLHelper.Utility;
     using System;
     using System.Diagnostics;
 
@@ -15,32 +14,32 @@
             Fatal
         }
 
-        //private static bool EnableDebugging
-        //{
-        //    get
-        //    {
-        //        return PlayerPrefsExtra.GetBool("QModManager_EnableDebugLogs", false);
-        //    }
-        //    set
-        //    {
-        //        PlayerPrefsExtra.SetBool("QModManager_EnableDebugLogs", value);
-        //    }
-        //}
+        private static bool EnableDebugging
+        {
+            get => PlayerPrefsExtra.GetBool("QModManager_EnableDebugLogs", false);
+            set => PlayerPrefsExtra.SetBool("QModManager_EnableDebugLogs", value);
+        }
 
         private static void Log(string logLevel, params string[] text)
         {
-            if (text == null || text.Length < 1) return;
+            if (text == null || text.Length < 1)
+                return;
 
             string from;
             Type classType = GetCallingClass();
 
-            if (classType == null) from = null;
-            else if (classType.Namespace.Contains("SMLHelper")) from = "SMLHelper";
-            else from = classType.Name;
+            if (classType == null)
+                from = null;
+            else if (classType.Namespace.Contains("SMLHelper"))
+                from = "SMLHelper";
+            else
+                from = classType.Name;
 
             string toWrite = "[QModManager] ";
-            if (!string.IsNullOrEmpty(from)) toWrite += $"[{from}] ";
-            if (!string.IsNullOrEmpty(logLevel)) toWrite += $"[{logLevel}] ";
+            if (!string.IsNullOrEmpty(from))
+                toWrite += $"[{from}] ";
+            if (!string.IsNullOrEmpty(logLevel))
+                toWrite += $"[{logLevel}] ";
 
             int length = toWrite.Length;
 
@@ -48,7 +47,6 @@
 
             for (int i = 1; i < text.Length; i++)
                 Console.WriteLine($"{text[i]}");
-                //Console.WriteLine($"{' '.Repeat(toWrite.Length)}{text[i]}");
         }
 
         internal static void Log(params string[] text)
@@ -80,7 +78,9 @@
 
         internal static void Debug(params string[] text)
         {
-            //if (EnableDebugging)
+#if !DEBUG
+            if (EnableDebugging)
+#endif
                 Log("Debug", text);
         }
 
@@ -116,7 +116,7 @@
 
         private static Type GetCallingClass()
         {
-            StackTrace stackTrace = new StackTrace();
+            var stackTrace = new StackTrace();
             StackFrame[] frames = stackTrace.GetFrames();
 
             foreach (StackFrame stackFrame in frames)
