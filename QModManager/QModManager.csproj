@@ -147,9 +147,11 @@
     <Compile Include="DataStructures\ErrorTypes.cs" />
     <Compile Include="DataStructures\ISortable.cs" />
     <Compile Include="DataStructures\PairedList.cs" />
-    <Compile Include="DataStructures\SortedTree.cs" />
+    <Compile Include="DataStructures\SortedCollection.cs" />
     <Compile Include="DataStructures\SortedTreeNode.cs" />
+    <Compile Include="DataStructures\SortedTreeNodeCollection.cs" />
     <Compile Include="DataStructures\SortResults.cs" />
+    <Compile Include="DataStructures\WeightedList.cs" />
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Checks\NitroxCheck.cs" />
     <Compile Include="Patching\FatalPatchingException.cs" />

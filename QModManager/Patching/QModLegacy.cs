@@ -114,13 +114,13 @@
                 return ModStatus.MissingPatchMethod;
 
             foreach (string item in this.Dependencies)
-                this.DependencyCollection.Add(item);
+                this.RequiredDependencies.Add(item);
 
             foreach (string item in this.LoadBefore)
-                this.LoadBeforeCollection.Add(item);
+                this.LoadBeforePreferences.Add(item);
 
             foreach (string item in this.LoadAfter)
-                this.LoadAfterCollection.Add(item);
+                this.LoadAfterPreferences.Add(item);
 
             var versionedDependencies = new List<RequiredQMod>(this.VersionDependencies.Count);
             foreach (KeyValuePair<string, string> item in this.VersionDependencies)

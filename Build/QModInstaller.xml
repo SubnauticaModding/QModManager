@@ -153,7 +153,7 @@
         </member>
         <member name="T:QModManager.DataStructures.ISortable`1">
             <summary>
-            Requirements to function within the <seealso cref="T:QModManager.DataStructures.SortedTree`2"/>
+            Requirements to function within the <seealso cref="T:QModManager.DataStructures.SortedCollection`2"/>
             </summary>
             <typeparam name="IdType">The ID type.</typeparam>
         </member>

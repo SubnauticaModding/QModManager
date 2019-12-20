@@ -14,6 +14,7 @@
             Fatal
         }
 
+        // TODO - Handle this somewhere easier to access
         private static bool EnableDebugging
         {
             get => PlayerPrefsExtra.GetBool("QModManager_EnableDebugLogs", false);

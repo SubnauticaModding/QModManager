@@ -4,7 +4,7 @@
     using System.Collections.Generic;
 
     /// <summary>
-    /// Requirements to function within the <seealso cref="SortedTree{IdType, DataType}"/>
+    /// Requirements to function within the <seealso cref="SortedCollection{IdType, DataType}"/>
     /// </summary>
     /// <typeparam name="IdType">The ID type.</typeparam>
     internal interface ISortable<IdType>
@@ -12,8 +12,8 @@
     {
         IdType Id { get; }
 
-        ICollection<IdType> DependencyCollection { get; }
-        ICollection<IdType> LoadBeforeCollection { get; }
-        ICollection<IdType> LoadAfterCollection { get; }
+        IList<IdType> RequiredDependencies { get; }
+        IList<IdType> LoadBeforePreferences { get; }
+        IList<IdType> LoadAfterPreferences { get; }
     }
 }

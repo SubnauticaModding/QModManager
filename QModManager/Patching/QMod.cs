@@ -23,9 +23,9 @@
 
         public IEnumerable<RequiredQMod> RequiredMods { get; protected set; }
 
-        public IEnumerable<string> ModsToLoadBefore => this.LoadBeforeCollection;
+        public IEnumerable<string> ModsToLoadBefore => this.LoadBeforePreferences;
 
-        public IEnumerable<string> ModsToLoadAfter => this.LoadAfterCollection;
+        public IEnumerable<string> ModsToLoadAfter => this.LoadAfterPreferences;
 
         public Assembly LoadedAssembly { get; set; }
 
@@ -74,11 +74,11 @@
 
         public Dictionary<PatchingOrder, QModPatchMethod> PatchMethods { get; } = new Dictionary<PatchingOrder, QModPatchMethod>();
 
-        public ICollection<string> DependencyCollection { get; } = new List<string>();
+        public IList<string> RequiredDependencies { get; } = new List<string>();
 
-        public ICollection<string> LoadBeforeCollection { get; } = new List<string>();
+        public IList<string> LoadBeforePreferences { get; } = new List<string>();
 
-        public ICollection<string> LoadAfterCollection { get; } = new List<string>();
+        public IList<string> LoadAfterPreferences { get; } = new List<string>();
 
         public ModStatus IsValidForLoading(string subDirectory)
         {

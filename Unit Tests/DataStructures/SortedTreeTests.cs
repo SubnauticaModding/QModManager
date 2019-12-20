@@ -34,36 +34,37 @@
 
             public string Id { get; }
 
-            public ICollection<string> DependencyCollection => depends;
+            public IList<string> RequiredDependencies => depends;
 
-            public ICollection<string> LoadBeforeCollection => loadBefore;
+            public IList<string> LoadBeforePreferences => loadBefore;
 
-            public ICollection<string> LoadAfterCollection => loadAfter;
+            public IList<string> LoadAfterPreferences => loadAfter;
 
             public PatchingOrder LoadPriority { get; } = PatchingOrder.NormalInitialize;
 
             public override string ToString()
             {
-                return Id.ToString();
+                return this.Id.ToString();
             }
         }
 
         [Test]
         public void Test_NoPreferences_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData>();
+            var tree = new SortedCollection<string, TestData>();
 
-            tree.Add(new TestData(0));
-            tree.Add(new TestData(1));
-            tree.Add(new TestData(2));
+            tree.AddSorted(new TestData(0));
+            tree.AddSorted(new TestData(1));
+            tree.AddSorted(new TestData(2));
 
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
+            List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
 
-            Assert.IsTrue(list.IndexOf("0") < list.IndexOf("1"));
-            Assert.IsTrue(list.IndexOf("1") < list.IndexOf("2"));
+            Assert.AreEqual("1", list[0]);
+            Assert.AreEqual("2", list[1]);
+            Assert.AreEqual("0", list[2]);
 
             Assert.Pass(ListToString(list));
         }
@@ -71,13 +72,13 @@
         [Test]
         public void Test_DupId_A_GetError()
         {
-            var tree = new SortedTree<string, TestData>();
+            var tree = new SortedCollection<string, TestData>();
 
-            tree.Add(new TestData(0));
-            tree.Add(new TestData(0));
-            tree.Add(new TestData(1));
+            tree.AddSorted(new TestData(0));
+            tree.AddSorted(new TestData(0));
+            tree.AddSorted(new TestData(1));
 
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
+            List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(1, list.Count);
@@ -90,13 +91,13 @@
         [Test]
         public void Test_DupId_B_GetError()
         {
-            var tree = new SortedTree<string, TestData>();
+            var tree = new SortedCollection<string, TestData>();
 
-            tree.Add(new TestData(0));
-            tree.Add(new TestData(1));
-            tree.Add(new TestData(0));
+            tree.AddSorted(new TestData(0));
+            tree.AddSorted(new TestData(1));
+            tree.AddSorted(new TestData(0));
 
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
+            List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(1, list.Count);
@@ -109,17 +110,17 @@
         [Test]
         public void Test_DupId_C_GetError()
         {
-            var tree = new SortedTree<string, TestData>();
+            var tree = new SortedCollection<string, TestData>();
 
             var i1 = new TestData(1);
             var i0 = new TestData(0);
             var i02 = new TestData(0);
 
-            tree.Add(i1);
-            tree.Add(i0);
-            tree.Add(i02);
+            tree.AddSorted(i1);
+            tree.AddSorted(i0);
+            tree.AddSorted(i02);
 
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
+            List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(1, list.Count);
@@ -132,14 +133,14 @@
         [Test]
         public void Test_MissingDependency_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData>();
+            var tree = new SortedCollection<string, TestData>();
 
             var entity = new TestData(0);
-            entity.DependencyCollection.Add("1");
+            entity.RequiredDependencies.Add("1");
 
-            tree.Add(entity);
+            tree.AddSorted(entity);
 
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
+            List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(0, list.Count);
@@ -152,19 +153,19 @@
         [Test]
         public void Test_MutualSortPrefrence_AB_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData>();
+            var tree = new SortedCollection<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeCollection.Add("1");
+            iA.LoadBeforePreferences.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadAfterCollection.Add("0");
+            iB.LoadAfterPreferences.Add("0");
 
-            tree.Add(iA);
-            tree.Add(iB);
-            tree.Add(new TestData(2));
+            tree.AddSorted(iA);
+            tree.AddSorted(iB);
+            tree.AddSorted(new TestData(2));
 
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
+            List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -177,19 +178,19 @@
         [Test]
         public void Test_MutualSortPrefrence_BA_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData>();
+            var tree = new SortedCollection<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeCollection.Add("1");
+            iA.LoadBeforePreferences.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadAfterCollection.Add("0");
+            iB.LoadAfterPreferences.Add("0");
 
-            tree.Add(iB);
-            tree.Add(iA);
-            tree.Add(new TestData(2));
+            tree.AddSorted(iB);
+            tree.AddSorted(iA);
+            tree.AddSorted(new TestData(2));
 
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
+            List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -202,19 +203,19 @@
         [Test]
         public void Test_MutualSortPrefrence_ACB_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData>();
+            var tree = new SortedCollection<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeCollection.Add("1");
+            iA.LoadBeforePreferences.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadAfterCollection.Add("0");
+            iB.LoadAfterPreferences.Add("0");
 
-            tree.Add(iA);
-            tree.Add(new TestData(2));
-            tree.Add(iB);
+            tree.AddSorted(iA);
+            tree.AddSorted(new TestData(2));
+            tree.AddSorted(iB);
 
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
+            List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -227,19 +228,19 @@
         [Test]
         public void Test_MutualSortPrefrence_BCA_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData>();
+            var tree = new SortedCollection<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeCollection.Add("1");
+            iA.LoadBeforePreferences.Add("1");
 
             var iB = new TestData(1);
-            iB.LoadAfterCollection.Add("0");
+            iB.LoadAfterPreferences.Add("0");
 
-            tree.Add(iB);
-            tree.Add(new TestData(2));
-            tree.Add(iA);
+            tree.AddSorted(iB);
+            tree.AddSorted(new TestData(2));
+            tree.AddSorted(iA);
 
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
+            List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -254,18 +255,18 @@
         [Test]
         public void Test_BeforeOnlySortPrefrence_AB_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData>();
+            var tree = new SortedCollection<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeCollection.Add("1");
+            iA.LoadBeforePreferences.Add("1");
 
             var iB = new TestData(1);
 
-            tree.Add(iA);
-            tree.Add(iB);
-            tree.Add(new TestData(2));
+            tree.AddSorted(iA);
+            tree.AddSorted(iB);
+            tree.AddSorted(new TestData(2));
 
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
+            List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -278,18 +279,18 @@
         [Test]
         public void Test_BeforeOnlySortPrefrence_BA_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData>();
+            var tree = new SortedCollection<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeCollection.Add("1");
+            iA.LoadBeforePreferences.Add("1");
 
             var iB = new TestData(1);
 
-            tree.Add(iB);
-            tree.Add(iA);
-            tree.Add(new TestData(2));
+            tree.AddSorted(iB);
+            tree.AddSorted(iA);
+            tree.AddSorted(new TestData(2));
 
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
+            List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -302,18 +303,18 @@
         [Test]
         public void Test_BeforeOnlySortPrefrence_ACB_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData>();
+            var tree = new SortedCollection<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeCollection.Add("1");
+            iA.LoadBeforePreferences.Add("1");
 
             var iB = new TestData(1);
 
-            tree.Add(iA);
-            tree.Add(new TestData(2));
-            tree.Add(iB);
+            tree.AddSorted(iA);
+            tree.AddSorted(new TestData(2));
+            tree.AddSorted(iB);
 
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
+            List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -326,18 +327,18 @@
         [Test]
         public void Test_BeforeOnlySortPrefrence_BCA_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData>();
+            var tree = new SortedCollection<string, TestData>();
 
             var iA = new TestData(0);
-            iA.LoadBeforeCollection.Add("1");
+            iA.LoadBeforePreferences.Add("1");
 
             var iB = new TestData(1);
 
-            tree.Add(iB);
-            tree.Add(new TestData(2));
-            tree.Add(iA);
+            tree.AddSorted(iB);
+            tree.AddSorted(new TestData(2));
+            tree.AddSorted(iA);
 
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
+            List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -352,18 +353,18 @@
         [Test]
         public void Test_AfterOnlySortPrefrence_AB_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData>();
+            var tree = new SortedCollection<string, TestData>();
 
             var iA = new TestData(0);
 
             var iB = new TestData(1);
-            iB.LoadAfterCollection.Add("0");
+            iB.LoadAfterPreferences.Add("0");
 
-            tree.Add(iA);
-            tree.Add(iB);
-            tree.Add(new TestData(2));
+            tree.AddSorted(iA);
+            tree.AddSorted(iB);
+            tree.AddSorted(new TestData(2));
 
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
+            List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -376,18 +377,18 @@
         [Test]
         public void Test_AfterOnlySortPrefrence_BA_GetExpectedOrder()
         {
-            var tree = new SortedTree<string, TestData>();
+            var tree = new SortedCollection<string, TestData>();
 
             var iA = new TestData(0);
 
             var iB = new TestData(1);
-            iB.LoadAfterCollection.Add("0");
+            iB.LoadAfterPreferences.Add("0");
 
-            tree.Add(iB);
-            tree.Add(iA);
-            tree.Add(new TestData(2));
+            tree.AddSorted(iB);
+            tree.AddSorted(iA);
+            tree.AddSorted(new TestData(2));
 
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
+            List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
@@ -397,490 +398,449 @@
             Assert.Pass(ListToString(list));
         }
 
-        //-------
+        // TODO - Detecting circular load order and preferences before sorting
 
         [Test]
-        public void Test_CircularLoadOrder_BothLoadBeforeRequirements_AB_GetError()
+        public void TestDependencies_UsingRealData_ConfirmAllEntriesIncluded_ConfirmCorrectOrder()
         {
-            var tree = new SortedTree<string, TestData>();
+            var tree = new SortedCollection<string, TestData>();
+            /* 01 */
+            tree.AddSorted(new TestData("AcceleratedStart"));
+            /* 02 */
+            tree.AddSorted(new TestData("AutosortLockers"));
+            /* 03 */
+            tree.AddSorted(new TestData("BaseLightSwitch", "SMLHelper"));
+            /* 04 */
+            tree.AddSorted(new TestData("BetterBioReactor"));
+            /* 05 */
+            tree.AddSorted(new TestData("BiomeHUDIndicator", "SMLHelper"));
+            /* 06 */
+            tree.AddSorted(new TestData("BuilderModule", "SMLHelper"));
+            /* 07 */
+            tree.AddSorted(new TestData("BuilderModuleInputFix", "SMLHelper"));
+            /* 08 */
+            tree.AddSorted(new TestData("CustomBatteries", "SMLHelper"));
+            /* 09 */
+            tree.AddSorted(new TestData("CustomCraft2SML", "SMLHelper"));
+            /* 10 */
+            tree.AddSorted(new TestData("CustomizedStorage"));
+            /* 11 */
+            tree.AddSorted(new TestData("CyclopsAutoZapper", "SMLHelper", "MoreCyclopsUpgrades"));
+            /* 12 */
+            tree.AddSorted(new TestData("CyclopsBioReactor", "SMLHelper", "MoreCyclopsUpgrades"));
+            /* 13 */
+            tree.AddSorted(new TestData("CyclopsEngineUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
+            /* 14 */
+            tree.AddSorted(new TestData("CyclopsLaserCannonModule", "SMLHelper", "MoreCyclopsUpgrades"));
+            /* 15 */
+            tree.AddSorted(new TestData("CyclopsNuclearReactor", "SMLHelper", "MoreCyclopsUpgrades"));
+            /* 16 */
+            tree.AddSorted(new TestData("CyclopsNuclearUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
+            /* 17 */
+            tree.AddSorted(new TestData("CyclopsSolarUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
+            /* 18 */
+            tree.AddSorted(new TestData("CyclopsSpeedUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
+            /* 19 */
+            tree.AddSorted(new TestData("CyclopsThermalUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
+            /* 20 */
+            tree.AddSorted(new TestData("DockedVehicleStorageAccess"));
+            /* 21 */
+            tree.AddSorted(new TestData("EasyCraft"));
+            /* 22 */
+            tree.AddSorted(new TestData("EnzymeChargedBattery", "SMLHelper"));
+            /* 23 */
+            tree.AddSorted(new TestData("ExteriorPlantPots", "SMLHelper"));
+            /* 24 */
+            tree.AddSorted(new TestData("FCSDeepDriller", "SMLHelper"));
+            /* 25 */
+            tree.AddSorted(new TestData("AIMarineTurbine", "SMLHelper"));
+            /* 26 */
+            tree.AddSorted(new TestData("MiniFountainFilter", "SMLHelper"));
+            /* 27 */
+            tree.AddSorted(new TestData("FCSAIPowerCellSocket", "SMLHelper"));
+            /* 28 */
+            tree.AddSorted(new TestData("FCSPowerStorage", "SMLHelper"));
+            /* 29 */
+            tree.AddSorted(new TestData("FCSTechFabricator", "SMLHelper"));
+            /* 30 */
+            tree.AddSorted(new TestData("snowrabbit007_subnautica_FishOverflowDistributor"));
+            /* 31 */
+            tree.AddSorted(new TestData("FloatingCargoCrate", "SMLHelper"));
+            /* 32 */
+            tree.AddSorted(new TestData("HabitatControlPanel"));
+            /* 33 */
+            tree.AddSorted(new TestData("InstantBulkheadAnimations"));
+            /* 34 */
+            tree.AddSorted(new TestData("IonCubeGenerator", "SMLHelper"));
+            /* 35 */
+            tree.AddSorted(new TestData("LaserCannon", "SMLHelper"));
+            /* 36 */
+            tree.AddSorted(new TestData("SMLHelper"));
+            /* 37 */
+            tree.AddSorted(new TestData("MoonpoolVehicleRepair"));
+            /* 38 */
+            tree.AddSorted(new TestData("MoreCyclopsUpgrades", "SMLHelper"));
+            /* 39 */
+            tree.AddSorted(new TestData("MoreQuickSlots"));
+            /* 40 */
+            tree.AddSorted(new TestData("MoreSeamothDepth", "SMLHelper"));
+            /* 41 */
+            tree.AddSorted(new TestData("PrawnSuitSonarUpgrade", "SMLHelper"));
+            /* 42 */
+            tree.AddSorted(new TestData("QPrawnUpgradeAccess"));
+            /* 43 */
+            tree.AddSorted(new TestData("QuitToDesktop"));
+            /* 44 */
+            tree.AddSorted(new TestData("AgonyRadialCraftingTabs"));
+            /* 45 */
+            tree.AddSorted(new TestData("RepairModule", "SMLHelper"));
+            /* 46 */
+            tree.AddSorted(new TestData("ResourceMonitor", "SMLHelper"));
+            /* 47 */
+            tree.AddSorted(new TestData("RunningWithTools"));
+            /* 48 */
+            tree.AddSorted(new TestData("ScannerModule", "SMLHelper"));
+            /* 49 */
+            tree.AddSorted(new TestData("SeamothArms", "SMLHelper"));
+            /* 50 */
+            tree.AddSorted(new TestData("SeamothEnergyShield", "SMLHelper"));
+            /* 51 */
+            tree.AddSorted(new TestData("SeamothStorageAccess"));
+            /* 52 */
+            tree.AddSorted(new TestData("SeamothThermal", "SMLHelper"));
+            /* 53 */
+            tree.AddSorted(new TestData("SlotExtender"));
+            /* 54 */
+            tree.AddSorted(new TestData("TimeCapsuleLogger"));
+            /* 55 */
+            tree.AddSorted(new TestData("UniversalChargingModule", "SMLHelper"));
+            /* 56 */
+            tree.AddSorted(new TestData("UpgradedVehicles", "SMLHelper"));
+            /* 57 */
+            tree.AddSorted(new TestData("VehicleUpgradesInCyclops", "SMLHelper"));
 
-            var iA = new TestData(0);
-            iA.LoadBeforeCollection.Add("1");
+            List<TestData> list = tree.GetSortedList();
 
-            var iB = new TestData(1);
-            iB.LoadBeforeCollection.Add("0");
-
-            tree.Add(iA);
-            SortResults result = tree.Add(iB);
-
-            Assert.AreEqual(SortResults.CircularLoadOrder, result);
-
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
             Console.WriteLine(ListToString(list));
 
-            Assert.AreEqual(0, list.Count);
+            foreach (string item in tree.KnownNodes)
+            {
+                Assert.IsNotNull(list.Find(n => n.Id == item), item + " was missing");
+            }
 
-            Assert.Pass(ListToString(list));
+            Assert.AreEqual(57, list.Count);
+
+            foreach (SortedTreeNode<string, TestData> node in tree.NodesToSort.Values)
+            {
+                if (node.Dependencies.Count == 0)
+                    continue;
+
+                int indexOfNode = list.IndexOf(node.Data);
+                foreach (string dependency in node.Dependencies)
+                {
+                    int indexOfDependency = list.FindIndex(d => d.Id == dependency);
+
+                    Assert.IsTrue(indexOfNode < indexOfDependency);
+                }
+            }
+        }
+
+        private class TestDependencies : ISortable<string>
+        {
+            public TestDependencies(string id)
+            {
+                this.Id = id;
+            }
+
+            public TestDependencies(string id, params string[] dependencies)
+               : this(id)
+            {
+                foreach (string dependency in dependencies)
+                    this.RequiredDependencies.Add(dependency);
+            }
+
+            public string Id { get; }
+
+            public IList<string> RequiredDependencies { get; } = new List<string>();
+            public IList<string> LoadBeforePreferences { get; } = new List<string>();
+            public IList<string> LoadAfterPreferences { get; } = new List<string>();
+        }
+
+        private class TestLoadBefore : ISortable<string>
+        {
+            public TestLoadBefore(string id)
+            {
+                this.Id = id;
+            }
+
+            public TestLoadBefore(string id, params string[] loadBefore)
+               : this(id)
+            {
+                foreach (string before in loadBefore)
+                    this.LoadBeforePreferences.Add(before);
+            }
+
+            public string Id { get; }
+
+            public IList<string> RequiredDependencies { get; } = new List<string>();
+            public IList<string> LoadBeforePreferences { get; } = new List<string>();
+            public IList<string> LoadAfterPreferences { get; } = new List<string>();
         }
 
         [Test]
-        public void Test_CircularLoadOrder_BothLoadBeforeRequirements_BA_GetError()
+        public void CleanRedundantDependencies_SingleRedundancy_RedundanciesCleared()
         {
-            var tree = new SortedTree<string, TestData>();
+            var rng = new Random();
+            const string innerDependency = "mostUsedDependency";
+            const string outterDependency = "redundant";
+            var entries = new List<TestDependencies>
+            {
+                new TestDependencies(innerDependency),
+                new TestDependencies(outterDependency, innerDependency),
+                new TestDependencies("commonEntry1", innerDependency),
+                new TestDependencies("commonEntry2", innerDependency, outterDependency),
+                new TestDependencies("commonEntry3", innerDependency, outterDependency),
+                new TestDependencies("commonEntry4"),
+                new TestDependencies("commonEntry5", innerDependency, outterDependency),
+                new TestDependencies("commonEntry6", innerDependency, outterDependency),
+                new TestDependencies("commonEntry7", innerDependency),
+            };
+            int originalCount = entries.Count;
+            var tree = new SortedCollection<string, TestDependencies>();
 
-            var iA = new TestData(0);
-            iA.LoadBeforeCollection.Add("1");
+            // Add entries in random order
+            while (entries.Count > 0)
+            {
+                int rngSelected = rng.Next(0, entries.Count);
+                Assert.IsTrue(tree.AddSorted(entries[rngSelected]));
+                entries.RemoveAt(rngSelected);
+            }
 
-            var iB = new TestData(1);
-            iB.LoadBeforeCollection.Add("0");
+            Assert.AreEqual(originalCount, tree.Count);
 
-            tree.Add(iB);
-            SortResults result = tree.Add(iA);
+            tree.CleanRedundantDependencies();
 
-            Assert.AreEqual(SortResults.CircularLoadOrder, result);
+            Assert.AreEqual(originalCount, tree.Count);
+            Assert.AreEqual(4, tree.DependencyUsedBy(outterDependency));
+            Assert.AreEqual(3, tree.DependencyUsedBy(innerDependency));
 
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
-            Console.WriteLine(ListToString(list));
+            Assert.IsTrue(tree[outterDependency].RequiredDependencies.Contains(innerDependency));
 
-            Assert.AreEqual(0, list.Count);
+            Assert.IsTrue(tree["commonEntry1"].RequiredDependencies.Contains(innerDependency));
+            Assert.IsTrue(tree["commonEntry2"].RequiredDependencies.Contains(outterDependency));
+            Assert.IsTrue(tree["commonEntry3"].RequiredDependencies.Contains(outterDependency));
 
-            Assert.Pass(ListToString(list));
+            Assert.IsTrue(tree["commonEntry5"].RequiredDependencies.Contains(outterDependency));
+            Assert.IsTrue(tree["commonEntry6"].RequiredDependencies.Contains(outterDependency));
+            Assert.IsTrue(tree["commonEntry7"].RequiredDependencies.Contains(innerDependency));
+
+            Assert.IsFalse(tree["commonEntry2"].RequiredDependencies.Contains(innerDependency));
+            Assert.IsFalse(tree["commonEntry3"].RequiredDependencies.Contains(innerDependency));
+
+            Assert.IsFalse(tree["commonEntry5"].RequiredDependencies.Contains(innerDependency));
+            Assert.IsFalse(tree["commonEntry6"].RequiredDependencies.Contains(innerDependency));
         }
 
         [Test]
-        public void Test_CircularLoadOrder_BothLoadBeforeRequirements_ACB_GetError()
+        public void CleanRedundantDependencies_MultipleRedundancy_RedundanciesCleared()
         {
-            var tree = new SortedTree<string, TestData>();
+            var rng = new Random();
+            const string innerDependency = "mostUsedDependency";
+            const string outterDep1 = "redundant1";
+            const string outterDep2 = "redundant2";
+            const string outterDep3 = "redundant3";
+            var entries = new List<TestDependencies>
+            {
+                new TestDependencies(innerDependency),
+                new TestDependencies(outterDep1, innerDependency),
+                new TestDependencies(outterDep2, innerDependency, outterDep1),
+                new TestDependencies(outterDep3, outterDep2, innerDependency),
+                new TestDependencies("commonEntry1", innerDependency),
+                new TestDependencies("commonEntry1a", outterDep2, innerDependency),
+                new TestDependencies("commonEntry2", innerDependency, outterDep1),
+                new TestDependencies("commonEntry2a", innerDependency, outterDep1, outterDep2),
+                new TestDependencies("commonEntry3", innerDependency, outterDep2, outterDep3, outterDep1),
+                new TestDependencies("commonEntry3a", innerDependency, outterDep1),
+                new TestDependencies("commonEntry4"),
+                new TestDependencies("commonEntry5", innerDependency, outterDep2),
+                new TestDependencies("commonEntry5a", innerDependency, outterDep1, outterDep2, outterDep3),
+                new TestDependencies("commonEntry6", innerDependency, outterDep1),
+                new TestDependencies("commonEntry6a", innerDependency, outterDep2, outterDep1),
+                new TestDependencies("commonEntry7", innerDependency),
+            };
+            int originalCount = entries.Count;
+            var tree = new SortedCollection<string, TestDependencies>();
 
-            var iA = new TestData(0);
-            iA.LoadBeforeCollection.Add("1");
+            // Add entries in random order
+            while (entries.Count > 0)
+            {
+                int rngSelected = rng.Next(0, entries.Count);
+                Assert.IsTrue(tree.AddSorted(entries[rngSelected]));
+                entries.RemoveAt(rngSelected);
+            }
 
-            var iB = new TestData(1);
-            iB.LoadBeforeCollection.Add("0");
+            Assert.AreEqual(originalCount, tree.Count);
 
-            tree.Add(iA);
-            tree.Add(new TestData(2));
-            SortResults result = tree.Add(iB);
+            tree.CleanRedundantDependencies();
 
-            Assert.AreEqual(SortResults.CircularLoadOrder, result);
+            Assert.AreEqual(originalCount, tree.Count);
 
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
-            Console.WriteLine(ListToString(list));
+            Assert.IsTrue(tree[outterDep1].RequiredDependencies.Contains(innerDependency));
+            Assert.IsTrue(tree[outterDep2].RequiredDependencies.Contains(outterDep1));
+            Assert.IsTrue(tree[outterDep3].RequiredDependencies.Contains(outterDep2));
 
-            Assert.AreEqual(1, list.Count);
+            Assert.IsFalse(tree["commonEntry1a"].RequiredDependencies.Contains(innerDependency));
 
-            Assert.Pass(ListToString(list));
+            Assert.IsFalse(tree["commonEntry2"].RequiredDependencies.Contains(innerDependency));
+
+            Assert.IsFalse(tree["commonEntry2a"].RequiredDependencies.Contains(innerDependency));
+            Assert.IsFalse(tree["commonEntry2a"].RequiredDependencies.Contains(outterDep1));
+
+            Assert.IsFalse(tree["commonEntry3"].RequiredDependencies.Contains(innerDependency));
+            Assert.IsFalse(tree["commonEntry3"].RequiredDependencies.Contains(outterDep1));
+            Assert.IsFalse(tree["commonEntry3"].RequiredDependencies.Contains(outterDep2));
+
+            Assert.IsFalse(tree["commonEntry3a"].RequiredDependencies.Contains(innerDependency));
+
+            Assert.IsFalse(tree["commonEntry5"].RequiredDependencies.Contains(outterDep1));
+            Assert.IsFalse(tree["commonEntry5"].RequiredDependencies.Contains(innerDependency));
+
+            Assert.IsFalse(tree["commonEntry5a"].RequiredDependencies.Contains(innerDependency));
+            Assert.IsFalse(tree["commonEntry5a"].RequiredDependencies.Contains(outterDep1));
+            Assert.IsFalse(tree["commonEntry5a"].RequiredDependencies.Contains(outterDep2));
+
+            Assert.IsFalse(tree["commonEntry6a"].RequiredDependencies.Contains(innerDependency));
+            Assert.IsFalse(tree["commonEntry6a"].RequiredDependencies.Contains(outterDep1));
+
+            Assert.AreEqual(4, tree.DependencyUsedBy(outterDep1));
+            Assert.AreEqual(5, tree.DependencyUsedBy(outterDep2));
+            Assert.AreEqual(2, tree.DependencyUsedBy(outterDep3));
+            Assert.AreEqual(3, tree.DependencyUsedBy(innerDependency));
         }
 
         [Test]
-        public void Test_CircularLoadOrder_BothLoadBeforeRequirements_BCA_GetError()
+        public void CleanRedundantLoadBefore_SingleRedundancy_RedundanciesCleared()
         {
-            var tree = new SortedTree<string, TestData>();
+            var rng = new Random();
+            const string innerDependency = "mostUsedDependency";
+            const string outterDependency = "redundant";
+            var entries = new List<TestLoadBefore>
+            {
+                new TestLoadBefore(innerDependency),
+                new TestLoadBefore(outterDependency, innerDependency),
+                new TestLoadBefore("commonEntry1", innerDependency),
+                new TestLoadBefore("commonEntry2", innerDependency, outterDependency),
+                new TestLoadBefore("commonEntry3", innerDependency, outterDependency),
+                new TestLoadBefore("commonEntry4"),
+                new TestLoadBefore("commonEntry5", innerDependency, outterDependency),
+                new TestLoadBefore("commonEntry6", innerDependency, outterDependency),
+                new TestLoadBefore("commonEntry7", innerDependency),
+            };
+            int originalCount = entries.Count;
+            var tree = new SortedCollection<string, TestLoadBefore>();
 
-            var iA = new TestData(0);
-            iA.LoadBeforeCollection.Add("1");
+            // Add entries in random order
+            while (entries.Count > 0)
+            {
+                int rngSelected = rng.Next(0, entries.Count);
+                Assert.IsTrue(tree.AddSorted(entries[rngSelected]));
+                entries.RemoveAt(rngSelected);
+            }
 
-            var iB = new TestData(1);
-            iB.LoadBeforeCollection.Add("0");
+            Assert.AreEqual(originalCount, tree.Count);
 
-            tree.Add(iA);
-            tree.Add(new TestData(2));
-            SortResults result = tree.Add(iB);
+            tree.CleanRedundantLoadBefore();
 
-            Assert.AreEqual(SortResults.CircularLoadOrder, result);
+            Assert.AreEqual(originalCount, tree.Count);
 
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
-            Console.WriteLine(ListToString(list));
+            Assert.IsTrue(tree[outterDependency].LoadBeforePreferences.Contains(innerDependency));
 
-            Assert.AreEqual(1, list.Count);
+            Assert.IsTrue(tree["commonEntry1"].LoadBeforePreferences.Contains(innerDependency));
+            Assert.IsTrue(tree["commonEntry2"].LoadBeforePreferences.Contains(outterDependency));
+            Assert.IsTrue(tree["commonEntry3"].LoadBeforePreferences.Contains(outterDependency));
 
-            Assert.Pass(ListToString(list));
-        }
+            Assert.IsTrue(tree["commonEntry5"].LoadBeforePreferences.Contains(outterDependency));
+            Assert.IsTrue(tree["commonEntry6"].LoadBeforePreferences.Contains(outterDependency));
+            Assert.IsTrue(tree["commonEntry7"].LoadBeforePreferences.Contains(innerDependency));
 
-        //-------
+            Assert.IsFalse(tree["commonEntry2"].LoadBeforePreferences.Contains(innerDependency));
+            Assert.IsFalse(tree["commonEntry3"].LoadBeforePreferences.Contains(innerDependency));
 
-        [Test]
-        public void Test_CircularLoadOrder_BothLoadAfterRequirements_AB_GetError()
-        {
-            var tree = new SortedTree<string, TestData>();
-
-            var iA = new TestData(0);
-            iA.LoadAfterCollection.Add("1");
-
-            var iB = new TestData(1);
-            iB.LoadAfterCollection.Add("0");
-
-            tree.Add(iA);
-            SortResults result = tree.Add(iB);
-
-            Assert.AreEqual(SortResults.CircularLoadOrder, result);
-
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
-            Console.WriteLine(ListToString(list));
-
-            Assert.AreEqual(0, list.Count);
-
-            Assert.Pass(ListToString(list));
-        }
-
-        [Test]
-        public void Test_CircularLoadOrder_BothLoadAfterRequirements_BA_GetError()
-        {
-            var tree = new SortedTree<string, TestData>();
-
-            var iA = new TestData(0);
-            iA.LoadAfterCollection.Add("1");
-
-            var iB = new TestData(1);
-            iB.LoadAfterCollection.Add("0");
-
-            tree.Add(iB);
-            SortResults result = tree.Add(iA);
-
-            Assert.AreEqual(SortResults.CircularLoadOrder, result);
-
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
-            Console.WriteLine(ListToString(list));
-
-            Assert.AreEqual(0, list.Count);
-
-            Assert.Pass(ListToString(list));
+            Assert.IsFalse(tree["commonEntry5"].LoadBeforePreferences.Contains(innerDependency));
+            Assert.IsFalse(tree["commonEntry6"].LoadBeforePreferences.Contains(innerDependency));
         }
 
         [Test]
-        public void Test_CircularLoadOrder_BothLoadAfterRequirements_ACB_GetError()
+        public void CleanRedundantLoadBefore_MultipleRedundancy_RedundanciesCleared()
         {
-            var tree = new SortedTree<string, TestData>();
+            var rng = new Random();
+            const string innerDependency = "mostUsedDependency";
+            const string outterDep1 = "redundant1";
+            const string outterDep2 = "redundant2";
+            const string outterDep3 = "redundant3";
+            var entries = new List<TestLoadBefore>
+            {
+                new TestLoadBefore(innerDependency),
+                new TestLoadBefore(outterDep1, innerDependency),
+                new TestLoadBefore(outterDep2, innerDependency, outterDep1),
+                new TestLoadBefore(outterDep3, outterDep2, innerDependency),
+                new TestLoadBefore("commonEntry1", innerDependency),
+                new TestLoadBefore("commonEntry1a", outterDep2, innerDependency),
+                new TestLoadBefore("commonEntry2", innerDependency, outterDep1),
+                new TestLoadBefore("commonEntry2a", innerDependency, outterDep1, outterDep2),
+                new TestLoadBefore("commonEntry3", innerDependency, outterDep2, outterDep3, outterDep1),
+                new TestLoadBefore("commonEntry3a", innerDependency, outterDep1),
+                new TestLoadBefore("commonEntry4"),
+                new TestLoadBefore("commonEntry5", innerDependency, outterDep2),
+                new TestLoadBefore("commonEntry5a", innerDependency, outterDep1, outterDep2, outterDep3),
+                new TestLoadBefore("commonEntry6", innerDependency, outterDep1),
+                new TestLoadBefore("commonEntry6a", innerDependency, outterDep2, outterDep1),
+                new TestLoadBefore("commonEntry7", innerDependency),
+            };
+            int originalCount = entries.Count;
+            var tree = new SortedCollection<string, TestLoadBefore>();
+
+            // Add entries in random order
+            while (entries.Count > 0)
+            {
+                int rngSelected = rng.Next(0, entries.Count);
+                Assert.IsTrue(tree.AddSorted(entries[rngSelected]));
+                entries.RemoveAt(rngSelected);
+            }
+
+            Assert.AreEqual(originalCount, tree.Count);
+
+            tree.CleanRedundantLoadBefore();
+
+            Assert.AreEqual(originalCount, tree.Count);
+
+            Assert.IsTrue(tree[outterDep1].LoadBeforePreferences.Contains(innerDependency));
+            Assert.IsTrue(tree[outterDep2].LoadBeforePreferences.Contains(outterDep1));
+            Assert.IsTrue(tree[outterDep3].LoadBeforePreferences.Contains(outterDep2));
+
+            Assert.IsFalse(tree["commonEntry1a"].LoadBeforePreferences.Contains(innerDependency));
+
+            Assert.IsFalse(tree["commonEntry2"].LoadBeforePreferences.Contains(innerDependency));
+
+            Assert.IsFalse(tree["commonEntry2a"].LoadBeforePreferences.Contains(innerDependency));
+            Assert.IsFalse(tree["commonEntry2a"].LoadBeforePreferences.Contains(outterDep1));
+
+            Assert.IsFalse(tree["commonEntry3"].LoadBeforePreferences.Contains(innerDependency));
+            Assert.IsFalse(tree["commonEntry3"].LoadBeforePreferences.Contains(outterDep1));
+            Assert.IsFalse(tree["commonEntry3"].LoadBeforePreferences.Contains(outterDep2));
+
+            Assert.IsFalse(tree["commonEntry3a"].LoadBeforePreferences.Contains(innerDependency));
+
+            Assert.IsFalse(tree["commonEntry5"].LoadBeforePreferences.Contains(outterDep1));
+            Assert.IsFalse(tree["commonEntry5"].LoadBeforePreferences.Contains(innerDependency));
+
+            Assert.IsFalse(tree["commonEntry5a"].LoadBeforePreferences.Contains(innerDependency));
+            Assert.IsFalse(tree["commonEntry5a"].LoadBeforePreferences.Contains(outterDep1));
+            Assert.IsFalse(tree["commonEntry5a"].LoadBeforePreferences.Contains(outterDep2));
+
+            Assert.IsFalse(tree["commonEntry6a"].LoadBeforePreferences.Contains(innerDependency));
+            Assert.IsFalse(tree["commonEntry6a"].LoadBeforePreferences.Contains(outterDep1));
 
-            var iA = new TestData(0);
-            iA.LoadAfterCollection.Add("1");
-
-            var iB = new TestData(1);
-            iB.LoadAfterCollection.Add("0");
-
-            tree.Add(iA);
-            tree.Add(new TestData(2));
-            SortResults result = tree.Add(iB);
-
-            Assert.AreEqual(SortResults.CircularLoadOrder, result);
-
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
-            Console.WriteLine(ListToString(list));
-
-            Assert.AreEqual(1, list.Count);
-
-            Assert.Pass(ListToString(list));
-        }
-
-        [Test]
-        public void Test_CircularLoadOrder_BothLoadAfterRequirements_BCA_GetError()
-        {
-            var tree = new SortedTree<string, TestData>();
-
-            var iA = new TestData(0);
-            iA.LoadAfterCollection.Add("1");
-
-            var iB = new TestData(1);
-            iB.LoadAfterCollection.Add("0");
-
-            tree.Add(iA);
-            tree.Add(new TestData(2));
-            SortResults result = tree.Add(iB);
-
-            Assert.AreEqual(SortResults.CircularLoadOrder, result);
-
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
-            Console.WriteLine(ListToString(list));
-
-            Assert.AreEqual(1, list.Count);
-
-            Assert.Pass(ListToString(list));
-        }
-
-        //-------
-
-        [Test]
-        public void Test_CircularLoadOrder_DependencyChain3inLoop_AllLoadAfterRequirements_GetError()
-        {
-            // A -> B ~ B -> C ~ C -> A
-            var tree = new SortedTree<string, TestData>();
-
-            var iA = new TestData(0);
-            iA.LoadAfterCollection.Add("1");
-
-            var iB = new TestData(1);
-            iB.LoadAfterCollection.Add("2");
-
-            var iC = new TestData(2);
-            iC.LoadAfterCollection.Add("0");
-
-            tree.Add(iA);
-            tree.Add(iB);
-            tree.Add(iC);
-
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
-            Console.WriteLine(ListToString(list));
-
-            Assert.AreEqual(0, list.Count);
-
-            Assert.Pass(ListToString(list));
-        }
-
-        [Test]
-        public void Test_CircularLoadOrder_DependencyChain4inLoop_AllLoadAfterRequirements_GetError()
-        {
-            // A -> B ~ B -> C ~ C -> D ~ D -> A
-            var tree = new SortedTree<string, TestData>();
-
-            var iA = new TestData(0);
-            iA.LoadAfterCollection.Add("1");
-
-            var iB = new TestData(1);
-            iB.LoadAfterCollection.Add("2");
-
-            var iC = new TestData(2);
-            iC.LoadAfterCollection.Add("3");
-
-            var iD = new TestData(3);
-            iD.LoadAfterCollection.Add("0");
-
-            tree.Add(iA);
-            tree.Add(iB);
-            tree.Add(iC);
-            tree.Add(iD);
-
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
-            Console.WriteLine(ListToString(list));
-
-            Assert.AreEqual(0, list.Count);
-
-            Assert.Pass(ListToString(list));
-        }
-
-        [Test]
-        public void Test_CircularLoadOrder_DependencyChain3inLoop_AllLoadBeforeRequirements_GetError()
-        {
-            // A -> B ~ B -> C ~ C -> A
-            var tree = new SortedTree<string, TestData>();
-
-            var iA = new TestData(0);
-            iA.LoadBeforeCollection.Add("1");
-
-            var iB = new TestData(1);
-            iB.LoadBeforeCollection.Add("2");
-
-            var iC = new TestData(2);
-            iC.LoadBeforeCollection.Add("0");
-
-            tree.Add(iA);
-            tree.Add(iB);
-            tree.Add(iC);
-
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
-            Console.WriteLine(ListToString(list));
-
-            Assert.AreEqual(0, list.Count);
-
-            Assert.Pass(ListToString(list));
-        }
-
-        [Test]
-        public void Test_CircularLoadOrder_DependencyChain4inLoop_AllLoadBeforeRequirements_GetError()
-        {
-            // A -> B ~ B -> C ~ C -> D ~ D -> A
-            var tree = new SortedTree<string, TestData>();
-
-            var iA = new TestData(0);
-            iA.LoadBeforeCollection.Add("1");
-
-            var iB = new TestData(1);
-            iB.LoadBeforeCollection.Add("2");
-
-            var iC = new TestData(2);
-            iC.LoadBeforeCollection.Add("3");
-
-            var iD = new TestData(3);
-            iD.LoadBeforeCollection.Add("0");
-
-            tree.Add(iA);
-            tree.Add(iB);
-            tree.Add(iC);
-            tree.Add(iD);
-
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
-            Console.WriteLine(ListToString(list));
-
-            Assert.AreEqual(0, list.Count);
-
-            Assert.Pass(ListToString(list));
-        }
-
-        //-------
-
-        [Test]
-        public void Test_CircularLoadOrder_DependencyChain3inLoop_NonDependentEntitiesIncluded()
-        {
-            // A -> B ~ B -> C ~ C -> A
-            var tree = new SortedTree<string, TestData>();
-
-            var iA = new TestData(0);
-            iA.LoadAfterCollection.Add("1");
-
-            var iB = new TestData(1);
-            iB.LoadAfterCollection.Add("2");
-
-            var iC = new TestData(2);
-            iC.LoadAfterCollection.Add("0");
-
-            tree.Add(new TestData(3));
-            tree.Add(iA);
-            tree.Add(new TestData(4));
-            tree.Add(iB);
-            tree.Add(new TestData(5));
-            tree.Add(iC);
-            tree.Add(new TestData(6));
-
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
-            Console.WriteLine(ListToString(list));
-
-            Assert.AreEqual(4, list.Count);
-            Assert.IsTrue(list.Contains("3"));
-            Assert.IsTrue(list.Contains("4"));
-            Assert.IsTrue(list.Contains("5"));
-            Assert.IsTrue(list.Contains("6"));
-
-            Assert.IsFalse(list.Contains("0"));
-            Assert.IsFalse(list.Contains("1"));
-            Assert.IsFalse(list.Contains("2"));
-
-            Assert.Pass(ListToString(list));
-        }
-
-        [Test]
-        public void Test_CircularLoadOrder_DependencyChain3inLoop_NonLoopChainEntitiesIncluded()
-        {
-            // A -> B ~ B -> C ~ C -> A
-            var tree = new SortedTree<string, TestData>();
-
-            var iA = new TestData(0);
-            iA.LoadAfterCollection.Add("1");
-
-            var iB = new TestData(1);
-            iB.LoadAfterCollection.Add("2");
-
-            var iC = new TestData(2);
-            iC.LoadAfterCollection.Add("0");
-
-            // -- 
-
-            var i3 = new TestData(3);
-            i3.LoadAfterCollection.Add("4");
-
-            var i4 = new TestData(4);
-            i4.LoadAfterCollection.Add("5");
-
-            var i5 = new TestData(5);
-            i5.LoadAfterCollection.Add("6");
-
-            var i6 = new TestData(6);
-
-            tree.Add(i6);
-            tree.Add(iA);
-            tree.Add(i5);
-            tree.Add(iB);
-            tree.Add(i4);
-            tree.Add(iC);
-            tree.Add(i3);
-
-            List<string> list = tree.CreateFlatIndexList(out PairedList<TestData, ErrorTypes> errors);
-            Console.WriteLine(ListToString(list));
-
-            Assert.AreEqual(4, list.Count);
-            Assert.IsTrue(list.Contains("3"));
-            Assert.IsTrue(list.Contains("4"));
-            Assert.IsTrue(list.Contains("5"));
-            Assert.IsTrue(list.Contains("6"));
-
-            Assert.IsFalse(list.Contains("0"));
-            Assert.IsFalse(list.Contains("1"));
-            Assert.IsFalse(list.Contains("2"));
-
-            Assert.IsTrue(list.IndexOf("3") < list.IndexOf("4"));
-            Assert.IsTrue(list.IndexOf("4") < list.IndexOf("5"));
-            Assert.IsTrue(list.IndexOf("5") < list.IndexOf("6"));
-
-            Assert.Pass(ListToString(list));
-        }
-
-        // TODO - Meta priority tests
-
-        [Test]
-        public void Test_RealData()
-        {
-            var tree = new SortedTree<string, TestData>();
-            tree.Add(new TestData("AcceleratedStart"));
-            tree.Add(new TestData("AutosortLockers"));
-            tree.Add(new TestData("BaseLightSwitch", "SMLHelper"));
-            tree.Add(new TestData("BetterBioReactor"));
-            tree.Add(new TestData("BiomeHUDIndicator", "SMLHelper"));
-            tree.Add(new TestData("BuilderModule", "SMLHelper"));
-            tree.Add(new TestData("BuilderModuleInputFix", "SMLHelper"));
-            tree.Add(new TestData("CustomBatteries", "SMLHelper"));
-            tree.Add(new TestData("CustomCraft2SML", "SMLHelper"));
-            tree.Add(new TestData("CustomizedStorage"));
-            tree.Add(new TestData("CyclopsAutoZapper", "SMLHelper", "MoreCyclopsUpgrades"));
-            tree.Add(new TestData("CyclopsBioReactor", "SMLHelper", "MoreCyclopsUpgrades"));
-            tree.Add(new TestData("CyclopsEngineUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
-            tree.Add(new TestData("CyclopsLaserCannonModule", "SMLHelper", "MoreCyclopsUpgrades"));
-            tree.Add(new TestData("CyclopsNuclearReactor", "SMLHelper", "MoreCyclopsUpgrades"));
-            tree.Add(new TestData("CyclopsNuclearUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
-            tree.Add(new TestData("CyclopsSolarUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
-            tree.Add(new TestData("CyclopsSpeedUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
-            tree.Add(new TestData("CyclopsThermalUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
-            tree.Add(new TestData("DockedVehicleStorageAccess"));
-            tree.Add(new TestData("EasyCraft"));
-            tree.Add(new TestData("EnzymeChargedBattery", "SMLHelper"));
-            tree.Add(new TestData("ExteriorPlantPots", "SMLHelper"));
-            tree.Add(new TestData("FCSDeepDriller", "SMLHelper"));
-            tree.Add(new TestData("AIMarineTurbine", "SMLHelper"));
-            tree.Add(new TestData("MiniFountainFilter", "SMLHelper"));
-            tree.Add(new TestData("FCSAIPowerCellSocket", "SMLHelper"));
-            tree.Add(new TestData("FCSPowerStorage", "SMLHelper"));
-            tree.Add(new TestData("FCSTechFabricator", "SMLHelper"));
-            tree.Add(new TestData("snowrabbit007_subnautica_FishOverflowDistributor"));
-            tree.Add(new TestData("FloatingCargoCrate", "SMLHelper"));
-            tree.Add(new TestData("HabitatControlPanel"));
-            tree.Add(new TestData("InstantBulkheadAnimations"));
-            tree.Add(new TestData("IonCubeGenerator", "SMLHelper"));
-            tree.Add(new TestData("LaserCannon", "SMLHelper"));
-            tree.Add(new TestData("SMLHelper"));
-            tree.Add(new TestData("MoonpoolVehicleRepair"));
-            tree.Add(new TestData("MoreCyclopsUpgrades", "SMLHelper"));
-            tree.Add(new TestData("MoreQuickSlots"));
-            tree.Add(new TestData("MoreSeamothDepth", "SMLHelper"));
-            tree.Add(new TestData("PrawnSuitSonarUpgrade", "SMLHelper"));
-            tree.Add(new TestData("QPrawnUpgradeAccess"));
-            tree.Add(new TestData("QuitToDesktop"));
-            tree.Add(new TestData("AgonyRadialCraftingTabs"));
-            tree.Add(new TestData("RepairModule", "SMLHelper"));
-            tree.Add(new TestData("ResourceMonitor", "SMLHelper"));
-            tree.Add(new TestData("RunningWithTools"));
-            tree.Add(new TestData("ScannerModule", "SMLHelper"));
-            tree.Add(new TestData("SeamothArms", "SMLHelper"));
-            tree.Add(new TestData("SeamothEnergyShield", "SMLHelper"));
-            tree.Add(new TestData("SeamothStorageAccess"));
-            tree.Add(new TestData("SeamothThermal", "SMLHelper"));
-            tree.Add(new TestData("SlotExtender"));
-            tree.Add(new TestData("TimeCapsuleLogger"));
-            tree.Add(new TestData("UniversalChargingModule", "SMLHelper"));
-            tree.Add(new TestData("UpgradedVehicles", "SMLHelper"));
-            tree.Add(new TestData("VehicleUpgradesInCyclops", "SMLHelper"));
-
-            List<TestData> list = tree.CreateFlatList(out PairedList<TestData, ErrorTypes> errors);
-            Assert.AreEqual(0, tree.NodesInError);
-            Assert.AreNotEqual(0, list.Count);
-            Assert.AreEqual(0, errors.Count);
-            Console.WriteLine(ListToString(list));
         }
 
         private static string ListToString<T>(IList<T> list)
@@ -892,16 +852,13 @@
                 return s;
             }
 
-            int lastIndex = list.Count - 1;
-
-            for (int i = 0; i < lastIndex; i++)
+            for (int i = 0; i < list.Count; i++)
             {
                 T item = list[i];
-                s += item + Environment.NewLine;
-                s += ", ";
+                s += Environment.NewLine;
+                s += item;
             }
 
-            s += list[lastIndex];
             return s;
         }
     }
