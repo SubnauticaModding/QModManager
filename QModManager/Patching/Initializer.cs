@@ -1,11 +1,7 @@
 ﻿namespace QModManager.API.ModLoading
 {
-    using System;
-    using System.IO;
-    //using QModManager.API.SMLHelper.Patchers;
     using QModManager.DataStructures;
     using QModManager.Patching;
-    using QModManager.Utility;
 
     internal class Initializer
     {
@@ -16,12 +12,11 @@
             currentGame = currentlyRunningGame;
         }
 
-        internal bool InitializeMods(PairedList<QMod, ModStatus> modsToInitialize)
+        internal void InitializeMods(PairedList<QMod, ModStatus> modsToInitialize)
         {
             InitializeMods(modsToInitialize, PatchingOrder.PreInitialize);
             InitializeMods(modsToInitialize, PatchingOrder.NormalInitialize);
             InitializeMods(modsToInitialize, PatchingOrder.PostInitialize);
-            return true;
         }
 
         private void InitializeMods(PairedList<QMod, ModStatus> modsToInitialize, PatchingOrder order)

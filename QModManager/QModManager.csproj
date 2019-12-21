@@ -140,7 +140,10 @@
   <ItemGroup>
     <Compile Include="API\ModLoading\IQMod.cs" />
     <Compile Include="API\ModLoading\ModStatus.cs" />
-    <Compile Include="API\ModLoading\PatchResults.cs" />
+    <Compile Include="API\ModLoading\QModCoreAttribute.cs" />
+    <Compile Include="API\ModLoading\QModPatch.cs" />
+    <Compile Include="API\ModLoading\QModPostPatch.cs" />
+    <Compile Include="API\ModLoading\QModPrePatch.cs" />
     <Compile Include="API\ModLoading\RequiredQMod.cs" />
     <Compile Include="API\QModGame.cs" />
     <Compile Include="Checks\PirateCheck.cs" />
@@ -162,10 +165,11 @@
     <Compile Include="Patching\IQModSerialiable.cs" />
     <Compile Include="Patching\ModLoadingResults.cs" />
     <Compile Include="Patching\PatchingOrder.cs" />
+    <Compile Include="Patching\PatchMethodFinder.cs" />
     <Compile Include="Patching\QMod.cs" />
     <Compile Include="Patching\QModFactory.cs" />
-    <Compile Include="Patching\QModLegacy.cs" />
-    <Compile Include="Patching\QModPatchAttributeBase.cs" />
+    <Compile Include="Patching\QModJson.cs" />
+    <Compile Include="API\ModLoading\QModPatchAttributeBase.cs" />
     <Compile Include="Patching\QModPlaceholder.cs" />
     <Compile Include="Patching\QModPatchMethod.cs" />
     <Compile Include="SummaryLogger.cs" />

@@ -3,7 +3,6 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using Oculus.Newtonsoft.Json;
     using QModManager.API;
@@ -11,9 +10,9 @@
     using QModManager.Utility;
 
     [JsonObject(MemberSerialization.OptIn)]
-    internal class QModLegacy : QMod, IQMod, IQModSerialiable
+    internal class QModJson : QMod, IQMod, IQModSerialiable
     {
-        public QModLegacy()
+        public QModJson()
         {
             // Empty public constructor for JSON
         }
@@ -51,7 +50,7 @@
         [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
         public override bool Enable { get; set; } = true;
 
-        [JsonProperty(Required = Required.Always)]
+        [JsonProperty(Required = Required.Default)]
         public string EntryMethod { get; set; }
 
         protected override ModStatus Validate(string subDirectory)
@@ -105,10 +104,7 @@
                 }
             }
 
-            MethodInfo patchMethod = GetPatchMethod(this.EntryMethod, this.LoadedAssembly);
-
-            if (patchMethod != null && patchMethod.GetParameters().Length == 0)
-                this.PatchMethods.Add(PatchingOrder.NormalInitialize, new QModPatchMethod(patchMethod, this, PatchingOrder.NormalInitialize));
+            patchMethodFinder.LoadPatchMethods(this);
 
             if (this.PatchMethods.Count == 0)
                 return ModStatus.MissingPatchMethod;
@@ -140,17 +136,8 @@
                     versionedDependencies.Add(new RequiredQMod(item.Key));
                 }
             }
-            
+
             return ModStatus.Success;
-        }
-
-        private MethodInfo GetPatchMethod(string methodPath, Assembly assembly)
-        {
-            string[] entryMethodSig = methodPath.Split('.');
-            string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
-            string entryMethod = entryMethodSig[entryMethodSig.Length - 1];
-
-            return assembly.GetType(entryType).GetMethod(entryMethod);
         }
     }
 }

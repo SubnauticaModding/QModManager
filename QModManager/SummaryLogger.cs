@@ -17,8 +17,8 @@
             LogStatus(mods, ModStatus.PatchMethodFailed, "The following mods failed during patching", Logger.Level.Error);
             LogStatus(mods, ModStatus.TooManyPatchMethods, "The following mods had too many patch methods and were canceled", Logger.Level.Error);
             LogStatus(mods, ModStatus.MissingPatchMethod, "The following mods had no patch methods to run", Logger.Level.Error);
-            LogStatus(mods, ModStatus.CircularLoadOrder, "The following mods could not be loaded due to circular load order", Logger.Level.Error);
-            LogStatus(mods, ModStatus.CircularDependency, "The following mods could not be loaded due to circular dependencies", Logger.Level.Error);
+            //LogStatus(mods, ModStatus.CircularLoadOrder, "The following mods could not be loaded due to circular load order", Logger.Level.Error);
+            //LogStatus(mods, ModStatus.CircularDependency, "The following mods could not be loaded due to circular dependencies", Logger.Level.Error);
             LogStatus(mods, ModStatus.MissingDependency, "The following mods could not be loaded due to missing dependencies", Logger.Level.Error);
             LogStatus(mods, ModStatus.OutOfDateDependency, "The following mods could not be loaded due to outdated dependencies", Logger.Level.Error);
             LogStatus(mods, ModStatus.CurrentGameNotSupported, "The following mods do not support the current game", Logger.Level.Error);

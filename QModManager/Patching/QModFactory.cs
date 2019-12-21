@@ -160,7 +160,7 @@
             return modList;
         }
 
-        private static QModLegacy FromJsonFile(string subDirectory)
+        private static QModJson FromJsonFile(string subDirectory)
         {
             string jsonFile = Path.Combine(subDirectory, "mod.json");
 
@@ -177,7 +177,7 @@
                 };
 
                 string jsonText = File.ReadAllText(jsonFile);
-                return JsonConvert.DeserializeObject<QModLegacy>(jsonText);
+                return JsonConvert.DeserializeObject<QModJson>(jsonText);
             }
             catch (Exception e)
             {

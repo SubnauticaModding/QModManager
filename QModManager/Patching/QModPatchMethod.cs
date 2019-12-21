@@ -7,60 +7,51 @@
 
     internal class QModPatchMethod
     {
-        internal QModPatchMethod(MethodInfo method, IQMod qmod, PatchingOrder order)
+        internal QModPatchMethod(MethodInfo method, QMod qmod, PatchingOrder order)
         {
+            this.Origin = qmod;
             this.ModId = qmod.Id;
             this.Order = order;
             this.Method = method;
         }
 
+        internal QMod Origin { get; }
         internal string ModId { get; }
         internal PatchingOrder Order { get; }
         internal MethodInfo Method { get; }
         internal bool IsPatched { get; private set; }
 
-        internal PatchResults TryInvoke()
+        internal bool TryInvoke()
         {
             try
             {
-                object instance = null;
-
                 if (!this.Method.IsStatic)
                 {
-                    instance = Activator.CreateInstance(this.Method.DeclaringType);
+                    this.Origin.legacyinstance = Activator.CreateInstance(this.Method.DeclaringType);
                 }
 
-                if (this.Method.ReturnType == typeof(PatchResults))
-                {
-                    var value = (PatchResults)this.Method.Invoke(instance, new object[] { });
-                    this.IsPatched = value == PatchResults.OK;
-                    return value;
-                }
-                else
-                {
-                    this.Method.Invoke(instance, new object[] { });
-                    this.IsPatched = true;
-                    return PatchResults.OK;
-                }
+                this.Method.Invoke(this.Origin.legacyinstance, new object[] { });
+                this.IsPatched = true;
+                return true;
             }
             catch (ArgumentNullException e)
             {
                 Logger.Error($"Could not parse entry method \"{this.Method.Name}\" for mod \"{this.ModId}\"");
                 Logger.Exception(e);
 
-                return PatchResults.Error;
+                return false;
             }
             catch (TargetInvocationException e)
             {
                 Logger.Error($"Invoking the specified entry method \"{this.Method.Name}\" failed for mod \"{this.ModId}\"");
                 Logger.Exception(e);
-                return PatchResults.Error;
+                return false;
             }
             catch (Exception e)
             {
                 Logger.Error($"An unexpected error occurred whilst trying to load mod \"{this.ModId}\"");
                 Logger.Exception(e);
-                return PatchResults.Error;
+                return false;
             }
         }
     }

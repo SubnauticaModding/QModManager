@@ -12,6 +12,9 @@
     internal abstract class QMod : ISortable<string>
     {
         internal static readonly Regex VersionRegex = new Regex(@"(((\d+)\.?)+)");
+        internal static readonly PatchMethodFinder patchMethodFinder = new PatchMethodFinder();
+
+        internal object legacyinstance = null;
 
         public virtual string Id { get; set; }
 
@@ -107,23 +110,18 @@
                 return ModLoadingResults.AlreadyLoaded;
 
             Logger.Debug($"Starting patch method for mod \"{this.Id}\" at {order}");
-            PatchResults result = patchMethod.TryInvoke();
-            switch (result)
+
+
+            if (patchMethod.TryInvoke())
             {
-                case PatchResults.OK:
-                    Logger.Debug($"Completed patch method for mod \"{this.Id}\" at {order}");
-                    return ModLoadingResults.Success;
-
-                case PatchResults.Error:
-                    this.PatchMethods.Clear(); // Do not attempt any other patch methods
-                    return ModLoadingResults.Failure;
-
-                case PatchResults.ModderCanceled:
-                    this.PatchMethods.Clear(); // Do not attempt any other patch methods
-                    return ModLoadingResults.CancledByModAuthor;
+                Logger.Debug($"Completed patch method for mod \"{this.Id}\" at {order}");
+                return ModLoadingResults.Success;
             }
-
-            return ModLoadingResults.Failure;
+            else
+            {
+                this.PatchMethods.Clear(); // Do not attempt any other patch methods
+                return ModLoadingResults.Failure;
+            }
         }
 
         protected static bool IsDefaultVersion(Version version)

@@ -1,8 +1,9 @@
-﻿namespace QModManager.DataStructures
+﻿namespace QMMTests
 {
     using System;
     using System.Collections.Generic;
     using NUnit.Framework;
+    using QModManager.DataStructures;
     using QModManager.Patching;
 
     [TestFixture]

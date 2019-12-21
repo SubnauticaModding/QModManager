@@ -1,6 +1,7 @@
-﻿namespace QModManager.Patching
+﻿namespace QModManager.API
 {
     using System;
+    using QModManager.Patching;
 
     /// <summary>
     /// Base class to all attributes that identify QMod patch methods.

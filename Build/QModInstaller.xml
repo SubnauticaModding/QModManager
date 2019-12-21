@@ -71,28 +71,57 @@
             Whether or not this mod has been loaded
             </summary>
         </member>
-        <member name="T:QModManager.API.ModLoading.PatchResults">
+        <member name="T:QModManager.API.ModLoading.QModCoreAttribute">
             <summary>
-            An optional value that can be returned from a mod patching method.
+            Identifies the patching class for your QMod.
+            </summary>
+            <seealso cref="T:QModManager.API.ModLoading.QModPatch"/>
+            <seealso cref="T:QModManager.API.ModLoading.QModPrePatch"/>
+            <seealso cref="T:QModManager.API.ModLoading.QModPostPatch"/>
+            <seealso cref="T:System.Attribute" />
+        </member>
+        <member name="M:QModManager.API.ModLoading.QModCoreAttribute.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModCoreAttribute" /> class.
             </summary>
         </member>
-        <member name="F:QModManager.API.ModLoading.PatchResults.OK">
+        <member name="T:QModManager.API.ModLoading.QModPatch">
             <summary>
-            The patch method ran successfully.<para/>
-            A method that returns <seealso cref="T:System.Void"/> and does not through an exception will default to this value.
+            Identifies a normal patch method for a QMod.<para/>
+            This method must be public, must take no parameters, and must return either <seealso cref="T:System.Void"/> or <seealso cref="!:PatchResults"/>.<para/>
+            ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreAttribute"/> attribute.
+            </summary>
+            <seealso cref="T:System.Attribute" />
+        </member>
+        <member name="M:QModManager.API.ModLoading.QModPatch.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPatch"/> class for normal patching.        
             </summary>
         </member>
-        <member name="F:QModManager.API.ModLoading.PatchResults.Error">
+        <member name="T:QModManager.API.ModLoading.QModPostPatch">
             <summary>
-            The patch method encountered an error.<para/>
-            Execution of any further patch methods this mod implements will be skipped.
+            Identifies a post-patch method for a QMod.<para/>
+            This method must be public, must take no parameters, and must return either <seealso cref="T:System.Void"/> or <seealso cref="!:PatchResults"/>.<para/>
+            ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreAttribute"/> attribute.
+            </summary>
+            <seealso cref="T:System.Attribute" />
+        </member>
+        <member name="M:QModManager.API.ModLoading.QModPostPatch.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPostPatch"/> class for post-patching.
             </summary>
         </member>
-        <member name="F:QModManager.API.ModLoading.PatchResults.ModderCanceled">
+        <member name="T:QModManager.API.ModLoading.QModPrePatch">
             <summary>
-            Informs that the mod author has requested that patching be halted for this mod.<para/>
-            Execution of any further patch methods this mod implements will be skipped.<para/>
-            This doesn't necessarily imply that and error happened, so it will be handled silently.
+            Identifies a pre-patch method for a QMod.<para/>
+            This method must be public, must take no parameters, and must return either <seealso cref="T:System.Void"/> or <seealso cref="!:PatchResults"/>.<para/>
+            ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreAttribute"/> attribute.
+            </summary>
+            <seealso cref="T:System.Attribute" />
+        </member>
+        <member name="M:QModManager.API.ModLoading.QModPrePatch.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPrePatch"/> class for pre-patching.
             </summary>
         </member>
         <member name="T:QModManager.API.ModLoading.RequiredQMod">
@@ -141,6 +170,18 @@
             Both Subnautica and Below Zero.
             </summary>
         </member>
+        <member name="T:QModManager.API.QModPatchAttributeBase">
+            <summary>
+            Base class to all attributes that identify QMod patch methods.
+            </summary>
+            <seealso cref="T:System.Attribute" />
+        </member>
+        <member name="M:QModManager.API.QModPatchAttributeBase.#ctor(QModManager.Patching.PatchingOrder)">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.QModPatchAttributeBase"/> class.
+            </summary>
+            <param name="patchOrder">The patch order.</param>
+        </member>
         <member name="T:QModManager.Checks.PirateCheck">
             <summary>
             Utility class which detects whether or not the game is pirated
@@ -181,18 +222,6 @@
             <summary>
             For post-initialize patch methods
             </summary>
-        </member>
-        <member name="T:QModManager.Patching.QModPatchAttributeBase">
-            <summary>
-            Base class to all attributes that identify QMod patch methods.
-            </summary>
-            <seealso cref="T:System.Attribute" />
-        </member>
-        <member name="M:QModManager.Patching.QModPatchAttributeBase.#ctor(QModManager.Patching.PatchingOrder)">
-            <summary>
-            Initializes a new instance of the <see cref="T:QModManager.Patching.QModPatchAttributeBase"/> class.
-            </summary>
-            <param name="patchOrder">The patch order.</param>
         </member>
         <member name="P:QModManager.Patching.QModPlaceholder.QModManager">
             <summary>
