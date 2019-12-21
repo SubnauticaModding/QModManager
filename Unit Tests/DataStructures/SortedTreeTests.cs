@@ -404,119 +404,68 @@
         public void TestDependencies_UsingRealData_ConfirmAllEntriesIncluded_ConfirmCorrectOrder()
         {
             var tree = new SortedCollection<string, TestData>();
-            /* 01 */
             tree.AddSorted(new TestData("AcceleratedStart"));
-            /* 02 */
             tree.AddSorted(new TestData("AutosortLockers"));
-            /* 03 */
             tree.AddSorted(new TestData("BaseLightSwitch", "SMLHelper"));
-            /* 04 */
             tree.AddSorted(new TestData("BetterBioReactor"));
-            /* 05 */
             tree.AddSorted(new TestData("BiomeHUDIndicator", "SMLHelper"));
-            /* 06 */
             tree.AddSorted(new TestData("BuilderModule", "SMLHelper"));
-            /* 07 */
             tree.AddSorted(new TestData("BuilderModuleInputFix", "SMLHelper"));
-            /* 08 */
             tree.AddSorted(new TestData("CustomBatteries", "SMLHelper"));
-            /* 09 */
-            tree.AddSorted(new TestData("CustomCraft2SML", "SMLHelper"));
-            /* 10 */
+            tree.AddSorted(new TestData("CustomCraft2SML", "SMLHelper")
+            {
+                LoadAfterPreferences = { "MoreSeamothDepth", "DecorationsMod", "UpgradedVehicles", "MoreCyclopsUpgrades", "MoreSeamothUpgrades", "ScannerModule", "RepairModule", "EnzymeChargedBattery", "ExplosiveTorpedo" }
+            });
             tree.AddSorted(new TestData("CustomizedStorage"));
-            /* 11 */
             tree.AddSorted(new TestData("CyclopsAutoZapper", "SMLHelper", "MoreCyclopsUpgrades"));
-            /* 12 */
             tree.AddSorted(new TestData("CyclopsBioReactor", "SMLHelper", "MoreCyclopsUpgrades"));
-            /* 13 */
             tree.AddSorted(new TestData("CyclopsEngineUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
-            /* 14 */
             tree.AddSorted(new TestData("CyclopsLaserCannonModule", "SMLHelper", "MoreCyclopsUpgrades"));
-            /* 15 */
             tree.AddSorted(new TestData("CyclopsNuclearReactor", "SMLHelper", "MoreCyclopsUpgrades"));
-            /* 16 */
             tree.AddSorted(new TestData("CyclopsNuclearUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
-            /* 17 */
             tree.AddSorted(new TestData("CyclopsSolarUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
-            /* 18 */
             tree.AddSorted(new TestData("CyclopsSpeedUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
-            /* 19 */
             tree.AddSorted(new TestData("CyclopsThermalUpgrades", "SMLHelper", "MoreCyclopsUpgrades"));
-            /* 20 */
             tree.AddSorted(new TestData("DockedVehicleStorageAccess"));
-            /* 21 */
             tree.AddSorted(new TestData("EasyCraft"));
-            /* 22 */
             tree.AddSorted(new TestData("EnzymeChargedBattery", "SMLHelper"));
-            /* 23 */
             tree.AddSorted(new TestData("ExteriorPlantPots", "SMLHelper"));
-            /* 24 */
             tree.AddSorted(new TestData("FCSDeepDriller", "SMLHelper"));
-            /* 25 */
             tree.AddSorted(new TestData("AIMarineTurbine", "SMLHelper"));
-            /* 26 */
             tree.AddSorted(new TestData("MiniFountainFilter", "SMLHelper"));
-            /* 27 */
             tree.AddSorted(new TestData("FCSAIPowerCellSocket", "SMLHelper"));
-            /* 28 */
             tree.AddSorted(new TestData("FCSPowerStorage", "SMLHelper"));
-            /* 29 */
             tree.AddSorted(new TestData("FCSTechFabricator", "SMLHelper"));
-            /* 30 */
             tree.AddSorted(new TestData("snowrabbit007_subnautica_FishOverflowDistributor"));
-            /* 31 */
             tree.AddSorted(new TestData("FloatingCargoCrate", "SMLHelper"));
-            /* 32 */
             tree.AddSorted(new TestData("HabitatControlPanel"));
-            /* 33 */
             tree.AddSorted(new TestData("InstantBulkheadAnimations"));
-            /* 34 */
             tree.AddSorted(new TestData("IonCubeGenerator", "SMLHelper"));
-            /* 35 */
             tree.AddSorted(new TestData("LaserCannon", "SMLHelper"));
-            /* 36 */
             tree.AddSorted(new TestData("SMLHelper"));
-            /* 37 */
             tree.AddSorted(new TestData("MoonpoolVehicleRepair"));
-            /* 38 */
-            tree.AddSorted(new TestData("MoreCyclopsUpgrades", "SMLHelper"));
-            /* 39 */
+            tree.AddSorted(new TestData("MoreCyclopsUpgrades", "SMLHelper")
+            {
+                LoadBeforePreferences = { "CustomCraft2SML" }
+            });
             tree.AddSorted(new TestData("MoreQuickSlots"));
-            /* 40 */
             tree.AddSorted(new TestData("MoreSeamothDepth", "SMLHelper"));
-            /* 41 */
             tree.AddSorted(new TestData("PrawnSuitSonarUpgrade", "SMLHelper"));
-            /* 42 */
             tree.AddSorted(new TestData("QPrawnUpgradeAccess"));
-            /* 43 */
             tree.AddSorted(new TestData("QuitToDesktop"));
-            /* 44 */
             tree.AddSorted(new TestData("AgonyRadialCraftingTabs"));
-            /* 45 */
             tree.AddSorted(new TestData("RepairModule", "SMLHelper"));
-            /* 46 */
             tree.AddSorted(new TestData("ResourceMonitor", "SMLHelper"));
-            /* 47 */
             tree.AddSorted(new TestData("RunningWithTools"));
-            /* 48 */
             tree.AddSorted(new TestData("ScannerModule", "SMLHelper"));
-            /* 49 */
             tree.AddSorted(new TestData("SeamothArms", "SMLHelper"));
-            /* 50 */
             tree.AddSorted(new TestData("SeamothEnergyShield", "SMLHelper"));
-            /* 51 */
             tree.AddSorted(new TestData("SeamothStorageAccess"));
-            /* 52 */
             tree.AddSorted(new TestData("SeamothThermal", "SMLHelper"));
-            /* 53 */
             tree.AddSorted(new TestData("SlotExtender"));
-            /* 54 */
             tree.AddSorted(new TestData("TimeCapsuleLogger"));
-            /* 55 */
             tree.AddSorted(new TestData("UniversalChargingModule", "SMLHelper"));
-            /* 56 */
             tree.AddSorted(new TestData("UpgradedVehicles", "SMLHelper"));
-            /* 57 */
             tree.AddSorted(new TestData("VehicleUpgradesInCyclops", "SMLHelper"));
 
             List<TestData> list = tree.GetSortedList();
@@ -543,6 +492,10 @@
                     Assert.IsTrue(indexOfNode < indexOfDependency);
                 }
             }
+
+            int cc2Index = list.FindIndex(c => c.Id == "CustomCraft2SML");
+            int mcuIndex = list.FindIndex(m => m.Id == "MoreCyclopsUpgrades");
+            Assert.IsTrue(cc2Index > mcuIndex);
         }
 
         private class TestDependencies : ISortable<string>

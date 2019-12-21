@@ -332,14 +332,16 @@
 
                 foreach (IdType d1 in collection)
                 {
-                    SortedTreeNode<IdType, DataType> nodeD1 = NodesToSort[d1];
+                    if (!NodesToSort.TryGetValue(d1, out SortedTreeNode<IdType, DataType> nodeD1))
+                        continue;
 
                     foreach (IdType d2 in collection)
                     {
                         if (d1.Equals(d2))
                             continue;
 
-                        SortedTreeNode<IdType, DataType> nodeD2 = NodesToSort[d2];
+                        if (!NodesToSort.TryGetValue(d2, out SortedTreeNode<IdType, DataType> nodeD2))
+                            continue;
 
                         if (HasSortPreferenceWith(nodeD1, getCollection, nodeD2))
                         {
@@ -370,7 +372,8 @@
 
             foreach (IdType aDependency in collection)
             {
-                SortedTreeNode<IdType, DataType> aDep = NodesToSort[aDependency];
+                if (!NodesToSort.TryGetValue(aDependency, out SortedTreeNode<IdType, DataType> aDep))
+                    continue;
 
                 if (HasSortPreferenceWith(aDep, getCollection, b))
                     return true;
