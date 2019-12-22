@@ -19,7 +19,8 @@
             Invocations.Clear();
         }
 
-        [QModPrePatch]
+        // This extra step is to prevent modders from abusing the new Pre/Post Patching methods
+        [QModPrePatch("C75582AC97732BB95F76AD3755EBD0AB")]
         public static void QPrePatch()
         {
             Invocations.Add(nameof(QPrePatch));
@@ -33,7 +34,9 @@
             PatchInvoked = true;
         }
 
-        [QModPostPatch]
+        // If a modder doesn't want to go through the effort to understand what this is and why,
+        // then they shouldn't be using this feature in the first place.
+        [QModPostPatch("4F89B345B56898C514E89B65E4CC67DE")]
         public static void QPostPatch()
         {
             Invocations.Add(nameof(QPostPatch));

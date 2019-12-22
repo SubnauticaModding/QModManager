@@ -34,6 +34,11 @@
                     {
                         foreach (QModPatchAttributeBase patch in method.GetCustomAttributes(typeof(QModPatchAttributeBase), false))
                         {
+                            if (patch.PatchOrder != PatchingOrder.PreInitialize)
+                            {
+                                patch.ValidateThatModderHasReadTheDocumentation(method);
+                            }
+
                             qMod.PatchMethods[patch.PatchOrder] = new QModPatchMethod(method, qMod, patch.PatchOrder);
                         }
                     }

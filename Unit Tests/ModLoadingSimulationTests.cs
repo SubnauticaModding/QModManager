@@ -23,7 +23,6 @@
         {
             PatchMethodFinder_FetchPatchMethods();
         }
-
         
         public void PatchMethodFinder_FetchPatchMethods()
         {

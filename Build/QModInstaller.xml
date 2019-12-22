@@ -106,10 +106,11 @@
             </summary>
             <seealso cref="T:System.Attribute" />
         </member>
-        <member name="M:QModManager.API.ModLoading.QModPostPatch.#ctor">
+        <member name="M:QModManager.API.ModLoading.QModPostPatch.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPostPatch"/> class for post-patching.
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPostPatch" /> class.
             </summary>
+            <param name="secretPassword">The secret password that proves you read the documentation.</param>
         </member>
         <member name="T:QModManager.API.ModLoading.QModPrePatch">
             <summary>
@@ -119,10 +120,11 @@
             </summary>
             <seealso cref="T:System.Attribute" />
         </member>
-        <member name="M:QModManager.API.ModLoading.QModPrePatch.#ctor">
+        <member name="M:QModManager.API.ModLoading.QModPrePatch.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPrePatch"/> class for pre-patching.
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPrePatch"/> class.
             </summary>
+            <param name="secretPassword">The secret password that proves you read the documentation.</param>
         </member>
         <member name="T:QModManager.API.ModLoading.RequiredQMod">
             <summary>
@@ -181,6 +183,21 @@
             Initializes a new instance of the <see cref="T:QModManager.API.QModPatchAttributeBase"/> class.
             </summary>
             <param name="patchOrder">The patch order.</param>
+        </member>
+        <member name="M:QModManager.API.QModPatchAttributeBase.#ctor(QModManager.Patching.PatchingOrder,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:QModManager.API.QModPatchAttributeBase" /> class.
+            </summary>
+            <param name="patchOrder">The patch order.</param>
+            <param name="secretPasword">The secret pasword.</param>
+            <exception cref="T:QModManager.Patching.FatalPatchingException">This modder has not read the documentation and should not be using prepatch/postpatch functions.</exception>
+        </member>
+        <member name="M:QModManager.API.QModPatchAttributeBase.ValidateThatModderHasReadTheDocumentation(System.Reflection.MethodInfo)">
+            <summary>
+            Validates the that modder has read the documentation.
+            </summary>
+            <param name="method">The method.</param>
+            <exception cref="T:QModManager.Patching.FatalPatchingException">This modder has not read the documentation and should not be using prepatch/postpatch functions.</exception>
         </member>
         <member name="T:QModManager.Checks.PirateCheck">
             <summary>

@@ -13,9 +13,10 @@
     public sealed class QModPostPatch : QModPatchAttributeBase
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="QModPostPatch"/> class for post-patching.
+        /// Initializes a new instance of the <see cref="QModPostPatch" /> class.
         /// </summary>
-        public QModPostPatch() : base(PatchingOrder.PostInitialize)
+        /// <param name="secretPassword">The secret password that proves you read the documentation.</param>
+        public QModPostPatch(string secretPassword) : base(PatchingOrder.PostInitialize, secretPassword)
         {
         }
     }
