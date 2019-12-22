@@ -14,7 +14,7 @@
         internal static readonly Regex VersionRegex = new Regex(@"(((\d+)\.?)+)");
         internal static readonly PatchMethodFinder patchMethodFinder = new PatchMethodFinder();
 
-        internal object legacyinstance = null;
+        internal object instance = null;
 
         public virtual string Id { get; set; }
 

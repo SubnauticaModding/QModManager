@@ -27,10 +27,10 @@
             {
                 if (!this.Method.IsStatic)
                 {
-                    this.Origin.legacyinstance = Activator.CreateInstance(this.Method.DeclaringType);
+                    this.Origin.instance = Activator.CreateInstance(this.Method.DeclaringType);
                 }
 
-                this.Method.Invoke(this.Origin.legacyinstance, new object[] { });
+                this.Method.Invoke(this.Origin.instance, new object[] { });
                 this.IsPatched = true;
                 return true;
             }

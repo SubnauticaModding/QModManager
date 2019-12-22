@@ -64,9 +64,10 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ModLoadingSimulationTests.cs" />
     <Compile Include="SortedTreeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="LoadPatchMethodsTests.cs" />
+    <Compile Include="TestPatchClass.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

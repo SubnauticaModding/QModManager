@@ -44,18 +44,5 @@
                 }
             }
         }
-
-        private string GetOtherGame()
-        {
-            switch (currentGame)
-            {
-                case QModGame.Subnautica:
-                    return "BelowZero";
-                case QModGame.BelowZero:
-                    return "Subnautica";
-                default:
-                    return "Unknown";
-            }
-        }
     }
 }
