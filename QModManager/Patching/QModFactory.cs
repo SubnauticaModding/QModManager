@@ -10,9 +10,6 @@
 
     internal class QModFactory
     {
-        private QMod smlHelper = null;
-        private QMod cc2 = null;
-
         internal PairedList<QMod, ModStatus> BuildModLoadingList(string qmodsDirectory)
         {
             if (!Directory.Exists(qmodsDirectory))
@@ -62,17 +59,6 @@
                     continue;
                 }
 
-                // TODO - Make this unnecessary
-                if (smlHelper == null && mod.Id == "SMLHelper")
-                {
-                    smlHelper = mod;
-                }
-
-                if (cc2 == null && mod.Id == "CustomCraft2SML")
-                {
-                    cc2 = mod;
-                }
-
                 Logger.Debug($"Sorting mod {mod.Id}");
                 bool added = modSorter.AddSorted(mod);
                 if (!added)
@@ -84,24 +70,7 @@
 
             List<QMod> modsToLoad = modSorter.GetSortedList();
 
-            if (smlHelper != null)
-                modsToLoad.Remove(smlHelper);
-
-            if (cc2 != null)
-                modsToLoad.Remove(cc2);
-
             PairedList<QMod, ModStatus> modList = CreateModStatusList(earlyErrors, modsToLoad);
-
-            // TODO - Make this unnecessary
-            if (cc2 != null)
-            {                
-                modList.Add(cc2, ModStatus.Success);
-            }
-
-            if (smlHelper != null)
-            {
-                modList.Add(smlHelper, ModStatus.Success);
-            }
 
             return modList;
         }
