@@ -2,6 +2,7 @@
 {
     using System;
     using System.Diagnostics;
+    using System.IO;
 
     internal static class Logger
     {
@@ -14,12 +15,14 @@
             Fatal
         }
 
-        // TODO - Handle this somewhere easier to access
-        private static bool EnableDebugging
-        {
-            get => PlayerPrefsExtra.GetBool("QModManager_EnableDebugLogs", false);
-            set => PlayerPrefsExtra.SetBool("QModManager_EnableDebugLogs", value);
-        }
+        /// <summary>
+        /// Gets a value indicating whether debug logs are enabled.
+        /// To enable debug logs, simple create an empty file named <c>"QModDebug.txt"</c> within the Subnautica folder.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if debug logs are enabled; otherwise, <c>false</c>.
+        /// </value>
+        private static bool EnableDebugLogging { get; } = File.Exists(Path.Combine(Environment.CurrentDirectory, "QModDebug.txt"));
 
         private static void Log(string logLevel, params string[] text)
         {
@@ -79,9 +82,7 @@
 
         internal static void Debug(params string[] text)
         {
-#if !DEBUG
-            if (EnableDebugging)
-#endif
+            if (EnableDebugLogging)
                 Log("Debug", text);
         }
 
