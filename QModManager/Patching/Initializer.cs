@@ -30,8 +30,6 @@
                 ModLoadingResults result = mod.TryLoading(order, currentGame);
                 switch (result)
                 {
-                    case ModLoadingResults.Success:
-                        break;
                     case ModLoadingResults.Failure:
                         pair.Value = ModStatus.PatchMethodFailed;
                         break;

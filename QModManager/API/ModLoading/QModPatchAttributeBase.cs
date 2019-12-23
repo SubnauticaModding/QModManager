@@ -51,14 +51,15 @@
                 return;
             /*
             What is all this for?
-            This is to make sure that modders don't start using PrePatch and PostPatch without a second thought.
+            This is to make sure that modders don't start using PrePatching and PostPatching in place of normal Patching without a second thought.
             Pre/Post patching should be reserved for mods that absolutely require it; Primarily, mods that interact with other mods.
-            Mods that act as mod libraries, or that otherwise deal with other mods, are candidates for Pre/Post patching.
+            
+            Mods that act as APIs or libraries, or that otherwise deal with the requests of other mods, are prime candidates for Pre/Post patching.
 
-            Pre/Post Patching should not be present in in common, standalone mods.
+            Pre/Post Patching should not be present in common, standalone mods.
             Pre/Post Patching should absolutely NOT be used to resolve load order conflicts with a single mod: use LoadBefore/LoadAfter instead.
 
-            Now, if you are convinced that you mod should be using these features, then this is what you do.            
+            Now, if you are convinced that your mod should be using these features, then this is what you do.            
             */
             using (var md5 = MD5.Create())
             {
@@ -69,12 +70,12 @@
                 // Step 3: Check if you are doing a PrePatch or PostPatch
                 if (this.PatchOrder < 0)
                 {
-                    // Step 3a: For a PrePatch, prefix the assembly name with the method name.
+                    // Step 3 Option A: For a PrePatch, create a string by placing the prepatch method name before the assembly name.
                     c = c1 + c2;
                 }
                 else
                 {
-                    // Step 3b: For a PostPatch, prefix the method name with the assembly name.
+                    // Step 3 Option B: For a PostPatch, create a string by placing the postpatch method name after the assembly name.
                     c = c2 + c1;
                 }
 
@@ -83,7 +84,7 @@
                 byte[] inputBytes = Encoding.ASCII.GetBytes(c);
                 byte[] hashBytes = md5.ComputeHash(inputBytes);
 
-                // Step 5: Use the resulting string as the parameter for [QModPrePatch] or [QModPostPatch] depending on which one you built.
+                // Step 5: Use the resulting string as the parameter for [QModPrePatch()] or [QModPostPatch()] depending on which one you built.
                 var sb = new StringBuilder();
                 for (int i = 0; i < hashBytes.Length; i++)
                 {

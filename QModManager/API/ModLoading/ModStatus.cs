@@ -3,7 +3,7 @@
     internal enum ModStatus
     {
         Success,
-        CanceledByAuthor,
+        //CanceledByAuthor,
         CanceledByUser,
         PatchMethodFailed,
         TooManyPatchMethods,

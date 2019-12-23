@@ -8,7 +8,7 @@
 
     internal class PatchMethodFinder
     {
-        public void LoadPatchMethods(QModJson qMod)
+        public ModStatus LoadPatchMethods(QModJson qMod)
         {
             if (!string.IsNullOrEmpty(qMod.EntryMethod))
             {
@@ -39,11 +39,24 @@
                                 patch.ValidateThatModderHasReadTheDocumentation(method);
                             }
 
-                            qMod.PatchMethods[patch.PatchOrder] = new QModPatchMethod(method, qMod, patch.PatchOrder);
+                            if (qMod.PatchMethods.TryGetValue(patch.PatchOrder, out QModPatchMethod extra))
+                            {
+                                if (extra.Method.Name != method.Name)
+                                    return ModStatus.TooManyPatchMethods;
+                            }
+                            else
+                            {
+                                qMod.PatchMethods[patch.PatchOrder] = new QModPatchMethod(method, qMod, patch.PatchOrder);
+                            }
                         }
                     }
                 }
             }
+
+            if (qMod.PatchMethods.Count == 0)
+                return ModStatus.MissingPatchMethod;
+
+            return ModStatus.Success;
         }
     }
 }

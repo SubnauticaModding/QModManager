@@ -104,10 +104,10 @@
                 }
             }
 
-            patchMethodFinder.LoadPatchMethods(this);
+            ModStatus patchMethodResults = patchMethodFinder.LoadPatchMethods(this);
 
-            if (this.PatchMethods.Count == 0)
-                return ModStatus.MissingPatchMethod;
+            if (patchMethodResults != ModStatus.Success)
+                return patchMethodResults;
 
             foreach (string item in this.Dependencies)
                 this.RequiredDependencies.Add(item);

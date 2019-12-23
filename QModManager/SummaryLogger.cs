@@ -12,7 +12,7 @@
         internal static void LogSummaries(PairedList<QMod, ModStatus> mods)
         {
             CheckOldHarmony(mods.Keys);
-            LogStatus(mods, ModStatus.CanceledByAuthor, "The following mods have been disabled internally by the mod author", Logger.Level.Info);
+            //LogStatus(mods, ModStatus.CanceledByAuthor, "The following mods have been disabled internally by the mod author", Logger.Level.Info);
             LogStatus(mods, ModStatus.CanceledByUser, "The following mods have been disabled by user configuration", Logger.Level.Info);
             LogStatus(mods, ModStatus.PatchMethodFailed, "The following mods failed during patching", Logger.Level.Error);
             LogStatus(mods, ModStatus.TooManyPatchMethods, "The following mods had too many patch methods and were canceled", Logger.Level.Error);
@@ -25,8 +25,8 @@
             LogStatus(mods, ModStatus.FailedIdentifyingGame, "Could not identify the supported game for the following mods did not ", Logger.Level.Error);
             LogStatus(mods, ModStatus.DuplicateIdDetected, "Found the following duplicate mods", Logger.Level.Error);
             LogStatus(mods, ModStatus.DuplicatePatchAttemptDetected, "Found the following mods attempted duplicate patching", Logger.Level.Error);
-            LogStatus(mods, ModStatus.MissingCoreInfo, "The following mods could not be loaded for patching due to missing core data", Logger.Level.Error);
-            LogStatus(mods, ModStatus.InvalidCoreInfo, "The following mods could not be loaded for patching due to invalid core data", Logger.Level.Error);
+            LogStatus(mods, ModStatus.MissingCoreInfo, "The following mods could not be loaded for patching due to missing mod.json file", Logger.Level.Error);
+            LogStatus(mods, ModStatus.InvalidCoreInfo, "The following mods could not be loaded for patching due to invalid mod.json file", Logger.Level.Error);
             LogStatus(mods, ModStatus.MissingAssemblyFile, "The following mods had no DLL file to load", Logger.Level.Error);
             LogStatus(mods, ModStatus.FailedLoadingAssemblyFile, "The following mods failing loading their DLL files", Logger.Level.Error);
             LogStatus(mods, ModStatus.UnidentifiedMod, "The following mods could not be identified for loading", Logger.Level.Error);
