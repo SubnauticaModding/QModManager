@@ -9,7 +9,7 @@
     using QModManager.DataStructures;
     using QModManager.Utility;
 
-    internal abstract class QMod : ISortable<string>
+    internal abstract class QMod : ISortable<string>, IQMod
     {
         internal static readonly Regex VersionRegex = new Regex(@"(((\d+)\.?)+)");
         internal static readonly PatchMethodFinder patchMethodFinder = new PatchMethodFinder();

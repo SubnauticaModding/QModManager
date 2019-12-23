@@ -4,72 +4,85 @@
         <name>QModInstaller</name>
     </assembly>
     <members>
-        <member name="T:QModManager.API.ModLoading.IQMod">
+        <member name="T:QModManager.API.IQMod">
             <summary>
             All public data about a QMod.
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.Id">
+        <member name="P:QModManager.API.IQMod.Id">
             <summary>
             The ID of the mod <para/>
             Can only contain alphanumeric characters and underscores: (<see langword="a-z"/>, <see langword="A-Z"/>, <see langword="0-9"/>, <see langword="_"/>)
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.DisplayName">
+        <member name="P:QModManager.API.IQMod.DisplayName">
             <summary>
             The display name of the mod
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.Author">
+        <member name="P:QModManager.API.IQMod.Author">
             <summary>
             The author of the mod
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.SupportedGame">
+        <member name="P:QModManager.API.IQMod.SupportedGame">
             <summary>
             The game this mod was developed for.
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.RequiredMods">
+        <member name="P:QModManager.API.IQMod.RequiredMods">
             <summary>
             The dependencies of the mod and their optional minimum required version
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.ModsToLoadBefore">
+        <member name="P:QModManager.API.IQMod.ModsToLoadBefore">
             <summary>
             A list of mods, before which, this mod will load
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.ModsToLoadAfter">
+        <member name="P:QModManager.API.IQMod.ModsToLoadAfter">
             <summary>
             A list of mods, after which, this mod will load
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.LoadedAssembly">
+        <member name="P:QModManager.API.IQMod.LoadedAssembly">
             <summary>
             The assembly of this mod <para/>
             Check if <see langword="null"/> before using
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.AssemblyName">
+        <member name="P:QModManager.API.IQMod.AssemblyName">
             <summary>
             The assembly name of the mod
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.ParsedVersion">
+        <member name="P:QModManager.API.IQMod.ParsedVersion">
             <summary>
             The version of the mod.
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.Enable">
+        <member name="P:QModManager.API.IQMod.Enable">
             <summary>
             Whether or not this mod is enabled
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.IQMod.IsLoaded">
+        <member name="P:QModManager.API.IQMod.IsLoaded">
             <summary>
             Whether or not this mod has been loaded
             </summary>
+        </member>
+        <member name="T:QModManager.API.IQModServices">
+            <summary>
+            An interface of services that other mods can make use of.
+            </summary>
+        </member>
+        <member name="M:QModManager.API.IQModServices.GetLoadedMods">
+            <summary>
+            Gets a list successfully loaded mods.
+            </summary>
+            <returns>
+            The loaded mods.
+            </returns>
         </member>
         <member name="T:QModManager.API.ModLoading.QModCoreAttribute">
             <summary>
@@ -126,25 +139,47 @@
             </summary>
             <param name="secretPassword">The secret password that proves you read the documentation.</param>
         </member>
-        <member name="T:QModManager.API.ModLoading.RequiredQMod">
+        <member name="T:QModManager.API.QModServices">
+            <summary>
+            Services offered to mods.
+            </summary>
+            <seealso cref="T:QModManager.API.IQModServices" />
+        </member>
+        <member name="P:QModManager.API.QModServices.Main">
+            <summary>
+            Gets the main entry point into the QMod Services.
+            </summary>
+            <value>
+            The main.
+            </value>
+        </member>
+        <member name="M:QModManager.API.QModServices.GetLoadedMods">
+            <summary>
+            Gets a list successfully loaded mods.
+            </summary>
+            <returns>
+            The loaded mods.
+            </returns>
+        </member>
+        <member name="T:QModManager.API.RequiredQMod">
             <summary>
             Identifies a required mod and an optional minimum version.
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.RequiredQMod.Id">
+        <member name="P:QModManager.API.RequiredQMod.Id">
             <summary>
             Gets the required mod's ID.
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.RequiredQMod.RequiresMinimumVersion">
+        <member name="P:QModManager.API.RequiredQMod.RequiresMinimumVersion">
             <summary>
             Gets a value indicating whether the mod must be at a minimum version for compatibility.
             </summary>
         </member>
-        <member name="P:QModManager.API.ModLoading.RequiredQMod.MinimumVersion">
+        <member name="P:QModManager.API.RequiredQMod.MinimumVersion">
             <summary>
             Gets the minimum version this mod should be at.<para/>
-            If <see cref="P:QModManager.API.ModLoading.RequiredQMod.RequiresMinimumVersion"/> is <c>false</c>, this will return a default value.
+            If <see cref="P:QModManager.API.RequiredQMod.RequiresMinimumVersion"/> is <c>false</c>, this will return a default value.
             </summary>
         </member>
         <member name="T:QModManager.API.QModGame">

@@ -14,7 +14,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("3.0")]
 [assembly: AssemblyFileVersion("3.0")]
 
-[assembly: InternalsVisibleTo("SMLHelper")] // Pass-through
 [assembly: InternalsVisibleTo("QModManager")] // Executable
 [assembly: InternalsVisibleTo("QMMTests")] // Unit Tests
 

@@ -14,7 +14,7 @@ namespace QModManager.Patching
     /// <summary>
     /// The main class which handles all of QModManager's patching
     /// </summary>
-    public static class Patcher
+    internal static class Patcher
     {
         internal static HarmonyInstance Harmony;
 
@@ -104,10 +104,13 @@ namespace QModManager.Patching
 
                 int loadedMods = 0;
                 int erroredMods = 0;
-                foreach (Pair<QMod, ModStatus> mod in modsToLoad)
+                foreach (QMod mod in modsToLoad.Keys)
                 {
-                    if (mod.Key.IsLoaded)
+                    if (mod.IsLoaded)
+                    {
                         loadedMods++;
+                        QModServices.successfullyLoadedMods.Add(mod);
+                    }
                     else
                         erroredMods++;
                 }

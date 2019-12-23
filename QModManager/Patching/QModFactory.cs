@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using Oculus.Newtonsoft.Json;
+    using QModManager.API;
     using QModManager.API.ModLoading;
     using QModManager.DataStructures;
     using QModManager.Utility;

@@ -1,4 +1,4 @@
-﻿namespace QModManager.API.ModLoading
+﻿namespace QModManager.API
 {
     using System;
     using System.Collections.Generic;
