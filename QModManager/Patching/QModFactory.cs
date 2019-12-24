@@ -43,7 +43,7 @@
                     continue;
                 }
 
-                QMod mod = FromJsonFile(subDir);
+                QMod mod = CreateFromJsonManifestFile(subDir);
 
                 ModStatus status = mod.IsValidForLoading(subDir);
 
@@ -130,7 +130,7 @@
             return modList;
         }
 
-        private static QModJson FromJsonFile(string subDirectory)
+        private static QMod CreateFromJsonManifestFile(string subDirectory)
         {
             string jsonFile = Path.Combine(subDirectory, "mod.json");
 
@@ -147,7 +147,7 @@
                 };
 
                 string jsonText = File.ReadAllText(jsonFile);
-                return JsonConvert.DeserializeObject<QModJson>(jsonText);
+                return JsonConvert.DeserializeObject<QMod>(jsonText);
             }
             catch (Exception e)
             {

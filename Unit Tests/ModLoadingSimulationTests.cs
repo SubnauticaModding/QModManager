@@ -10,7 +10,7 @@
     [TestFixture]
     public class ModLoadingSimulationTests
     {
-        private readonly QModJson qmod = new QModJson();
+        private readonly QMod qmod = new QMod();
 
         [OneTimeSetUp]
         public void SetUpTestMod()

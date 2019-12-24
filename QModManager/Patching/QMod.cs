@@ -2,27 +2,69 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Reflection;
     using System.Text.RegularExpressions;
+    using Oculus.Newtonsoft.Json;
     using QModManager.API;
     using QModManager.API.ModLoading;
     using QModManager.DataStructures;
     using QModManager.Utility;
 
-    internal abstract class QMod : ISortable<string>, IQMod
+    [JsonObject(MemberSerialization.OptIn)]
+    internal class QMod : ISortable<string>, IQMod, IQModSerialiable
     {
         internal static readonly Regex VersionRegex = new Regex(@"(((\d+)\.?)+)");
         internal static readonly PatchMethodFinder patchMethodFinder = new PatchMethodFinder();
 
         internal object instance = null;
 
-        public virtual string Id { get; set; }
+        #region JSON & IQModSerialiable
 
-        public virtual string DisplayName { get; set; }
+        public QMod()
+        {
+            // Empty public constructor for JSON
+        }
 
-        public virtual string Author { get; set; }
+        [JsonProperty(Required = Required.Always)]
+        public string Id { get; set; }
 
-        public virtual QModGame SupportedGame { get; protected set; }
+        [JsonProperty(Required = Required.Always)]
+        public string DisplayName { get; set; }
+
+        [JsonProperty(Required = Required.Always)]
+        public string Author { get; set; }
+
+        [JsonProperty(Required = Required.Always)]
+        public string Version { get; set; }
+
+        [JsonProperty(Required = Required.Default)]
+        public string[] Dependencies { get; set; } = new string[0];
+
+        [JsonProperty(Required = Required.Default)]
+        public Dictionary<string, string> VersionDependencies { get; set; } = new Dictionary<string, string>();
+
+        [JsonProperty(Required = Required.Default)]
+        public string[] LoadBefore { get; set; } = new string[0];
+
+        [JsonProperty(Required = Required.Default)]
+        public string[] LoadAfter { get; set; } = new string[0];
+
+        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        public bool Enable { get; set; } = true;
+
+        [JsonProperty(Required = Required.DisallowNull)]
+        public string Game { get; set; } = $"{QModGame.Subnautica}";
+
+        [JsonProperty(Required = Required.Always)]
+        public string AssemblyName { get; set; }
+
+        [JsonProperty(Required = Required.Default)]
+        public string EntryMethod { get; set; }
+
+        #endregion
+
+        public QModGame SupportedGame { get; protected set; }
 
         public IEnumerable<RequiredQMod> RequiredMods { get; protected set; }
 
@@ -32,11 +74,7 @@
 
         public Assembly LoadedAssembly { get; set; }
 
-        public virtual string AssemblyName { get; set; }
-
         public Version ParsedVersion { get; set; }
-
-        public virtual bool Enable { get; set; } = true;
 
         public bool IsLoaded
         {
@@ -93,7 +131,92 @@
             return Validate(subDirectory);
         }
 
-        protected abstract ModStatus Validate(string subDirectory);
+        protected virtual ModStatus Validate(string subDirectory)
+        {
+            switch (this.Game)
+            {
+                case "BelowZero":
+                    this.SupportedGame = QModGame.BelowZero;
+                    break;
+                case "Both":
+                    this.SupportedGame = QModGame.Both;
+                    break;
+                case "Subnautica":
+                    this.SupportedGame = QModGame.Subnautica;
+                    break;
+                default:
+                    return ModStatus.FailedIdentifyingGame;
+            }
+
+            try
+            {
+                if (System.Version.TryParse(this.Version, out Version version))
+                    this.ParsedVersion = version;
+            }
+            catch (Exception vEx)
+            {
+                Logger.Error($"There was an error parsing version \"{this.Version}\" for mod \"{this.DisplayName}\"");
+                Logger.Exception(vEx);
+
+                return ModStatus.InvalidCoreInfo;
+            }
+
+            string modAssemblyPath = Path.Combine(subDirectory, this.AssemblyName);
+
+            if (string.IsNullOrEmpty(modAssemblyPath) || !File.Exists(modAssemblyPath))
+            {
+                Logger.Debug($"Did not find a DLL at {modAssemblyPath}");
+                return ModStatus.MissingAssemblyFile;
+            }
+            else
+            {
+                try
+                {
+                    this.LoadedAssembly = Assembly.LoadFrom(modAssemblyPath);
+                }
+                catch (Exception aEx)
+                {
+                    Logger.Error($"Failed loading the dll found at \"{modAssemblyPath}\" for mod \"{this.DisplayName}\"");
+                    Logger.Exception(aEx);
+                    return ModStatus.FailedLoadingAssemblyFile;
+                }
+            }
+
+            ModStatus patchMethodResults = patchMethodFinder.LoadPatchMethods(this);
+
+            if (patchMethodResults != ModStatus.Success)
+                return patchMethodResults;
+
+            foreach (string item in this.Dependencies)
+                this.RequiredDependencies.Add(item);
+
+            foreach (string item in this.LoadBefore)
+                this.LoadBeforePreferences.Add(item);
+
+            foreach (string item in this.LoadAfter)
+                this.LoadAfterPreferences.Add(item);
+
+            var versionedDependencies = new List<RequiredQMod>(this.VersionDependencies.Count);
+            foreach (KeyValuePair<string, string> item in this.VersionDependencies)
+            {
+                string cleanVersion = QMod.VersionRegex.Matches(item.Value)?[0]?.Value;
+
+                if (string.IsNullOrEmpty(cleanVersion))
+                {
+                    versionedDependencies.Add(new RequiredQMod(item.Key));
+                }
+                else if (System.Version.TryParse(cleanVersion, out Version version))
+                {
+                    versionedDependencies.Add(new RequiredQMod(item.Key, version));
+                }
+                else
+                {
+                    versionedDependencies.Add(new RequiredQMod(item.Key));
+                }
+            }
+
+            return ModStatus.Success;
+        }
 
         public virtual ModLoadingResults TryLoading(PatchingOrder order, QModGame currentGame)
         {
@@ -122,16 +245,6 @@
                 this.PatchMethods.Clear(); // Do not attempt any other patch methods
                 return ModLoadingResults.Failure;
             }
-        }
-
-        protected static bool IsDefaultVersion(Version version)
-        {
-            return version.Major == 0 && version.Minor == 0 && version.Revision == 0 && version.Build == 0;
-        }
-
-        protected static bool MinimumVersionMet(Version currentVersion, Version minimumVersion)
-        {
-            return currentVersion >= minimumVersion;
         }
     }
 }

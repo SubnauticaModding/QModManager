@@ -170,7 +170,6 @@
     <Compile Include="Patching\PatchMethodFinder.cs" />
     <Compile Include="Patching\QMod.cs" />
     <Compile Include="Patching\QModFactory.cs" />
-    <Compile Include="Patching\QModJson.cs" />
     <Compile Include="API\ModLoading\QModPatchAttributeBase.cs" />
     <Compile Include="Patching\QModPlaceholder.cs" />
     <Compile Include="Patching\QModPatchMethod.cs" />

@@ -8,7 +8,7 @@
 
     internal class PatchMethodFinder
     {
-        public ModStatus LoadPatchMethods(QModJson qMod)
+        public ModStatus LoadPatchMethods(QMod qMod)
         {
             if (!string.IsNullOrEmpty(qMod.EntryMethod))
             {
