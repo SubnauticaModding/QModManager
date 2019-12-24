@@ -121,18 +121,15 @@
 
         public IList<string> LoadAfterPreferences { get; } = new List<string>();
 
-        public ModStatus IsValidForLoading(string subDirectory)
+        internal ModStatus Status { get; set; }
+
+        public virtual ModStatus ValidateManifest(string subDirectory)
         {
             if (string.IsNullOrEmpty(this.Id) ||
                 string.IsNullOrEmpty(this.DisplayName) ||
                 string.IsNullOrEmpty(this.Author))
-                return ModStatus.MissingCoreInfo;
+                return this.Status = ModStatus.MissingCoreInfo;
 
-            return Validate(subDirectory);
-        }
-
-        protected virtual ModStatus Validate(string subDirectory)
-        {
             switch (this.Game)
             {
                 case "BelowZero":
@@ -145,7 +142,7 @@
                     this.SupportedGame = QModGame.Subnautica;
                     break;
                 default:
-                    return ModStatus.FailedIdentifyingGame;
+                    return this.Status = ModStatus.FailedIdentifyingGame;
             }
 
             try
@@ -158,7 +155,7 @@
                 Logger.Error($"There was an error parsing version \"{this.Version}\" for mod \"{this.DisplayName}\"");
                 Logger.Exception(vEx);
 
-                return ModStatus.InvalidCoreInfo;
+                return this.Status = ModStatus.InvalidCoreInfo;
             }
 
             string modAssemblyPath = Path.Combine(subDirectory, this.AssemblyName);
@@ -166,7 +163,7 @@
             if (string.IsNullOrEmpty(modAssemblyPath) || !File.Exists(modAssemblyPath))
             {
                 Logger.Debug($"Did not find a DLL at {modAssemblyPath}");
-                return ModStatus.MissingAssemblyFile;
+                return this.Status = ModStatus.MissingAssemblyFile;
             }
             else
             {
@@ -178,14 +175,14 @@
                 {
                     Logger.Error($"Failed loading the dll found at \"{modAssemblyPath}\" for mod \"{this.DisplayName}\"");
                     Logger.Exception(aEx);
-                    return ModStatus.FailedLoadingAssemblyFile;
+                    return this.Status = ModStatus.FailedLoadingAssemblyFile;
                 }
             }
 
             ModStatus patchMethodResults = patchMethodFinder.LoadPatchMethods(this);
 
             if (patchMethodResults != ModStatus.Success)
-                return patchMethodResults;
+                return this.Status = patchMethodResults;
 
             foreach (string item in this.Dependencies)
                 this.RequiredDependencies.Add(item);
@@ -196,30 +193,39 @@
             foreach (string item in this.LoadAfter)
                 this.LoadAfterPreferences.Add(item);
 
-            var versionedDependencies = new List<RequiredQMod>(this.VersionDependencies.Count);
-            foreach (KeyValuePair<string, string> item in this.VersionDependencies)
+            if (this.VersionDependencies.Count > 0)
             {
-                string cleanVersion = QMod.VersionRegex.Matches(item.Value)?[0]?.Value;
+                var versionedDependencies = new List<RequiredQMod>(this.VersionDependencies.Count);
+                foreach (KeyValuePair<string, string> item in this.VersionDependencies)
+                {
+                    string cleanVersion = VersionRegex.Matches(item.Value)?[0]?.Value;
 
-                if (string.IsNullOrEmpty(cleanVersion))
-                {
-                    versionedDependencies.Add(new RequiredQMod(item.Key));
-                }
-                else if (System.Version.TryParse(cleanVersion, out Version version))
-                {
-                    versionedDependencies.Add(new RequiredQMod(item.Key, version));
-                }
-                else
-                {
-                    versionedDependencies.Add(new RequiredQMod(item.Key));
+                    if (string.IsNullOrEmpty(cleanVersion))
+                    {
+                        versionedDependencies.Add(new RequiredQMod(item.Key));
+                    }
+                    else if (System.Version.TryParse(cleanVersion, out Version version))
+                    {
+                        versionedDependencies.Add(new RequiredQMod(item.Key, version));
+                    }
+                    else
+                    {
+                        versionedDependencies.Add(new RequiredQMod(item.Key));
+                    }
                 }
             }
 
-            return ModStatus.Success;
+            if (!this.Enable)
+                return this.Status = ModStatus.CanceledByUser;
+
+            return this.Status = ModStatus.Success;
         }
 
         public virtual ModLoadingResults TryLoading(PatchingOrder order, QModGame currentGame)
         {
+            if (this.Status != ModStatus.Success)
+                return ModLoadingResults.Failure;
+
             if ((this.SupportedGame & currentGame) == QModGame.None)
             {
                 this.PatchMethods.Clear(); // Do not attempt any other patch methods

@@ -1,10 +1,10 @@
 ﻿namespace QMMTests
 {
+    using System.Collections.Generic;
     using System.Reflection;
     using NUnit.Framework;
     using QModManager.API;
     using QModManager.API.ModLoading;
-    using QModManager.DataStructures;
     using QModManager.Patching;
 
     [TestFixture]
@@ -38,9 +38,10 @@
 
         public void InitializeMods_MethodsInvoked()
         {
-            var list = new PairedList<QMod, ModStatus>
+            qmod.Status = ModStatus.Success;
+            var list = new List<QMod>
             {
-                { qmod, ModStatus.Success }
+                qmod
             };
 
             TestPatchClass.Reset();
@@ -48,7 +49,7 @@
             var initializer = new Initializer(QModGame.Subnautica);
             initializer.InitializeMods(list);
 
-            Assert.AreEqual(ModStatus.Success, list[0].Value);
+            Assert.AreEqual(ModStatus.Success, list[0].Status);
 
             Assert.IsTrue(TestPatchClass.PrePatchInvoked);
             Assert.IsTrue(TestPatchClass.PatchInvoked);

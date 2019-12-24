@@ -1,6 +1,7 @@
 namespace QModManager.Patching
 {
     using System;
+    using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
     using System.Text.RegularExpressions;
@@ -8,7 +9,6 @@ namespace QModManager.Patching
     using API.ModLoading;
     using Checks;
     using Harmony;
-    using QModManager.DataStructures;
     using Utility;
 
     /// <summary>
@@ -97,14 +97,14 @@ namespace QModManager.Patching
                 AddAssemblyResolveEvent();
 
                 var modFactory = new QModFactory();
-                PairedList<QMod, ModStatus> modsToLoad = modFactory.BuildModLoadingList(QModBaseDir);
+                List<QMod> modsToLoad = modFactory.BuildModLoadingList(QModBaseDir);
 
                 var initializer = new Initializer(CurrentlyRunningGame);
                 initializer.InitializeMods(modsToLoad);
 
                 int loadedMods = 0;
                 int erroredMods = 0;
-                foreach (QMod mod in modsToLoad.Keys)
+                foreach (QMod mod in modsToLoad)
                 {
                     if (mod.IsLoaded)
                     {

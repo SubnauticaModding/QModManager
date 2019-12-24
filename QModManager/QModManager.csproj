@@ -151,7 +151,6 @@
     <Compile Include="Checks\PirateCheck.cs" />
     <Compile Include="DataStructures\ErrorTypes.cs" />
     <Compile Include="DataStructures\ISortable.cs" />
-    <Compile Include="DataStructures\PairedList.cs" />
     <Compile Include="DataStructures\SortedCollection.cs" />
     <Compile Include="DataStructures\SortedTreeNode.cs" />
     <Compile Include="DataStructures\SortedTreeNodeCollection.cs" />

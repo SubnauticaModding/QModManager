@@ -1,6 +1,6 @@
 ﻿namespace QModManager.API.ModLoading
 {
-    using QModManager.DataStructures;
+    using System.Collections.Generic;
     using QModManager.Patching;
 
     internal class Initializer
@@ -12,32 +12,31 @@
             currentGame = currentlyRunningGame;
         }
 
-        internal void InitializeMods(PairedList<QMod, ModStatus> modsToInitialize)
+        internal void InitializeMods(List<QMod> modsToInitialize)
         {
             InitializeMods(modsToInitialize, PatchingOrder.PreInitialize);
             InitializeMods(modsToInitialize, PatchingOrder.NormalInitialize);
             InitializeMods(modsToInitialize, PatchingOrder.PostInitialize);
         }
 
-        private void InitializeMods(PairedList<QMod, ModStatus> modsToInitialize, PatchingOrder order)
+        private void InitializeMods(List<QMod> modsToInitialize, PatchingOrder order)
         {
-            foreach (Pair<QMod, ModStatus> pair in modsToInitialize)
+            foreach (QMod mod in modsToInitialize)
             {
-                if (pair.Value != ModStatus.Success)
+                if (mod.Status != ModStatus.Success)
                     continue;
 
-                QMod mod = pair.Key;
                 ModLoadingResults result = mod.TryLoading(order, currentGame);
                 switch (result)
                 {
                     case ModLoadingResults.Failure:
-                        pair.Value = ModStatus.PatchMethodFailed;
+                        mod.Status = ModStatus.PatchMethodFailed;
                         break;
                     case ModLoadingResults.AlreadyLoaded:
-                        pair.Value = ModStatus.DuplicatePatchAttemptDetected;
+                        mod.Status = ModStatus.DuplicatePatchAttemptDetected;
                         break;
                     case ModLoadingResults.CurrentGameNotSupported:
-                        pair.Value = ModStatus.CurrentGameNotSupported;
+                        mod.Status = ModStatus.CurrentGameNotSupported;
                         break;
                 }
             }
