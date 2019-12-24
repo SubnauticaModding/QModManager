@@ -11,19 +11,21 @@
 
     internal class QModFactory
     {
-        internal PairedList<QMod, ModStatus> BuildModLoadingList(string qmodsDirectory)
+        internal static readonly ManifestValidator Validator = new ManifestValidator();
+
+        internal List<QMod> BuildModLoadingList(string qmodsDirectory)
         {
             if (!Directory.Exists(qmodsDirectory))
             {
                 Logger.Info("QMods directory was not found! Creating...");
                 Directory.CreateDirectory(qmodsDirectory);
 
-                return new PairedList<QMod, ModStatus>(0);
+                return new List<QMod>(0);
             }
 
             string[] subDirectories = Directory.GetDirectories(qmodsDirectory);
             var modSorter = new SortedCollection<string, QMod>();
-            var earlyErrors = new PairedList<QMod, ModStatus>(subDirectories.Length);
+            var earlyErrors = new List<QMod>(subDirectories.Length);
 
             foreach (string subDir in subDirectories)
             {
@@ -39,24 +41,18 @@
                 if (!File.Exists(jsonFile))
                 {
                     Logger.Error($"Unable to set up mod in folder \"{folderName}\"");
-                    earlyErrors.Add(new QModPlaceholder(folderName), ModStatus.InvalidCoreInfo);
+                    earlyErrors.Add(new QModPlaceholder(folderName, ModStatus.InvalidCoreInfo));
                     continue;
                 }
 
-                QMod mod = FromJsonFile(subDir);
+                QMod mod = CreateFromJsonManifestFile(subDir);
 
-                ModStatus status = mod.IsValidForLoading(subDir);
+                ModStatus status = Validator.ValidateManifest(mod, subDir);
 
                 if (status != ModStatus.Success)
                 {
-                    Logger.Debug($"Mod '{mod.Id}' had invalid core data");
-                    earlyErrors.Add(mod, status);
-                    continue;
-                }
-
-                if (!mod.Enable)
-                {
-                    earlyErrors.Add(mod, ModStatus.CanceledByUser);
+                    Logger.Debug($"Mod '{mod.Id}' will not be loaded");
+                    earlyErrors.Add(mod);
                     continue;
                 }
 
@@ -65,63 +61,55 @@
                 if (!added)
                 {
                     Logger.Debug($"DuplicateId on mod {mod.Id}");
-                    earlyErrors.Add(mod, ModStatus.DuplicateIdDetected);
+                    mod.Status = ModStatus.DuplicateIdDetected;
+                    earlyErrors.Add(mod);
                 }
             }
 
             List<QMod> modsToLoad = modSorter.GetSortedList();
 
-            PairedList<QMod, ModStatus> modList = CreateModStatusList(earlyErrors, modsToLoad);
+            List<QMod> modList = CreateModStatusList(earlyErrors, modsToLoad);
 
             return modList;
         }
 
-        private static PairedList<QMod, ModStatus> CreateModStatusList(
-            PairedList<QMod, ModStatus> earlyErrors, List<QMod> modsToLoad)
+        private static List<QMod> CreateModStatusList(List<QMod> earlyErrors, List<QMod> modsToLoad)
         {
-            var modList = new PairedList<QMod, ModStatus>(modsToLoad.Count + earlyErrors.Count);
+            var modList = new List<QMod>(modsToLoad.Count + earlyErrors.Count);
 
             foreach (QMod mod in modsToLoad)
             {
                 Logger.Debug($"{mod.Id} ready to load");
-                modList.Add(mod, ModStatus.Success);
+                modList.Add(mod);
             }
 
-            foreach (Pair<QMod, ModStatus> erroredMod in earlyErrors)
+            foreach (QMod erroredMod in earlyErrors)
             {
-                Logger.Debug($"{erroredMod.Key.Id} had an early error");
-                modList.Add(erroredMod.Key, erroredMod.Value);
+                Logger.Debug($"{erroredMod.Id} had an early error");
+                modList.Add(erroredMod);
             }
 
-            foreach (Pair<QMod, ModStatus> pair in modList)
+            foreach (QMod mod in modList)
             {
-                if (pair.Value != ModStatus.Success)
+                if (mod.Status != ModStatus.Success)
                     continue;
-
-                QMod mod = pair.Key;
 
                 if (mod.RequiredMods == null)
                     continue;
 
                 foreach (RequiredQMod requiredMod in mod.RequiredMods)
                 {
-                    Pair<QMod, ModStatus> dependency = modList.Find(d => d.Key.Id == requiredMod.Id);
+                    QMod dependency = modList.Find(d => d.Id == requiredMod.Id);
 
-                    if (dependency == null || dependency.Key == null)
+                    if (dependency == null || dependency.Status != ModStatus.Success)
                     {
-                        pair.Value = ModStatus.MissingDependency;
+                        mod.Status = ModStatus.MissingDependency;
                         break;
                     }
 
-                    if (dependency.Value != ModStatus.Success)
+                    if (dependency.ParsedVersion < requiredMod.MinimumVersion)
                     {
-                        pair.Value = ModStatus.MissingDependency;
-                        break;
-                    }
-
-                    if (dependency.Key.ParsedVersion < requiredMod.MinimumVersion)
-                    {
-                        pair.Value = ModStatus.OutOfDateDependency;
+                        mod.Status = ModStatus.OutOfDateDependency;
                         break;
                     }
                 }
@@ -130,7 +118,7 @@
             return modList;
         }
 
-        private static QModJson FromJsonFile(string subDirectory)
+        private static QMod CreateFromJsonManifestFile(string subDirectory)
         {
             string jsonFile = Path.Combine(subDirectory, "mod.json");
 
@@ -147,7 +135,7 @@
                 };
 
                 string jsonText = File.ReadAllText(jsonFile);
-                return JsonConvert.DeserializeObject<QModJson>(jsonText);
+                return JsonConvert.DeserializeObject<QMod>(jsonText);
             }
             catch (Exception e)
             {

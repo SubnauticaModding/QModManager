@@ -1,34 +1,36 @@
 ﻿namespace QMMTests
 {
+    using System.Collections.Generic;
     using System.Reflection;
     using NUnit.Framework;
     using QModManager.API;
     using QModManager.API.ModLoading;
-    using QModManager.DataStructures;
     using QModManager.Patching;
 
     [TestFixture]
     public class ModLoadingSimulationTests
     {
-        private readonly QModJson qmod = new QModJson();
+        private readonly QMod qmod = new QMod();
 
         [OneTimeSetUp]
         public void SetUpTestMod()
         {
+            qmod.SupportedGame = QModGame.Subnautica;
             qmod.LoadedAssembly = Assembly.GetExecutingAssembly();
         }
 
         [Test]
         public void SimulateModLoading()
         {
-            PatchMethodFinder_FetchPatchMethods();
+            FindPatchMethods_FetchPatchMethods();
+            InitializeMods_MethodsInvoked();
         }
         
-        public void PatchMethodFinder_FetchPatchMethods()
+        public void FindPatchMethods_FetchPatchMethods()
         {
-            var methodFinder = new PatchMethodFinder();
+            var methodFinder = new ManifestValidator();
 
-            methodFinder.LoadPatchMethods(qmod);
+            methodFinder.FindPatchMethods(qmod);
 
             Assert.AreEqual(3, qmod.PatchMethods.Count);
             Assert.AreEqual("QPrePatch", qmod.PatchMethods[PatchingOrder.PreInitialize].Method.Name);
@@ -38,9 +40,10 @@
 
         public void InitializeMods_MethodsInvoked()
         {
-            var list = new PairedList<QMod, ModStatus>
+            qmod.Status = ModStatus.Success;
+            var list = new List<QMod>
             {
-                { qmod, ModStatus.Success }
+                qmod
             };
 
             TestPatchClass.Reset();
@@ -48,7 +51,7 @@
             var initializer = new Initializer(QModGame.Subnautica);
             initializer.InitializeMods(list);
 
-            Assert.AreEqual(ModStatus.Success, list[0].Value);
+            Assert.AreEqual(ModStatus.Success, list[0].Status);
 
             Assert.IsTrue(TestPatchClass.PrePatchInvoked);
             Assert.IsTrue(TestPatchClass.PatchInvoked);

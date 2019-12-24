@@ -22,22 +22,22 @@
         private QModPlaceholder()
         {
             // Hide empty constructor. Only to be used for QModManager singlton.
-            status = ModStatus.Success;
+            this.Status = ModStatus.Success;
         }
 
         internal QModPlaceholder(string name)
+            : this(name, ModStatus.UnidentifiedMod)
+        {
+        }
+
+        internal QModPlaceholder(string name, ModStatus status)
         {
             this.Id = Patcher.IDRegex.Replace(name, "");
             this.DisplayName = name;
             this.Author = "Unknown";
             this.SupportedGame = QModGame.None;
             this.Enable = false;
-            status = ModStatus.UnidentifiedMod;
-        }
-
-        protected override ModStatus Validate(string subDirectory)
-        {
-            return status;
+            this.Status = ModStatus.UnidentifiedMod;
         }
     }
 }

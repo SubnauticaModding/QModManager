@@ -3,15 +3,14 @@
     using System;
     using System.Collections.Generic;
     using QModManager.API.ModLoading;
-    using QModManager.DataStructures;
     using QModManager.Patching;
     using Logger = Utility.Logger;
 
     internal static class SummaryLogger
     {
-        internal static void LogSummaries(PairedList<QMod, ModStatus> mods)
+        internal static void LogSummaries(List<QMod> mods)
         {
-            CheckOldHarmony(mods.Keys);
+            CheckOldHarmony(mods);
             //LogStatus(mods, ModStatus.CanceledByAuthor, "The following mods have been disabled internally by the mod author", Logger.Level.Info);
             LogStatus(mods, ModStatus.CanceledByUser, "The following mods have been disabled by user configuration", Logger.Level.Info);
             LogStatus(mods, ModStatus.PatchMethodFailed, "The following mods failed during patching", Logger.Level.Error);
@@ -32,19 +31,18 @@
             LogStatus(mods, ModStatus.UnidentifiedMod, "The following mods could not be identified for loading", Logger.Level.Error);
         }
 
-        private static void LogStatus(PairedList<QMod, ModStatus> mods, ModStatus statusToReport, string summary, Logger.Level logLevel)
+        private static void LogStatus(List<QMod> mods, ModStatus statusToReport, string summary, Logger.Level logLevel)
         {
-            if (mods.ValueCount(statusToReport) == 0)
+            if (mods.Count == 0)
                 return;
 
             Logger.Log(logLevel, summary);
-            foreach (Pair<QMod, ModStatus> pair in mods)
+            foreach (QMod mod in mods)
             {
-                if (pair.Value == statusToReport)
-                {
-                    QMod mod = pair.Key;
-                    Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");
-                }
+                if (mod.Status != statusToReport)
+                    continue;
+
+                Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");
             }
         }
 

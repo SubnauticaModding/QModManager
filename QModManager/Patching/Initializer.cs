@@ -1,7 +1,8 @@
 ﻿namespace QModManager.API.ModLoading
 {
-    using QModManager.DataStructures;
+    using System.Collections.Generic;
     using QModManager.Patching;
+    using QModManager.Utility;
 
     internal class Initializer
     {
@@ -12,34 +13,46 @@
             currentGame = currentlyRunningGame;
         }
 
-        internal void InitializeMods(PairedList<QMod, ModStatus> modsToInitialize)
+        internal void InitializeMods(List<QMod> modsToInitialize)
         {
             InitializeMods(modsToInitialize, PatchingOrder.PreInitialize);
             InitializeMods(modsToInitialize, PatchingOrder.NormalInitialize);
             InitializeMods(modsToInitialize, PatchingOrder.PostInitialize);
         }
 
-        private void InitializeMods(PairedList<QMod, ModStatus> modsToInitialize, PatchingOrder order)
+        private void InitializeMods(List<QMod> modsToInitialize, PatchingOrder order)
         {
-            foreach (Pair<QMod, ModStatus> pair in modsToInitialize)
+            foreach (QMod mod in modsToInitialize)
             {
-                if (pair.Value != ModStatus.Success)
+                if (mod.Status != ModStatus.Success)
                     continue;
 
-                QMod mod = pair.Key;
-                ModLoadingResults result = mod.TryLoading(order, currentGame);
-                switch (result)
+                if ((mod.SupportedGame & currentGame) == QModGame.None)
                 {
-                    case ModLoadingResults.Failure:
-                        pair.Value = ModStatus.PatchMethodFailed;
-                        break;
-                    case ModLoadingResults.AlreadyLoaded:
-                        pair.Value = ModStatus.DuplicatePatchAttemptDetected;
-                        break;
-                    case ModLoadingResults.CurrentGameNotSupported:
-                        pair.Value = ModStatus.CurrentGameNotSupported;
-                        break;
+                    mod.PatchMethods.Clear(); // Do not attempt any other patch methods
+                    mod.Status = ModStatus.CurrentGameNotSupported;
+                    continue;
                 }
+
+                if (mod.PatchMethods.Count == 0 || !mod.PatchMethods.TryGetValue(order, out QModPatchMethod patchMethod))
+                    continue;
+
+                if (patchMethod.IsPatched)
+                {
+                    mod.Status = ModStatus.DuplicatePatchAttemptDetected;
+                    continue;
+                }
+
+                Logger.Debug($"Starting patch method for mod \"{mod.Id}\" at {order}");
+
+                if (!patchMethod.TryInvoke())
+                {
+                    mod.PatchMethods.Clear(); // Do not attempt any other patch methods
+                    mod.Status = ModStatus.PatchMethodFailed;
+                    continue;
+                }
+
+                Logger.Debug($"Completed patch method for mod \"{mod.Id}\" at {order}");
             }
         }
     }
