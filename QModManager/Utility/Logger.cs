@@ -1,37 +1,49 @@
-﻿using QModManager.API.SMLHelper.Utility;
-using System;
-using System.Diagnostics;
-
-namespace QModManager.Utility
+﻿namespace QModManager.Utility
 {
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+
     internal static class Logger
     {
-        private static bool EnableDebugging
+        internal enum Level
         {
-            get
-            {
-                return PlayerPrefsExtra.GetBool("QModManager_EnableDebugLogs", false);
-            }
-            set
-            {
-                PlayerPrefsExtra.SetBool("QModManager_EnableDebugLogs", value);
-            }
+            Debug,
+            Info,
+            Warn,
+            Error,
+            Fatal
         }
+
+        /// <summary>
+        /// Gets a value indicating whether debug logs are enabled.
+        /// To enable debug logs, simple create an empty file named <c>"QModDebug.txt"</c> within the Subnautica folder.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if debug logs are enabled; otherwise, <c>false</c>.
+        /// </value>
+        private static bool EnableDebugLogging { get; } = File.Exists(Path.Combine(Environment.CurrentDirectory, "QModDebug.txt"));
 
         private static void Log(string logLevel, params string[] text)
         {
-            if (text == null || text.Length < 1) return;
+            if (text == null || text.Length < 1)
+                return;
 
             string from;
             Type classType = GetCallingClass();
 
-            if (classType == null) from = null;
-            else if (classType.Namespace.Contains("SMLHelper")) from = "SMLHelper";
-            else from = classType.Name;
+            if (classType == null)
+                from = null;
+            else if (classType.Namespace.Contains("SMLHelper"))
+                from = "SMLHelper";
+            else
+                from = classType.Name;
 
             string toWrite = "[QModManager] ";
-            if (!string.IsNullOrEmpty(from)) toWrite += $"[{from}] ";
-            if (!string.IsNullOrEmpty(logLevel)) toWrite += $"[{logLevel}] ";
+            if (!string.IsNullOrEmpty(from))
+                toWrite += $"[{from}] ";
+            if (!string.IsNullOrEmpty(logLevel))
+                toWrite += $"[{logLevel}] ";
 
             int length = toWrite.Length;
 
@@ -39,7 +51,6 @@ namespace QModManager.Utility
 
             for (int i = 1; i < text.Length; i++)
                 Console.WriteLine($"{text[i]}");
-                //Console.WriteLine($"{' '.Repeat(toWrite.Length)}{text[i]}");
         }
 
         internal static void Log(params string[] text)
@@ -47,9 +58,31 @@ namespace QModManager.Utility
             Log("", text);
         }
 
+        internal static void Log(Level logLevel, params string[] text)
+        {
+            switch (logLevel)
+            {
+                case Level.Debug:
+                    Debug(text);
+                    break;
+                case Level.Info:
+                    Info(text);
+                    break;
+                case Level.Warn:
+                    Warn(text);
+                    break;
+                case Level.Error:
+                    Error(text);
+                    break;
+                case Level.Fatal:
+                    Fatal(text);
+                    break;
+            }
+        }
+
         internal static void Debug(params string[] text)
         {
-            if (EnableDebugging)
+            if (EnableDebugLogging)
                 Log("Debug", text);
         }
 
@@ -85,7 +118,7 @@ namespace QModManager.Utility
 
         private static Type GetCallingClass()
         {
-            StackTrace stackTrace = new StackTrace();
+            var stackTrace = new StackTrace();
             StackFrame[] frames = stackTrace.GetFrames();
 
             foreach (StackFrame stackFrame in frames)

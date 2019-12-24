@@ -1,23 +1,24 @@
-﻿using AssetsTools.NET;
-using AssetsTools.NET.Extra;
-using System;
-using System.Collections.Generic;
-using System.IO;
-
-namespace QModManager.Executable
+﻿namespace QModManager.Executable
 {
+    using AssetsTools.NET;
+    using AssetsTools.NET.Extra;
+    using QModManager.API;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+
     internal static class AudioFixer
     {
-        internal static void ChangeDisableUnityAudio(string path, bool newValue, Patcher.Game game)
+        internal static void ChangeDisableUnityAudio(string path, bool newValue, QModGame game)
         {
-            if (game != Patcher.Game.Subnautica && game != Patcher.Game.BelowZero)
+            if (game != QModGame.Subnautica && game != QModGame.BelowZero)
                 throw new ArgumentException("Neither Subnautica nor Below Zero detected!");
             AssetsManager am = new AssetsManager();
             AssetsFileInstance afi = am.LoadAssetsFile(path, false);
-            if (game == Patcher.Game.Subnautica)
-                am.LoadClassPackage("cldb.dat");
+            if (game == QModGame.Subnautica)
+                am.LoadClassDatabase("cldb.dat");
             else
-                am.LoadClassPackage("cldb2018.dat");
+                am.LoadClassDatabase("cldb2018.dat");
             AssetFileInfoEx audioInfo = afi.table.getAssetInfo(4);
             AssetTypeInstance audioAti = am.GetATI(afi.file, audioInfo);
             AssetTypeValueField audioBaseField = audioAti.GetBaseField();
