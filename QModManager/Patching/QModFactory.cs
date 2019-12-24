@@ -11,6 +11,8 @@
 
     internal class QModFactory
     {
+        internal static readonly ManifestValidator Validator = new ManifestValidator();
+
         internal List<QMod> BuildModLoadingList(string qmodsDirectory)
         {
             if (!Directory.Exists(qmodsDirectory))
@@ -45,7 +47,7 @@
 
                 QMod mod = CreateFromJsonManifestFile(subDir);
 
-                ModStatus status = mod.ValidateManifest(subDir);
+                ModStatus status = Validator.ValidateManifest(mod, subDir);
 
                 if (status != ModStatus.Success)
                 {

@@ -15,20 +15,22 @@
         [OneTimeSetUp]
         public void SetUpTestMod()
         {
+            qmod.SupportedGame = QModGame.Subnautica;
             qmod.LoadedAssembly = Assembly.GetExecutingAssembly();
         }
 
         [Test]
         public void SimulateModLoading()
         {
-            PatchMethodFinder_FetchPatchMethods();
+            FindPatchMethods_FetchPatchMethods();
+            InitializeMods_MethodsInvoked();
         }
         
-        public void PatchMethodFinder_FetchPatchMethods()
+        public void FindPatchMethods_FetchPatchMethods()
         {
-            var methodFinder = new PatchMethodFinder();
+            var methodFinder = new ManifestValidator();
 
-            methodFinder.LoadPatchMethods(qmod);
+            methodFinder.FindPatchMethods(qmod);
 
             Assert.AreEqual(3, qmod.PatchMethods.Count);
             Assert.AreEqual("QPrePatch", qmod.PatchMethods[PatchingOrder.PreInitialize].Method.Name);
