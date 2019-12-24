@@ -149,12 +149,10 @@
     <Compile Include="API\RequiredQMod.cs" />
     <Compile Include="API\QModGame.cs" />
     <Compile Include="Checks\PirateCheck.cs" />
-    <Compile Include="DataStructures\ErrorTypes.cs" />
     <Compile Include="DataStructures\ISortable.cs" />
     <Compile Include="DataStructures\SortedCollection.cs" />
     <Compile Include="DataStructures\SortedTreeNode.cs" />
     <Compile Include="DataStructures\SortedTreeNodeCollection.cs" />
-    <Compile Include="DataStructures\SortResults.cs" />
     <Compile Include="DataStructures\WeightedList.cs" />
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Checks\NitroxCheck.cs" />
@@ -163,7 +161,6 @@
     <Compile Include="Patching\Initializer.cs" />
     <Compile Include="Patching\ManifestValidator.cs" />
     <Compile Include="Patching\Patcher.cs" />
-    <Compile Include="Patching\IModOrder.cs" />
     <Compile Include="Patching\IQModSerialiable.cs" />
     <Compile Include="Patching\PatchingOrder.cs" />
     <Compile Include="Patching\QMod.cs" />

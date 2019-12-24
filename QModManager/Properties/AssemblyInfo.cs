@@ -2,10 +2,10 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("QModManager")]
+[assembly: AssemblyTitle("QModManager 3")]
 [assembly: AssemblyDescription("Config based patch management for Subnautica and Subnautica: Below Zero")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("QModManager")]
+[assembly: AssemblyCompany("Subnautica Modding")]
 [assembly: AssemblyProduct("QModManager")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
