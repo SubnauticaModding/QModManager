@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.IO;
 using Logger = QModManager.Utility.Logger;
 
-namespace QModManager
+namespace QModManager.Checks
 {
     internal static class PirateCheck
     {

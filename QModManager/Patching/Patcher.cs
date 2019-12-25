@@ -18,7 +18,6 @@ namespace QModManager.Patching
     {
         internal const string IDRegex = "[^0-9a-z_]";
 
-        internal static string QModBaseDir = Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows") ? null : Path.Combine(Environment.CurrentDirectory, "QMods");
         internal static bool patched = false;
 
         internal static string QModBaseDir
@@ -56,7 +55,7 @@ namespace QModManager.Patching
                     Logger.Fatal("There was an error with the QMods directory");
                     Logger.Fatal("Please make sure that you ran Subnautica from Steam/Epic/Discord, and not from the executable file!");
 
-                    Dialog.Show("A fatal error has occurred. QModManager could not be initialized.", Dialog.Button.Close, Dialog.Button.Disabled, false);
+                    Dialog.Show("A fatal error has occurred. QModManager could not be initialized.", Dialog.Button.close, Dialog.Button.Disabled, false);
 
                     return;
                 }
@@ -130,14 +129,14 @@ namespace QModManager.Patching
                 Logger.Fatal($"A fatal patching exception has been caught! Patching ended prematurely!");
                 Logger.Exception(pEx);
 
-                Dialog.Show("A fatal patching exception has been caught. QModManager could not be initialized.", Dialog.Button.Close, Dialog.Button.Disabled, false);
+                Dialog.Show("A fatal patching exception has been caught. QModManager could not be initialized.", Dialog.Button.close, Dialog.Button.Disabled, false);
             }
             catch (Exception e)
             {
                 Logger.Fatal("An unhandled exception has been caught! - Patching ended prematurely!");
                 Logger.Exception(e);
 
-                Dialog.Show("An unhandled exception has been caught. QModManager could not be initialized.", Dialog.Button.Close, Dialog.Button.Disabled, false);
+                Dialog.Show("An unhandled exception has been caught. QModManager could not be initialized.", Dialog.Button.close, Dialog.Button.Disabled, false);
             }
         }
 
@@ -162,8 +161,8 @@ namespace QModManager.Patching
 
         private static void PatchHarmony()
         {
-            Harmony = HarmonyInstance.Create("qmodmanager");
-            Harmony.PatchAll();
+            var harmony = HarmonyInstance.Create("qmodmanager");
+            harmony.PatchAll();
             Logger.Debug("Patched!");
         }
     }

@@ -1,4 +1,4 @@
-﻿namespace QModManager
+﻿namespace QModManager.Checks
 {
     using System;
     using System.Net;

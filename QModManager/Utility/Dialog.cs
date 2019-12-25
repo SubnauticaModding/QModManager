@@ -11,13 +11,14 @@
     using QModManager.API;
     using UnityEngine;
     using UnityEngine.UI;
+    using System.Reflection;
 
     internal static class Dialog
     {
         internal class Button
         {
-            internal string text = null;
-            internal Action action = null;
+            internal string Text = null;
+            internal Action Action = null;
 
             internal static readonly Button Disabled = new Button();
             internal static readonly Button SeeLog = new Button("See Log", () =>

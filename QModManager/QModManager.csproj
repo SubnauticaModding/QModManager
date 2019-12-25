@@ -100,22 +100,22 @@
     <Reference Include="System" />
     <Reference Include="UnityEngine.AssetBundleModule">
       <HintPath>..\Dependencies\UnityEngine.AssetBundleModule.dll</HintPath>
-	  <Private>False</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\Dependencies\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
       <HintPath>..\Dependencies\UnityEngine.InputLegacyModule.dll</HintPath>
-	  <Private>False</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputModule">
       <HintPath>..\Dependencies\UnityEngine.InputModule.dll</HintPath>
-	  <Private>False</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>..\Dependencies\UnityEngine.UI.dll</HintPath>
-	  <Private>False</Private>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -135,7 +135,7 @@
     <Compile Include="DataStructures\SortedTreeNodeCollection.cs" />
     <Compile Include="DataStructures\WeightedList.cs" />
     <Compile Include="EntryPoint.cs" />
-    <Compile Include="NitroxCheck.cs" />
+    <Compile Include="Checks\NitroxCheck.cs" />
     <Compile Include="Patching\FatalPatchingException.cs" />
     <Compile Include="Patching\GameDetector.cs" />
     <Compile Include="Patching\Initializer.cs" />
@@ -153,12 +153,7 @@
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="Utility\Dialog.cs" />
     <Compile Include="OptionsManager.cs" />
-    <Compile Include="PirateCheck.cs" />
-    <Compile Include="Prefab Debugger\HierarchyItem.cs" />
-    <Compile Include="Prefab Debugger\LogMessage.cs" />
-    <Compile Include="Prefab Debugger\PrefabDebugger.cs" />
-    <Compile Include="Prefab Debugger\Tree.cs" />
-    <Compile Include="QMod.cs" />
+    <Compile Include="Checks\PirateCheck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\ExtensionMethods.cs" />
     <Compile Include="Utility\NetworkUtilities.cs" />
