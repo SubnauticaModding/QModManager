@@ -15,8 +15,16 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="QModPrePatch"/> class.
         /// </summary>
+        public QModPrePatch() : base(PatchingOrder.PreInitialize)
+        {
+
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="QModPrePatch"/> class.
+        /// </summary>
         /// <param name="secretPassword">The secret password that proves you read the documentation.</param>
-        public QModPrePatch(string secretPassword) : base(PatchingOrder.PreInitialize, secretPassword)
+        public QModPrePatch(string secretPassword) : base(PatchingOrder.MetaPreInitialize, secretPassword)
         {
         }
     }

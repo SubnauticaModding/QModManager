@@ -2,6 +2,8 @@
 {
     internal enum PatchingOrder
     {
+        MetaPreInitialize = -2,
+
         /// <summary>
         /// For pre-initialize patch methods
         /// </summary>
@@ -15,6 +17,8 @@
         /// <summary>
         /// For post-initialize patch methods
         /// </summary>
-        PostInitialize = 1
+        PostInitialize = 1,
+
+        MetaPostInitialize = 2
     }
 }

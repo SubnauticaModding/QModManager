@@ -138,9 +138,12 @@
                     {
                         foreach (QModPatchAttributeBase patch in method.GetCustomAttributes(typeof(QModPatchAttributeBase), false))
                         {
-                            if (patch.PatchOrder != PatchingOrder.PreInitialize)
+                            switch (patch.PatchOrder)
                             {
-                                patch.ValidateThatModderHasReadTheDocumentation(method);
+                                case PatchingOrder.MetaPreInitialize:
+                                case PatchingOrder.MetaPostInitialize:
+                                    patch.ValidateSecretPassword(method, qMod);
+                                    break;
                             }
 
                             if (qMod.PatchMethods.TryGetValue(patch.PatchOrder, out QModPatchMethod extra))

@@ -44,27 +44,30 @@
         /// Validates the that modder has read the documentation.
         /// </summary>
         /// <param name="method">The method.</param>
+        /// <param name="mod">The mod.</param>
         /// <exception cref="FatalPatchingException">This modder has not read the documentation and should not be using prepatch/postpatch functions.</exception>
-        internal void ValidateThatModderHasReadTheDocumentation(MethodInfo method)
+        internal void ValidateSecretPassword(MethodInfo method, QMod mod)
         {
-            if (this.PatchOrder == 0)
-                return;
+            switch (this.PatchOrder)
+            {
+                case PatchingOrder.PreInitialize:
+                case PatchingOrder.NormalInitialize:
+                case PatchingOrder.PostInitialize:
+                    return;
+            }
+
             /*
             What is all this for?
-            This is to make sure that modders don't start using PrePatching and PostPatching in place of normal Patching without a second thought.
-            Pre/Post patching should be reserved for mods that absolutely require it; Primarily, mods that interact with other mods.
-            
-            Mods that act as APIs or libraries, or that otherwise deal with the requests of other mods, are prime candidates for Pre/Post patching.
+            This is to make sure that modders don't start using elevated PrePatching and PostPatching in place of normal Pre/Post Patching without a second thought.
+            Elevated Pre/Post patching should be reserved for mods that absolutely require it; Primarily, mods that interact with all other mods.
+            Mods that only interact with one or two mods can likely do just fine with basic load order.
 
-            Pre/Post Patching should not be present in common, standalone mods.
-            Pre/Post Patching should absolutely NOT be used to resolve load order conflicts with a single mod: use LoadBefore/LoadAfter instead.
-
-            Now, if you are convinced that your mod should be using these features, then this is what you do.            
+            Now, if you are convinced that your mod should be using these features, then this is what you do.
             */
             using (var md5 = MD5.Create())
             {
                 string c1 = method.Name; // Step 1: Start with the name of your pre or post patching method.
-                string c2 = method.DeclaringType.Assembly.GetName().Name; // Step 2: Get the simple name of your assembly.
+                string c2 = mod.Id; // Step 2: Get the ID of your mod
                 string c;
 
                 // Step 3: Check if you are doing a PrePatch or PostPatch
