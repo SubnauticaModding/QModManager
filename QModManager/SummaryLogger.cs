@@ -33,17 +33,14 @@
 
         private static void LogStatus(List<QMod> mods, ModStatus statusToReport, string summary, Logger.Level logLevel)
         {
-            if (mods.Count == 0)
+            List<QMod> specificMods = mods.FindAll(mod => mod.Status == statusToReport);
+
+            if (specificMods.Count == 0)
                 return;
 
             Logger.Log(logLevel, summary);
-            foreach (QMod mod in mods)
-            {
-                if (mod.Status != statusToReport)
-                    continue;
-
-                Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");
-            }
+            foreach (QMod mod in specificMods)            
+                Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");            
         }
 
         private static void CheckOldHarmony(IEnumerable<QMod> mods)
