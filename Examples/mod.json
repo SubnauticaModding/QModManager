@@ -1,7 +1,7 @@
 {
   "Id": "ExampleMod",
   "DisplayName": "Example Mod",
-  "Author": "the QModManager dev team",
+  "Author": "Example Author",
   "Version": "1.0",
   "Enable": true,
   "Game": "Subnautica",
