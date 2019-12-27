@@ -76,14 +76,15 @@
             An interface of services that other mods can make use of.
             </summary>
         </member>
-        <member name="M:QModManager.API.IQModServices.GetLoadedMods">
+        <member name="M:QModManager.API.IQModServices.GetAllMods">
             <summary>
-            Gets a list successfully loaded mods.
+            Gets a list all mods being tracked by QModManager.
             </summary>
             <returns>
-            The loaded mods.
+            A <see cref="T:System.Collections.Generic.List`1"/> containing all mods recognized by the mod loader.
             </returns>
         </member>
+        <!-- Badly formed XML comment ignored for member "M:QModManager.API.IQModServices.FindModById(System.String)" -->
         <member name="T:QModManager.API.ModLoading.QModCoreAttribute">
             <summary>
             Identifies the patching class for your QMod.
@@ -163,13 +164,20 @@
             The main.
             </value>
         </member>
-        <member name="M:QModManager.API.QModServices.GetLoadedMods">
+        <member name="M:QModManager.API.QModServices.GetAllMods">
             <summary>
-            Gets a list successfully loaded mods.
+            Gets a list all mods being tracked by QModManager.
             </summary>
             <returns>
-            The loaded mods.
+            A <see cref="T:System.Collections.Generic.List`1" /> containing all mods recognized by the mod loader.
             </returns>
+        </member>
+        <member name="M:QModManager.API.QModServices.FindModById(System.String)">
+            <summary>
+            Finds the mod by identifier.
+            </summary>
+            <param name="modId">The mod identifier.</param>
+            <returns></returns>
         </member>
         <member name="T:QModManager.API.RequiredQMod">
             <summary>
