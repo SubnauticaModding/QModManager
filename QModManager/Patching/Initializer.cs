@@ -39,8 +39,8 @@
                     continue;
                 }
 
-                if (mod.PatchMethods.Count == 0 || !mod.PatchMethods.TryGetValue(order, out QModPatchMethod patchMethod))
-                    continue;
+                if (!mod.PatchMethods.TryGetValue(order, out QModPatchMethod patchMethod))
+                    continue; // Nothing to patch at this stage
 
                 if (patchMethod.IsPatched)
                 {

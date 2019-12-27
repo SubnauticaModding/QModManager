@@ -4,7 +4,6 @@ namespace QModManager.Patching
     using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
-    using System.Text.RegularExpressions;
     using API;
     using API.ModLoading;
     using Checks;
@@ -99,6 +98,8 @@ namespace QModManager.Patching
                 var modFactory = new QModFactory();
                 List<QMod> modsToLoad = modFactory.BuildModLoadingList(QModBaseDir);
 
+                QModServices.LoadKnownMods(modsToLoad);
+
                 var initializer = new Initializer(CurrentlyRunningGame);
                 initializer.InitializeMods(modsToLoad);
 
@@ -107,10 +108,7 @@ namespace QModManager.Patching
                 foreach (QMod mod in modsToLoad)
                 {
                     if (mod.IsLoaded)
-                    {
                         loadedMods++;
-                        QModServices.successfullyLoadedMods.Add(mod);
-                    }
                     else
                         erroredMods++;
                 }
