@@ -1,25 +1,24 @@
 ﻿namespace QModManager.API
 {
-    using System.Collections.Generic;
+    using System.Reflection;
 
     /// <summary>
-    /// An interface of services that other mods can make use of.
+    /// An set of services provided by QModManager for mods to use.
     /// </summary>
-    public interface IQModServices
+    public interface IQModServices : IQModAPI
     {
-        /// <summary>
-        /// Gets a list all mods being tracked by QModManager.
-        /// </summary>
-        /// <returns>
-        /// A <see cref="List{IQMod}"/> containing all mods recognized by the mod loader.
-        /// </returns>
-        List<IQMod> GetAllMods();
-
         /// <summary>
         /// Finds a specific mod by its unique <see cref="IQMod.Id"/> value.
         /// </summary>
         /// <param name="modId">The mod ID.</param>
-        /// <returns>The <see cref="IQMod"/> instance of the mod if found; otherwise returns <c>null</c.></returns>
+        /// <returns>The <see cref="IQMod"/> instance of the mod if found; otherwise returns <c>null</c>.</returns>
         IQMod FindModById(string modId);
+
+        /// <summary>
+        /// Finds a specific mod with a <see cref="IQMod.LoadedAssembly"/> that matches the provided one.
+        /// </summary>
+        /// <param name="modAssembly">The mod assembly.</param>
+        /// <returns>The <see cref="IQMod"/> instance of the mod if found; otherwise returns <c>null</c.></returns>
+        IQMod FindModByAssembly(Assembly modAssembly);
     }
 }

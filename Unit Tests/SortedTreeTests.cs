@@ -399,6 +399,16 @@
             Assert.Pass(ListToString(list));
         }
 
+        [Test]
+        public void GetSortedList_WhenCollectionEmpty_ReturnsEmptyList()
+        {
+            var tree = new SortedCollection<string, TestData>();
+
+            List<TestData> list = tree.GetSortedList();
+            Assert.IsNotNull(list);
+            Assert.AreEqual(0, list.Count);
+        }
+
         // TODO - Detecting circular load order and preferences before sorting
 
         [Test]

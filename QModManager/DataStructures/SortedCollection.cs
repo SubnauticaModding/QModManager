@@ -86,15 +86,6 @@
 
                 break;
             }
-
-            //if (node.NodeBefore != null)
-            //    AddLinkedNodesToList(ref node.NodeBefore, list);
-
-            //if (node.AllDependenciesPresent(NodesToSort.Keys) && !list.Contains(node.Data))
-            //    list.Add(node.Data);
-
-            //if (node.NodeAfter != null)
-            //    AddLinkedNodesToList(ref node.NodeAfter, list);
         }
 
         private SortedTreeNode<IdType, DataType> LinkNodes()
@@ -115,7 +106,7 @@
                 roots[i].SetNodeAfter(roots[i + 1]);
             }
 
-            return roots[0];
+            return roots.Count > 0 ? roots[0] : null;
         }
 
         private void LinkRemaining(List<SortedTreeNode<IdType, DataType>> roots)
