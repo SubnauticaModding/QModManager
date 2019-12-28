@@ -71,20 +71,55 @@
             Whether or not this mod has been loaded
             </summary>
         </member>
-        <member name="T:QModManager.API.IQModServices">
+        <member name="T:QModManager.API.IQModAPI">
             <summary>
-            An interface of services that other mods can make use of.
+            An set of services provided by QModManager for mods to use.
             </summary>
         </member>
-        <member name="M:QModManager.API.IQModServices.GetAllMods">
+        <member name="M:QModManager.API.IQModAPI.GetAllMods">
             <summary>
             Gets a list all mods being tracked by QModManager.
             </summary>
-            <returns>
-            A <see cref="T:System.Collections.Generic.List`1"/> containing all mods recognized by the mod loader.
-            </returns>
+            <returns>A read only list of mods containing all of the loaded mods</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:QModManager.API.IQModServices.FindModById(System.String)" -->
+        <member name="M:QModManager.API.IQModAPI.GetMyMod">
+            <summary>
+            Returns the mod from the assembly which called this method
+            </summary>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.GetMod(System.Reflection.Assembly)">
+            <summary>
+            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
+            </summary>
+            <param name="modAssembly"></param>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.GetMod(System.String)">
+            <summary>
+            Finds a specific mod by its unique <see cref="P:QModManager.API.IQMod.Id"/> value.
+            </summary>
+            <param name="id">The mod ID.</param>
+            <returns>The <see cref="T:QModManager.API.IQMod"/> instance of the mod if found; otherwise returns <c>null</c>.</returns>
+        </member>
+        <member name="M:QModManager.API.IQModAPI.ModPresent(System.String)">
+            <summary>
+            Checks whether or not a mod is present based on its unique <see cref="P:QModManager.API.IQMod.Id"/> value.
+            </summary>
+            <param name="id">The mod ID.</param>
+            <returns><c>True</c> if the mod is in the collection of mods to load; Otherwise <c>false</c>.</returns>
+        </member>
+        <member name="T:QModManager.API.IQModServices">
+            <summary>
+            An set of services provided by QModManager for mods to use.
+            </summary>
+        </member>
+        <member name="M:QModManager.API.IQModServices.FindModById(System.String)">
+            <summary>
+            Finds a specific mod by its unique <see cref="P:QModManager.API.IQMod.Id"/> value.
+            </summary>
+            <param name="modId">The mod ID.</param>
+            <returns>The <see cref="T:QModManager.API.IQMod"/> instance of the mod if found; otherwise returns <c>null</c>.</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:QModManager.API.IQModServices.FindModByAssembly(System.Reflection.Assembly)" -->
         <member name="T:QModManager.API.ModLoading.QModCoreAttribute">
             <summary>
             Identifies the patching class for your QMod.
@@ -150,6 +185,48 @@
             </summary>
             <param name="secretPassword">The secret password that proves you read the documentation.</param>
         </member>
+        <member name="T:QModManager.API.QModAPI">
+            <summary>
+            Minimal legacy support only.
+            </summary>
+            <seealso cref="T:QModManager.API.IQModAPI" />
+        </member>
+        <member name="P:QModManager.API.QModAPI.Main">
+            <summary>
+            Minimal legacy support only.
+            </summary>
+        </member>
+        <member name="M:QModManager.API.QModAPI.GetAllMods">
+            <summary>
+            Gets a list all mods being tracked by QModManager.
+            </summary>
+            <returns>A read only list of mods containing all of the loaded mods</returns>
+        </member>
+        <member name="M:QModManager.API.QModAPI.GetMyMod">
+            <summary>
+            Returns the mod from the assembly which called this method
+            </summary>
+        </member>
+        <member name="M:QModManager.API.QModAPI.GetMod(System.Reflection.Assembly)">
+            <summary>
+            Returns a mod from an <see cref="T:System.Reflection.Assembly"/>
+            </summary>
+            <param name="modAssembly"></param>
+        </member>
+        <member name="M:QModManager.API.QModAPI.GetMod(System.String)">
+            <summary>
+            Finds a specific mod by its unique <see cref="P:QModManager.API.IQMod.Id"/> value.
+            </summary>
+            <param name="id">The mod ID.</param>
+            <returns>The <see cref="T:QModManager.API.IQMod"/> instance of the mod if found; otherwise returns <c>null</c>.</returns>
+        </member>
+        <member name="M:QModManager.API.QModAPI.ModPresent(System.String)">
+            <summary>
+            Checks whether or not a mod is present based on its unique <see cref="P:QModManager.API.IQMod.Id"/> value.
+            </summary>
+            <param name="id">The mod ID.</param>
+            <returns><c>True</c> if the mod is in the collection of mods to load; Otherwise <c>false</c>.</returns>
+        </member>
         <member name="T:QModManager.API.QModServices">
             <summary>
             Services offered to mods.
@@ -164,19 +241,57 @@
             The main.
             </value>
         </member>
-        <member name="M:QModManager.API.QModServices.GetAllMods">
-            <summary>
-            Gets a list all mods being tracked by QModManager.
-            </summary>
-            <returns>
-            A <see cref="T:System.Collections.Generic.List`1" /> containing all mods recognized by the mod loader.
-            </returns>
-        </member>
         <member name="M:QModManager.API.QModServices.FindModById(System.String)">
             <summary>
             Finds the mod by identifier.
             </summary>
             <param name="modId">The mod identifier.</param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.QModServices.ModPresent(System.String)">
+            <summary>
+            Checks whether or not a mod is present based on its ID.
+            </summary>
+            <param name="modId">The mod ID.</param>
+            <returns>
+              <c>True</c> if the mod is in the collection of mods to load; Otherwise <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:QModManager.API.QModServices.FindModByAssembly(System.Reflection.Assembly)">
+            <summary>
+            Finds the mod by assembly.
+            </summary>
+            <param name="modAssembly">The mod assembly.</param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:QModManager.API.QModServices.GetAllMods">
+            <summary>
+            Gets a list all mods being tracked by QModManager.
+            </summary>
+            <returns>
+            A read only list of mods containing all of the loaded mods
+            </returns>
+        </member>
+        <member name="M:QModManager.API.QModServices.GetMyMod">
+            <summary>
+            Returns the mod from the assembly which called this method
+            </summary>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:QModManager.API.QModServices.GetMod(System.Reflection.Assembly)">
+            <summary>
+            Returns a mod from an <see cref="T:System.Reflection.Assembly" />
+            </summary>
+            <param name="modAssembly"></param>
+            <returns></returns>
+        </member>
+        <member name="M:QModManager.API.QModServices.GetMod(System.String)">
+            <summary>
+            Returns a mod from an ID
+            </summary>
+            <param name="id"></param>
             <returns></returns>
         </member>
         <member name="T:QModManager.API.RequiredQMod">
