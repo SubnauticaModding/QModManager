@@ -74,8 +74,9 @@ Example: `[ "DependencyModID" ]`
 - `VersionDependencies`: Just like `Dependencies`, but you can specify a version range for the needed mods.  
 _(optional, default to `{}`)_  
 Type: `Dictionary<string, string>`  
-Example: `{ "SMLHelper": "2.x", "AnotherVeryImportantMod": ">1.2.3" }`  
-**Note: The versioning system which is used is SemVer. [Here](https://github.com/adamreeve/semver.net/blob/master/README.md) is a readme file with all of the possible version range declarations. Some weird things could occurr, so it's recommended that you test out your version ranges [here](https://semver.npmjs.com/).**
+Example: `{ "SMLHelper": "2.0", "AnotherVeryImportantMod": "1.2.3" }`  
+**Note that the version you specify here will be treated as the new "minimum required version".**  
+If the dependency mod is out of data, QModManager won't load this one.
 
 - `LoadBefore`: Specify mods that will be loaded after your mod. If a mod in this list isn't found, it is simply ignored.  
 _(optional, defaults to `[]`)_  
@@ -105,7 +106,9 @@ Example: `"BestMod.dll"`
 - `EntryMethod`: The method which is called to load the mod. The method must be public, static, and have no parameters.  
 _(required)_  
 Type: `string`  
-Example: `"BestMod.QMod.Patch"`
+Example: `"BestMod.QMod.Patch"`  
+**Note: This is not longer required.**   
+See the new [wiki](https://github.com/SubnauticaModding/QModManager/wiki) for details on how you can identify your patching method without setting it in the manifest file.
 
 #### The final result would look something like this:
 
@@ -117,8 +120,8 @@ Example: `"BestMod.QMod.Patch"`
   "Version": "1.0.0",
   "Dependencies": [ "DependencyModID" ],
   "VersionDependencies": { 
-    "SMLHelper": "2.x", 
-    "AnotherVeryImportantMod": ">1.2.3" 
+    "SMLHelper": "2.0", 
+    "AnotherVeryImportantMod": "1.2.3" 
   },
   "LoadBefore": [ "AModID", "SomeOtherModID" ],
   "LoadAfter": [ "AnotherModID" ],
