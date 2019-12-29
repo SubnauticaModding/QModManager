@@ -1,7 +1,7 @@
 ; Throws an error if the version used to compile this script is not unicode
 ; This ensures that the application is built correctly
 #if !Defined(UNICODE)
-  #error An unicode version of Inno Setup is required to compile this script
+  #error A unicode version of Inno Setup is required to compile this script
 #endif
 
 #define Name "QModManager" ; The name of the game will be added after it
