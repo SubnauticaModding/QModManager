@@ -16,6 +16,7 @@
 
         public ModStatus ValidateManifest(QMod mod, string subDirectory)
         {
+            Logger.Debug($"Validating mod in '{subDirectory}'");
             if (string.IsNullOrEmpty(mod.Id) ||
                 string.IsNullOrEmpty(mod.DisplayName) ||
                 string.IsNullOrEmpty(mod.Author))
@@ -70,10 +71,18 @@
                 }
             }
 
-            ModStatus patchMethodResults = FindPatchMethods(mod);
+            try
+            {
+                ModStatus patchMethodResults = FindPatchMethods(mod);
 
-            if (patchMethodResults != ModStatus.Success)
-                return mod.Status = patchMethodResults;
+                if (patchMethodResults != ModStatus.Success)
+                    return mod.Status = patchMethodResults;
+            }
+            catch (Exception ex)
+            {
+                Logger.Exception(ex);
+                return mod.Status = ModStatus.MissingPatchMethod;
+            }
 
             foreach (string item in mod.Dependencies)
                 mod.RequiredDependencies.Add(item);
@@ -112,7 +121,7 @@
             return mod.Status = ModStatus.Success;
         }
 
-        public ModStatus FindPatchMethods(QMod qMod)
+        internal ModStatus FindPatchMethods(QMod qMod)
         {
             if (!string.IsNullOrEmpty(qMod.EntryMethod))
             {

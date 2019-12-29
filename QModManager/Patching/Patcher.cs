@@ -69,6 +69,8 @@ namespace QModManager.Patching
                     Logger.Exception(e);
                 }
 
+                Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}...");
+
                 PirateCheck.IsPirate(Environment.CurrentDirectory);
 
                 var gameDetector = new GameDetector();
