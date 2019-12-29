@@ -33,6 +33,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.3</LangVersion>
+    <DocumentationFile>..\Build\QModInstaller.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -83,81 +85,83 @@
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\Dependencies\Assembly-CSharp.dll</HintPath>
-	  <Private>False</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\Dependencies\Assembly-CSharp-firstpass.dll</HintPath>
-	  <Private>False</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Dependencies\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="SemVer">
-      <HintPath>..\Dependencies\SemVer.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="UnityEngine">
-      <HintPath>..\Dependencies\UnityEngine.dll</HintPath>
-	  <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
       <HintPath>..\Dependencies\UnityEngine.AssetBundleModule.dll</HintPath>
-	  <Private>False</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\Dependencies\UnityEngine.CoreModule.dll</HintPath>
-	  <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>..\Dependencies\UnityEngine.IMGUIModule.dll</HintPath>
-	  <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
       <HintPath>..\Dependencies\UnityEngine.InputLegacyModule.dll</HintPath>
-	  <Private>False</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputModule">
       <HintPath>..\Dependencies\UnityEngine.InputModule.dll</HintPath>
-	  <Private>False</Private>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>..\Dependencies\UnityEngine.UI.dll</HintPath>
-	  <Private>False</Private>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="API\QModHooks.cs" />
-    <Compile Include="EntryPoint.cs" />
-    <Compile Include="Dialog.cs" />
-    <Compile Include="Obsolete\Hooks.cs" />
-    <Compile Include="Obsolete\PatchManager.cs" />
-    <Compile Include="API\Messages.cs" />
+    <Compile Include="API\IQMod.cs" />
+    <Compile Include="API\IQModAPI.cs" />
+    <Compile Include="API\IQModServices.cs" />
+    <Compile Include="API\ModLoading\ModStatus.cs" />
+    <Compile Include="API\ModLoading\QModCoreAttribute.cs" />
+    <Compile Include="API\ModLoading\QModPatch.cs" />
+    <Compile Include="API\ModLoading\QModPostPatch.cs" />
+    <Compile Include="API\ModLoading\QModPrePatch.cs" />
     <Compile Include="API\QModAPI.cs" />
-    <Compile Include="NitroxCheck.cs" />
+    <Compile Include="API\QModServices.cs" />
+    <Compile Include="API\RequiredQMod.cs" />
+    <Compile Include="API\QModGame.cs" />
+    <Compile Include="DataStructures\ISortable.cs" />
+    <Compile Include="DataStructures\SortedCollection.cs" />
+    <Compile Include="DataStructures\SortedTreeNode.cs" />
+    <Compile Include="DataStructures\SortedTreeNodeCollection.cs" />
+    <Compile Include="DataStructures\WeightedList.cs" />
+    <Compile Include="EntryPoint.cs" />
+    <Compile Include="Checks\NitroxCheck.cs" />
+    <Compile Include="Patching\FatalPatchingException.cs" />
+    <Compile Include="Patching\GameDetector.cs" />
+    <Compile Include="Patching\Initializer.cs" />
+    <Compile Include="Patching\ManifestValidator.cs" />
+    <Compile Include="Patching\Patcher.cs" />
+    <Compile Include="Patching\IQModSerialiable.cs" />
+    <Compile Include="Patching\PatchingOrder.cs" />
+    <Compile Include="Patching\QMod.cs" />
+    <Compile Include="Patching\QModFactory.cs" />
+    <Compile Include="API\ModLoading\QModPatchAttributeBase.cs" />
+    <Compile Include="Patching\QModPlaceholder.cs" />
+    <Compile Include="Patching\QModPatchMethod.cs" />
+    <Compile Include="SummaryLogger.cs" />
     <Compile Include="Utility\IOUtilities.cs" />
     <Compile Include="Utility\Logger.cs" />
+    <Compile Include="Utility\Dialog.cs" />
     <Compile Include="OptionsManager.cs" />
-    <Compile Include="PirateCheck.cs" />
-    <Compile Include="Prefab Debugger\HierarchyItem.cs" />
-    <Compile Include="Prefab Debugger\LogMessage.cs" />
-    <Compile Include="Prefab Debugger\PrefabDebugger.cs" />
-    <Compile Include="Prefab Debugger\Tree.cs" />
-    <Compile Include="QMod.cs" />
+    <Compile Include="Checks\PirateCheck.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Patcher.cs" />
     <Compile Include="Utility\ExtensionMethods.cs" />
     <Compile Include="Utility\NetworkUtilities.cs" />
     <Compile Include="Utility\PlayerPrefsExtra.cs" />
     <Compile Include="Utility\ReflectionHelper.cs" />
-    <Compile Include="VersionCheck.cs" />
+    <Compile Include="Checks\VersionCheck.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

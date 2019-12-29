@@ -1,3 +1,0 @@
-QModManager is currently compatible with the following games:
-- Subnautica
-- Subnautica: Below Zero

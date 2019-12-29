@@ -1,12 +1,12 @@
 ; Throws an error if the version used to compile this script is not unicode
 ; This ensures that the application is built correctly
 #if !Defined(UNICODE)
-  #error An unicode version of Inno Setup is required to compile this script
+  #error A unicode version of Inno Setup is required to compile this script
 #endif
 
 #define Name "QModManager" ; The name of the game will be added after it
-#define Version "2.1"
-#define Author "the QModManager dev team"
+#define Version "3.0"
+#define Author "QModManager"
 #define URL "https://github.com/QModManager/QModManager"
 #define SupportURL "https://discord.gg/UpWuWwq"
 #define UpdatesURL "https://nexusmods.com" ; The link to the mod will be added after it
@@ -31,18 +31,17 @@ DisableDirPage=no
 DisableProgramGroupPage=yes
 DisableWelcomePage=no
 EnableDirDoesntExistWarning=yes
-InfoBeforeFile=Info.txt
 OutputBaseFilename=QModManager_Setup
 OutputDir=..\Build
 PrivilegesRequired=admin
-SetupIconFile=QModsIcon.ico
+SetupIconFile=..\Assets\Icon.ico
 SolidCompression=yes
 UninstallDisplayIcon={app}\{code:GetUninstallIcon}
 UninstallDisplayName={code:GetName}
 UsePreviousAppDir=no
 UsePreviousLanguage=no
-WizardImageFile=WizardImage.bmp
-WizardSmallImageFile=WizardSmallImageTransparent.bmp
+WizardImageFile=..\Assets\InstallerImage.bmp
+WizardSmallImageFile=..\Assets\InstallerSmallImage.bmp
 UsePreviousSetupType=False
 UsePreviousTasks=False
 CloseApplications=False
@@ -64,22 +63,18 @@ Source: "..\Dependencies\0Harmony-1.2.0.1.dll"; DestDir: "{app}\Subnautica_Data\
 Source: "..\Dependencies\AssetsTools.NET.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 Source: "..\Dependencies\cldb.dat"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 Source: "..\Dependencies\Mono.Cecil.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Dependencies\SemVer.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 Source: "..\Build\QModInstaller.xml"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 Source: "..\Build\QModManager.exe"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Assets\QModManagerAssets.unity3d"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
 ; Below Zero
 Source: "..\Dependencies\0Harmony.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 Source: "..\Dependencies\0Harmony-1.2.0.1.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 Source: "..\Dependencies\AssetsTools.NET.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 Source: "..\Dependencies\cldb2018.dat"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 Source: "..\Dependencies\Mono.Cecil.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Dependencies\SemVer.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 Source: "..\Build\QModInstaller.xml"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 Source: "..\Build\QModManager.exe"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Assets\QModManagerAssets.unity3d"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
 
 [Run]
 ; Subnautica
@@ -97,7 +92,7 @@ Filename: "{app}\SubnauticaZero_Data\Managed\QModManager.exe"; Parameters: "-u";
 ; BeveledLabel={#Name} {#Version}
 WizardSelectDir=Select install location
 SelectDirLabel3=Please select the install folder of the game.
-SelectDirBrowseLabel=To continue, click Next. If you would like to select a different folder, click Browse.%nYou can also use the buttons on the bottom left to auto-complete the install path for the chosen game. (Only works for Steam)
+SelectDirBrowseLabel=To continue, click Next. If you would like to select a different folder, click Browse.%nIf you have the game on steam, you can also use the buttons on the bottom left to auto-complete the install path for the chosen game.
 ReadyLabel2a=By installing, you agree to allow QModManager to send external web requests, most often to check for updates. You can disable this option at any time in the Mods tab of the Subnautica options menu.
 ExitSetupMessage=Setup is not complete. If you exit now, {#Name} will not be installed.%nExit Setup?
 WizardSelectComponents=Review Install
@@ -189,7 +184,7 @@ function GetURL(def: string): String;
 begin
   if (IsSubnauticaApp()) then
   begin
-    Result := '{#UpdatesURL}/subnautica/mods/16'
+    Result := '{#UpdatesURL}/subnautica/mods/201'
   end
   else if (IsBelowZeroApp()) then
   begin
@@ -308,7 +303,7 @@ begin
   with ACLabel do
   begin
     Parent := WizardForm
-    Caption := 'Auto-complete path for: (Steam)'
+    Caption := 'Get path from Steam for:'
     Left := WizardForm.SelectDirLabel.Left / 3
     Top := WizardForm.BackButton.Top - WizardForm.BackButton.Top / 90
   end;
