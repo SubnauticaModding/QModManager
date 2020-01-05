@@ -3,6 +3,8 @@
     using Harmony;
     using UnityEngine;
     using UnityEngine.Events;
+    using System.IO;
+    using System;
 
     internal static class PlayerPrefsExtra
     {
@@ -18,8 +20,6 @@
 
     internal static class OptionsManager
     {
-        internal static bool DebuggerEnabled { get => PlayerPrefsExtra.GetBool("QModManager_PrefabDebugger_EnableExperimental", false); }
-
         internal static int ModsTab;
 
         [HarmonyPatch(typeof(uGUI_OptionsPanel), "AddTabs")]
@@ -31,14 +31,21 @@
                 ModsTab = __instance.AddTab("Mods");
                 __instance.AddHeading(ModsTab, "QModManager");
 
-                bool enableDebugLogs = PlayerPrefsExtra.GetBool("QModManager_EnableDebugLogs", false);
+                bool enableDebugLogs = Utility.Logger.EnableDebugLogging;
                 __instance.AddToggleOption(ModsTab, "Enable debug logs", enableDebugLogs,
-                    new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_EnableDebugLogs", toggleVal)));
+                    new UnityAction<bool>(toggleVal => ChangeDebugLogs(toggleVal)));
 
                 bool updateCheck = PlayerPrefsExtra.GetBool("QModManager_EnableUpdateCheck", true);
                 __instance.AddToggleOption(ModsTab, "Check for updates", updateCheck,
                     new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_EnableUpdateCheck", toggleVal)));
             }
+        }
+
+        internal static void ChangeDebugLogs(bool value)
+        {
+            string path = Path.Combine(Environment.CurrentDirectory, "QModDebug.txt");
+            if (value && !File.Exists(path)) File.WriteAllText(path, "1");
+            if (!value && File.Exists(path)) File.Delete(path);
         }
     }
 }

@@ -22,7 +22,7 @@
         /// <value>
         ///   <c>true</c> if debug logs are enabled; otherwise, <c>false</c>.
         /// </value>
-        private static bool EnableDebugLogging { get; } = File.Exists(Path.Combine(Environment.CurrentDirectory, "QModDebug.txt"));
+        internal static bool EnableDebugLogging { get; } = File.Exists(Path.Combine(Environment.CurrentDirectory, "QModDebug.txt"));
 
         private static void Log(string logLevel, params string[] text)
         {
