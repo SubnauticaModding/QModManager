@@ -17,8 +17,6 @@ namespace QModManager.Patching
     {
         internal const string IDRegex = "[^0-9a-z_]";
 
-        internal static bool patched = false;
-
         internal static string QModBaseDir
         {
             get
@@ -38,7 +36,7 @@ namespace QModManager.Patching
         {
             try
             {
-                if (patched)
+                if (Patched)
                 {
                     Logger.Warn("Patch method was called multiple times!");
                     return; // Halt patching
@@ -68,8 +66,6 @@ namespace QModManager.Patching
                     Logger.Error("There was an error while trying to display the folder structure.");
                     Logger.Exception(e);
                 }
-
-                Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}...");
 
                 PirateCheck.IsPirate(Environment.CurrentDirectory);
 
@@ -161,8 +157,7 @@ namespace QModManager.Patching
 
         private static void PatchHarmony()
         {
-            var harmony = HarmonyInstance.Create("qmodmanager");
-            harmony.PatchAll();
+            HarmonyInstance.Create("qmodmanager").PatchAll();
             Logger.Debug("Patched!");
         }
     }

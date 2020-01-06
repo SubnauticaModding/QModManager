@@ -128,7 +128,7 @@
 
                 // Re-open the dialog if it is not closeable
                 if (cannotClose)
-                    Show(error, leftButton, rightButton, blue, cannotClose, .25f);
+                    Show(error, leftButton, rightButton, blue, cannotClose, .05f);
             });
 
             yield return null;
