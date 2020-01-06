@@ -24,7 +24,7 @@
         /// Initializes a new instance of the <see cref="QModPrePatch"/> class.<para/>
         /// Should only be used for mods that need to load first, before all other mods. Read the documentation for instructions.
         /// </summary>
-        /// <param name="secretPassword">Should only be used for mods that need to load last, after all other mods. Read the documentation for instructions.</param>
+        /// <param name="secretPassword">Should only be used for mods that need to load first, before all other mods. Read the documentation for instructions.</param>
         public QModPrePatch(string secretPassword) : base(PatchingOrder.MetaPreInitialize, secretPassword)
         {
         }
