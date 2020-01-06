@@ -150,7 +150,7 @@
     <Compile Include="API\ModLoading\QModPatchAttributeBase.cs" />
     <Compile Include="Patching\QModPlaceholder.cs" />
     <Compile Include="Patching\QModPatchMethod.cs" />
-    <Compile Include="SummaryLogger.cs" />
+    <Compile Include="Utility\SummaryLogger.cs" />
     <Compile Include="Utility\IOUtilities.cs" />
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="Utility\Dialog.cs" />
