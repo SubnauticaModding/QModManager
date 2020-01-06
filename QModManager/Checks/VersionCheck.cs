@@ -12,7 +12,7 @@
     {
         internal const string snNexus = "https://nexusmods.com/subnautica/mods/201";
         internal const string bzNexus = "https://nexusmods.com/subnauticabelowzero/mods/1";
-        internal const string VersionURL = "https://raw.githubusercontent.com/QModManager/QModManager/master/Data/latest-version.txt";
+        internal const string VersionURL = "https://raw.githubusercontent.com/SubnauticaModding/QModManager/master/Data/latest-version.txt";
 
         internal static void Check()
         {
