@@ -22,6 +22,8 @@
     {
         internal static int ModsTab;
 
+        internal static bool DevMode = false;
+
         [HarmonyPatch(typeof(uGUI_OptionsPanel), "AddTabs")]
         internal static class OptionsPatch
         {
@@ -31,13 +33,13 @@
                 ModsTab = __instance.AddTab("Mods");
                 __instance.AddHeading(ModsTab, "QModManager");
 
-                bool enableDebugLogs = Utility.Logger.EnableDebugLogging;
-                __instance.AddToggleOption(ModsTab, "Enable debug logs", enableDebugLogs,
+                __instance.AddToggleOption(ModsTab, "Enable debug logs", Utility.Logger.EnableDebugLogging,
                     new UnityAction<bool>(toggleVal => ChangeDebugLogs(toggleVal)));
 
-                bool updateCheck = PlayerPrefsExtra.GetBool("QModManager_EnableUpdateCheck", true);
-                __instance.AddToggleOption(ModsTab, "Check for updates", updateCheck,
+                __instance.AddToggleOption(ModsTab, "Check for updates", PlayerPrefsExtra.GetBool("QModManager_EnableUpdateCheck", true),
                     new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_EnableUpdateCheck", toggleVal)));
+
+                __instance.AddToggleOption(ModsTab, "Enable developer mode", DevMode, new UnityAction<bool>(toggleVal => DevMode = toggleVal));
             }
         }
 

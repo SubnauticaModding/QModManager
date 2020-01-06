@@ -24,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
     <LangVersion>latest</LangVersion>
     <DocumentationFile>..\Build\QModInstaller.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -138,6 +139,7 @@
     <Compile Include="Checks\NitroxCheck.cs" />
     <Compile Include="Patching\FatalPatchingException.cs" />
     <Compile Include="Patching\GameDetector.cs" />
+    <Compile Include="Patching\InGamePatcher.cs" />
     <Compile Include="Patching\Initializer.cs" />
     <Compile Include="Patching\ManifestValidator.cs" />
     <Compile Include="Patching\Patcher.cs" />
