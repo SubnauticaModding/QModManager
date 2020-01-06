@@ -21,12 +21,9 @@ public class ModListEntry : MonoBehaviour
 
     [Header("Mod details")]
 
-    [ReadOnly]
-    public bool _enabled;
-    [ReadOnly]
-    public bool expanded;
-    [ReadOnly]
-    public string modJSON;
+    bool _enabled;
+    bool expanded;
+    string modJSON;
 
     public void Awake()
     {

@@ -3,22 +3,20 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Toggle))]
-[RequireComponent(typeof(EnablerDisablerController))]
+[RequireComponent(typeof(StateController))]
 [DisallowMultipleComponent]
 public class SidebarMenuItem : MonoBehaviour
 {
     public GameObject content;
     public bool isDefault;
-    [ReadOnly]
-    public EnablerDisablerController controller;
-    [ReadOnly]
-    public Toggle toggle;
+    StateController controller;
+    Toggle toggle;
     public UnityEvent onRefresh;
 
     public void Start()
     {
         toggle = GetComponent<Toggle>();
-        controller = GetComponent<EnablerDisablerController>();
+        controller = GetComponent<StateController>();
 
         toggle.onValueChanged.AddListener(OnToggleChanged);
         toggle.isOn = isDefault;

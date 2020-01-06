@@ -13,8 +13,7 @@ public class DirectorySelector : MonoBehaviour
 {
     public static DirectorySelector singleton;
 
-    [ReadOnly]
-    public string FolderPref = "SubnauticaInstallDirectory";
+    string FolderPref = "SubnauticaInstallDirectory";
 
     public TextMeshProUGUI label;
     public TextMeshProUGUI statusLabel;

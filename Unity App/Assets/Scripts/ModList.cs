@@ -12,10 +12,9 @@ public class ModList : MonoBehaviour
     public ModListEntry modEntryTemplate;
     public Transform contentContainer;
 
-    [ReadOnly]
-    public List<ModListEntry> modEntries = new List<ModListEntry>();
+    List<ModListEntry> modEntries = new List<ModListEntry>();
 
-    public void Awake()
+    void Awake()
     {
         modEntryTemplate.gameObject.SetActive(false);
     }
@@ -29,7 +28,7 @@ public class ModList : MonoBehaviour
         DestroyAllEntries();
     }
 
-    public void Initialize()
+    void Initialize()
     {
         DestroyAllEntries();
 

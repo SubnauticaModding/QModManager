@@ -8,6 +8,6 @@ public class SidebarFooter : MonoBehaviour
 
     public void Awake()
     {
-        GetComponent<TextMeshProUGUI>().text = Prefix + GameManager.singleton.Version;
+        GetComponent<TextMeshProUGUI>().text = Prefix + AppManager.singleton.Version;
     }
 }
