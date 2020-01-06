@@ -1,10 +1,9 @@
-﻿namespace QModManager
+﻿namespace QModManager.Utility
 {
     using System;
     using System.Collections.Generic;
     using QModManager.API.ModLoading;
     using QModManager.Patching;
-    using Logger = Utility.Logger;
 
     internal static class SummaryLogger
     {

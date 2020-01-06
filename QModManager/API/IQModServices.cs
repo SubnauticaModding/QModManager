@@ -18,7 +18,7 @@
         /// Finds a specific mod with a <see cref="IQMod.LoadedAssembly"/> that matches the provided one.
         /// </summary>
         /// <param name="modAssembly">The mod assembly.</param>
-        /// <returns>The <see cref="IQMod"/> instance of the mod if found; otherwise returns <c>null</c.></returns>
+        /// <returns>The <see cref="IQMod"/> instance of the mod if found; otherwise returns <c>null</c></returns>
         IQMod FindModByAssembly(Assembly modAssembly);
     }
 }
