@@ -1,5 +1,4 @@
 ### QModManager
-[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors)
 
 #### Config based patch management for Subnautica and Subnautica: Below Zero
 
