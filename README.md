@@ -1,4 +1,5 @@
 ### QModManager
+[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors)
 
 #### Config based patch management for Subnautica and Subnautica: Below Zero
 
@@ -70,6 +71,13 @@ _(optional, defaults to `[]`)_
 Type: `string[]`  
 Example: `[ "DependencyModID" ]`
 
+- `VersionDependencies`: Just like `Dependencies`, but you can specify a version range for the needed mods.  
+_(optional, default to `{}`)_  
+Type: `Dictionary<string, string>`  
+Example: `{ "SMLHelper": "2.0", "AnotherVeryImportantMod": "1.2.3" }`  
+**Note that the version you specify here will be treated as the new "minimum required version".**  
+If the dependency mod is out of data, QModManager won't load this one.
+
 - `LoadBefore`: Specify mods that will be loaded after your mod. If a mod in this list isn't found, it is simply ignored.  
 _(optional, defaults to `[]`)_  
 Type: `string[]`  
@@ -98,7 +106,9 @@ Example: `"BestMod.dll"`
 - `EntryMethod`: The method which is called to load the mod. The method must be public, static, and have no parameters.  
 _(required)_  
 Type: `string`  
-Example: `"BestMod.QMod.Patch"`
+Example: `"BestMod.QMod.Patch"`  
+**Note: This is not longer required.**   
+See the new [wiki](https://github.com/SubnauticaModding/QModManager/wiki) for details on how you can identify your patching method without setting it in the manifest file.
 
 #### The final result would look something like this:
 
@@ -109,6 +119,10 @@ Example: `"BestMod.QMod.Patch"`
   "Author": "Awesome Guy",
   "Version": "1.0.0",
   "Dependencies": [ "DependencyModID" ],
+  "VersionDependencies": { 
+    "SMLHelper": "2.0", 
+    "AnotherVeryImportantMod": "1.2.3" 
+  },
   "LoadBefore": [ "AModID", "SomeOtherModID" ],
   "LoadAfter": [ "AnotherModID" ],
   "Enable": true,
@@ -125,3 +139,13 @@ ___
 ### Mac Users
 
 Refer to the `README.md` file in the [`Mac Installation`](Mac%20Installation) folder for installation instructions.
+___
+
+### Linux Users
+
+Using [Steam Proton 4.2](https://www.protondb.com/app/264710), QModManager can be used with Subnautica, allowing you to use certain mods. To Get this working, the following actions should be taken.
+
+- (Optionally) Use an application like Q4Wine to add the Steam Proton directory to your prefix list for easy access.
+- Run the Windows installer in the Steam Proton directory `./steamapps/compatdata/264710/`
+- Install QModManager into the actual Subnautica directory `./steamapps/common/Subnautica/`
+- Manually install mods by adding them to the QMods folder in your Subnautica directory  `./steamapps/common/Subnautica/QMods/`

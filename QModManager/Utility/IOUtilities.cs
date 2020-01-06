@@ -6,11 +6,16 @@ namespace QModManager.Utility
 {
     internal static class IOUtilities
     {
-        private static readonly HashSet<string> BannedFolders = new HashSet<string>()
+        internal static readonly HashSet<string> BannedFolders = new HashSet<string>()
         {
+            ".git",
             "OST",
+            "AssetBundles",
+            "MonoBleedingEdge",
             "SNAppData",
             "SNUnmanagedData",
+            "Subnautica_Data",
+            "_CommonRedist",
             "Subnautica_Data/Mono",
             "Subnautica_Data/Plugins",
             "Subnautica_Data/Resources",
@@ -31,7 +36,7 @@ namespace QModManager.Utility
             }
         }
 
-        private static string GenerateFolderStructure(string directory)
+        internal static string GenerateFolderStructure(string directory)
         {
             try
             {
@@ -59,7 +64,7 @@ namespace QModManager.Utility
                 throw e;
             }
         }
-        private static string GetFolderStructureRecursively(string directory, int spaces = 0)
+        internal static string GetFolderStructureRecursively(string directory, int spaces = 0)
         {
             try
             {
@@ -95,7 +100,7 @@ namespace QModManager.Utility
             }
         }
 
-        private static string ParseSize(long lsize)
+        internal static string ParseSize(long lsize)
         {
             string[] units = new[] { "B", "KB", "MB", "GB" };
             float size = lsize;
@@ -105,7 +110,7 @@ namespace QModManager.Utility
             {
                 unit++;
                 size /= 1024;
-            };
+            }
 
             string number = size.ToString("F2");
             number.TrimEnd('0');
@@ -114,7 +119,7 @@ namespace QModManager.Utility
             return number + units[unit];
         }
 
-        private static string GenerateSpaces(int spaces)
+        internal static string GenerateSpaces(int spaces)
         {
             string s = "";
             for (int i = 1; i <= spaces; i += 4)
@@ -122,7 +127,7 @@ namespace QModManager.Utility
             return s;
         }
 
-        private static int GetFileCountRecursively(string directory)
+        internal static int GetFileCountRecursively(string directory)
         {
             int c = 0;
             foreach (string file in Directory.GetFiles(directory)) c++;

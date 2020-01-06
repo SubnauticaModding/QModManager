@@ -2,10 +2,10 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("QModManager")]
+[assembly: AssemblyTitle("QModManager 3")]
 [assembly: AssemblyDescription("Config based patch management for Subnautica and Subnautica: Below Zero")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("the QModManager dev team")]
+[assembly: AssemblyCompany("Subnautica Modding")]
 [assembly: AssemblyProduct("QModManager")]
 [assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
@@ -13,9 +13,8 @@ using System.Runtime.InteropServices;
 
 [assembly: ComVisible(false)]
 
-[assembly: AssemblyVersion("2.0.1")]
-[assembly: AssemblyFileVersion("2.0.1")]
+[assembly: AssemblyVersion("3.0.0")]
+[assembly: AssemblyFileVersion("3.0.0")]
 
 [assembly: InternalsVisibleTo("QMMTests")]
 [assembly: InternalsVisibleTo("QModManager")]
-[assembly: InternalsVisibleTo("SMLHelper")]
