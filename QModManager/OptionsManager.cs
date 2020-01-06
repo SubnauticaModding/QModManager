@@ -33,11 +33,21 @@
                 ModsTab = __instance.AddTab("Mods");
                 __instance.AddHeading(ModsTab, "QModManager");
 
+                __instance.AddToggleOption(ModsTab, "Enable debug logs", Utility.Logger.EnableDebugLogging,
+                    new UnityAction<bool>(toggleVal => ChangeDebugLogs(toggleVal)));
+
                 __instance.AddToggleOption(ModsTab, "Check for updates", PlayerPrefsExtra.GetBool("QModManager_EnableUpdateCheck", true),
                     new UnityAction<bool>(toggleVal => PlayerPrefsExtra.SetBool("QModManager_EnableUpdateCheck", toggleVal)));
 
                 __instance.AddToggleOption(ModsTab, "Enable developer mode", DevMode, new UnityAction<bool>(toggleVal => DevMode = toggleVal));
             }
+        }
+
+        internal static void ChangeDebugLogs(bool value)
+        {
+            string path = Path.Combine(Environment.CurrentDirectory, "QModDebug.txt");
+            if (value && !File.Exists(path)) File.WriteAllText(path, "1");
+            if (!value && File.Exists(path)) File.Delete(path);
         }
     }
 }
