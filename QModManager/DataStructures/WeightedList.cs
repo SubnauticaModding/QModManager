@@ -1,4 +1,5 @@
-﻿namespace QModManager.DataStructures
+﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+namespace QModManager.DataStructures
 {
     using System;
     using System.Collections;
