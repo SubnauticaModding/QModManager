@@ -6,7 +6,6 @@
 
     internal class QModPlaceholder : QMod, IQMod
     {
-        private readonly ModStatus status;
         /// <summary>
         /// The dummy <see cref="QMod"/> which is used to represent QModManager
         /// </summary>

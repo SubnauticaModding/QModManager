@@ -5,7 +5,7 @@
 
     /// <summary>
     /// Identifies a post-patch method for a QMod.<para/>
-    /// This method must be public, must take no parameters, and must return either <seealso cref="void"/> or <seealso cref="PatchResults"/>.<para/>
+    /// This method must be public, must take no parameters, and must return <seealso cref="void"/>.<para/>
     /// ALERT: The class that defines this method must have a <seealso cref="QModCoreAttribute"/> attribute.
     /// </summary>
     /// <seealso cref="Attribute" />
@@ -21,9 +21,10 @@
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="QModPostPatch" /> class.
+        /// Initializes a new instance of the <see cref="QModPostPatch" /> class.<para/>
+        /// Should only be used for mods that need to load last, after all other mods. Read the documentation for instructions.
         /// </summary>
-        /// <param name="secretPassword">The secret password that proves you read the documentation.</param>
+        /// <param name="secretPassword">Should only be used for mods that need to load last, after all other mods. Read the documentation for instructions.</param>
         public QModPostPatch(string secretPassword) : base(PatchingOrder.MetaPostInitialize, secretPassword)
         {
         }
