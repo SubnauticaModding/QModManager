@@ -52,7 +52,7 @@
                 if (status != ModStatus.Success)
                 {
                     Logger.Debug($"Mod '{mod.Id}' will not be loaded");
-                    earlyErrors.Add(mod);
+                    if (status != ModStatus.Merged) earlyErrors.Add(mod);
                     continue;
                 }
 
