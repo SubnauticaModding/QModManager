@@ -14,12 +14,12 @@
     {
         internal static readonly Regex VersionRegex = new Regex(@"(((\d+)\.?)+)");
 
-        internal static readonly Dictionary<string, string> BannedIDs = new Dictionary<string, string>()
+        internal static readonly Dictionary<string, Tuple<string, ModStatus>> BannedIDs = new Dictionary<string, Tuple<string, ModStatus>>()
         {
-            { "QModManager", "This mod ID is banned. Please pick another one." },
-            { "QModInstaller", "This mod ID is banned. Please pick another one." },
+            { "QModManager", new Tuple<string, ModStatus>("This mod ID is banned. Please pick another one.", ModStatus.InvalidCoreInfo) },
+            { "QModInstaller", new Tuple<string, ModStatus>("This mod ID is banned. Please pick another one.", ModStatus.InvalidCoreInfo) },
             // The list can be continued in the future with stuff like
-            // { "RadialTabs", "Mod merged with QModManager" },
+            // { "RadialTabs", new Tuple<string, ModStatus>("Mod merged with QModManager", ModStatus.CanceledByUser) },
         };
 
         public ModStatus ValidateManifest(QMod mod, string subDirectory)
@@ -30,10 +30,10 @@
                 string.IsNullOrEmpty(mod.Author))
                 return mod.Status = ModStatus.MissingCoreInfo;
 
-            if (BannedIDs.TryGetValue(mod.Id, out string reason))
+            if (BannedIDs.TryGetValue(mod.Id, out Tuple<string, ModStatus> reason))
             {
-                Logger.Error($"Mod \"{mod.Id}\" has an invalid ID. Reason: ${reason}");
-                return mod.Status = ModStatus.InvalidCoreInfo;
+                Logger.Error($"Mod \"{mod.Id}\" has an invalid ID. Reason: ${reason.Item1}");
+                return mod.Status = reason.Item2;
             }
 
             switch (mod.Game)
