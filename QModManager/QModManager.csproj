@@ -138,6 +138,7 @@
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Checks\NitroxCheck.cs" />
     <Compile Include="HarmonyPatches\DisableDevErrorReporting.cs" />
+    <Compile Include="HarmonyPatches\EnableAchievements.cs" />
     <Compile Include="Patching\FatalPatchingException.cs" />
     <Compile Include="Patching\GameDetector.cs" />
     <Compile Include="HarmonyPatches\UpdateDeveloperMode.cs" />
