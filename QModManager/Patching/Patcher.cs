@@ -129,7 +129,7 @@ namespace QModManager.Patching
             }
             catch (Exception e)
             {
-                Logger.Fatal("An unhandled exception has been caught! - Patching ended prematurely!");
+                Logger.Fatal("An unhandled exception has been caught! Patching ended prematurely!");
                 Logger.Exception(e);
 
                 Dialog.Show("An unhandled exception has been caught. QModManager could not be initialized.", Dialog.Button.close, Dialog.Button.Disabled, false);
@@ -157,6 +157,7 @@ namespace QModManager.Patching
 
         private static void PatchHarmony()
         {
+            Logger.Debug("Applying Harmony patches...");
             HarmonyInstance.Create("qmodmanager").PatchAll();
             Logger.Debug("Patched!");
         }
