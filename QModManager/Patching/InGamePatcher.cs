@@ -49,7 +49,7 @@
                 float time = Time.timeSinceLevelLoad - __instance.lastSavedStateTime;
                 if (!GameModeUtils.IsPermadeath() && time > __instance.maxSecondsToBeRecentlySaved)
                 {
-                    __instance.quitLastSaveText.text = Language.main.GetFormat("TimeSinceLastSave", Utils.PrettifyTime((int)time));
+                    QuitConfirmationWithSaveWarning.GetComponent<Text>().text = Language.main.GetFormat("TimeSinceLastSave", Utils.PrettifyTime((int)time));
                     __instance.ChangeSubscreen("QuitToDesktop ConfirmationWithSaveWarning");
                     return;
                 }
