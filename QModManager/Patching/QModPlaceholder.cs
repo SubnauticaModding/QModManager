@@ -36,7 +36,7 @@
             this.Author = "Unknown";
             this.SupportedGame = QModGame.None;
             this.Enable = false;
-            this.Status = ModStatus.UnidentifiedMod;
+            this.Status = status;
         }
     }
 }

@@ -14,6 +14,14 @@
     {
         internal static readonly Regex VersionRegex = new Regex(@"(((\d+)\.?)+)");
 
+        internal static readonly Dictionary<string, string> BannedIDs = new Dictionary<string, string>()
+        {
+            { "QModManager", "This mod ID is banned. Please pick another one." },
+            { "QModInstaller", "This mod ID is banned. Please pick another one." },
+            // The list can be continued in the future with stuff like
+            // { "RadialTabs", "Mod merged with QModManager" },
+        };
+
         public ModStatus ValidateManifest(QMod mod, string subDirectory)
         {
             Logger.Debug($"Validating mod in '{subDirectory}'");
@@ -21,6 +29,12 @@
                 string.IsNullOrEmpty(mod.DisplayName) ||
                 string.IsNullOrEmpty(mod.Author))
                 return mod.Status = ModStatus.MissingCoreInfo;
+
+            if (BannedIDs.TryGetValue(mod.Id, out string reason))
+            {
+                Logger.Error($"Mod \"{mod.Id}\" has an invalid ID. Reason: ${reason}");
+                return mod.Status = ModStatus.InvalidCoreInfo;
+            }
 
             switch (mod.Game)
             {
@@ -39,7 +53,7 @@
 
             try
             {
-                if (System.Version.TryParse(mod.Version, out Version version))
+                if (Version.TryParse(mod.Version, out Version version))
                     mod.ParsedVersion = version;
             }
             catch (Exception vEx)
