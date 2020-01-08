@@ -14,7 +14,7 @@
     {
         internal static readonly Regex VersionRegex = new Regex(@"(((\d+)\.?)+)");
 
-        internal static readonly Dictionary<string, ModStatus> Exceptions = new Dictionary<string, ModStatus>()
+        internal static readonly Dictionary<string, ModStatus> ProhibitedModIDs = new Dictionary<string, ModStatus>()
         {
             { "QModManager", ModStatus.BannedID },
             { "QModInstaller", ModStatus.BannedID },
@@ -29,7 +29,7 @@
                 string.IsNullOrEmpty(mod.Author))
                 return mod.Status = ModStatus.MissingCoreInfo;
 
-            if (Exceptions.TryGetValue(mod.Id, out ModStatus reason))
+            if (ProhibitedModIDs.TryGetValue(mod.Id, out ModStatus reason))
                 return mod.Status = reason;
 
             switch (mod.Game)

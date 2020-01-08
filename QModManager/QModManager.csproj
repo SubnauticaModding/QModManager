@@ -137,9 +137,10 @@
     <Compile Include="DataStructures\WeightedList.cs" />
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Checks\NitroxCheck.cs" />
+    <Compile Include="HarmonyPatches\DisableDevErrorReporting.cs" />
     <Compile Include="Patching\FatalPatchingException.cs" />
     <Compile Include="Patching\GameDetector.cs" />
-    <Compile Include="Patching\InGamePatcher.cs" />
+    <Compile Include="HarmonyPatches\UpdateDeveloperMode.cs" />
     <Compile Include="Patching\Initializer.cs" />
     <Compile Include="Patching\ManifestValidator.cs" />
     <Compile Include="Patching\Patcher.cs" />

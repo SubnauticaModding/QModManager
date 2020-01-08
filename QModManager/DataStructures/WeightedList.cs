@@ -1,11 +1,10 @@
-﻿#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
-namespace QModManager.DataStructures
+﻿namespace QModManager.DataStructures
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
 
-    public class WeightedList<TKey> : ICollection<TKey>
+    internal class WeightedList<TKey> : ICollection<TKey>
     {
         private readonly Dictionary<TKey, int> weights = new Dictionary<TKey, int>();
 
