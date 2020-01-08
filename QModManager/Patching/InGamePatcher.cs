@@ -17,6 +17,15 @@
                     IngameMenu.main.developerMode = OptionsManager.DevMode;
                     IngameMenu.main.developerButton.gameObject.SetActive(OptionsManager.DevMode);
                 }
+            }
+        }
+
+        [HarmonyPatch(typeof(IngameMenu), nameof(IngameMenu.Start))]
+        internal static class IngameMenu_Start_Patch
+        {
+            [HarmonyPostfix]
+            internal static void Postfix(IngameMenu __instance)
+            {
                 __instance.feedbackButton.interactable = false;
                 Transform transform = __instance.transform.Find("Main/ButtonLayout/ButtonFeedback");
                 if (transform != null) transform.gameObject.GetComponent<Button>().interactable = false;
