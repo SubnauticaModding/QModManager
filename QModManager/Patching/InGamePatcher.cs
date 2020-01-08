@@ -1,6 +1,7 @@
 ﻿namespace QModManager.Patching
 {
     using Harmony;
+    using System.Linq;
     using UnityEngine;
     using UnityEngine.UI;
 
@@ -49,7 +50,7 @@
                 float time = Time.timeSinceLevelLoad - __instance.lastSavedStateTime;
                 if (!GameModeUtils.IsPermadeath() && time > __instance.maxSecondsToBeRecentlySaved)
                 {
-                    QuitConfirmationWithSaveWarning.GetComponent<Text>().text = Language.main.GetFormat("TimeSinceLastSave", Utils.PrettifyTime((int)time));
+                    QuitConfirmationWithSaveWarning.GetComponentsInChildren<Text>()[1].text = Language.main.GetFormat("TimeSinceLastSave", Utils.PrettifyTime((int)time));
                     __instance.ChangeSubscreen("QuitToDesktop ConfirmationWithSaveWarning");
                     return;
                 }
