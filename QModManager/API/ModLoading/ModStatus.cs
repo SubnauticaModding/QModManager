@@ -21,5 +21,7 @@
         MissingAssemblyFile,
         FailedLoadingAssemblyFile,
         UnidentifiedMod,
+        BannedID,
+        Merged,
     }
 }
