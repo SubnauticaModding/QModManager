@@ -125,16 +125,16 @@ namespace QModManager.Patching
                     switch (erroredMods.Length)
                     {
                         case 1:
-                            message = $"The following mod could not be loaded: {erroredMods[0].DisplayName}. Check the log for more information";
+                            message = $"The following mod could not be loaded: {erroredMods[0].DisplayName}. Check the log for more information.";
                             break;
                         case 2:
-                            message = $"The following mods could not be loaded: {erroredMods[0].DisplayName} and {erroredMods[1].DisplayName}. Check the log for more information";
+                            message = $"The following mods could not be loaded: {erroredMods[0].DisplayName} and {erroredMods[1].DisplayName}. Check the log for more information.";
                             break;
                         case 3:
-                            message = $"The following mods could not be loaded: {erroredMods[0].DisplayName}, {erroredMods[1].DisplayName} and {erroredMods[2].DisplayName}. Check the log for more information";
+                            message = $"The following mods could not be loaded: {erroredMods[0].DisplayName}, {erroredMods[1].DisplayName} and {erroredMods[2].DisplayName}. Check the log for more information.";
                             break;
                         default:
-                            message = $"The following mods could not be loaded: {erroredMods[0].DisplayName}, {erroredMods[1].DisplayName}, {erroredMods[2].DisplayName} and {erroredMods.Length - 3} others. Check the log for more information";
+                            message = $"The following mods could not be loaded: {erroredMods[0].DisplayName}, {erroredMods[1].DisplayName}, {erroredMods[2].DisplayName} and {erroredMods.Length - 3} others. Check the log for more information.";
                             break;
                     }
 
@@ -143,7 +143,7 @@ namespace QModManager.Patching
                         message = message,
                         leftButton = Dialog.Button.SeeLog,
                         rightButton = Dialog.Button.Close,
-                        color = Dialog.DialogColor.Blue
+                        color = Dialog.DialogColor.Red
                     }.Show();
                 }
                 else if (VersionCheck.result != null)
@@ -169,7 +169,6 @@ namespace QModManager.Patching
                     message = "A fatal patching exception has been caught. QModManager could not be initialized.",
                     color = Dialog.DialogColor.Red,
                     leftButton = Dialog.Button.SeeLog,
-                    cannotClose = true,
                 }.Show();
             }
             catch (Exception e)
@@ -182,7 +181,6 @@ namespace QModManager.Patching
                     message = "An unhandled exception has been caught. QModManager could not be initialized.",
                     color = Dialog.DialogColor.Red,
                     leftButton = Dialog.Button.SeeLog,
-                    cannotClose = true,
                 }.Show();
             }
         }

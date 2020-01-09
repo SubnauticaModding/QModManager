@@ -62,7 +62,6 @@
         internal DialogColor color = DialogColor.Blue;
         internal Button leftButton = Button.Disabled;
         internal Button rightButton = Button.Disabled;
-        internal bool cannotClose = false;
 
         private GameObject coroutineHandler;
 
@@ -162,7 +161,7 @@
                 UnityEngine.Object.Destroy(coroutineHandler);
 
                 // Re-open the dialog if it is not closeable
-                if (cannotClose) Show();
+                if ((leftButtonClicked && leftButton != Button.Close) || (!leftButtonClicked && rightButton != Button.Close)) Show();
             });
 
             // Focus popup
