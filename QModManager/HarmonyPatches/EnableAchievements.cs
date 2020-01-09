@@ -3,7 +3,7 @@ namespace QModManager.HarmonyPatches.EnableAchievements
 {
     using Harmony;
 
-    [HarmonyPatch(typeof(GameAchievements), "Unlock")]
+    [HarmonyPatch(typeof(GameAchievements), nameof(GameAchievements.Unlock))]
     internal static class GameAchievements_Unlock_Patch
     {
         // This patch allows achievements to be earned even if console commands were used
