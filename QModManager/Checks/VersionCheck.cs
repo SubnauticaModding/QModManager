@@ -71,9 +71,13 @@
                     Logger.Info($"Newer version found: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()}");
                     result = latestVersion;
                 }
+                else if (latestVersion < currentVersion)
+                {
+                    Logger.Info($"Received latest version from GitHub. We're... ahead? Is this a development version, or did Prime forget to update the version again? 🙄");
+                }
                 else
                 {
-                    Logger.Info($"Recieved latest version from GitHub. We are up to date!");
+                    Logger.Info($"Received latest version from GitHub. We are up to date!");
                 }
             }
             catch (Exception e)

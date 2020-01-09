@@ -112,9 +112,15 @@ namespace QModManager.Patching
                 initializer.InitializeMods(modsToLoad);
 
                 QMod[] loadedMods = modsToLoad.Where(m => m.IsLoaded).ToArray();
-                QMod[] erroredMods = modsToLoad.Where(m => !m.IsLoaded).ToArray();
+                QMod[] skippedMods = modsToLoad.Where(m => !m.IsLoaded && m.Status < 0).ToArray();
+                QMod[] erroredMods = modsToLoad.Where(m => !m.IsLoaded && m.Status > 0).ToArray();
 
                 Logger.Info($"Finished loading QModManager. Loaded {loadedMods.Length} mods.");
+
+                if (skippedMods.Length > 0)
+                {
+                    Logger.Info($"A total of {skippedMods.Length} mods were skipped");
+                }
 
                 if (erroredMods.Length > 0)
                 {

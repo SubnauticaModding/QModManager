@@ -121,7 +121,7 @@
     <Compile Include="API\IQMod.cs" />
     <Compile Include="API\IQModAPI.cs" />
     <Compile Include="API\IQModServices.cs" />
-    <Compile Include="API\ModLoading\ModStatus.cs" />
+    <Compile Include="Patching\ModStatus.cs" />
     <Compile Include="API\ModLoading\QModCoreAttribute.cs" />
     <Compile Include="API\ModLoading\QModPatch.cs" />
     <Compile Include="API\ModLoading\QModPostPatch.cs" />

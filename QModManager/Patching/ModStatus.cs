@@ -1,10 +1,11 @@
-﻿namespace QModManager.API.ModLoading
+﻿namespace QModManager.Patching
 {
     internal enum ModStatus
     {
-        Success,
-        //CanceledByAuthor,
-        CanceledByUser,
+        Merged = -3,
+        //CanceledByAuthor = -2,
+        CanceledByUser = -1,
+        Success = 0,
         PatchMethodFailed,
         TooManyPatchMethods,
         MissingPatchMethod,
@@ -22,6 +23,5 @@
         FailedLoadingAssemblyFile,
         UnidentifiedMod,
         BannedID,
-        Merged,
     }
 }
