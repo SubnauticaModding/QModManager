@@ -160,8 +160,10 @@
 
                 UnityEngine.Object.Destroy(coroutineHandler);
 
-                // Re-open the dialog if it is not closeable
-                if ((leftButtonClicked && leftButton != Button.Close) || (!leftButtonClicked && rightButton != Button.Close)) Show();
+                // Re-open the dialog if the button pressed was not close
+                bool closeButtonClicked = (leftButtonClicked && leftButton == Button.Close) || (!leftButtonClicked && rightButton == Button.Close);
+                if (!closeButtonClicked)
+                    Show();
             });
 
             // Focus popup

@@ -73,7 +73,7 @@
                 }
                 else if (latestVersion < currentVersion)
                 {
-                    Logger.Info($"Received latest version from GitHub. We're... ahead? Is this a development version, or did Prime forget to update the version again? 🙄");
+                    Logger.Info($"Received latest version from GitHub. We're ahead. This is probably a development build.");
                 }
                 else
                 {

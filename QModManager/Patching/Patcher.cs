@@ -111,24 +111,22 @@ namespace QModManager.Patching
                 var initializer = new Initializer(CurrentlyRunningGame);
                 initializer.InitializeMods(modsToLoad);
 
-                QMod[] loadedMods = modsToLoad.Where(m => m.IsLoaded).ToArray();
-                QMod[] skippedMods = modsToLoad.Where(m => !m.IsLoaded && m.Status < 0).ToArray();
-                QMod[] erroredMods = modsToLoad.Where(m => !m.IsLoaded && m.Status > 0).ToArray();
+                List<QMod> loadedMods = modsToLoad.FindAll(m => m.IsLoaded);
+                List<QMod> skippedMods = modsToLoad.FindAll(m => !m.IsLoaded && m.Status < 0);
+                List<QMod> erroredMods = modsToLoad.FindAll(m => !m.IsLoaded && m.Status > 0);
 
-                Logger.Info($"Finished loading QModManager. Loaded {loadedMods.Length} mods.");
+                Logger.Info($"Finished loading QModManager. Loaded {loadedMods.Count} mods.");
 
-                if (skippedMods.Length > 0)
+                if (skippedMods.Count > 0)
+                    Logger.Info($"A total of {skippedMods.Count} mods were skipped");
+
+                if (erroredMods.Count> 0)
                 {
-                    Logger.Info($"A total of {skippedMods.Length} mods were skipped");
-                }
-
-                if (erroredMods.Length > 0)
-                {
-                    Logger.Error($"A total of {erroredMods.Length} mods failed to load");
+                    Logger.Error($"A total of {erroredMods.Count} mods failed to load");
 
                     string message;
 
-                    switch (erroredMods.Length)
+                    switch (erroredMods.Count)
                     {
                         case 1:
                             message = $"The following mod could not be loaded: {erroredMods[0].DisplayName}. Check the log for more information.";
@@ -140,7 +138,7 @@ namespace QModManager.Patching
                             message = $"The following mods could not be loaded: {erroredMods[0].DisplayName}, {erroredMods[1].DisplayName} and {erroredMods[2].DisplayName}. Check the log for more information.";
                             break;
                         default:
-                            message = $"The following mods could not be loaded: {erroredMods[0].DisplayName}, {erroredMods[1].DisplayName}, {erroredMods[2].DisplayName} and {erroredMods.Length - 3} others. Check the log for more information.";
+                            message = $"The following mods could not be loaded: {erroredMods[0].DisplayName}, {erroredMods[1].DisplayName}, {erroredMods[2].DisplayName} and {erroredMods.Count - 3} others. Check the log for more information.";
                             break;
                     }
 
