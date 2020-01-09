@@ -14,6 +14,8 @@
         internal const string bzNexus = "https://nexusmods.com/subnauticabelowzero/mods/1";
         internal const string VersionURL = "https://raw.githubusercontent.com/SubnauticaModding/QModManager/master/Data/latest-version.txt";
 
+        internal static Version result = null;
+
         internal static void Check()
         {
             if (PlayerPrefs.GetInt("QModManager_EnableUpdateCheck", 1) == 0)
@@ -47,6 +49,7 @@
                 client.DownloadStringAsync(new Uri(VersionURL));
             }
         }
+
         internal static void Parse(string versionStr)
         {
             try
@@ -66,16 +69,7 @@
                 if (latestVersion > currentVersion)
                 {
                     Logger.Info($"Newer version found: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()}");
-                    if (Patcher.ErrorModCount <= 0)
-                    {
-                        new Dialog()
-                        {
-                            message = $"There is a newer version of QModManager available: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()})",
-                            leftButton = Dialog.Button.Download,
-                            rightButton = Dialog.Button.Close,
-                            color = Dialog.DialogColor.Blue
-                        }.Show();
-                    }
+                    result = latestVersion;
                 }
                 else
                 {

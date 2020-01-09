@@ -3,6 +3,7 @@ namespace QModManager.Patching
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using API;
     using API.ModLoading;
@@ -53,8 +54,8 @@ namespace QModManager.Patching
                     {
                         message = "A fatal error has occurred. QModManager could not be initialized.",
                         color = Dialog.DialogColor.Red,
-                        leftButton = Dialog.Button.Close,
-                        rightButton = Dialog.Button.SeeLog,
+                        leftButton = Dialog.Button.SeeLog,
+                        rightButton = Dialog.Button.Close,
                     }.Show();
 
                     return;
@@ -110,26 +111,53 @@ namespace QModManager.Patching
                 var initializer = new Initializer(CurrentlyRunningGame);
                 initializer.InitializeMods(modsToLoad);
 
-                int loadedMods = 0;
-                int erroredMods = 0;
-                foreach (QMod mod in modsToLoad)
+                QMod[] loadedMods = modsToLoad.Where(m => m.IsLoaded).ToArray();
+                QMod[] erroredMods = modsToLoad.Where(m => !m.IsLoaded).ToArray();
+
+                Logger.Info($"Finished loading QModManager. Loaded {loadedMods.Length} mods.");
+
+                if (erroredMods.Length > 0)
                 {
-                    if (mod.IsLoaded)
-                        loadedMods++;
-                    else
-                        erroredMods++;
+                    Logger.Error($"A total of {erroredMods.Length} mods failed to load");
+
+                    string message;
+
+                    switch (erroredMods.Length)
+                    {
+                        case 1:
+                            message = $"The following mod could not be loaded: {erroredMods[0].DisplayName}. Check the log for more information";
+                            break;
+                        case 2:
+                            message = $"The following mods could not be loaded: {erroredMods[0].DisplayName} and {erroredMods[1].DisplayName}. Check the log for more information";
+                            break;
+                        case 3:
+                            message = $"The following mods could not be loaded: {erroredMods[0].DisplayName}, {erroredMods[1].DisplayName} and {erroredMods[2].DisplayName}. Check the log for more information";
+                            break;
+                        default:
+                            message = $"The following mods could not be loaded: {erroredMods[0].DisplayName}, {erroredMods[1].DisplayName}, {erroredMods[2].DisplayName} and {erroredMods.Length - 3} others. Check the log for more information";
+                            break;
+                    }
+
+                    new Dialog()
+                    {
+                        message = message,
+                        leftButton = Dialog.Button.SeeLog,
+                        rightButton = Dialog.Button.Close,
+                        color = Dialog.DialogColor.Blue
+                    }.Show();
+                }
+                else if (VersionCheck.result != null)
+                {
+                    new Dialog()
+                    {
+                        message = $"There is a newer version of QModManager available: {VersionCheck.result.ToStringParsed()} (current version: {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()})",
+                        leftButton = Dialog.Button.Download,
+                        rightButton = Dialog.Button.Close,
+                        color = Dialog.DialogColor.Blue
+                    }.Show();
                 }
 
-                ErrorModCount = erroredMods;
-
-                Logger.Info($"Finished loading QModManager. Loaded {loadedMods} mods");
-
-                if (ErrorModCount > 0)
-                    Logger.Warn($"A total of {ErrorModCount} mods failed to load");
-
                 SummaryLogger.LogSummaries(modsToLoad);
-
-                throw new FatalPatchingException();
             }
             catch (FatalPatchingException pEx)
             {
