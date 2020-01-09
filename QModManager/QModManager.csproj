@@ -141,7 +141,7 @@
     <Compile Include="DataStructures\WeightedList.cs" />
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Checks\NitroxCheck.cs" />
-    <Compile Include="HarmonyPatches\ConsoleImproved.cs" />
+    <Compile Include="HarmonyPatches\EnableConsoleSetting.cs" />
     <Compile Include="HarmonyPatches\DisableDevErrorReporting.cs" />
     <Compile Include="HarmonyPatches\EnableAchievements.cs" />
     <Compile Include="Patching\FatalPatchingException.cs" />
