@@ -18,7 +18,8 @@
         {
             { "QModManager", ModStatus.BannedID },
             { "QModInstaller", ModStatus.BannedID },
-            { "ConsoleImproved", ModStatus.Merged },
+            // The list can be continued in the future with stuff like
+            // { "RadialTabs", ModStatus.Merged },
         };
 
         public ModStatus ValidateManifest(QMod mod, string subDirectory)
