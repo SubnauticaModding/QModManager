@@ -10,7 +10,6 @@
         internal static class FIELDS
         {
             internal const string CHECK_FOR_UPDATES = "Check for updates";
-            internal const string CONSOLE_HISTORY = "Console history";
             internal const string ENABLE_CONSOLE = "Enable console";
             internal const string ENABLE_DEBUG_LOGS = "Enable debug logs";
             internal const string ENABLE_DEV_MODE = "Enable developer mode";
