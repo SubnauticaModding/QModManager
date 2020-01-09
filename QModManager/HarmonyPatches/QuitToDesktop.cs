@@ -1,4 +1,4 @@
-﻿// Original mod by RandyKnapp
+﻿// Original mod by RandyKnapp: https://github.com/RandyKnapp/SubnauticaModSystem/blob/3b10593994f18e9015aa480d92b393f78fc4922e/SubnauticaModSystem/QuitToDesktop/Patches/IngameMenu_Open_Patch.cs
 namespace QModManager.HarmonyPatches.QuitToDesktop
 {
     using Harmony;
