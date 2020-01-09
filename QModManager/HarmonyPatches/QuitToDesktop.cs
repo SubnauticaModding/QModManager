@@ -2,38 +2,14 @@
 namespace QModManager.HarmonyPatches.QuitToDesktop
 {
     using Harmony;
-    using System.Collections;
     using UnityEngine;
     using UnityEngine.UI;
 
-    [HarmonyPatch(typeof(IngameMenu), nameof(IngameMenu.Start))]
-    internal static class IngameMenu_Start
+    internal static class QTD
     {
         internal static Button quitButton;
         internal static GameObject quitConfirmation;
         internal static GameObject quitConfirmation2;
-
-        [HarmonyPostfix]
-        internal static void Postfix(IngameMenu __instance)
-        {
-            var buttonPrefab = __instance.quitToMainMenuButton.GetComponent<Button>();
-            quitButton = GameObject.Instantiate(buttonPrefab, __instance.quitToMainMenuButton.transform.parent);
-            quitButton.name = "QuitToDesktop Button";
-            quitButton.onClick.RemoveAllListeners();
-            quitButton.onClick.AddListener(() => QuitDesktopSubscreen(__instance));
-
-            var confirmationPrefab = __instance.transform.Find("QuitConfirmation").gameObject;
-            quitConfirmation = GameObject.Instantiate(confirmationPrefab, __instance.transform);
-            quitConfirmation.name = "QuitToDesktop Confirmation";
-            quitConfirmation.GetComponentsInChildren<Button>()[1].onClick.RemoveAllListeners();
-            quitConfirmation.GetComponentsInChildren<Button>()[1].onClick.AddListener(() => __instance.QuitGame(true));
-
-            var confirmationWithSaveWarningPrefab = __instance.transform.Find("QuitConfirmationWithSaveWarning").gameObject;
-            quitConfirmation2 = GameObject.Instantiate(confirmationWithSaveWarningPrefab, __instance.transform);
-            quitConfirmation2.name = "QuitToDesktop ConfirmationWithSaveWarning";
-            quitConfirmation2.GetComponentsInChildren<Button>()[1].onClick.RemoveAllListeners();
-            quitConfirmation2.GetComponentsInChildren<Button>()[1].onClick.AddListener(() => __instance.QuitGame(true));
-        }
 
         internal static void QuitDesktopSubscreen(IngameMenu __instance)
         {
@@ -48,15 +24,45 @@ namespace QModManager.HarmonyPatches.QuitToDesktop
         }
     }
 
-    [HarmonyPatch(typeof(IngameMenu), nameof(IngameMenu.Open))]
-    internal static class IngameMenu_Open
+    [HarmonyPatch(typeof(IngameMenu), nameof(IngameMenu.Start))]
+    internal static class IngameMenu_Start_Patch
     {
+        // This patch creates the UI elements for the Quit to Desktop button
+
+        [HarmonyPostfix]
+        internal static void Postfix(IngameMenu __instance)
+        {
+            var buttonPrefab = __instance.quitToMainMenuButton.GetComponent<Button>();
+            QTD.quitButton = GameObject.Instantiate(buttonPrefab, __instance.quitToMainMenuButton.transform.parent);
+            QTD.quitButton.name = "QuitToDesktop Button";
+            QTD.quitButton.onClick.RemoveAllListeners();
+            QTD.quitButton.onClick.AddListener(() => QTD.QuitDesktopSubscreen(__instance));
+
+            var confirmationPrefab = __instance.transform.Find("QuitConfirmation").gameObject;
+            QTD.quitConfirmation = GameObject.Instantiate(confirmationPrefab, __instance.transform);
+            QTD.quitConfirmation.name = "QuitToDesktop Confirmation";
+            QTD.quitConfirmation.GetComponentsInChildren<Button>()[1].onClick.RemoveAllListeners();
+            QTD.quitConfirmation.GetComponentsInChildren<Button>()[1].onClick.AddListener(() => __instance.QuitGame(true));
+
+            var confirmationWithSaveWarningPrefab = __instance.transform.Find("QuitConfirmationWithSaveWarning").gameObject;
+            QTD.quitConfirmation2 = GameObject.Instantiate(confirmationWithSaveWarningPrefab, __instance.transform);
+            QTD.quitConfirmation2.name = "QuitToDesktop ConfirmationWithSaveWarning";
+            QTD.quitConfirmation2.GetComponentsInChildren<Button>()[1].onClick.RemoveAllListeners();
+            QTD.quitConfirmation2.GetComponentsInChildren<Button>()[1].onClick.AddListener(() => __instance.QuitGame(true));
+        }
+    }
+
+    [HarmonyPatch(typeof(IngameMenu), nameof(IngameMenu.Open))]
+    internal static class IngameMenu_Open_Patch
+    {
+        // This patch disables the QTD button in hardcore mode and changes the names of the two quit buttons based on game mode
+
         [HarmonyPostfix]
         internal static void Postfix(IngameMenu __instance)
         {
             __instance.quitToMainMenuText.text = $"{(GameModeUtils.IsPermadeath() ? "Save & " : "")}Quit to Main Menu";
-            IngameMenu_Start.quitButton.interactable = !GameModeUtils.IsPermadeath();
-            IngameMenu_Start.quitButton.GetComponentsInChildren<Text>().Do(t => t.text = "Quit to Desktop");
+            QTD.quitButton.interactable = !GameModeUtils.IsPermadeath();
+            QTD.quitButton.GetComponentsInChildren<Text>().Do(t => t.text = "Quit to Desktop");
         }
     }
 
@@ -64,6 +70,8 @@ namespace QModManager.HarmonyPatches.QuitToDesktop
     [HarmonyPatch(typeof(IngameMenu), nameof(IngameMenu.QuitGame))]
     internal static class IngameMenu_QuitGame
     {
+        // This is a pass-through patch
+
         [HarmonyPrefix]
         internal static bool Prefix(IngameMenu __instance, bool quitToDesktop)
         {
@@ -74,6 +82,8 @@ namespace QModManager.HarmonyPatches.QuitToDesktop
 
     internal static class IngameMenu_QuitGameAsync
     {
+        // This patch makes QTD work in hardcore mode
+
         internal static IEnumerator Passthrough(IEnumerator original, bool quitToDesktop)
         {
             int n = 0;
