@@ -24,7 +24,7 @@
 
             if (!NetworkUtilities.CheckConnection())
             {
-                Logger.Warn("Cannot check for updates, internet disabled");
+                Logger.Info("Cannot check for updates, internet disabled");
                 return;
             }
 
@@ -68,9 +68,13 @@
                     Logger.Info($"Newer version found: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()}");
                     if (Patcher.ErrorModCount <= 0)
                     {
-                        Dialog.Show(
-                            $"There is a newer version of QModManager available: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()})",
-                            Dialog.Button.download, Dialog.Button.close, true);
+                        new Dialog()
+                        {
+                            message = $"There is a newer version of QModManager available: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()})",
+                            leftButton = Dialog.Button.Download,
+                            rightButton = Dialog.Button.Close,
+                            color = Dialog.DialogColor.Blue
+                        }.Show();
                     }
                 }
                 else
