@@ -18,6 +18,8 @@
         {
             { "QModManager", ModStatus.BannedID },
             { "QModInstaller", ModStatus.BannedID },
+          
+            { "EnableAchievements", ModStatus.Merged },
             { "QuitToDesktop", ModStatus.Merged },
         };
 
