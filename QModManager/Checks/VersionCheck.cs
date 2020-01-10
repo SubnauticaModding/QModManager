@@ -68,7 +68,7 @@
                 }
                 if (latestVersion > currentVersion)
                 {
-                    Logger.Info($"Newer version found: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()}");
+                    Logger.Info($"Newer version found: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()})");
                     result = latestVersion;
                 }
                 else if (latestVersion < currentVersion)
