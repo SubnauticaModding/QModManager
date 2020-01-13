@@ -113,6 +113,8 @@
                         versionedDependencies.Add(new RequiredQMod(item.Key));
                     }
                 }
+
+                mod.RequiredMods = versionedDependencies;
             }
 
             if (!mod.Enable)
