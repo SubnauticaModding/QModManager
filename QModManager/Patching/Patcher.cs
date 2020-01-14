@@ -98,7 +98,7 @@ namespace QModManager.Patching
 
                 AddAssemblyResolveEvent();
 
-                var modFactory = new QModFactory();
+                IQModFactory modFactory = new QModFactory();
                 List<QMod> modsToLoad = modFactory.BuildModLoadingList(QModBaseDir);
 
                 QModServices.LoadKnownMods(modsToLoad);
@@ -112,7 +112,7 @@ namespace QModManager.Patching
                 {
                     if (mod.IsLoaded)
                         loadedMods++;
-                    else
+                    else if (mod.Enable)
                         erroredMods++;
                 }
 
