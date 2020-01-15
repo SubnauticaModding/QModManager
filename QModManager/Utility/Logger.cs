@@ -73,7 +73,7 @@
 
         internal static void Debug(params string[] text)
         {
-            if (Config.Get(Config.FIELDS.ENABLE_DEBUG_LOGS, false))
+            if (Config.EnableDebugLogs)
                 Log("Debug", text);
         }
 

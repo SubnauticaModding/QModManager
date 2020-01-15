@@ -11,7 +11,7 @@
         [HarmonyPostfix]
         internal static void Postfix(IngameMenu __instance)
         {
-            var devMode = Config.Get("Enable developer mode", false);
+            var devMode = Config.EnableDevMode;
 
             IngameMenu.main.developerMode = devMode;
             IngameMenu.main.developerButton.gameObject.SetActive(devMode);

@@ -15,7 +15,7 @@
         [HarmonyPostfix]
         internal static void Postfix()
         {
-            DevConsole.disableConsole = !Config.Get(Config.FIELDS.ENABLE_CONSOLE, false);
+            DevConsole.disableConsole = !Config.EnableConsole;
         }
     }
 
@@ -48,10 +48,10 @@
             if (key != "UWE.DisableConsole") return true;
 
             GUI.enabled = false;
-            GUILayout.Toggle(!Config.Get(Config.FIELDS.ENABLE_CONSOLE, false), " " + label);
+            GUILayout.Toggle(!Config.EnableConsole, " " + label);
             GUI.enabled = true;
 
-            __result = !Config.Get(Config.FIELDS.ENABLE_CONSOLE, false);
+            __result = !Config.EnableConsole;
 
             return false;
         }
