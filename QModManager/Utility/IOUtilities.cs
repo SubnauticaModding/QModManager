@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-
-namespace QModManager.Utility
+﻿namespace QModManager.Utility
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+
     internal static class IOUtilities
     {
-        internal static readonly HashSet<string> BannedFolders = new HashSet<string>()
+        #region Folder Structure
+
+        private static readonly HashSet<string> BannedFolders = new HashSet<string>()
         {
             ".git",
             "OST",
@@ -32,7 +35,7 @@ namespace QModManager.Utility
             }
         }
 
-        internal static string GenerateFolderStructure(string directory)
+        private static string GenerateFolderStructure(string directory)
         {
             try
             {
@@ -60,7 +63,8 @@ namespace QModManager.Utility
                 throw e;
             }
         }
-        internal static string GetFolderStructureRecursively(string directory, int spaces = 0)
+
+        private static string GetFolderStructureRecursively(string directory, int spaces = 0)
         {
             try
             {
@@ -96,7 +100,7 @@ namespace QModManager.Utility
             }
         }
 
-        internal static string ParseSize(long lsize)
+        private static string ParseSize(long lsize)
         {
             string[] units = new[] { "B", "KB", "MB", "GB" };
             float size = lsize;
@@ -115,7 +119,7 @@ namespace QModManager.Utility
             return number + units[unit];
         }
 
-        internal static string GenerateSpaces(int spaces)
+        private static string GenerateSpaces(int spaces)
         {
             string s = "";
             for (int i = 1; i <= spaces; i += 4)
@@ -123,12 +127,57 @@ namespace QModManager.Utility
             return s;
         }
 
-        internal static int GetFileCountRecursively(string directory)
+        private static int GetFileCountRecursively(string directory)
         {
             int c = 0;
             foreach (string file in Directory.GetFiles(directory)) c++;
             foreach (string dir in Directory.GetDirectories(directory)) c += GetFileCountRecursively(dir);
             return c;
+        }
+
+        #endregion
+
+        internal static void NormalizeQMods(string qmodsDir)
+        {
+            string[] folders = Directory.GetDirectories(qmodsDir);
+            foreach (string folder in folders)
+            {
+                try
+                {
+                    if (File.Exists(Path.Combine(folder, "mod.json"))) continue;
+
+                    Logger.Debug("Found folder with no mod.json: \"" + folder + "\"");
+
+                    string[] subfolders = Directory.GetDirectories(folder);
+
+                    foreach (string subfolder in subfolders)
+                    {
+                        try
+                        {
+                            if (!File.Exists(Path.Combine(subfolder, "mod.json"))) continue;
+
+                            string newPath = Path.Combine(qmodsDir, Path.GetFileName(subfolder));
+
+                            Logger.Info("Moving \"" + subfolder + "\" to \"" + newPath + "\"");
+
+                            Directory.Move(subfolder, newPath);
+                        }
+                        catch (Exception e)
+                        {
+                            Logger.Error($"There was an error while attempting to normalize folder structure for folder: \"{subfolder}\"");
+                            Logger.Exception(e);
+                        }
+                    }
+
+                    string[] newSubfolders = Directory.GetFiles(folder).Concat(Directory.GetDirectories(folder)).ToArray();
+                    if (newSubfolders.Length == 0) Directory.Delete(folder);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error($"There was an error while attempting to normalize folder structure for folder: \"{folder}\"");
+                    Logger.Exception(e);
+                }
+            }
         }
     }
 }

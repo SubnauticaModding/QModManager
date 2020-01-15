@@ -37,7 +37,7 @@ namespace QModManager.Patching
                 if (Patched)
                 {
                     Logger.Warn("Patch method was called multiple times!");
-                    return; // Halt patching
+                    return;
                 }
 
                 Patched = true;
@@ -63,6 +63,16 @@ namespace QModManager.Patching
 
                 try
                 {
+                    IOUtilities.NormalizeQMods(QModBaseDir);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error("There was an error while trying to normalize folder paths.");
+                    Logger.Exception(e);
+                }
+
+                try
+                {
                     Logger.Info($"Folder structure:\n{IOUtilities.GetFolderStructureAsTree()}\n");
                 }
                 catch (Exception e)
@@ -80,7 +90,15 @@ namespace QModManager.Patching
 
                 CurrentlyRunningGame = gameDetector.CurrentlyRunningGame;
 
-                PatchHarmony();
+                try
+                {
+                    PatchHarmony();
+                }
+                catch (Exception e)
+                {
+                    Logger.Error("There was an error while trying to apply Harmony patches.");
+                    Logger.Exception(e);
+                }
 
                 if (NitroxCheck.IsInstalled)
                 {
