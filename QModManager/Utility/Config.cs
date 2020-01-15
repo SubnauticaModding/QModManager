@@ -22,7 +22,7 @@
         internal static bool EnableDebugLogs
         {
             get => Get("Enable debug logs", false);
-            set => Get("Enable debug logs", value);
+            set => Set("Enable debug logs", value);
         }
 
         internal static bool EnableDevMode
@@ -38,53 +38,54 @@
 
         private static void Load()
         {
-            if (!File.Exists(ConfigPath)) File.WriteAllText(ConfigPath, "{}");
-            string text = File.ReadAllText(ConfigPath);
-            Cfg = JsonConvert.DeserializeObject<Dictionary<string, object>>(text);
+            try
+            {
+                if (!File.Exists(ConfigPath)) File.WriteAllText(ConfigPath, "{}");
+                string text = File.ReadAllText(ConfigPath);
+                Cfg = JsonConvert.DeserializeObject<Dictionary<string, object>>(text);
+
+                Loaded = true;
+            }
+            catch (Exception e)
+            {
+                Logger.Error($"There was an error loading the config file.");
+                Logger.Exception(e);
+            }
         }
 
         private static void Save()
         {
-            string text = JsonConvert.SerializeObject(Cfg, Formatting.Indented);
-            File.WriteAllText(ConfigPath, text);
-        }
-
-        private static object Get(string field, object def = null)
-        {
             try
             {
-                if (!Loaded) Load();
-
-                if (Cfg.TryGetValue(field, out object value))
-                    return value;
-
-                return def;
+                string text = JsonConvert.SerializeObject(Cfg, Formatting.Indented);
+                File.WriteAllText(ConfigPath, text);
             }
             catch (Exception e)
             {
-                Logger.Error($"There was an error retrieving the value \"{field}\" from the config file.");
+                Logger.Error($"There was an error saving the config file.");
                 Logger.Exception(e);
-
-                return null;
             }
         }
 
         private static T Get<T>(string field, T def = default)
         {
-            object value = Get(field);
-            if (value != null && value is T) return (T)value;
+            if (!Loaded) Load();
+
+            if (!Cfg.TryGetValue(field, out object value))
+                return def;
+
+            if (value is T typedValue) return typedValue;
+
             return def;
         }
 
-        private static object Set(string field, object value, bool save = true)
+        private static void Set(string field, object value)
         {
             if (!Loaded) Load();
 
-            Cfg.TryGetValue(field, out object oldValue);
-            Cfg.Remove(field);
-            Cfg.Add(field, value);
-            if (save) Save();
-            return oldValue;
+            Cfg[field] = value;
+
+            Save();
         }
     }
 }

@@ -27,9 +27,10 @@
         [HarmonyTranspiler]
         internal static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
+            FieldInfo disableConsole = AccessTools.Field(typeof(DevConsole), nameof(DevConsole.disableConsole));
             foreach (CodeInstruction instruction in instructions)
             {
-                if (instruction.opcode == OpCodes.Stsfld && (FieldInfo)instruction.operand == AccessTools.Field(typeof(DevConsole), nameof(DevConsole.disableConsole)))
+                if (instruction.opcode == OpCodes.Stsfld && (FieldInfo)instruction.operand == disableConsole)
                     yield return new CodeInstruction(OpCodes.Nop);
                 else
                     yield return instruction;
