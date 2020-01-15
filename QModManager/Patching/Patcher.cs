@@ -82,7 +82,15 @@ namespace QModManager.Patching
 
                 CurrentlyRunningGame = gameDetector.CurrentlyRunningGame;
 
-                PatchHarmony();
+                try 
+                {    
+                    PatchHarmony();
+                }
+                catch (Exception e)
+                {
+                    Logger.Error("There was an error while trying to apply Harmony patches.");
+                    Logger.Exception(e);
+                }
 
                 if (NitroxCheck.IsInstalled)
                 {
