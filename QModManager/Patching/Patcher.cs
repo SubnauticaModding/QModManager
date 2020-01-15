@@ -47,6 +47,7 @@ namespace QModManager.Patching
                 Patched = true;
 
                 Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}...");
+                Logger.Info($"Today is {DateTime.Today:dd-MMMM-yyyy}");
 
                 if (QModBaseDir == null)
                 {
@@ -97,7 +98,7 @@ namespace QModManager.Patching
 
                 AddAssemblyResolveEvent();
 
-                var modFactory = new QModFactory();
+                IQModFactory modFactory = new QModFactory();
                 List<QMod> modsToLoad = modFactory.BuildModLoadingList(QModBaseDir);
 
                 QModServices.LoadKnownMods(modsToLoad);
@@ -111,7 +112,7 @@ namespace QModManager.Patching
                 {
                     if (mod.IsLoaded)
                         loadedMods++;
-                    else
+                    else if (mod.Enable)
                         erroredMods++;
                 }
 
@@ -120,7 +121,11 @@ namespace QModManager.Patching
                 Logger.Info($"Finished loading QModManager. Loaded {loadedMods} mods");
 
                 if (ErrorModCount > 0)
-                    Logger.Warn($"A total of {ErrorModCount} mods failed to load");
+                {
+                    string msg = $"A total of {ErrorModCount} mods failed to load";
+                    Logger.Warn(msg);
+                    Dialog.Show(msg + "\nSee log file for details.", Dialog.Button.close, Dialog.Button.Disabled, false);
+                }
 
                 SummaryLogger.LogSummaries(modsToLoad);
             }

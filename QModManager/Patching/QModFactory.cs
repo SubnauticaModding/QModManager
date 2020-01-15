@@ -9,11 +9,17 @@
     using QModManager.DataStructures;
     using QModManager.Utility;
 
-    internal class QModFactory
+    internal class QModFactory : IQModFactory
     {
         internal static readonly ManifestValidator Validator = new ManifestValidator();
 
-        internal List<QMod> BuildModLoadingList(string qmodsDirectory)
+        /// <summary>
+        /// Searches through all folders in the provided directory and returns an ordered list of mods to load.<para/>
+        /// Mods that cannot be loaded will have an unsuccessful <see cref="QMod.Status"/> value.
+        /// </summary>
+        /// <param name="qmodsDirectory">The QMods directory</param>
+        /// <returns>A new, sorted <see cref="List{QMod}"/> ready to be initialized or skipped.</returns>
+        public List<QMod> BuildModLoadingList(string qmodsDirectory)
         {
             if (!Directory.Exists(qmodsDirectory))
             {
@@ -68,12 +74,10 @@
 
             List<QMod> modsToLoad = modSorter.GetSortedList();
 
-            List<QMod> modList = CreateModStatusList(earlyErrors, modsToLoad);
-
-            return modList;
+            return CreateModStatusList(earlyErrors, modsToLoad);
         }
 
-        private static List<QMod> CreateModStatusList(List<QMod> earlyErrors, List<QMod> modsToLoad)
+        internal static List<QMod> CreateModStatusList(List<QMod> earlyErrors, List<QMod> modsToLoad)
         {
             var modList = new List<QMod>(modsToLoad.Count + earlyErrors.Count);
 
@@ -99,7 +103,7 @@
 
                 foreach (RequiredQMod requiredMod in mod.RequiredMods)
                 {
-                    QMod dependency = modList.Find(d => d.Id == requiredMod.Id);
+                    QMod dependency = modsToLoad.Find(d => d.Id == requiredMod.Id);
 
                     if (dependency == null || dependency.Status != ModStatus.Success)
                     {

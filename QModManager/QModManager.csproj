@@ -139,6 +139,7 @@
     <Compile Include="Patching\FatalPatchingException.cs" />
     <Compile Include="Patching\GameDetector.cs" />
     <Compile Include="Patching\Initializer.cs" />
+    <Compile Include="Patching\IQModFactory.cs" />
     <Compile Include="Patching\ManifestValidator.cs" />
     <Compile Include="Patching\Patcher.cs" />
     <Compile Include="Patching\IQModSerialiable.cs" />
