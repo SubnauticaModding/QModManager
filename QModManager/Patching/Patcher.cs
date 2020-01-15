@@ -43,6 +43,7 @@ namespace QModManager.Patching
                 Patched = true;
 
                 Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}...");
+                Logger.Info($"Today is {DateTime.Today:dd-MMMM-yyyy}");
 
                 if (QModBaseDir == null)
                 {
@@ -103,7 +104,7 @@ namespace QModManager.Patching
 
                 AddAssemblyResolveEvent();
 
-                var modFactory = new QModFactory();
+                IQModFactory modFactory = new QModFactory();
                 List<QMod> modsToLoad = modFactory.BuildModLoadingList(QModBaseDir);
 
                 QModServices.LoadKnownMods(modsToLoad);
