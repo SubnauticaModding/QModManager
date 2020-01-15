@@ -1,19 +1,18 @@
 ﻿namespace QModManager.Utility
 {
+    using Harmony;
+    using QModManager.API;
+    using QModManager.Checks;
+    using QModManager.Patching;
     using System;
     using System.Collections;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using Harmony;
-    using QModManager.Checks;
-    using QModManager.Patching;
-    using QModManager.API;
     using UnityEngine;
     using UnityEngine.UI;
-    using System.Reflection;
 
-    internal static class Dialog
+    internal class Dialog
     {
         internal class Button
         {
@@ -23,16 +22,7 @@
             internal static readonly Button Disabled = new Button();
             internal static readonly Button SeeLog = new Button("See Log", () =>
             {
-                string logPath;
-
-                if (Patcher.CurrentlyRunningGame == QModGame.Subnautica)
-                {
-                    logPath = Path.Combine(Application.persistentDataPath, "Player.log");
-                }
-                else
-                {
-                    logPath = Path.Combine(Application.persistentDataPath, "output_log.txt");
-                }
+                string logPath = Application.consoleLogPath;
 
                 Logger.Debug($"Opening log file located in: \"{logPath}\"");
 
@@ -45,10 +35,10 @@
                     Logger.Error($"Expected log file at: \"{logPath}\" but none was found.");
                 }
             });
-            internal static readonly Button close = new Button("Close", () => { });
-            internal static readonly Button download = new Button("Download", () =>
+            internal static readonly Button Close = new Button("Close", () => { });
+            internal static readonly Button Download = new Button("Download", () =>
             {
-                if (Patcher.CurrentlyRunningGame == API.QModGame.Subnautica)
+                if (Patcher.CurrentlyRunningGame == QModGame.Subnautica)
                     Process.Start(VersionCheck.snNexus);
                 else
                     Process.Start(VersionCheck.bzNexus);
@@ -62,19 +52,29 @@
             }
         }
 
-        internal static void Show(string error, Button leftButton, Button rightButton, bool blue, bool cannotClose = false, float waitTime = 3f)
+        internal enum DialogColor
         {
-            var couroutineHandler = new GameObject("QModManager Dialog Coroutine");
-            couroutineHandler.AddComponent<DummyBehaviour>().StartCoroutine(
-                ShowDialogEnumerator(error, leftButton, rightButton, blue, cannotClose, waitTime, couroutineHandler));
+            Red,
+            Blue
         }
 
-        private static IEnumerator ShowDialogEnumerator(string error, Button leftButton, Button rightButton, bool blue, bool cannotClose, float waitTime, GameObject couroutineHandler)
-        {
-            while (typeof(uGUI).GetField("_main", BindingFlags.NonPublic | BindingFlags.Static).GetValue(null) == null)
-                yield return null;
+        internal string message = "";
+        internal DialogColor color = DialogColor.Blue;
+        internal Button leftButton = Button.Disabled;
+        internal Button rightButton = Button.Disabled;
 
-            yield return new WaitForSecondsRealtime(waitTime);
+        private GameObject coroutineHandler;
+
+        internal void Show()
+        {
+            coroutineHandler = new GameObject("QModManager Dialog Coroutine");
+            coroutineHandler.AddComponent<DummyBehaviour>().StartCoroutine(ShowDialogEnumerator());
+        }
+
+        private IEnumerator ShowDialogEnumerator()
+        {
+            while (uGUI._main == null)
+                yield return null;
 
             uGUI_SceneConfirmation confirmation = uGUI.main.confirmation;
 
@@ -94,25 +94,59 @@
             else
                 confirmation.no.gameObject.GetComponentInChildren<Text>().text = rightButton.Text;
 
-            // Turn the dialog blue if the blue parameter is true
-            Sprite sprite = confirmation.gameObject.GetComponentInChildren<Image>().sprite;
-            if (blue)
+            // If one button is disabled, center the other
+            float pos = 0;
+            if (confirmation.yes.gameObject.activeSelf && !confirmation.no.gameObject.activeSelf)
             {
-                confirmation.gameObject.GetComponentInChildren<Image>().sprite = confirmation.gameObject.GetComponentsInChildren<Image>()[1].sprite;
+                pos = confirmation.yes.transform.localPosition.x;
+                confirmation.yes.transform.localPosition = new Vector3(
+                    (confirmation.yes.transform.localPosition.x + confirmation.no.transform.localPosition.x) / 2,
+                    confirmation.yes.transform.localPosition.y,
+                    confirmation.yes.transform.localPosition.z);
+            }
+            if (!confirmation.yes.gameObject.activeSelf && confirmation.no.gameObject.activeSelf)
+            {
+                pos = confirmation.no.transform.localPosition.x;
+                confirmation.no.transform.localPosition = new Vector3(
+                    (confirmation.no.transform.localPosition.x + confirmation.yes.transform.localPosition.x) / 2,
+                    confirmation.no.transform.localPosition.y,
+                    confirmation.no.transform.localPosition.z);
             }
 
-            // Reduce the text size on the buttons by two pts
+            // Turn the dialog blue if the blue parameter is true
+            Sprite sprite = confirmation.gameObject.GetComponentInChildren<Image>().sprite;
+            if (color == DialogColor.Blue)
+                confirmation.gameObject.GetComponentInChildren<Image>().sprite = confirmation.gameObject.GetComponentsInChildren<Image>()[1].sprite;
+
+            // Reduce the text size on the buttons
             var texts = confirmation.gameObject.GetComponentsInChildren<Text>().ToList();
             texts.RemoveAt(0);
-            texts.Do(t => t.fontSize = t.fontSize - 2);
+            texts.Do(t => t.fontSize = t.fontSize - 4);
 
-            // Revert everything after the popup was closed
-            confirmation.Show(error, delegate (bool leftButtonClicked)
+            // Show dialog
+            confirmation.Show(message, delegate (bool leftButtonClicked)
             {
+                // Run actions based on which button was pressed
                 if (leftButtonClicked)
                     leftButton.Action?.Invoke();
                 else
                     rightButton.Action?.Invoke();
+
+                // Revert everything to its original state
+                if (confirmation.yes.gameObject.activeSelf && !confirmation.no.gameObject.activeSelf)
+                {
+                    confirmation.yes.transform.localPosition = new Vector3(
+                        pos,
+                        confirmation.yes.transform.localPosition.y,
+                        confirmation.yes.transform.localPosition.z);
+                }
+                if (!confirmation.yes.gameObject.activeSelf && confirmation.no.gameObject.activeSelf)
+                {
+                    confirmation.no.transform.localPosition = new Vector3(
+                        pos,
+                        confirmation.no.transform.localPosition.y,
+                        confirmation.no.transform.localPosition.z);
+                }
 
                 confirmation.yes.gameObject.SetActive(true);
                 confirmation.no.gameObject.SetActive(true);
@@ -122,16 +156,21 @@
 
                 confirmation.gameObject.GetComponentInChildren<Image>().sprite = sprite;
 
-                texts.Do(t => t.fontSize = t.fontSize + 2);
+                texts.Do(t => t.fontSize = t.fontSize + 4);
 
-                UnityEngine.Object.Destroy(couroutineHandler);
+                UnityEngine.Object.Destroy(coroutineHandler);
 
-                // Re-open the dialog if it is not closeable
-                if (cannotClose)
-                    Show(error, leftButton, rightButton, blue, cannotClose, .05f);
+                // Re-open the dialog if the button pressed was not close
+                bool closeButtonClicked = (leftButtonClicked && leftButton == Button.Close) || (!leftButtonClicked && rightButton == Button.Close);
+                if (!closeButtonClicked)
+                    Show();
             });
 
-            yield return null;
+            // Focus popup
+            while (confirmation.selected)
+                yield return new WaitForSecondsRealtime(0.25f);
+
+            confirmation.Select();
         }
     }
 }

@@ -1,14 +1,14 @@
 ﻿namespace QModManager.Patching
 {
+    using QModManager.API;
+    using QModManager.API.ModLoading;
+    using QModManager.Utility;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Text.RegularExpressions;
-    using QModManager.API;
-    using QModManager.API.ModLoading;
-    using QModManager.Utility;
 
     internal class ManifestValidator
     {
@@ -125,6 +125,8 @@
                         versionedDependencies.Add(new RequiredQMod(item.Key));
                     }
                 }
+
+                mod.RequiredMods = versionedDependencies;
             }
 
             if (!mod.Enable)

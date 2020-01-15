@@ -382,6 +382,14 @@
             </summary>
             <typeparam name="IdType">The ID type.</typeparam>
         </member>
+        <member name="M:QModManager.Patching.IQModFactory.BuildModLoadingList(System.String)">
+            <summary>
+            Searches through all folders in the provided directory and returns an ordered list of mods to load.<para/>
+            Mods that cannot be loaded will have an unsuccessful <see cref="P:QModManager.Patching.QMod.Status"/> value.
+            </summary>
+            <param name="qmodsDirectory">The QMods directory</param>
+            <returns>A new, sorted <see cref="T:System.Collections.Generic.List`1"/> ready to be initialized or skipped.</returns>
+        </member>
         <member name="T:QModManager.Patching.Patcher">
             <summary>
             The main class which handles all of QModManager's patching
@@ -406,6 +414,14 @@
             <summary>
             For post-initialize patch methods
             </summary>
+        </member>
+        <member name="M:QModManager.Patching.QModFactory.BuildModLoadingList(System.String)">
+            <summary>
+            Searches through all folders in the provided directory and returns an ordered list of mods to load.<para/>
+            Mods that cannot be loaded will have an unsuccessful <see cref="P:QModManager.Patching.QMod.Status"/> value.
+            </summary>
+            <param name="qmodsDirectory">The QMods directory</param>
+            <returns>A new, sorted <see cref="T:System.Collections.Generic.List`1"/> ready to be initialized or skipped.</returns>
         </member>
         <member name="P:QModManager.Patching.QModPlaceholder.QModManager">
             <summary>

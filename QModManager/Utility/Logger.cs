@@ -40,8 +40,10 @@
                 from = classType.Name;
 
             string toWrite = "[QModManager] ";
-            if (!string.IsNullOrEmpty(from))
+            if (!string.IsNullOrEmpty(from) && !from.Contains("<>"))
                 toWrite += $"[{from}] ";
+            else if (!string.IsNullOrEmpty(from) && from.Contains("<>"))
+                toWrite += $"[Anonymous] ";
             if (!string.IsNullOrEmpty(logLevel))
                 toWrite += $"[{logLevel}] ";
 

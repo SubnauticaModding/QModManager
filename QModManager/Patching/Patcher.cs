@@ -3,6 +3,7 @@ namespace QModManager.Patching
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Reflection;
     using API;
     using API.ModLoading;
@@ -10,9 +11,6 @@ namespace QModManager.Patching
     using Harmony;
     using Utility;
 
-    /// <summary>
-    /// The main class which handles all of QModManager's patching
-    /// </summary>
     internal static class Patcher
     {
         internal const string IDRegex = "[^0-9a-z_]";
@@ -45,6 +43,7 @@ namespace QModManager.Patching
                 Patched = true;
 
                 Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}...");
+                Logger.Info($"Today is {DateTime.Today:dd-MMMM-yyyy}");
 
                 if (QModBaseDir == null)
                 {
@@ -52,7 +51,13 @@ namespace QModManager.Patching
                     Logger.Fatal("There was an error with the QMods directory");
                     Logger.Fatal("Please make sure that you ran Subnautica from Steam/Epic/Discord, and not from the executable file!");
 
-                    Dialog.Show("A fatal error has occurred. QModManager could not be initialized.", Dialog.Button.close, Dialog.Button.Disabled, false);
+                    new Dialog()
+                    {
+                        message = "A fatal error has occurred. QModManager could not be initialized.",
+                        color = Dialog.DialogColor.Red,
+                        leftButton = Dialog.Button.SeeLog,
+                        rightButton = Dialog.Button.Close,
+                    }.Show();
 
                     return;
                 }
@@ -82,7 +87,13 @@ namespace QModManager.Patching
                 {
                     Logger.Fatal($"Nitrox was detected!");
 
-                    Dialog.Show("Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.", Dialog.Button.Disabled, Dialog.Button.Disabled, false);
+                    new Dialog()
+                    {
+                        message = "Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.",
+                        leftButton = Dialog.Button.Disabled,
+                        rightButton = Dialog.Button.Disabled,
+                        color = Dialog.DialogColor.Red,
+                    }.Show();
 
                     return;
                 }
@@ -93,7 +104,7 @@ namespace QModManager.Patching
 
                 AddAssemblyResolveEvent();
 
-                var modFactory = new QModFactory();
+                IQModFactory modFactory = new QModFactory();
                 List<QMod> modsToLoad = modFactory.BuildModLoadingList(QModBaseDir);
 
                 QModServices.LoadKnownMods(modsToLoad);
@@ -101,22 +112,55 @@ namespace QModManager.Patching
                 var initializer = new Initializer(CurrentlyRunningGame);
                 initializer.InitializeMods(modsToLoad);
 
-                int loadedMods = 0;
-                int erroredMods = 0;
-                foreach (QMod mod in modsToLoad)
+                List<QMod> loadedMods = modsToLoad.FindAll(m => m.IsLoaded);
+                List<QMod> skippedMods = modsToLoad.FindAll(m => !m.IsLoaded && m.Status < 0);
+                List<QMod> erroredMods = modsToLoad.FindAll(m => !m.IsLoaded && m.Status > 0);
+
+                Logger.Info($"Finished loading QModManager. Loaded {loadedMods.Count} mods.");
+
+                if (skippedMods.Count > 0)
+                    Logger.Info($"A total of {skippedMods.Count} mods were skipped");
+
+                if (erroredMods.Count> 0)
                 {
-                    if (mod.IsLoaded)
-                        loadedMods++;
-                    else
-                        erroredMods++;
+                    Logger.Error($"A total of {erroredMods.Count} mods failed to load");
+
+                    string message;
+
+                    switch (erroredMods.Count)
+                    {
+                        case 1:
+                            message = $"The following mod could not be loaded: {erroredMods[0].DisplayName}. Check the log for more information.";
+                            break;
+                        case 2:
+                            message = $"The following mods could not be loaded: {erroredMods[0].DisplayName} and {erroredMods[1].DisplayName}. Check the log for more information.";
+                            break;
+                        case 3:
+                            message = $"The following mods could not be loaded: {erroredMods[0].DisplayName}, {erroredMods[1].DisplayName} and {erroredMods[2].DisplayName}. Check the log for more information.";
+                            break;
+                        default:
+                            message = $"The following mods could not be loaded: {erroredMods[0].DisplayName}, {erroredMods[1].DisplayName}, {erroredMods[2].DisplayName} and {erroredMods.Count - 3} others. Check the log for more information.";
+                            break;
+                    }
+
+                    new Dialog()
+                    {
+                        message = message,
+                        leftButton = Dialog.Button.SeeLog,
+                        rightButton = Dialog.Button.Close,
+                        color = Dialog.DialogColor.Red
+                    }.Show();
                 }
-
-                ErrorModCount = erroredMods;
-
-                Logger.Info($"Finished loading QModManager. Loaded {loadedMods} mods");
-
-                if (ErrorModCount > 0)
-                    Logger.Warn($"A total of {ErrorModCount} mods failed to load");
+                else if (VersionCheck.result != null)
+                {
+                    new Dialog()
+                    {
+                        message = $"There is a newer version of QModManager available: {VersionCheck.result.ToStringParsed()} (current version: {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()})",
+                        leftButton = Dialog.Button.Download,
+                        rightButton = Dialog.Button.Close,
+                        color = Dialog.DialogColor.Blue
+                    }.Show();
+                }
 
                 SummaryLogger.LogSummaries(modsToLoad);
             }
@@ -125,14 +169,24 @@ namespace QModManager.Patching
                 Logger.Fatal($"A fatal patching exception has been caught! Patching ended prematurely!");
                 Logger.Exception(pEx);
 
-                Dialog.Show("A fatal patching exception has been caught. QModManager could not be initialized.", Dialog.Button.close, Dialog.Button.Disabled, false);
+                new Dialog()
+                {
+                    message = "A fatal patching exception has been caught. QModManager could not be initialized.",
+                    color = Dialog.DialogColor.Red,
+                    leftButton = Dialog.Button.SeeLog,
+                }.Show();
             }
             catch (Exception e)
             {
                 Logger.Fatal("An unhandled exception has been caught! Patching ended prematurely!");
                 Logger.Exception(e);
 
-                Dialog.Show("An unhandled exception has been caught. QModManager could not be initialized.", Dialog.Button.close, Dialog.Button.Disabled, false);
+                new Dialog()
+                {
+                    message = "An unhandled exception has been caught. QModManager could not be initialized.",
+                    color = Dialog.DialogColor.Red,
+                    leftButton = Dialog.Button.SeeLog,
+                }.Show();
             }
         }
 
