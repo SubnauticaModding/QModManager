@@ -14,6 +14,8 @@
         internal const string bzNexus = "https://nexusmods.com/subnauticabelowzero/mods/1";
         internal const string VersionURL = "https://raw.githubusercontent.com/SubnauticaModding/QModManager/master/Data/latest-version.txt";
 
+        internal static Version result = null;
+
         internal static void Check()
         {
             if (PlayerPrefs.GetInt("QModManager_EnableUpdateCheck", 1) == 0)
@@ -24,7 +26,7 @@
 
             if (!NetworkUtilities.CheckConnection())
             {
-                Logger.Warn("Cannot check for updates, internet disabled");
+                Logger.Info("Cannot check for updates, internet disabled");
                 return;
             }
 
@@ -47,6 +49,7 @@
                 client.DownloadStringAsync(new Uri(VersionURL));
             }
         }
+
         internal static void Parse(string versionStr)
         {
             try
@@ -65,17 +68,16 @@
                 }
                 if (latestVersion > currentVersion)
                 {
-                    Logger.Info($"Newer version found: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()}");
-                    if (Patcher.ErrorModCount <= 0)
-                    {
-                        Dialog.Show(
-                            $"There is a newer version of QModManager available: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()})",
-                            Dialog.Button.download, Dialog.Button.close, true);
-                    }
+                    Logger.Info($"Newer version found: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()})");
+                    result = latestVersion;
+                }
+                else if (latestVersion < currentVersion)
+                {
+                    Logger.Info($"Received latest version from GitHub. We're ahead. This is probably a development build.");
                 }
                 else
                 {
-                    Logger.Info($"Recieved latest version from GitHub. We are up to date!");
+                    Logger.Info($"Received latest version from GitHub. We are up to date!");
                 }
             }
             catch (Exception e)
