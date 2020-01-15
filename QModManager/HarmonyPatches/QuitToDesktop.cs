@@ -5,50 +5,68 @@ namespace QModManager.HarmonyPatches.QuitToDesktop
     using UnityEngine;
     using UnityEngine.UI;
 
-    internal static class QTD
+    [HarmonyPatch(typeof(IngameMenu), nameof(IngameMenu.Start))]
+    internal static class IngameMenu_Start_Patch
     {
+        // This patch creates the UI elements for the Quit to Desktop button
+
         internal static Button quitButton;
         internal static GameObject quitConfirmation;
         internal static GameObject quitConfirmation2;
+
+        [HarmonyPostfix]
+        internal static void Postfix(IngameMenu __instance)
+        {
+            var buttonPrefab = __instance.quitToMainMenuButton.GetComponent<Button>();
+            quitButton = GameObject.Instantiate(buttonPrefab, __instance.quitToMainMenuButton.transform.parent);
+            quitButton.name = "QuitToDesktop Button";
+            quitButton.onClick.RemoveAllListeners();
+            quitButton.onClick.AddListener(() => QuitDesktopSubscreen(__instance));
+
+            var confirmationPrefab = __instance.transform.Find("QuitConfirmation").gameObject;
+            quitConfirmation = GameObject.Instantiate(confirmationPrefab, __instance.transform);
+            quitConfirmation.name = "QuitToDesktop Confirmation";
+            quitConfirmation.GetComponentsInChildren<Button>()[1].onClick.RemoveAllListeners();
+            quitConfirmation.GetComponentsInChildren<Button>()[1].onClick.AddListener(() => __instance.QuitGame(true));
+
+            var confirmationWithSaveWarningPrefab = __instance.transform.Find("QuitConfirmationWithSaveWarning").gameObject;
+            quitConfirmation2 = GameObject.Instantiate(confirmationWithSaveWarningPrefab, __instance.transform);
+            quitConfirmation2.name = "QuitToDesktop ConfirmationWithSaveWarning";
+            quitConfirmation2.GetComponentsInChildren<Button>()[1].onClick.RemoveAllListeners();
+            quitConfirmation2.GetComponentsInChildren<Button>()[1].onClick.AddListener(() => __instance.QuitGame(true));
+        }
 
         internal static void QuitDesktopSubscreen(IngameMenu __instance)
         {
             float time = Time.timeSinceLevelLoad - __instance.lastSavedStateTime;
             if (!GameModeUtils.IsPermadeath() && time > __instance.maxSecondsToBeRecentlySaved)
             {
-                quitConfirmation2.GetComponentsInChildren<Text>()[1].text = Language.main.GetFormat("TimeSinceLastSave", Utils.PrettifyTime((int)time));
+                // We can't use Language.main directly since it's a field in Subnautica and a property in Below Zero
+                Language languageMain;
+                try
+                {
+                    // We can't use nameof(Language.main) since it will throw a field not found exception in Below Zero
+                    languageMain = AccessTools.Field(typeof(Language), "main").GetValue(null) as Language;
+                }
+                catch
+                {
+                    try
+                    {
+                        languageMain = AccessTools.Property(typeof(Language), "main").GetValue(null, null) as Language;
+                    }
+                    catch
+                    {
+                        quitButton.GetComponentsInChildren<Text>().Do(t => t.text = "ERROR");
+                        quitButton.interactable = false;
+                        return;
+                    }
+                }
+
+                quitConfirmation2.GetComponentsInChildren<Text>()[1].text = languageMain.GetFormat("TimeSinceLastSave", Utils.PrettifyTime((int)time));
                 __instance.ChangeSubscreen("QuitToDesktop ConfirmationWithSaveWarning");
                 return;
             }
             __instance.ChangeSubscreen("QuitToDesktop Confirmation");
-        }
-    }
-
-    [HarmonyPatch(typeof(IngameMenu), nameof(IngameMenu.Start))]
-    internal static class IngameMenu_Start_Patch
-    {
-        // This patch creates the UI elements for the Quit to Desktop button
-
-        [HarmonyPostfix]
-        internal static void Postfix(IngameMenu __instance)
-        {
-            var buttonPrefab = __instance.quitToMainMenuButton.GetComponent<Button>();
-            QTD.quitButton = GameObject.Instantiate(buttonPrefab, __instance.quitToMainMenuButton.transform.parent);
-            QTD.quitButton.name = "QuitToDesktop Button";
-            QTD.quitButton.onClick.RemoveAllListeners();
-            QTD.quitButton.onClick.AddListener(() => QTD.QuitDesktopSubscreen(__instance));
-
-            var confirmationPrefab = __instance.transform.Find("QuitConfirmation").gameObject;
-            QTD.quitConfirmation = GameObject.Instantiate(confirmationPrefab, __instance.transform);
-            QTD.quitConfirmation.name = "QuitToDesktop Confirmation";
-            QTD.quitConfirmation.GetComponentsInChildren<Button>()[1].onClick.RemoveAllListeners();
-            QTD.quitConfirmation.GetComponentsInChildren<Button>()[1].onClick.AddListener(() => __instance.QuitGame(true));
-
-            var confirmationWithSaveWarningPrefab = __instance.transform.Find("QuitConfirmationWithSaveWarning").gameObject;
-            QTD.quitConfirmation2 = GameObject.Instantiate(confirmationWithSaveWarningPrefab, __instance.transform);
-            QTD.quitConfirmation2.name = "QuitToDesktop ConfirmationWithSaveWarning";
-            QTD.quitConfirmation2.GetComponentsInChildren<Button>()[1].onClick.RemoveAllListeners();
-            QTD.quitConfirmation2.GetComponentsInChildren<Button>()[1].onClick.AddListener(() => __instance.QuitGame(true));
         }
     }
 
@@ -61,8 +79,8 @@ namespace QModManager.HarmonyPatches.QuitToDesktop
         internal static void Postfix(IngameMenu __instance)
         {
             __instance.quitToMainMenuText.text = $"{(GameModeUtils.IsPermadeath() ? "Save & " : "")}Quit to Main Menu";
-            QTD.quitButton.interactable = !GameModeUtils.IsPermadeath();
-            QTD.quitButton.GetComponentsInChildren<Text>().Do(t => t.text = "Quit to Desktop");
+            IngameMenu_Start_Patch.quitButton.interactable = !GameModeUtils.IsPermadeath();
+            IngameMenu_Start_Patch.quitButton.GetComponentsInChildren<Text>().Do(t => t.text = "Quit to Desktop");
         }
     }
 

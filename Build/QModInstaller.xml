@@ -119,7 +119,13 @@
             <param name="modId">The mod ID.</param>
             <returns>The <see cref="T:QModManager.API.IQMod"/> instance of the mod if found; otherwise returns <c>null</c>.</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:QModManager.API.IQModServices.FindModByAssembly(System.Reflection.Assembly)" -->
+        <member name="M:QModManager.API.IQModServices.FindModByAssembly(System.Reflection.Assembly)">
+            <summary>
+            Finds a specific mod with a <see cref="P:QModManager.API.IQMod.LoadedAssembly"/> that matches the provided one.
+            </summary>
+            <param name="modAssembly">The mod assembly.</param>
+            <returns>The <see cref="T:QModManager.API.IQMod"/> instance of the mod if found; otherwise returns <c>null</c>.</returns>
+        </member>
         <member name="T:QModManager.API.ModLoading.QModCoreAttribute">
             <summary>
             Identifies the patching class for your QMod.
@@ -137,7 +143,7 @@
         <member name="T:QModManager.API.ModLoading.QModPatch">
             <summary>
             Identifies a normal patch method for a QMod.<para/>
-            This method must be public, must take no parameters, and must return either <seealso cref="T:System.Void"/> or <seealso cref="!:PatchResults"/>.<para/>
+            This method must be public, must take no parameters, and must return <seealso cref="T:System.Void"/>.<para/>
             ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreAttribute"/> attribute.
             </summary>
             <seealso cref="T:System.Attribute" />
@@ -150,7 +156,7 @@
         <member name="T:QModManager.API.ModLoading.QModPostPatch">
             <summary>
             Identifies a post-patch method for a QMod.<para/>
-            This method must be public, must take no parameters, and must return either <seealso cref="T:System.Void"/> or <seealso cref="!:PatchResults"/>.<para/>
+            This method must be public, must take no parameters, and must return <seealso cref="T:System.Void"/>.<para/>
             ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreAttribute"/> attribute.
             </summary>
             <seealso cref="T:System.Attribute" />
@@ -162,14 +168,15 @@
         </member>
         <member name="M:QModManager.API.ModLoading.QModPostPatch.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPostPatch" /> class.
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPostPatch" /> class.<para/>
+            Should only be used for mods that need to load last, after all other mods. Read the documentation for instructions.
             </summary>
-            <param name="secretPassword">The secret password that proves you read the documentation.</param>
+            <param name="secretPassword">Should only be used for mods that need to load last, after all other mods. Read the documentation for instructions.</param>
         </member>
         <member name="T:QModManager.API.ModLoading.QModPrePatch">
             <summary>
             Identifies a pre-patch method for a QMod.<para/>
-            This method must be public, must take no parameters, and must return either <seealso cref="T:System.Void"/> or <seealso cref="!:PatchResults"/>.<para/>
+            This method must be public, must take no parameters, and must return <seealso cref="T:System.Void"/><para/>
             ALERT: The class that defines this method must have a <seealso cref="T:QModManager.API.ModLoading.QModCoreAttribute"/> attribute.
             </summary>
             <seealso cref="T:System.Attribute" />
@@ -181,9 +188,10 @@
         </member>
         <member name="M:QModManager.API.ModLoading.QModPrePatch.#ctor(System.String)">
             <summary>
-            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPrePatch"/> class.
+            Initializes a new instance of the <see cref="T:QModManager.API.ModLoading.QModPrePatch"/> class.<para/>
+            Should only be used for mods that need to load first, before all other mods. Read the documentation for instructions.
             </summary>
-            <param name="secretPassword">The secret password that proves you read the documentation.</param>
+            <param name="secretPassword">Should only be used for mods that need to load first, before all other mods. Read the documentation for instructions.</param>
         </member>
         <member name="T:QModManager.API.QModAPI">
             <summary>
