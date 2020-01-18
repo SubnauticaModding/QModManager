@@ -39,7 +39,7 @@
 
             try
             {
-                if (System.Version.TryParse(mod.Version, out Version version))
+                if (Version.TryParse(mod.Version, out Version version))
                     mod.ParsedVersion = version;
             }
             catch (Exception vEx)
@@ -104,7 +104,7 @@
                     {
                         versionedDependencies.Add(new RequiredQMod(item.Key));
                     }
-                    else if (System.Version.TryParse(cleanVersion, out Version version))
+                    else if (Version.TryParse(cleanVersion, out Version version))
                     {
                         versionedDependencies.Add(new RequiredQMod(item.Key, version));
                     }
@@ -125,50 +125,58 @@
 
         internal ModStatus FindPatchMethods(QMod qMod)
         {
-            if (!string.IsNullOrEmpty(qMod.EntryMethod))
+            try
             {
-                // Legacy
-                string[] entryMethodSig = qMod.EntryMethod.Split('.');
-                string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
-                string entryMethod = entryMethodSig[entryMethodSig.Length - 1];
-
-                MethodInfo jsonPatchMethod = qMod.LoadedAssembly.GetType(entryType).GetMethod(entryMethod, BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
-
-                if (jsonPatchMethod != null && jsonPatchMethod.GetParameters().Length == 0)
+                if (!string.IsNullOrEmpty(qMod.EntryMethod))
                 {
-                    qMod.PatchMethods[PatchingOrder.NormalInitialize] = new QModPatchMethod(jsonPatchMethod, qMod, PatchingOrder.NormalInitialize);
-                }
-            }
+                    // Legacy
+                    string[] entryMethodSig = qMod.EntryMethod.Split('.');
+                    string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
+                    string entryMethod = entryMethodSig[entryMethodSig.Length - 1];
 
-            // QMM 3.0
-            foreach (Type type in qMod.LoadedAssembly.GetTypes())
-            {
-                foreach (QModCoreAttribute core in type.GetCustomAttributes(typeof(QModCoreAttribute), false))
-                {
-                    foreach (MethodInfo method in type.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance))
+                    MethodInfo jsonPatchMethod = qMod.LoadedAssembly.GetType(entryType).GetMethod(entryMethod, BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
+
+                    if (jsonPatchMethod != null && jsonPatchMethod.GetParameters().Length == 0)
                     {
-                        foreach (QModPatchAttributeBase patch in method.GetCustomAttributes(typeof(QModPatchAttributeBase), false))
-                        {
-                            switch (patch.PatchOrder)
-                            {
-                                case PatchingOrder.MetaPreInitialize:
-                                case PatchingOrder.MetaPostInitialize:
-                                    patch.ValidateSecretPassword(method, qMod);
-                                    break;
-                            }
+                        qMod.PatchMethods[PatchingOrder.NormalInitialize] = new QModPatchMethod(jsonPatchMethod, qMod, PatchingOrder.NormalInitialize);
+                    }
+                }
 
-                            if (qMod.PatchMethods.TryGetValue(patch.PatchOrder, out QModPatchMethod extra))
+                // QMM 3.0
+                foreach (Type type in qMod.LoadedAssembly.GetTypes())
+                {
+                    foreach (QModCoreAttribute core in type.GetCustomAttributes(typeof(QModCoreAttribute), false))
+                    {
+                        foreach (MethodInfo method in type.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance))
+                        {
+                            foreach (QModPatchAttributeBase patch in method.GetCustomAttributes(typeof(QModPatchAttributeBase), false))
                             {
-                                if (extra.Method.Name != method.Name)
-                                    return ModStatus.TooManyPatchMethods;
-                            }
-                            else
-                            {
-                                qMod.PatchMethods[patch.PatchOrder] = new QModPatchMethod(method, qMod, patch.PatchOrder);
+                                switch (patch.PatchOrder)
+                                {
+                                    case PatchingOrder.MetaPreInitialize:
+                                    case PatchingOrder.MetaPostInitialize:
+                                        patch.ValidateSecretPassword(method, qMod);
+                                        break;
+                                }
+
+                                if (qMod.PatchMethods.TryGetValue(patch.PatchOrder, out QModPatchMethod extra))
+                                {
+                                    if (extra.Method.Name != method.Name)
+                                        return ModStatus.TooManyPatchMethods;
+                                }
+                                else
+                                {
+                                    qMod.PatchMethods[patch.PatchOrder] = new QModPatchMethod(method, qMod, patch.PatchOrder);
+                                }
                             }
                         }
                     }
                 }
+            }
+            catch (TypeLoadException)
+            {
+                Logger.Warn($"Unable to load types for '{qMod.Id}'");
+                return ModStatus.InvalidCoreInfo;
             }
 
             if (qMod.PatchMethods.Count == 0)

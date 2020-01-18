@@ -33,6 +33,19 @@
             var modSorter = new SortedCollection<string, QMod>();
             var earlyErrors = new List<QMod>(subDirectories.Length);
 
+            // Load Mods - Checking for duplicates
+            LoadModsFromDirectories(subDirectories, modSorter, earlyErrors);
+
+            // Sort
+            List<QMod> modsToLoad = modSorter.GetSortedList();
+
+            ValidateManifests(earlyErrors, modsToLoad);
+
+            return CreateModStatusList(earlyErrors, modsToLoad);
+        }
+
+        internal static void LoadModsFromDirectories(string[] subDirectories, SortedCollection<string, QMod> modSorter, List<QMod> earlyErrors)
+        {
             foreach (string subDir in subDirectories)
             {
                 string[] dllFiles = Directory.GetFiles(subDir, "*.dll", SearchOption.TopDirectoryOnly);
@@ -53,15 +66,6 @@
 
                 QMod mod = CreateFromJsonManifestFile(subDir);
 
-                ModStatus status = Validator.ValidateManifest(mod, subDir);
-
-                if (status != ModStatus.Success)
-                {
-                    Logger.Debug($"Mod '{mod.Id}' will not be loaded");
-                    earlyErrors.Add(mod);
-                    continue;
-                }
-
                 Logger.Debug($"Sorting mod {mod.Id}");
                 bool added = modSorter.AddSorted(mod);
                 if (!added)
@@ -71,10 +75,21 @@
                     earlyErrors.Add(mod);
                 }
             }
+        }
 
-            List<QMod> modsToLoad = modSorter.GetSortedList();
+        private static void ValidateManifests(List<QMod> earlyErrors, List<QMod> modsToLoad)
+        {
+            foreach (QMod mod in modsToLoad)
+            {
+                ModStatus status = Validator.ValidateManifest(mod, mod.SubDirectory);
 
-            return CreateModStatusList(earlyErrors, modsToLoad);
+                if (status != ModStatus.Success)
+                {
+                    Logger.Debug($"Mod '{mod.Id}' will not be loaded");
+                    earlyErrors.Add(mod);
+                    continue;
+                }
+            }
         }
 
         internal static List<QMod> CreateModStatusList(List<QMod> earlyErrors, List<QMod> modsToLoad)
@@ -139,7 +154,12 @@
                 };
 
                 string jsonText = File.ReadAllText(jsonFile);
-                return JsonConvert.DeserializeObject<QMod>(jsonText);
+
+                QMod mod = JsonConvert.DeserializeObject<QMod>(jsonText);
+
+                mod.SubDirectory = subDirectory;
+
+                return mod;
             }
             catch (Exception e)
             {
