@@ -173,9 +173,14 @@
                     }
                 }
             }
-            catch (TypeLoadException)
+            catch (TypeLoadException tlEx)
             {
-                Logger.Warn($"Unable to load types for '{qMod.Id}'");
+                Logger.Warn($"Unable to load types for '{qMod.Id}': " + tlEx.Message);
+                return ModStatus.MissingDependency;
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn($"Unable to load patch method for '{qMod.Id}': " + ex.Message);
                 return ModStatus.InvalidCoreInfo;
             }
 
