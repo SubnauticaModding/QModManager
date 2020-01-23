@@ -37,6 +37,9 @@
                     return mod.Status = ModStatus.FailedIdentifyingGame;
             }
 
+            if (!mod.Enable)
+                return mod.Status = ModStatus.CanceledByUser;
+
             try
             {
                 if (Version.TryParse(mod.Version, out Version version))
@@ -116,9 +119,6 @@
 
                 mod.RequiredMods = versionedDependencies;
             }
-
-            if (!mod.Enable)
-                return mod.Status = ModStatus.CanceledByUser;
 
             return mod.Status = ModStatus.Success;
         }

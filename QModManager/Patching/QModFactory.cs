@@ -33,10 +33,8 @@
             var modSorter = new SortedCollection<string, QMod>();
             var earlyErrors = new List<QMod>(subDirectories.Length);
 
-            // Load Mods - Checking for duplicates
             LoadModsFromDirectories(subDirectories, modSorter, earlyErrors);
 
-            // Sort
             List<QMod> modsToLoad = modSorter.GetSortedList();
 
             ValidateManifests(earlyErrors, modsToLoad);
