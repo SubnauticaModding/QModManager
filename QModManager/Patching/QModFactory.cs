@@ -77,8 +77,10 @@
 
         private static void ValidateManifests(List<QMod> earlyErrors, List<QMod> modsToLoad)
         {
-            foreach (QMod mod in modsToLoad)
+            // Validating in reverse order so that Dependencies are validated first
+            for (int m = modsToLoad.Count; m >= 0; m--)
             {
+                QMod mod = modsToLoad[m];
                 ModStatus status = Validator.ValidateManifest(mod, mod.SubDirectory);
 
                 if (status != ModStatus.Success)
