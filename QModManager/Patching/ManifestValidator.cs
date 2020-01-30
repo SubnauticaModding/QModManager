@@ -10,17 +10,32 @@
     using QModManager.API.ModLoading;
     using QModManager.Utility;
 
-    internal class ManifestValidator
+    internal class ManifestValidator : IManifestValidator
     {
         internal static readonly Regex VersionRegex = new Regex(@"(((\d+)\.?)+)");
 
-        public ModStatus ValidateManifest(QMod mod, string subDirectory)
+        public void ValidateManifest(QMod mod)
         {
-            Logger.Debug($"Validating mod in '{subDirectory}'");
+            if (mod.Status != ModStatus.Success)
+                return;
+
+            if (mod.PatchMethods.Count > 0)
+                return;
+
+            Logger.Debug($"Validating mod in '{mod.SubDirectory}'");
             if (string.IsNullOrEmpty(mod.Id) ||
                 string.IsNullOrEmpty(mod.DisplayName) ||
                 string.IsNullOrEmpty(mod.Author))
-                return mod.Status = ModStatus.MissingCoreInfo;
+            {
+                mod.Status = ModStatus.MissingCoreInfo;
+                return;
+            }
+
+            if (!mod.Enable)
+            {
+                mod.Status = ModStatus.CanceledByUser;
+                return;
+            }
 
             switch (mod.Game)
             {
@@ -34,11 +49,11 @@
                     mod.SupportedGame = QModGame.Subnautica;
                     break;
                 default:
-                    return mod.Status = ModStatus.FailedIdentifyingGame;
+                {
+                    mod.Status = ModStatus.FailedIdentifyingGame;
+                    return;
+                }
             }
-
-            if (!mod.Enable)
-                return mod.Status = ModStatus.CanceledByUser;
 
             try
             {
@@ -50,15 +65,17 @@
                 Logger.Error($"There was an error parsing version \"{mod.Version}\" for mod \"{mod.DisplayName}\"");
                 Logger.Exception(vEx);
 
-                return mod.Status = ModStatus.InvalidCoreInfo;
+                mod.Status = ModStatus.InvalidCoreInfo;
+                return;
             }
 
-            string modAssemblyPath = Path.Combine(subDirectory, mod.AssemblyName);
+            string modAssemblyPath = Path.Combine(mod.SubDirectory, mod.AssemblyName);
 
             if (string.IsNullOrEmpty(modAssemblyPath) || !File.Exists(modAssemblyPath))
             {
                 Logger.Debug($"Did not find a DLL at {modAssemblyPath}");
-                return mod.Status = ModStatus.MissingAssemblyFile;
+                mod.Status = ModStatus.MissingAssemblyFile;
+                return;
             }
             else
             {
@@ -70,22 +87,15 @@
                 {
                     Logger.Error($"Failed loading the dll found at \"{modAssemblyPath}\" for mod \"{mod.DisplayName}\"");
                     Logger.Exception(aEx);
-                    return mod.Status = ModStatus.FailedLoadingAssemblyFile;
+                    mod.Status = ModStatus.FailedLoadingAssemblyFile;
+                    return;
                 }
             }
 
-            try
-            {
-                ModStatus patchMethodResults = FindPatchMethods(mod);
+            ModStatus patchMethodResults = FindPatchMethods(mod);
 
-                if (patchMethodResults != ModStatus.Success)
-                    return mod.Status = patchMethodResults;
-            }
-            catch (Exception ex)
-            {
-                Logger.Exception(ex);
-                return mod.Status = ModStatus.MissingPatchMethod;
-            }
+            if (patchMethodResults != ModStatus.Success)
+                return;
 
             foreach (string item in mod.Dependencies)
                 mod.RequiredDependencies.Add(item);
@@ -120,7 +130,7 @@
                 mod.RequiredMods = versionedDependencies;
             }
 
-            return mod.Status = ModStatus.Success;
+            return;
         }
 
         internal ModStatus FindPatchMethods(QMod qMod)
@@ -145,6 +155,9 @@
                 // QMM 3.0
                 foreach (Type type in qMod.LoadedAssembly.GetTypes())
                 {
+                    if (type.IsNotPublic || type.IsEnum || type.ContainsGenericParameters)
+                        continue;
+
                     foreach (QModCoreAttribute core in type.GetCustomAttributes(typeof(QModCoreAttribute), false))
                     {
                         foreach (MethodInfo method in type.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance))
@@ -177,6 +190,11 @@
             {
                 Logger.Warn($"Unable to load types for '{qMod.Id}': " + tlEx.Message);
                 return ModStatus.MissingDependency;
+            }
+            catch (MissingMethodException mmEx)
+            {
+                Logger.Warn($"Unable to find patch method for '{qMod.Id}': " + mmEx.Message);
+                return ModStatus.InvalidCoreInfo;
             }
             catch (Exception ex)
             {

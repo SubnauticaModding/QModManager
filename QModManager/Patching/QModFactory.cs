@@ -11,7 +11,7 @@
 
     internal class QModFactory : IQModFactory
     {
-        internal static readonly ManifestValidator Validator = new ManifestValidator();
+        internal IManifestValidator Validator { get; set; } = new ManifestValidator();
 
         /// <summary>
         /// Searches through all folders in the provided directory and returns an ordered list of mods to load.<para/>
@@ -36,8 +36,6 @@
             LoadModsFromDirectories(subDirectories, modSorter, earlyErrors);
 
             List<QMod> modsToLoad = modSorter.GetSortedList();
-
-            ValidateManifests(earlyErrors, modsToLoad);
 
             return CreateModStatusList(earlyErrors, modsToLoad);
         }
@@ -75,24 +73,7 @@
             }
         }
 
-        private static void ValidateManifests(List<QMod> earlyErrors, List<QMod> modsToLoad)
-        {
-            // Validating in reverse order so that Dependencies are validated first
-            for (int m = modsToLoad.Count - 1; m >= 0; m--)
-            {
-                QMod mod = modsToLoad[m];
-                ModStatus status = Validator.ValidateManifest(mod, mod.SubDirectory);
-
-                if (status != ModStatus.Success)
-                {
-                    Logger.Debug($"Mod '{mod.Id}' will not be loaded");
-                    earlyErrors.Add(mod);
-                    continue;
-                }
-            }
-        }
-
-        internal static List<QMod> CreateModStatusList(List<QMod> earlyErrors, List<QMod> modsToLoad)
+        internal List<QMod> CreateModStatusList(List<QMod> earlyErrors, List<QMod> modsToLoad)
         {
             var modList = new List<QMod>(modsToLoad.Count + earlyErrors.Count);
 
@@ -113,28 +94,53 @@
                 if (mod.Status != ModStatus.Success)
                     continue;
 
-                if (mod.RequiredMods == null)
-                    continue;
-
-                foreach (RequiredQMod requiredMod in mod.RequiredMods)
+                if (mod.RequiredMods != null)
                 {
-                    QMod dependency = modsToLoad.Find(d => d.Id == requiredMod.Id);
-
-                    if (dependency == null || dependency.Status != ModStatus.Success)
-                    {
-                        mod.Status = ModStatus.MissingDependency;
-                        break;
-                    }
-
-                    if (dependency.ParsedVersion < requiredMod.MinimumVersion)
-                    {
-                        mod.Status = ModStatus.OutOfDateDependency;
-                        break;
-                    }
+                    ValidateDependencies(modsToLoad, mod);
                 }
+
+                if (mod.Status == ModStatus.Success)
+                    this.Validator.ValidateManifest(mod);
             }
 
             return modList;
+        }
+
+        private void ValidateDependencies(List<QMod> modsToLoad, QMod mod)
+        {
+            // Check the mod dependencies
+            foreach (RequiredQMod requiredMod in mod.RequiredMods)
+            {
+                QMod dependency = modsToLoad.Find(d => d.Id == requiredMod.Id);
+
+                if (dependency == null || dependency.Status != ModStatus.Success)
+                {
+                    // Dependency not found or failed
+                    mod.Status = ModStatus.MissingDependency;
+                    break;
+                }
+
+                if (dependency.LoadedAssembly == null)
+                {
+                    // Dependency hasn't been validated yet
+                    this.Validator.ValidateManifest(dependency);
+                }
+
+                if (dependency.Status != ModStatus.Success)
+                {
+                    // Dependency failed to load successfully
+                    // Treat it as missing
+                    mod.Status = ModStatus.MissingDependency;
+                    break;
+                }
+
+                if (dependency.ParsedVersion < requiredMod.MinimumVersion)
+                {
+                    // Dependency version is older than the version required by this mod
+                    mod.Status = ModStatus.OutOfDateDependency;
+                    break;
+                }
+            }
         }
 
         private static QMod CreateFromJsonManifestFile(string subDirectory)
