@@ -13,6 +13,10 @@
     {
         private class DummyValidator : IManifestValidator
         {
+            public void CheckRequiredMods(QMod mod)
+            {
+            }
+
             public void ValidateManifest(QMod mod)
             {
             }
