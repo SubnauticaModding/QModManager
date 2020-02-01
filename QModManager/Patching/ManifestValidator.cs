@@ -99,6 +99,10 @@
                 mod.Status = patchMethodResults;
                 return;
             }
+        }
+
+        public void CheckRequiredMods(QMod mod)
+        {
             foreach (string item in mod.Dependencies)
                 mod.RequiredDependencies.Add(item);
 
@@ -199,12 +203,7 @@
             catch (MissingMethodException mmEx)
             {
                 Logger.Warn($"Unable to find patch method for '{qMod.Id}': " + mmEx.Message);
-                return ModStatus.InvalidCoreInfo;
-            }
-            catch (Exception ex)
-            {
-                Logger.Warn($"Unable to load patch method for '{qMod.Id}': " + ex.Message);
-                return ModStatus.InvalidCoreInfo;
+                return ModStatus.MissingDependency;
             }
 
             if (qMod.PatchMethods.Count == 0)

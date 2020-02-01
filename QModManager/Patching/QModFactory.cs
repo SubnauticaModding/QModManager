@@ -94,6 +94,8 @@
                 if (mod.Status != ModStatus.Success)
                     continue;
 
+                this.Validator.CheckRequiredMods(mod);
+
                 if (mod.RequiredMods != null)
                 {
                     ValidateDependencies(modsToLoad, mod);
