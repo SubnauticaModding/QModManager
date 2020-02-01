@@ -168,7 +168,12 @@
                                 {
                                     case PatchingOrder.MetaPreInitialize:
                                     case PatchingOrder.MetaPostInitialize:
-                                        patch.ValidateSecretPassword(method, qMod);
+                                        if (!patch.ValidateSecretPassword(method, qMod))
+                                        {
+                                            Logger.Error($"The mod {qMod.Id} has an invalid priority patching password.");
+                                            qMod.PatchMethods.Clear();
+                                            return ModStatus.InvalidCoreInfo;
+                                        }
                                         break;
                                 }
 
