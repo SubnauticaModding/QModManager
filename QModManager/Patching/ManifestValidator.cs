@@ -95,8 +95,10 @@
             ModStatus patchMethodResults = FindPatchMethods(mod);
 
             if (patchMethodResults != ModStatus.Success)
+            {
+                mod.Status = patchMethodResults;
                 return;
-
+            }
             foreach (string item in mod.Dependencies)
                 mod.RequiredDependencies.Add(item);
 
@@ -129,8 +131,6 @@
 
                 mod.RequiredMods = versionedDependencies;
             }
-
-            return;
         }
 
         internal ModStatus FindPatchMethods(QMod qMod)
