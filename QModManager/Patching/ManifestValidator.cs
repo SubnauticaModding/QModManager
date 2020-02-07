@@ -198,11 +198,55 @@
             catch (TypeLoadException tlEx)
             {
                 Logger.Warn($"Unable to load types for '{qMod.Id}': " + tlEx.Message);
+                if (qMod.Dependencies.Count() > 0)
+                {
+                    foreach (string dependency in qMod.Dependencies)
+                    {
+                        if (!QModServices.Main.ModPresent(dependency))
+                            Logger.Warn($"Dependency {dependency} for {qMod.Id} may not be installed correctly.");
+                    }
+                }
+                else
+                {
+                    Logger.Error($"{qMod.Id} is missing a dependency but none are listed in mod.json, Please check Nexusmods for list of Dependencies.");
+                }
+                Console.WriteLine("");
                 return ModStatus.MissingDependency;
             }
             catch (MissingMethodException mmEx)
             {
                 Logger.Warn($"Unable to find patch method for '{qMod.Id}': " + mmEx.Message);
+                if (qMod.Dependencies.Count() > 0)
+                {
+                    foreach (string dependency in qMod.Dependencies)
+                    {
+                        if (!QModServices.Main.ModPresent(dependency))
+                            Logger.Warn($"Dependency {dependency} for {qMod.Id} may not be installed correctly.");
+                    }
+                }
+                else
+                {
+                    Logger.Error($"{qMod.Id} is missing a dependency but none are listed in mod.json, Please check Nexusmods for list of Dependencies.");
+                }
+                Console.WriteLine("");
+                return ModStatus.MissingDependency;
+            }
+            catch (ReflectionTypeLoadException rtle)
+            {
+                Logger.Warn($"Unable to load types for '{qMod.Id}': " + rtle.Message);
+                if (qMod.Dependencies.Count() > 0)
+                {
+                    foreach (string dependency in qMod.Dependencies)
+                    {
+                        if (!QModServices.Main.ModPresent(dependency))
+                            Logger.Warn($"Dependency {dependency} for {qMod.Id} may not be installed correctly.");
+                    }
+                }
+                else
+                {
+                    Logger.Error($"{qMod.Id} is missing a dependency but none are listed in mod.json, Please check Nexusmods for list of Dependencies.");
+                }
+                Console.WriteLine("");
                 return ModStatus.MissingDependency;
             }
 
