@@ -205,6 +205,11 @@
                 Logger.Warn($"Unable to find patch method for '{qMod.Id}': " + mmEx.Message);
                 return ModStatus.MissingDependency;
             }
+            catch (ReflectionTypeLoadException rtle)
+            {
+                Logger.Warn($"Unable to load types for '{qMod.Id}': " + rtle.Message);
+                return ModStatus.MissingDependency;
+            }
 
             if (qMod.PatchMethods.Count == 0)
                 return ModStatus.MissingPatchMethod;
