@@ -118,6 +118,7 @@
                 if (dependency == null || dependency.Status != ModStatus.Success)
                 {
                     // Dependency not found or failed
+                    Logger.Error($"{mod.Id} cannot be loaded because it is missing a dependency. Missing mod: {requiredMod.Id}");
                     mod.Status = ModStatus.MissingDependency;
                     break;
                 }
@@ -132,6 +133,7 @@
                 {
                     // Dependency failed to load successfully
                     // Treat it as missing
+                    Logger.Error($"{mod.Id} cannot be loaded because its dependency failed to load. Failed mod: {requiredMod.Id}");
                     mod.Status = ModStatus.MissingDependency;
                     break;
                 }
@@ -139,6 +141,7 @@
                 if (dependency.ParsedVersion < requiredMod.MinimumVersion)
                 {
                     // Dependency version is older than the version required by this mod
+                    Logger.Error($"{mod.Id} cannot be loaded because its dependency is out of date. Outdated mod: {requiredMod.Id}");
                     mod.Status = ModStatus.OutOfDateDependency;
                     break;
                 }

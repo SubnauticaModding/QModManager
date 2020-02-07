@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
     using QModManager.API;
     using QModManager.API.ModLoading;
     using QModManager.Patching;
@@ -43,26 +42,37 @@
             Logger.Log(logLevel, summary);
             foreach (QMod mod in specificMods)
             {
-                if (statusToReport == ModStatus.MissingDependency)
+                switch (statusToReport)
                 {
-                    if (mod.Dependencies.Count() > 0)
+                    case ModStatus.MissingDependency:
                     {
-                        foreach (string dependency in mod.Dependencies)
+                        if (mod.Dependencies.Length > 0)
                         {
-                            if (!QModServices.Main.ModPresent(dependency))
-                                Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is missing {dependency}");
+                            Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is missing one or more of these dependencies:");
+                            foreach (RequiredQMod dependency in mod.RequiredMods)
+                                Console.WriteLine($"   - {dependency.Id}");
                         }
+                        else
+                        {
+                            Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is missing a dependency but none are listed in mod.json, Please check Nexusmods for list of Dependencies.");
+                        }
+                        break;
                     }
-                    else
-                    {
-                        Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is missing a dependency but none are listed in mod.json, Please check Nexusmods for list of Dependencies.");
-                    }
+
+                    case ModStatus.OutOfDateDependency:
+                        Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is requires a newer version of one or more of these dependencies:");
+                        foreach (RequiredQMod dependency in mod.RequiredMods)
+                        {
+                            if (dependency.RequiresMinimumVersion)
+                                Console.WriteLine($"   - {dependency.Id} at version {dependency.MinimumVersion} or later");
+                        }
+                        break;
+
+                    default:
+                        Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");
+                        break;
                 }
-                else
-                {
-                    Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");
-                }
-            }           
+            }
         }
 
         private static void CheckOldHarmony(IEnumerable<QMod> mods)
