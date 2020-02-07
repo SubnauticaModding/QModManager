@@ -197,17 +197,17 @@
             }
             catch (TypeLoadException tlEx)
             {
-                Logger.Warn($"Unable to load types for '{qMod.Id}': " + tlEx.Message);
+                Logger.Debug($"Unable to load types for '{qMod.Id}': " + tlEx.Message);
                 return ModStatus.MissingDependency;
             }
             catch (MissingMethodException mmEx)
             {
-                Logger.Warn($"Unable to find patch method for '{qMod.Id}': " + mmEx.Message);
+                Logger.Debug($"Unable to find patch method for '{qMod.Id}': " + mmEx.Message);
                 return ModStatus.MissingDependency;
             }
             catch (ReflectionTypeLoadException rtle)
             {
-                Logger.Warn($"Unable to load types for '{qMod.Id}': " + rtle.Message);
+                Logger.Debug($"Unable to load types for '{qMod.Id}': " + rtle.Message);
                 return ModStatus.MissingDependency;
             }
 
