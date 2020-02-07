@@ -2,6 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using QModManager.API;
     using QModManager.API.ModLoading;
     using QModManager.Patching;
     using Logger = Utility.Logger;
@@ -39,8 +41,28 @@
                 return;
 
             Logger.Log(logLevel, summary);
-            foreach (QMod mod in specificMods)            
-                Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");            
+            foreach (QMod mod in specificMods)
+            {
+                if (statusToReport == ModStatus.MissingDependency)
+                {
+                    if (mod.Dependencies.Count() > 0)
+                    {
+                        foreach (string dependency in mod.Dependencies)
+                        {
+                            if (!QModServices.Main.ModPresent(dependency))
+                                Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is missing {dependency}");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is missing a dependency but none are listed in mod.json, Please check Nexusmods for list of Dependencies.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");
+                }
+            }           
         }
 
         private static void CheckOldHarmony(IEnumerable<QMod> mods)
