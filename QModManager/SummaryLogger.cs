@@ -48,9 +48,12 @@
                     {
                         if (mod.Dependencies.Length > 0)
                         {
-                            Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is missing one or more of these dependencies:");
+                            Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is missing these dependencies:");
                             foreach (RequiredQMod dependency in mod.RequiredMods)
-                                Console.WriteLine($"   - {dependency.Id}");
+                            {
+                                if (!QModServices.Main.ModPresent(dependency.Id))
+                                    Console.WriteLine($"   - {dependency.Id}");
+                            }
                         }
                         else
                         {
@@ -60,11 +63,16 @@
                     }
 
                     case ModStatus.OutOfDateDependency:
-                        Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is requires a newer version of one or more of these dependencies:");
+                        Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is requires a newer version of these dependencies:");
                         foreach (RequiredQMod dependency in mod.RequiredMods)
                         {
                             if (dependency.RequiresMinimumVersion)
-                                Console.WriteLine($"   - {dependency.Id} at version {dependency.MinimumVersion} or later");
+                            {
+                                IQMod dependencyDetails = QModServices.Main.FindModById(dependency.Id);
+
+                                if (dependencyDetails == null || dependencyDetails.ParsedVersion < dependency.MinimumVersion)                                
+                                    Console.WriteLine($"   - {dependency.Id} at version {dependency.MinimumVersion} or later");                                
+                            }
                         }
                         break;
 
