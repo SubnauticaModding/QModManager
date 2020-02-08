@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Reflection;
     using NUnit.Framework;
     using QModManager.API;
     using QModManager.API.ModLoading;
@@ -10,10 +11,22 @@
     [TestFixture]
     internal class QModFactoryTests
     {
+        private class DummyValidator : IManifestValidator
+        {
+            public void CheckRequiredMods(QMod mod)
+            {
+            }
+
+            public void ValidateManifest(QMod mod)
+            {
+            }
+        }
+
         [Test]
         public void CreateModStatusList_EarlyErrorsCombineWithSuccessfullMods()
         {
             // Arange
+            var factory = new QModFactory();
             var earlyErrors = new List<QMod>
             {
                 new QMod {Id = "1", Status = ModStatus.CanceledByUser },
@@ -31,7 +44,7 @@
             };
 
             // Act
-            List<QMod> combinedList = QModFactory.CreateModStatusList(earlyErrors, modsToLoad);
+            List<QMod> combinedList = factory.CreateModStatusList(earlyErrors, modsToLoad);
 
             Assert.AreEqual(earlyErrors.Count + modsToLoad.Count, combinedList.Count);
 
@@ -48,6 +61,11 @@
         public void CreateModStatusList_WhenMissingVersionDependencies_StatusUpdates(string missingOrOutdatedMod, ModStatus expectedStatus)
         {
             // Arange
+            var factory = new QModFactory
+            {
+                Validator = new DummyValidator()
+            };
+
             var earlyErrors = new List<QMod>
             {
                 new QMod {Id = "5", Status = ModStatus.MissingPatchMethod },
@@ -69,13 +87,14 @@
                 new QMod
                 {
                     Id = "7", Status = ModStatus.Success,
-                    ParsedVersion = new Version(1, 0, 1)
+                    ParsedVersion = new Version(1, 0, 1),
+                    LoadedAssembly = Assembly.GetExecutingAssembly()
                 },
                 modToInspect
             };
 
             // Act
-            List<QMod> combinedList = QModFactory.CreateModStatusList(earlyErrors, modsToLoad);
+            List<QMod> combinedList = factory.CreateModStatusList(earlyErrors, modsToLoad);
 
             // Assert
             Assert.AreEqual(expectedStatus, modToInspect.Status);

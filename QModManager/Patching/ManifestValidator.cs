@@ -10,17 +10,32 @@
     using QModManager.API.ModLoading;
     using QModManager.Utility;
 
-    internal class ManifestValidator
+    internal class ManifestValidator : IManifestValidator
     {
         internal static readonly Regex VersionRegex = new Regex(@"(((\d+)\.?)+)");
 
-        public ModStatus ValidateManifest(QMod mod, string subDirectory)
+        public void ValidateManifest(QMod mod)
         {
-            Logger.Debug($"Validating mod in '{subDirectory}'");
+            if (mod.Status != ModStatus.Success)
+                return;
+
+            if (mod.PatchMethods.Count > 0)
+                return;
+
+            Logger.Debug($"Validating mod in '{mod.SubDirectory}'");
             if (string.IsNullOrEmpty(mod.Id) ||
                 string.IsNullOrEmpty(mod.DisplayName) ||
                 string.IsNullOrEmpty(mod.Author))
-                return mod.Status = ModStatus.MissingCoreInfo;
+            {
+                mod.Status = ModStatus.MissingCoreInfo;
+                return;
+            }
+
+            if (!mod.Enable)
+            {
+                mod.Status = ModStatus.CanceledByUser;
+                return;
+            }
 
             switch (mod.Game)
             {
@@ -34,12 +49,15 @@
                     mod.SupportedGame = QModGame.Subnautica;
                     break;
                 default:
-                    return mod.Status = ModStatus.FailedIdentifyingGame;
+                {
+                    mod.Status = ModStatus.FailedIdentifyingGame;
+                    return;
+                }
             }
 
             try
             {
-                if (System.Version.TryParse(mod.Version, out Version version))
+                if (Version.TryParse(mod.Version, out Version version))
                     mod.ParsedVersion = version;
             }
             catch (Exception vEx)
@@ -47,15 +65,17 @@
                 Logger.Error($"There was an error parsing version \"{mod.Version}\" for mod \"{mod.DisplayName}\"");
                 Logger.Exception(vEx);
 
-                return mod.Status = ModStatus.InvalidCoreInfo;
+                mod.Status = ModStatus.InvalidCoreInfo;
+                return;
             }
 
-            string modAssemblyPath = Path.Combine(subDirectory, mod.AssemblyName);
+            string modAssemblyPath = Path.Combine(mod.SubDirectory, mod.AssemblyName);
 
             if (string.IsNullOrEmpty(modAssemblyPath) || !File.Exists(modAssemblyPath))
             {
                 Logger.Debug($"Did not find a DLL at {modAssemblyPath}");
-                return mod.Status = ModStatus.MissingAssemblyFile;
+                mod.Status = ModStatus.MissingAssemblyFile;
+                return;
             }
             else
             {
@@ -67,23 +87,22 @@
                 {
                     Logger.Error($"Failed loading the dll found at \"{modAssemblyPath}\" for mod \"{mod.DisplayName}\"");
                     Logger.Exception(aEx);
-                    return mod.Status = ModStatus.FailedLoadingAssemblyFile;
+                    mod.Status = ModStatus.FailedLoadingAssemblyFile;
+                    return;
                 }
             }
 
-            try
-            {
-                ModStatus patchMethodResults = FindPatchMethods(mod);
+            ModStatus patchMethodResults = FindPatchMethods(mod);
 
-                if (patchMethodResults != ModStatus.Success)
-                    return mod.Status = patchMethodResults;
-            }
-            catch (Exception ex)
+            if (patchMethodResults != ModStatus.Success)
             {
-                Logger.Exception(ex);
-                return mod.Status = ModStatus.MissingPatchMethod;
+                mod.Status = patchMethodResults;
+                return;
             }
+        }
 
+        public void CheckRequiredMods(QMod mod)
+        {
             foreach (string item in mod.Dependencies)
                 mod.RequiredDependencies.Add(item);
 
@@ -104,7 +123,7 @@
                     {
                         versionedDependencies.Add(new RequiredQMod(item.Key));
                     }
-                    else if (System.Version.TryParse(cleanVersion, out Version version))
+                    else if (Version.TryParse(cleanVersion, out Version version))
                     {
                         versionedDependencies.Add(new RequiredQMod(item.Key, version));
                     }
@@ -116,59 +135,80 @@
 
                 mod.RequiredMods = versionedDependencies;
             }
-
-            if (!mod.Enable)
-                return mod.Status = ModStatus.CanceledByUser;
-
-            return mod.Status = ModStatus.Success;
         }
 
         internal ModStatus FindPatchMethods(QMod qMod)
         {
-            if (!string.IsNullOrEmpty(qMod.EntryMethod))
+            try
             {
-                // Legacy
-                string[] entryMethodSig = qMod.EntryMethod.Split('.');
-                string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
-                string entryMethod = entryMethodSig[entryMethodSig.Length - 1];
-
-                MethodInfo jsonPatchMethod = qMod.LoadedAssembly.GetType(entryType).GetMethod(entryMethod, BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
-
-                if (jsonPatchMethod != null && jsonPatchMethod.GetParameters().Length == 0)
+                if (!string.IsNullOrEmpty(qMod.EntryMethod))
                 {
-                    qMod.PatchMethods[PatchingOrder.NormalInitialize] = new QModPatchMethod(jsonPatchMethod, qMod, PatchingOrder.NormalInitialize);
-                }
-            }
+                    // Legacy
+                    string[] entryMethodSig = qMod.EntryMethod.Split('.');
+                    string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
+                    string entryMethod = entryMethodSig[entryMethodSig.Length - 1];
 
-            // QMM 3.0
-            foreach (Type type in qMod.LoadedAssembly.GetTypes())
-            {
-                foreach (QModCoreAttribute core in type.GetCustomAttributes(typeof(QModCoreAttribute), false))
-                {
-                    foreach (MethodInfo method in type.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance))
+                    MethodInfo jsonPatchMethod = qMod.LoadedAssembly.GetType(entryType).GetMethod(entryMethod, BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
+
+                    if (jsonPatchMethod != null && jsonPatchMethod.GetParameters().Length == 0)
                     {
-                        foreach (QModPatchAttributeBase patch in method.GetCustomAttributes(typeof(QModPatchAttributeBase), false))
-                        {
-                            switch (patch.PatchOrder)
-                            {
-                                case PatchingOrder.MetaPreInitialize:
-                                case PatchingOrder.MetaPostInitialize:
-                                    patch.ValidateSecretPassword(method, qMod);
-                                    break;
-                            }
+                        qMod.PatchMethods[PatchingOrder.NormalInitialize] = new QModPatchMethod(jsonPatchMethod, qMod, PatchingOrder.NormalInitialize);
+                    }
+                }
 
-                            if (qMod.PatchMethods.TryGetValue(patch.PatchOrder, out QModPatchMethod extra))
+                // QMM 3.0
+                foreach (Type type in qMod.LoadedAssembly.GetTypes())
+                {
+                    if (type.IsNotPublic || type.IsEnum || type.ContainsGenericParameters)
+                        continue;
+
+                    foreach (QModCoreAttribute core in type.GetCustomAttributes(typeof(QModCoreAttribute), false))
+                    {
+                        foreach (MethodInfo method in type.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance))
+                        {
+                            foreach (QModPatchAttributeBase patch in method.GetCustomAttributes(typeof(QModPatchAttributeBase), false))
                             {
-                                if (extra.Method.Name != method.Name)
-                                    return ModStatus.TooManyPatchMethods;
-                            }
-                            else
-                            {
-                                qMod.PatchMethods[patch.PatchOrder] = new QModPatchMethod(method, qMod, patch.PatchOrder);
+                                switch (patch.PatchOrder)
+                                {
+                                    case PatchingOrder.MetaPreInitialize:
+                                    case PatchingOrder.MetaPostInitialize:
+                                        if (!patch.ValidateSecretPassword(method, qMod))
+                                        {
+                                            Logger.Error($"The mod {qMod.Id} has an invalid priority patching password.");
+                                            qMod.PatchMethods.Clear();
+                                            return ModStatus.InvalidCoreInfo;
+                                        }
+                                        break;
+                                }
+
+                                if (qMod.PatchMethods.TryGetValue(patch.PatchOrder, out QModPatchMethod extra))
+                                {
+                                    if (extra.Method.Name != method.Name)
+                                        return ModStatus.TooManyPatchMethods;
+                                }
+                                else
+                                {
+                                    qMod.PatchMethods[patch.PatchOrder] = new QModPatchMethod(method, qMod, patch.PatchOrder);
+                                }
                             }
                         }
                     }
                 }
+            }
+            catch (TypeLoadException tlEx)
+            {
+                Logger.Debug($"Unable to load types for '{qMod.Id}': " + tlEx.Message);
+                return ModStatus.MissingDependency;
+            }
+            catch (MissingMethodException mmEx)
+            {
+                Logger.Debug($"Unable to find patch method for '{qMod.Id}': " + mmEx.Message);
+                return ModStatus.MissingDependency;
+            }
+            catch (ReflectionTypeLoadException rtle)
+            {
+                Logger.Debug($"Unable to load types for '{qMod.Id}': " + rtle.Message);
+                return ModStatus.MissingDependency;
             }
 
             if (qMod.PatchMethods.Count == 0)

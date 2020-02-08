@@ -116,5 +116,7 @@
         public IList<string> LoadAfterPreferences { get; } = new List<string>();
 
         internal ModStatus Status { get; set; }
+
+        internal string SubDirectory { get; set; }
     }
 }

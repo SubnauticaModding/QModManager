@@ -138,6 +138,7 @@
     <Compile Include="Checks\NitroxCheck.cs" />
     <Compile Include="Patching\FatalPatchingException.cs" />
     <Compile Include="Patching\GameDetector.cs" />
+    <Compile Include="Patching\IManifestValidator.cs" />
     <Compile Include="Patching\Initializer.cs" />
     <Compile Include="Patching\IQModFactory.cs" />
     <Compile Include="Patching\ManifestValidator.cs" />
