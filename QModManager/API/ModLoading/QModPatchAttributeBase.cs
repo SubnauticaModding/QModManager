@@ -5,6 +5,7 @@
     using System.Security.Cryptography;
     using System.Text;
     using QModManager.Patching;
+    using QModManager.Utility;
 
     /// <summary>
     /// Base class to all attributes that identify QMod patch methods.
@@ -46,14 +47,14 @@
         /// <param name="method">The method.</param>
         /// <param name="mod">The mod.</param>
         /// <exception cref="FatalPatchingException">This modder has not read the documentation and should not be using prepatch/postpatch functions.</exception>
-        internal void ValidateSecretPassword(MethodInfo method, QMod mod)
+        internal bool ValidateSecretPassword(MethodInfo method, QMod mod)
         {
             switch (this.PatchOrder)
             {
                 case PatchingOrder.PreInitialize:
                 case PatchingOrder.NormalInitialize:
                 case PatchingOrder.PostInitialize:
-                    return;
+                    return true;
             }
 
             /*
@@ -94,8 +95,7 @@
                     sb.Append(hashBytes[i].ToString("X2"));
                 }
 
-                if (sb.ToString() != _secretPasword)
-                    throw new FatalPatchingException("This modder has not read the documentation and should not be using prepatch/postpatch functions.");
+                return sb.ToString() == _secretPasword;
             }
         }
     }
