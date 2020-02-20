@@ -509,6 +509,38 @@
             Assert.IsTrue(cc2Index > mcuIndex);
         }
 
+        [Test]
+        public void TestDependencies_SML_CC2_ConfirmCorrectOrder()
+        {
+            var validator = new ManifestValidator();
+            var tree = new SortedCollection<string, QMod>();
+
+            var cc2 = new QMod
+            {
+                Id = "CustomCraft2SML",
+                Dependencies = new[] { "SMLHelper" }
+            };            
+
+            var sml = new QMod
+            {
+                Id = "SMLHelper"
+            };
+
+            validator.CheckRequiredMods(cc2);
+            validator.CheckRequiredMods(sml);
+
+            tree.AddSorted(cc2);
+            tree.AddSorted(sml);
+
+            List<QMod> list = tree.GetSortedList();
+
+            Console.WriteLine(ListToString(list));
+
+            Assert.AreEqual(2, list.Count);
+            Assert.AreEqual("CustomCraft2SML", list[0].Id);
+            Assert.AreEqual("SMLHelper", list[1].Id);
+        }
+
         private class TestDependencies : ISortable<string>
         {
             public TestDependencies(string id)
