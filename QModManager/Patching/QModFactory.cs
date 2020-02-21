@@ -40,7 +40,7 @@
             return CreateModStatusList(earlyErrors, modsToLoad);
         }
 
-        internal static void LoadModsFromDirectories(string[] subDirectories, SortedCollection<string, QMod> modSorter, List<QMod> earlyErrors)
+        internal void LoadModsFromDirectories(string[] subDirectories, SortedCollection<string, QMod> modSorter, List<QMod> earlyErrors)
         {
             foreach (string subDir in subDirectories)
             {
@@ -61,6 +61,8 @@
                 }
 
                 QMod mod = CreateFromJsonManifestFile(subDir);
+
+                this.Validator.CheckRequiredMods(mod);
 
                 Logger.Debug($"Sorting mod {mod.Id}");
                 bool added = modSorter.AddSorted(mod);
@@ -93,8 +95,6 @@
             {
                 if (mod.Status != ModStatus.Success)
                     continue;
-
-                this.Validator.CheckRequiredMods(mod);
 
                 if (mod.RequiredMods != null)
                 {
