@@ -15,7 +15,7 @@ namespace QModManager.Patching
     /// </summary>
     internal static class Patcher
     {
-        internal const string IDRegex = "[^0-9a-z_]";
+        internal const string IDRegex = "[^0-9a-zA-Z_]";
 
         internal static bool patched = false;
 
