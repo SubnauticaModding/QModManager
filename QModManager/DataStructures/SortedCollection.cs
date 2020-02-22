@@ -70,17 +70,16 @@
 
             while (true)
             {
-                if (node.NodeBefore != null)
+                if (node.LeftChildNode != null)
                 {
-                    AddLinkedNodesToList(ref node.NodeBefore, list);
+                    AddLinkedNodesToList(ref node.LeftChildNode, list);
                 }
 
-                if (node.AllDependenciesPresent(NodesToSort.Keys) && !list.Contains(node.Data))
-                    list.Add(node.Data);
+                list.Add(node.Data);
 
-                if (node.NodeAfter != null)
+                if (node.RightChildNode != null)
                 {
-                    node = node.NodeAfter;
+                    node = node.RightChildNode;
                     continue;
                 }
 
@@ -103,7 +102,7 @@
 
             for (int i = 0; i < roots.Count - 1; i++)
             {
-                roots[i].SetNodeAfter(roots[i + 1]);
+                roots[i].SetRightChild(roots[i + 1]);
             }
 
             return roots.Count > 0 ? roots[0] : null;
@@ -121,7 +120,7 @@
                     }
                     else
                     {
-                        roots[0].SetNodeBefore(node);
+                        roots[0].SetLeftChild(node);
                     }
                 }
             }
@@ -139,7 +138,7 @@
                     {
                         if (!item.IsLinked)
                         {
-                            node.SetNodeBefore(item);
+                            node.SetRightChild(item);
 
                             if (roots.Count == 0)
                                 roots.Add(node);
@@ -161,7 +160,7 @@
                     {
                         if (!item.IsLinked)
                         {
-                            node.SetNodeAfter(item);
+                            node.SetLeftChild(item);
 
                             if (roots.Count == 0)
                                 roots.Add(node);
@@ -186,7 +185,7 @@
                     {
                         if (!item.IsLinked)
                         {
-                            node.SetNodeBefore(item);
+                            node.SetLeftChild(item);
                         }
                     }
                 }
@@ -222,7 +221,7 @@
 
                     if (!node.HasOrdering)
                     {
-                        root.SetNodeBefore(node);
+                        root.SetLeftChild(node);
                         continue;
                     }
                     else if (node.Dependencies.Count == 0)
@@ -248,7 +247,7 @@
 
                         if (noPreferences)
                         {
-                            root.SetNodeAfter(node);
+                            root.SetRightChild(node);
                             continue;
                         }
                     }
@@ -383,10 +382,10 @@
 
             encountered.Add(node.Id);
 
-            if (node.NodeBefore != null && HasCycle(node.NodeBefore, encountered))
+            if (node.LeftChildNode != null && HasCycle(node.LeftChildNode, encountered))
                 return true;
 
-            if (node.NodeAfter != null && HasCycle(node.NodeAfter, encountered))
+            if (node.RightChildNode != null && HasCycle(node.RightChildNode, encountered))
                 return true;
 
             return false;

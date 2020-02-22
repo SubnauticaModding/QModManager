@@ -1,6 +1,7 @@
 ﻿namespace QModManager.Patching
 {
     using System.Reflection;
+    using System.Text.RegularExpressions;
     using QModManager.API;
     using QModManager.API.ModLoading;
 
@@ -32,7 +33,10 @@
 
         internal QModPlaceholder(string name, ModStatus status)
         {
-            this.Id = Patcher.IDRegex.Replace(name, "");
+            Regex regex = new Regex(Patcher.IDRegex);
+            string cleanName = regex.Replace(name, "");
+
+            this.Id = cleanName;
             this.DisplayName = name;
             this.Author = "Unknown";
             this.SupportedGame = QModGame.None;
