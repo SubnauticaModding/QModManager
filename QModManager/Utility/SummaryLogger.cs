@@ -5,7 +5,6 @@
     using System.Collections.Generic;
     using QModManager.API;
     using QModManager.API.ModLoading;
-    using Logger = Utility.Logger;
 
     internal static class SummaryLogger
     {

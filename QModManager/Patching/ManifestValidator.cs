@@ -45,7 +45,10 @@
             }
 
             if (ProhibitedModIDs.TryGetValue(mod.Id, out ModStatus reason))
-                return mod.Status = reason;
+            {
+                mod.Status = reason; 
+                return;
+            }
 
             switch (mod.Game)
             {
