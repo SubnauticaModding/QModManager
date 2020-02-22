@@ -139,7 +139,7 @@
                     {
                         if (!item.IsLinked)
                         {
-                            node.SetBefore(item);
+                            node.SetAfter(item);
 
                             if (roots.Count == 0)
                                 roots.Add(node);
@@ -161,7 +161,7 @@
                     {
                         if (!item.IsLinked)
                         {
-                            node.SetAfter(item);
+                            node.SetBefore(item);
 
                             if (roots.Count == 0)
                                 roots.Add(node);
