@@ -20,17 +20,6 @@
 
         public readonly SortedCollection<IdType, DataType> Tree;
 
-        public bool AllDependenciesPresent(ICollection<IdType> otherNodes)
-        {
-            foreach (IdType item in this.Dependencies)
-            {
-                if (!otherNodes.Contains(item))
-                    return false;
-            }
-
-            return true;
-        }
-
         public IList<IdType> Dependencies => Data.RequiredDependencies;
 
         public IList<IdType> LoadBefore => Data.LoadBeforePreferences;
@@ -39,51 +28,51 @@
 
         internal bool HasOrdering => this.Dependencies.Count > 0 || this.LoadBefore.Count > 0 || this.LoadAfter.Count > 0;
 
-        public bool IsRoot => Parent == null && (NodeAfter != null || NodeBefore != null);
+        public bool IsRoot => Parent == null && (RightChildNode != null || LeftChildNode != null);
 
-        public bool IsLinked => (Parent != null) || (NodeAfter != null || NodeBefore != null);
+        public bool IsLinked => (Parent != null) || (RightChildNode != null || LeftChildNode != null);
 
         public SortedTreeNode<IdType, DataType> Parent;
 
-        public SortedTreeNode<IdType, DataType> NodeBefore;
+        public SortedTreeNode<IdType, DataType> LeftChildNode;
 
-        public SortedTreeNode<IdType, DataType> NodeAfter;
+        public SortedTreeNode<IdType, DataType> RightChildNode;
 
         public void ClearLinks()
         {
-            NodeBefore = null;
-            NodeAfter = null;
+            LeftChildNode = null;
+            RightChildNode = null;
         }
 
-        public void SetBefore(SortedTreeNode<IdType, DataType> node)
+        public void SetLeftChild(SortedTreeNode<IdType, DataType> node)
         {
             if (ReferenceEquals(node, this))
                 return;
 
-            if (NodeBefore == null)
+            if (LeftChildNode == null)
             {
-                NodeBefore = node;
+                LeftChildNode = node;
                 node.Parent = this;
             }
             else
             {
-                NodeBefore.SetAfter(node);
+                LeftChildNode.SetRightChild(node);
             }
         }
 
-        public void SetAfter(SortedTreeNode<IdType, DataType> node)
+        public void SetRightChild(SortedTreeNode<IdType, DataType> node)
         {
             if (ReferenceEquals(node, this))
                 return;
 
-            if (NodeAfter == null)
+            if (RightChildNode == null)
             {
-                NodeAfter = node;
+                RightChildNode = node;
                 node.Parent = this;
             }
             else
             {
-                NodeAfter.SetBefore(node);
+                RightChildNode.SetLeftChild(node);
             }
         }
     }

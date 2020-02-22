@@ -136,7 +136,7 @@
             List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
-            Assert.AreEqual(0, list.Count);
+            Assert.AreEqual(1, list.Count); // Still added to list and checked later
         }
 
         //-------
