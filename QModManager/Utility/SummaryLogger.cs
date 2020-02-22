@@ -3,8 +3,9 @@
     using QModManager.Patching;
     using System;
     using System.Collections.Generic;
+    using System.Reflection;
     using QModManager.API;
-    using QModManager.API.ModLoading;
+    using QModManager.Checks;
 
     internal static class SummaryLogger
     {
@@ -101,6 +102,61 @@
                 {
                     Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");
                 }
+            }
+        }
+
+        internal static void ReportIssues(List<QMod> mods)
+        {
+            List<QMod> loadedMods = mods.FindAll(m => m.IsLoaded);
+            List<QMod> skippedMods = mods.FindAll(m => !m.IsLoaded && m.Status < 0);
+            List<QMod> erroredMods = mods.FindAll(m => !m.IsLoaded && m.Status > 0);
+
+            Logger.Info($"Finished loading QModManager. Loaded {loadedMods.Count} mods.");
+
+            if (skippedMods.Count > 0)
+                Logger.Info($"A total of {skippedMods.Count} mods were skipped");
+
+            if (erroredMods.Count > 0)
+            {
+                Logger.Error($"A total of {erroredMods.Count} mods failed to load");
+
+                string message;
+
+                switch (erroredMods.Count)
+                {
+                    case 1:
+                        message = $"The following mod could not be loaded: {erroredMods[0].DisplayName}.";
+                        break;
+                    case 2:
+                        message = $"The following mods could not be loaded: {erroredMods[0].DisplayName} and {erroredMods[1].DisplayName}.";
+                        break;
+                    case 3:
+                        message = $"The following mods could not be loaded: {erroredMods[0].DisplayName}, {erroredMods[1].DisplayName} and {erroredMods[2].DisplayName}.";
+                        break;
+                    default:
+                        message = $"The following mods could not be loaded: {erroredMods[0].DisplayName}, {erroredMods[1].DisplayName}, {erroredMods[2].DisplayName} and {erroredMods.Count - 3} others.";
+                        break;
+                }
+
+                message += " Check the log for more information.";
+
+                new Dialog()
+                {
+                    message = message,
+                    leftButton = Dialog.Button.SeeLog,
+                    rightButton = Dialog.Button.Close,
+                    color = Dialog.DialogColor.Red
+                }.Show();
+            }
+            else if (VersionCheck.result != null)
+            {
+                new Dialog()
+                {
+                    message = $"There is a newer version of QModManager available: {VersionCheck.result.ToStringParsed()} (current version: {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()})",
+                    leftButton = Dialog.Button.Download,
+                    rightButton = Dialog.Button.Close,
+                    color = Dialog.DialogColor.Blue
+                }.Show();
             }
         }
     }
