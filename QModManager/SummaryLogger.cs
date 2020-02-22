@@ -49,10 +49,10 @@
                         if (mod.Dependencies.Length > 0)
                         {
                             Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is missing these dependencies:");
-                            foreach (RequiredQMod dependency in mod.RequiredMods)
+                            foreach (string dependency in mod.Dependencies)
                             {
-                                if (!QModServices.Main.ModPresent(dependency.Id))
-                                    Console.WriteLine($"   - {dependency.Id}");
+                                if (!QModServices.Main.ModPresent(dependency))
+                                    Console.WriteLine($"   - {dependency}");
                             }
                         }
                         else
