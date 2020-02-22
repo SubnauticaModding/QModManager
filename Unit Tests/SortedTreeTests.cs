@@ -66,8 +66,6 @@
             Assert.AreEqual("1", list[0]);
             Assert.AreEqual("2", list[1]);
             Assert.AreEqual("0", list[2]);
-
-            Assert.Pass(ListToString(list));
         }
 
         [Test]
@@ -85,8 +83,6 @@
             Assert.AreEqual(1, list.Count);
 
             Assert.AreEqual("1", list[0]);
-
-            Assert.Pass(ListToString(list));
         }
 
         [Test]
@@ -104,8 +100,6 @@
             Assert.AreEqual(1, list.Count);
 
             Assert.AreEqual("1", list[0]);
-
-            Assert.Pass(ListToString(list));
         }
 
         [Test]
@@ -127,8 +121,6 @@
             Assert.AreEqual(1, list.Count);
 
             Assert.AreEqual("1", list[0]);
-
-            Assert.Pass(ListToString(list));
         }
 
         [Test]
@@ -144,9 +136,7 @@
             List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
-            Assert.AreEqual(0, list.Count);
-
-            Assert.Pass(ListToString(list));
+            Assert.AreEqual(1, list.Count); // Still added to list and checked later
         }
 
         //-------
@@ -156,14 +146,14 @@
         {
             var tree = new SortedCollection<string, TestData>();
 
-            var iA = new TestData(0);
-            iA.LoadBeforePreferences.Add("1");
+            var i0 = new TestData(0);
+            i0.LoadBeforePreferences.Add("1"); // Load 0 before 1
 
-            var iB = new TestData(1);
-            iB.LoadAfterPreferences.Add("0");
+            var i1 = new TestData(1);
+            i1.LoadAfterPreferences.Add("0"); // Load 1 after 0
 
-            tree.AddSorted(iA);
-            tree.AddSorted(iB);
+            tree.AddSorted(i0);
+            tree.AddSorted(i1);
             tree.AddSorted(new TestData(2));
 
             List<string> list = tree.GetSortedIndexList();
@@ -171,9 +161,7 @@
 
             Assert.AreEqual(3, list.Count);
 
-            Assert.IsTrue(list.IndexOf("1") < list.IndexOf("0"));
-
-            Assert.Pass(ListToString(list));
+            Assert.IsTrue(list.IndexOf("0") < list.IndexOf("1"));
         }
 
         [Test]
@@ -181,14 +169,14 @@
         {
             var tree = new SortedCollection<string, TestData>();
 
-            var iA = new TestData(0);
-            iA.LoadBeforePreferences.Add("1");
+            var i0 = new TestData(0);
+            i0.LoadBeforePreferences.Add("1"); // Load 0 before 1
 
-            var iB = new TestData(1);
-            iB.LoadAfterPreferences.Add("0");
+            var i1 = new TestData(1);
+            i1.LoadAfterPreferences.Add("0"); // Load 1 after 0
 
-            tree.AddSorted(iB);
-            tree.AddSorted(iA);
+            tree.AddSorted(i1);
+            tree.AddSorted(i0);
             tree.AddSorted(new TestData(2));
 
             List<string> list = tree.GetSortedIndexList();
@@ -196,9 +184,7 @@
 
             Assert.AreEqual(3, list.Count);
 
-            Assert.IsTrue(list.IndexOf("1") < list.IndexOf("0"));
-
-            Assert.Pass(ListToString(list));
+            Assert.IsTrue(list.IndexOf("0") < list.IndexOf("1"));
         }
 
         [Test]
@@ -206,24 +192,22 @@
         {
             var tree = new SortedCollection<string, TestData>();
 
-            var iA = new TestData(0);
-            iA.LoadBeforePreferences.Add("1");
+            var i0 = new TestData(0);
+            i0.LoadBeforePreferences.Add("1"); // Load 0 before 1
 
-            var iB = new TestData(1);
-            iB.LoadAfterPreferences.Add("0");
+            var i1 = new TestData(1);
+            i1.LoadAfterPreferences.Add("0"); // Load 1 after 0
 
-            tree.AddSorted(iA);
+            tree.AddSorted(i0);
             tree.AddSorted(new TestData(2));
-            tree.AddSorted(iB);
+            tree.AddSorted(i1);
 
             List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
 
-            Assert.IsTrue(list.IndexOf("1") < list.IndexOf("0"));
-
-            Assert.Pass(ListToString(list));
+            Assert.IsTrue(list.IndexOf("0") < list.IndexOf("1"));
         }
 
         [Test]
@@ -231,24 +215,22 @@
         {
             var tree = new SortedCollection<string, TestData>();
 
-            var iA = new TestData(0);
-            iA.LoadBeforePreferences.Add("1");
+            var i0 = new TestData(0);
+            i0.LoadBeforePreferences.Add("1"); // Load 0 before 1
 
-            var iB = new TestData(1);
-            iB.LoadAfterPreferences.Add("0");
+            var i1 = new TestData(1);
+            i1.LoadAfterPreferences.Add("0"); // Load 1 after 0
 
-            tree.AddSorted(iB);
+            tree.AddSorted(i1);
             tree.AddSorted(new TestData(2));
-            tree.AddSorted(iA);
+            tree.AddSorted(i0);
 
             List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
 
-            Assert.IsTrue(list.IndexOf("1") < list.IndexOf("0"));
-
-            Assert.Pass(ListToString(list));
+            Assert.IsTrue(list.IndexOf("0") < list.IndexOf("1"));
         }
 
         //-------
@@ -258,13 +240,13 @@
         {
             var tree = new SortedCollection<string, TestData>();
 
-            var iA = new TestData(0);
-            iA.LoadBeforePreferences.Add("1");
+            var i0 = new TestData(0);
+            i0.LoadBeforePreferences.Add("1"); // Load 0 before 1
 
-            var iB = new TestData(1);
+            var i1 = new TestData(1);
 
-            tree.AddSorted(iA);
-            tree.AddSorted(iB);
+            tree.AddSorted(i0);
+            tree.AddSorted(i1);
             tree.AddSorted(new TestData(2));
 
             List<string> list = tree.GetSortedIndexList();
@@ -272,9 +254,7 @@
 
             Assert.AreEqual(3, list.Count);
 
-            Assert.IsTrue(list.IndexOf("1") < list.IndexOf("0"));
-
-            Assert.Pass(ListToString(list));
+            Assert.IsTrue(list.IndexOf("0") < list.IndexOf("1"));
         }
 
         [Test]
@@ -282,13 +262,13 @@
         {
             var tree = new SortedCollection<string, TestData>();
 
-            var iA = new TestData(0);
-            iA.LoadBeforePreferences.Add("1");
+            var i0 = new TestData(0);
+            i0.LoadBeforePreferences.Add("1"); // Load 0 before 1
 
-            var iB = new TestData(1);
+            var i1 = new TestData(1);
 
-            tree.AddSorted(iB);
-            tree.AddSorted(iA);
+            tree.AddSorted(i1);
+            tree.AddSorted(i0);
             tree.AddSorted(new TestData(2));
 
             List<string> list = tree.GetSortedIndexList();
@@ -296,9 +276,7 @@
 
             Assert.AreEqual(3, list.Count);
 
-            Assert.IsTrue(list.IndexOf("1") < list.IndexOf("0"));
-
-            Assert.Pass(ListToString(list));
+            Assert.IsTrue(list.IndexOf("0") < list.IndexOf("1"));
         }
 
         [Test]
@@ -306,23 +284,21 @@
         {
             var tree = new SortedCollection<string, TestData>();
 
-            var iA = new TestData(0);
-            iA.LoadBeforePreferences.Add("1");
+            var i0 = new TestData(0);
+            i0.LoadBeforePreferences.Add("1"); // Load 0 before 1
 
-            var iB = new TestData(1);
+            var i1 = new TestData(1);
 
-            tree.AddSorted(iA);
+            tree.AddSorted(i0);
             tree.AddSorted(new TestData(2));
-            tree.AddSorted(iB);
+            tree.AddSorted(i1);
 
             List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
 
-            Assert.IsTrue(list.IndexOf("1") < list.IndexOf("0"));
-
-            Assert.Pass(ListToString(list));
+            Assert.IsTrue(list.IndexOf("0") < list.IndexOf("1"));
         }
 
         [Test]
@@ -330,23 +306,21 @@
         {
             var tree = new SortedCollection<string, TestData>();
 
-            var iA = new TestData(0);
-            iA.LoadBeforePreferences.Add("1");
+            var i0 = new TestData(0);
+            i0.LoadBeforePreferences.Add("1"); // Load 0 before 1
 
-            var iB = new TestData(1);
+            var i1 = new TestData(1);
 
-            tree.AddSorted(iB);
+            tree.AddSorted(i1);
             tree.AddSorted(new TestData(2));
-            tree.AddSorted(iA);
+            tree.AddSorted(i0);
 
             List<string> list = tree.GetSortedIndexList();
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(3, list.Count);
 
-            Assert.IsTrue(list.IndexOf("1") < list.IndexOf("0"));
-
-            Assert.Pass(ListToString(list));
+            Assert.IsTrue(list.IndexOf("0") < list.IndexOf("1"));
         }
 
         //-------
@@ -356,13 +330,12 @@
         {
             var tree = new SortedCollection<string, TestData>();
 
-            var iA = new TestData(0);
+            var i0 = new TestData(0);
+            var i1 = new TestData(1);
+            i1.LoadAfterPreferences.Add("0"); // Load 1 after 0
 
-            var iB = new TestData(1);
-            iB.LoadAfterPreferences.Add("0");
-
-            tree.AddSorted(iA);
-            tree.AddSorted(iB);
+            tree.AddSorted(i0);
+            tree.AddSorted(i1);
             tree.AddSorted(new TestData(2));
 
             List<string> list = tree.GetSortedIndexList();
@@ -370,9 +343,7 @@
 
             Assert.AreEqual(3, list.Count);
 
-            Assert.IsTrue(list.IndexOf("1") < list.IndexOf("0"));
-
-            Assert.Pass(ListToString(list));
+            Assert.IsTrue(list.IndexOf("0") < list.IndexOf("1"));
         }
 
         [Test]
@@ -380,13 +351,13 @@
         {
             var tree = new SortedCollection<string, TestData>();
 
-            var iA = new TestData(0);
+            var i0 = new TestData(0);
 
-            var iB = new TestData(1);
-            iB.LoadAfterPreferences.Add("0");
+            var i1 = new TestData(1);
+            i1.LoadAfterPreferences.Add("0"); // Load 1 after 0
 
-            tree.AddSorted(iB);
-            tree.AddSorted(iA);
+            tree.AddSorted(i1);
+            tree.AddSorted(i0);
             tree.AddSorted(new TestData(2));
 
             List<string> list = tree.GetSortedIndexList();
@@ -394,9 +365,7 @@
 
             Assert.AreEqual(3, list.Count);
 
-            Assert.IsTrue(list.IndexOf("1") < list.IndexOf("0"));
-
-            Assert.Pass(ListToString(list));
+            Assert.IsTrue(list.IndexOf("0") < list.IndexOf("1"));
         }
 
         [Test]
@@ -507,6 +476,70 @@
             int cc2Index = list.FindIndex(c => c.Id == "CustomCraft2SML");
             int mcuIndex = list.FindIndex(m => m.Id == "MoreCyclopsUpgrades");
             Assert.IsTrue(cc2Index > mcuIndex);
+        }
+
+        [Test]
+        public void TestDependencies_SML_CC2_ConfirmCorrectOrder()
+        {
+            var validator = new ManifestValidator();
+            var tree = new SortedCollection<string, QMod>();
+
+            var cc2 = new QMod
+            {
+                Id = "CustomCraft2SML",
+                Dependencies = new[] { "SMLHelper" }
+            };
+
+            var sml = new QMod
+            {
+                Id = "SMLHelper"
+            };
+
+            validator.CheckRequiredMods(cc2);
+            validator.CheckRequiredMods(sml);
+
+            tree.AddSorted(cc2);
+            tree.AddSorted(sml);
+
+            List<QMod> list = tree.GetSortedList();
+
+            Console.WriteLine(ListToString(list));
+
+            Assert.AreEqual(2, list.Count);
+            Assert.AreEqual("CustomCraft2SML", list[0].Id);
+            Assert.AreEqual("SMLHelper", list[1].Id);
+        }
+
+        [Test]
+        public void TestDependencies_SSS_SE_ConfirmCorrectOrder()
+        {
+            var validator = new ManifestValidator();
+            var tree = new SortedCollection<string, QMod>();
+
+            var sss = new QMod
+            {
+                Id = "SeamothStorageSlots",
+                LoadBefore = new[] { "SlotExtender" }
+            };
+
+            var se = new QMod
+            {
+                Id = "SlotExtender"
+            };
+
+            validator.CheckRequiredMods(sss);
+            validator.CheckRequiredMods(se);
+
+            tree.AddSorted(sss);
+            tree.AddSorted(se);
+
+            List<QMod> list = tree.GetSortedList();
+
+            Console.WriteLine(ListToString(list));
+
+            Assert.AreEqual(2, list.Count);
+            Assert.AreEqual("SeamothStorageSlots", list[0].Id);
+            Assert.AreEqual("SlotExtender", list[1].Id);
         }
 
         private class TestDependencies : ISortable<string>

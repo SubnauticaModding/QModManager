@@ -11,18 +11,11 @@
     {
         internal static void ChangeDisableUnityAudio(string path, bool newValue, QModGame game)
         {
-            //Temp Fix for BZ.
-            if(game == QModGame.BelowZero)
-            {
-                return;
-            }
-
             if (game != QModGame.Subnautica && game != QModGame.BelowZero)
                 throw new ArgumentException("Neither Subnautica nor Below Zero detected!");
             AssetsManager am = new AssetsManager();
             AssetsFileInstance afi = am.LoadAssetsFile(path, false);
-            if (game == QModGame.Subnautica)
-                am.LoadClassDatabase("cldb.dat");
+            am.LoadClassDatabase("cldb.dat");
             AssetFileInfoEx audioInfo = afi.table.getAssetInfo(4);
             AssetTypeInstance audioAti = am.GetATI(afi.file, audioInfo);
             AssetTypeValueField audioBaseField = audioAti.GetBaseField();

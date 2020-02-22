@@ -103,6 +103,7 @@
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\Dependencies\UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
       <HintPath>..\Dependencies\UnityEngine.InputLegacyModule.dll</HintPath>
@@ -142,6 +143,7 @@
     <Compile Include="Patching\FatalPatchingException.cs" />
     <Compile Include="Patching\GameDetector.cs" />
     <Compile Include="HarmonyPatches\UpdateDeveloperMode.cs" />
+    <Compile Include="Patching\IManifestValidator.cs" />
     <Compile Include="Patching\Initializer.cs" />
     <Compile Include="Patching\IQModFactory.cs" />
     <Compile Include="Patching\ManifestValidator.cs" />
