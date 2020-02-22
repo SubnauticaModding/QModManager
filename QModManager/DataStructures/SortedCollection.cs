@@ -103,7 +103,7 @@
 
             for (int i = 0; i < roots.Count - 1; i++)
             {
-                roots[i].SetNodeAfter(roots[i + 1]);
+                roots[i].SetAfter(roots[i + 1]);
             }
 
             return roots.Count > 0 ? roots[0] : null;
@@ -121,7 +121,7 @@
                     }
                     else
                     {
-                        roots[0].SetNodeBefore(node);
+                        roots[0].SetBefore(node);
                     }
                 }
             }
@@ -139,7 +139,7 @@
                     {
                         if (!item.IsLinked)
                         {
-                            node.SetNodeBefore(item);
+                            node.SetBefore(item);
 
                             if (roots.Count == 0)
                                 roots.Add(node);
@@ -161,7 +161,7 @@
                     {
                         if (!item.IsLinked)
                         {
-                            node.SetNodeAfter(item);
+                            node.SetAfter(item);
 
                             if (roots.Count == 0)
                                 roots.Add(node);
@@ -186,7 +186,7 @@
                     {
                         if (!item.IsLinked)
                         {
-                            node.SetNodeBefore(item);
+                            node.SetBefore(item);
                         }
                     }
                 }
@@ -222,7 +222,7 @@
 
                     if (!node.HasOrdering)
                     {
-                        root.SetNodeBefore(node);
+                        root.SetBefore(node);
                         continue;
                     }
                     else if (node.Dependencies.Count == 0)
@@ -248,7 +248,7 @@
 
                         if (noPreferences)
                         {
-                            root.SetNodeAfter(node);
+                            root.SetAfter(node);
                             continue;
                         }
                     }

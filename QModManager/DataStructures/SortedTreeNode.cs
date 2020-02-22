@@ -55,7 +55,7 @@
             NodeAfter = null;
         }
 
-        public void SetNodeBefore(SortedTreeNode<IdType, DataType> node)
+        public void SetBefore(SortedTreeNode<IdType, DataType> node)
         {
             if (ReferenceEquals(node, this))
                 return;
@@ -67,11 +67,11 @@
             }
             else
             {
-                NodeBefore.SetNodeAfter(node);
+                NodeBefore.SetAfter(node);
             }
         }
 
-        public void SetNodeAfter(SortedTreeNode<IdType, DataType> node)
+        public void SetAfter(SortedTreeNode<IdType, DataType> node)
         {
             if (ReferenceEquals(node, this))
                 return;
@@ -83,7 +83,7 @@
             }
             else
             {
-                NodeAfter.SetNodeBefore(node);
+                NodeAfter.SetBefore(node);
             }
         }
     }

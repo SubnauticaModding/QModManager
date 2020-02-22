@@ -519,7 +519,7 @@
             {
                 Id = "CustomCraft2SML",
                 Dependencies = new[] { "SMLHelper" }
-            };            
+            };
 
             var sml = new QMod
             {
@@ -539,6 +539,38 @@
             Assert.AreEqual(2, list.Count);
             Assert.AreEqual("CustomCraft2SML", list[0].Id);
             Assert.AreEqual("SMLHelper", list[1].Id);
+        }
+
+        [Test]
+        public void TestDependencies_SSS_SE_ConfirmCorrectOrder()
+        {
+            var validator = new ManifestValidator();
+            var tree = new SortedCollection<string, QMod>();
+
+            var sss = new QMod
+            {
+                Id = "SeamothStorageSlots",
+                LoadBefore = new[] { "SlotExtender" }
+            };
+
+            var se = new QMod
+            {
+                Id = "SlotExtender"
+            };
+
+            validator.CheckRequiredMods(sss);
+            validator.CheckRequiredMods(se);
+
+            tree.AddSorted(sss);
+            tree.AddSorted(se);
+
+            List<QMod> list = tree.GetSortedList();
+
+            Console.WriteLine(ListToString(list));
+
+            Assert.AreEqual(2, list.Count);
+            Assert.AreEqual("SeamothStorageSlots", list[0].Id);
+            Assert.AreEqual("SlotExtender", list[1].Id);
         }
 
         private class TestDependencies : ISortable<string>
