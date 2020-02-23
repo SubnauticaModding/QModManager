@@ -554,7 +554,10 @@
             Console.WriteLine(ListToString(list));
 
             Assert.AreEqual(4, list.Count);
-            Assert.AreEqual("SMLHelper", list[list.Count - 1].Id);
+            Assert.AreEqual("SpecialtyManifold", list[0].Id);
+            Assert.AreEqual("ScubaManifold", list[1].Id);
+            Assert.AreEqual("NitrogenMod", list[2].Id);
+            Assert.AreEqual("SMLHelper", list[3].Id);
         }
 
         [Test]
