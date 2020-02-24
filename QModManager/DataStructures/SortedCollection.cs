@@ -41,53 +41,47 @@
 
         public List<DataType> GetSortedList()
         {
+            if (NodesToSort.Count == 0)
+                return new List<DataType>();
+
             CleanRedundantDependencies();
             CleanRedundantLoadBefore();
             CleanRedundantLoadAfter();
 
-            SortedTreeNode<IdType, DataType> root = LinkNodes();
+            List<SortedTreeNode<IdType, DataType>> roots = LinkNodes();
 
-            if (root != null)
-                AddUnsortedNodes(ref root);
+            AddUnsortedNodes(roots[0]);
 
             var sortedList = new List<DataType>(NodesToSort.Count);
 
-            if (root != null)
-                AddLinkedNodesToList(ref root, sortedList);
-
-            if (HasCycle(root, new List<IdType>()))
+            foreach (SortedTreeNode<IdType, DataType> root in roots)
             {
-                return null;
+                if (HasCycle(root, new List<IdType>()))
+                    return null;
             }
+
+            foreach (SortedTreeNode<IdType, DataType> root in roots)
+                AddLinkedNodesToList(root, sortedList);
 
             return sortedList;
         }
 
-        private void AddLinkedNodesToList(ref SortedTreeNode<IdType, DataType> node, List<DataType> list)
+        private void AddLinkedNodesToList(SortedTreeNode<IdType, DataType> node, List<DataType> list)
         {
             if (node == null)
                 return;
 
-            while (true)
-            {
-                if (node.LeftChildNode != null)
-                {
-                    AddLinkedNodesToList(ref node.LeftChildNode, list);
-                }
+            if (node.LeftChildNode != null)
+                AddLinkedNodesToList(node.LeftChildNode, list);
 
+            if (!list.Contains(node.Data))
                 list.Add(node.Data);
 
-                if (node.RightChildNode != null)
-                {
-                    node = node.RightChildNode;
-                    continue;
-                }
-
-                break;
-            }
+            if (node.RightChildNode != null)
+                AddLinkedNodesToList(node.RightChildNode, list);
         }
 
-        private SortedTreeNode<IdType, DataType> LinkNodes()
+        private List<SortedTreeNode<IdType, DataType>> LinkNodes()
         {
             List<IdType> orderedDependencies = KnownDependencies.ToSortedList();
             List<IdType> orderedPreferences = KnownPreferences.ToSortedList();
@@ -100,12 +94,7 @@
 
             LinkRemaining(roots);
 
-            for (int i = 0; i < roots.Count - 1; i++)
-            {
-                roots[i].SetRightChild(roots[i + 1]);
-            }
-
-            return roots.Count > 0 ? roots[0] : null;
+            return roots;
         }
 
         private void LinkRemaining(List<SortedTreeNode<IdType, DataType>> roots)
@@ -206,7 +195,7 @@
             return indexList;
         }
 
-        private void AddUnsortedNodes(ref SortedTreeNode<IdType, DataType> root)
+        private void AddUnsortedNodes(SortedTreeNode<IdType, DataType> root)
         {
             // Add nodes without preferences
             foreach (IdType id in NodesToSort.Keys)

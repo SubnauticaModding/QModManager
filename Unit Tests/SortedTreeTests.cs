@@ -511,6 +511,56 @@
         }
 
         [Test]
+        public void TestDependencies_Multiple_Mod_Dependencies_ConfirmCorrectOrder()
+        {
+            var validator = new ManifestValidator();
+            var tree = new SortedCollection<string, QMod>();
+
+            var st = new QMod
+            {
+                Id = "SpecialtyManifold",
+                Dependencies = new[] { "NitrogenMod", "ScubaManifold" }
+            };
+
+            var no2 = new QMod
+            {
+                Id = "NitrogenMod",
+                Dependencies = new[] { "SMLHelper" }
+            };
+
+            var sm = new QMod
+            {
+                Id = "ScubaManifold",
+                Dependencies = new[] { "SMLHelper" }
+            };
+
+            var sml = new QMod
+            {
+                Id = "SMLHelper"
+            };
+
+            validator.CheckRequiredMods(st);
+            validator.CheckRequiredMods(no2);
+            validator.CheckRequiredMods(sm);
+            validator.CheckRequiredMods(sml);
+
+            tree.AddSorted(st);
+            tree.AddSorted(no2);
+            tree.AddSorted(sm);
+            tree.AddSorted(sml);
+
+            List<QMod> list = tree.GetSortedList();
+
+            Console.WriteLine(ListToString(list));
+
+            Assert.AreEqual(4, list.Count);
+            Assert.AreEqual("SpecialtyManifold", list[0].Id);
+            Assert.AreEqual("ScubaManifold", list[1].Id);
+            Assert.AreEqual("NitrogenMod", list[2].Id);
+            Assert.AreEqual("SMLHelper", list[3].Id);
+        }
+
+        [Test]
         public void TestDependencies_SSS_SE_ConfirmCorrectOrder()
         {
             var validator = new ManifestValidator();
