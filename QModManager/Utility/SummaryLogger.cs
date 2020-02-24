@@ -3,6 +3,9 @@
     using QModManager.Patching;
     using System;
     using System.Collections.Generic;
+    using System.Reflection;
+    using QModManager.API;
+    using QModManager.Checks;
 
     internal static class SummaryLogger
     {
@@ -39,8 +42,47 @@
                 return;
 
             Logger.Log(logLevel, summary);
-            foreach (QMod mod in specificMods)            
-                Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");            
+            foreach (QMod mod in specificMods)
+            {
+                switch (statusToReport)
+                {
+                    case ModStatus.MissingDependency:
+                    {
+                        if (mod.Dependencies.Length > 0)
+                        {
+                            Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is missing these dependencies:");
+                            foreach (string dependency in mod.Dependencies)
+                            {
+                                if (!QModServices.Main.ModPresent(dependency))
+                                    Console.WriteLine($"   - {dependency}");
+                            }
+                        }
+                        else
+                        {
+                            Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is missing a dependency but none are listed in mod.json, Please check Nexusmods for list of Dependencies.");
+                        }
+                        break;
+                    }
+
+                    case ModStatus.OutOfDateDependency:
+                        Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is requires a newer version of these dependencies:");
+                        foreach (RequiredQMod dependency in mod.RequiredMods)
+                        {
+                            if (dependency.RequiresMinimumVersion)
+                            {
+                                IQMod dependencyDetails = QModServices.Main.FindModById(dependency.Id);
+
+                                if (dependencyDetails == null || dependencyDetails.ParsedVersion < dependency.MinimumVersion)                                
+                                    Console.WriteLine($"   - {dependency.Id} at version {dependency.MinimumVersion} or later");                                
+                            }
+                        }
+                        break;
+
+                    default:
+                        Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");
+                        break;
+                }
+            }
         }
 
         private static void CheckOldHarmony(IEnumerable<QMod> mods)
@@ -60,6 +102,61 @@
                 {
                     Console.WriteLine($"- {mod.DisplayName} ({mod.Id})");
                 }
+            }
+        }
+
+        internal static void ReportIssues(List<QMod> mods)
+        {
+            List<QMod> loadedMods = mods.FindAll(m => m.IsLoaded);
+            List<QMod> skippedMods = mods.FindAll(m => !m.IsLoaded && m.Status < 0);
+            List<QMod> erroredMods = mods.FindAll(m => !m.IsLoaded && m.Status > 0);
+
+            Logger.Info($"Finished loading QModManager. Loaded {loadedMods.Count} mods.");
+
+            if (skippedMods.Count > 0)
+                Logger.Info($"A total of {skippedMods.Count} mods were skipped");
+
+            if (erroredMods.Count > 0)
+            {
+                Logger.Error($"A total of {erroredMods.Count} mods failed to load");
+
+                string message;
+
+                switch (erroredMods.Count)
+                {
+                    case 1:
+                        message = $"The following mod could not be loaded: {erroredMods[0].DisplayName}.";
+                        break;
+                    case 2:
+                        message = $"The following mods could not be loaded: {erroredMods[0].DisplayName} and {erroredMods[1].DisplayName}.";
+                        break;
+                    case 3:
+                        message = $"The following mods could not be loaded: {erroredMods[0].DisplayName}, {erroredMods[1].DisplayName} and {erroredMods[2].DisplayName}.";
+                        break;
+                    default:
+                        message = $"The following mods could not be loaded: {erroredMods[0].DisplayName}, {erroredMods[1].DisplayName}, {erroredMods[2].DisplayName} and {erroredMods.Count - 3} others.";
+                        break;
+                }
+
+                message += " Check the log for more information.";
+
+                new Dialog()
+                {
+                    message = message,
+                    leftButton = Dialog.Button.SeeLog,
+                    rightButton = Dialog.Button.Close,
+                    color = Dialog.DialogColor.Red
+                }.Show();
+            }
+            else if (VersionCheck.result != null)
+            {
+                new Dialog()
+                {
+                    message = $"There is a newer version of QModManager available: {VersionCheck.result.ToStringParsed()} (current version: {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()})",
+                    leftButton = Dialog.Button.Download,
+                    rightButton = Dialog.Button.Close,
+                    color = Dialog.DialogColor.Blue
+                }.Show();
             }
         }
     }

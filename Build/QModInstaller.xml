@@ -376,12 +376,6 @@
             <param name="mod">The mod.</param>
             <exception cref="T:QModManager.Patching.FatalPatchingException">This modder has not read the documentation and should not be using prepatch/postpatch functions.</exception>
         </member>
-        <member name="T:QModManager.DataStructures.ISortable`1">
-            <summary>
-            Requirements to function within the <seealso cref="T:QModManager.DataStructures.SortedCollection`2"/>
-            </summary>
-            <typeparam name="IdType">The ID type.</typeparam>
-        </member>
         <member name="M:QModManager.Patching.IQModFactory.BuildModLoadingList(System.String)">
             <summary>
             Searches through all folders in the provided directory and returns an ordered list of mods to load.<para/>
@@ -389,11 +383,6 @@
             </summary>
             <param name="qmodsDirectory">The QMods directory</param>
             <returns>A new, sorted <see cref="T:System.Collections.Generic.List`1"/> ready to be initialized or skipped.</returns>
-        </member>
-        <member name="T:QModManager.Patching.Patcher">
-            <summary>
-            The main class which handles all of QModManager's patching
-            </summary>
         </member>
         <member name="T:QModManager.Patching.IQModSerialiable">
             <summary>
@@ -427,6 +416,21 @@
             <summary>
             The dummy <see cref="T:QModManager.Patching.QMod"/> which is used to represent QModManager
             </summary>
+        </member>
+        <member name="T:QModManager.DataStructures.ISortable`1">
+            <summary>
+            Requirements to function within the <seealso cref="T:QModManager.DataStructures.SortedCollection`2"/>
+            </summary>
+            <typeparam name="IdType">The ID type.</typeparam>
+        </member>
+        <member name="P:QModManager.Utility.Logger.EnableDebugLogging">
+            <summary>
+            Gets a value indicating whether debug logs are enabled.
+            To enable debug logs, simple create an empty file named <c>"QModDebug.txt"</c> within the Subnautica folder.
+            </summary>
+            <value>
+              <c>true</c> if debug logs are enabled; otherwise, <c>false</c>.
+            </value>
         </member>
         <member name="T:QModInstaller.QModPatcher">
             <summary>

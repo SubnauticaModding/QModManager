@@ -3,7 +3,6 @@
     using System;
     using System.Net;
     using System.Reflection;
-    using QModManager.Patching;
     using QModManager.Utility;
     using UnityEngine;
     using Logger = Utility.Logger;

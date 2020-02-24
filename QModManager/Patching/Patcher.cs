@@ -3,7 +3,6 @@ namespace QModManager.Patching
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using System.Linq;
     using System.Reflection;
     using API;
     using API.ModLoading;
@@ -13,7 +12,7 @@ namespace QModManager.Patching
 
     internal static class Patcher
     {
-        internal const string IDRegex = "[^0-9a-z_]";
+        internal const string IDRegex = "[^0-9a-zA-Z_]";
 
         internal static string QModBaseDir
         {
@@ -42,6 +41,7 @@ namespace QModManager.Patching
 
                 Patched = true;
 
+                Logger.Info("Game Version: " + SNUtils.GetPlasticChangeSetOfBuild() + " Build Date: " + SNUtils.GetDateTimeOfBuild().ToLongDateString());
                 Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}...");
                 Logger.Info($"Today is {DateTime.Today:dd-MMMM-yyyy}");
 
@@ -81,7 +81,15 @@ namespace QModManager.Patching
 
                 CurrentlyRunningGame = gameDetector.CurrentlyRunningGame;
 
-                PatchHarmony();
+                try
+                {
+                    PatchHarmony();
+                }
+                catch (Exception e)
+                {
+                    Logger.Error("There was an error while trying to apply Harmony patches.");
+                    Logger.Exception(e);
+                }
 
                 if (NitroxCheck.IsInstalled)
                 {
@@ -112,55 +120,7 @@ namespace QModManager.Patching
                 var initializer = new Initializer(CurrentlyRunningGame);
                 initializer.InitializeMods(modsToLoad);
 
-                List<QMod> loadedMods = modsToLoad.FindAll(m => m.IsLoaded);
-                List<QMod> skippedMods = modsToLoad.FindAll(m => !m.IsLoaded && m.Status < 0);
-                List<QMod> erroredMods = modsToLoad.FindAll(m => !m.IsLoaded && m.Status > 0);
-
-                Logger.Info($"Finished loading QModManager. Loaded {loadedMods.Count} mods.");
-
-                if (skippedMods.Count > 0)
-                    Logger.Info($"A total of {skippedMods.Count} mods were skipped");
-
-                if (erroredMods.Count> 0)
-                {
-                    Logger.Error($"A total of {erroredMods.Count} mods failed to load");
-
-                    string message;
-
-                    switch (erroredMods.Count)
-                    {
-                        case 1:
-                            message = $"The following mod could not be loaded: {erroredMods[0].DisplayName}. Check the log for more information.";
-                            break;
-                        case 2:
-                            message = $"The following mods could not be loaded: {erroredMods[0].DisplayName} and {erroredMods[1].DisplayName}. Check the log for more information.";
-                            break;
-                        case 3:
-                            message = $"The following mods could not be loaded: {erroredMods[0].DisplayName}, {erroredMods[1].DisplayName} and {erroredMods[2].DisplayName}. Check the log for more information.";
-                            break;
-                        default:
-                            message = $"The following mods could not be loaded: {erroredMods[0].DisplayName}, {erroredMods[1].DisplayName}, {erroredMods[2].DisplayName} and {erroredMods.Count - 3} others. Check the log for more information.";
-                            break;
-                    }
-
-                    new Dialog()
-                    {
-                        message = message,
-                        leftButton = Dialog.Button.SeeLog,
-                        rightButton = Dialog.Button.Close,
-                        color = Dialog.DialogColor.Red
-                    }.Show();
-                }
-                else if (VersionCheck.result != null)
-                {
-                    new Dialog()
-                    {
-                        message = $"There is a newer version of QModManager available: {VersionCheck.result.ToStringParsed()} (current version: {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()})",
-                        leftButton = Dialog.Button.Download,
-                        rightButton = Dialog.Button.Close,
-                        color = Dialog.DialogColor.Blue
-                    }.Show();
-                }
+                SummaryLogger.ReportIssues(modsToLoad);
 
                 SummaryLogger.LogSummaries(modsToLoad);
             }
