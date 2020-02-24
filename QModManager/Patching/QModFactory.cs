@@ -1,13 +1,12 @@
 ﻿namespace QModManager.Patching
 {
+    using Oculus.Newtonsoft.Json;
+    using QModManager.API;
+    using QModManager.DataStructures;
+    using QModManager.Utility;
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Oculus.Newtonsoft.Json;
-    using QModManager.API;
-    using QModManager.API.ModLoading;
-    using QModManager.DataStructures;
-    using QModManager.Utility;
 
     internal class QModFactory : IQModFactory
     {
@@ -56,7 +55,7 @@
                 if (!File.Exists(jsonFile))
                 {
                     Logger.Error($"Unable to set up mod in folder \"{folderName}\"");
-                    earlyErrors.Add(new QModPlaceholder(folderName, ModStatus.InvalidCoreInfo));
+                    earlyErrors.Add(new QModPlaceholder(folderName, ModStatus.MissingCoreInfo));
                     continue;
                 }
 

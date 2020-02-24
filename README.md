@@ -1,5 +1,4 @@
-### QModManager
-[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors)
+## QModManager
 
 #### Config based patch management for Subnautica and Subnautica: Below Zero
 
@@ -139,3 +138,10 @@ ___
 ### Non-Windows Users
 
 For non-Windows users, please refer to the instructions in the [`Non-Windows Installation`](Non-Windows%20Installation) folder.
+
+___
+
+### Merged Mods
+###### These mods were so cool, that we decided to merge them into QModManager! The list may extend in the future.
+
+- [`Enable Achievements`](https://github.com/AlexejheroYTB/Subnautica-Mods/blob/daf31fa169b923c74defa89d3df29d21a7583e36/EnableAchievements/Mod.cs) by [@AlexejheroYTB](https://github.com/AlexejheroYTB/)

@@ -24,6 +24,7 @@
     <WarningLevel>4</WarningLevel>
     <LangVersion>latest</LangVersion>
     <DocumentationFile>..\Build\QModInstaller.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -83,12 +84,12 @@
       <HintPath>..\Dependencies\0Harmony-1.2.0.1.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>..\Dependencies\Assembly-CSharp.dll</HintPath>
+    <Reference Include="Assembly-CSharp-firstpass_publicized">
+      <HintPath>..\Dependencies\Assembly-CSharp-firstpass_publicized.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>..\Dependencies\Assembly-CSharp-firstpass.dll</HintPath>
+    <Reference Include="Assembly-CSharp_publicized">
+      <HintPath>..\Dependencies\Assembly-CSharp_publicized.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
@@ -121,7 +122,7 @@
     <Compile Include="API\IQMod.cs" />
     <Compile Include="API\IQModAPI.cs" />
     <Compile Include="API\IQModServices.cs" />
-    <Compile Include="API\ModLoading\ModStatus.cs" />
+    <Compile Include="Patching\ModStatus.cs" />
     <Compile Include="API\ModLoading\QModCoreAttribute.cs" />
     <Compile Include="API\ModLoading\QModPatch.cs" />
     <Compile Include="API\ModLoading\QModPostPatch.cs" />
@@ -137,8 +138,11 @@
     <Compile Include="DataStructures\WeightedList.cs" />
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Checks\NitroxCheck.cs" />
+    <Compile Include="HarmonyPatches\DisableDevErrorReporting.cs" />
+    <Compile Include="HarmonyPatches\EnableAchievements.cs" />
     <Compile Include="Patching\FatalPatchingException.cs" />
     <Compile Include="Patching\GameDetector.cs" />
+    <Compile Include="HarmonyPatches\UpdateDeveloperMode.cs" />
     <Compile Include="Patching\IManifestValidator.cs" />
     <Compile Include="Patching\Initializer.cs" />
     <Compile Include="Patching\IQModFactory.cs" />
@@ -151,7 +155,7 @@
     <Compile Include="API\ModLoading\QModPatchAttributeBase.cs" />
     <Compile Include="Patching\QModPlaceholder.cs" />
     <Compile Include="Patching\QModPatchMethod.cs" />
-    <Compile Include="SummaryLogger.cs" />
+    <Compile Include="Utility\SummaryLogger.cs" />
     <Compile Include="Utility\IOUtilities.cs" />
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="Utility\Dialog.cs" />

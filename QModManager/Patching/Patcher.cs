@@ -10,14 +10,9 @@ namespace QModManager.Patching
     using Harmony;
     using Utility;
 
-    /// <summary>
-    /// The main class which handles all of QModManager's patching
-    /// </summary>
     internal static class Patcher
     {
         internal const string IDRegex = "[^0-9a-zA-Z_]";
-
-        internal static bool patched = false;
 
         internal static string QModBaseDir
         {
@@ -38,7 +33,7 @@ namespace QModManager.Patching
         {
             try
             {
-                if (patched)
+                if (Patched)
                 {
                     Logger.Warn("Patch method was called multiple times!");
                     return; // Halt patching
@@ -46,6 +41,7 @@ namespace QModManager.Patching
 
                 Patched = true;
 
+                Logger.Info("Game Version: " + SNUtils.GetPlasticChangeSetOfBuild() + " Build Date: " + SNUtils.GetDateTimeOfBuild().ToLongDateString());
                 Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}...");
                 Logger.Info($"Today is {DateTime.Today:dd-MMMM-yyyy}");
 
@@ -55,7 +51,13 @@ namespace QModManager.Patching
                     Logger.Fatal("There was an error with the QMods directory");
                     Logger.Fatal("Please make sure that you ran Subnautica from Steam/Epic/Discord, and not from the executable file!");
 
-                    Dialog.Show("A fatal error has occurred. QModManager could not be initialized.", Dialog.Button.close, Dialog.Button.Disabled, false);
+                    new Dialog()
+                    {
+                        message = "A fatal error has occurred. QModManager could not be initialized.",
+                        color = Dialog.DialogColor.Red,
+                        leftButton = Dialog.Button.SeeLog,
+                        rightButton = Dialog.Button.Close,
+                    }.Show();
 
                     return;
                 }
@@ -70,8 +72,6 @@ namespace QModManager.Patching
                     Logger.Exception(e);
                 }
 
-                Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}...");
-
                 PirateCheck.IsPirate(Environment.CurrentDirectory);
 
                 var gameDetector = new GameDetector();
@@ -81,13 +81,27 @@ namespace QModManager.Patching
 
                 CurrentlyRunningGame = gameDetector.CurrentlyRunningGame;
 
-                PatchHarmony();
+                try
+                {
+                    PatchHarmony();
+                }
+                catch (Exception e)
+                {
+                    Logger.Error("There was an error while trying to apply Harmony patches.");
+                    Logger.Exception(e);
+                }
 
                 if (NitroxCheck.IsInstalled)
                 {
                     Logger.Fatal($"Nitrox was detected!");
 
-                    Dialog.Show("Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.", Dialog.Button.Disabled, Dialog.Button.Disabled, false);
+                    new Dialog()
+                    {
+                        message = "Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.",
+                        leftButton = Dialog.Button.Disabled,
+                        rightButton = Dialog.Button.Disabled,
+                        color = Dialog.DialogColor.Red,
+                    }.Show();
 
                     return;
                 }
@@ -106,26 +120,7 @@ namespace QModManager.Patching
                 var initializer = new Initializer(CurrentlyRunningGame);
                 initializer.InitializeMods(modsToLoad);
 
-                int loadedMods = 0;
-                int erroredMods = 0;
-                foreach (QMod mod in modsToLoad)
-                {
-                    if (mod.IsLoaded)
-                        loadedMods++;
-                    else if (mod.Enable)
-                        erroredMods++;
-                }
-
-                ErrorModCount = erroredMods;
-
-                Logger.Info($"Finished loading QModManager. Loaded {loadedMods} mods");
-
-                if (ErrorModCount > 0)
-                {
-                    string msg = $"A total of {ErrorModCount} mods failed to load";
-                    Logger.Warn(msg);
-                    Dialog.Show(msg + "\nSee log file for details.", Dialog.Button.close, Dialog.Button.Disabled, false);
-                }
+                SummaryLogger.ReportIssues(modsToLoad);
 
                 SummaryLogger.LogSummaries(modsToLoad);
             }
@@ -134,14 +129,24 @@ namespace QModManager.Patching
                 Logger.Fatal($"A fatal patching exception has been caught! Patching ended prematurely!");
                 Logger.Exception(pEx);
 
-                Dialog.Show("A fatal patching exception has been caught. QModManager could not be initialized.", Dialog.Button.close, Dialog.Button.Disabled, false);
+                new Dialog()
+                {
+                    message = "A fatal patching exception has been caught. QModManager could not be initialized.",
+                    color = Dialog.DialogColor.Red,
+                    leftButton = Dialog.Button.SeeLog,
+                }.Show();
             }
             catch (Exception e)
             {
-                Logger.Fatal("An unhandled exception has been caught! - Patching ended prematurely!");
+                Logger.Fatal("An unhandled exception has been caught! Patching ended prematurely!");
                 Logger.Exception(e);
 
-                Dialog.Show("An unhandled exception has been caught. QModManager could not be initialized.", Dialog.Button.close, Dialog.Button.Disabled, false);
+                new Dialog()
+                {
+                    message = "An unhandled exception has been caught. QModManager could not be initialized.",
+                    color = Dialog.DialogColor.Red,
+                    leftButton = Dialog.Button.SeeLog,
+                }.Show();
             }
         }
 
@@ -166,8 +171,8 @@ namespace QModManager.Patching
 
         private static void PatchHarmony()
         {
-            var harmony = HarmonyInstance.Create("qmodmanager");
-            harmony.PatchAll();
+            Logger.Debug("Applying Harmony patches...");
+            HarmonyInstance.Create("qmodmanager").PatchAll();
             Logger.Debug("Patched!");
         }
     }
