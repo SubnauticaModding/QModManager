@@ -423,15 +423,6 @@
             </summary>
             <typeparam name="IdType">The ID type.</typeparam>
         </member>
-        <member name="P:QModManager.Utility.Logger.EnableDebugLogging">
-            <summary>
-            Gets a value indicating whether debug logs are enabled.
-            To enable debug logs, simple create an empty file named <c>"QModDebug.txt"</c> within the Subnautica folder.
-            </summary>
-            <value>
-              <c>true</c> if debug logs are enabled; otherwise, <c>false</c>.
-            </value>
-        </member>
         <member name="T:QModInstaller.QModPatcher">
             <summary>
             Container class for the entry point

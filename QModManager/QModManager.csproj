@@ -105,6 +105,10 @@
       <HintPath>..\Dependencies\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>..\Dependencies\UnityEngine.IMGUIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
       <HintPath>..\Dependencies\UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>False</Private>
@@ -138,6 +142,7 @@
     <Compile Include="DataStructures\WeightedList.cs" />
     <Compile Include="EntryPoint.cs" />
     <Compile Include="Checks\NitroxCheck.cs" />
+    <Compile Include="HarmonyPatches\EnableConsoleSetting.cs" />
     <Compile Include="HarmonyPatches\DisableDevErrorReporting.cs" />
     <Compile Include="HarmonyPatches\EnableAchievements.cs" />
     <Compile Include="Patching\FatalPatchingException.cs" />
@@ -155,6 +160,7 @@
     <Compile Include="API\ModLoading\QModPatchAttributeBase.cs" />
     <Compile Include="Patching\QModPlaceholder.cs" />
     <Compile Include="Patching\QModPatchMethod.cs" />
+    <Compile Include="Utility\Config.cs" />
     <Compile Include="Utility\SummaryLogger.cs" />
     <Compile Include="Utility\IOUtilities.cs" />
     <Compile Include="Utility\Logger.cs" />
@@ -164,7 +170,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utility\ExtensionMethods.cs" />
     <Compile Include="Utility\NetworkUtilities.cs" />
-    <Compile Include="Utility\PlayerPrefsExtra.cs" />
     <Compile Include="Utility\ReflectionHelper.cs" />
     <Compile Include="Checks\VersionCheck.cs" />
   </ItemGroup>
