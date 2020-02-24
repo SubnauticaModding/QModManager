@@ -21,10 +21,11 @@
 
                 __instance.AddToggleOption(ModsTab, "Check for updates", Config.CheckForUpdates, new UnityAction<bool>(value => Config.CheckForUpdates = value));
 
-                __instance.AddToggleOption(ModsTab, "Enable console", Config.EnableConsole,new UnityAction<bool>(value =>
+                __instance.AddToggleOption(ModsTab, "Enable console", Config.EnableConsole, new UnityAction<bool>(value =>
                 {
                     Config.EnableConsole = value;
                     DevConsole.disableConsole = !value;
+                    UnityEngine.PlayerPrefs.SetInt("UWE.DisableConsole", value ? 0 : 1);
                 }));
 
                 __instance.AddToggleOption(ModsTab, "Enable debug logs", Config.EnableDebugLogs, new UnityAction<bool>(value => Config.EnableDebugLogs = value));

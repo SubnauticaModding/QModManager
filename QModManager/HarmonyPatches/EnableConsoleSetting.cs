@@ -16,45 +16,23 @@
         internal static void Postfix()
         {
             DevConsole.disableConsole = !Config.EnableConsole;
-        }
-    }
-
-    [HarmonyPatch(typeof(GraphicsDebugGUI), nameof(GraphicsDebugGUI.OnGUI))]
-    internal static class GraphicsDebugGUI_OnGUI_Patch
-    {
-        // This patch prevents the F3 debug menu from toggling the console
-
-        [HarmonyTranspiler]
-        internal static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-        {
-            FieldInfo disableConsole = AccessTools.Field(typeof(DevConsole), nameof(DevConsole.disableConsole));
-            foreach (CodeInstruction instruction in instructions)
-            {
-                if (instruction.opcode == OpCodes.Stsfld && (FieldInfo)instruction.operand == disableConsole)
-                    yield return new CodeInstruction(OpCodes.Nop);
-                else
-                    yield return instruction;
-            }
+            PlayerPrefs.SetInt("UWE.DisableConsole", Config.EnableConsole ? 0 : 1);
         }
     }
 
     [HarmonyPatch(typeof(PlayerPrefsUtils), nameof(PlayerPrefsUtils.PrefsToggle))]
     internal static class PlayerPrefsUtils_PrefsToggle_Patch
     {
-        // This patch disables the "Disable console" UI element in the F3 debug menu
+        // This patch syncronizes the "Disable console" UI element in the F3 debug menu
 
-        [HarmonyPrefix]
-        public static bool Prefix(bool __result, string key, string label)
+        [HarmonyPostfix]
+        public static void Postfix(bool __result, string key)
         {
-            if (key != "UWE.DisableConsole") return true;
+            if (key != "UWE.DisableConsole") return;
 
-            GUI.enabled = false;
-            GUILayout.Toggle(!Config.EnableConsole, " " + label);
-            GUI.enabled = true;
+            Config.EnableConsole = !__result;
 
-            __result = !Config.EnableConsole;
-
-            return false;
+            return;
         }
     }
 }
