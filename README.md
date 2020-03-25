@@ -1,5 +1,4 @@
-### QModManager
-[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors)
+## QModManager
 
 #### Config based patch management for Subnautica and Subnautica: Below Zero
 
@@ -136,16 +135,6 @@ _Please note that you need to add commas after each value except the last one. I
 
 ___
 
-### Mac Users
+### Merged Mods
 
-Refer to the `README.md` file in the [`Mac Installation`](Mac%20Installation) folder for installation instructions.
-___
-
-### Linux Users
-
-Using [Steam Proton 4.2](https://www.protondb.com/app/264710), QModManager can be used with Subnautica, allowing you to use certain mods. To Get this working, the following actions should be taken.
-
-- (Optionally) Use an application like Q4Wine to add the Steam Proton directory to your prefix list for easy access.
-- Run the Windows installer in the Steam Proton directory `./steamapps/compatdata/264710/`
-- Install QModManager into the actual Subnautica directory `./steamapps/common/Subnautica/`
-- Manually install mods by adding them to the QMods folder in your Subnautica directory  `./steamapps/common/Subnautica/QMods/`
+- [`Enable Achievements`](https://github.com/AlexejheroYTB/Subnautica-Mods/blob/daf31fa169b923c74defa89d3df29d21a7583e36/EnableAchievements/Mod.cs) by [@AlexejheroYTB](https://github.com/AlexejheroYTB/)

@@ -1,13 +1,12 @@
 ﻿namespace QModManager.Patching
 {
+    using Oculus.Newtonsoft.Json;
+    using QModManager.API;
+    using QModManager.DataStructures;
+    using QModManager.Utility;
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Oculus.Newtonsoft.Json;
-    using QModManager.API;
-    using QModManager.API.ModLoading;
-    using QModManager.DataStructures;
-    using QModManager.Utility;
 
     internal class QModFactory : IQModFactory
     {
@@ -40,7 +39,7 @@
             return CreateModStatusList(earlyErrors, modsToLoad);
         }
 
-        internal static void LoadModsFromDirectories(string[] subDirectories, SortedCollection<string, QMod> modSorter, List<QMod> earlyErrors)
+        internal void LoadModsFromDirectories(string[] subDirectories, SortedCollection<string, QMod> modSorter, List<QMod> earlyErrors)
         {
             foreach (string subDir in subDirectories)
             {
@@ -56,11 +55,13 @@
                 if (!File.Exists(jsonFile))
                 {
                     Logger.Error($"Unable to set up mod in folder \"{folderName}\"");
-                    earlyErrors.Add(new QModPlaceholder(folderName, ModStatus.InvalidCoreInfo));
+                    earlyErrors.Add(new QModPlaceholder(folderName, ModStatus.MissingCoreInfo));
                     continue;
                 }
 
                 QMod mod = CreateFromJsonManifestFile(subDir);
+
+                this.Validator.CheckRequiredMods(mod);
 
                 Logger.Debug($"Sorting mod {mod.Id}");
                 bool added = modSorter.AddSorted(mod);
@@ -93,8 +94,6 @@
             {
                 if (mod.Status != ModStatus.Success)
                     continue;
-
-                this.Validator.CheckRequiredMods(mod);
 
                 if (mod.RequiredMods != null)
                 {

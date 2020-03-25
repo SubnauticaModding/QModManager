@@ -1,8 +1,8 @@
 ﻿namespace QModManager.API.ModLoading
 {
-    using System.Collections.Generic;
     using QModManager.Patching;
     using QModManager.Utility;
+    using System.Collections.Generic;
 
     internal class Initializer
     {

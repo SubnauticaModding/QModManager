@@ -41,54 +41,47 @@
 
         public List<DataType> GetSortedList()
         {
+            if (NodesToSort.Count == 0)
+                return new List<DataType>();
+
             CleanRedundantDependencies();
             CleanRedundantLoadBefore();
             CleanRedundantLoadAfter();
 
-            SortedTreeNode<IdType, DataType> root = LinkNodes();
+            List<SortedTreeNode<IdType, DataType>> roots = LinkNodes();
 
-            if (root != null)
-                AddUnsortedNodes(ref root);
+            AddUnsortedNodes(roots[0]);
 
             var sortedList = new List<DataType>(NodesToSort.Count);
 
-            if (root != null)
-                AddLinkedNodesToList(ref root, sortedList);
-
-            if (HasCycle(root, new List<IdType>()))
+            foreach (SortedTreeNode<IdType, DataType> root in roots)
             {
-                return null;
+                if (HasCycle(root, new List<IdType>()))
+                    return null;
             }
+
+            foreach (SortedTreeNode<IdType, DataType> root in roots)
+                AddLinkedNodesToList(root, sortedList);
 
             return sortedList;
         }
 
-        private void AddLinkedNodesToList(ref SortedTreeNode<IdType, DataType> node, List<DataType> list)
+        private void AddLinkedNodesToList(SortedTreeNode<IdType, DataType> node, List<DataType> list)
         {
             if (node == null)
                 return;
 
-            while (true)
-            {
-                if (node.NodeBefore != null)
-                {
-                    AddLinkedNodesToList(ref node.NodeBefore, list);
-                }
+            if (node.LeftChildNode != null)
+                AddLinkedNodesToList(node.LeftChildNode, list);
 
-                if (node.AllDependenciesPresent(NodesToSort.Keys) && !list.Contains(node.Data))
-                    list.Add(node.Data);
+            if (!list.Contains(node.Data))
+                list.Add(node.Data);
 
-                if (node.NodeAfter != null)
-                {
-                    node = node.NodeAfter;
-                    continue;
-                }
-
-                break;
-            }
+            if (node.RightChildNode != null)
+                AddLinkedNodesToList(node.RightChildNode, list);
         }
 
-        private SortedTreeNode<IdType, DataType> LinkNodes()
+        private List<SortedTreeNode<IdType, DataType>> LinkNodes()
         {
             List<IdType> orderedDependencies = KnownDependencies.ToSortedList();
             List<IdType> orderedPreferences = KnownPreferences.ToSortedList();
@@ -101,12 +94,7 @@
 
             LinkRemaining(roots);
 
-            for (int i = 0; i < roots.Count - 1; i++)
-            {
-                roots[i].SetNodeAfter(roots[i + 1]);
-            }
-
-            return roots.Count > 0 ? roots[0] : null;
+            return roots;
         }
 
         private void LinkRemaining(List<SortedTreeNode<IdType, DataType>> roots)
@@ -121,7 +109,7 @@
                     }
                     else
                     {
-                        roots[0].SetNodeBefore(node);
+                        roots[0].SetLeftChild(node);
                     }
                 }
             }
@@ -139,7 +127,7 @@
                     {
                         if (!item.IsLinked)
                         {
-                            node.SetNodeBefore(item);
+                            node.SetRightChild(item);
 
                             if (roots.Count == 0)
                                 roots.Add(node);
@@ -161,7 +149,7 @@
                     {
                         if (!item.IsLinked)
                         {
-                            node.SetNodeAfter(item);
+                            node.SetLeftChild(item);
 
                             if (roots.Count == 0)
                                 roots.Add(node);
@@ -186,7 +174,7 @@
                     {
                         if (!item.IsLinked)
                         {
-                            node.SetNodeBefore(item);
+                            node.SetLeftChild(item);
                         }
                     }
                 }
@@ -207,7 +195,7 @@
             return indexList;
         }
 
-        private void AddUnsortedNodes(ref SortedTreeNode<IdType, DataType> root)
+        private void AddUnsortedNodes(SortedTreeNode<IdType, DataType> root)
         {
             // Add nodes without preferences
             foreach (IdType id in NodesToSort.Keys)
@@ -222,7 +210,7 @@
 
                     if (!node.HasOrdering)
                     {
-                        root.SetNodeBefore(node);
+                        root.SetLeftChild(node);
                         continue;
                     }
                     else if (node.Dependencies.Count == 0)
@@ -248,7 +236,7 @@
 
                         if (noPreferences)
                         {
-                            root.SetNodeAfter(node);
+                            root.SetRightChild(node);
                             continue;
                         }
                     }
@@ -383,10 +371,10 @@
 
             encountered.Add(node.Id);
 
-            if (node.NodeBefore != null && HasCycle(node.NodeBefore, encountered))
+            if (node.LeftChildNode != null && HasCycle(node.LeftChildNode, encountered))
                 return true;
 
-            if (node.NodeAfter != null && HasCycle(node.NodeAfter, encountered))
+            if (node.RightChildNode != null && HasCycle(node.RightChildNode, encountered))
                 return true;
 
             return false;

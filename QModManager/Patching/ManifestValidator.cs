@@ -1,18 +1,25 @@
 ﻿namespace QModManager.Patching
 {
+    using QModManager.API;
+    using QModManager.API.ModLoading;
+    using QModManager.Utility;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Reflection;
     using System.Text.RegularExpressions;
-    using QModManager.API;
-    using QModManager.API.ModLoading;
-    using QModManager.Utility;
 
     internal class ManifestValidator : IManifestValidator
     {
         internal static readonly Regex VersionRegex = new Regex(@"(((\d+)\.?)+)");
+
+        internal static readonly Dictionary<string, ModStatus> ProhibitedModIDs = new Dictionary<string, ModStatus>()
+        {
+            { "QModManager", ModStatus.BannedID },
+            { "QModInstaller", ModStatus.BannedID },
+            { "EnableAchievements", ModStatus.Merged },
+        };
 
         public void ValidateManifest(QMod mod)
         {
@@ -34,6 +41,12 @@
             if (!mod.Enable)
             {
                 mod.Status = ModStatus.CanceledByUser;
+                return;
+            }
+
+            if (ProhibitedModIDs.TryGetValue(mod.Id, out ModStatus reason))
+            {
+                mod.Status = reason; 
                 return;
             }
 

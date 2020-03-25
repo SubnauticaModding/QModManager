@@ -1,12 +1,12 @@
 ﻿namespace QModManager.Patching
 {
     using System.Reflection;
+    using System.Text.RegularExpressions;
     using QModManager.API;
-    using QModManager.API.ModLoading;
+    using System.Reflection;
 
     internal class QModPlaceholder : QMod, IQMod
     {
-        private readonly ModStatus status;
         /// <summary>
         /// The dummy <see cref="QMod"/> which is used to represent QModManager
         /// </summary>
@@ -32,12 +32,15 @@
 
         internal QModPlaceholder(string name, ModStatus status)
         {
-            this.Id = Patcher.IDRegex.Replace(name, "");
+            Regex regex = new Regex(Patcher.IDRegex);
+            string cleanName = regex.Replace(name, "");
+
+            this.Id = cleanName;
             this.DisplayName = name;
             this.Author = "Unknown";
             this.SupportedGame = QModGame.None;
             this.Enable = false;
-            this.Status = ModStatus.UnidentifiedMod;
+            this.Status = status;
         }
     }
 }

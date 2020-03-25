@@ -1,8 +1,8 @@
 ﻿namespace QModManager.Patching
 {
+    using QModManager.Utility;
     using System;
     using System.Reflection;
-    using QModManager.Utility;
 
     internal class QModPatchMethod
     {
