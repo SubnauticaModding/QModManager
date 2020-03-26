@@ -15,15 +15,6 @@
             Fatal
         }
 
-        /// <summary>
-        /// Gets a value indicating whether debug logs are enabled.
-        /// To enable debug logs, simple create an empty file named <c>"QModDebug.txt"</c> within the Subnautica folder.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if debug logs are enabled; otherwise, <c>false</c>.
-        /// </value>
-        private static bool EnableDebugLogging { get; } = File.Exists(Path.Combine(Environment.CurrentDirectory, "QModDebug.txt"));
-
         private static void Log(string logLevel, params string[] text)
         {
             if (text == null || text.Length < 1)
@@ -40,8 +31,10 @@
                 from = classType.Name;
 
             string toWrite = "[QModManager] ";
-            if (!string.IsNullOrEmpty(from))
+            if (!string.IsNullOrEmpty(from) && !from.Contains("<>"))
                 toWrite += $"[{from}] ";
+            else if (!string.IsNullOrEmpty(from) && from.Contains("<>"))
+                toWrite += $"[Anonymous] ";
             if (!string.IsNullOrEmpty(logLevel))
                 toWrite += $"[{logLevel}] ";
 
@@ -82,7 +75,7 @@
 
         internal static void Debug(params string[] text)
         {
-            if (EnableDebugLogging)
+            if (Config.EnableDebugLogs)
                 Log("Debug", text);
         }
 

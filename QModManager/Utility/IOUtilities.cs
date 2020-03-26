@@ -16,10 +16,6 @@ namespace QModManager.Utility
             "SNUnmanagedData",
             "Subnautica_Data",
             "_CommonRedist",
-            "Subnautica_Data/Mono",
-            "Subnautica_Data/Plugins",
-            "Subnautica_Data/Resources",
-            "Subnautica_Data/StreamingAssets",
         };
 
         internal static string GetFolderStructureAsTree(string directory = null)

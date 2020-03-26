@@ -4,7 +4,7 @@
     using System.Collections;
     using System.Collections.Generic;
 
-    public class WeightedList<TKey> : ICollection<TKey>
+    internal class WeightedList<TKey> : ICollection<TKey>
     {
         private readonly Dictionary<TKey, int> weights = new Dictionary<TKey, int>();
 

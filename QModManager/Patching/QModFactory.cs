@@ -1,19 +1,24 @@
 ﻿namespace QModManager.Patching
 {
+    using Oculus.Newtonsoft.Json;
+    using QModManager.API;
+    using QModManager.DataStructures;
+    using QModManager.Utility;
     using System;
     using System.Collections.Generic;
     using System.IO;
-    using Oculus.Newtonsoft.Json;
-    using QModManager.API;
-    using QModManager.API.ModLoading;
-    using QModManager.DataStructures;
-    using QModManager.Utility;
 
-    internal class QModFactory
+    internal class QModFactory : IQModFactory
     {
-        internal static readonly ManifestValidator Validator = new ManifestValidator();
+        internal IManifestValidator Validator { get; set; } = new ManifestValidator();
 
-        internal List<QMod> BuildModLoadingList(string qmodsDirectory)
+        /// <summary>
+        /// Searches through all folders in the provided directory and returns an ordered list of mods to load.<para/>
+        /// Mods that cannot be loaded will have an unsuccessful <see cref="QMod.Status"/> value.
+        /// </summary>
+        /// <param name="qmodsDirectory">The QMods directory</param>
+        /// <returns>A new, sorted <see cref="List{QMod}"/> ready to be initialized or skipped.</returns>
+        public List<QMod> BuildModLoadingList(string qmodsDirectory)
         {
             if (!Directory.Exists(qmodsDirectory))
             {
@@ -27,6 +32,15 @@
             var modSorter = new SortedCollection<string, QMod>();
             var earlyErrors = new List<QMod>(subDirectories.Length);
 
+            LoadModsFromDirectories(subDirectories, modSorter, earlyErrors);
+
+            List<QMod> modsToLoad = modSorter.GetSortedList();
+
+            return CreateModStatusList(earlyErrors, modsToLoad);
+        }
+
+        internal void LoadModsFromDirectories(string[] subDirectories, SortedCollection<string, QMod> modSorter, List<QMod> earlyErrors)
+        {
             foreach (string subDir in subDirectories)
             {
                 string[] dllFiles = Directory.GetFiles(subDir, "*.dll", SearchOption.TopDirectoryOnly);
@@ -41,20 +55,13 @@
                 if (!File.Exists(jsonFile))
                 {
                     Logger.Error($"Unable to set up mod in folder \"{folderName}\"");
-                    earlyErrors.Add(new QModPlaceholder(folderName, ModStatus.InvalidCoreInfo));
+                    earlyErrors.Add(new QModPlaceholder(folderName, ModStatus.MissingCoreInfo));
                     continue;
                 }
 
                 QMod mod = CreateFromJsonManifestFile(subDir);
 
-                ModStatus status = Validator.ValidateManifest(mod, subDir);
-
-                if (status != ModStatus.Success)
-                {
-                    Logger.Debug($"Mod '{mod.Id}' will not be loaded");
-                    earlyErrors.Add(mod);
-                    continue;
-                }
+                this.Validator.CheckRequiredMods(mod);
 
                 Logger.Debug($"Sorting mod {mod.Id}");
                 bool added = modSorter.AddSorted(mod);
@@ -65,15 +72,9 @@
                     earlyErrors.Add(mod);
                 }
             }
-
-            List<QMod> modsToLoad = modSorter.GetSortedList();
-
-            List<QMod> modList = CreateModStatusList(earlyErrors, modsToLoad);
-
-            return modList;
         }
 
-        private static List<QMod> CreateModStatusList(List<QMod> earlyErrors, List<QMod> modsToLoad)
+        internal List<QMod> CreateModStatusList(List<QMod> earlyErrors, List<QMod> modsToLoad)
         {
             var modList = new List<QMod>(modsToLoad.Count + earlyErrors.Count);
 
@@ -94,28 +95,56 @@
                 if (mod.Status != ModStatus.Success)
                     continue;
 
-                if (mod.RequiredMods == null)
-                    continue;
-
-                foreach (RequiredQMod requiredMod in mod.RequiredMods)
+                if (mod.RequiredMods != null)
                 {
-                    QMod dependency = modList.Find(d => d.Id == requiredMod.Id);
-
-                    if (dependency == null || dependency.Status != ModStatus.Success)
-                    {
-                        mod.Status = ModStatus.MissingDependency;
-                        break;
-                    }
-
-                    if (dependency.ParsedVersion < requiredMod.MinimumVersion)
-                    {
-                        mod.Status = ModStatus.OutOfDateDependency;
-                        break;
-                    }
+                    ValidateDependencies(modsToLoad, mod);
                 }
+
+                if (mod.Status == ModStatus.Success)
+                    this.Validator.ValidateManifest(mod);
             }
 
             return modList;
+        }
+
+        private void ValidateDependencies(List<QMod> modsToLoad, QMod mod)
+        {
+            // Check the mod dependencies
+            foreach (RequiredQMod requiredMod in mod.RequiredMods)
+            {
+                QMod dependency = modsToLoad.Find(d => d.Id == requiredMod.Id);
+
+                if (dependency == null || dependency.Status != ModStatus.Success)
+                {
+                    // Dependency not found or failed
+                    Logger.Error($"{mod.Id} cannot be loaded because it is missing a dependency. Missing mod: {requiredMod.Id}");
+                    mod.Status = ModStatus.MissingDependency;
+                    break;
+                }
+
+                if (dependency.LoadedAssembly == null)
+                {
+                    // Dependency hasn't been validated yet
+                    this.Validator.ValidateManifest(dependency);
+                }
+
+                if (dependency.Status != ModStatus.Success)
+                {
+                    // Dependency failed to load successfully
+                    // Treat it as missing
+                    Logger.Error($"{mod.Id} cannot be loaded because its dependency failed to load. Failed mod: {requiredMod.Id}");
+                    mod.Status = ModStatus.MissingDependency;
+                    break;
+                }
+
+                if (dependency.ParsedVersion < requiredMod.MinimumVersion)
+                {
+                    // Dependency version is older than the version required by this mod
+                    Logger.Error($"{mod.Id} cannot be loaded because its dependency is out of date. Outdated mod: {requiredMod.Id}");
+                    mod.Status = ModStatus.OutOfDateDependency;
+                    break;
+                }
+            }
         }
 
         private static QMod CreateFromJsonManifestFile(string subDirectory)
@@ -135,7 +164,12 @@
                 };
 
                 string jsonText = File.ReadAllText(jsonFile);
-                return JsonConvert.DeserializeObject<QMod>(jsonText);
+
+                QMod mod = JsonConvert.DeserializeObject<QMod>(jsonText);
+
+                mod.SubDirectory = subDirectory;
+
+                return mod;
             }
             catch (Exception e)
             {

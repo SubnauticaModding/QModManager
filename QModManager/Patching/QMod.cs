@@ -1,12 +1,11 @@
 ﻿namespace QModManager.Patching
 {
+    using Oculus.Newtonsoft.Json;
+    using QModManager.API;
+    using QModManager.DataStructures;
     using System;
     using System.Collections.Generic;
     using System.Reflection;
-    using Oculus.Newtonsoft.Json;
-    using QModManager.API;
-    using QModManager.API.ModLoading;
-    using QModManager.DataStructures;
 
     [JsonObject(MemberSerialization.OptIn)]
     internal class QMod : ISortable<string>, IQMod, IQModSerialiable
@@ -116,5 +115,7 @@
         public IList<string> LoadAfterPreferences { get; } = new List<string>();
 
         internal ModStatus Status { get; set; }
+
+        internal string SubDirectory { get; set; }
     }
 }
