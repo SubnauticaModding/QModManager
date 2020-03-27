@@ -137,4 +137,6 @@ ___
 
 ### Merged Mods
 
+###### These mods have had their entire functionality or a part of it merged with QModManager.
+
 - [`Enable Achievements`](https://github.com/AlexejheroYTB/Subnautica-Mods/blob/daf31fa169b923c74defa89d3df29d21a7583e36/EnableAchievements/Mod.cs) by [@AlexejheroYTB](https://github.com/AlexejheroYTB/)
