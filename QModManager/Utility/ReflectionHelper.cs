@@ -7,10 +7,13 @@ namespace QModManager.Utility
 {
     internal static class ReflectionHelper
     {
-        internal static Assembly CallingAssemblyByStackTrace()
+        internal static Assembly CallingAssemblyByStackTrace(bool immediate = false)
         {
             var stackTrace = new StackTrace();
             StackFrame[] frames = stackTrace.GetFrames();
+
+            if (immediate)
+                return frames[2].GetMethod().DeclaringType.Assembly;
 
             foreach (StackFrame stackFrame in frames)
             {
