@@ -9,7 +9,10 @@
     using UnityEngine;
     using UnityEngine.SceneManagement;
 
-    /// <summary>TODO</summary>
+    /// <summary>
+    /// Allows to add critical messages to the main menu.
+    /// Messages will stay in the main menu and on loading screen.
+    /// </summary>
     public static class MainMenuMessages
     {
         private const int defaultSize = 25;
@@ -18,7 +21,11 @@
         private static List<string> messageQueue;
         private static List<ErrorMessage._Message> messages;
 
-        /// <summary>TODO</summary>
+        /// <summary> Adds message to the main menu. </summary>
+        /// <param name="msg"> message to add </param>
+        /// <param name="size"> text size </param>
+        /// <param name="color"> text color </param>
+        /// <param name="autoformat"> whether it needed to apply formatting tags to the message or show it as it is </param>
         public static void Add(string msg, int size = defaultSize, string color = defaultColor, bool autoformat = true)
         {
             if (Patches.hInstance == null) // just in case
@@ -69,6 +76,7 @@
             var message = ErrorMessage.main.GetExistingMessage(msg);
             messages.Add(message);
             message.timeEnd += 1e6f;
+            message.entry.rectTransform.sizeDelta = new Vector2(1640f, 0f); // 1920 - 140 * 2  (140 is a default offset for text entries)
         }
 
         private static void OnSceneLoaded(Scene scene, LoadSceneMode _)
@@ -86,10 +94,12 @@
                 while (SaveLoadManager.main.isLoading)
                     yield return null;
 
-                foreach (var msg in messages)
-                    msg.timeEnd = Time.time + 1f;
+                messages.ForEach(msg => msg.timeEnd = Time.time + 1f);
+                yield return new WaitForSeconds(1.1f); // wait for messages to dissapear
 
+                messages.ForEach(msg => msg.entry.rectTransform.sizeDelta = new Vector2(500f, 0f)); // set back default width
                 messages.Clear();
+
                 Patches.Unpatch();
             }
         }
