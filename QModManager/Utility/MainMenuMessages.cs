@@ -154,14 +154,12 @@
             private static IEnumerable<CodeInstruction> UpdateMessages(IEnumerable<CodeInstruction> cins)
             {
                 var list = new List<CodeInstruction>(cins);
-                int index = list.FindIndex(cin => cin.opcode == OpCodes.Stloc_S && (cin.operand as LocalBuilder)?.LocalIndex == 11) + 1;
+                int index = list.FindIndex(cin => cin.opcode == OpCodes.Stloc_S && (cin.operand as LocalBuilder)?.LocalIndex == 11);
 
                 list.InsertRange(index, new List<CodeInstruction>
                 {
-                    new CodeInstruction(OpCodes.Ldloc_S, 11),
                     new CodeInstruction(OpCodes.Ldloc_S, 6),
-                    new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Patches), nameof(_getVal))),
-                    new CodeInstruction(OpCodes.Stloc_S, 11)
+                    new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Patches), nameof(_getVal)))
                 });
 
                 return list;
