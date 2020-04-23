@@ -13,43 +13,33 @@
     /// Allows to add critical messages to the main menu.
     /// Messages will stay in the main menu and on loading screen.
     /// </summary>
-    public static class MainMenuMessages
+    internal static class MainMenuMessages
     {
-        private const int defaultSize = 25;
-        private const string defaultColor = "red";
+        internal const int defaultSize = 25;
+        internal const string defaultColor = "red";
 
         private static List<string> messageQueue;
         private static List<ErrorMessage._Message> messages;
 
-        /// <summary> Adds message to the main menu. </summary>
-        /// <param name="msg"> message to add </param>
-        /// <param name="size"> text size </param>
-        /// <param name="color"> text color </param>
-        /// <param name="autoformat"> whether it needed to apply formatting tags to the message or show it as it is </param>
-        public static void Add(string msg, int size = defaultSize, string color = defaultColor, bool autoformat = true)
+        /// <summary>Adds an error message to the main menu.</summary>
+        /// <param name="msg">The message to add.</param>
+        /// <param name="callerID">The ID of the caller (or null for "QModManager").</param>
+        /// <param name="size">The size of the text.</param>
+        /// <param name="color">The color of the text.</param>
+        /// <param name="autoformat">Whether or not to apply formatting tags to the message, or show it as it is.</param>
+        internal static void Add(string msg, string callerID = null, int size = defaultSize, string color = defaultColor, bool autoformat = true)
         {
             if (Patches.hInstance == null) // just in case
             {
-                Logger.Error($"MainMenuMessages: trying to add message before Harmony initialized ({msg})");
+                Logger.Error($"Tried to add main menu message before Harmony was initialized. (Message: \"{msg}\")");
                 return;
             }
 
             Init();
-
-            Logger.Debug($"MainMenuMessages: message added {msg}");
+            Logger.Debug($"Created message: \"{msg}\"");
 
             if (autoformat)
-            {
-                Assembly callingAssembly = ReflectionHelper.CallingAssemblyByStackTrace(true);
-
-                string prefix;
-                if (callingAssembly != Assembly.GetExecutingAssembly())
-                    prefix = callingAssembly.GetName().Name;
-                else
-                    prefix = "QModManager"; // or maybe just remove prefix if it's QMM ?
-
-                msg = $"<size={size}><color={color}><b>[{prefix}]:</b> {msg}</color></size>";
-            }
+                msg = $"<size={size}><color={color}><b>[{callerID ?? "QModManager"}]:</b> {msg}</color></size>";
 
             if (ErrorMessage.main != null)
                 AddInternal(msg);
@@ -110,7 +100,7 @@
 
             public static void Patch()
             {
-                Logger.Debug("MainMenuMessages: patching");
+                Logger.Debug("Patching ErrorMessage");
 
                 // patching it only if we need to (transpilers take time)
                 hInstance.Patch(AccessTools.Method(typeof(ErrorMessage), nameof(ErrorMessage.OnUpdate)),
@@ -119,7 +109,7 @@
 
             public static void Unpatch()
             {
-                Logger.Debug("MainMenuMessages: unpatching");
+                Logger.Debug("Unpatching ErrorMessage");
 
                 hInstance.Unpatch(AccessTools.Method(typeof(ErrorMessage), nameof(ErrorMessage.Awake)),
                     AccessTools.Method(typeof(AddMessages), nameof(AddMessages.Postfix)));
