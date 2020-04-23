@@ -9,6 +9,7 @@ namespace QModManager.Utility
         internal static readonly HashSet<string> BannedFolders = new HashSet<string>()
         {
             ".git",
+            ".svn",
             "OST",
             "AssetBundles",
             "MonoBleedingEdge",
@@ -22,7 +23,7 @@ namespace QModManager.Utility
         {
             try
             {
-                directory = directory ?? Environment.CurrentDirectory;
+                directory ??= Environment.CurrentDirectory;
 
                 return GenerateFolderStructure(directory) + "\n";
             }
@@ -69,7 +70,7 @@ namespace QModManager.Utility
 
                 if (BannedFolders.Contains(dirInfo.Name) || BannedFolders.Contains($"{dirInfo.Parent.Name}/{dirInfo.Name}"))
                 {
-                    toWrite += $"{GenerateSpaces(spaces + 4)}`---- ({GetFileCountRecursively(directory)} elements not shown...)\n";
+                    toWrite += $"{GenerateSpaces(spaces + 4)}`---- (Folder content not shown)\n";
                     return toWrite;
                 }
 
