@@ -18,6 +18,9 @@
         internal const int defaultSize = 25;
         internal const string defaultColor = "red";
 
+        private static readonly Vector2 newOffset = new Vector2(20f, 20f);
+        private static Vector2 prevOffset;
+
         private static List<string> messageQueue;
         private static List<ErrorMessage._Message> messages;
 
@@ -66,7 +69,7 @@
             var message = ErrorMessage.main.GetExistingMessage(msg);
             messages.Add(message);
             message.timeEnd += 1e6f;
-            message.entry.rectTransform.sizeDelta = new Vector2(1640f, 0f); // 1920 - 140 * 2  (140 is a default offset for text entries)
+            message.entry.rectTransform.sizeDelta = new Vector2(1920f - newOffset.x * 2f, 0f);
         }
 
         private static void OnSceneLoaded(Scene scene, LoadSceneMode _)
@@ -87,10 +90,14 @@
                 messages.ForEach(msg => msg.timeEnd = Time.time + 1f);
                 yield return new WaitForSeconds(1.1f); // wait for messages to dissapear
 
-                messages.ForEach(msg => msg.entry.rectTransform.sizeDelta = new Vector2(500f, 0f)); // set back default width
+                Vector2 originalSize = ErrorMessage.main.prefabMessage.rectTransform.sizeDelta;
+                messages.ForEach(msg => msg.entry.rectTransform.sizeDelta = originalSize);
                 messages.Clear();
 
                 Patches.Unpatch();
+
+                yield return new WaitForSeconds(0.5f);
+                ErrorMessage.main.offset = prevOffset;
             }
         }
 
@@ -130,7 +137,8 @@
 
                 public static void Postfix()
                 {
-                    Logger.Debug($"MainMenuMessages: ErrorMessage created");
+                    prevOffset = ErrorMessage.main.offset;
+                    ErrorMessage.main.offset = newOffset;
 
                     messageQueue.ForEach(msg => AddInternal(msg));
                     messageQueue.Clear();
