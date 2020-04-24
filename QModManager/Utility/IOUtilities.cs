@@ -123,13 +123,5 @@ namespace QModManager.Utility
                 s += "|   ";
             return s;
         }
-
-        internal static int GetFileCountRecursively(string directory)
-        {
-            int c = 0;
-            foreach (string file in Directory.GetFiles(directory)) c++;
-            foreach (string dir in Directory.GetDirectories(directory)) c += GetFileCountRecursively(dir);
-            return c;
-        }
     }
 }
