@@ -134,7 +134,3 @@ See the new [wiki](https://github.com/SubnauticaModding/QModManager/wiki) for de
 _Please note that you need to add commas after each value except the last one. If you get a "mod.json deserialization failed" error, check the `mod.json` file on an online json validator._
 
 ___
-
-### Merged Mods
-
-- [`Enable Achievements`](https://github.com/AlexejheroYTB/Subnautica-Mods/blob/daf31fa169b923c74defa89d3df29d21a7583e36/EnableAchievements/Mod.cs) by [@AlexejheroYTB](https://github.com/AlexejheroYTB/)
