@@ -179,7 +179,7 @@
             if (SelectedTextType == null)
             {
                 Type TxtType = typeof(Text);
-                Type TxtProType = Type.GetType("TMPro.TextMeshProUGUI, Unity.TextMeshPro", true, true);
+                Type TxtProType = Type.GetType("TMPro.TextMeshProUGUI, Unity.TextMeshPro", false, false);
 
                 if (TxtProType != null && obj.GetComponentInChildren(TxtProType) != null)
                 {
