@@ -221,6 +221,7 @@
             if (fontSizeProperty == null)
                 return;
 
+            // Loop starts at 1 because text 0 is the main dialog text, which shouldn't be changed
             for (int i = 1; i < textComponents.Length; i++)
             {
                 object t = textComponents[i];
