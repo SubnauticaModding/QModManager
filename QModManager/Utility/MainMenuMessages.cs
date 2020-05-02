@@ -24,6 +24,8 @@
         private static List<string> messageQueue;
         private static List<ErrorMessage._Message> messages;
 
+        private static bool inited => messageQueue != null;
+
         /// <summary>Adds an error message to the main menu.</summary>
         /// <param name="msg">The message to add.</param>
         /// <param name="callerID">The ID of the caller (or null for "QModManager").</param>
@@ -35,6 +37,12 @@
             if (Patches.hInstance == null) // just in case
             {
                 Logger.Error($"Tried to add main menu message before Harmony was initialized. (Message: \"{msg}\")");
+                return;
+            }
+
+            if (SceneManager.GetSceneByName("Main").isLoaded) // it works just like regular ErrorMessage outside of main menu
+            {
+                ErrorMessage.AddDebug(msg);
                 return;
             }
 
@@ -52,7 +60,7 @@
 
         private static void Init()
         {
-            if (messageQueue != null)
+            if (inited)
                 return;
 
             messageQueue = new List<string>();
@@ -69,7 +77,7 @@
             var message = ErrorMessage.main.GetExistingMessage(msg);
             messages.Add(message);
             message.timeEnd += 1e6f;
-            message.entry.rectTransform.sizeDelta = new Vector2(1920f - newOffset.x * 2f, 0f);
+            message.entry.rectTransform.sizeDelta = new Vector2(1920f - ErrorMessage.main.offset.x * 2f, 0f);
         }
 
         private static void OnSceneLoaded(Scene scene, LoadSceneMode _)
@@ -138,6 +146,10 @@
                 public static void Postfix()
                 {
                     prevOffset = ErrorMessage.main.offset;
+
+                    if (!inited)
+                        return;
+
                     ErrorMessage.main.offset = newOffset;
 
                     messageQueue.ForEach(msg => AddInternal(msg));
