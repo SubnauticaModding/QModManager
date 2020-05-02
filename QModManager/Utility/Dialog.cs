@@ -1,19 +1,22 @@
 ﻿namespace QModManager.Utility
 {
-    using Harmony;
-    using QModManager.API;
-    using QModManager.Checks;
-    using QModManager.Patching;
     using System;
     using System.Collections;
     using System.Diagnostics;
     using System.IO;
-    using System.Linq;
+    using System.Reflection;
+    using QModManager.API;
+    using QModManager.Checks;
+    using QModManager.Patching;
     using UnityEngine;
     using UnityEngine.UI;
 
     internal class Dialog
     {
+        private static Type SelectedTextType;
+        private static PropertyInfo textProperty;
+        private static PropertyInfo fontSizeProperty;
+
         internal class Button
         {
             internal string Text = null;
@@ -88,11 +91,11 @@
             if (string.IsNullOrEmpty(leftButton.Text))
                 confirmation.yes.gameObject.SetActive(false);
             else
-                confirmation.yes.gameObject.GetComponentInChildren<Text>().text = leftButton.Text;
+                SetText(confirmation.yes.gameObject, leftButton.Text);
             if (string.IsNullOrEmpty(rightButton.Text))
                 confirmation.no.gameObject.SetActive(false);
             else
-                confirmation.no.gameObject.GetComponentInChildren<Text>().text = rightButton.Text;
+                SetText(confirmation.no.gameObject, rightButton.Text);
 
             // If one button is disabled, center the other
             float pos = 0;
@@ -119,9 +122,7 @@
                 confirmation.gameObject.GetComponentInChildren<Image>().sprite = confirmation.gameObject.GetComponentsInChildren<Image>()[1].sprite;
 
             // Reduce the text size on the buttons
-            var texts = confirmation.gameObject.GetComponentsInChildren<Text>().ToList();
-            texts.RemoveAt(0);
-            texts.Do(t => t.fontSize = t.fontSize - 4);
+            object[] texts = ChangeAllFontSizes(confirmation.gameObject, -4f);
 
             // Show dialog
             confirmation.Show(message, delegate (bool leftButtonClicked)
@@ -151,12 +152,12 @@
                 confirmation.yes.gameObject.SetActive(true);
                 confirmation.no.gameObject.SetActive(true);
 
-                confirmation.yes.gameObject.GetComponentInChildren<Text>().text = "Yes";
-                confirmation.no.gameObject.GetComponentInChildren<Text>().text = "No";
+                SetText(confirmation.yes.gameObject, "Yes");
+                SetText(confirmation.no.gameObject, "No");
 
                 confirmation.gameObject.GetComponentInChildren<Image>().sprite = sprite;
 
-                texts.Do(t => t.fontSize = t.fontSize + 4);
+                ChangeAllFontSizes(texts, 4f);
 
                 UnityEngine.Object.Destroy(coroutineHandler);
 
@@ -171,6 +172,64 @@
                 yield return new WaitForSecondsRealtime(0.25f);
 
             confirmation.Select();
+        }
+
+        private static void SetText(GameObject obj, string text)
+        {
+            if (SelectedTextType == null)
+            {
+                Type TxtType = typeof(Text);
+                Type TxtProType = Type.GetType("TMPro.TextMeshProUGUI, Unity.TextMeshPro", false, false);
+
+                if (TxtProType != null && obj.GetComponentInChildren(TxtProType) != null)
+                {
+                    SelectedTextType = TxtProType;
+                }
+                else if (TxtType != null && obj.GetComponentInChildren(TxtType))
+                {
+                    SelectedTextType = TxtType;
+                }
+                else
+                {
+                    Logger.Error("Unable to find Text component in dialog box");
+                    return;
+                }
+
+                textProperty = SelectedTextType.GetProperty("text", typeof(string));
+                fontSizeProperty = SelectedTextType.GetProperty("fontSize", typeof(float));
+            }
+
+            object txt = obj.GetComponentInChildren(SelectedTextType);
+
+            textProperty.SetValue(txt, text, null);
+        }
+
+        private static object[] ChangeAllFontSizes(GameObject obj, float change)
+        {
+            if (fontSizeProperty == null)
+                return null;
+
+            object[] textComponents = obj.GetComponentsInChildren(SelectedTextType);
+
+            ChangeAllFontSizes(textComponents, change);
+
+            return textComponents;
+        }
+
+        private static void ChangeAllFontSizes(object[] textComponents, float change)
+        {
+            if (fontSizeProperty == null)
+                return;
+
+            // Loop starts at 1 because text 0 is the main dialog text, which shouldn't be changed
+            for (int i = 1; i < textComponents.Length; i++)
+            {
+                object t = textComponents[i];
+                float originalSize = (float)fontSizeProperty.GetValue(t, null);
+                float nextSize = originalSize + change;
+
+                fontSizeProperty.SetValue(t, nextSize, null);
+            }
         }
     }
 }
