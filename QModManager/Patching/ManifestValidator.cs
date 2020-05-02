@@ -203,7 +203,6 @@
                                 else
                                 {
                                     qMod.PatchMethods[patch.PatchOrder] = new QModPatchMethod(method, qMod, patch.PatchOrder);
-                                    return ModStatus.Success;
                                 }
                             }
                         }
