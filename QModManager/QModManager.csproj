@@ -168,6 +168,7 @@
     <Compile Include="Patching\QModPlaceholder.cs" />
     <Compile Include="Patching\QModPatchMethod.cs" />
     <Compile Include="Utility\Config.cs" />
+    <Compile Include="Utility\MainMenuMessages.cs" />
     <Compile Include="Utility\SummaryLogger.cs" />
     <Compile Include="Utility\IOUtilities.cs" />
     <Compile Include="Utility\Logger.cs" />

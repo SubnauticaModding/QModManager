@@ -4,6 +4,7 @@
     using System.Collections.ObjectModel;
     using System.Reflection;
     using QModManager.Patching;
+    using QModManager.Utility;
 
     /// <summary>
     /// Services offered to mods.
@@ -115,6 +116,20 @@
         public IQMod GetMod(string id)
         {
             return FindModById(id);
+        }
+
+        /// <summary>
+        /// Adds a critical message to the main menu.
+        /// Message will stay in the main menu and on the loading screen.
+        /// </summary>
+        /// <param name="msg">The message to add.</param>
+        /// <param name="size">The size of the text.</param>
+        /// <param name="color">The color of the text.</param>
+        /// <param name="autoformat">Whether or not to apply formatting tags to the message, or show it as it is.</param>
+        public void AddCriticalMessage(string msg, int size = MainMenuMessages.defaultSize, string color = MainMenuMessages.defaultColor, bool autoformat = true)
+        {
+            var callingMod = GetMod(ReflectionHelper.CallingAssemblyByStackTrace());
+            MainMenuMessages.Add(msg, callingMod?.DisplayName, size, color, autoformat);
         }
     }
 }
