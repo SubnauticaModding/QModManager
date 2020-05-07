@@ -1,7 +1,7 @@
 ## Dependencies
 
 | Dependency | Link | Redistributed? | License |
-|:----------------------------------:|:------------------------------------------------------:|:--------------------------------------:|-------------------------------------------------------------------------------------------------|
+|:----------------------------------:|:------------------------------------------------------:|:--------------------------------------:|:-----------------------------------------------------------------------------------------------:|
 | `0Harmony(-*).dll` | https://github.com/pardeike/Harmony | &#9745; | [MIT](https://github.com/pardeike/Harmony/blob/master/LICENSE) |
 | `Assembly-CSharp.dll` | https://github.com/unknownworlds | &#9744; <br>Game file |  |
 | `Assembly-CSharp-firstpass.dll` | https://github.com/unknownworlds | &#9744; <br>Game file |  |
