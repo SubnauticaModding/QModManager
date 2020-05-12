@@ -161,11 +161,12 @@
                     string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
                     string entryMethod = entryMethodSig[entryMethodSig.Length - 1];
 
-                    MethodInfo jsonPatchMethod = qMod.LoadedAssembly.GetType(entryType).GetMethod(entryMethod, BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
+                    MethodInfo jsonPatchMethod = qMod.LoadedAssembly.GetType(entryType)?.GetMethod(entryMethod, BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
 
                     if (jsonPatchMethod != null && jsonPatchMethod.GetParameters().Length == 0)
                     {
                         qMod.PatchMethods[PatchingOrder.NormalInitialize] = new QModPatchMethod(jsonPatchMethod, qMod, PatchingOrder.NormalInitialize);
+                        return ModStatus.Success;
                     }
                 }
 
@@ -202,6 +203,7 @@
                                 else
                                 {
                                     qMod.PatchMethods[patch.PatchOrder] = new QModPatchMethod(method, qMod, patch.PatchOrder);
+                                    continue;
                                 }
                             }
                         }

@@ -61,6 +61,13 @@
 
                 QMod mod = CreateFromJsonManifestFile(subDir);
 
+                if(mod == null)
+                {
+                    Logger.Error($"Unable to set up mod in folder \"{folderName}\"");
+                    earlyErrors.Add(new QModPlaceholder(folderName, ModStatus.MissingCoreInfo));
+                    continue;
+                }
+
                 this.Validator.CheckRequiredMods(mod);
 
                 Logger.Debug($"Sorting mod {mod.Id}");

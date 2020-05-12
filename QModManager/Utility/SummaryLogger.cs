@@ -65,7 +65,7 @@
                     }
 
                     case ModStatus.OutOfDateDependency:
-                        Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is requires a newer version of these dependencies:");
+                        Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) requires a newer version of these dependencies:");
                         foreach (RequiredQMod dependency in mod.RequiredMods)
                         {
                             if (dependency.RequiresMinimumVersion)

@@ -43,6 +43,11 @@
                 if (!File.Exists(ConfigPath)) File.WriteAllText(ConfigPath, "{}");
                 string text = File.ReadAllText(ConfigPath);
                 Cfg = JsonConvert.DeserializeObject<Dictionary<string, object>>(text);
+                if (Cfg == null) 
+                {
+                    File.WriteAllText(ConfigPath, "{}");
+                    Cfg = new Dictionary<string, object>();
+                }
 
                 Loaded = true;
             }

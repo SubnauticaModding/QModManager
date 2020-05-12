@@ -7,7 +7,7 @@ namespace QModManager.Utility
 {
     internal static class ReflectionHelper
     {
-        internal static Assembly CallingAssemblyByStackTrace()
+        internal static Assembly CallingAssemblyByStackTrace(bool skipSystemAssembly = true)
         {
             var stackTrace = new StackTrace();
             StackFrame[] frames = stackTrace.GetFrames();
@@ -15,6 +15,10 @@ namespace QModManager.Utility
             foreach (StackFrame stackFrame in frames)
             {
                 Assembly ownerAssembly = stackFrame.GetMethod().DeclaringType.Assembly;
+
+                if (skipSystemAssembly && ownerAssembly.GetName().Name == "mscorlib") // in case reflection is used
+                    continue;
+
                 if (ownerAssembly != Assembly.GetExecutingAssembly())
                     return ownerAssembly;
             }

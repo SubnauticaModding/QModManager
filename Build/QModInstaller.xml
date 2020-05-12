@@ -126,6 +126,16 @@
             <param name="modAssembly">The mod assembly.</param>
             <returns>The <see cref="T:QModManager.API.IQMod"/> instance of the mod if found; otherwise returns <c>null</c>.</returns>
         </member>
+        <member name="M:QModManager.API.IQModServices.AddCriticalMessage(System.String,System.Int32,System.String,System.Boolean)">
+            <summary>
+            Adds a critical message to the main menu.
+            Message will stay in the main menu and on the loading screen.
+            </summary>
+            <param name="msg">The message to add.</param>
+            <param name="size">The size of the text.</param>
+            <param name="color">The color of the text.</param>
+            <param name="autoformat">Whether or not to apply formatting tags to the message, or show it as it is.</param>
+        </member>
         <member name="T:QModManager.API.ModLoading.QModCoreAttribute">
             <summary>
             Identifies the patching class for your QMod.
@@ -302,6 +312,16 @@
             <param name="id"></param>
             <returns></returns>
         </member>
+        <member name="M:QModManager.API.QModServices.AddCriticalMessage(System.String,System.Int32,System.String,System.Boolean)">
+            <summary>
+            Adds a critical message to the main menu.
+            Message will stay in the main menu and on the loading screen.
+            </summary>
+            <param name="msg">The message to add.</param>
+            <param name="size">The size of the text.</param>
+            <param name="color">The color of the text.</param>
+            <param name="autoformat">Whether or not to apply formatting tags to the message, or show it as it is.</param>
+        </member>
         <member name="T:QModManager.API.RequiredQMod">
             <summary>
             Identifies a required mod and an optional minimum version.
@@ -422,6 +442,20 @@
             Requirements to function within the <seealso cref="T:QModManager.DataStructures.SortedCollection`2"/>
             </summary>
             <typeparam name="IdType">The ID type.</typeparam>
+        </member>
+        <member name="T:QModManager.Utility.MainMenuMessages">
+            <summary>
+            Allows to add critical messages to the main menu.
+            Messages will stay in the main menu and on loading screen.
+            </summary>
+        </member>
+        <member name="M:QModManager.Utility.MainMenuMessages.Add(System.String,System.String,System.Int32,System.String,System.Boolean)">
+            <summary>Adds an error message to the main menu.</summary>
+            <param name="msg">The message to add.</param>
+            <param name="callerID">The ID of the caller (or null for "QModManager").</param>
+            <param name="size">The size of the text.</param>
+            <param name="color">The color of the text.</param>
+            <param name="autoformat">Whether or not to apply formatting tags to the message, or show it as it is.</param>
         </member>
         <member name="T:QModInstaller.QModPatcher">
             <summary>

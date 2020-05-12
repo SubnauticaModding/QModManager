@@ -3,7 +3,6 @@
     using System.Reflection;
     using System.Text.RegularExpressions;
     using QModManager.API;
-    using System.Reflection;
 
     internal class QModPlaceholder : QMod, IQMod
     {
