@@ -10,6 +10,7 @@ namespace QModManager.HarmonyPatches.FixSignsLoading
     /// Note that the initial exceptions will still be raised upon loading (and logged in Player.log file).
     /// That's because this fix is applied as a postfix method (in other words, signs are fixed after their initial loading failure).
     /// A benefit from this is that it does not prevent modders from applying further modifications to the <see cref="uGUI_SignInput.UpdateScale"/> method.
+    /// Also note that if something crash in there that probably means Unknown World fixed the issue (because it has been reported to them). If that's the case this entire file can be safely removed from QModManager project.
     /// </summary>
     [HarmonyPatch(typeof(uGUI_SignInput), nameof(uGUI_SignInput.UpdateScale))]
     internal static class uGUI_SignInputFixer_UpdateScale_Patch
