@@ -32,7 +32,7 @@ namespace QModManager.HarmonyPatches.FixSignsLoading
                     // If we were able to get the Sign component for this uGUI_SignInput.
                     if (sign != null)
                     {
-                        // Add our fixer comonent to the game object.
+                        // Add our fixer component to the game object.
                         __instance.gameObject.AddComponent<SignFixerComponent>();
                     }
                 }
