@@ -2,6 +2,7 @@
 namespace QModManager.HarmonyPatches.FixSignsLoading
 {
     using Harmony;
+    using QModManager.Patching;
     using UnityEngine;
 
     /// <summary>
@@ -22,19 +23,23 @@ namespace QModManager.HarmonyPatches.FixSignsLoading
         [HarmonyPostfix]
         internal static void Postfix(uGUI_SignInput __instance)
         {
-            // If this uGUI_SignInput is enabled and attached to a game object.
-            if (__instance.enabled && __instance.gameObject != null && __instance.gameObject.GetComponent<SignFixerComponent>() == null)
+            // Only apply this fix if current Subnautica build version is below 65271.
+            if (Patcher.CurrentlyRunningGame == API.QModGame.BelowZero || SNUtils.GetPlasticChangeSetOfBuild(65271) < 65271)
             {
-                // If this uGUI_SignInput has a valid parent.
-                if (__instance.transform != null && __instance.transform.parent != null)
+                // If this uGUI_SignInput is enabled and attached to a game object.
+                if (__instance.enabled && __instance.gameObject != null && __instance.gameObject.GetComponent<SignFixerComponent>() == null)
                 {
-                    // Get Sign component from this uGUI_SignInput parent.
-                    Sign sign = __instance.transform.parent.GetComponent<Sign>();
-                    // If we were able to get the Sign component for this uGUI_SignInput.
-                    if (sign != null)
+                    // If this uGUI_SignInput has a valid parent.
+                    if (__instance.transform != null && __instance.transform.parent != null)
                     {
-                        // Add our fixer component to the game object.
-                        __instance.gameObject.AddComponent<SignFixerComponent>();
+                        // Get Sign component from this uGUI_SignInput parent.
+                        Sign sign = __instance.transform.parent.GetComponent<Sign>();
+                        // If we were able to get the Sign component for this uGUI_SignInput.
+                        if (sign != null)
+                        {
+                            // Add our fixer component to the game object.
+                            __instance.gameObject.AddComponent<SignFixerComponent>();
+                        }
                     }
                 }
             }
