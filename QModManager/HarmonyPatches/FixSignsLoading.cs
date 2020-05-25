@@ -13,12 +13,14 @@ namespace QModManager.HarmonyPatches.FixSignsLoading
     /// A benefit from this is that it does not prevent modders from applying further modifications to the <see cref="uGUI_SignInput.UpdateScale"/> method.
     /// Also note that if something crash in there that probably means Unknown World fixed the issue (because it has been reported to them). If that's the case this entire file can be safely removed from QModManager project.
     /// </summary>
+    [HarmonyPatch(typeof(uGUI_SignInput), nameof(uGUI_SignInput.UpdateScale))]
     internal static class uGUI_SignInput_UpdateScale_Patch
     {
         /// <summary>
         /// This function is patched into the game using Harmony.
         /// </summary>
         /// <param name="__instance">The <see cref="uGUI_SignInput"/> instance that owns the method.</param>
+        [HarmonyPostfix]
         internal static void Postfix(uGUI_SignInput __instance)
         {
             // If this uGUI_SignInput is enabled and attached to a game object.
@@ -38,6 +40,14 @@ namespace QModManager.HarmonyPatches.FixSignsLoading
                 }
             }
         }
+
+
+        /// <summary>
+        /// Only apply this patch if game is any CS version for Below Zero or below version 65271 for Subnautica.
+        /// </summary>
+        /// <returns>Returns true if this patch needs to be applied, false otherwise.</returns>
+        [HarmonyPrepare]
+        internal static bool ApplyFix() => (Patcher.CurrentlyRunningGame == API.QModGame.BelowZero || SNUtils.GetPlasticChangeSetOfBuild(65271) < 65271);
     }
 
     /// <summary>
