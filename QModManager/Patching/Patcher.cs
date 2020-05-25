@@ -8,6 +8,7 @@ namespace QModManager.Patching
     using API.ModLoading;
     using Checks;
     using Harmony;
+    using QModManager.HarmonyPatches.FixSignsLoading;
     using Utility;
 
     internal static class Patcher
@@ -172,7 +173,21 @@ namespace QModManager.Patching
         private static void PatchHarmony()
         {
             Logger.Debug("Applying Harmony patches...");
-            HarmonyInstance.Create("qmodmanager").PatchAll();
+
+            // Create harmony instance.
+            HarmonyInstance harmony = HarmonyInstance.Create("qmodmanager");
+
+            // Apply all patches.
+            harmony.PatchAll();
+
+            // If game is Below Zero (any CS version), or if game is Subnautica (CS version < 65271), apply patch to Sign objects.
+            if (Patcher.CurrentlyRunningGame == QModGame.BelowZero || SNUtils.GetPlasticChangeSetOfBuild(65271) < 65271)
+            {
+                MethodInfo toPatch = typeof(uGUI_SignInput).GetMethod(nameof(uGUI_SignInput.UpdateScale), BindingFlags.NonPublic | BindingFlags.Instance);
+                MethodInfo postfix = typeof(uGUI_SignInput_UpdateScale_Patch).GetMethod(nameof(uGUI_SignInput.UpdateScale), BindingFlags.NonPublic | BindingFlags.Instance);
+                harmony.Patch(toPatch, null, new HarmonyMethod(postfix));
+            }
+
             Logger.Debug("Patched!");
         }
     }

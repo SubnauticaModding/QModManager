@@ -13,33 +13,27 @@ namespace QModManager.HarmonyPatches.FixSignsLoading
     /// A benefit from this is that it does not prevent modders from applying further modifications to the <see cref="uGUI_SignInput.UpdateScale"/> method.
     /// Also note that if something crash in there that probably means Unknown World fixed the issue (because it has been reported to them). If that's the case this entire file can be safely removed from QModManager project.
     /// </summary>
-    [HarmonyPatch(typeof(uGUI_SignInput), nameof(uGUI_SignInput.UpdateScale))]
-    internal static class uGUI_SignInputFixer_UpdateScale_Patch
+    internal static class uGUI_SignInput_UpdateScale_Patch
     {
         /// <summary>
         /// This function is patched into the game using Harmony.
         /// </summary>
         /// <param name="__instance">The <see cref="uGUI_SignInput"/> instance that owns the method.</param>
-        [HarmonyPostfix]
         internal static void Postfix(uGUI_SignInput __instance)
         {
-            // Only apply this fix if current Subnautica build version is below 65271.
-            if (Patcher.CurrentlyRunningGame == API.QModGame.BelowZero || SNUtils.GetPlasticChangeSetOfBuild(65271) < 65271)
+            // If this uGUI_SignInput is enabled and attached to a game object.
+            if (__instance.enabled && __instance.gameObject != null && __instance.gameObject.GetComponent<SignFixerComponent>() == null)
             {
-                // If this uGUI_SignInput is enabled and attached to a game object.
-                if (__instance.enabled && __instance.gameObject != null && __instance.gameObject.GetComponent<SignFixerComponent>() == null)
+                // If this uGUI_SignInput has a valid parent.
+                if (__instance.transform != null && __instance.transform.parent != null)
                 {
-                    // If this uGUI_SignInput has a valid parent.
-                    if (__instance.transform != null && __instance.transform.parent != null)
+                    // Get Sign component from this uGUI_SignInput parent.
+                    Sign sign = __instance.transform.parent.GetComponent<Sign>();
+                    // If we were able to get the Sign component for this uGUI_SignInput.
+                    if (sign != null)
                     {
-                        // Get Sign component from this uGUI_SignInput parent.
-                        Sign sign = __instance.transform.parent.GetComponent<Sign>();
-                        // If we were able to get the Sign component for this uGUI_SignInput.
-                        if (sign != null)
-                        {
-                            // Add our fixer component to the game object.
-                            __instance.gameObject.AddComponent<SignFixerComponent>();
-                        }
+                        // Add our fixer component to the game object.
+                        __instance.gameObject.AddComponent<SignFixerComponent>();
                     }
                 }
             }
