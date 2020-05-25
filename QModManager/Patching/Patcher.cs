@@ -184,7 +184,7 @@ namespace QModManager.Patching
             if (Patcher.CurrentlyRunningGame == QModGame.BelowZero || SNUtils.GetPlasticChangeSetOfBuild(65271) < 65271)
             {
                 MethodInfo toPatch = typeof(uGUI_SignInput).GetMethod(nameof(uGUI_SignInput.UpdateScale), BindingFlags.NonPublic | BindingFlags.Instance);
-                MethodInfo postfix = typeof(uGUI_SignInput_UpdateScale_Patch).GetMethod(nameof(uGUI_SignInput.UpdateScale), BindingFlags.NonPublic | BindingFlags.Instance);
+                MethodInfo postfix = typeof(uGUI_SignInput_UpdateScale_Patch).GetMethod(nameof(uGUI_SignInput_UpdateScale_Patch.Postfix), BindingFlags.NonPublic | BindingFlags.Static);
                 harmony.Patch(toPatch, null, new HarmonyMethod(postfix));
             }
 
