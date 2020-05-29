@@ -8,6 +8,7 @@ namespace QModManager.Patching
     using API.ModLoading;
     using Checks;
     using Harmony;
+    using QModManager.HarmonyPatches.FixSignsLoading;
     using Utility;
 
     internal static class Patcher
