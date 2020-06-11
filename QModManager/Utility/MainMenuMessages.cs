@@ -21,7 +21,7 @@
         private static readonly Vector2 newOffset = new Vector2(20f, 20f);
         private static Vector2 prevOffset;
 
-        private static List<string> messageQueue;
+        private static Dictionary<string, float> messageQueue;
         private static List<ErrorMessage._Message> messages;
 
         private static bool inited => messageQueue != null;
@@ -32,7 +32,8 @@
         /// <param name="size">The size of the text.</param>
         /// <param name="color">The color of the text.</param>
         /// <param name="autoformat">Whether or not to apply formatting tags to the message, or show it as it is.</param>
-        internal static void Add(string msg, string callerID = null, int size = defaultSize, string color = defaultColor, bool autoformat = true)
+        /// <param name="timeEnd">The number of seconds the message will stay on screen.</param>
+        internal static void Add(string msg, string callerID = null, int size = defaultSize, string color = defaultColor, bool autoformat = true, float timeEnd = 1e6f)
         {
             if (Patches.hInstance == null) // just in case
             {
@@ -53,9 +54,9 @@
                 msg = $"<size={size}><color={color}><b>[{callerID ?? "QModManager"}]:</b> {msg}</color></size>";
 
             if (ErrorMessage.main != null)
-                AddInternal(msg);
+                AddInternal(msg, timeEnd);
             else
-                messageQueue.Add(msg);
+                messageQueue.Add(msg, timeEnd);
         }
 
         private static void Init()
@@ -63,20 +64,20 @@
             if (inited)
                 return;
 
-            messageQueue = new List<string>();
+            messageQueue = new Dictionary<string, float>();
             messages = new List<ErrorMessage._Message>();
             Patches.Patch();
 
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
-        private static void AddInternal(string msg)
+        private static void AddInternal(string msg, float timeEnd = 1e6f)
         {
             ErrorMessage.AddDebug(msg);
 
             var message = ErrorMessage.main.GetExistingMessage(msg);
             messages.Add(message);
-            message.timeEnd += 1e6f;
+            message.timeEnd += timeEnd;
             message.entry.rectTransform.sizeDelta = new Vector2(1920f - ErrorMessage.main.offset.x * 2f, 0f);
         }
 
@@ -152,7 +153,7 @@
 
                     ErrorMessage.main.offset = newOffset;
 
-                    messageQueue.ForEach(msg => AddInternal(msg));
+                    messageQueue.ForEach(msg => AddInternal(msg.Key, msg.Value));
                     messageQueue.Clear();
                 }
             }
