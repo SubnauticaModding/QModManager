@@ -22,7 +22,7 @@
 
         private const string AssemblyName = "QModManager";
 
-        #region Private functions (Used by the Logger)
+        #region Private functions (used by the Logger)
 
         private static string GetCallingAssemblyName() => ReflectionHelper.CallingAssemblyByStackTrace()?.GetName().Name;
 
@@ -154,16 +154,42 @@
 
         internal static void Fatal(params string[] msgs) => Fatal(true, msgs);
 
+        internal static void Log(Level logLevel, params string[] msgs)
+        {
+            if (msgs == null) // Return if there is no messages
+                return;
+
+            switch (logLevel)
+            {
+                case Level.Debug:
+                    Debug(true, msgs);
+                    break;
+                case Level.Warn:
+                    Warn(true, msgs);
+                    break;
+                case Level.Error:
+                    Error(true, msgs);
+                    break;
+                case Level.Fatal:
+                    Fatal(true, msgs);
+                    break;
+                default: // Defaults to informational logging
+                    Info(true, msgs);
+                    break;
+            }
+        }
+
         #endregion
 
-        #region Public functions (used by mods and QModManager)
+        #region Public functions (used by mods)
 
         /// <summary>Used to know if debug logging is enabled or not.</summary>
         public static bool DebugLogsEnabled => Config.EnableDebugLogs;
 
         /// <summary>
         /// This function will log given message and/or exception. It can optionally show the message on screen.
-        /// Note: You need to provide a message and/or an exception (this function will do nothing if both are set to null).
+        /// You need to provide a message and/or an exception (this function will do nothing if both are set to null).
+        /// Warning: Do not call this function from QModManager.
         /// </summary>
         /// <param name="logLevel">The level of the log.</param>
         /// <param name="msg">Optional: The message that needs to be logged.</param>
@@ -196,33 +222,6 @@
                     break;
                 default: // Defaults to informational logging
                     Info(msg, showOnScreen);
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// This function will log given array of strings (each string of the array is logged as an individual log line).
-        /// </summary>
-        /// <param name="logLevel">The level of the log.</param>
-        /// <param name="text">The array of strings that needs to be logged (each string will be logged individually).</param>
-        public static void Log(Level logLevel, params string[] text)
-        {
-            switch (logLevel)
-            {
-                case Level.Debug:
-                    Debug(false, text);
-                    break;
-                case Level.Warn:
-                    Warn(false, text);
-                    break;
-                case Level.Error:
-                    Error(false, text);
-                    break;
-                case Level.Fatal:
-                    Fatal(false, text);
-                    break;
-                default: // Defaults to informational logging
-                    Info(false, text);
                     break;
             }
         }
