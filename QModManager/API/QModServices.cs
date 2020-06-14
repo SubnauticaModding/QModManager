@@ -126,11 +126,10 @@
         /// <param name="size">The size of the text.</param>
         /// <param name="color">The color of the text.</param>
         /// <param name="autoformat">Whether or not to apply formatting tags to the message, or show it as it is.</param>
-        /// <param name="timeEnd">The number of seconds the message will stay on screen.</param>
-        public void AddCriticalMessage(string msg, int size = MainMenuMessages.defaultSize, string color = MainMenuMessages.defaultColor, bool autoformat = true, float timeEnd = 1e6f)
+        public void AddCriticalMessage(string msg, int size = MainMenuMessages.defaultSize, string color = MainMenuMessages.defaultColor, bool autoformat = true)
         {
             var callingMod = GetMod(ReflectionHelper.CallingAssemblyByStackTrace());
-            MainMenuMessages.Add(msg, callingMod?.DisplayName, size, color, autoformat, timeEnd);
+            MainMenuMessages.Add(msg, callingMod?.DisplayName, size, color, autoformat);
         }
     }
 }
