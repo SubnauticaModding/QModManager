@@ -189,7 +189,7 @@
         /// <summary>
         /// This function will log given message and/or exception. It can optionally show the message on screen.
         /// You need to provide a message and/or an exception (this function will do nothing if both are set to null).
-        /// Warning: Do not call this function from QModManager.
+        /// Warning: You can call this function from any mod but don't call it from QModManager (<see cref="GetCallingAssemblyName"/> would fail).
         /// </summary>
         /// <param name="logLevel">The level of the log.</param>
         /// <param name="msg">Optional: The message that needs to be logged.</param>
