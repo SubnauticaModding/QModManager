@@ -37,26 +37,6 @@
                 ErrorMessage.AddDebug(msg);
         }
 
-        private static void Debug(bool selfAssembly = false, params string[] msgs)
-        {
-            if (Config.EnableDebugLogs && msgs != null && msgs.Length > 0)
-            {
-                string callingAssembly = selfAssembly ? AssemblyName : GetCallingAssemblyName();
-                foreach (string msg in msgs)
-                    Debug(msg, false, callingAssembly, false);
-            }
-        }
-
-        private static void DebugForce(bool selfAssembly = false, params string[] msgs)
-        {
-            if (msgs != null && msgs.Length > 0)
-            {
-                string callingAssembly = selfAssembly ? AssemblyName : GetCallingAssemblyName();
-                foreach (string msg in msgs)
-                    Debug(msg, false, callingAssembly, true);
-            }
-        }
-
         private static void Info(string msg, bool showOnScreen = false, string callingAssembly = null)
         {
             Console.WriteLine($"[{callingAssembly ?? GetCallingAssemblyName()}:INFO] {msg}");
@@ -65,32 +45,12 @@
                 ErrorMessage.AddMessage(msg);
         }
 
-        private static void Info(bool selfAssembly = false, params string[] msgs)
-        {
-            if (msgs != null && msgs.Length > 0)
-            {
-                string callingAssembly = selfAssembly ? AssemblyName : GetCallingAssemblyName();
-                foreach (string msg in msgs)
-                    Info(msg, false, callingAssembly);
-            }
-        }
-
         private static void Warn(string msg, bool showOnScreen = false, string callingAssembly = null)
         {
             Console.WriteLine($"[{callingAssembly ?? GetCallingAssemblyName()}:WARN] {msg}");
 
             if (showOnScreen)
                 ErrorMessage.AddWarning(msg);
-        }
-
-        private static void Warn(bool selfAssembly = false, params string[] msgs)
-        {
-            if (msgs != null && msgs.Length > 0)
-            {
-                string callingAssembly = selfAssembly ? AssemblyName : GetCallingAssemblyName();
-                foreach (string msg in msgs)
-                    Warn(msg, false, callingAssembly);
-            }
         }
 
         private static void Error(string msg = null, Exception ex = null, bool showOnScreen = false, string callingAssembly = null)
@@ -102,16 +62,6 @@
 
             if (showOnScreen && !string.IsNullOrEmpty(msg))
                 ErrorMessage.AddError(msg);
-        }
-
-        private static void Error(bool selfAssembly = false, params string[] msgs)
-        {
-            if (msgs != null && msgs.Length > 0)
-            {
-                string callingAssembly = selfAssembly ? AssemblyName : GetCallingAssemblyName();
-                foreach (string msg in msgs)
-                    Error(msg, null, false, callingAssembly);
-            }
         }
 
         private static void Exception(Exception e, bool selfAssembly = false) => Error(null, e, false, selfAssembly ? AssemblyName : GetCallingAssemblyName());
@@ -126,55 +76,45 @@
                 ErrorMessage.AddError(msg);
         }
 
-        private static void Fatal(bool selfAssembly = false, params string[] msgs)
-        {
-            if (msgs != null && msgs.Length > 0)
-            {
-                string callingAssembly = selfAssembly ? AssemblyName : GetCallingAssemblyName();
-                foreach (string msg in msgs)
-                    Fatal(msg, null, false, callingAssembly);
-            }
-        }
-
         #endregion
 
         #region Internal functions (used by QModManager)
 
-        internal static void Debug(params string[] msgs) => Debug(true, msgs);
+        internal static void Debug(string msg) => Debug(msg, false, AssemblyName, false);
 
-        internal static void DebugForce(params string[] msgs) => DebugForce(true, msgs);
+        internal static void DebugForce(string msg) => Debug(msg, false, AssemblyName, true);
 
-        internal static void Info(params string[] msgs) => Info(true, msgs);
+        internal static void Info(string msg) => Info(msg, false, AssemblyName);
 
-        internal static void Warn(params string[] msgs) => Warn(true, msgs);
+        internal static void Warn(string msg) => Warn(msg, false, AssemblyName);
 
-        internal static void Error(params string[] msgs) => Error(true, msgs);
+        internal static void Error(string msg) => Error(msg, null, false, AssemblyName);
 
         internal static void Exception(Exception e) => Exception(e, true);
 
-        internal static void Fatal(params string[] msgs) => Fatal(true, msgs);
+        internal static void Fatal(string msg) => Fatal(msg, null, false, AssemblyName);
 
-        internal static void Log(Level logLevel, params string[] msgs)
+        internal static void Log(Level logLevel, string msg)
         {
-            if (msgs == null) // Return if there is no messages
+            if (msg == null) // Return if there is no messages
                 return;
 
             switch (logLevel)
             {
                 case Level.Debug:
-                    Debug(true, msgs);
+                    Debug(msg);
                     break;
                 case Level.Warn:
-                    Warn(true, msgs);
+                    Warn(msg);
                     break;
                 case Level.Error:
-                    Error(true, msgs);
+                    Error(msg);
                     break;
                 case Level.Fatal:
-                    Fatal(true, msgs);
+                    Fatal(msg);
                     break;
                 default: // Defaults to informational logging
-                    Info(true, msgs);
+                    Info(msg);
                     break;
             }
         }
@@ -209,19 +149,19 @@
             switch (logLevel)
             {
                 case Level.Debug:
-                    Debug(msg, showOnScreen);
+                    Debug(msg, showOnScreen, null, false);
                     break;
                 case Level.Warn:
-                    Warn(msg, showOnScreen);
+                    Warn(msg, showOnScreen, null);
                     break;
                 case Level.Error:
-                    Error(msg, ex, showOnScreen);
+                    Error(msg, ex, showOnScreen, null);
                     break;
                 case Level.Fatal:
-                    Fatal(msg, ex, showOnScreen);
+                    Fatal(msg, ex, showOnScreen, null);
                     break;
                 default: // Defaults to informational logging
-                    Info(msg, showOnScreen);
+                    Info(msg, showOnScreen, null);
                     break;
             }
         }
