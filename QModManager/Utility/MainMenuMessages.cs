@@ -63,6 +63,7 @@
             if (inited)
                 return;
 
+            LoadDynamicAssembly();
             messageQueue = new List<string>();
             messages = new List<ErrorMessage._Message>();
             Patches.Patch();
@@ -78,7 +79,6 @@
             messages.Add(message);
             message.timeEnd += 1e6f;
 
-            LoadDynamicAssembly();
             GetRectTransform(message).sizeDelta = new Vector2(1920f - ErrorMessage.main.offset.x * 2f, 0f);
         }
 
@@ -100,7 +100,6 @@
                 messages.ForEach(msg => msg.timeEnd = Time.time + 1f);
                 yield return new WaitForSeconds(1.1f); // wait for messages to dissapear
 
-                LoadDynamicAssembly();
                 Vector2 originalSize = GetRectTransform(ErrorMessage.main.prefabMessage.GetComponent(SelectedTextType)).sizeDelta;
 
                 messages.ForEach(msg => GetRectTransform(msg).sizeDelta = originalSize);
