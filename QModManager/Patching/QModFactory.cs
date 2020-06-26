@@ -165,11 +165,6 @@
 
             try
             {
-                var settings = new JsonSerializerSettings
-                {
-                    MissingMemberHandling = MissingMemberHandling.Ignore
-                };
-
                 string jsonText = File.ReadAllText(jsonFile);
 
                 QMod mod = JsonConvert.DeserializeObject<QMod>(jsonText);
