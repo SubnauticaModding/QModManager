@@ -165,9 +165,17 @@
 
             try
             {
+                var deserializer = new JsonSerializer
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore
+                };
+
                 string jsonText = File.ReadAllText(jsonFile);
 
-                QMod mod = JsonConvert.DeserializeObject<QMod>(jsonText);
+                using StreamReader sr = new StreamReader(jsonFile);
+                using JsonReader reader = new JsonTextReader(sr);
+                QMod mod = deserializer.Deserialize<QMod>(reader);
 
                 mod.SubDirectory = subDirectory;
 
