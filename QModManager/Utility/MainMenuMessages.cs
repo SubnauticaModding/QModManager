@@ -1,10 +1,10 @@
 ﻿namespace QModManager.Utility
 {
+    using System;
     using System.Reflection;
     using System.Reflection.Emit;
     using System.Collections;
     using System.Collections.Generic;
-
     using Harmony;
     using UnityEngine;
     using UnityEngine.SceneManagement;
@@ -63,6 +63,7 @@
             if (inited)
                 return;
 
+            LoadDynamicAssembly();
             messageQueue = new List<string>();
             messages = new List<ErrorMessage._Message>();
             Patches.Patch();
@@ -77,7 +78,8 @@
             var message = ErrorMessage.main.GetExistingMessage(msg);
             messages.Add(message);
             message.timeEnd += 1e6f;
-            message.entry.rectTransform.sizeDelta = new Vector2(1920f - ErrorMessage.main.offset.x * 2f, 0f);
+
+            GetRectTransform(message).sizeDelta = new Vector2(1920f - ErrorMessage.main.offset.x * 2f, 0f);
         }
 
         private static void OnSceneLoaded(Scene scene, LoadSceneMode _)
@@ -98,8 +100,10 @@
                 messages.ForEach(msg => msg.timeEnd = Time.time + 1f);
                 yield return new WaitForSeconds(1.1f); // wait for messages to dissapear
 
-                Vector2 originalSize = ErrorMessage.main.prefabMessage.rectTransform.sizeDelta;
-                messages.ForEach(msg => msg.entry.rectTransform.sizeDelta = originalSize);
+                Vector2 originalSize = GetRectTransform(ErrorMessage.main.prefabMessage.GetComponent(SelectedTextType)).sizeDelta;
+
+                messages.ForEach(msg => GetRectTransform(msg).sizeDelta = originalSize);
+
                 messages.Clear();
 
                 Patches.Unpatch();
@@ -108,6 +112,48 @@
                 ErrorMessage.main.offset = prevOffset;
             }
         }
+
+        #region Dynamic assembly loading
+
+        private static Type SelectedTextType;
+        private static Func<object, RectTransform> GetRectTransform;
+
+        private static void LoadDynamicAssembly()
+        {
+            if (SelectedTextType == null)
+            {
+                Type TxtType = typeof(UnityEngine.UI.Text);
+                Type TxtProType = Type.GetType("TMPro.TextMeshProUGUI, Unity.TextMeshPro", false, false);
+
+                SelectedTextType = TxtProType ?? TxtType;
+
+                FieldInfo entryField = SelectedTextType.GetField("entry");
+                if (TxtProType != null)
+                {
+                    // Using TextMeshPro
+                    FieldInfo recTransformField = TxtProType.GetField("m_rectTransform");
+
+                    GetRectTransform = (obj) =>
+                    {
+                        var entry = entryField.GetValue(obj);
+                        return (RectTransform)recTransformField.GetValue(obj);
+                    };
+                }
+                else
+                {
+                    // Using Text
+                    PropertyInfo recTransformProperty = TxtType.GetProperty("rectTransform");
+
+                    GetRectTransform = (obj) =>
+                    {
+                        var entry = entryField.GetValue(obj);
+                        return (RectTransform)recTransformProperty.GetValue(obj, null);
+                    };
+                }
+            }
+        }
+
+        #endregion Dynamic assembly loading
 
         private static class Patches
         {
@@ -157,7 +203,7 @@
                 }
             }
 
-            private static float _getVal(float val, ErrorMessage._Message message) => messages.Contains(message)? 1f: val;
+            private static float _getVal(float val, ErrorMessage._Message message) => messages.Contains(message) ? 1f : val;
 
             // we changing result for 'float value = Mathf.Clamp01(MathExtensions.EvaluateLine(...' to 1.0f
             // so text don't stay in the center of the screen (because of changed 'timeEnd')
