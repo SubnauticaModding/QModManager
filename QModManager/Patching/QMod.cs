@@ -19,40 +19,40 @@
             // Empty public constructor for JSON
         }
 
-        [JsonProperty(Required = Required.Always)]
+        [JsonProperty(nameof(Id))]
         public string Id { get; set; }
 
-        [JsonProperty(Required = Required.Always)]
+        [JsonProperty(nameof(DisplayName))]
         public string DisplayName { get; set; }
 
-        [JsonProperty(Required = Required.Always)]
+        [JsonProperty(nameof(Author))]
         public string Author { get; set; }
 
-        [JsonProperty(Required = Required.Always)]
+        [JsonProperty(nameof(Version))]
         public string Version { get; set; }
 
-        [JsonProperty(Required = Required.Default)]
+        [JsonProperty(nameof(Dependencies))]
         public string[] Dependencies { get; set; } = new string[0];
 
-        [JsonProperty(Required = Required.Default)]
+        [JsonProperty(nameof(VersionDependencies))]
         public Dictionary<string, string> VersionDependencies { get; set; } = new Dictionary<string, string>();
 
-        [JsonProperty(Required = Required.Default)]
+        [JsonProperty(nameof(LoadBefore))]
         public string[] LoadBefore { get; set; } = new string[0];
 
-        [JsonProperty(Required = Required.Default)]
+        [JsonProperty(nameof(LoadAfter))]
         public string[] LoadAfter { get; set; } = new string[0];
 
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        [JsonProperty(nameof(Enable))]
         public bool Enable { get; set; } = true;
 
-        [JsonProperty(Required = Required.DisallowNull)]
+        [JsonProperty(nameof(Game))]
         public string Game { get; set; } = $"{QModGame.Subnautica}";
 
-        [JsonProperty(Required = Required.Always)]
+        [JsonProperty(nameof(AssemblyName))]
         public string AssemblyName { get; set; }
 
-        [JsonProperty(Required = Required.Default)]
+        [JsonProperty(nameof(EntryMethod))]
         public string EntryMethod { get; set; }
 
         #endregion

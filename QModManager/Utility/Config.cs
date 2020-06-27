@@ -62,8 +62,14 @@
         {
             try
             {
-                string text = JsonConvert.SerializeObject(Cfg, Formatting.Indented);
-                File.WriteAllText(ConfigPath, text);
+                var serializer = new JsonSerializer
+                {
+                    NullValueHandling = NullValueHandling.Ignore
+                };
+
+                using StreamWriter sw = new StreamWriter(ConfigPath);
+                using JsonWriter writer = new JsonTextWriter(sw);
+                serializer.Serialize(writer, Cfg);
             }
             catch (Exception e)
             {
