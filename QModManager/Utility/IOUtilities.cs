@@ -16,6 +16,7 @@ namespace QModManager.Utility
             "SNAppData",
             "SNUnmanagedData",
             "Subnautica_Data",
+            "SubnauticaZero_Data",
             "_CommonRedist",
         };
 

@@ -8,7 +8,6 @@ namespace QModManager.Patching
     using API.ModLoading;
     using Checks;
     using Harmony;
-    using QModManager.HarmonyPatches.FixSignsLoading;
     using Utility;
 
     internal static class Patcher
@@ -82,15 +81,7 @@ namespace QModManager.Patching
 
                 CurrentlyRunningGame = gameDetector.CurrentlyRunningGame;
 
-                try
-                {
-                    PatchHarmony();
-                }
-                catch (Exception e)
-                {
-                    Logger.Error("There was an error while trying to apply Harmony patches.");
-                    Logger.Exception(e);
-                }
+                PatchHarmony();
 
                 if (NitroxCheck.IsInstalled)
                 {
@@ -172,9 +163,20 @@ namespace QModManager.Patching
 
         private static void PatchHarmony()
         {
-            Logger.Debug("Applying Harmony patches...");
-            HarmonyInstance.Create("qmodmanager").PatchAll();
-            Logger.Debug("Patched!");
+            try
+            {
+                Logger.Debug("Applying Harmony patches...");
+
+                var instance = HarmonyInstance.Create("qmodmanager");
+                instance.PatchAll(Assembly.GetExecutingAssembly());
+
+                Logger.Debug("Patched!");
+            }
+            catch (Exception e)
+            {
+                Logger.Error("There was an error while trying to apply Harmony patches.");
+                Logger.Exception(e);
+            }
         }
     }
 }

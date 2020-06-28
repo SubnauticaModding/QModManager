@@ -40,13 +40,25 @@
         {
             try
             {
-                if (!File.Exists(ConfigPath)) File.WriteAllText(ConfigPath, "{}");
-                string text = File.ReadAllText(ConfigPath);
-                Cfg = JsonConvert.DeserializeObject<Dictionary<string, object>>(text);
+                if (!File.Exists(ConfigPath))
+                {
+                    Save();
+                }
+
+                var serializer = new JsonSerializer
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    MissingMemberHandling = MissingMemberHandling.Ignore
+                };
+
+                using StreamReader sr = new StreamReader(ConfigPath);
+                using JsonReader reader = new JsonTextReader(sr);
+                Cfg = serializer.Deserialize<Dictionary<string, object>>(reader);
+
                 if (Cfg == null) 
                 {
-                    File.WriteAllText(ConfigPath, "{}");
                     Cfg = new Dictionary<string, object>();
+                    Save();
                 }
 
                 Loaded = true;
@@ -80,7 +92,10 @@
 
         private static T Get<T>(string field, T def = default)
         {
-            if (!Loaded) Load();
+            if (!Loaded)
+            {
+                Load();
+            }
 
             if (!Cfg.TryGetValue(field, out object value))
                 return def;
