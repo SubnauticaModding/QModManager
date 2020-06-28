@@ -42,9 +42,9 @@ namespace QModManager.Patching
 
                 Patched = true;
 
-                Logger.Info("Game Version: " + SNUtils.GetPlasticChangeSetOfBuild() + " Build Date: " + SNUtils.GetDateTimeOfBuild().ToString());
+                //Logger.Info("Game Version: " + SNUtils.GetPlasticChangeSetOfBuild() + " Build Date: " + SNUtils.GetDateTimeOfBuild().ToString());
                 Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}...");
-                Logger.Info($"Today is {DateTime.Today:dd-MMMM-yyyy}");
+                //Logger.Info($"Today is {DateTime.Today:dd-MMMM-yyyy}");
 
                 if (QModBaseDir == null)
                 {
