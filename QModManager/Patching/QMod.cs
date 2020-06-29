@@ -19,40 +19,40 @@
             // Empty public constructor for JSON
         }
 
-        [JsonProperty(nameof(Id))]
+        [JsonProperty]
         public string Id { get; set; }
 
-        [JsonProperty(nameof(DisplayName))]
+        [JsonProperty]
         public string DisplayName { get; set; }
 
-        [JsonProperty(nameof(Author))]
+        [JsonProperty]
         public string Author { get; set; }
 
-        [JsonProperty(nameof(Version))]
+        [JsonProperty]
         public string Version { get; set; }
 
-        [JsonProperty(nameof(Dependencies))]
+        [JsonProperty]
         public string[] Dependencies { get; set; } = new string[0];
 
-        [JsonProperty(nameof(VersionDependencies))]
+        [JsonProperty]
         public Dictionary<string, string> VersionDependencies { get; set; } = new Dictionary<string, string>();
 
-        [JsonProperty(nameof(LoadBefore))]
+        [JsonProperty]
         public string[] LoadBefore { get; set; } = new string[0];
 
-        [JsonProperty(nameof(LoadAfter))]
+        [JsonProperty]
         public string[] LoadAfter { get; set; } = new string[0];
 
-        [JsonProperty(nameof(Enable))]
+        [JsonProperty]
         public bool Enable { get; set; } = true;
 
-        [JsonProperty(nameof(Game))]
+        [JsonProperty]
         public string Game { get; set; } = $"{QModGame.Subnautica}";
 
-        [JsonProperty(nameof(AssemblyName))]
+        [JsonProperty]
         public string AssemblyName { get; set; }
 
-        [JsonProperty(nameof(EntryMethod))]
+        [JsonProperty]
         public string EntryMethod { get; set; }
 
         #endregion

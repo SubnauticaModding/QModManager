@@ -35,8 +35,14 @@
 
         private static Dictionary<string, object> Cfg = new Dictionary<string, object>();
         private static bool Loaded = false;
+        private static readonly JsonSerializer serializer = new JsonSerializer
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            MissingMemberHandling = MissingMemberHandling.Ignore,
+            DefaultValueHandling = DefaultValueHandling.Ignore
+        };
 
-        private static void Load()
+    private static void Load()
         {
             try
             {
@@ -44,12 +50,6 @@
                 {
                     Save();
                 }
-
-                var serializer = new JsonSerializer
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    MissingMemberHandling = MissingMemberHandling.Ignore
-                };
 
                 using StreamReader sr = new StreamReader(ConfigPath);
                 using JsonReader reader = new JsonTextReader(sr);
@@ -74,11 +74,6 @@
         {
             try
             {
-                var serializer = new JsonSerializer
-                {
-                    NullValueHandling = NullValueHandling.Ignore
-                };
-
                 using StreamWriter sw = new StreamWriter(ConfigPath);
                 using JsonWriter writer = new JsonTextWriter(sw);
                 serializer.Serialize(writer, Cfg);
