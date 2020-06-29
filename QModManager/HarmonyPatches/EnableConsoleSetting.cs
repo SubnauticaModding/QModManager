@@ -2,9 +2,6 @@
 {
     using Harmony;
     using QModManager.Utility;
-    using System.Collections.Generic;
-    using System.Reflection;
-    using System.Reflection.Emit;
     using UnityEngine;
 
     [HarmonyPatch(typeof(DevConsole), nameof(DevConsole.Awake))]
@@ -26,13 +23,12 @@
         // This patch syncronizes the "Disable console" UI element in the F3 debug menu
 
         [HarmonyPostfix]
-        public static void Postfix(bool __result, string key)
+        public static void Postfix(bool defaultVal, string key, string label, ref bool __result)
         {
-            if (key != "UWE.DisableConsole") return;
-
-            Config.EnableConsole = !__result;
-
-            return;
+            if (key == "UWE.DisableConsole")
+            {
+                Config.EnableConsole = !__result;
+            }
         }
     }
 }

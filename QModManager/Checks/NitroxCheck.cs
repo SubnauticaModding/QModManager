@@ -9,7 +9,7 @@ namespace QModManager.Checks
     {
         internal static bool IsInstalled { get; set; } = false;
 
-        [HarmonyPatch(typeof(GameInput), "Awake")]
+        [HarmonyPatch(typeof(GameInput), nameof(GameInput.Awake))]
         internal static class AwakePatch
         {
             internal static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)

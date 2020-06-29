@@ -167,8 +167,7 @@ namespace QModManager.Patching
             {
                 Logger.Debug("Applying Harmony patches...");
 
-                var instance = HarmonyInstance.Create("qmodmanager");
-                instance.PatchAll(Assembly.GetExecutingAssembly());
+                HarmonyInstance.Create("qmodmanager").PatchAll();
 
                 Logger.Debug("Patched!");
             }
