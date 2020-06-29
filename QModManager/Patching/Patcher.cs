@@ -41,9 +41,9 @@ namespace QModManager.Patching
 
                 Patched = true;
 
-                //Logger.Info("Game Version: " + SNUtils.GetPlasticChangeSetOfBuild() + " Build Date: " + SNUtils.GetDateTimeOfBuild().ToString());
+                Logger.Info($"Game Version: {SNUtils.GetPlasticChangeSetOfBuild()} Build Date: {SNUtils.GetDateTimeOfBuild():dd-MMMM-yyyy}");
                 Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}...");
-                //Logger.Info($"Today is {DateTime.Today:dd-MMMM-yyyy}");
+                Logger.Info($"Today is {DateTime.Today:dd-MMMM-yyyy}");
 
                 if (QModBaseDir == null)
                 {
@@ -64,7 +64,7 @@ namespace QModManager.Patching
 
                 try
                 {
-                    Logger.Info($"Folder structure:\n{IOUtilities.GetFolderStructureAsTree()}\n");
+                    Logger.Info($"Folder structure:{IOUtilities.GetFolderStructureAsTree()}");
                 }
                 catch (Exception e)
                 {

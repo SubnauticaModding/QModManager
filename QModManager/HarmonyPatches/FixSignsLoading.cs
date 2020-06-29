@@ -78,7 +78,7 @@ namespace QModManager.HarmonyPatches.FixSignsLoading
         {
             // If current MonoBehavour is enabled, call RestoreSignState next frame (we can't restore the Sign state this frame because the RectTransform property of Sign's base class uGUI_SignInput has not been set yet). 
             if (enabled)
-                Invoke("RestoreSignState", 1f);
+                Invoke(nameof(RestoreSignState), 1f);
         }
     }
 }
