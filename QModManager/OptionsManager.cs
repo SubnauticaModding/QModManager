@@ -8,9 +8,7 @@
     {
         internal static int ModsTab;
 
-
-
-        [HarmonyPatch(typeof(uGUI_OptionsPanel), "AddTabs")]
+        [HarmonyPatch(typeof(uGUI_OptionsPanel), nameof(uGUI_OptionsPanel.AddTabs))]
         internal static class OptionsPatch
         {
             [HarmonyPostfix]

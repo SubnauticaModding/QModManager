@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 
 namespace QModManager.Utility
 {
@@ -16,7 +17,9 @@ namespace QModManager.Utility
             "SNAppData",
             "SNUnmanagedData",
             "Subnautica_Data",
+            "SubnauticaZero_Data",
             "_CommonRedist",
+            "steam_shader_cache",
         };
 
         internal static string GetFolderStructureAsTree(string directory = null)
@@ -25,7 +28,7 @@ namespace QModManager.Utility
             {
                 directory ??= Environment.CurrentDirectory;
 
-                return GenerateFolderStructure(directory) + "\n";
+                return GenerateFolderStructure(directory);
             }
             catch (Exception e)
             {
@@ -35,13 +38,15 @@ namespace QModManager.Utility
 
         internal static string GenerateFolderStructure(string directory)
         {
+            var builder = new StringBuilder();
             try
             {
-                string toWrite = $"+ {new DirectoryInfo(directory).Name}\n";
+                builder.AppendLine();
+                builder.AppendLine($"+ {new DirectoryInfo(directory).Name}");
 
                 foreach (string dir in Directory.GetDirectories(directory))
                 {
-                    toWrite += GetFolderStructureRecursively(dir, 0);
+                    GetFolderStructureRecursively(builder, dir, 0);
                 }
 
                 string[] files = Directory.GetFiles(directory);
@@ -49,34 +54,35 @@ namespace QModManager.Utility
                 {
                     FileInfo fileinfo = new FileInfo(files[i - 1]);
                     if (i != files.Length)
-                        toWrite += $"{GenerateSpaces(0)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})\n";
-                    else 
-                        toWrite += $"{GenerateSpaces(0)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})\n";
+                        builder.AppendLine($"{GenerateSpaces(0)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
+                    else
+                        builder.AppendLine($"{GenerateSpaces(0)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
                 }
 
-                return toWrite;
+                builder.AppendLine();
+                return builder.ToString();
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
-        internal static string GetFolderStructureRecursively(string directory, int spaces = 0)
+        internal static void GetFolderStructureRecursively(StringBuilder builder, string directory, int spaces = 0)
         {
             try
             {
                 DirectoryInfo dirInfo = new DirectoryInfo(directory);
-                string toWrite = $"{GenerateSpaces(spaces)}|---+ {dirInfo.Name}\n";
+                builder.AppendLine($"{GenerateSpaces(spaces)}|---+ {dirInfo.Name}");
 
                 if (BannedFolders.Contains(dirInfo.Name) || BannedFolders.Contains($"{dirInfo.Parent.Name}/{dirInfo.Name}"))
                 {
-                    toWrite += $"{GenerateSpaces(spaces + 4)}`---- (Folder content not shown)\n";
-                    return toWrite;
+                    builder.AppendLine($"{GenerateSpaces(spaces + 4)}`---- (Folder content not shown)");
+                    return;
                 }
 
                 foreach (string dir in Directory.GetDirectories(directory))
                 {
-                    toWrite += GetFolderStructureRecursively(dir, spaces + 4);
+                    GetFolderStructureRecursively(builder, dir, spaces + 4);
                 }
 
                 string[] files = Directory.GetFiles(directory);
@@ -84,12 +90,10 @@ namespace QModManager.Utility
                 {
                     FileInfo fileinfo = new FileInfo(files[i - 1]);
                     if (i != files.Length)
-                        toWrite += $"{GenerateSpaces(spaces + 4)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})\n";
+                        builder.AppendLine($"{GenerateSpaces(spaces + 4)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
                     else
-                        toWrite += $"{GenerateSpaces(spaces + 4)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})\n";
+                        builder.AppendLine($"{GenerateSpaces(spaces + 4)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
                 }
-
-                return toWrite;
             }
             catch (Exception e)
             {

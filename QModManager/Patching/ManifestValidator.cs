@@ -144,6 +144,8 @@
                     {
                         versionedDependencies.Add(new RequiredQMod(item.Key));
                     }
+
+                    mod.RequiredDependencies.Add(item.Key);
                 }
 
                 mod.RequiredMods = versionedDependencies;

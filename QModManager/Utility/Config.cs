@@ -35,18 +35,30 @@
 
         private static Dictionary<string, object> Cfg = new Dictionary<string, object>();
         private static bool Loaded = false;
+        private static readonly JsonSerializer serializer = new JsonSerializer
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            MissingMemberHandling = MissingMemberHandling.Ignore,
+            DefaultValueHandling = DefaultValueHandling.Ignore
+        };
 
-        private static void Load()
+    private static void Load()
         {
             try
             {
-                if (!File.Exists(ConfigPath)) File.WriteAllText(ConfigPath, "{}");
-                string text = File.ReadAllText(ConfigPath);
-                Cfg = JsonConvert.DeserializeObject<Dictionary<string, object>>(text);
+                if (!File.Exists(ConfigPath))
+                {
+                    Save();
+                }
+
+                using StreamReader sr = new StreamReader(ConfigPath);
+                using JsonReader reader = new JsonTextReader(sr);
+                Cfg = serializer.Deserialize<Dictionary<string, object>>(reader);
+
                 if (Cfg == null) 
                 {
-                    File.WriteAllText(ConfigPath, "{}");
                     Cfg = new Dictionary<string, object>();
+                    Save();
                 }
 
                 Loaded = true;
@@ -62,8 +74,9 @@
         {
             try
             {
-                string text = JsonConvert.SerializeObject(Cfg, Formatting.Indented);
-                File.WriteAllText(ConfigPath, text);
+                using StreamWriter sw = new StreamWriter(ConfigPath);
+                using JsonWriter writer = new JsonTextWriter(sw);
+                serializer.Serialize(writer, Cfg);
             }
             catch (Exception e)
             {
@@ -74,7 +87,10 @@
 
         private static T Get<T>(string field, T def = default)
         {
-            if (!Loaded) Load();
+            if (!Loaded)
+            {
+                Load();
+            }
 
             if (!Cfg.TryGetValue(field, out object value))
                 return def;

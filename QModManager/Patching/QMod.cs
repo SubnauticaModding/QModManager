@@ -19,40 +19,40 @@
             // Empty public constructor for JSON
         }
 
-        [JsonProperty(Required = Required.Always)]
+        [JsonProperty]
         public string Id { get; set; }
 
-        [JsonProperty(Required = Required.Always)]
+        [JsonProperty]
         public string DisplayName { get; set; }
 
-        [JsonProperty(Required = Required.Always)]
+        [JsonProperty]
         public string Author { get; set; }
 
-        [JsonProperty(Required = Required.Always)]
+        [JsonProperty]
         public string Version { get; set; }
 
-        [JsonProperty(Required = Required.Default)]
+        [JsonProperty]
         public string[] Dependencies { get; set; } = new string[0];
 
-        [JsonProperty(Required = Required.Default)]
+        [JsonProperty]
         public Dictionary<string, string> VersionDependencies { get; set; } = new Dictionary<string, string>();
 
-        [JsonProperty(Required = Required.Default)]
+        [JsonProperty]
         public string[] LoadBefore { get; set; } = new string[0];
 
-        [JsonProperty(Required = Required.Default)]
+        [JsonProperty]
         public string[] LoadAfter { get; set; } = new string[0];
 
-        [JsonProperty(Required = Required.DisallowNull, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+        [JsonProperty]
         public bool Enable { get; set; } = true;
 
-        [JsonProperty(Required = Required.DisallowNull)]
+        [JsonProperty]
         public string Game { get; set; } = $"{QModGame.Subnautica}";
 
-        [JsonProperty(Required = Required.Always)]
+        [JsonProperty]
         public string AssemblyName { get; set; }
 
-        [JsonProperty(Required = Required.Default)]
+        [JsonProperty]
         public string EntryMethod { get; set; }
 
         #endregion

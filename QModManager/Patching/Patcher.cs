@@ -41,7 +41,7 @@ namespace QModManager.Patching
 
                 Patched = true;
 
-                Logger.Info("Game Version: " + SNUtils.GetPlasticChangeSetOfBuild() + " Build Date: " + SNUtils.GetDateTimeOfBuild().ToLongDateString());
+                Logger.Info($"Game Version: {SNUtils.GetPlasticChangeSetOfBuild()} Build Date: {SNUtils.GetDateTimeOfBuild():dd-MMMM-yyyy}");
                 Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}...");
                 Logger.Info($"Today is {DateTime.Today:dd-MMMM-yyyy}");
 
@@ -64,7 +64,7 @@ namespace QModManager.Patching
 
                 try
                 {
-                    Logger.Info($"Folder structure:\n{IOUtilities.GetFolderStructureAsTree()}\n");
+                    Logger.Info($"Folder structure:{IOUtilities.GetFolderStructureAsTree()}");
                 }
                 catch (Exception e)
                 {
@@ -81,15 +81,7 @@ namespace QModManager.Patching
 
                 CurrentlyRunningGame = gameDetector.CurrentlyRunningGame;
 
-                try
-                {
-                    PatchHarmony();
-                }
-                catch (Exception e)
-                {
-                    Logger.Error("There was an error while trying to apply Harmony patches.");
-                    Logger.Exception(e);
-                }
+                PatchHarmony();
 
                 if (NitroxCheck.IsInstalled)
                 {
@@ -171,9 +163,19 @@ namespace QModManager.Patching
 
         private static void PatchHarmony()
         {
-            Logger.Debug("Applying Harmony patches...");
-            HarmonyInstance.Create("qmodmanager").PatchAll();
-            Logger.Debug("Patched!");
+            try
+            {
+                Logger.Debug("Applying Harmony patches...");
+
+                HarmonyInstance.Create("qmodmanager").PatchAll();
+
+                Logger.Debug("Patched!");
+            }
+            catch (Exception e)
+            {
+                Logger.Error("There was an error while trying to apply Harmony patches.");
+                Logger.Exception(e);
+            }
         }
     }
 }

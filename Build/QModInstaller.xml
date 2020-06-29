@@ -457,6 +457,41 @@
             <param name="color">The color of the text.</param>
             <param name="autoformat">Whether or not to apply formatting tags to the message, or show it as it is.</param>
         </member>
+        <member name="T:QModManager.Utility.Logger">
+            <summary>A simple logging class. Can be used for basic logging or to know which logging level is enabled.</summary>
+        </member>
+        <member name="T:QModManager.Utility.Logger.Level">
+            <summary>Possible logging levels.</summary>
+        </member>
+        <member name="F:QModManager.Utility.Logger.Level.Debug">
+            <summary>Debugging log level</summary>
+        </member>
+        <member name="F:QModManager.Utility.Logger.Level.Info">
+            <summary>Informational log level</summary>
+        </member>
+        <member name="F:QModManager.Utility.Logger.Level.Warn">
+            <summary>Warning log level</summary>
+        </member>
+        <member name="F:QModManager.Utility.Logger.Level.Error">
+            <summary>Error log level</summary>
+        </member>
+        <member name="F:QModManager.Utility.Logger.Level.Fatal">
+            <summary>Fatal log level</summary>
+        </member>
+        <member name="P:QModManager.Utility.Logger.DebugLogsEnabled">
+            <summary>Used to know if debug logging is enabled or not.</summary>
+        </member>
+        <member name="M:QModManager.Utility.Logger.Log(QModManager.Utility.Logger.Level,System.String,System.Exception,System.Boolean)">
+            <summary>
+            This function will log given message and/or exception. It can optionally show the message on screen.
+            You need to provide a message and/or an exception (this function will do nothing if both are set to null).
+            Warning: You can call this function from any mod but don't call it from QModManager (<see cref="M:QModManager.Utility.Logger.GetCallingAssemblyName"/> would fail).
+            </summary>
+            <param name="logLevel">The level of the log.</param>
+            <param name="msg">Optional: The message that needs to be logged.</param>
+            <param name="ex">Optional: The exception that needs to be logged.</param>
+            <param name="showOnScreen">Optional: Whether to show the message on screen or not.</param>
+        </member>
         <member name="T:QModInstaller.QModPatcher">
             <summary>
             Container class for the entry point
