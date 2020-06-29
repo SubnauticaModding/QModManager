@@ -443,43 +443,6 @@
             </summary>
             <typeparam name="IdType">The ID type.</typeparam>
         </member>
-        <member name="T:QModManager.HarmonyPatches.FixSignsLoading.uGUI_SignInput_UpdateScale_Patch">
-            <summary>
-            Will fix the signs loading bug (see https://youtu.be/8eGj40Xzkag).
-            This bug happens in vanilla version of the game (no mods installed).
-            Note that the initial exceptions will still be raised upon loading (and logged in Player.log file).
-            That's because this fix is applied as a postfix method (in other words, signs are fixed after their initial loading failure).
-            A benefit from this is that it does not prevent modders from applying further modifications to the <see cref="M:uGUI_SignInput.UpdateScale"/> method.
-            Also note that if something crash in there that probably means Unknown World fixed the issue (because it has been reported to them). If that's the case this entire file can be safely removed from QModManager project.
-            </summary>
-        </member>
-        <member name="M:QModManager.HarmonyPatches.FixSignsLoading.uGUI_SignInput_UpdateScale_Patch.Postfix(uGUI_SignInput)">
-            <summary>
-            This function is patched into the game using Harmony.
-            </summary>
-            <param name="__instance">The <see cref="T:uGUI_SignInput"/> instance that owns the method.</param>
-        </member>
-        <member name="M:QModManager.HarmonyPatches.FixSignsLoading.uGUI_SignInput_UpdateScale_Patch.ApplyFix">
-            <summary>
-            Only apply this patch if game is any CS version for Below Zero or below version 65271 for Subnautica.
-            </summary>
-            <returns>Returns true if this patch needs to be applied, false otherwise.</returns>
-        </member>
-        <member name="T:QModManager.HarmonyPatches.FixSignsLoading.SignFixerComponent">
-            <summary>
-            MonoBehaviour component attached to sign objects to fix their loading problem (see https://youtu.be/8eGj40Xzkag).
-            </summary>
-        </member>
-        <member name="M:QModManager.HarmonyPatches.FixSignsLoading.SignFixerComponent.RestoreSignState">
-            <summary>
-            This function gets called by <see cref="M:QModManager.HarmonyPatches.FixSignsLoading.SignFixerComponent.Awake"/> method.
-            </summary>
-        </member>
-        <member name="M:QModManager.HarmonyPatches.FixSignsLoading.SignFixerComponent.Awake">
-            <summary>
-            This function gets called once the MonoBehaviour wakes up.
-            </summary>
-        </member>
         <member name="T:QModManager.Utility.MainMenuMessages">
             <summary>
             Allows to add critical messages to the main menu.
