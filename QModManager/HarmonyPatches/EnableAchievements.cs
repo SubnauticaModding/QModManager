@@ -1,7 +1,7 @@
 ﻿// Original mod by AlexejheroYTB
 namespace QModManager.HarmonyPatches.EnableAchievements
 {
-    using HarmonyLib;
+    using Harmony;
 
     [HarmonyPatch(typeof(GameAchievements), nameof(GameAchievements.Unlock))]
     internal static class GameAchievements_Unlock_Patch

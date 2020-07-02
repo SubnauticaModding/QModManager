@@ -7,7 +7,7 @@ namespace QModManager.Patching
     using API;
     using API.ModLoading;
     using Checks;
-    using HarmonyLib;
+    using Harmony;
     using Utility;
 
     internal static class Patcher
@@ -161,15 +161,13 @@ namespace QModManager.Patching
             Logger.Debug("Added AssemblyResolve event");
         }
 
-        // Store the instance for use by MainMenuMessages
-        internal static Harmony hInstance;
         private static void PatchHarmony()
         {
             try
             {
                 Logger.Debug("Applying Harmony patches...");
 
-                hInstance = Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), "qmodmanager");
+                HarmonyInstance.Create("qmodmanager").PatchAll();
 
                 Logger.Debug("Patched!");
             }

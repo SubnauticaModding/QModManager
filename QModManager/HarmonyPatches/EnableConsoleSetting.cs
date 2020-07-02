@@ -1,6 +1,6 @@
 ﻿namespace QModManager.HarmonyPatches.EnableConsoleSetting
 {
-    using HarmonyLib;
+    using Harmony;
     using QModManager.Utility;
     using UnityEngine;
 

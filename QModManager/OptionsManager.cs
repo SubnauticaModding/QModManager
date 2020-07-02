@@ -1,9 +1,8 @@
 ﻿namespace QModManager
 {
-    using HarmonyLib;
+    using Harmony;
     using QModManager.Utility;
     using UnityEngine.Events;
-    using UnityEngine.UI;
 
     internal static class OptionsManager
     {
