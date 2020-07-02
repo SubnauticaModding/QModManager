@@ -3,6 +3,9 @@ using BepInEx.Logging;
 
 namespace QMMLoader
 {
+    /// <summary>
+    /// QMMLoader - simply fires up the QModManager entry point.
+    /// </summary>
     [BepInPlugin(PluginGuid, PluginName, PluginVersion)]
     [BepInProcess(SubnauticaProcessName)]
     [BepInProcess(SubnauticaZeroProcessName)]
@@ -15,6 +18,9 @@ namespace QMMLoader
         internal const string SubnauticaProcessName = "Subnautica";
         internal const string SubnauticaZeroProcessName = "SubnauticaZero";
 
+        /// <summary>
+        /// Static singleton instance of QMMLoader
+        /// </summary>
         public static QMMLoader Main;
 
         internal new ManualLogSource Logger => base.Logger;
