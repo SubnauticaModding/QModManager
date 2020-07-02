@@ -17,4 +17,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("3.3.0.0")]
 
 [assembly: InternalsVisibleTo("QMMTests")]
-[assembly: InternalsVisibleTo("QModManager")]
+[assembly: InternalsVisibleTo("QMMLoader")]

@@ -1,6 +1,6 @@
 ﻿namespace QModManager.HarmonyPatches.DisableDevErrorReporting
 {
-    using Harmony;
+    using HarmonyLib;
     using UnityEngine;
 
     [HarmonyPatch(typeof(SentrySdk), nameof(SentrySdk.Start))]
