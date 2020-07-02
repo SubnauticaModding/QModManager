@@ -37,7 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BepInEx">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\SubnauticaZero\BepInEx\core\BepInEx.dll</HintPath>
+      <HintPath>..\Dependencies\BepInEx.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="QModInstaller">
