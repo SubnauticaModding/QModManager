@@ -40,7 +40,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="QModInstaller">
-      <HintPath>..\..\..\..\QModManager\Build\QModInstaller.dll</HintPath>
+      <HintPath>..\Build\QModInstaller.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
