@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>QMMLoader</name>
+    </assembly>
+    <members>
+        <member name="T:QMMLoader.QMMLoader">
+            <summary>
+            QMMLoader - simply fires up the QModManager entry point.
+            </summary>
+        </member>
+        <member name="F:QMMLoader.QMMLoader.Main">
+            <summary>
+            Static singleton instance of QMMLoader
+            </summary>
+        </member>
+    </members>
+</doc>
