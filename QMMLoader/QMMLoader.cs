@@ -1,5 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
+using HarmonyLib;
+using System.Reflection;
 
 namespace QMMLoader
 {
@@ -30,7 +32,6 @@ namespace QMMLoader
             if (Main == null && this != null)
             {
                 Main = this;
-
                 Initialize();
             }
             else
@@ -39,15 +40,22 @@ namespace QMMLoader
             }
         }
 
-        private bool initialized = false;
+        private static Harmony harmony;
+        private static MethodInfo entryPointTarget = AccessTools.Method(typeof(GameInput), nameof(GameInput.Awake));
+        private static MethodInfo entryPointPatch = AccessTools.Method(typeof(QMMLoader), nameof(QMMLoader.InitializeQModManager));
         private void Initialize()
         {
-            if (!initialized && Main != null && Main == this)
+            if (harmony == null && Main != null && Main == this)
             {
-                initialized = true;
-
-                QModManager.Patching.Patcher.Patch();
+                harmony = new Harmony("QMMLoader");
+                harmony.Patch(entryPointTarget, postfix: new HarmonyMethod(entryPointPatch));
             }
+        }
+
+        private static void InitializeQModManager()
+        {
+            QModManager.Patching.Patcher.Patch(); // Run QModManager patch
+            harmony.Unpatch(entryPointTarget, entryPointPatch); // kill this Harmony patch just to be sure it never happens twice
         }
     }
 }
