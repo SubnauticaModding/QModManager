@@ -5,9 +5,10 @@
     using System.Reflection.Emit;
     using System.Collections;
     using System.Collections.Generic;
-    using Harmony;
+    using HarmonyLib;
     using UnityEngine;
     using UnityEngine.SceneManagement;
+    using QModManager.Patching;
 
     /// <summary>
     /// Allows to add critical messages to the main menu.
@@ -34,7 +35,7 @@
         /// <param name="autoformat">Whether or not to apply formatting tags to the message, or show it as it is.</param>
         internal static void Add(string msg, string callerID = null, int size = defaultSize, string color = defaultColor, bool autoformat = true)
         {
-            if (Patches.hInstance == null) // just in case
+            if (!inited || Patches.hInstance == null) // just in case
             {
                 Logger.Error($"Tried to add main menu message before Harmony was initialized. (Message: \"{msg}\")");
                 return;
@@ -155,15 +156,15 @@
 
         #endregion Dynamic assembly loading
 
-        private static class Patches
+        internal static class Patches
         {
-            public static HarmonyInstance hInstance { get; private set; }
+            public static Harmony hInstance => Patcher.hInstance; // Point to the stored Harmony instance rather than getting it from the old TargetMethod workaround (hack)
 
             public static void Patch()
             {
                 Logger.Debug("Patching ErrorMessage");
 
-                // patching it only if we need to (transpilers take time)
+                //patching it only if we need to(transpilers take time)
                 hInstance.Patch(AccessTools.Method(typeof(ErrorMessage), nameof(ErrorMessage.OnUpdate)),
                     transpiler: new HarmonyMethod(AccessTools.Method(typeof(Patches), nameof(UpdateMessages))));
             }
@@ -180,16 +181,9 @@
             }
 
             [HarmonyPatch(typeof(ErrorMessage), nameof(ErrorMessage.Awake))]
-            private static class AddMessages
+            internal static class AddMessages
             {
-                // workaround to get harmony instance
-                private static MethodBase TargetMethod(HarmonyInstance instance)
-                {
-                    hInstance = instance;
-                    return null; // using target method from attribute
-                }
-
-                public static void Postfix()
+                internal static void Postfix()
                 {
                     prevOffset = ErrorMessage.main.offset;
 
@@ -207,7 +201,7 @@
 
             // we changing result for 'float value = Mathf.Clamp01(MathExtensions.EvaluateLine(...' to 1.0f
             // so text don't stay in the center of the screen (because of changed 'timeEnd')
-            private static IEnumerable<CodeInstruction> UpdateMessages(IEnumerable<CodeInstruction> cins)
+            internal static IEnumerable<CodeInstruction> UpdateMessages(IEnumerable<CodeInstruction> cins)
             {
                 var list = new List<CodeInstruction>(cins);
                 int index = list.FindIndex(cin => cin.opcode == OpCodes.Stloc_S && (cin.operand as LocalBuilder)?.LocalIndex == 11);
