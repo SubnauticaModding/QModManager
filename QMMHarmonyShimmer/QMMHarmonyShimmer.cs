@@ -18,7 +18,8 @@ namespace QMMLoader.QMMHarmonyShimmer
         internal const string SubnauticaProcessName = "Subnautica";
         internal const string SubnauticaZeroProcessName = "SubnauticaZero";
 
-        internal static string QModInstallerPath => Path.Combine(Path.Combine(Path.Combine(Paths.BepInExRootPath, "plugins"), "QMMLoader"), "QModInstaller.dll");
+        internal static string QMMLoaderPluginPath => Path.Combine(Path.Combine(Paths.BepInExRootPath, "plugins"), "QMMLoader");
+        internal static string QModInstallerPath => Path.Combine(QMMLoaderPluginPath, "QModInstaller.dll");
         internal static string QModsPath => Path.Combine(Paths.GameRootPath, "QMods");
 
         public static IEnumerable<string> TargetDLLs { get; } = new[] { "Assembly-CSharp.dll" };
@@ -30,9 +31,10 @@ namespace QMMLoader.QMMHarmonyShimmer
         {
             var name = new AssemblyName(assemblyNameReference.FullName);
 
-            if (Utility.TryResolveDllAssembly(name, Paths.BepInExAssemblyDirectory, readerParameters, out var assembly) ||
-                Utility.TryResolveDllAssembly(name, QModsPath, readerParameters, out assembly) ||
-                Utility.TryResolveDllAssembly(name, Paths.ManagedPath, readerParameters, out assembly))
+            if (Utility.TryResolveDllAssembly(name, Paths.BepInExAssemblyDirectory, readerParameters, out var assembly) || // First try BepInEx assemblies
+                Utility.TryResolveDllAssembly(name, QMMLoaderPluginPath, readerParameters, out assembly) || // Then QMMLoader assemblies
+                Utility.TryResolveDllAssembly(name, QModsPath, readerParameters, out assembly) || // Then QMods
+                Utility.TryResolveDllAssembly(name, Paths.ManagedPath, readerParameters, out assembly)) // Finally, Subnautica Managed assemblies
             {
                 return assembly;
             }
