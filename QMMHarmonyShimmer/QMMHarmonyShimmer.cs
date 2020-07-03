@@ -12,7 +12,11 @@ namespace QMMLoader.QMMHarmonyShimmer
 {
     /// <summary>
     /// Based on the work of IPALoaderX: https://github.com/BepInEx/IPALoaderX/tree/v1.2.2/BepInEx.IPAHarmonyShimmer
+    /// A patcher which runs ahead of any BepInEx plugins (eg. QMMLoader) to identify QMods referencing older versions of Harmony than the
+    /// Harmony shipped with BepInEx, backs them up and creates a patched copy which references new Harmony, shimming the outdated Harmony
+    /// API.
     /// </summary>
+    [Obsolete("Should not be used!", true)]
     public static class QMMHarmonyShimmer
     {
         internal const string SubnauticaProcessName = "Subnautica";
@@ -22,9 +26,32 @@ namespace QMMLoader.QMMHarmonyShimmer
         internal static string QModInstallerPath => Path.Combine(QMMLoaderPluginPath, "QModInstaller.dll");
         internal static string QModsPath => Path.Combine(Paths.GameRootPath, "QMods");
 
-        public static IEnumerable<string> TargetDLLs { get; } = new[] { "Assembly-CSharp.dll" };
-
         private static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("QMMHarmonyShim");
+
+        /// <summary>
+        /// Called from BepInEx while patching, our entry point for patching.
+        /// Do not change the method name as it is identified by BepInEx. Method must remain public.
+        /// </summary>
+        [Obsolete("Should not be used!", true)]
+        public static void Initialize()
+        {
+            ApplyHarmonyPatches();
+            InitAssemblyResolver();
+            ApplyShims();
+        }
+        
+        private static void ApplyHarmonyPatches()
+        {
+            var harmony = new HarmonyLib.Harmony("QMMLoader");
+            harmony.PatchAll();
+        }
+
+        private static void InitAssemblyResolver()
+        {
+            var resolver = new DefaultAssemblyResolver();
+            readerParameters = new ReaderParameters { AssemblyResolver = resolver };
+            resolver.ResolveFailure += ResolveAssemblies;
+        }
 
         private static ReaderParameters readerParameters;
         private static AssemblyDefinition ResolveAssemblies(object sender, AssemblyNameReference assemblyNameReference)
@@ -48,25 +75,12 @@ namespace QMMLoader.QMMHarmonyShimmer
             }
         }
 
-        public static void ApplyHarmonyPatches()
-        {
-            var harmony = new HarmonyLib.Harmony("QMMLoader");
-            harmony.PatchAll();
-        }
-
-        public static void InitAssemblyResolver()
-        {
-            var resolver = new DefaultAssemblyResolver();
-            readerParameters = new ReaderParameters { AssemblyResolver = resolver };
-            resolver.ResolveFailure += ResolveAssemblies;
-        }
-
-        public static void ApplyShims()
+        private static void ApplyShims()
         {
             ShimQMods();
         }
 
-        public static void ShimQMods()
+        private static void ShimQMods()
         {
             if (!Directory.Exists(QModsPath))
             {
@@ -189,7 +203,7 @@ namespace QMMLoader.QMMHarmonyShimmer
                             }
 
                             if (shimmed)
-                            {
+                            {   // backup the original to QMods_backup and write the patched back to the QMods folder, where QModManager loads from.
                                 var pathPart = filePath.Substring(QModsPath.Length + 1);
                                 var backupPath = Path.Combine(backupDirectory, pathPart);
                                 Logger.LogInfo($"Backing up {Path.GetFileNameWithoutExtension(filePath)} to {backupPath}. Original path: {filePath}");
@@ -211,23 +225,40 @@ namespace QMMLoader.QMMHarmonyShimmer
             }
         }
 
-        public static void Initialize()
-        {
-            ApplyHarmonyPatches();
-            InitAssemblyResolver();
-            ApplyShims();
-        }
-
-        public static void Patch(AssemblyDefinition ad) { }
-
+        /// <summary>
+        /// Called from BepInEx while patching, runs after all patches complete.
+        /// Do not change the method name as it is identified by BepInEx. Method must remain public.
+        /// </summary>
+        [Obsolete("Should not be used!", true)]
         public static void Finish()
         {
             AppDomain.CurrentDomain.AssemblyResolve += (sender, resolveEventArgs) =>
             {
-                return new AssemblyName(resolveEventArgs.Name).Name == "0Harmony_Shim"
-                    ? Assembly.GetExecutingAssembly()
+                return new AssemblyName(resolveEventArgs.Name).Name == "0Harmony_Shim" // Redirect references to the shim to this assembly,
+                    ? Assembly.GetExecutingAssembly()                                  // since we are emulating the API.
                     : null;
             };
         }
+
+        /// <summary>
+        /// For BepInEx to identify your patcher as a patcher, it must match the patcher contract as outlined in the BepInEx docs:
+        /// https://bepinex.github.io/bepinex_docs/v5.0/articles/dev_guide/preloader_patchers.html#patcher-contract
+        /// It must contain a list of managed assemblies to patch as a public static <see cref="IEnumerable{string}"/>property named TargetDLLs
+        /// </summary>
+        [Obsolete("Should not be used!", true)]
+        public static IEnumerable<string> TargetDLLs { get; } = new[] { "Assembly-CSharp.dll" };
+
+        /// <summary>
+        /// For BepInEx to identify your patcher as a patcher, it must match the patcher contract as outlined in the BepInEx docs:
+        /// https://bepinex.github.io/bepinex_docs/v5.0/articles/dev_guide/preloader_patchers.html#patcher-contract
+        /// It must contain a public static void method named Patch which receives an <see cref="AssemblyDefinition"/> argument,
+        /// which patches each of the target assemblies in the TargetDLLs list.
+        /// 
+        /// We don't actually need to patch any of the managed assemblies, so we are providing an empty method here, and instead dynamically patch
+        /// assemblies in the QMods directory via the <see cref="ShimQMods"/> method.
+        /// </summary>
+        /// <param name="ad"></param>
+        [Obsolete("Should not be used!", true)]
+        public static void Patch(AssemblyDefinition ad) { }
     }
 }
