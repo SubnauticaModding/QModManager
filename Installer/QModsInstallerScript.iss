@@ -5,7 +5,7 @@
 #endif
 
 #define Name "QModManager" ; The name of the game will be added after it
-#define Version "3.3.0"
+#define Version "4.0"
 #define Author "QModManager"
 #define URL "https://github.com/QModManager/QModManager"
 #define SupportURL "https://discord.gg/UpWuWwq"
@@ -57,36 +57,22 @@ Source: "..\Dependencies\Carbon.vsf"; Flags: DontCopy
 ; Installer extensions
 Source: "..\Build\InstallerExtensions.dll"; Flags: DontCopy
 ; Files required by QModManager itself
-; Subnautica
-Source: "..\Dependencies\0Harmony.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Dependencies\0Harmony-1.2.0.1.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Dependencies\AssetsTools.NET.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Dependencies\cldb.dat"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Dependencies\Mono.Cecil.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Build\QModInstaller.xml"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-Source: "..\Build\QModManager.exe"; DestDir: "{app}\Subnautica_Data\Managed"; Flags: IgnoreVersion; Check: IsSubnauticaApp
-; Below Zero
-Source: "..\Dependencies\0Harmony.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Dependencies\0Harmony-1.2.0.1.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Dependencies\AssetsTools.NET.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Dependencies\cldb.dat"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Dependencies\Mono.Cecil.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Build\QModInstaller.xml"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
-Source: "..\Build\QModManager.exe"; DestDir: "{app}\SubnauticaZero_Data\Managed"; Flags: IgnoreVersion; Check: IsBelowZeroApp
+Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
+Source: "..\Build\QModInstaller.xml"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
+Source: "..\Build\QMMLoader.dll"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
+Source: "..\Build\QMMLoader.xml"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
+Source: "..\Build\QMMLoader.QMMHarmonyShimmer.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+Source: "..\Build\QModManager.exe"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: IgnoreVersion;
+Source: "..\Dependencies\AssetsTools.NET.dll"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: IgnoreVersion;
+Source: "..\Dependencies\cldb.dat"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: IgnoreVersion;
+; BepInEx
+Source: "..\Dependencies\BepInEx\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs replacesameversion sharedfile uninsnosharedfileprompt;
 
 [Run]
-; Subnautica
-Filename: "{app}\Subnautica_Data\Managed\QModManager.exe"; Parameters: "-i"; Check: IsSubnauticaApp
-; Below Zero
-Filename: "{app}\SubnauticaZero_Data\Managed\QModManager.exe"; Parameters: "-i"; Check: IsBelowZeroApp
+Filename: "{app}\BepInEx\plugins\QModManager\QModManager.exe"; Parameters: "-i";
 
 [UninstallRun]
-; Subnautica
-Filename: "{app}\Subnautica_Data\Managed\QModManager.exe"; Parameters: "-u"; Check: IsSubnauticaApp
-; Below Zero
-Filename: "{app}\SubnauticaZero_Data\Managed\QModManager.exe"; Parameters: "-u"; Check: IsBelowZeroApp
+Filename: "{app}\BepInEx\plugins\QModManager\QModManager.exe"; Parameters: "-u";
 
 [Messages]
 ; BeveledLabel={#Name} {#Version}
@@ -101,16 +87,16 @@ SelectComponentsLabel2=
 
 [Types]
 ; Used to disable the three Full, Compact and Custom types
-Name: "select"; Description: "QModManager"; Flags: IsCustom
+Name: "select"; Description: "QModManager"; Flags: IsCustom;
 
 [Components]
-Name: "qmm"; Description: "QModManager"; Flags: fixed; Types: select
-Name: "qmm\sn"; Description: "Install for Subnautica"; Flags: exclusive fixed
-Name: "qmm\bz"; Description: "Install for Below Zero"; Flags: exclusive fixed
+Name: "qmm"; Description: "QModManager"; Flags: fixed; Types: select;
+Name: "qmm\sn"; Description: "Install for Subnautica"; Flags: exclusive fixed;
+Name: "qmm\bz"; Description: "Install for Below Zero"; Flags: exclusive fixed;
 
 [Code]
 // Import stuff from InstallerExtensions.dll
-function PathsEqual(pathone, pathtwo: WideString): Boolean; external 'PathsEqual@files:InstallerExtensions.dll stdcall delayload';
+function PathsEqual(pathone, pathtwo: WideString): Boolean; external 'PathsEqual@files:InstallerExtensions.dll stdcall setuponly delayload';
 
 function IsSubnautica(path: String): Boolean;
 begin
@@ -562,15 +548,71 @@ begin
     LoadVCLStyle(ExpandConstant('{tmp}\Carbon.vsf'));
     Result := true
   end
+end;    
+
+function IsPreviousVersionInstalled: boolean; // Returns true for previus versions < 4.0 (prior to the change to BepInEx)
+var
+  uninstallRegKey: String;
+  previousVersion: String;
+begin
+  uninstallRegKey := 'Software\Microsoft\Windows\CurrentVersion\Uninstall\' + GetGuid('') + '_is1';
+  previousVersion := '';
+  Result := (RegKeyExists(HKLM, uninstallRegKey) or RegKeyExists(HKCU, uninstallRegKey));
+end;
+
+function GetUninstallString: string;
+var
+  uninstallRegKey: String;
+  uninstallString: String;
+begin
+  Result := '';
+  uninstallRegKey := 'Software\Microsoft\Windows\CurrentVersion\Uninstall\' + GetGuid('') + '_is1';
+  uninstallString := '';
+  if not RegQueryStringValue(HKLM, uninstallRegKey, 'UninstallString', uninstallString) then
+    RegQueryStringValue(HKCU, uninstallRegKey, 'UninstallString', uninstallString);
+  Result := uninstallString;
+end;
+
+function IsUpgrade: Boolean;
+begin
+  Result := (GetUninstallString() <> '');
 end;
 
 function NextButtonClick(CurPageID: Integer): Boolean;
+var 
+  uninstallString: String;
+  resultCode: Integer;
 begin
   if CurPageID = wpSelectComponents then
   begin
     appIsSet := true
+
+    begin
+      if IsPreviousVersionInstalled() then
+      begin
+        if MsgBox('A previous installation of QModManager was detected. To update, it must be uninstalled.' + #13#10 + 'Do you want to uninstall it now?', mbInformation, MB_YESNO) = IDYES then
+        begin
+          uninstallString := RemoveQuotes(GetUninstallString());
+          Exec(ExpandConstant(uninstallString), '', '', SW_SHOW, ewWaitUntilTerminated, resultCode);
+            if IsPreviousVersionInstalled() then
+            begin
+              MsgBox('Previous installation of QModManager must be uninstalled to continue.', mbError, MB_OK);
+              Result := false;
+              Exit;
+            end
+            else
+              Result := true;
+        end
+        else
+        begin
+          MsgBox('Previous installation of QModManager must be uninstalled to continue.', mbError, MB_OK);
+          Result := false;
+          Exit;
+        end;
+      end;
+    end;
   end;
-  Result := true
+  Result := true;
 end;
 
 var TypesComboOnChangePrev: TNotifyEvent;
@@ -597,7 +639,7 @@ begin
   CurPageChanged_AddButtons(CurPageID)
   if CurPageID = wpSelectComponents then
   begin
-    ComponentsListCheckChanges
+    ComponentsListCheckChanges;
   end
 end;
 
@@ -610,8 +652,50 @@ begin
   InitializeWizard_DirOnChange
 end;
 
+procedure UnloadInstallerExtensions();
+  var
+  FilePath: string;
+  BatchPath: string;
+  S: TArrayOfString;
+  ResultCode: Integer;
+begin
+  FilePath := ExpandConstant('{tmp}\InstallerExtensions.dll');
+  if not FileExists(FilePath) then
+  begin
+    Log(Format('File %s does not exist', [FilePath]));
+  end
+    else
+  begin
+    BatchPath :=
+      ExpandConstant('{%TEMP}\') +
+      'delete_' + ExtractFileName(ExpandConstant('{tmp}')) + '.bat';
+    SetArrayLength(S, 7);
+    S[0] := ':loop';
+    S[1] := 'del "' + FilePath + '"';
+    S[2] := 'if not exist "' + FilePath + '" goto end';
+    S[3] := 'goto loop';
+    S[4] := ':end';
+    S[5] := 'rd "' + ExpandConstant('{tmp}') + '"';
+    S[6] := 'del "' + BatchPath + '"';
+    if not SaveStringsToFile(BatchPath, S, False) then
+    begin
+      Log(Format('Error creating batch file %s to delete %s', [BatchPath, FilePath]));
+    end
+      else
+    if not Exec(BatchPath, '', '', SW_HIDE, ewNoWait, ResultCode) then
+    begin
+      Log(Format('Error executing batch file %s to delete %s', [BatchPath, FilePath]));
+    end
+      else
+    begin
+      Log(Format('Executed batch file %s to delete %s', [BatchPath, FilePath]));
+    end;
+  end;
+end;
+
 procedure DeinitializeSetup();
 begin
   // Unload skin
   UnLoadVCLStyles;
+  UnloadInstallerExtensions;
 end;
