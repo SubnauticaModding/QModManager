@@ -75,7 +75,7 @@
                     Environment.Exit(1);
                     return;
                 }
-                else if (os != OS.Windows && os != OS.Mac)
+                else if (os == OS.None)
                 {
                     Console.WriteLine("Could not find any game to patch!");
                     Console.WriteLine("An assembly file was found, but no executable was detected.");
