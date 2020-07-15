@@ -26,6 +26,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallerExtensions", "Installer\InstallerExtensions.csproj", "{92726127-A08F-4843-BF96-4989CE1BF422}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Executable", "Executable\Executable.csproj", "{E00B7FE8-0F1D-4AE6-9E47-4BFD81537F14}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CA99F076-7459-4682-A41D-2850AEE28566} = {CA99F076-7459-4682-A41D-2850AEE28566}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityAudioFixer", "QMMUnityAudioFixer\UnityAudioFixer.csproj", "{CA99F076-7459-4682-A41D-2850AEE28566}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DA63F59D-4676-4726-AFEC-BD9D3682733F} = {DA63F59D-4676-4726-AFEC-BD9D3682733F}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -105,6 +113,18 @@ Global
 		{E00B7FE8-0F1D-4AE6-9E47-4BFD81537F14}.Release|x64.Build.0 = Release|x64
 		{E00B7FE8-0F1D-4AE6-9E47-4BFD81537F14}.Release|x86.ActiveCfg = Release|x86
 		{E00B7FE8-0F1D-4AE6-9E47-4BFD81537F14}.Release|x86.Build.0 = Release|x86
+		{CA99F076-7459-4682-A41D-2850AEE28566}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA99F076-7459-4682-A41D-2850AEE28566}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA99F076-7459-4682-A41D-2850AEE28566}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CA99F076-7459-4682-A41D-2850AEE28566}.Debug|x64.Build.0 = Debug|Any CPU
+		{CA99F076-7459-4682-A41D-2850AEE28566}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CA99F076-7459-4682-A41D-2850AEE28566}.Debug|x86.Build.0 = Debug|Any CPU
+		{CA99F076-7459-4682-A41D-2850AEE28566}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA99F076-7459-4682-A41D-2850AEE28566}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA99F076-7459-4682-A41D-2850AEE28566}.Release|x64.ActiveCfg = Release|Any CPU
+		{CA99F076-7459-4682-A41D-2850AEE28566}.Release|x64.Build.0 = Release|Any CPU
+		{CA99F076-7459-4682-A41D-2850AEE28566}.Release|x86.ActiveCfg = Release|Any CPU
+		{CA99F076-7459-4682-A41D-2850AEE28566}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
