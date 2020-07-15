@@ -4,8 +4,9 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
     using System.Runtime.InteropServices;
-    using QModManager.API;
+    using UnityAudioFixer;
 
     internal enum Action
     {
@@ -27,12 +28,13 @@
     {
         internal static Action action = Action.RunByUser;
         internal static OS os;
-        internal static QModGame game;
 
         internal static void Main(string[] args)
         {
             try
             {
+                InitAssemblyResolver();
+
                 var parsedArgs = new Dictionary<string, string>();
 
                 foreach (string arg in args)
@@ -72,7 +74,7 @@
                 }
                 string globalgamemanagers = Path.Combine(managedDirectory, "../globalgamemanagers");
 
-                GetInfo(out os, out _, out game);
+                os = GetOS();
 
                 if (os == OS.Both)
                 {
@@ -112,16 +114,16 @@
 
                 if (action == Action.Install)
                 {
-                    Console.WriteLine("Trying to enable Unity sound...");
-                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, game);
-                    Console.WriteLine("Unity sound enabled successfully");
+                    Console.WriteLine("Attempting to enable Unity audio...");
+                    UnityAudioFixer.EnableUnityAudio();
+                    Console.WriteLine("Unity audio enabled.");
                     Environment.Exit(0);
                 }
                 else if (action == Action.Uninstall)
                 {
-                    Console.WriteLine("Trying to disable Unity sound...");
-                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, game);
-                    Console.WriteLine("Unity sound disabled successfully");
+                    Console.WriteLine("Attempting to disable Unity audio...");
+                    UnityAudioFixer.DisableUnityAudio();
+                    Console.WriteLine("Unity audio disabled.");
                     Environment.Exit(0);
                 }
                 else
@@ -132,18 +134,18 @@
 
                     if (key == ConsoleKey.Y)
                     {
-                        Console.WriteLine("Trying to enable Unity sound...");
-                        AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, game);
-                        Console.WriteLine("Unity sound enabled successfully");
+                        Console.WriteLine("Attempting to enable Unity audio...");
+                        UnityAudioFixer.EnableUnityAudio();
+                        Console.WriteLine("Unity audio enabled.");
                         Console.WriteLine("Press any key to exit...");
                         Console.ReadKey();
                         Environment.Exit(0);
                     }
                     else if (key == ConsoleKey.N)
                     {
-                        Console.WriteLine("Trying to disable Unity sound...");
-                        AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, game);
-                        Console.WriteLine("Unity sound disabled successfully");
+                        Console.WriteLine("Attempting to disable Unity audio...");
+                        UnityAudioFixer.DisableUnityAudio();
+                        Console.WriteLine("Unity audio disabled.");
                         Console.WriteLine("Press any key to exit...");
                         Console.ReadKey();
                         Environment.Exit(0);
@@ -160,7 +162,7 @@
             }
         }
 
-        private static void GetInfo(out OS os, out string directory, out QModGame game)
+        private static OS GetOS()
         {
             string windowsDirectory = Path.Combine(Environment.CurrentDirectory, "../../..");
             string macDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../../..");
@@ -214,24 +216,44 @@
                 }
             }
 
-            os = OS.None;
-            directory = null;
+            var os = OS.None;
             if (onWindows)
             {
                 os |= OS.Windows;
-                directory = windowsDirectory;
             }
             if (onMac)
             {
                 os |= OS.Mac;
-                directory = windowsDirectory;
             }
+            return os;
+        }
 
-            game = QModGame.None;
-            if (subnautica)
-                game |= QModGame.Subnautica;
-            if (belowzero)
-                game |= QModGame.BelowZero;
+        private static void InitAssemblyResolver()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += ResolveAssemblies;
+        }
+
+        internal static string GameRootDirectory => Path.Combine(Environment.CurrentDirectory, "../../..");
+        internal static string BepInExRootDirectory => Path.Combine(GameRootDirectory, "BepInEx");
+        internal static string BepInExAssemblyDirectory => Path.Combine(BepInExRootDirectory, "core");
+        internal static string QModManagerPluginDirectory => Path.Combine(BepInExRootDirectory, "plugins", "QModManager");
+        internal static string QModManagerPatcherDirectory => Path.Combine(BepInExRootDirectory, "patchers", "QModManager");
+
+        private static Assembly ResolveAssemblies(object sender, ResolveEventArgs e)
+        {
+            var name = new AssemblyName(e.Name);
+
+            if (Utility.TryResolveDllAssembly(name, BepInExRootDirectory, out var assembly) || // First try BepInEx assemblies
+                Utility.TryResolveDllAssembly(name, QModManagerPluginDirectory, out assembly) || // Then QModManager plugins
+                Utility.TryResolveDllAssembly(name, QModManagerPatcherDirectory, out assembly)) // Then QModManager patchers
+            {
+
+                return assembly;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         #region Disable exit
