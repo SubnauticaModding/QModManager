@@ -26,7 +26,7 @@ namespace QMMLoader.QMMHarmonyShimmer
         internal static string QModInstallerPath => Path.Combine(QMMLoaderPluginPath, "QModInstaller.dll");
         internal static string QModsPath => Path.Combine(Paths.GameRootPath, "QMods");
 
-        private static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("QMMHarmonyShim");
+        private static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("QMMLoader");
 
         /// <summary>
         /// Called from BepInEx while patching, our entry point for patching.
@@ -39,7 +39,7 @@ namespace QMMLoader.QMMHarmonyShimmer
             InitAssemblyResolver();
             ApplyShims();
         }
-        
+
         private static void ApplyHarmonyPatches()
         {
             var harmony = new HarmonyLib.Harmony("QMMLoader");
@@ -88,7 +88,7 @@ namespace QMMLoader.QMMHarmonyShimmer
                 return;
             }
 
-            Logger.LogDebug("Shimming QMods...");
+            Logger.LogInfo("Shimming QMods...");
             var harmonyTypes = new HashSet<string>();
             using (var shimmerAssemblyDefinition = AssemblyDefinition.ReadAssembly(Assembly.GetExecutingAssembly().Location))
             {
@@ -243,10 +243,10 @@ namespace QMMLoader.QMMHarmonyShimmer
         /// <summary>
         /// For BepInEx to identify your patcher as a patcher, it must match the patcher contract as outlined in the BepInEx docs:
         /// https://bepinex.github.io/bepinex_docs/v5.0/articles/dev_guide/preloader_patchers.html#patcher-contract
-        /// It must contain a list of managed assemblies to patch as a public static <see cref="IEnumerable{string}"/>property named TargetDLLs
+        /// It must contain a list of managed assemblies to patch as a public static <see cref="IEnumerable{T}"/> property named TargetDLLs
         /// </summary>
         [Obsolete("Should not be used!", true)]
-        public static IEnumerable<string> TargetDLLs { get; } = new[] { "Assembly-CSharp.dll" };
+        public static IEnumerable<string> TargetDLLs { get; } = new string[0];
 
         /// <summary>
         /// For BepInEx to identify your patcher as a patcher, it must match the patcher contract as outlined in the BepInEx docs:
