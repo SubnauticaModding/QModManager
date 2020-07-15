@@ -47,19 +47,30 @@
                         action = Action.Uninstall;
                 }
 
-                string managedDirectory = Environment.CurrentDirectory;
-                string globalgamemanagers = Path.Combine(managedDirectory, "../globalgamemanagers");
-
-                if (!File.Exists(Path.Combine(managedDirectory, "Assembly-CSharp.dll")))
+                string gameRootDirectory = Path.Combine(Environment.CurrentDirectory, "../../..");
+                string snManagedDirectory = Path.Combine(gameRootDirectory, "Subnautica_Data", "Managed");
+                string bzManagedDirectory = Path.Combine(gameRootDirectory, "SubnauticaZero_Data", "Managed");
+                string managedDirectory;
+                if (Directory.Exists(snManagedDirectory))
                 {
-                    Console.WriteLine("Could not find the assembly file.");
+                    managedDirectory = snManagedDirectory;
+                }
+                else if (Directory.Exists(bzManagedDirectory))
+                {
+                    managedDirectory = bzManagedDirectory;
+                }
+                else
+                {
+                    Console.WriteLine("Could not find Managed directory.");
                     Console.WriteLine("Please make sure you have installed QModManager in the right folder.");
                     Console.WriteLine("If the problem persists, open a bug report on NexusMods or an issue on GitHub");
                     Console.WriteLine();
                     Console.WriteLine("Press any key to exit...");
                     Console.ReadKey();
                     Environment.Exit(1);
+                    return;
                 }
+                string globalgamemanagers = Path.Combine(managedDirectory, "../globalgamemanagers");
 
                 GetInfo(out os, out _, out game);
 
@@ -86,6 +97,17 @@
                     Console.ReadKey();
                     Environment.Exit(1);
                     return;
+                }
+
+                if (!File.Exists(Path.Combine(managedDirectory, "Assembly-CSharp.dll")))
+                {
+                    Console.WriteLine("Could not find the assembly file.");
+                    Console.WriteLine("Please make sure you have installed QModManager in the right folder.");
+                    Console.WriteLine("If the problem persists, open a bug report on NexusMods or an issue on GitHub");
+                    Console.WriteLine();
+                    Console.WriteLine("Press any key to exit...");
+                    Console.ReadKey();
+                    Environment.Exit(1);
                 }
 
                 if (action == Action.Install)
@@ -140,8 +162,8 @@
 
         private static void GetInfo(out OS os, out string directory, out QModGame game)
         {
-            string windowsDirectory = Path.Combine(Environment.CurrentDirectory, "../..");
-            string macDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../..");
+            string windowsDirectory = Path.Combine(Environment.CurrentDirectory, "../../..");
+            string macDirectory = Path.Combine(Environment.CurrentDirectory, "../../../../../..");
 
             bool subnautica = false, belowzero = false;
 
