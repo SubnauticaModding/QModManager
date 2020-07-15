@@ -1,6 +1,6 @@
 <p>
   <strong>NOTE:</strong>
-  This license does not apply to the contents of the <code>QMMHarmonyShimmer</code> folder. The contents of the <code>QMMHarmonyShimmer</code> folder are licensed under <code>GPL-3.0</code> (<a href="./QMMHarmonyShimmer/LICENSE.md">view LICENSE.md</a>).
+  This license does not apply to the contents of the <code>QMMHarmonyShimmer</code> folder. The contents of the <code>QMMHarmonyShimmer</code> folder are licensed under <code>GPL-3.0</code> (<a href="./QMMHarmonyShimmer/LICENSE">view LICENSE</a>).
 </p>
 
 <h3>Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International Public License</h3>
