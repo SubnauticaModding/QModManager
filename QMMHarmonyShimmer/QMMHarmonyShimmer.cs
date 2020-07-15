@@ -19,14 +19,11 @@ namespace QMMLoader.QMMHarmonyShimmer
     [Obsolete("Should not be used!", true)]
     public static class QMMHarmonyShimmer
     {
-        internal const string SubnauticaProcessName = "Subnautica";
-        internal const string SubnauticaZeroProcessName = "SubnauticaZero";
-
-        internal static string QMMLoaderPluginPath => Path.Combine(Path.Combine(Paths.BepInExRootPath, "plugins"), "QMMLoader");
+        internal static string QMMLoaderPluginPath => Path.Combine(Path.Combine(Paths.BepInExRootPath, "plugins"), "QModManager");
         internal static string QModInstallerPath => Path.Combine(QMMLoaderPluginPath, "QModInstaller.dll");
         internal static string QModsPath => Path.Combine(Paths.GameRootPath, "QMods");
 
-        private static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("QMMLoader");
+        private static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("QMMHarmonyShimmer");
 
         /// <summary>
         /// Called from BepInEx while patching, our entry point for patching.
