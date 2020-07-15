@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Executable", "Executable\Ex
 		{CA99F076-7459-4682-A41D-2850AEE28566} = {CA99F076-7459-4682-A41D-2850AEE28566}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityAudioFixer", "QMMUnityAudioFixer\UnityAudioFixer.csproj", "{CA99F076-7459-4682-A41D-2850AEE28566}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityAudioFixer", "UnityAudioFixer\UnityAudioFixer.csproj", "{CA99F076-7459-4682-A41D-2850AEE28566}"
 	ProjectSection(ProjectDependencies) = postProject
 		{DA63F59D-4676-4726-AFEC-BD9D3682733F} = {DA63F59D-4676-4726-AFEC-BD9D3682733F}
 	EndProjectSection
