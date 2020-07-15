@@ -15,7 +15,7 @@ namespace UnityAudioFixer
     /// </summary>
     public static class UnityAudioFixer
     {
-        internal static string UnityAudioFixerPath => Path.Combine(Path.Combine(Paths.BepInExRootPath, "patchers"), "UnityAudioFixer");
+        internal static string UnityAudioFixerPath => Path.Combine(Path.Combine(Paths.BepInExRootPath, "patchers"), "QModManager");
 
         private static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("UnityAudioFixer");
 
