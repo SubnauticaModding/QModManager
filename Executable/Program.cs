@@ -61,9 +61,7 @@
                     Environment.Exit(1);
                 }
 
-                GetInfo(out os, out string directory, out game);
-
-                Injector injector;
+                GetInfo(out os, out _, out game);
 
                 if (os == OS.Both)
                 {
@@ -77,11 +75,7 @@
                     Environment.Exit(1);
                     return;
                 }
-                else if (os == OS.Windows || os == OS.Mac)
-                {
-                    injector = new Injector(directory, managedDirectory);
-                }
-                else
+                else if (os != OS.Windows && os != OS.Mac)
                 {
                     Console.WriteLine("Could not find any game to patch!");
                     Console.WriteLine("An assembly file was found, but no executable was detected.");
@@ -94,83 +88,43 @@
                     return;
                 }
 
-                bool isInjected = injector.IsInjected();
-
                 if (action == Action.Install)
                 {
-                    if (!isInjected)
-                    {
-                        Console.WriteLine("Installing QModManager...");
-                        injector.Inject();
-                    }
-                    else
-                    {
-                        Console.WriteLine("QModManager is already installed!");
-                        Console.WriteLine("Skipping installation");
-                        Console.WriteLine();
-                        Console.WriteLine("Trying to enable Unity sound...");
-
-                        AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, game);
-
-                        Console.WriteLine("Unity sound enabled successfully");
-                        Environment.Exit(0);
-                    }
+                    Console.WriteLine("Trying to enable Unity sound...");
+                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, game);
+                    Console.WriteLine("Unity sound enabled successfully");
+                    Environment.Exit(0);
                 }
                 else if (action == Action.Uninstall)
                 {
-                    if (isInjected)
-                    {
-                        Console.WriteLine("Uninstalling QModManager...");
-                        injector.Remove();
-                    }
-                    else
-                    {
-                        Console.WriteLine("QModManager is already uninstalled!");
-                        Console.WriteLine("Skipping uninstallation");
-                        Console.WriteLine();
-                        Console.WriteLine("Trying to disable Unity sound...");
-
-                        AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, game);
-
-                        Console.WriteLine("Unity sound disabled successfully");
-                        Environment.Exit(0);
-                    }
+                    Console.WriteLine("Trying to disable Unity sound...");
+                    AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, game);
+                    Console.WriteLine("Unity sound disabled successfully");
+                    Environment.Exit(0);
                 }
                 else
                 {
-                    if (!isInjected)
+                    Console.Write("Enable Unity sound? [Y/N] > ");
+                    ConsoleKey key = Console.ReadKey().Key;
+                    Console.WriteLine();
+
+                    if (key == ConsoleKey.Y)
                     {
-                        Console.Write("No patch detected, install? [Y/N] > ");
-                        ConsoleKey key = Console.ReadKey().Key;
-                        Console.WriteLine();
-                        if (key == ConsoleKey.Y)
-                        {
-                            Console.WriteLine("Installing QModManager...");
-                            injector.Inject();
-                        }
-                        else if (key == ConsoleKey.N)
-                        {
-                            Console.WriteLine("Press any key to exit...");
-                            Console.ReadKey();
-                            Environment.Exit(0);
-                        }
+                        Console.WriteLine("Trying to enable Unity sound...");
+                        AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, false, game);
+                        Console.WriteLine("Unity sound enabled successfully");
+                        Console.WriteLine("Press any key to exit...");
+                        Console.ReadKey();
+                        Environment.Exit(0);
                     }
-                    else
+                    else if (key == ConsoleKey.N)
                     {
-                        Console.Write("Patch installed, remove? [Y/N] > ");
-                        ConsoleKey key = Console.ReadKey().Key;
-                        Console.WriteLine();
-                        if (key == ConsoleKey.Y)
-                        {
-                            Console.Write("Uninstalling QModManager...");
-                            injector.Remove();
-                        }
-                        else if (key == ConsoleKey.N)
-                        {
-                            Console.WriteLine("Press any key to exit...");
-                            Console.ReadKey();
-                            Environment.Exit(0);
-                        }
+                        Console.WriteLine("Trying to disable Unity sound...");
+                        AudioFixer.ChangeDisableUnityAudio(globalgamemanagers, true, game);
+                        Console.WriteLine("Unity sound disabled successfully");
+                        Console.WriteLine("Press any key to exit...");
+                        Console.ReadKey();
+                        Environment.Exit(0);
                     }
                 }
             }
@@ -192,7 +146,7 @@
             bool subnautica = false, belowzero = false;
 
             // Check if the device is running Windows OS
-            bool onWindows = false, onWindowsSN = false, onWindowsBZ = false;
+            bool onWindows = false, onWindowsSN, onWindowsBZ;
             if (Directory.Exists(windowsDirectory))
             {
                 try
@@ -215,7 +169,7 @@
             }
 
             // Check if the device is running Mac OS
-            bool onMac = false, onMacSN = false, onMacBZ = false;
+            bool onMac = false, onMacSN, onMacBZ;
             if (Directory.Exists(macDirectory))
             {
                 try
