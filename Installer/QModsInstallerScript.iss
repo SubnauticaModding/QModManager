@@ -36,7 +36,7 @@ OutputDir=..\Build
 PrivilegesRequired=admin
 SetupIconFile=..\Assets\Icon.ico
 SolidCompression=yes
-UninstallDisplayIcon={app}\{code:GetUninstallIcon}
+UninstallDisplayIcon={app}\BepInEx\patchers\QModManager\QModManager.exe
 UninstallDisplayName={code:GetName}
 UsePreviousAppDir=no
 UsePreviousLanguage=no
@@ -62,17 +62,16 @@ Source: "..\Build\QModInstaller.xml"; DestDir: "{app}\BepInEx\plugins\QModManage
 Source: "..\Build\QMMLoader.dll"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QMMLoader.xml"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QMMLoader.QMMHarmonyShimmer.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
-Source: "..\Build\QModManager.exe"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: IgnoreVersion;
-Source: "..\Dependencies\AssetsTools.NET.dll"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: IgnoreVersion;
-Source: "..\Dependencies\cldb.dat"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: IgnoreVersion;
+Source: "..\Build\UnityAudioFixer.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+Source: "..\Build\UnityAudioFixer.xml"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+Source: "..\Dependencies\AssetsTools.NET.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+Source: "..\Dependencies\cldb.dat"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+Source: "..\Build\QModManager.exe"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 ; BepInEx
 Source: "..\Dependencies\BepInEx\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs replacesameversion sharedfile uninsnosharedfileprompt;
-
-[Run]
-Filename: "{app}\BepInEx\plugins\QModManager\QModManager.exe"; Parameters: "-i";
-
+ 
 [UninstallRun]
-Filename: "{app}\BepInEx\plugins\QModManager\QModManager.exe"; Parameters: "-u";
+Filename: "{app}\BepInEx\patchers\QModManager\QModManager.exe"; Parameters: "-u";
 
 [Messages]
 ; BeveledLabel={#Name} {#Version}
@@ -147,22 +146,6 @@ begin
   else
   begin
     Result := ExpandConstant('{app}')
-  end
-end;
-
-function GetUninstallIcon(def: string): String;
-begin
-  if (IsSubnauticaApp()) then
-  begin
-    Result := 'Subnautica_Data\Managed\QModManager.exe'
-  end
-  else if (IsBelowZeroApp()) then
-  begin
-    Result := 'SubnauticaZero_Data\Managed\QModManager.exe'
-  end
-  else
-  begin
-    Result := ''
   end
 end;
 
