@@ -1,12 +1,13 @@
 ﻿using AssetsTools.NET;
 using AssetsTools.NET.Extra;
-using BepInEx;
 using BepInEx.Logging;
 using Mono.Cecil;
 using QModManager.API;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace UnityAudioFixer
 {
@@ -15,7 +16,25 @@ namespace UnityAudioFixer
     /// </summary>
     public static class UnityAudioFixer
     {
-        internal static string UnityAudioFixerPath => Path.Combine(Path.Combine(Paths.BepInExRootPath, "patchers"), "QModManager");
+        internal static string UnityAudioFixerPath => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        internal static string GameRootPath => Path.Combine(UnityAudioFixerPath, "../../..");
+        internal static string DataPath => Directory.GetDirectories(GameRootPath, "*_Data", SearchOption.TopDirectoryOnly).SingleOrDefault();
+        internal static QModGame Game
+        {
+            get
+            {
+                switch (new DirectoryInfo(DataPath).Name)
+                {
+                    case "Subnautica_Data":
+                        return QModGame.Subnautica;
+                    case "SubnauticaZero_Data":
+                        return QModGame.BelowZero;
+                    default:
+                        return QModGame.None;
+                }
+            }
+        }
+        internal static string ManagedPath => Path.Combine(DataPath, "Managed");
 
         private static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("UnityAudioFixer");
 
@@ -34,22 +53,10 @@ namespace UnityAudioFixer
         /// </summary>
         public static void EnableUnityAudio()
         {
-            var game = QModGame.None;
-
-            switch (Paths.ProcessName)
-            {
-                case "Subnautica":
-                    game = QModGame.Subnautica;
-                    break;
-                case "SubnauticaZero":
-                    game = QModGame.BelowZero;
-                    break;
-            }
-
             try
             {
                 Logger.LogInfo("Attempting to enable Unity audio...");
-                ChangeDisableUnityAudio(Path.Combine(Paths.ManagedPath, "../globalgamemanagers"), false, game);
+                ChangeDisableUnityAudio(Path.Combine(ManagedPath, "../globalgamemanagers"), false, Game);
                 Logger.LogInfo("Unity audio enabled.");
             }
             catch (Exception ex)
@@ -63,22 +70,10 @@ namespace UnityAudioFixer
         /// </summary>
         public static void DisableUnityAudio()
         {
-            var game = QModGame.None;
-
-            switch (Paths.ProcessName)
-            {
-                case "Subnautica":
-                    game = QModGame.Subnautica;
-                    break;
-                case "SubnauticaZero":
-                    game = QModGame.BelowZero;
-                    break;
-            }
-
             try
             {
                 Logger.LogInfo("Attempting to disable Unity audio...");
-                ChangeDisableUnityAudio(Path.Combine(Paths.ManagedPath, "../globalgamemanagers"), true, game);
+                ChangeDisableUnityAudio(Path.Combine(ManagedPath, "../globalgamemanagers"), true, Game);
                 Logger.LogInfo("Unity audio disabled.");
             }
             catch (Exception ex)
