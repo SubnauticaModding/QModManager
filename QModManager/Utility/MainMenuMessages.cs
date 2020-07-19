@@ -128,7 +128,7 @@
 
                 SelectedTextType = TxtProType ?? TxtType;
 
-                FieldInfo entryField = SelectedTextType.GetField("entry");
+                FieldInfo entryField = typeof(ErrorMessage._Message).GetField("entry");
                 if (TxtProType != null)
                 {
                     // Using TextMeshPro
@@ -137,7 +137,7 @@
                     GetRectTransform = (obj) =>
                     {
                         var entry = entryField.GetValue(obj);
-                        return (RectTransform)recTransformField.GetValue(obj);
+                        return (RectTransform)recTransformField.GetValue(entry);
                     };
                 }
                 else
@@ -148,7 +148,7 @@
                     GetRectTransform = (obj) =>
                     {
                         var entry = entryField.GetValue(obj);
-                        return (RectTransform)recTransformProperty.GetValue(obj, null);
+                        return (RectTransform)recTransformProperty.GetValue(entry, null);
                     };
                 }
             }
