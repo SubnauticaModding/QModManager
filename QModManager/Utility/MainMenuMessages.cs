@@ -35,7 +35,7 @@
         /// <param name="autoformat">Whether or not to apply formatting tags to the message, or show it as it is.</param>
         internal static void Add(string msg, string callerID = null, int size = defaultSize, string color = defaultColor, bool autoformat = true)
         {
-            if (!inited || Patches.hInstance == null) // just in case
+            if (Patches.hInstance == null) // just in case
             {
                 Logger.Error($"Tried to add main menu message before Harmony was initialized. (Message: \"{msg}\")");
                 return;
