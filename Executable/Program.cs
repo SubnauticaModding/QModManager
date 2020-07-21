@@ -6,7 +6,6 @@
     using System.Linq;
     using System.Reflection;
     using System.Runtime.InteropServices;
-    using UnityAudioFixer;
 
     internal enum Action
     {

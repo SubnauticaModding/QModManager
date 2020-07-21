@@ -3,7 +3,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using System.Reflection;
 
-namespace QMMLoader
+namespace QModManager
 {
     /// <summary>
     /// QMMLoader - simply fires up the QModManager entry point.

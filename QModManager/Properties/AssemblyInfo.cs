@@ -18,4 +18,4 @@ using System.Runtime.InteropServices;
 
 [assembly: InternalsVisibleTo("QMMTests")]
 [assembly: InternalsVisibleTo("QModManager")]
-[assembly: InternalsVisibleTo("QMMLoader")]
+[assembly: InternalsVisibleTo("QModManager.QMMLoader")]

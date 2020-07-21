@@ -7,8 +7,8 @@
     <ProjectGuid>{F308F15A-2767-4B4E-BAA4-D9B95D99F8E5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>QMMLoader.QMMHarmonyShimmer</RootNamespace>
-    <AssemblyName>QMMLoader.QMMHarmonyShimmer</AssemblyName>
+    <RootNamespace>QModManager.QMMHarmonyShimmer</RootNamespace>
+    <AssemblyName>QModManager.QMMHarmonyShimmer</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

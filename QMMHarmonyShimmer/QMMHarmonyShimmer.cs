@@ -1,14 +1,14 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using Mono.Cecil;
-using QMMLoader.QMMHarmonyShimmer.Patches;
+using QModManager.QMMHarmonyShimmer.Patches;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace QMMLoader.QMMHarmonyShimmer
+namespace QModManager.QMMHarmonyShimmer
 {
     /// <summary>
     /// Based on the work of IPALoaderX: https://github.com/BepInEx/IPALoaderX/tree/v1.2.2/BepInEx.IPAHarmonyShimmer

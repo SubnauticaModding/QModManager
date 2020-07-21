@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace UnityAudioFixer
+namespace QModManager
 {
     /// <summary>
     /// A patcher which runs ahead of UnityPlayer to enable Unity Audio.

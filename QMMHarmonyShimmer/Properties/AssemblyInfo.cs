@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("QMMHarmonyShimmer")]
+[assembly: AssemblyTitle("QModManager.QMMHarmonyShimmer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Subnautica Modding")]
-[assembly: AssemblyProduct("QMMHarmonyShimmer")]
+[assembly: AssemblyProduct("QModManager.QMMHarmonyShimmer")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

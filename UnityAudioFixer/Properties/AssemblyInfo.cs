@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("UnityAudioFixer")]
+[assembly: AssemblyTitle("QModManager.UnityAudioFixer")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Subnautica Modding")]
-[assembly: AssemblyProduct("UnityAudioFixer")]
+[assembly: AssemblyProduct("QModManager.UnityAudioFixer")]
 [assembly: AssemblyCopyright("Copyright ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

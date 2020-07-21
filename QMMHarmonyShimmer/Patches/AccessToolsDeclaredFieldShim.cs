@@ -2,7 +2,7 @@
 using System.Reflection;
 using HarmonyLib;
 
-namespace QMMLoader.QMMHarmonyShimmer.Patches
+namespace QModManager.QMMHarmonyShimmer.Patches
 {
     [HarmonyPatch(typeof(AccessTools), nameof(AccessTools.DeclaredField), typeof(Type), typeof(string))]
     internal static class AccessToolsDeclaredFieldShim

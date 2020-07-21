@@ -59,11 +59,11 @@ Source: "..\Build\InstallerExtensions.dll"; Flags: DontCopy
 ; Files required by QModManager itself
 Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModInstaller.xml"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
-Source: "..\Build\QMMLoader.dll"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
-Source: "..\Build\QMMLoader.xml"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
-Source: "..\Build\QMMLoader.QMMHarmonyShimmer.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
-Source: "..\Build\UnityAudioFixer.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
-Source: "..\Build\UnityAudioFixer.xml"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+Source: "..\Build\QModManager.QMMLoader.dll"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
+Source: "..\Build\QModManager.QMMLoader.xml"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
+Source: "..\Build\QModManager.QMMHarmonyShimmer.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+Source: "..\Build\QModManager.UnityAudioFixer.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+Source: "..\Build\QModManager.UnityAudioFixer.xml"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\Dependencies\AssetsTools.NET.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\Dependencies\cldb.dat"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModManager.exe"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;

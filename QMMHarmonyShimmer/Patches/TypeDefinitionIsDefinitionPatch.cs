@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using Mono.Cecil;
 
-namespace QMMLoader.QMMHarmonyShimmer.Patches
+namespace QModManager.QMMHarmonyShimmer.Patches
 {
     [HarmonyPatch(typeof(TypeDefinition), nameof(TypeDefinition.IsDefinition), MethodType.Getter)]
     internal static class TypeDefinitionIsDefinitionPatch

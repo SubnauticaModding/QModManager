@@ -13,12 +13,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Installer\QModsInstallerScript.iss = Installer\QModsInstallerScript.iss
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMMLoader", "QMMLoader\QMMLoader.csproj", "{21D282E0-6B3E-4776-AC86-3089F0655893}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QModManager.QMMLoader", "QMMLoader\QModManager.QMMLoader.csproj", "{21D282E0-6B3E-4776-AC86-3089F0655893}"
 	ProjectSection(ProjectDependencies) = postProject
 		{DA63F59D-4676-4726-AFEC-BD9D3682733F} = {DA63F59D-4676-4726-AFEC-BD9D3682733F}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QMMLoader.QMMHarmonyShimmer", "QMMHarmonyShimmer\QMMLoader.QMMHarmonyShimmer.csproj", "{F308F15A-2767-4B4E-BAA4-D9B95D99F8E5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QModManager.QMMHarmonyShimmer", "QMMHarmonyShimmer\QModManager.QMMHarmonyShimmer.csproj", "{F308F15A-2767-4B4E-BAA4-D9B95D99F8E5}"
 	ProjectSection(ProjectDependencies) = postProject
 		{DA63F59D-4676-4726-AFEC-BD9D3682733F} = {DA63F59D-4676-4726-AFEC-BD9D3682733F}
 	EndProjectSection
@@ -30,7 +30,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Executable", "Executable\Ex
 		{CA99F076-7459-4682-A41D-2850AEE28566} = {CA99F076-7459-4682-A41D-2850AEE28566}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityAudioFixer", "UnityAudioFixer\UnityAudioFixer.csproj", "{CA99F076-7459-4682-A41D-2850AEE28566}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QModManager.UnityAudioFixer", "UnityAudioFixer\QModManager.UnityAudioFixer.csproj", "{CA99F076-7459-4682-A41D-2850AEE28566}"
 	ProjectSection(ProjectDependencies) = postProject
 		{DA63F59D-4676-4726-AFEC-BD9D3682733F} = {DA63F59D-4676-4726-AFEC-BD9D3682733F}
 	EndProjectSection

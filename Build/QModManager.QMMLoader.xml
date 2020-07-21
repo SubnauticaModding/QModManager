@@ -1,15 +1,15 @@
 <?xml version="1.0"?>
 <doc>
     <assembly>
-        <name>QMMLoader</name>
+        <name>QModManager.QMMLoader</name>
     </assembly>
     <members>
-        <member name="T:QMMLoader.QMMLoader">
+        <member name="T:QModManager.QMMLoader">
             <summary>
             QMMLoader - simply fires up the QModManager entry point.
             </summary>
         </member>
-        <member name="F:QMMLoader.QMMLoader.Main">
+        <member name="F:QModManager.QMMLoader.Main">
             <summary>
             Static singleton instance of QMMLoader
             </summary>
