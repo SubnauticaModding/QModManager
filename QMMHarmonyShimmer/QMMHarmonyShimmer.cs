@@ -22,6 +22,7 @@ namespace QModManager.QMMHarmonyShimmer
         internal static string QMMLoaderPluginPath => Path.Combine(Path.Combine(Paths.BepInExRootPath, "plugins"), "QModManager");
         internal static string QModInstallerPath => Path.Combine(QMMLoaderPluginPath, "QModInstaller.dll");
         internal static string QModsPath => Path.Combine(Paths.GameRootPath, "QMods");
+        internal static string QModBackupsPath => Path.Combine(QModsPath, ".backups");
 
         private static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("QMMHarmonyShimmer");
 
@@ -110,7 +111,6 @@ namespace QModManager.QMMHarmonyShimmer
                 }
             }
 
-            var backupDirectory = Path.Combine(Paths.GameRootPath, "QMods_backup");
             foreach (var subfolderPath in Directory.GetDirectories(QModsPath))
             {
                 foreach (string filePath in Directory.GetFiles(subfolderPath, "*.dll", SearchOption.TopDirectoryOnly))
@@ -200,10 +200,15 @@ namespace QModManager.QMMHarmonyShimmer
                             }
 
                             if (shimmed)
-                            {   // backup the original to QMods_backup and write the patched back to the QMods folder, where QModManager loads from.
+                            {   // backup the original to QMods\.backups and write the patched back to the QMods folder, where QModManager loads from.
                                 var pathPart = filePath.Substring(QModsPath.Length + 1);
-                                var backupPath = Path.Combine(backupDirectory, pathPart);
+                                var backupPath = Path.Combine(QModBackupsPath, pathPart);
                                 Logger.LogInfo($"Backing up {Path.GetFileNameWithoutExtension(filePath)} to {backupPath}. Original path: {filePath}");
+                                var backupDirInfo = Directory.CreateDirectory(QModBackupsPath);
+                                if ((backupDirInfo.Attributes & FileAttributes.Hidden) != FileAttributes.Hidden)
+                                {
+                                    backupDirInfo.Attributes |= FileAttributes.Hidden;
+                                }
                                 Directory.CreateDirectory(Path.GetDirectoryName(backupPath));
                                 File.Copy(filePath, backupPath, true);
 
