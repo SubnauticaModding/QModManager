@@ -1,4 +1,4 @@
-|  | Link | Redistributed? | License |
+| Dependency | Link | Redistributed? | License |
 |:-:|:-:|:-:|:-:|
 | `Assembly-CSharp.dll`<br>`Assembly-CSharp-firstpass.dll` | [@unknownworlds](https://github.com/unknownworlds) | &#9744;<br>Game file | Intellectual property of Unknown Worlds<br>_**Not included on GitHub**_ |
 | [`AssetsTools.NET.dll`](./AssetsTools.NET.dll) | [nesrak1/AssetsTools.NET](https://github.com/nesrak1/AssetsTools.NET) | &#9745; | [MIT](https://github.com/nesrak1/AssetsTools.NET/blob/master/LICENSE) |
@@ -9,7 +9,7 @@
 | [`BepInEx/BepInEx/core/Mono.Cecil.dll`](./BepInEx/BepInEx/core/Mono.Cecil.dll)<br>[`BepInEx/BepInEx/core/Mono.Cecil.Mdb.dll`](./BepInEx/BepInEx/core/Mono.Cecil.Mdb.dll)<br>[`BepInEx/BepInEx/core/Mono.Cecil.Pdb.dll`](./BepInEx/BepInEx/core/Mono.Cecil.Pdb.dll)<br>[`BepInEx/BepInEx/core/Mono.Cecil.Rocks.dll`](./BepInEx/BepInEx/core/Mono.Cecil.Rocks.dll) | [jbevain/cecil](https://github.com/jbevain/cecil) | &#9745; | [MIT](https://github.com/jbevain/cecil/blob/master/LICENSE.txt) |
 | [`BepInEx/BepInEx/core/MonoMod.RuntimeDetour.dll`](./BepInEx/BepInEx/core/MonoMod.RuntimeDetour.dll)<br>[`BepInEx/BepInEx/core/MonoMod.Utils.dll`](./BepInEx/BepInEx/core/MonoMod.Utils.dll) | [MonoMod/MonoMod](https://github.com/MonoMod/MonoMod) | &#9745; | [MIT](https://github.com/MonoMod/MonoMod/blob/master/LICENSE) |
 | [`Carbon.vsf`](./Carbon.vsf)<br>[`VclStylesinno.dll`](./VclStylesinno.dll) | [RRUZ/vcl-styles-plugins](https://github.com/RRUZ/vcl-styles-plugins) | &#9744;<br>Bundled with the installer | No license |
-| [`cldb.dat`](./cldb.dat) | [DerPopo/UABE](https://github.com/DerPopo/UABE) | &#9745; | Free use - this file was generated using a software |
+| [`cldb.dat`](./cldb.dat) | [DerPopo/UABE](https://github.com/DerPopo/UABE) | &#9745; | Free use |
 | [`Newtonsoft.Json.dll`](./Newtonsoft.Json.dll) | [JamesNK/Newtonsoft.Json](https://github.com/JamesNK/Newtonsoft.Json) | &#9744;<br>Game file | [MIT](https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md) |
 | [`RGiesecke.DllExport.Metadata.dll`](./RGiesecke.DllExport.Metadata.dll) | [nuget.org/UnmanagedExports](https://www.nuget.org/packages/UnmanagedExports) | &#9744; | [MIT](https://opensource.org/licenses/mit-license.php) |
 | [`UnityEngine.dll`](./UnityEngine.dll)<br>[`UnityEngine.AssetBundleModule.dll`](./UnityEngine.AssetBundleModule.dll)<br>[`UnityEngine.CoreModule.dll`](./UnityEngine.CoreModule.dll)<br>[`UnityEngine.IMGUIModule.dll`](./UnityEngine.IMGUIModule.dll)<br>[`UnityEngine.InputLegacyModule.dll`](./UnityEngine.InputLegacyModule.dll)<br>[`UnityEngine.InputModule.dll`](./UnityEngine.InputModule.dll)<br>[`UnityEngine.UI.dll`](./UnityEngine.UI.dll) | [Unity-Technologies/UnityCsReference](https://github.com/Unity-Technologies/UnityCsReference) | &#9744;<br>Game file | [Unity Reference-Only License](https://unity3d.com/legal/licenses/Unity_Reference_Only_License) |
