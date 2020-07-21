@@ -7,6 +7,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
 
     internal class QModFactory : IQModFactory
     {
@@ -41,7 +42,7 @@
 
         internal void LoadModsFromDirectories(string[] subDirectories, SortedCollection<string, QMod> modSorter, List<QMod> earlyErrors)
         {
-            foreach (string subDir in subDirectories)
+            foreach (string subDir in subDirectories.Where(subDir => (new DirectoryInfo(subDir).Attributes & FileAttributes.Hidden) != FileAttributes.Hidden)) // exclude hidden directories
             {
                 string[] dllFiles = Directory.GetFiles(subDir, "*.dll", SearchOption.TopDirectoryOnly);
 
@@ -61,7 +62,7 @@
 
                 QMod mod = CreateFromJsonManifestFile(subDir);
 
-                if(mod == null)
+                if (mod == null)
                 {
                     Logger.Error($"Unable to set up mod in folder \"{folderName}\"");
                     earlyErrors.Add(new QModPlaceholder(folderName, ModStatus.MissingCoreInfo));
