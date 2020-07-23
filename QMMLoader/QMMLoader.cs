@@ -1,6 +1,8 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
+using QModManager.API.ModLoading;
+using System.Linq;
 using System.Reflection;
 
 namespace QModManager
@@ -13,8 +15,8 @@ namespace QModManager
     [BepInProcess(SubnauticaZeroProcessName)]
     public class QMMLoader : BaseUnityPlugin
     {
-        internal const string PluginGuid = "QMMLoader";
-        internal const string PluginName = "QMMLoader";
+        internal const string PluginGuid = "QModManager.QMMLoader";
+        internal const string PluginName = "QModManager.QMMLoader";
         internal const string PluginVersion = "1.0";
 
         internal const string SubnauticaProcessName = "Subnautica";
@@ -47,7 +49,7 @@ namespace QModManager
         {
             if (harmony == null && Main != null && Main == this)
             {
-                harmony = new Harmony("QMMLoader");
+                harmony = new Harmony("QModManager.QMMLoader");
                 harmony.Patch(entryPointTarget, postfix: new HarmonyMethod(entryPointPatch));
             }
         }
@@ -55,7 +57,20 @@ namespace QModManager
         private static void InitializeQModManager()
         {
             QModManager.Patching.Patcher.Patch(); // Run QModManager patch
+            InitializeQMods();
             harmony.Unpatch(entryPointTarget, entryPointPatch); // kill this Harmony patch just to be sure it never happens twice
+        }
+
+        private static void InitializeQMods()
+        {
+            var qMods = QModPluginGenerator.QModsToLoad.ToList();
+
+            var initializer = new Initializer(Patching.Patcher.CurrentlyRunningGame);
+            initializer.InitializeMods(qMods);
+
+            Utility.SummaryLogger.ReportIssues(qMods);
+
+            Utility.SummaryLogger.LogSummaries(qMods);
         }
     }
 }
