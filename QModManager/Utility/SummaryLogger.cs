@@ -54,7 +54,7 @@
                             foreach (RequiredQMod dependency in mod.RequiredMods)
                             {
                                 if (!QModServices.Main.ModPresent(dependency.Id))
-                                    Console.WriteLine($"   - {dependency.Id}");
+                                    Console.WriteLine($"   - {dependency.Id}{(dependency.RequiresMinimumVersion ? $" at version {dependency.MinimumVersion} or newer" : string.Empty)}");
                             }
                         }
                         else
@@ -73,7 +73,7 @@
                                 IQMod dependencyDetails = QModServices.Main.FindModById(dependency.Id);
 
                                 if (dependencyDetails == null || dependencyDetails.ParsedVersion < dependency.MinimumVersion)                                
-                                    Console.WriteLine($"   - {dependency.Id} at version {dependency.MinimumVersion} or later");                                
+                                    Console.WriteLine($"   - {dependency.Id} at version {dependency.MinimumVersion} or newer");                                
                             }
                         }
                         break;
