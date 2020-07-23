@@ -46,7 +46,7 @@
 
             if (ProhibitedModIDs.TryGetValue(mod.Id, out ModStatus reason))
             {
-                mod.Status = reason; 
+                mod.Status = reason;
                 return;
             }
 
@@ -116,40 +116,45 @@
 
         public void CheckRequiredMods(QMod mod)
         {
-            foreach (string item in mod.Dependencies)
-                mod.RequiredDependencies.Add(item);
+            var requiredMods = new Dictionary<string, RequiredQMod>(mod.VersionDependencies.Count + mod.RequiredDependencies.Count);
 
-            foreach (string item in mod.LoadBefore)
-                mod.LoadBeforePreferences.Add(item);
+            foreach (string id in mod.Dependencies)
+            {
+                mod.RequiredDependencies.Add(id);
+                requiredMods.Add(id, new RequiredQMod(id));
+            }
 
-            foreach (string item in mod.LoadAfter)
-                mod.LoadAfterPreferences.Add(item);
+            foreach (string id in mod.LoadBefore)
+                mod.LoadBeforePreferences.Add(id);
+
+            foreach (string id in mod.LoadAfter)
+                mod.LoadAfterPreferences.Add(id);
 
             if (mod.VersionDependencies.Count > 0)
             {
-                var versionedDependencies = new List<RequiredQMod>(mod.VersionDependencies.Count);
                 foreach (KeyValuePair<string, string> item in mod.VersionDependencies)
                 {
+                    string id = item.Key;
                     string cleanVersion = VersionRegex.Matches(item.Value)?[0]?.Value;
 
                     if (string.IsNullOrEmpty(cleanVersion))
                     {
-                        versionedDependencies.Add(new RequiredQMod(item.Key));
+                        requiredMods[id] = new RequiredQMod(id);
                     }
                     else if (Version.TryParse(cleanVersion, out Version version))
                     {
-                        versionedDependencies.Add(new RequiredQMod(item.Key, version));
+                        requiredMods[id] = new RequiredQMod(id, version);
                     }
-                    else
+                    else if (!requiredMods.ContainsKey(id))
                     {
-                        versionedDependencies.Add(new RequiredQMod(item.Key));
+                        requiredMods[id] = new RequiredQMod(id);
                     }
 
-                    mod.RequiredDependencies.Add(item.Key);
+                    mod.RequiredDependencies.Add(id);
                 }
-
-                mod.RequiredMods = versionedDependencies;
             }
+
+            mod.RequiredMods = requiredMods.Values;
         }
 
         internal ModStatus FindPatchMethods(QMod qMod)
