@@ -19,7 +19,7 @@ namespace QModManager.QMMHarmonyShimmer
     [Obsolete("Should not be used!", true)]
     public static class QMMHarmonyShimmer
     {
-        internal static string QMMLoaderPluginPath => Path.Combine(Path.Combine(Paths.BepInExRootPath, "plugins"), "QModManager");
+        internal static string QMMLoaderPluginPath => Path.Combine(Paths.BepInExRootPath, "plugins", "QModManager");
         internal static string QModInstallerPath => Path.Combine(QMMLoaderPluginPath, "QModInstaller.dll");
         internal static string QModsPath => Path.Combine(Paths.GameRootPath, "QMods");
         internal static string QModBackupsPath => Path.Combine(QModsPath, ".backups");
