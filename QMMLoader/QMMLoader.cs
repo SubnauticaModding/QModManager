@@ -1,8 +1,6 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
-using QModManager.API.ModLoading;
-using System.Linq;
 using System.Reflection;
 
 namespace QModManager
@@ -57,20 +55,7 @@ namespace QModManager
         private static void InitializeQModManager()
         {
             QModManager.Patching.Patcher.Patch(); // Run QModManager patch
-            InitializeQMods();
             harmony.Unpatch(entryPointTarget, entryPointPatch); // kill this Harmony patch just to be sure it never happens twice
-        }
-
-        private static void InitializeQMods()
-        {
-            var qMods = QModPluginGenerator.QModsToLoad.ToList();
-
-            var initializer = new Initializer(Patching.Patcher.CurrentlyRunningGame);
-            initializer.InitializeMods(qMods);
-
-            Utility.SummaryLogger.ReportIssues(qMods);
-
-            Utility.SummaryLogger.LogSummaries(qMods);
         }
     }
 }
