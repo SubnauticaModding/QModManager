@@ -46,7 +46,7 @@
 
             if (ProhibitedModIDs.TryGetValue(mod.Id, out ModStatus reason))
             {
-                mod.Status = reason;
+                mod.Status = reason; 
                 return;
             }
 
@@ -62,10 +62,10 @@
                     mod.SupportedGame = QModGame.Subnautica;
                     break;
                 default:
-                    {
-                        mod.Status = ModStatus.FailedIdentifyingGame;
-                        return;
-                    }
+                {
+                    mod.Status = ModStatus.FailedIdentifyingGame;
+                    return;
+                }
             }
 
             try
@@ -125,7 +125,7 @@
             foreach (string item in mod.LoadAfter)
                 mod.LoadAfterPreferences.Add(item);
 
-            if (mod.VersionDependencies.Count > 0 || mod.RequiredDependencies.Count > 0)
+            if (mod.VersionDependencies.Count > 0)
             {
                 var versionedDependencies = new List<RequiredQMod>(mod.VersionDependencies.Count);
                 foreach (KeyValuePair<string, string> item in mod.VersionDependencies)
@@ -146,14 +146,6 @@
                     }
 
                     mod.RequiredDependencies.Add(item.Key);
-                }
-
-                foreach (var id in mod.RequiredDependencies)
-                {
-                    if (!versionedDependencies.Any(x => x.Id == id))
-                    {
-                        versionedDependencies.Add(new RequiredQMod(id));
-                    }
                 }
 
                 mod.RequiredMods = versionedDependencies;
