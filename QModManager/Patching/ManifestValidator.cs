@@ -116,7 +116,7 @@
 
         public void CheckRequiredMods(QMod mod)
         {
-            var requiredMods = new Dictionary<string, RequiredQMod>(mod.VersionDependencies.Count + mod.RequiredDependencies.Count);
+            var requiredMods = new Dictionary<string, RequiredQMod>(mod.VersionDependencies.Count + mod.Dependencies.Length);
 
             foreach (string id in mod.Dependencies)
             {
