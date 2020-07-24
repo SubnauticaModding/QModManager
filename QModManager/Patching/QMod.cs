@@ -56,6 +56,8 @@
         [JsonProperty]
         public string EntryMethod { get; set; }
 
+        public bool HasDependencies => Dependencies.Length > 0 || VersionDependencies.Count > 0;
+
         #endregion
 
         public QModGame SupportedGame { get; internal set; }
