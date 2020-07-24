@@ -1,6 +1,6 @@
 ﻿namespace QModManager.Patching
 {
-    using Oculus.Newtonsoft.Json;
+    using Newtonsoft.Json;
     using QModManager.API;
     using QModManager.DataStructures;
     using QModManager.Utility;
