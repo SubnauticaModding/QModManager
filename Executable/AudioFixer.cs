@@ -16,7 +16,7 @@
             AssetsManager am = new AssetsManager();
             AssetsFileInstance afi = am.LoadAssetsFile(path, false);
             am.LoadClassDatabase("cldb.dat");
-            AssetFileInfoEx audioInfo = afi.table.getAssetInfo(4);
+            AssetFileInfoEx audioInfo = afi.table.GetAssetInfo(4);
             AssetTypeInstance audioAti = am.GetATI(afi.file, audioInfo);
             AssetTypeValueField audioBaseField = audioAti.GetBaseField();
             audioBaseField.Get("m_DisableAudio").GetValue().Set(newValue);
@@ -32,7 +32,7 @@
             using (MemoryStream memStream = new MemoryStream())
             using (AssetsFileWriter writer = new AssetsFileWriter(memStream))
             {
-                afi.file.Write(writer, 0, rep.ToArray(), 0);
+                afi.file.Write(writer, 0, rep, 0);
                 afi.stream.Close();
                 File.WriteAllBytes(path, memStream.ToArray());
             }
