@@ -48,13 +48,13 @@
                 {
                     case ModStatus.MissingDependency:
                     {
-                        if (mod.Dependencies.Length > 0)
+                        if (mod.HasDependencies)
                         {
                             Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is missing these dependencies:");
-                            foreach (string dependency in mod.Dependencies)
+                            foreach (RequiredQMod dependency in mod.RequiredMods)
                             {
-                                if (!QModServices.Main.ModPresent(dependency))
-                                    Console.WriteLine($"   - {dependency}");
+                                if (!QModServices.Main.ModPresent(dependency.Id))
+                                    Console.WriteLine($"   - {dependency.Id}{(dependency.RequiresMinimumVersion ? $" at version {dependency.MinimumVersion} or newer" : string.Empty)}");
                             }
                         }
                         else
@@ -73,7 +73,7 @@
                                 IQMod dependencyDetails = QModServices.Main.FindModById(dependency.Id);
 
                                 if (dependencyDetails == null || dependencyDetails.ParsedVersion < dependency.MinimumVersion)                                
-                                    Console.WriteLine($"   - {dependency.Id} at version {dependency.MinimumVersion} or later");                                
+                                    Console.WriteLine($"   - {dependency.Id} at version {dependency.MinimumVersion} or newer");                                
                             }
                         }
                         break;
