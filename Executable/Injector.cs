@@ -17,7 +17,7 @@ namespace QModManager
         internal Injector(string dir, string managedDir)
         {
             gameDirectory = dir;
-			managedDirectory = managedDir;
+            managedDirectory = managedDir;
             mainFilename = Path.Combine(managedDirectory, mainFilename);
             globalgamemanagers = Path.Combine(managedDirectory, "../globalgamemanagers");
         }
@@ -45,7 +45,6 @@ namespace QModManager
                     File.Delete(backupFilePath);
 
                 AssemblyDefinition game = AssemblyDefinition.ReadAssembly(mainFilename);
-
                 AssemblyDefinition installer = AssemblyDefinition.ReadAssembly(installerFilename);
                 MethodDefinition patchMethod = installer.MainModule.GetType("QModInstaller.QModPatcher").Methods.First(x => x.Name == "Patch");
 
