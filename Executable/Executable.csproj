@@ -86,7 +86,8 @@
       <HintPath>..\packages\AssetsTools.NET.2.0.3\lib\net35\AssetsTools.NET.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Mono.Cecil">
+    <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Dependencies\Mono.Cecil.dll</HintPath>
       <Private>False</Private>
     </Reference>
