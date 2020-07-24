@@ -34,8 +34,8 @@
     <DocumentationFile>..\Build\QModManager.UnityAudioFixer.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AssetsTools.NET">
-      <HintPath>..\Dependencies\AssetsTools.NET.dll</HintPath>
+    <Reference Include="AssetsTools.NET, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AssetsTools.NET.2.0.3\lib\net35\AssetsTools.NET.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="BepInEx">
@@ -60,6 +60,9 @@
   <ItemGroup>
     <Compile Include="UnityAudioFixer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
