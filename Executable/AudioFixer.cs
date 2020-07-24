@@ -13,8 +13,6 @@
         {
             if (game != QModGame.Subnautica && game != QModGame.BelowZero)
                 throw new ArgumentException("Neither Subnautica nor Below Zero detected!");
-            else if (game == QModGame.BelowZero)
-                return;
             AssetsManager am = new AssetsManager();
             AssetsFileInstance afi = am.LoadAssetsFile(path, false);
             am.LoadClassDatabase("cldb.dat");
