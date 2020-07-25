@@ -41,9 +41,19 @@ namespace QModManager.Patching
 
                 Patched = true;
 
+                var gameDetector = new GameDetector();
+
                 Logger.Info($"Game Version: {SNUtils.GetPlasticChangeSetOfBuild()} Build Date: {SNUtils.GetDateTimeOfBuild():dd-MMMM-yyyy}");
-                Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}...");
+                Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}{(gameDetector.IsValidGameRunning && gameDetector.MinimumBuildVersion != 0 ? $" built for {gameDetector.CurrentlyRunningGame} v{gameDetector.MinimumBuildVersion}" : string.Empty)}...");
                 Logger.Info($"Today is {DateTime.Today:dd-MMMM-yyyy}");
+
+                if (!gameDetector.IsValidGameRunning)
+                    return;
+
+                if (!gameDetector.IsValidGameVersion)
+                    throw new FatalPatchingException("An invalid game version was detected!");
+
+                CurrentlyRunningGame = gameDetector.CurrentlyRunningGame;
 
                 if (QModBaseDir == null)
                 {
@@ -73,13 +83,6 @@ namespace QModManager.Patching
                 }
 
                 PirateCheck.IsPirate(Environment.CurrentDirectory);
-
-                var gameDetector = new GameDetector();
-
-                if (!gameDetector.IsValidGameRunning)
-                    return;
-
-                CurrentlyRunningGame = gameDetector.CurrentlyRunningGame;
 
                 PatchHarmony();
 
