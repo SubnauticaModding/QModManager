@@ -572,7 +572,7 @@ begin
     appIsSet := true
 
     begin
-      if IsPreviousVersionInstalled() then
+      if IsPreviousVersionInstalled() and IsUpgrade() and FileExists(GetUninstallString()) then
       begin
         if MsgBox('A previous installation of QModManager was detected. To update, it must be uninstalled.' + #13#10 + 'Do you want to uninstall it now?', mbInformation, MB_YESNO) = IDYES then
         begin
