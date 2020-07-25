@@ -572,26 +572,42 @@ begin
     appIsSet := true
 
     begin
-      if IsPreviousVersionInstalled() and IsUpgrade() and FileExists(GetUninstallString()) then
+      if IsPreviousVersionInstalled() then
       begin
-        if MsgBox('A previous installation of QModManager was detected. To update, it must be uninstalled.' + #13#10 + 'Do you want to uninstall it now?', mbInformation, MB_YESNO) = IDYES then
+        if IsUpgrade() and FileExists(GetUninstallString()) then
         begin
-          uninstallString := RemoveQuotes(GetUninstallString());
-          Exec(ExpandConstant(uninstallString), '', '', SW_SHOW, ewWaitUntilTerminated, resultCode);
-            if IsPreviousVersionInstalled() then
-            begin
-              MsgBox('Previous installation of QModManager must be uninstalled to continue.', mbError, MB_OK);
-              Result := false;
-              Exit;
-            end
-            else
-              Result := true;
+          if MsgBox('A previous installation of QModManager was detected. To update, it must be uninstalled.' + #13#10 + 'Do you want to uninstall it now?', mbInformation, MB_YESNO) = IDYES then
+          begin
+            uninstallString := RemoveQuotes(GetUninstallString());
+            Exec(ExpandConstant(uninstallString), '', '', SW_SHOW, ewWaitUntilTerminated, resultCode);
+              if IsPreviousVersionInstalled() then
+              begin
+                MsgBox('Previous installation of QModManager must be uninstalled to continue.', mbError, MB_OK);
+                Result := false;
+                Exit;
+              end
+              else
+                Result := true;
+          end
+          else
+          begin
+            MsgBox('Previous installation of QModManager must be uninstalled to continue.', mbError, MB_OK);
+            Result := false;
+            Exit;
+          end;
         end
         else
         begin
-          MsgBox('Previous installation of QModManager must be uninstalled to continue.', mbError, MB_OK);
-          Result := false;
-          Exit;
+          if MsgBox('A previous installation of QModManager was detected, but the uninstaller could not be found.' + #13#10 + 'Improper uninstallation of QModManager can result in needing to verify your game files/reinstall the game.' + #13#10 + #13#10 + 'Install anyway?', mbError, MB_YESNO) = IDYES then
+          begin
+            Result := true;
+          end
+          else
+          begin
+            WizardForm.Close();
+            Result := false;
+            Exit;
+          end;
         end;
       end;
     end;
