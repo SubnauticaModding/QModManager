@@ -396,6 +396,12 @@
             <param name="mod">The mod.</param>
             <exception cref="T:QModManager.Patching.FatalPatchingException">This modder has not read the documentation and should not be using prepatch/postpatch functions.</exception>
         </member>
+        <member name="F:QModManager.Patching.GameDetector.SupportedGameVersions">
+            <summary>
+            Game -> game version.
+            0 = no minimum version required.
+            </summary>
+        </member>
         <member name="M:QModManager.Patching.IQModFactory.BuildModLoadingList(System.String)">
             <summary>
             Searches through all folders in the provided directory and returns an ordered list of mods to load.<para/>
