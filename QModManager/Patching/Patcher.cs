@@ -43,15 +43,8 @@ namespace QModManager.Patching
 
                 var gameDetector = new GameDetector();
 
-                Logger.Info($"Game Version: {SNUtils.GetPlasticChangeSetOfBuild()} Build Date: {SNUtils.GetDateTimeOfBuild():dd-MMMM-yyyy}");
-                Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}{(gameDetector.IsValidGameRunning && gameDetector.MinimumBuildVersion != 0 ? $" built for {gameDetector.CurrentlyRunningGame} v{gameDetector.MinimumBuildVersion}" : string.Empty)}...");
-                Logger.Info($"Today is {DateTime.Today:dd-MMMM-yyyy}");
-
-                if (!gameDetector.IsValidGameRunning)
+                if (!gameDetector.IsValidGameRunning || !gameDetector.IsValidGameVersion)
                     return;
-
-                if (!gameDetector.IsValidGameVersion)
-                    throw new FatalPatchingException("An invalid game version was detected!");
 
                 CurrentlyRunningGame = gameDetector.CurrentlyRunningGame;
 

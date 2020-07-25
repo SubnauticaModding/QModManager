@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Reflection;
     using QModManager.API;
     using QModManager.Utility;
 
@@ -53,9 +54,16 @@
                 throw new FatalPatchingException("No game executable was found!");
             }
 
+            Logger.Info($"Game Version: {SNUtils.GetPlasticChangeSetOfBuild()} Build Date: {SNUtils.GetDateTimeOfBuild():dd-MMMM-yyyy}");
+            Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}{(IsValidGameRunning && MinimumBuildVersion != 0 ? $" built for {CurrentlyRunningGame} v{MinimumBuildVersion}" : string.Empty)}...");
+            Logger.Info($"Today is {DateTime.Today:dd-MMMM-yyyy}");
+
             CurrentGameVersion = SNUtils.GetPlasticChangeSetOfBuild(-1);
             if (!IsValidGameVersion)
+            {
                 Logger.Fatal("A fatal error has occurred. An invalid game version was detected!");
+                throw new FatalPatchingException("An invalid game version was detected!");
+            }
         }
     }
 }
