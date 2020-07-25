@@ -19,3 +19,4 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("QMMTests")]
 [assembly: InternalsVisibleTo("QModManager")]
 [assembly: InternalsVisibleTo("QModManager.QMMLoader")]
+[assembly: InternalsVisibleTo("QModManager.QModPluginGenerator")]

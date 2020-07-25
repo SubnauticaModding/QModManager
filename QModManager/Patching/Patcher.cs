@@ -1,11 +1,9 @@
 namespace QModManager.Patching
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
     using API;
-    using API.ModLoading;
     using Checks;
     using HarmonyLib;
     using Utility;
@@ -103,18 +101,6 @@ namespace QModManager.Patching
                 Logger.Info("Started loading mods");
 
                 AddAssemblyResolveEvent();
-
-                IQModFactory modFactory = new QModFactory();
-                List<QMod> modsToLoad = modFactory.BuildModLoadingList(QModBaseDir);
-
-                QModServices.LoadKnownMods(modsToLoad);
-
-                var initializer = new Initializer(CurrentlyRunningGame);
-                initializer.InitializeMods(modsToLoad);
-
-                SummaryLogger.ReportIssues(modsToLoad);
-
-                SummaryLogger.LogSummaries(modsToLoad);
             }
             catch (FatalPatchingException pEx)
             {
