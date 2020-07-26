@@ -574,7 +574,7 @@ begin
     begin
       if IsPreviousVersionInstalled() then
       begin
-        if IsUpgrade() and FileExists(GetUninstallString()) then
+        if IsUpgrade() and FileExists(RemoveQuotes(GetUninstallString())) then
         begin
           if MsgBox('A previous installation of QModManager was detected. To update, it must be uninstalled.' + #13#10 + 'Do you want to uninstall it now?', mbInformation, MB_YESNO) = IDYES then
           begin
@@ -598,7 +598,7 @@ begin
         end
         else
         begin
-          if MsgBox('A previous installation of QModManager was detected, but the uninstaller could not be found.' + #13#10 + 'Improper uninstallation of QModManager can result in needing to verify your game files/reinstall the game.' + #13#10 + #13#10 + 'Install anyway?', mbError, MB_YESNO) = IDYES then
+          if MsgBox('A previous installation of QModManager was detected, but the uninstaller could not be found.' + #13#10 + 'Improper uninstallation of QModManager can result in needing to verify your game files or reinstall the game.' + #13#10 + #13#10 + 'Install anyway?', mbError, MB_YESNO) = IDYES then
           begin
             Result := true;
           end
