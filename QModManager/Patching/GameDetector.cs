@@ -23,7 +23,7 @@
         };
 
         internal bool IsValidGameRunning => SupportedGameVersions.ContainsKey(CurrentlyRunningGame);
-        internal int MinimumBuildVersion => IsValidGameVersion ? SupportedGameVersions[CurrentlyRunningGame] : -1;
+        internal int MinimumBuildVersion => IsValidGameRunning ? SupportedGameVersions[CurrentlyRunningGame] : -1;
         internal bool IsValidGameVersion => IsValidGameRunning && MinimumBuildVersion == 0 || (CurrentGameVersion > -1 && CurrentGameVersion >= MinimumBuildVersion);
 
         internal GameDetector()
