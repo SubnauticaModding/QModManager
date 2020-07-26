@@ -18,8 +18,8 @@ namespace QModManager
     {
         internal static string QModsPath => Path.Combine(Paths.GameRootPath, "QMods");
 
-        private static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("PluginEmulator");
-        private const string pluginCache = "qmodmanager_pluginemulator";
+        private static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("QModPluginGenerator");
+        private const string pluginCache = "qmodmanager_plugingenerator";
 
         internal static IEnumerable<QMod> QModsToLoad;
         internal static Dictionary<string, QMod> QModsToLoadById;
@@ -29,7 +29,7 @@ namespace QModManager
         [Obsolete("Should not be used!", true)]
         public static void Finish()
         {
-            var harmony = new Harmony("PluginEmulator");
+            var harmony = new Harmony("QModManager.QModPluginGenerator");
             harmony.Patch(
                 typeof(TypeLoader).GetMethod(nameof(TypeLoader.FindPluginTypes)).MakeGenericMethod(typeof(PluginInfo)),
                 postfix: new HarmonyMethod(typeof(QModPluginGenerator).GetMethod(nameof(TypeLoaderFindPluginTypesPostfix))));
