@@ -17,7 +17,7 @@ namespace QModManager
     public class QMMLoader : BaseUnityPlugin
     {
         internal const string PluginGuid = "QModManager.QMMLoader";
-        internal const string PluginName = "QModManager.QMMLoader";
+        internal const string PluginName = "QMMLoader";
         internal const string PluginVersion = "1.0";
 
         internal const string SubnauticaProcessName = "Subnautica";

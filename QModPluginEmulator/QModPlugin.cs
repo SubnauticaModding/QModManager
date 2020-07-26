@@ -5,7 +5,7 @@ using QModManager.Patching;
 
 namespace QModManager
 {
-    [BepInPlugin("QModManager.QModPluginGenerator", "QModManager.QModPluginGenerator", "1.0")]
+    [BepInPlugin("QModManager.QModPlugin", "QModPlugin", "1.0")]
     public class QModPlugin : BaseUnityPlugin
     {
         public IQMod QMod { get; private set; }

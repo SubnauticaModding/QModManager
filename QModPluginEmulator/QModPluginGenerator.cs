@@ -18,8 +18,8 @@ namespace QModManager
     {
         internal static string QModsPath => Path.Combine(Paths.GameRootPath, "QMods");
 
-        private static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("PluginEmulator");
-        private const string pluginCache = "qmodmanager_pluginemulator";
+        private static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("QModPluginGenerator");
+        private const string pluginCache = "qmodmanager_plugingenerator";
 
         internal static IEnumerable<QMod> QModsToLoad;
         internal static Dictionary<string, QMod> QModsToLoadById;
@@ -29,13 +29,10 @@ namespace QModManager
         [Obsolete("Should not be used!", true)]
         public static void Finish()
         {
-            var harmony = new Harmony("PluginEmulator");
+            var harmony = new Harmony("QModManager.QModPluginGenerator");
             harmony.Patch(
                 typeof(TypeLoader).GetMethod(nameof(TypeLoader.FindPluginTypes)).MakeGenericMethod(typeof(PluginInfo)),
                 postfix: new HarmonyMethod(typeof(QModPluginGenerator).GetMethod(nameof(TypeLoaderFindPluginTypesPostfix))));
-            //harmony.Patch(
-            //    typeof(BepInEx.Utility).GetMethod(nameof(BepInEx.Utility.TopologicalSort)).MakeGenericMethod(typeof(string)),
-            //    postfix: new HarmonyMethod(typeof(QModPluginGenerator).GetMethod(nameof(TopologicalSortPostfix))));
             harmony.PatchAll(typeof(QModPluginGenerator));
         }
 
@@ -138,12 +135,6 @@ namespace QModManager
                     QModPluginInfos.Add(mod.Id, pluginInfo);
                 }
 
-                //Traverse.Create(qmmLoaderPluginInfo)
-                //    .Property<IEnumerable<BepInDependency>>(nameof(PluginInfo.Dependencies)).Value
-                //    = qmmLoaderPluginInfo.Dependencies
-                //    .Concat(factory.RequiredBepInExPlugins.Select(x => new BepInDependency(x.Metadata.GUID, BepInDependency.DependencyFlags.SoftDependency)))
-                //    .Concat(QModPluginInfos.Keys.Select(id => new BepInDependency(id, BepInDependency.DependencyFlags.SoftDependency)));
-
                 __result[Assembly.GetExecutingAssembly().Location] = QModPluginInfos.Values.Distinct().ToList();
 
                 TypeLoader.SaveAssemblyCache(pluginCache, result);
@@ -171,43 +162,6 @@ namespace QModManager
             }
             return true;
         }
-
-        //[Obsolete("Should not be used!", true)]
-        //public static void TopologicalSortPostfix(ref IEnumerable<string> __result)
-        //{
-        //    var initialized = new List<string>();
-
-        //    foreach (var order in new[] { PatchingOrder.MetaPreInitialize, PatchingOrder.PreInitialize })
-        //    {
-        //        QModPlugin.PatchStep = order;
-        //        foreach (var id in __result)
-        //        {
-        //            if (!QModsToLoadById.TryGetValue(id, out var mod) || !mod.PatchMethods.ContainsKey(order))
-        //                continue;
-
-        //            var pluginInfo = QModPluginInfos[id];
-        //            QModPlugin plugin;
-        //            //if (!initialized.Contains(id))
-        //            //{
-        //            //    //initialized.Add(id);
-
-        //            //    //Chainloader.PluginInfos[id] = pluginInfo;
-        //            //    //Traverse.Create(pluginInfo).Property<BaseUnityPlugin>(nameof(PluginInfo.Instance)).Value
-        //            //    //    = plugin = Chainloader.ManagerObject.AddComponent<QModPlugin>();
-        //            //}
-        //            //else
-        //            {
-        //                plugin = InitialisedQModPlugins.Find(x => x.Metadata.GUID == id).Instance as QModPlugin;
-        //            }
-
-        //            plugin.Initialize(order);
-        //        }
-        //    }
-
-        //    QModPlugin.PatchStep = PatchingOrder.NormalInitialize;
-
-        //    __result = __result.Except(initialized);
-        //}
 
         /// <summary>
         /// For BepInEx to identify your patcher as a patcher, it must match the patcher contract as outlined in the BepInEx docs:
