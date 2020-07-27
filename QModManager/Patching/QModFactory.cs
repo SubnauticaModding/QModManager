@@ -1,5 +1,6 @@
 ﻿namespace QModManager.Patching
 {
+    using BepInEx;
     using Oculus.Newtonsoft.Json;
     using QModManager.API;
     using QModManager.DataStructures;
@@ -7,6 +8,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
 
     internal class QModFactory : IQModFactory
     {
@@ -41,7 +43,7 @@
 
         internal void LoadModsFromDirectories(string[] subDirectories, SortedCollection<string, QMod> modSorter, List<QMod> earlyErrors)
         {
-            foreach (string subDir in subDirectories)
+            foreach (string subDir in subDirectories.Where(subDir => (new DirectoryInfo(subDir).Attributes & FileAttributes.Hidden) != FileAttributes.Hidden)) // exclude hidden directories
             {
                 string[] dllFiles = Directory.GetFiles(subDir, "*.dll", SearchOption.TopDirectoryOnly);
 
@@ -61,7 +63,7 @@
 
                 QMod mod = CreateFromJsonManifestFile(subDir);
 
-                if(mod == null)
+                if (mod == null)
                 {
                     Logger.Error($"Unable to set up mod in folder \"{folderName}\"");
                     earlyErrors.Add(new QModPlaceholder(folderName, ModStatus.MissingCoreInfo));
@@ -114,28 +116,38 @@
             return modList;
         }
 
+        internal List<PluginInfo> BepInExPlugins { get; set; }
+        internal List<PluginInfo> RequiredBepInExPlugins { get; set; } = new List<PluginInfo>();
         private void ValidateDependencies(List<QMod> modsToLoad, QMod mod)
         {
             // Check the mod dependencies
             foreach (RequiredQMod requiredMod in mod.RequiredMods)
             {
-                QMod dependency = modsToLoad.Find(d => d.Id == requiredMod.Id);
+                QMod dependencyQMod = modsToLoad.Find(d => d.Id == requiredMod.Id);
+                PluginInfo dependencyPluginInfo = BepInExPlugins.Find(d => d.Metadata.GUID == requiredMod.Id);
 
-                if (dependency == null || dependency.Status != ModStatus.Success)
+                if ((dependencyQMod == null || dependencyQMod.Status != ModStatus.Success) && dependencyPluginInfo == null)
                 {
                     // Dependency not found or failed
                     Logger.Error($"{mod.Id} cannot be loaded because it is missing a dependency. Missing mod: {requiredMod.Id}");
                     mod.Status = ModStatus.MissingDependency;
                     break;
                 }
-
-                if (dependency.LoadedAssembly == null)
+                else if (dependencyQMod == null && dependencyPluginInfo != null)
                 {
-                    // Dependency hasn't been validated yet
-                    this.Validator.ValidateManifest(dependency);
+                    if (!RequiredBepInExPlugins.Contains(dependencyPluginInfo))
+                        RequiredBepInExPlugins.Add(dependencyPluginInfo);
+
+                    continue;
                 }
 
-                if (dependency.Status != ModStatus.Success)
+                if (dependencyQMod.LoadedAssembly == null)
+                {
+                    // Dependency hasn't been validated yet
+                    this.Validator.ValidateManifest(dependencyQMod);
+                }
+
+                if (dependencyQMod.Status != ModStatus.Success)
                 {
                     // Dependency failed to load successfully
                     // Treat it as missing
@@ -144,7 +156,7 @@
                     break;
                 }
 
-                if (dependency.ParsedVersion < requiredMod.MinimumVersion)
+                if (dependencyQMod.ParsedVersion < requiredMod.MinimumVersion)
                 {
                     // Dependency version is older than the version required by this mod
                     Logger.Error($"{mod.Id} cannot be loaded because its dependency is out of date. Outdated mod: {requiredMod.Id}");

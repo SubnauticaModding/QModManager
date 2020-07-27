@@ -1,6 +1,6 @@
 ﻿namespace QModManager.HarmonyPatches.UpdateDeveloperMode
 {
-    using Harmony;
+    using HarmonyLib;
     using QModManager.Utility;
 
     [HarmonyPatch(typeof(IngameMenu), nameof(IngameMenu.Open))]

@@ -1,13 +1,11 @@
 namespace QModManager.Patching
 {
     using System;
-    using System.Collections.Generic;
     using System.IO;
     using System.Reflection;
     using API;
-    using API.ModLoading;
     using Checks;
-    using Harmony;
+    using HarmonyLib;
     using Utility;
 
     internal static class Patcher
@@ -99,18 +97,6 @@ namespace QModManager.Patching
                 Logger.Info("Started loading mods");
 
                 AddAssemblyResolveEvent();
-
-                IQModFactory modFactory = new QModFactory();
-                List<QMod> modsToLoad = modFactory.BuildModLoadingList(QModBaseDir);
-
-                QModServices.LoadKnownMods(modsToLoad);
-
-                var initializer = new Initializer(CurrentlyRunningGame);
-                initializer.InitializeMods(modsToLoad);
-
-                SummaryLogger.ReportIssues(modsToLoad);
-
-                SummaryLogger.LogSummaries(modsToLoad);
             }
             catch (FatalPatchingException pEx)
             {
@@ -157,13 +143,15 @@ namespace QModManager.Patching
             Logger.Debug("Added AssemblyResolve event");
         }
 
+        // Store the instance for use by MainMenuMessages
+        internal static Harmony hInstance;
         private static void PatchHarmony()
         {
             try
             {
                 Logger.Debug("Applying Harmony patches...");
 
-                HarmonyInstance.Create("qmodmanager").PatchAll();
+                hInstance = Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), "qmodmanager");
 
                 Logger.Debug("Patched!");
             }

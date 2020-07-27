@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>QModManager.UnityAudioFixer</name>
+    </assembly>
+    <members>
+        <member name="T:QModManager.UnityAudioFixer">
+            <summary>
+            A patcher which runs ahead of UnityPlayer to enable Unity Audio.
+            </summary>
+        </member>
+        <member name="M:QModManager.UnityAudioFixer.Initialize">
+            <summary>
+            Called from BepInEx while patching, our entry point for patching.
+            Do not change the method name as it is identified by BepInEx. Method must remain public.
+            </summary>
+        </member>
+        <member name="M:QModManager.UnityAudioFixer.EnableUnityAudio">
+            <summary>
+            Enable Unity Audio. Should only be called when UnityPlayer is not loaded.
+            </summary>
+        </member>
+        <member name="M:QModManager.UnityAudioFixer.DisableUnityAudio">
+            <summary>
+            Disable Unity Audio. Should only be called when UnityPlayer is not loaded.
+            </summary>
+        </member>
+        <member name="P:QModManager.UnityAudioFixer.TargetDLLs">
+            <summary>
+            For BepInEx to identify your patcher as a patcher, it must match the patcher contract as outlined in the BepInEx docs:
+            https://bepinex.github.io/bepinex_docs/v5.0/articles/dev_guide/preloader_patchers.html#patcher-contract
+            It must contain a list of managed assemblies to patch as a public static <see cref="T:System.Collections.Generic.IEnumerable`1"/> property named TargetDLLs
+            </summary>
+        </member>
+        <member name="M:QModManager.UnityAudioFixer.Patch(Mono.Cecil.AssemblyDefinition)">
+            <summary>
+            For BepInEx to identify your patcher as a patcher, it must match the patcher contract as outlined in the BepInEx docs:
+            https://bepinex.github.io/bepinex_docs/v5.0/articles/dev_guide/preloader_patchers.html#patcher-contract
+            It must contain a public static void method named Patch which receives an <see cref="T:Mono.Cecil.AssemblyDefinition"/> argument,
+            which patches each of the target assemblies in the TargetDLLs list.
+            
+            We don't actually need to patch any of the managed assemblies, so we are providing an empty method here.
+            </summary>
+            <param name="ad"></param>
+        </member>
+    </members>
+</doc>
