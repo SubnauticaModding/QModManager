@@ -287,7 +287,6 @@ begin
     Left := WizardForm.SelectDirLabel.Left + WizardForm.SelectDirLabel.Left / 30
     Top := WizardForm.BackButton.Top + 10
     Height := WizardForm.BackButton.Height
-    Enabled := False
   end;
   
   BelowZeroButton := TNewRadioButton.Create(WizardForm)
