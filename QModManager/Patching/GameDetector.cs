@@ -18,7 +18,7 @@
         /// </summary>
         private static readonly Dictionary<QModGame, int> SupportedGameVersions = new Dictionary<QModGame, int>
         {
-            { QModGame.BelowZero, 31692 }
+            { QModGame.BelowZero, 31692 }, { QModGame.Subnautica, 66013 }
         };
 
         internal bool IsValidGameRunning => SupportedGameVersions.ContainsKey(CurrentlyRunningGame);
