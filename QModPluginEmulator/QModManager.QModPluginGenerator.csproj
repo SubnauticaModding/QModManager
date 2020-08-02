@@ -46,8 +46,7 @@
       <HintPath>..\Dependencies\BepInEx\BepInEx\core\Mono.Cecil.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="QModInstaller, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="QModInstaller">
       <HintPath>..\Build\QModInstaller.dll</HintPath>
       <Private>False</Private>
     </Reference>
