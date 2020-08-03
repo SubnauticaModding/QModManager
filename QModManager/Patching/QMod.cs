@@ -5,6 +5,7 @@
     using QModManager.DataStructures;
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
 
     [JsonObject(MemberSerialization.OptIn)]
@@ -55,6 +56,8 @@
         [JsonProperty]
         public string EntryMethod { get; set; }
 
+        public bool HasDependencies => Dependencies.Length > 0 || VersionDependencies.Count > 0;
+
         #endregion
 
         public QModGame SupportedGame { get; internal set; }
@@ -90,16 +93,10 @@
         {
             get
             {
-                if (this.LoadedAssembly != null)
+                if (LoadedAssembly != null)
                 {
                     AssemblyName[] references = this.LoadedAssembly.GetReferencedAssemblies();
-                    foreach (AssemblyName reference in references)
-                    {
-                        if (reference.FullName == "0Harmony, Version=1.0.9.1, Culture=neutral, PublicKeyToken=null")
-                        {
-                            return true;
-                        }
-                    }
+                    return references.Any(reference => reference.FullName == "0Harmony, Version=1.0.9.1, Culture=neutral, PublicKeyToken=null" || (reference.Name.StartsWith("0Harmony") && reference.Version < new Version(2, 0)));
                 }
 
                 return false;
