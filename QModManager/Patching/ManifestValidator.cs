@@ -29,7 +29,7 @@
             if (mod.PatchMethods.Count > 0)
                 return;
 
-            Logger.Debug($"Validating mod in '{mod.SubDirectory}'");
+            Logger.Debug($"Validating mod '{mod.Id}'");
             if (string.IsNullOrEmpty(mod.Id) ||
                 string.IsNullOrEmpty(mod.DisplayName) ||
                 string.IsNullOrEmpty(mod.Author))
@@ -155,6 +155,16 @@
             }
 
             mod.RequiredMods = requiredMods.Values;
+            if (Logger.DebugLogsEnabled && requiredMods.Count > 0)
+            {
+                string msg = $"{mod.Id} has required mods: ";
+                foreach (var required in requiredMods.Values)
+                {
+                    msg += $"{required.Id} ";
+                }
+
+                Logger.Debug(msg);
+            }
         }
 
         internal ModStatus FindPatchMethods(QMod qMod)
