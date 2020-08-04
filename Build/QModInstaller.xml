@@ -498,6 +498,63 @@
             <param name="ex">Optional: The exception that needs to be logged.</param>
             <param name="showOnScreen">Optional: Whether to show the message on screen or not.</param>
         </member>
+        <member name="T:QModManager.Utility.IVersionParser">
+            <summary>
+            Defines a service for parsing version strings.
+            </summary>
+        </member>
+        <member name="P:QModManager.Utility.IVersionParser.NoVersionParsed">
+            <summary>
+            The default version zero used when no version could be parsed.
+            </summary>
+        </member>
+        <member name="M:QModManager.Utility.IVersionParser.GetVersion(System.String)">
+            <summary>
+            Returns a new <see cref="T:System.Version"/> based on the provided string value, with all 4 groups populated.
+            </summary>
+            <param name="versionString">The version string to parse.</param>
+            <returns>A new <see cref="T:System.Version"/> with all empty groups populated with 0.</returns>
+        </member>
+        <member name="M:QModManager.Utility.IVersionParser.IsAllZeroVersion(System.Version)">
+            <summary>
+            Checks if the provided version is all zeros.
+            </summary>
+            <param name="version">The version to check.</param>
+            <returns>True if this matches version 0.0.0.0</returns>
+        </member>
+        <member name="T:QModManager.Utility.VersionParser">
+            <summary>
+            A service that handles parsing <see cref="T:System.String"/> values into <see cref="T:System.Version"/> objects.
+            </summary>
+        </member>
+        <member name="F:QModManager.Utility.VersionParser.VersionRegex">
+            <summary>
+            The regex used to sanitize incoming version strings.
+            ^(((\d+)\.?){0,3}\d+)$
+            </summary>
+        </member>
+        <member name="P:QModManager.Utility.VersionParser.NoVersionParsed">
+            <summary>
+            The default version zero used when no version could be parsed.
+            </summary>
+        </member>
+        <member name="M:QModManager.Utility.VersionParser.GetVersion(System.String)">
+            <summary>
+            Returns a new <see cref="T:System.Version"/> based on the provided string value, with all 4 groups populated.
+            </summary>
+            <param name="versionString">The version string to parse. This must match <seealso cref="F:QModManager.Utility.VersionParser.VersionRegex"/>.</param>
+            <returns>A new <see cref="T:System.Version"/> with all empty groups populated with 0.</returns>
+            <example>
+            "2.8" will be parsed as "2.8.0.0"
+            </example>
+        </member>
+        <member name="M:QModManager.Utility.VersionParser.IsAllZeroVersion(System.Version)">
+            <summary>
+            Checks if the provided version is all zeros.
+            </summary>
+            <param name="version">The version to check.</param>
+            <returns>True if this matches version 0.0.0.0</returns>
+        </member>
         <member name="T:QModInstaller.QModPatcher">
             <summary>
             Container class for the entry point

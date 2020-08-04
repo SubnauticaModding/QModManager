@@ -141,6 +141,11 @@
                     continue;
                 }
 
+                if (dependencyQMod.HasDependencies)
+                {
+                    ValidateDependencies(modsToLoad, dependencyQMod);
+                }
+
                 if (dependencyQMod.LoadedAssembly == null)
                 {
                     // Dependency hasn't been validated yet
