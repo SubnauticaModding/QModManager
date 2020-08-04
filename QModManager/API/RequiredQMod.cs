@@ -1,30 +1,35 @@
 ﻿namespace QModManager.API
 {
     using System;
-    using System.Text.RegularExpressions;
+    using QModManager.Utility;
 
     /// <summary>
     /// Identifies a required mod and an optional minimum version.
     /// </summary>
     public class RequiredQMod
     {
-        internal static readonly Regex VersionRegex = new Regex(@"^(((\d+)\.?){0,3}\d+)$");
+        internal static IVersionParser VersionParserService { get; set; } = new VersionParser();
 
-        internal RequiredQMod(string id)
+        private RequiredQMod(string id, bool requiresMinVersion, Version version)
         {
             this.Id = id;
-            this.RequiresMinimumVersion = false;
-            this.MinimumVersion = new Version(0, 0, 0, 0);
+            this.RequiresMinimumVersion = requiresMinVersion;
+            this.MinimumVersion = version;
+        }
+
+        internal RequiredQMod(string id)
+            : this(id, false, VersionParserService.NoVersionParsed)
+        {
+        }
+
+        internal RequiredQMod(string id, Version minimumVersion)
+            : this(id, !VersionParserService.IsAllZeroVersion(minimumVersion), minimumVersion)
+        {
         }
 
         internal RequiredQMod(string id, string minimumVersion)
+            : this(id, !string.IsNullOrEmpty(minimumVersion), VersionParserService.GetVersion(minimumVersion))
         {
-            this.Id = id;
-            this.RequiresMinimumVersion = true;
-
-            var cleanVersion = CleanVersionString(minimumVersion);
-
-            this.MinimumVersion = Version.Parse(cleanVersion);
         }
 
         /// <summary>
@@ -42,23 +47,5 @@
         /// If <see cref="RequiresMinimumVersion"/> is <c>false</c>, this will return a default value.
         /// </summary>
         public Version MinimumVersion { get; }
-
-        internal static string CleanVersionString(string versionString)
-        {
-            if (!VersionRegex.IsMatch(versionString))
-            {
-                return null;
-            }
-
-            versionString = VersionRegex.Matches(versionString)?[0]?.Value;
-
-            int groups = versionString.Split('.').Length;
-            while (groups++ < 4)
-            {
-                versionString += ".0";
-            }
-
-            return versionString;
-        }
     }
 }

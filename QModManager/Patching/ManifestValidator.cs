@@ -12,6 +12,8 @@
 
     internal class ManifestValidator : IManifestValidator
     {
+        internal static IVersionParser VersionParserService { get; set; } = new VersionParser();
+
         internal static readonly Dictionary<string, ModStatus> ProhibitedModIDs = new Dictionary<string, ModStatus>()
         {
             { "QModManager", ModStatus.BannedID },
@@ -68,11 +70,7 @@
 
             try
             {
-
-                string cleanVersion = RequiredQMod.CleanVersionString(mod.Version);
-
-                if (!string.IsNullOrEmpty(cleanVersion))
-                    mod.ParsedVersion = Version.Parse(cleanVersion);
+                mod.ParsedVersion = VersionParserService.GetVersion(mod.Version);
             }
             catch (Exception vEx)
             {
@@ -138,17 +136,9 @@
                     string id = item.Key;
                     string versionString = item.Value;
 
+                    Version version = VersionParserService.GetVersion(versionString);
 
-                    string cleanVersion = RequiredQMod.CleanVersionString(versionString);
-
-                    if (string.IsNullOrEmpty(cleanVersion))
-                    {
-                        requiredMods[id] = new RequiredQMod(id);
-                    }
-                    else
-                    {
-                        requiredMods[id] = new RequiredQMod(id, cleanVersion);
-                    }
+                    requiredMods[id] = new RequiredQMod(id, version);
 
                     mod.RequiredDependencies.Add(id);
                 }
