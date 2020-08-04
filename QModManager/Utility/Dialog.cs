@@ -25,7 +25,11 @@
             internal static readonly Button Disabled = new Button();
             internal static readonly Button SeeLog = new Button("See Log", () =>
             {
-                string logPath = Application.consoleLogPath;
+                string gameSuffix = "Subnautica";
+                if (Patcher.CurrentlyRunningGame == QModGame.BelowZero)
+                    gameSuffix += "Zero";
+
+                string logPath = Path.Combine(Environment.CurrentDirectory, $"qmodmanager_log-{gameSuffix}.txt");
 
                 Logger.Debug($"Opening log file located in: \"{logPath}\"");
 
