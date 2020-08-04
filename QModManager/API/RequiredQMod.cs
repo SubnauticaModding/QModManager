@@ -11,14 +11,21 @@
         {
             this.Id = id;
             this.RequiresMinimumVersion = false;
-            this.MinimumVersion = new Version();            
+            this.MinimumVersion = new Version(0, 0, 0, 0);
         }
 
-        internal RequiredQMod(string id, Version minimumVersion)
+        internal RequiredQMod(string id, string minimumVersion)
         {
             this.Id = id;
             this.RequiresMinimumVersion = true;
-            this.MinimumVersion = minimumVersion;            
+
+            int groups = minimumVersion.Split('.').Length;
+            while (groups++ < 4)
+            {
+                minimumVersion += ".0";
+            }
+
+            this.MinimumVersion = Version.Parse(minimumVersion);
         }
 
         /// <summary>

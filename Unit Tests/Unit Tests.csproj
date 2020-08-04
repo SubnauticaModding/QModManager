@@ -44,6 +44,9 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>..\Dependencies\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="BepInEx">
+      <HintPath>..\Dependencies\BepInEx\BepInEx\core\BepInEx.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\MSTest.TestFramework.1.3.2\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
     </Reference>
@@ -64,6 +67,7 @@
     <Compile Include="ManifestValidatorTests.cs" />
     <Compile Include="ModLoadingSimulationTests.cs" />
     <Compile Include="QModFactoryTests.cs" />
+    <Compile Include="RequiredQModTests.cs" />
     <Compile Include="SortedTreeTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestPatchClass.cs" />

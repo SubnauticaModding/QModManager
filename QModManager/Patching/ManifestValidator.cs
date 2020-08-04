@@ -12,7 +12,7 @@
 
     internal class ManifestValidator : IManifestValidator
     {
-        internal static readonly Regex VersionRegex = new Regex(@"(((\d+)\.?)+)");
+        internal static readonly Regex VersionRegex = new Regex(@"^(((\d+)\.?){0,3}\d+)$");
 
         internal static readonly Dictionary<string, ModStatus> ProhibitedModIDs = new Dictionary<string, ModStatus>()
         {
@@ -135,19 +135,21 @@
                 foreach (KeyValuePair<string, string> item in mod.VersionDependencies)
                 {
                     string id = item.Key;
-                    string cleanVersion = VersionRegex.Matches(item.Value)?[0]?.Value;
+                    string versionString = item.Value;
+
+                    string cleanVersion = null;
+                    if (VersionRegex.IsMatch(versionString))
+                    {
+                        cleanVersion = VersionRegex.Matches(versionString)?[0]?.Value;
+                    }
 
                     if (string.IsNullOrEmpty(cleanVersion))
                     {
                         requiredMods[id] = new RequiredQMod(id);
                     }
-                    else if (Version.TryParse(cleanVersion, out Version version))
+                    else
                     {
-                        requiredMods[id] = new RequiredQMod(id, version);
-                    }
-                    else if (!requiredMods.ContainsKey(id))
-                    {
-                        requiredMods[id] = new RequiredQMod(id);
+                        requiredMods[id] = new RequiredQMod(id, cleanVersion);
                     }
 
                     mod.RequiredDependencies.Add(id);

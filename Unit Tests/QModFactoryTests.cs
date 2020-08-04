@@ -63,7 +63,8 @@
             // Arange
             var factory = new QModFactory
             {
-                Validator = new DummyValidator()
+                Validator = new DummyValidator(),
+                BepInExPlugins = new List<BepInEx.PluginInfo>()
             };
 
             var earlyErrors = new List<QMod>
@@ -77,7 +78,7 @@
                 Status = ModStatus.Success,
                 RequiredMods = new List<RequiredQMod>
                 {
-                    new RequiredQMod(missingOrOutdatedMod, new Version(1, 0, 2))
+                    new RequiredQMod(missingOrOutdatedMod, "1.0.2")
                 }
             };
 

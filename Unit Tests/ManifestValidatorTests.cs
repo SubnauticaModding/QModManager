@@ -65,7 +65,7 @@
 
             Assert.AreEqual(1, versionDependentMod.RequiredMods.Count());
 
-            RequiredQMod expected = new RequiredQMod(requiredMod, new Version(requiredVersionString));
+            RequiredQMod expected = new RequiredQMod(requiredMod, requiredVersionString);
             RequiredQMod actual = versionDependentMod.RequiredMods.First();
 
             Assert.AreEqual(requiredMod, actual.Id);
@@ -96,7 +96,7 @@
             // Only a single entry is added to RequiredMods.
             Assert.AreEqual(1, versionDependentMod.RequiredMods.Count());
 
-            RequiredQMod expected = new RequiredQMod(requiredMod, new Version(requiredVersionString));
+            RequiredQMod expected = new RequiredQMod(requiredMod, requiredVersionString);
             RequiredQMod actual = versionDependentMod.RequiredMods.First();
 
             Assert.AreEqual(requiredMod, actual.Id);
@@ -133,7 +133,7 @@
             Assert.AreEqual(expectedA.RequiresMinimumVersion, actualA.RequiresMinimumVersion);
             Assert.AreEqual(expectedA.MinimumVersion, actualA.MinimumVersion);
 
-            RequiredQMod expectedB = new RequiredQMod(requiredModB, new Version(requiredVersionBString));
+            RequiredQMod expectedB = new RequiredQMod(requiredModB, requiredVersionBString);
             RequiredQMod actualB = versionDependentMod.RequiredMods.ElementAt(1);
 
             Assert.AreEqual(requiredModB, actualB.Id);
