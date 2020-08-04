@@ -12,8 +12,6 @@
 
     internal class ManifestValidator : IManifestValidator
     {
-        internal static readonly Regex VersionRegex = new Regex(@"^(((\d+)\.?){0,3}\d+)$");
-
         internal static readonly Dictionary<string, ModStatus> ProhibitedModIDs = new Dictionary<string, ModStatus>()
         {
             { "QModManager", ModStatus.BannedID },
@@ -70,8 +68,11 @@
 
             try
             {
-                if (Version.TryParse(mod.Version, out Version version))
-                    mod.ParsedVersion = version;
+
+                string cleanVersion = RequiredQMod.CleanVersionString(mod.Version);
+
+                if (!string.IsNullOrEmpty(cleanVersion))
+                    mod.ParsedVersion = Version.Parse(cleanVersion);
             }
             catch (Exception vEx)
             {
@@ -137,11 +138,8 @@
                     string id = item.Key;
                     string versionString = item.Value;
 
-                    string cleanVersion = null;
-                    if (VersionRegex.IsMatch(versionString))
-                    {
-                        cleanVersion = VersionRegex.Matches(versionString)?[0]?.Value;
-                    }
+
+                    string cleanVersion = RequiredQMod.CleanVersionString(versionString);
 
                     if (string.IsNullOrEmpty(cleanVersion))
                     {

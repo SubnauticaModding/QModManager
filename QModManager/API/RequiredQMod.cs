@@ -1,12 +1,15 @@
 ﻿namespace QModManager.API
 {
     using System;
+    using System.Text.RegularExpressions;
 
     /// <summary>
     /// Identifies a required mod and an optional minimum version.
     /// </summary>
     public class RequiredQMod
     {
+        internal static readonly Regex VersionRegex = new Regex(@"^(((\d+)\.?){0,3}\d+)$");
+
         internal RequiredQMod(string id)
         {
             this.Id = id;
@@ -19,13 +22,9 @@
             this.Id = id;
             this.RequiresMinimumVersion = true;
 
-            int groups = minimumVersion.Split('.').Length;
-            while (groups++ < 4)
-            {
-                minimumVersion += ".0";
-            }
+            var cleanVersion = CleanVersionString(minimumVersion);
 
-            this.MinimumVersion = Version.Parse(minimumVersion);
+            this.MinimumVersion = Version.Parse(cleanVersion);
         }
 
         /// <summary>
@@ -43,5 +42,23 @@
         /// If <see cref="RequiresMinimumVersion"/> is <c>false</c>, this will return a default value.
         /// </summary>
         public Version MinimumVersion { get; }
+
+        internal static string CleanVersionString(string versionString)
+        {
+            if (!VersionRegex.IsMatch(versionString))
+            {
+                return null;
+            }
+
+            versionString = VersionRegex.Matches(versionString)?[0]?.Value;
+
+            int groups = versionString.Split('.').Length;
+            while (groups++ < 4)
+            {
+                versionString += ".0";
+            }
+
+            return versionString;
+        }
     }
 }
