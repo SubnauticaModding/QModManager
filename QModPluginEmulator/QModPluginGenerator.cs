@@ -5,6 +5,7 @@ using HarmonyLib;
 using Mono.Cecil;
 using QModManager.API;
 using QModManager.Patching;
+using QModManager.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,6 +25,8 @@ namespace QModManager
         internal static Dictionary<string, QMod> QModsToLoadById;
         internal static Dictionary<string, PluginInfo> QModPluginInfos;
         internal static List<PluginInfo> InitialisedQModPlugins;
+
+        internal static IVersionParser VersionParserService { get; set; } = new VersionParser();
 
         [Obsolete("Should not be used!", true)]
         public static void Finish()
@@ -100,22 +103,9 @@ namespace QModManager
 
                     foreach (var versionDependency in mod.VersionDependencies)
                     {
-                        var cleanVersion = ManifestValidator.VersionRegex.Matches(versionDependency.Value)?[0]?.Value;
-                        if (string.IsNullOrEmpty(cleanVersion))
-                        {
-                            traverseablePluginInfo.Property<IEnumerable<BepInDependency>>(nameof(PluginInfo.Dependencies)).Value
-                                = pluginInfo.Dependencies.AddItem(new BepInDependency(versionDependency.Key, new Version().ToString()));
-                        }
-                        else if (Version.TryParse(cleanVersion, out Version version))
-                        {
-                            traverseablePluginInfo.Property<IEnumerable<BepInDependency>>(nameof(PluginInfo.Dependencies)).Value
-                                = pluginInfo.Dependencies.AddItem(new BepInDependency(versionDependency.Key, version.ToString()));
-                        }
-                        else
-                        {
-                            traverseablePluginInfo.Property<IEnumerable<BepInDependency>>(nameof(PluginInfo.Dependencies)).Value
-                                = pluginInfo.Dependencies.AddItem(new BepInDependency(versionDependency.Key, new Version().ToString()));
-                        }
+                        var version = VersionParserService.GetVersion(versionDependency.Value);
+                        traverseablePluginInfo.Property<IEnumerable<BepInDependency>>(nameof(PluginInfo.Dependencies)).Value
+                            = pluginInfo.Dependencies.AddItem(new BepInDependency(versionDependency.Key, version.ToString()));
                     }
                     foreach (var id in mod.LoadAfter)
                     {
@@ -125,7 +115,7 @@ namespace QModManager
 
                     traverseablePluginInfo.Property<IEnumerable<BepInProcess>>(nameof(PluginInfo.Processes)).Value = new BepInProcess[0];
                     traverseablePluginInfo.Property<IEnumerable<BepInIncompatibility>>(nameof(PluginInfo.Incompatibilities)).Value = new BepInIncompatibility[0];
-                    traverseablePluginInfo.Property<BepInPlugin>(nameof(PluginInfo.Metadata)).Value = new BepInPlugin(mod.Id, mod.DisplayName, mod.Version);
+                    traverseablePluginInfo.Property<BepInPlugin>(nameof(PluginInfo.Metadata)).Value = new BepInPlugin(mod.Id, mod.DisplayName, mod.ParsedVersion.ToString());
                     traverseablePluginInfo.Property<string>("TypeName").Value = typeof(QModPlugin).FullName;
                     traverseablePluginInfo.Property<Version>("TargettedBepInExVersion").Value
                         = Assembly.GetExecutingAssembly().GetReferencedAssemblies().FirstOrDefault(x => x.Name == "BepInEx").Version;
