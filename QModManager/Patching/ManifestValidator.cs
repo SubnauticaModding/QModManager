@@ -8,7 +8,6 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Text.RegularExpressions;
 
     internal class ManifestValidator : IManifestValidator
     {
@@ -145,15 +144,25 @@
             }
 
             mod.RequiredMods = requiredMods.Values;
-            if (Logger.DebugLogsEnabled && requiredMods.Count > 0)
+            if (Logger.DebugLogsEnabled)
             {
-                string msg = $"{mod.Id} has required mods: ";
-                foreach (var required in requiredMods.Values)
+                string GetModList(IEnumerable<string> modIds)
                 {
-                    msg += $"{required.Id} ";
+                    string message = string.Empty;
+                    foreach (var id in modIds)
+                        message += $"{id} ";
+
+                    return message;
                 }
 
-                Logger.Debug(msg);
+                if (requiredMods.Count > 0)
+                    Logger.Debug($"{mod.Id} has required mods: {GetModList(requiredMods.Values.Cast<string>())}");
+
+                if (mod.LoadBeforePreferences.Count > 0)
+                    Logger.Debug($"{mod.Id} should load before: {GetModList(mod.LoadBeforePreferences)}");
+
+                if (mod.LoadAfterPreferences.Count > 0)
+                    Logger.Debug($"{mod.Id} should load after: {GetModList(mod.LoadAfterPreferences)}");
             }
         }
 
