@@ -510,11 +510,11 @@ function InitializeSetup(): Boolean;
 var
   ErrCode: Integer;
 begin
-  if not IsDotNetDetected('v3.5', 0) then 
+  if not IsDotNetDetected('v4\Full', 0) then 
   begin
-    if MsgBox('QModManager requires Microsoft .NET Framework 3.5.' + #13#10 + 'Would you like to install it now?', mbCriticalError, MB_YESNO) = IDYES then
+    if MsgBox('QModManager requires Microsoft .NET Framework 4.0' + #13#10 + 'Would you like to install it now?', mbCriticalError, MB_YESNO) = IDYES then
     begin
-      if not ShellExec('open', 'https://docs.microsoft.com/en-us/dotnet/framework/install/dotnet-35-windows-10', '', '', SW_SHOW, ewNoWait, ErrCode) then
+      if not ShellExec('open', 'https://dotnet.microsoft.com/download/dotnet-framework/net40', '', '', SW_SHOW, ewNoWait, ErrCode) then
       begin
         SysErrorMessage(ErrCode);
       end
