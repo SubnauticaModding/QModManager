@@ -12,7 +12,7 @@
 
     internal class ManifestValidator : IManifestValidator
     {
-        internal static readonly Regex VersionRegex = new Regex(@"(((\d+)\.?)+)");
+        internal static IVersionParser VersionParserService { get; set; } = new VersionParser();
 
         internal static readonly Dictionary<string, ModStatus> ProhibitedModIDs = new Dictionary<string, ModStatus>()
         {
@@ -29,7 +29,7 @@
             if (mod.PatchMethods.Count > 0)
                 return;
 
-            Logger.Debug($"Validating mod in '{mod.SubDirectory}'");
+            Logger.Debug($"Validating mod '{mod.Id}'");
             if (string.IsNullOrEmpty(mod.Id) ||
                 string.IsNullOrEmpty(mod.DisplayName) ||
                 string.IsNullOrEmpty(mod.Author))
@@ -70,8 +70,7 @@
 
             try
             {
-                if (Version.TryParse(mod.Version, out Version version))
-                    mod.ParsedVersion = version;
+                mod.ParsedVersion = VersionParserService.GetVersion(mod.Version);
             }
             catch (Exception vEx)
             {
@@ -135,26 +134,27 @@
                 foreach (KeyValuePair<string, string> item in mod.VersionDependencies)
                 {
                     string id = item.Key;
-                    string cleanVersion = VersionRegex.Matches(item.Value)?[0]?.Value;
+                    string versionString = item.Value;
 
-                    if (string.IsNullOrEmpty(cleanVersion))
-                    {
-                        requiredMods[id] = new RequiredQMod(id);
-                    }
-                    else if (Version.TryParse(cleanVersion, out Version version))
-                    {
-                        requiredMods[id] = new RequiredQMod(id, version);
-                    }
-                    else if (!requiredMods.ContainsKey(id))
-                    {
-                        requiredMods[id] = new RequiredQMod(id);
-                    }
+                    Version version = VersionParserService.GetVersion(versionString);
+
+                    requiredMods[id] = new RequiredQMod(id, version);
 
                     mod.RequiredDependencies.Add(id);
                 }
             }
 
             mod.RequiredMods = requiredMods.Values;
+            if (Logger.DebugLogsEnabled && requiredMods.Count > 0)
+            {
+                string msg = $"{mod.Id} has required mods: ";
+                foreach (var required in requiredMods.Values)
+                {
+                    msg += $"{required.Id} ";
+                }
+
+                Logger.Debug(msg);
+            }
         }
 
         internal ModStatus FindPatchMethods(QMod qMod)

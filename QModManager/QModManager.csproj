@@ -138,6 +138,7 @@
     <Compile Include="Utility\NetworkUtilities.cs" />
     <Compile Include="Utility\ReflectionHelper.cs" />
     <Compile Include="Checks\VersionCheck.cs" />
+    <Compile Include="Utility\VersionParser.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

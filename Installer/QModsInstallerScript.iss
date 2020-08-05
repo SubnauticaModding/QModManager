@@ -70,6 +70,9 @@ Source: "..\Dependencies\cldb.dat"; DestDir: "{app}\BepInEx\patchers\QModManager
 Source: "..\Build\QModManager.exe"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 ; BepInEx
 Source: "..\Dependencies\BepInEx\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs replacesameversion sharedfile uninsnosharedfileprompt;
+
+[Dirs]
+Name: "{app}\QMods"
  
 [UninstallRun]
 Filename: "{app}\BepInEx\patchers\QModManager\QModManager.exe"; Parameters: "-u";

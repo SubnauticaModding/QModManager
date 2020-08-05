@@ -1,24 +1,35 @@
 ﻿namespace QModManager.API
 {
     using System;
+    using QModManager.Utility;
 
     /// <summary>
     /// Identifies a required mod and an optional minimum version.
     /// </summary>
     public class RequiredQMod
     {
-        internal RequiredQMod(string id)
+        internal static IVersionParser VersionParserService { get; set; } = new VersionParser();
+
+        private RequiredQMod(string id, bool requiresMinVersion, Version version)
         {
             this.Id = id;
-            this.RequiresMinimumVersion = false;
-            this.MinimumVersion = new Version();            
+            this.RequiresMinimumVersion = requiresMinVersion;
+            this.MinimumVersion = version;
+        }
+
+        internal RequiredQMod(string id)
+            : this(id, false, VersionParserService.NoVersionParsed)
+        {
         }
 
         internal RequiredQMod(string id, Version minimumVersion)
+            : this(id, !VersionParserService.IsAllZeroVersion(minimumVersion), minimumVersion)
         {
-            this.Id = id;
-            this.RequiresMinimumVersion = true;
-            this.MinimumVersion = minimumVersion;            
+        }
+
+        internal RequiredQMod(string id, string minimumVersion)
+            : this(id, !string.IsNullOrEmpty(minimumVersion), VersionParserService.GetVersion(minimumVersion))
+        {
         }
 
         /// <summary>
