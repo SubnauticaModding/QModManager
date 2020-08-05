@@ -65,7 +65,8 @@ namespace QModManager.Patching
 
                 try
                 {
-                    Logger.Info($"Folder structure:{IOUtilities.GetFolderStructureAsTree()}");
+                    Logger.Info($"Folder structure:");
+                    IOUtilities.LogFolderStructureAsTree();
                 }
                 catch (Exception e)
                 {

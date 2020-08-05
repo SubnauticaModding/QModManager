@@ -22,13 +22,13 @@ namespace QModManager.Utility
             "steam_shader_cache",
         };
 
-        internal static string GetFolderStructureAsTree(string directory = null)
+        internal static void LogFolderStructureAsTree(string directory = null)
         {
             try
             {
                 directory ??= Environment.CurrentDirectory;
 
-                return GenerateFolderStructure(directory);
+                GenerateFolderStructure(directory);
             }
             catch (Exception e)
             {
@@ -36,17 +36,22 @@ namespace QModManager.Utility
             }
         }
 
-        internal static string GenerateFolderStructure(string directory)
+        internal static void GenerateFolderStructure(string directory)
         {
             var builder = new StringBuilder();
+
             try
             {
                 builder.AppendLine();
                 builder.AppendLine($"+ {new DirectoryInfo(directory).Name}");
 
+                Logger.Info(builder.ToString());
+                builder.Clear();
                 foreach (string dir in Directory.GetDirectories(directory))
                 {
                     GetFolderStructureRecursively(builder, dir, 0);
+                    Logger.Info(builder.ToString());
+                    builder.Clear();
                 }
 
                 string[] files = Directory.GetFiles(directory);
@@ -60,7 +65,7 @@ namespace QModManager.Utility
                 }
 
                 builder.AppendLine();
-                return builder.ToString();
+                Logger.Info(builder.ToString());
             }
             catch (Exception e)
             {
