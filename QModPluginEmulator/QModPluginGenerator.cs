@@ -3,23 +3,36 @@ using BepInEx.Bootstrap;
 using BepInEx.Logging;
 using HarmonyLib;
 using Mono.Cecil;
+using Oculus.Newtonsoft.Json.Bson;
+using Oculus.Newtonsoft.Json;
 using QModManager.API;
 using QModManager.Patching;
 using QModManager.Utility;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using TypeloaderCache = System.Collections.Generic.Dictionary<string, BepInEx.Bootstrap.CachedAssembly<BepInEx.PluginInfo>>;
+using QMMAssemblyCache = System.Collections.Generic.Dictionary<string, long>;
 
 namespace QModManager
 {
     public static class QModPluginGenerator
     {
-        internal static string QModsPath => Path.Combine(Paths.GameRootPath, "QMods");
+        internal static readonly string QModsPath = Path.Combine(Paths.GameRootPath, "QMods");
+        private static readonly string BepInExRootPath = Path.Combine(Paths.GameRootPath, "BepInEx");
+        private static readonly string BepInExCachePath = Path.Combine(Paths.BepInExRootPath, "cache");
+        private static readonly string BepInExPatchersPath = Path.Combine(Paths.BepInExRootPath, "patchers");
+        private static readonly string BepInExPluginsPath = Path.Combine(Paths.BepInExRootPath, "plugins");
+        private static readonly string QMMPatchersPath = Path.Combine(BepInExPatchersPath, "QModManager");
+        private static readonly string QMMPluginsPath = Path.Combine(BepInExPluginsPath, "QModManager");
+        private static readonly string QMMAssemblyCachePath = Path.Combine(BepInExCachePath, "qmodmanager.dat");
+        private static QMMAssemblyCache QMMAssemblyCache;
 
         private static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("QModPluginGenerator");
-        private const string pluginCache = "qmodmanager_plugingenerator";
+        private const string GeneratedPluginCache = "qmodmanager_plugingenerator";
 
         internal static IEnumerable<QMod> QModsToLoad;
         internal static Dictionary<string, QMod> QModsToLoadById;
@@ -28,14 +41,142 @@ namespace QModManager
 
         internal static IVersionParser VersionParserService { get; set; } = new VersionParser();
 
+        private static TypeloaderCache PluginCache;
+
         [Obsolete("Should not be used!", true)]
         public static void Finish()
         {
+            PluginCache = GetPluginCache();
             var harmony = new Harmony("QModManager.QModPluginGenerator");
             harmony.Patch(
                 typeof(TypeLoader).GetMethod(nameof(TypeLoader.FindPluginTypes)).MakeGenericMethod(typeof(PluginInfo)),
                 postfix: new HarmonyMethod(typeof(QModPluginGenerator).GetMethod(nameof(TypeLoaderFindPluginTypesPostfix))));
             harmony.PatchAll(typeof(QModPluginGenerator));
+        }
+
+        private static string[] QMMKnownAssemblyPaths = new[] {
+            Path.Combine(QMMPatchersPath, "QModManager.QMMHarmonyShimmer.dll"),
+            Path.Combine(QMMPatchersPath, "QModManager.QModPluginGenerator.dll"),
+            Path.Combine(QMMPatchersPath, "QModManager.UnityAudioFixer.dll"),
+            Path.Combine(QMMPatchersPath, "QModManager.exe"),
+            Path.Combine(QMMPluginsPath, "QModInstaller.dll"),
+            Path.Combine(QMMPluginsPath, "QModManager.QMMLoader.dll")
+        };
+
+        private static QMMAssemblyCache GetNewQMMAssemblyCache()
+        {
+            var qmmAssemblyCache = new QMMAssemblyCache();
+            foreach (var assemblyPath in QMMKnownAssemblyPaths)
+            {
+                if (!File.Exists(assemblyPath))
+                {
+                    Logger.LogError($"Could not find QMM assembly: {assemblyPath}");
+                    continue;
+                }
+
+                qmmAssemblyCache.Add(assemblyPath, File.GetLastWriteTimeUtc(assemblyPath).Ticks);
+            }
+            return qmmAssemblyCache;
+        }
+
+        private static void LoadQMMAssemblyCache()
+        {
+            Logger.LogInfo("Loading QMMAssemblyCache...");
+            var stopwatch = Stopwatch.StartNew();
+
+            if (!File.Exists(QMMAssemblyCachePath))
+            {
+                Logger.LogInfo("Could not find QMMAssemblyCache, skipping load.");
+                return;
+            }
+
+            try
+            {
+                var data = File.ReadAllBytes(QMMAssemblyCachePath);
+                using (var ms = new MemoryStream(data))
+                using (var reader = new BsonReader(ms))
+                {
+                    var serializer = new JsonSerializer();
+                    QMMAssemblyCache = serializer.Deserialize<QMMAssemblyCache>(reader);
+                }
+                stopwatch.Stop();
+                Logger.LogInfo($"QMMAssemblyCache loaded in {stopwatch.ElapsedMilliseconds} ms.");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Failed to load QMMAssemblyCache!");
+                Logger.LogError(ex);
+            }
+        }
+
+        private static void SaveQMMAssemblyCache()
+        {
+            if (QMMAssemblyCache == null)
+                QMMAssemblyCache = GetNewQMMAssemblyCache();
+
+            Logger.LogInfo("Saving QMMAssemblyCache...");
+            var stopwatch = Stopwatch.StartNew();
+
+            try
+            {
+                Directory.CreateDirectory(BepInExCachePath);
+
+                using (var ms = new MemoryStream())
+                using (var writer = new BsonWriter(ms))
+                {
+                    var serializer = new JsonSerializer();
+                    serializer.Serialize(writer, QMMAssemblyCache);
+                    File.WriteAllBytes(QMMAssemblyCachePath, ms.ToArray());
+                }
+
+                stopwatch.Stop();
+                Logger.LogInfo($"QMMAssemblyCache saved in {stopwatch.ElapsedMilliseconds} ms.");
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("Failed to save QMMAssemblyCache!");
+                Logger.LogError(ex);
+            }
+        }
+
+        private static void ClearBepInExCache()
+        {
+            if (BepInExCachePath.Contains("system32") || BepInExCachePath.Contains("Windows"))
+            {
+                throw new InvalidOperationException($"BepInEx Cache Path invalid! ({BepInExCachePath})");
+            }
+
+            Logger.LogInfo("Clearing BepInEx cache...");
+            var stopwatch = Stopwatch.StartNew();
+
+            Directory.Delete(BepInExCachePath, true);
+            stopwatch.Stop();
+            Logger.LogInfo($"Cleared BepInEx cache in {stopwatch.ElapsedMilliseconds} ms.");
+        }
+
+        private static TypeloaderCache GetPluginCache()
+        {
+            LoadQMMAssemblyCache();
+
+            if (QMMAssemblyCache == null)
+            {
+                ClearBepInExCache();
+                QMMAssemblyCache = GetNewQMMAssemblyCache();
+                SaveQMMAssemblyCache();
+            }
+            else
+            {
+                var qmmAssemblyCache = GetNewQMMAssemblyCache();
+
+                if (!qmmAssemblyCache.Keys.SequenceEqual(QMMAssemblyCache.Keys) ||
+                    qmmAssemblyCache.Any(x => x.Value != QMMAssemblyCache[x.Key]))
+                {
+                    ClearBepInExCache();
+                    QMMAssemblyCache = qmmAssemblyCache;
+                    SaveQMMAssemblyCache();
+                }
+            }
+            return TypeLoader.LoadAssemblyCache<PluginInfo>(GeneratedPluginCache);
         }
 
         [Obsolete("Should not be used!", true)]
@@ -50,7 +191,7 @@ namespace QModManager
             try
             {
                 var result = new Dictionary<string, List<PluginInfo>>();
-                var cache = TypeLoader.LoadAssemblyCache<PluginInfo>(pluginCache);
+
                 QModPluginInfos = new Dictionary<string, PluginInfo>();
                 InitialisedQModPlugins = new List<PluginInfo>();
 
@@ -59,12 +200,13 @@ namespace QModManager
                 QModsToLoad = factory.BuildModLoadingList(QModsPath);
                 QModServices.LoadKnownMods(QModsToLoad.ToList());
                 QModsToLoadById = QModsToLoad.ToDictionary(qmod => qmod.Id);
+
                 foreach (var mod in QModsToLoad.Where(mod => mod.Status == ModStatus.Success))
                 {
                     var dll = Path.Combine(mod.SubDirectory, mod.AssemblyName);
                     var manifest = Path.Combine(mod.SubDirectory, "mod.json");
 
-                    if (cache != null && cache.TryGetValue(dll, out var cacheEntry))
+                    if (PluginCache != null && PluginCache.TryGetValue(dll, out var cacheEntry))
                     {
                         var lastWrite = Math.Max(File.GetLastWriteTimeUtc(dll).Ticks, File.GetLastWriteTimeUtc(manifest).Ticks);
                         if (lastWrite == cacheEntry.Timestamp)
@@ -126,7 +268,7 @@ namespace QModManager
 
                 __result[Assembly.GetExecutingAssembly().Location] = QModPluginInfos.Values.Distinct().ToList();
 
-                TypeLoader.SaveAssemblyCache(pluginCache, result);
+                TypeLoader.SaveAssemblyCache(GeneratedPluginCache, result);
             }
             catch (Exception ex)
             {
