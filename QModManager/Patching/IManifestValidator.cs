@@ -5,5 +5,8 @@
         void ValidateManifest(QMod mod);
 
         void CheckRequiredMods(QMod mod);
+
+        void FindPatchMethods(QMod qMod);
+        void LoadAssembly(QMod mod);
     }
 }

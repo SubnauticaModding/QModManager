@@ -101,17 +101,28 @@
 
             foreach (QMod mod in modList)
             {
-                if (mod.Status != ModStatus.Success)
-                    continue;
-
-                if (mod.RequiredMods != null)
-                {
-                    ValidateDependencies(modsToLoad, mod);
-                }
-
                 if (mod.Status == ModStatus.Success)
                     this.Validator.ValidateManifest(mod);
             }
+
+            foreach (QMod mod in modList)
+            {
+                if (mod.Status == ModStatus.Success)
+                    this.Validator.LoadAssembly(mod);
+            }
+
+            foreach (QMod mod in modList)
+            {
+                if (mod.Status == ModStatus.Success)
+                    ValidateDependencies(modList, mod);
+            }
+
+            foreach (QMod mod in modList)
+            {
+                if (mod.Status == ModStatus.Success)
+                    this.Validator.FindPatchMethods(mod);
+            }
+
 
             return modList;
         }
@@ -144,12 +155,6 @@
                 if (dependencyQMod.HasDependencies)
                 {
                     ValidateDependencies(modsToLoad, dependencyQMod);
-                }
-
-                if (dependencyQMod.LoadedAssembly == null)
-                {
-                    // Dependency hasn't been validated yet
-                    this.Validator.ValidateManifest(dependencyQMod);
                 }
 
                 if (dependencyQMod.Status != ModStatus.Success)

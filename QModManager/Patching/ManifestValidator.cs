@@ -77,9 +77,11 @@
                 Logger.Exception(vEx);
 
                 mod.Status = ModStatus.InvalidCoreInfo;
-                return;
             }
+        }
 
+        public void LoadAssembly(QMod mod)
+        {
             string modAssemblyPath = Path.Combine(mod.SubDirectory, mod.AssemblyName);
 
             if (string.IsNullOrEmpty(modAssemblyPath) || !File.Exists(modAssemblyPath))
@@ -101,14 +103,6 @@
                     mod.Status = ModStatus.FailedLoadingAssemblyFile;
                     return;
                 }
-            }
-
-            ModStatus patchMethodResults = FindPatchMethods(mod);
-
-            if (patchMethodResults != ModStatus.Success)
-            {
-                mod.Status = patchMethodResults;
-                return;
             }
         }
 
@@ -166,7 +160,7 @@
             }
         }
 
-        internal ModStatus FindPatchMethods(QMod qMod)
+        public void FindPatchMethods(QMod qMod)
         {
             try
             {
@@ -182,7 +176,8 @@
                     if (jsonPatchMethod != null && jsonPatchMethod.GetParameters().Length == 0)
                     {
                         qMod.PatchMethods[PatchingOrder.NormalInitialize] = new QModPatchMethod(jsonPatchMethod, qMod, PatchingOrder.NormalInitialize);
-                        return ModStatus.Success;
+                        qMod.Status = ModStatus.Success;
+                        return;
                     }
                 }
 
@@ -206,7 +201,8 @@
                                         {
                                             Logger.Error($"The mod {qMod.Id} has an invalid priority patching password.");
                                             qMod.PatchMethods.Clear();
-                                            return ModStatus.InvalidCoreInfo;
+                                            qMod.Status = ModStatus.InvalidCoreInfo;
+                                            return;
                                         }
                                         break;
                                 }
@@ -214,7 +210,10 @@
                                 if (qMod.PatchMethods.TryGetValue(patch.PatchOrder, out QModPatchMethod extra))
                                 {
                                     if (extra.Method.Name != method.Name)
-                                        return ModStatus.TooManyPatchMethods;
+                                    {
+                                        qMod.Status = ModStatus.TooManyPatchMethods;
+                                        return;
+                                    }
                                 }
                                 else
                                 {
@@ -229,23 +228,23 @@
             catch (TypeLoadException tlEx)
             {
                 Logger.Debug($"Unable to load types for '{qMod.Id}': " + tlEx.Message);
-                return ModStatus.MissingDependency;
+                qMod.Status = ModStatus.MissingDependency;
             }
             catch (MissingMethodException mmEx)
             {
                 Logger.Debug($"Unable to find patch method for '{qMod.Id}': " + mmEx.Message);
-                return ModStatus.MissingDependency;
+                qMod.Status = ModStatus.MissingDependency;
             }
             catch (ReflectionTypeLoadException rtle)
             {
                 Logger.Debug($"Unable to load types for '{qMod.Id}': " + rtle.Message);
-                return ModStatus.MissingDependency;
+                qMod.Status = ModStatus.MissingDependency;
             }
 
             if (qMod.PatchMethods.Count == 0)
-                return ModStatus.MissingPatchMethod;
-
-            return ModStatus.Success;
+                qMod.Status = ModStatus.MissingPatchMethod;
+            else
+                qMod.Status = ModStatus.Success;
         }
     }
 }

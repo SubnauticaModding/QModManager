@@ -5,7 +5,6 @@
     using System.Reflection;
     using NUnit.Framework;
     using QModManager.API;
-    using QModManager.API.ModLoading;
     using QModManager.Patching;
 
     [TestFixture]
@@ -14,6 +13,14 @@
         private class DummyValidator : IManifestValidator
         {
             public void CheckRequiredMods(QMod mod)
+            {
+            }
+
+            public void FindPatchMethods(QMod qMod)
+            {                
+            }
+
+            public void LoadAssembly(QMod mod)
             {
             }
 
@@ -69,7 +76,7 @@
 
             var earlyErrors = new List<QMod>
             {
-                new QMod {Id = "5", Status = ModStatus.MissingPatchMethod },
+                new QMod {Id = "5", Status = ModStatus.MissingPatchMethod },                
             };
 
             var modToInspect = new QMod
@@ -84,12 +91,13 @@
 
             var modsToLoad = new List<QMod>
             {
-                new QMod { Id = "6", Status = ModStatus.Success },
+                new QMod { Id = "6", Status = ModStatus.Success, RequiredMods = new List<RequiredQMod>() },
                 new QMod
                 {
                     Id = "7", Status = ModStatus.Success,
                     ParsedVersion = new Version(1, 0, 1),
-                    LoadedAssembly = Assembly.GetExecutingAssembly()
+                    LoadedAssembly = Assembly.GetExecutingAssembly(),
+                    RequiredMods = new List<RequiredQMod>()
                 },
                 modToInspect
             };
