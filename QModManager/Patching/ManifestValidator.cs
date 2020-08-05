@@ -1,6 +1,5 @@
 ﻿namespace QModManager.Patching
 {
-    using Oculus.Newtonsoft.Json;
     using QModManager.API;
     using QModManager.API.ModLoading;
     using QModManager.Utility;
@@ -9,7 +8,6 @@
     using System.IO;
     using System.Linq;
     using System.Reflection;
-    using System.Text.RegularExpressions;
 
     internal class ManifestValidator : IManifestValidator
     {
