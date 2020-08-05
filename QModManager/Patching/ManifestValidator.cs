@@ -62,10 +62,10 @@
                     mod.SupportedGame = QModGame.Subnautica;
                     break;
                 default:
-                {
-                    mod.Status = ModStatus.FailedIdentifyingGame;
-                    return;
-                }
+                    {
+                        mod.Status = ModStatus.FailedIdentifyingGame;
+                        return;
+                    }
             }
 
             try
@@ -145,15 +145,38 @@
             }
 
             mod.RequiredMods = requiredMods.Values;
-            if (Logger.DebugLogsEnabled && requiredMods.Count > 0)
+            if (Logger.DebugLogsEnabled)
             {
-                string msg = $"{mod.Id} has required mods: ";
-                foreach (var required in requiredMods.Values)
+                if (requiredMods.Count > 0)
                 {
-                    msg += $"{required.Id} ";
-                }
+                    string msg = $"{mod.Id} has required mods: ";
+                    foreach (var required in requiredMods.Values)
+                    {
+                        msg += $"{required.Id} ";
+                    }
 
-                Logger.Debug(msg);
+                    Logger.Debug(msg);
+                }
+                if (mod.LoadBeforePreferences.Count > 0)
+                {
+                    string msg = $"{mod.Id} should load before: ";
+                    foreach (var id in mod.LoadBeforePreferences)
+                    {
+                        msg += $"{id} ";
+                    }
+
+                    Logger.Debug(msg);
+                }
+                if (mod.LoadAfterPreferences.Count > 0)
+                {
+                    string msg = $"{mod.Id} should load after: ";
+                    foreach (var id in mod.LoadAfterPreferences)
+                    {
+                        msg += $"{id} ";
+                    }
+
+                    Logger.Debug(msg);
+                }
             }
         }
 
