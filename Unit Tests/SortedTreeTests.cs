@@ -561,6 +561,64 @@
         }
 
         [Test]
+        public void TestList_MixedDependenciesAndPreferences_OrderCoherent_AllModsLinked()
+        {
+            var tree = new SortedCollection<string, QMod>();
+
+            var coreMod = new QMod
+            {
+                Id = "Core",
+                LoadAfter = new[] { "NonCore" }
+            };
+
+            var nonCoreMod = new QMod
+            {
+                Id = "NonCore",
+                Dependencies = new [] { "Core" }
+            };
+
+            tree.AddSorted(coreMod);
+            tree.AddSorted(nonCoreMod);
+
+            List<QMod> list = tree.GetSortedList();
+
+            Console.WriteLine(ListToString(list));
+
+            Assert.AreEqual(2, list.Count);
+            Assert.AreEqual("NonCore", list[0].Id);
+            Assert.AreEqual("Core", list[1].Id);
+        }
+
+        [Test]
+        public void TestList_MixedDependenciesAndPreferences_OrderInCycle_PreferenceIgnored_AllModsLinked()
+        {
+            var tree = new SortedCollection<string, QMod>();
+
+            var coreMod = new QMod
+            {
+                Id = "Core",
+                LoadBefore = new[] { "NonCore" }
+            };
+
+            var nonCoreMod = new QMod
+            {
+                Id = "NonCore",
+                Dependencies = new[] { "Core" }
+            };
+
+            tree.AddSorted(coreMod);
+            tree.AddSorted(nonCoreMod);
+
+            List<QMod> list = tree.GetSortedList();
+
+            Console.WriteLine(ListToString(list));
+
+            Assert.AreEqual(2, list.Count);
+            Assert.AreEqual("NonCore", list[0].Id);
+            Assert.AreEqual("Core", list[1].Id);
+        }
+
+        [Test]
         public void TestDependencies_SSS_SE_ConfirmCorrectOrder()
         {
             var validator = new ManifestValidator();
@@ -888,6 +946,25 @@
             Assert.IsFalse(tree["commonEntry6a"].LoadBeforePreferences.Contains(innerDependency));
             Assert.IsFalse(tree["commonEntry6a"].LoadBeforePreferences.Contains(outterDep1));
 
+        }
+
+        private static string ListToString(IList<QMod> list)
+        {
+            string s = "List: ";
+            if (list.Count == 0)
+            {
+                s += "Empty";
+                return s;
+            }
+
+            for (int i = 0; i < list.Count; i++)
+            {
+                QMod item = list[i];
+                s += Environment.NewLine;
+                s += item.Id;
+            }
+
+            return s;
         }
 
         private static string ListToString<T>(IList<T> list)
