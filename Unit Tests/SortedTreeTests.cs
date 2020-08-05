@@ -574,7 +574,7 @@
             var nonCoreMod = new QMod
             {
                 Id = "NonCore",
-                Dependencies = new [] { "Core" }
+                Dependencies = new[] { "Core" }
             };
 
             tree.AddSorted(coreMod);
