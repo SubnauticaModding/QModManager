@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using NUnit.Framework;
+    using NUnit.Framework.Internal;
     using QModManager.DataStructures;
     using QModManager.Patching;
 
@@ -476,6 +477,211 @@
             int cc2Index = list.FindIndex(c => c.Id == "CustomCraft2SML");
             int mcuIndex = list.FindIndex(m => m.Id == "MoreCyclopsUpgrades");
             Assert.IsTrue(cc2Index > mcuIndex);
+
+            int smlIndex = list.FindIndex(x => x.Id == "SMLHelper");
+            Assert.IsTrue(mcuIndex < smlIndex);
+        }
+
+        [Test]
+        public void TestDependenciesAndPreferences_UsingDeadMorozData_ConfirmAllEntriesIncluded_ConfirmCorrectOrder()
+        {
+            var tree = new SortedCollection<string, TestData>();
+            tree.AddSorted(new TestData("AdvancedInventory_BZ"));
+            tree.AddSorted(new TestData("All_Items_1x1"));
+            tree.AddSorted(new TestData("BagEquipment_BZ"));
+            tree.AddSorted(new TestData("BelowzeroAltMeter"));
+            tree.AddSorted(new TestData("BetterACU", "SMLHelper"));
+            tree.AddSorted(new TestData("BetterBioReactor"));
+            tree.AddSorted(new TestData("BetterSeaglide"));
+            tree.AddSorted(new TestData("BetterTeleportationTool", "SMLHelper"));
+            tree.AddSorted(new TestData("BuilderModule", "SMLHelper"));
+            tree.AddSorted(new TestData("BuildingTweaks"));
+            tree.AddSorted(new TestData("CopperFromScanning"));
+            tree.AddSorted(new TestData("CustomBeacons"));
+            tree.AddSorted(new TestData("DataBoxScannerFix"));
+            tree.AddSorted(new TestData("EasyCraft_BZ"));
+            tree.AddSorted(new TestData("Fixes", "SMLHelper"));
+            tree.AddSorted(new TestData("MoreIngotsBz", "SMLHelper")
+            {
+                LoadAfterPreferences = { "EasyCraft_BZ" }
+            });
+            tree.AddSorted(new TestData("PDAPause"));
+            tree.AddSorted(new TestData("PickupFullCarryalls", "SMLHelper"));
+            tree.AddSorted(new TestData("QuantumLockerEnhanced", "SMLHelper"));
+            tree.AddSorted(new TestData("QuickSlotsMod_BZ"));
+            tree.AddSorted(new TestData("ResourceMonitor", "SMLHelper"));
+            tree.AddSorted(new TestData("RuntimeEditorForSubnautiac"));
+            tree.AddSorted(new TestData("ScannerBlips"));
+            tree.AddSorted(new TestData("SeaTruckArms", "SMLHelper", "SlotExtenderZero"));
+            tree.AddSorted(new TestData("SeaTruckDepthUpgrades", "SMLHelper"));
+            tree.AddSorted(new TestData("SeaTruckSpeedUpgrades", "SMLHelper"));
+            tree.AddSorted(new TestData("SeaTruckStorage", "SMLHelper"));
+            tree.AddSorted(new TestData("SlotExtenderZero", "SMLHelper"));
+            tree.AddSorted(new TestData("SMLHelper"));
+            tree.AddSorted(new TestData("SnapBuilder", "SMLHelper"));
+            tree.AddSorted(new TestData("SubnauticaMap"));
+            tree.AddSorted(new TestData("VersionChecker", "SMLHelper"));
+            tree.AddSorted(new TestData("WorldLoad", "SMLHelper"));
+
+            List<TestData> list = tree.GetSortedList();
+
+            Console.WriteLine(ListToString(list));
+
+            foreach (string item in tree.KnownNodes)
+            {
+                Assert.IsNotNull(list.Find(n => n.Id == item), item + " was missing");
+            }
+
+            Assert.AreEqual(33, list.Count);
+
+            foreach (SortedTreeNode<string, TestData> node in tree.NodesToSort.Values)
+            {
+                if (node.Dependencies.Count == 0)
+                    continue;
+
+                int indexOfNode = list.IndexOf(node.Data);
+                foreach (string dependency in node.Dependencies)
+                {
+                    int indexOfDependency = list.FindIndex(d => d.Id == dependency);
+
+                    Assert.IsTrue(indexOfNode < indexOfDependency);
+                }
+
+                foreach (string id in node.LoadBefore)
+                {
+                    int indexOfDependency = list.FindIndex(d => d.Id == id);
+
+                    Assert.IsTrue(indexOfNode < indexOfDependency);
+                }
+
+                foreach (string id in node.LoadAfter)
+                {
+                    int indexOfDependency = list.FindIndex(d => d.Id == id);
+
+                    Assert.IsTrue(indexOfNode > indexOfDependency);
+                }
+            }
+        }
+
+        [Test]
+        public void TestDependenciesAndPreferences_MultipleVariations_ConfirmAllEntriesIncluded_ConfirmCorrectOrder()
+        {
+            void assertNoMissingItems(SortedCollection<string, TestData> tree, List<TestData> sortedList)
+            {
+                foreach (string item in tree.KnownNodes)
+                {
+                    Assert.IsNotNull(sortedList.Find(n => n.Id == item), item + " was missing");
+                }
+
+                Assert.AreEqual(3, sortedList.Count);
+            }
+
+            void assertCorrectDependencyOrder(SortedCollection<string, TestData> tree, List<TestData> sortedList)
+            {
+                foreach (SortedTreeNode<string, TestData> node in tree.NodesToSort.Values)
+                {
+                    if (node.Dependencies.Count == 0)
+                        continue;
+
+                    int indexOfNode = sortedList.IndexOf(node.Data);
+                    foreach (string dependency in node.Dependencies)
+                    {
+                        int indexOfDependency = sortedList.FindIndex(d => d.Id == dependency);
+
+                        Assert.IsTrue(indexOfNode < indexOfDependency);
+                    }
+
+                    foreach (string id in node.LoadBefore)
+                    {
+                        int indexOfDependency = sortedList.FindIndex(d => d.Id == id);
+
+                        Assert.IsTrue(indexOfNode < indexOfDependency);
+                    }
+
+                    foreach (string id in node.LoadAfter)
+                    {
+                        int indexOfDependency = sortedList.FindIndex(d => d.Id == id);
+
+                        Assert.IsTrue(indexOfNode > indexOfDependency);
+                    }
+                }
+            }
+
+            // No dependencies or preferences
+            var noDependenciesOrPreferences = new SortedCollection<string, TestData>();
+            noDependenciesOrPreferences.AddSorted(new TestData("A"));
+            noDependenciesOrPreferences.AddSorted(new TestData("B"));
+            noDependenciesOrPreferences.AddSorted(new TestData("C"));
+
+            List<TestData> list = noDependenciesOrPreferences.GetSortedList();
+            Console.WriteLine("No dependencies or preferences");
+            Console.WriteLine(ListToString(list) + Environment.NewLine);
+
+            assertNoMissingItems(noDependenciesOrPreferences, list);
+
+            // LoadBefore preference only
+            var loadBeforePreferenceOnly = new SortedCollection<string, TestData>();
+            loadBeforePreferenceOnly.AddSorted(new TestData("A")
+            {
+                LoadBeforePreferences = { "B" }
+            });
+            loadBeforePreferenceOnly.AddSorted(new TestData("B"));
+            loadBeforePreferenceOnly.AddSorted(new TestData("C"));
+
+            list = loadBeforePreferenceOnly.GetSortedList();
+            Console.WriteLine("A LoadBefore: [B]");
+            Console.WriteLine(ListToString(list) + Environment.NewLine);
+
+            assertNoMissingItems(loadBeforePreferenceOnly, list);
+            assertCorrectDependencyOrder(loadBeforePreferenceOnly, list);
+
+            // LoadBefore preference and dependency
+            var loadBeforePreferenceAndDependency = new SortedCollection<string, TestData>();
+            loadBeforePreferenceAndDependency.AddSorted(new TestData("A", "C")
+            {
+                LoadBeforePreferences = { "B" }
+            });
+            loadBeforePreferenceAndDependency.AddSorted(new TestData("B"));
+            loadBeforePreferenceAndDependency.AddSorted(new TestData("C"));
+
+            list = loadBeforePreferenceAndDependency.GetSortedList();
+            Console.WriteLine("A LoadBefore: [B], Dependencies: [C]");
+            Console.WriteLine(ListToString(list) + Environment.NewLine);
+
+            assertNoMissingItems(loadBeforePreferenceAndDependency, list);
+            assertCorrectDependencyOrder(loadBeforePreferenceAndDependency, list);
+
+            // LoadAfter preference only
+            var loadAfterPreferenceOnly = new SortedCollection<string, TestData>();
+            loadAfterPreferenceOnly.AddSorted(new TestData("A")
+            {
+                LoadAfterPreferences = { "B" }
+            });
+            loadAfterPreferenceOnly.AddSorted(new TestData("B"));
+            loadAfterPreferenceOnly.AddSorted(new TestData("C"));
+
+            list = loadAfterPreferenceOnly.GetSortedList();
+            Console.WriteLine("A LoadAfter: [B]");
+            Console.WriteLine(ListToString(list) + Environment.NewLine);
+
+            assertNoMissingItems(loadAfterPreferenceOnly, list);
+            assertCorrectDependencyOrder(loadAfterPreferenceOnly, list);
+
+            // LoadAfter preference and dependency
+            var loadAfterPreferenceAndDependency = new SortedCollection<string, TestData>();
+            loadAfterPreferenceAndDependency.AddSorted(new TestData("B"));
+            loadAfterPreferenceAndDependency.AddSorted(new TestData("A", "C")
+            {
+                LoadAfterPreferences = { "B" }
+            });
+            loadAfterPreferenceAndDependency.AddSorted(new TestData("C"));
+
+            list = loadAfterPreferenceAndDependency.GetSortedList();
+            Console.WriteLine("A LoadAfter: [B], Dependencies: [C]");
+            Console.WriteLine(ListToString(list) + Environment.NewLine);
+
+            assertNoMissingItems(loadAfterPreferenceAndDependency, list);
+            assertCorrectDependencyOrder(loadAfterPreferenceAndDependency, list);
         }
 
         [Test]
