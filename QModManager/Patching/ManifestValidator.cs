@@ -82,6 +82,7 @@
 
         public void LoadAssembly(QMod mod)
         {
+            Logger.Debug($"Loading assembly for '{mod.Id}'");
             string modAssemblyPath = Path.Combine(mod.SubDirectory, mod.AssemblyName);
 
             if (string.IsNullOrEmpty(modAssemblyPath) || !File.Exists(modAssemblyPath))
@@ -167,6 +168,7 @@
                 if (!string.IsNullOrEmpty(qMod.EntryMethod))
                 {
                     // Legacy
+                    Logger.Debug($"Finding patch methods for '{qMod.Id}' using legacy style");
                     string[] entryMethodSig = qMod.EntryMethod.Split('.');
                     string entryType = string.Join(".", entryMethodSig.Take(entryMethodSig.Length - 1).ToArray());
                     string entryMethod = entryMethodSig[entryMethodSig.Length - 1];
@@ -182,6 +184,7 @@
                 }
 
                 // QMM 3.0
+                Logger.Debug($"Finding patch methods for '{qMod.Id}' using attribute style");
                 foreach (Type type in qMod.LoadedAssembly.GetTypes())
                 {
                     if (type.IsNotPublic || type.IsEnum || type.ContainsGenericParameters)

@@ -99,24 +99,28 @@
                 modList.Add(erroredMod);
             }
 
+            Logger.Debug($"Validating basic manifest data");
             foreach (QMod mod in modList)
             {
                 if (mod.Status == ModStatus.Success)
                     this.Validator.ValidateManifest(mod);
             }
 
+            Logger.Debug($"Loading assemblies");
             foreach (QMod mod in modList)
             {
                 if (mod.Status == ModStatus.Success)
                     this.Validator.LoadAssembly(mod);
             }
 
+            Logger.Debug($"Checking mod dependencies");
             foreach (QMod mod in modList)
             {
                 if (mod.Status == ModStatus.Success)
                     ValidateDependencies(modList, mod);
             }
 
+            Logger.Debug($"Checking mod patch methods");
             foreach (QMod mod in modList)
             {
                 if (mod.Status == ModStatus.Success)
@@ -132,8 +136,16 @@
         private void ValidateDependencies(List<QMod> modsToLoad, QMod mod)
         {
             // Check the mod dependencies
+
+            bool printed = false;
             foreach (RequiredQMod requiredMod in mod.RequiredMods)
             {
+                if (!printed)
+                {
+                    Logger.Debug($"Checking dependencies for '{mod.Id}'");
+                    printed = true;
+                }
+
                 QMod dependencyQMod = modsToLoad.Find(d => d.Id == requiredMod.Id);
                 PluginInfo dependencyPluginInfo = BepInExPlugins.Find(d => d.Metadata.GUID == requiredMod.Id);
 
