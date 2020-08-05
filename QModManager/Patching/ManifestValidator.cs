@@ -1,5 +1,6 @@
 ﻿namespace QModManager.Patching
 {
+    using Oculus.Newtonsoft.Json;
     using QModManager.API;
     using QModManager.API.ModLoading;
     using QModManager.Utility;
@@ -147,36 +148,23 @@
             mod.RequiredMods = requiredMods.Values;
             if (Logger.DebugLogsEnabled)
             {
+                string GetModList(IEnumerable<string> modIds)
+                {
+                    string message = string.Empty;
+                    foreach (var id in modIds)
+                        message += $"{id} ";
+
+                    return message;
+                }
+
                 if (requiredMods.Count > 0)
-                {
-                    string msg = $"{mod.Id} has required mods: ";
-                    foreach (var required in requiredMods.Values)
-                    {
-                        msg += $"{required.Id} ";
-                    }
+                    Logger.Debug($"{mod.Id} has required mods: {GetModList(requiredMods.Values.Cast<string>())}");
 
-                    Logger.Debug(msg);
-                }
                 if (mod.LoadBeforePreferences.Count > 0)
-                {
-                    string msg = $"{mod.Id} should load before: ";
-                    foreach (var id in mod.LoadBeforePreferences)
-                    {
-                        msg += $"{id} ";
-                    }
+                    Logger.Debug($"{mod.Id} should load before: {GetModList(mod.LoadBeforePreferences)}");
 
-                    Logger.Debug(msg);
-                }
                 if (mod.LoadAfterPreferences.Count > 0)
-                {
-                    string msg = $"{mod.Id} should load after: ";
-                    foreach (var id in mod.LoadAfterPreferences)
-                    {
-                        msg += $"{id} ";
-                    }
-
-                    Logger.Debug(msg);
-                }
+                    Logger.Debug($"{mod.Id} should load after: {GetModList(mod.LoadAfterPreferences)}");
             }
         }
 
