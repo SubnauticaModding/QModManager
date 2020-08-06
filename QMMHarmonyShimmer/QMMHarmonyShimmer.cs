@@ -222,8 +222,10 @@ namespace QModManager.QMMHarmonyShimmer
                     {
                         if (Path.GetFileName(filePath).Contains("0Harmony"))
                             Logger.LogWarning($"QMod in folder {Path.GetDirectoryName(subfolderPath)} is shipping its own version of Harmony! " +
-                                $"This is NOT RECOMMENDED and can lead to serious compatibility issues with other mods! " +
-                                $"If you are a mod author, please do not ship Harmony with your mods, and instead rely on QModManager to load it for you.");
+                                "This is NOT RECOMMENDED and can lead to serious compatibility issues with other mods! " +
+                                "If you are a mod author, please do not ship Harmony with your mods, " +
+                                $"and instead rely on QModManager to load it for you. For more details, see the wiki:{Environment.NewLine}" +
+                                "https://github.com/SubnauticaModding/QModManager/wiki/Basic-ModLoading-Setup-(Basics)");
                         else
                             Logger.LogInfo($"Cannot shim {Path.GetFileName(filePath)} as it is not a valid assembly, skipping...");
                         continue;
