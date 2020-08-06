@@ -144,19 +144,20 @@
             }
 
             mod.RequiredMods = requiredMods.Values;
+
             if (Logger.DebugLogsEnabled)
             {
                 string GetModList(IEnumerable<string> modIds)
                 {
-                    string message = string.Empty;
+                    string modList = string.Empty;
                     foreach (var id in modIds)
-                        message += $"{id} ";
+                        modList += $"{id} ";
 
-                    return message;
+                    return modList;
                 }
 
                 if (requiredMods.Count > 0)
-                    Logger.Debug($"{mod.Id} has required mods: {GetModList(requiredMods.Values.Cast<string>())}");
+                    Logger.Debug($"{mod.Id} has required mods: {GetModList(mod.RequiredMods.Select(mod => mod.Id))}");
 
                 if (mod.LoadBeforePreferences.Count > 0)
                     Logger.Debug($"{mod.Id} should load before: {GetModList(mod.LoadBeforePreferences)}");
