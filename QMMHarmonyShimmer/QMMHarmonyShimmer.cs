@@ -40,7 +40,7 @@ namespace QModManager.QMMHarmonyShimmer
 
         private static void ApplyHarmonyPatches()
         {
-            var harmony = new HarmonyLib.Harmony("QMMLoader");
+            var harmony = new HarmonyLib.Harmony("QMMHarmonyShimmer");
             harmony.PatchAll();
         }
 
