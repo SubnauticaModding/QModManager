@@ -46,12 +46,21 @@ namespace QModManager
         [Obsolete("Should not be used!", true)]
         public static void Finish()
         {
-            PluginCache = GetPluginCache();
-            var harmony = new Harmony("QModManager.QModPluginGenerator");
-            harmony.Patch(
-                typeof(TypeLoader).GetMethod(nameof(TypeLoader.FindPluginTypes)).MakeGenericMethod(typeof(PluginInfo)),
-                postfix: new HarmonyMethod(typeof(QModPluginGenerator).GetMethod(nameof(TypeLoaderFindPluginTypesPostfix))));
-            harmony.PatchAll(typeof(QModPluginGenerator));
+            try
+            {
+                PluginCache = GetPluginCache();
+                var harmony = new Harmony("QModManager.QModPluginGenerator");
+                harmony.Patch(
+                    typeof(TypeLoader).GetMethod(nameof(TypeLoader.FindPluginTypes)).MakeGenericMethod(typeof(PluginInfo)),
+                    postfix: new HarmonyMethod(typeof(QModPluginGenerator).GetMethod(nameof(TypeLoaderFindPluginTypesPostfix))));
+                harmony.PatchAll(typeof(QModPluginGenerator));
+            }
+            catch (Exception ex)
+            {
+                Logger.LogFatal($"An exception occurred while attempting to generate BepInEx PluginInfos: {ex.Message}.");
+                Logger.LogFatal($"Beginning stacktrace:");
+                Logger.LogFatal(ex.StackTrace);
+            }
         }
 
         private static string[] QMMKnownAssemblyPaths = new[] {
