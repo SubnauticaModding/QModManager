@@ -33,9 +33,18 @@ namespace QModManager.QMMHarmonyShimmer
         [Obsolete("Should not be used!", true)]
         public static void Initialize()
         {
-            ApplyHarmonyPatches();
-            InitAssemblyResolver();
-            ApplyShims();
+            try
+            {
+                ApplyHarmonyPatches();
+                InitAssemblyResolver();
+                ApplyShims();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogFatal($"An exception occurred while attempting to apply Harmony shims: {ex.Message}.");
+                Logger.LogFatal($"Beginning stacktrace:");
+                Logger.LogFatal(ex.StackTrace);
+            }
         }
 
         private static void ApplyHarmonyPatches()
@@ -247,12 +256,21 @@ namespace QModManager.QMMHarmonyShimmer
         [Obsolete("Should not be used!", true)]
         public static void Finish()
         {
-            AppDomain.CurrentDomain.AssemblyResolve += (sender, resolveEventArgs) =>
+            try
             {
-                return new AssemblyName(resolveEventArgs.Name).Name == "0Harmony_Shim" // Redirect references to the shim to this assembly,
-                    ? Assembly.GetExecutingAssembly()                                  // since we are emulating the API.
-                    : null;
-            };
+                AppDomain.CurrentDomain.AssemblyResolve += (sender, resolveEventArgs) =>
+                {
+                    return new AssemblyName(resolveEventArgs.Name).Name == "0Harmony_Shim" // Redirect references to the shim to this assembly,
+                        ? Assembly.GetExecutingAssembly()                                  // since we are emulating the API.
+                        : null;
+                };
+            }
+            catch (Exception ex)
+            {
+                Logger.LogFatal($"An exception occurred while attempting to apply Harmony shims: {ex.Message}.");
+                Logger.LogFatal($"Beginning stacktrace:");
+                Logger.LogFatal(ex.StackTrace);
+            }
         }
 
         /// <summary>
