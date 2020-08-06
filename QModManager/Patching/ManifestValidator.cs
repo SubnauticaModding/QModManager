@@ -61,10 +61,10 @@
                     mod.SupportedGame = QModGame.Subnautica;
                     break;
                 default:
-                    {
-                        mod.Status = ModStatus.FailedIdentifyingGame;
-                        return;
-                    }
+                {
+                    mod.Status = ModStatus.FailedIdentifyingGame;
+                    return;
+                }
             }
 
             try
