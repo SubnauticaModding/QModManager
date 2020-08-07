@@ -204,8 +204,10 @@ namespace QModManager
                 QModPluginInfos = new Dictionary<string, PluginInfo>();
                 InitialisedQModPlugins = new List<PluginInfo>();
 
-                var factory = new QModFactory();
-                factory.BepInExPlugins = __result.Values.SelectMany(x => x).ToList();
+                IPluginCollection pluginCollection = new PluginCollection(__result.Values.SelectMany(x => x).ToList());
+
+                IQModFactory factory = new QModFactory(pluginCollection);
+
                 QModsToLoad = factory.BuildModLoadingList(QModsPath);
                 QModServices.LoadKnownMods(QModsToLoad.ToList());
                 QModsToLoadById = QModsToLoad.ToDictionary(qmod => qmod.Id);
@@ -231,7 +233,7 @@ namespace QModManager
                     {
                         QModPluginInfos[id].Dependencies.AddItem(new BepInDependency(mod.Id, BepInDependency.DependencyFlags.SoftDependency));
                     }
-                    foreach (var id in mod.LoadBefore.Where(id => factory.BepInExPlugins.Select(x => x.Metadata.GUID).Contains(id)).Except(loadBeforeQmodIds))
+                    foreach (var id in mod.LoadBefore.Where(id => pluginCollection.AllPlugins.Select(x => x.Metadata.GUID).Contains(id)).Except(loadBeforeQmodIds))
                     {
                         if (__result.Values.SelectMany(x => x).SingleOrDefault(x => x.Metadata.GUID == id) is PluginInfo bepinexPlugin)
                         {
