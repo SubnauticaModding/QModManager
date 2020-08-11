@@ -22,13 +22,13 @@ namespace QModManager.Utility
             "steam_shader_cache",
         };
 
-        internal static string GetFolderStructureAsTree(string directory = null)
+        internal static void LogFolderStructureAsTree(string directory = null)
         {
             try
             {
                 directory ??= Environment.CurrentDirectory;
 
-                return GenerateFolderStructure(directory);
+                WriteFolderStructure(directory);
             }
             catch (Exception e)
             {
@@ -36,17 +36,16 @@ namespace QModManager.Utility
             }
         }
 
-        internal static string GenerateFolderStructure(string directory)
+        internal static void WriteFolderStructure(string directory)
         {
-            var builder = new StringBuilder();
             try
             {
-                builder.AppendLine();
-                builder.AppendLine($"+ {new DirectoryInfo(directory).Name}");
+                Console.WriteLine();
+                Console.WriteLine($"+ {new DirectoryInfo(directory).Name}");
 
                 foreach (string dir in Directory.GetDirectories(directory))
                 {
-                    GetFolderStructureRecursively(builder, dir, 0);
+                    WriteFolderStructureRecursively(dir, 0);
                 }
 
                 string[] files = Directory.GetFiles(directory);
@@ -54,35 +53,32 @@ namespace QModManager.Utility
                 {
                     FileInfo fileinfo = new FileInfo(files[i - 1]);
                     if (i != files.Length)
-                        builder.AppendLine($"{GenerateSpaces(0)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
+                        Console.WriteLine($"{GenerateSpaces(0)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
                     else
-                        builder.AppendLine($"{GenerateSpaces(0)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
+                        Console.WriteLine($"{GenerateSpaces(0)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
                 }
-
-                builder.AppendLine();
-                return builder.ToString();
             }
             catch (Exception e)
             {
                 throw e;
             }
         }
-        internal static void GetFolderStructureRecursively(StringBuilder builder, string directory, int spaces = 0)
+        internal static void WriteFolderStructureRecursively(string directory, int spaces = 0)
         {
             try
             {
                 DirectoryInfo dirInfo = new DirectoryInfo(directory);
-                builder.AppendLine($"{GenerateSpaces(spaces)}|---+ {dirInfo.Name}");
+                Console.WriteLine($"{GenerateSpaces(spaces)}|---+ {dirInfo.Name}");
 
                 if (BannedFolders.Contains(dirInfo.Name) || BannedFolders.Contains($"{dirInfo.Parent.Name}/{dirInfo.Name}"))
                 {
-                    builder.AppendLine($"{GenerateSpaces(spaces + 4)}`---- (Folder content not shown)");
+                    Console.WriteLine($"{GenerateSpaces(spaces + 4)}`---- (Folder content not shown)");
                     return;
                 }
 
                 foreach (string dir in Directory.GetDirectories(directory))
                 {
-                    GetFolderStructureRecursively(builder, dir, spaces + 4);
+                    WriteFolderStructureRecursively(dir, spaces + 4);
                 }
 
                 string[] files = Directory.GetFiles(directory);
@@ -90,9 +86,9 @@ namespace QModManager.Utility
                 {
                     FileInfo fileinfo = new FileInfo(files[i - 1]);
                     if (i != files.Length)
-                        builder.AppendLine($"{GenerateSpaces(spaces + 4)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
+                        Console.WriteLine($"{GenerateSpaces(spaces + 4)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
                     else
-                        builder.AppendLine($"{GenerateSpaces(spaces + 4)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
+                        Console.WriteLine($"{GenerateSpaces(spaces + 4)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
                 }
             }
             catch (Exception e)

@@ -33,14 +33,23 @@ namespace QModManager.QMMHarmonyShimmer
         [Obsolete("Should not be used!", true)]
         public static void Initialize()
         {
-            ApplyHarmonyPatches();
-            InitAssemblyResolver();
-            ApplyShims();
+            try
+            {
+                ApplyHarmonyPatches();
+                InitAssemblyResolver();
+                ApplyShims();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogFatal($"An exception occurred while attempting to apply Harmony shims: {ex.Message}.");
+                Logger.LogFatal($"Beginning stacktrace:");
+                Logger.LogFatal(ex.StackTrace);
+            }
         }
 
         private static void ApplyHarmonyPatches()
         {
-            var harmony = new HarmonyLib.Harmony("QMMLoader");
+            var harmony = new HarmonyLib.Harmony("QMMHarmonyShimmer");
             harmony.PatchAll();
         }
 
@@ -218,10 +227,23 @@ namespace QModManager.QMMHarmonyShimmer
                             }
                         }
                     }
+                    catch (BadImageFormatException)
+                    {
+                        if (Path.GetFileName(filePath).Contains("0Harmony"))
+                            Logger.LogWarning($"QMod in folder {Path.GetDirectoryName(subfolderPath)} is shipping its own version of Harmony! " +
+                                "This is NOT RECOMMENDED and can lead to serious compatibility issues with other mods! " +
+                                "If you are a mod author, please do not ship Harmony with your mods, " +
+                                $"and instead rely on QModManager to load it for you. For more details, see the wiki:{Environment.NewLine}" +
+                                "https://github.com/SubnauticaModding/QModManager/wiki/Basic-ModLoading-Setup-(Basics)");
+                        else
+                            Logger.LogInfo($"Cannot shim {Path.GetFileName(filePath)} as it is not a valid assembly, skipping...");
+                        continue;
+                    }
                     catch (Exception e)
                     {
                         Logger.LogError($"Failed to shim {Path.GetFileName(filePath)}");
                         Logger.LogError(e);
+                        continue;
                     }
                 }
             }
@@ -234,12 +256,21 @@ namespace QModManager.QMMHarmonyShimmer
         [Obsolete("Should not be used!", true)]
         public static void Finish()
         {
-            AppDomain.CurrentDomain.AssemblyResolve += (sender, resolveEventArgs) =>
+            try
             {
-                return new AssemblyName(resolveEventArgs.Name).Name == "0Harmony_Shim" // Redirect references to the shim to this assembly,
-                    ? Assembly.GetExecutingAssembly()                                  // since we are emulating the API.
-                    : null;
-            };
+                AppDomain.CurrentDomain.AssemblyResolve += (sender, resolveEventArgs) =>
+                {
+                    return new AssemblyName(resolveEventArgs.Name).Name == "0Harmony_Shim" // Redirect references to the shim to this assembly,
+                        ? Assembly.GetExecutingAssembly()                                  // since we are emulating the API.
+                        : null;
+                };
+            }
+            catch (Exception ex)
+            {
+                Logger.LogFatal($"An exception occurred while attempting to apply Harmony shims: {ex.Message}.");
+                Logger.LogFatal($"Beginning stacktrace:");
+                Logger.LogFatal(ex.StackTrace);
+            }
         }
 
         /// <summary>

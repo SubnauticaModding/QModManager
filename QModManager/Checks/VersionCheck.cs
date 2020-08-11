@@ -17,7 +17,7 @@
 
         internal static void Check()
         {
-            if (PlayerPrefs.GetInt("QModManager_EnableUpdateCheck", 1) == 0)
+            if (!Config.CheckForUpdates)
             {
                 Logger.Info("Update check disabled");
                 return;

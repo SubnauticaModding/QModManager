@@ -136,6 +136,7 @@
     <Compile Include="API\IQMod.cs" />
     <Compile Include="API\IQModAPI.cs" />
     <Compile Include="API\IQModServices.cs" />
+    <Compile Include="Patching\IPluginCollection.cs" />
     <Compile Include="Patching\ModStatus.cs" />
     <Compile Include="API\ModLoading\QModCoreAttribute.cs" />
     <Compile Include="API\ModLoading\QModPatch.cs" />
@@ -165,6 +166,7 @@
     <Compile Include="Patching\Patcher.cs" />
     <Compile Include="Patching\IQModSerialiable.cs" />
     <Compile Include="Patching\PatchingOrder.cs" />
+    <Compile Include="Patching\PluginCollection.cs" />
     <Compile Include="Patching\QMod.cs" />
     <Compile Include="Patching\QModFactory.cs" />
     <Compile Include="API\ModLoading\QModPatchAttributeBase.cs" />

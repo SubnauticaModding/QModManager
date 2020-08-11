@@ -681,6 +681,43 @@
             The stream that writes to an external console. Null if no such console exists
             </summary>
         </member>
+        <member name="T:BepInEx.PluginInfo">
+            <summary>
+            Data class that represents information about a loadable BepInEx plugin.
+            Contains all metadata and additional info required for plugin loading by <see cref="T:BepInEx.Bootstrap.Chainloader"/>.
+            </summary>
+        </member>
+        <member name="P:BepInEx.PluginInfo.Metadata">
+            <summary>
+            General metadata about a plugin.
+            </summary>
+        </member>
+        <member name="P:BepInEx.PluginInfo.Processes">
+            <summary>
+            Collection of <see cref="T:BepInEx.BepInProcess"/> attributes that describe what processes the plugin can run on.
+            </summary>
+        </member>
+        <member name="P:BepInEx.PluginInfo.Dependencies">
+            <summary>
+            Collection of <see cref="T:BepInEx.BepInDependency"/> attributes that describe what plugins this plugin depends on.
+            </summary>
+        </member>
+        <member name="P:BepInEx.PluginInfo.Incompatibilities">
+            <summary>
+            Collection of <see cref="T:BepInEx.BepInIncompatibility"/> attributes that describe what plugins this plugin
+            is incompatible with.
+            </summary>
+        </member>
+        <member name="P:BepInEx.PluginInfo.Location">
+            <summary>
+            File path to the plugin DLL
+            </summary>
+        </member>
+        <member name="P:BepInEx.PluginInfo.Instance">
+            <summary>
+            Instance of the plugin that represents this info. NULL if no plugin is instantiated from info (yet)
+            </summary>
+        </member>
         <member name="M:BepInEx.PluginInfo.ToString">
             <inheritdoc />
         </member>
@@ -712,6 +749,11 @@
         <member name="T:BepInEx.BepInDependency">
             <summary>
             This attribute specifies any dependencies that this plugin has on other plugins.
+            </summary>
+        </member>
+        <member name="T:BepInEx.BepInDependency.DependencyFlags">
+            <summary>
+            Flags that are applied to a dependency
             </summary>
         </member>
         <member name="F:BepInEx.BepInDependency.DependencyFlags.HardDependency">
@@ -750,7 +792,7 @@
         <member name="M:BepInEx.BepInDependency.#ctor(System.String,System.String)">
             <summary>
             Marks this <see cref="T:BepInEx.BaseUnityPlugin"/> as depenant on another plugin. The other plugin will be loaded before this one.
-            If the other plugin doesn't exist or is of a version below <see cref="!:MinimumDependencyVersion"/>, this plugin will not load and an error will be logged instead.
+            If the other plugin doesn't exist or is of a version below <see cref="P:BepInEx.BepInDependency.MinimumVersion"/>, this plugin will not load and an error will be logged instead.
             </summary>
             <param name="DependencyGUID">The GUID of the referenced plugin.</param>
             <param name="MinimumDependencyVersion">The minimum version of the referenced plugin.</param>
@@ -825,7 +867,7 @@
             <summary>
             Retrieves the dependencies of the specified plugin type.
             </summary>
-            <param name="Plugin">The plugin type.</param>
+            <param name="plugin">The plugin type.</param>
             <returns>A list of all plugin types that the specified plugin type depends upon.</returns>
         </member>
         <member name="T:BepInEx.BuildInfoAttribute">
@@ -844,6 +886,17 @@
             The loaded and initialized list of plugins.
             </summary>
         </member>
+        <member name="P:BepInEx.Bootstrap.Chainloader.Plugins">
+            <summary>
+            List of all <see cref="T:BepInEx.BepInPlugin"/> loaded via the chainloader.
+            </summary>
+        </member>
+        <member name="P:BepInEx.Bootstrap.Chainloader.DependencyErrors">
+            <summary>
+            Collection of error chainloader messages that occured during plugin loading.
+            Contains information about what certain plugins were not loaded.
+            </summary>
+        </member>
         <member name="P:BepInEx.Bootstrap.Chainloader.ManagerObject">
             <summary>
             The GameObject that all plugins are attached to as components.
@@ -853,6 +906,13 @@
             <summary>
             Initializes BepInEx to be able to start the chainloader.
             </summary>
+        </member>
+        <member name="M:BepInEx.Bootstrap.Chainloader.ToPluginInfo(Mono.Cecil.TypeDefinition)">
+            <summary>
+            Analyzes the given type definition and attempts to convert it to a valid <see cref="T:BepInEx.PluginInfo"/>
+            </summary>
+            <param name="type">Type definition to analyze.</param>
+            <returns>If the type represent a valid plugin, returns a <see cref="T:BepInEx.PluginInfo"/> instance. Otherwise, return null.</returns>
         </member>
         <member name="M:BepInEx.Bootstrap.Chainloader.Start">
             <summary>
@@ -895,6 +955,21 @@
         <member name="T:BepInEx.Bootstrap.TypeLoader">
             <summary>
                 Provides methods for loading specified types from an assembly.
+            </summary>
+        </member>
+        <member name="F:BepInEx.Bootstrap.TypeLoader.Resolver">
+            <summary>
+            Default assembly resolved used by the <see cref="T:BepInEx.Bootstrap.TypeLoader"/>
+            </summary>
+        </member>
+        <member name="F:BepInEx.Bootstrap.TypeLoader.ReaderParameters">
+            <summary>
+            Default reader parameters used by <see cref="T:BepInEx.Bootstrap.TypeLoader"/>
+            </summary>
+        </member>
+        <member name="E:BepInEx.Bootstrap.TypeLoader.AssemblyResolve">
+            <summary>
+            Event fired when <see cref="T:BepInEx.Bootstrap.TypeLoader"/> fails to resolve a type during type loading.
             </summary>
         </member>
         <member name="M:BepInEx.Bootstrap.TypeLoader.FindPluginTypes``1(System.String,System.Func{Mono.Cecil.TypeDefinition,``0},System.Func{Mono.Cecil.AssemblyDefinition,System.Boolean},System.String)">
@@ -963,9 +1038,96 @@
             Logs entries using Unity specific outputs.
             </summary>
         </member>
+        <member name="P:BepInEx.Logging.DiskLogListener.DisplayedLogLevel">
+            <summary>
+            Log levels to display.
+            </summary>
+        </member>
+        <member name="P:BepInEx.Logging.DiskLogListener.LogWriter">
+            <summary>
+            Writer for the disk log.
+            </summary>
+        </member>
+        <member name="P:BepInEx.Logging.DiskLogListener.FlushTimer">
+            <summary>
+            Timer for flushing the logs to a file.
+            </summary>
+        </member>
+        <member name="P:BepInEx.Logging.DiskLogListener.WriteFromUnityLog">
+            <summary>
+            Whether to write Unity log messages to disk log.
+            </summary>
+        </member>
+        <member name="M:BepInEx.Logging.DiskLogListener.#ctor(System.String,BepInEx.Logging.LogLevel,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a new disk log listener.
+            </summary>
+            <param name="localPath">Path to the log.</param>
+            <param name="displayedLogLevel">Log levels to display.</param>
+            <param name="appendLog">Whether to append logs to an already existing log file.</param>
+            <param name="includeUnityLog">Whether to include Unity log into the disk log.</param>
+        </member>
+        <member name="M:BepInEx.Logging.DiskLogListener.LogEvent(System.Object,BepInEx.Logging.LogEventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="M:BepInEx.Logging.DiskLogListener.Dispose">
+            <inheritdoc />
+        </member>
+        <member name="M:BepInEx.Logging.DiskLogListener.Finalize">
+            <summary>
+            Disposes of Disk logger
+            </summary>
+        </member>
+        <member name="T:BepInEx.Logging.LogEventArgs">
+            <summary>
+            Log event arguments. Contains info about the log message.
+            </summary>
+        </member>
+        <member name="P:BepInEx.Logging.LogEventArgs.Data">
+            <summary>
+            Logged data.
+            </summary>
+        </member>
+        <member name="P:BepInEx.Logging.LogEventArgs.Level">
+            <summary>
+            Log levels for the data.
+            </summary>
+        </member>
+        <member name="P:BepInEx.Logging.LogEventArgs.Source">
+            <summary>
+            Log source that emitted the log event.
+            </summary>
+        </member>
+        <member name="M:BepInEx.Logging.LogEventArgs.#ctor(System.Object,BepInEx.Logging.LogLevel,BepInEx.Logging.ILogSource)">
+            <summary>
+            Creates the log event args-
+            </summary>
+            <param name="data">Logged data.</param>
+            <param name="level">Log level of the data.</param>
+            <param name="source">Log source that emits these args.</param>
+        </member>
+        <member name="M:BepInEx.Logging.LogEventArgs.ToString">
+            <inheritdoc />
+        </member>
+        <member name="M:BepInEx.Logging.LogEventArgs.ToStringLine">
+            <summary>
+            Like <see cref="M:BepInEx.Logging.LogEventArgs.ToString"/> but appends newline at the end.
+            </summary>
+            <returns>Same output as <see cref="M:BepInEx.Logging.LogEventArgs.ToString"/> but with new line.</returns>
+        </member>
         <member name="T:BepInEx.Logging.Logger">
             <summary>
-            A static <see cref="!:BaseLogger"/> instance.
+            A static Logger instance.
+            </summary>
+        </member>
+        <member name="P:BepInEx.Logging.Logger.Listeners">
+            <summary>
+            Collection of all log listeners that receive log events.
+            </summary>
+        </member>
+        <member name="P:BepInEx.Logging.Logger.Sources">
+            <summary>
+            Collection of all log source that output log events.
             </summary>
         </member>
         <member name="M:BepInEx.Logging.Logger.Log(BepInEx.Logging.LogLevel,System.Object)">
@@ -973,7 +1135,14 @@
             Logs an entry to the current logger instance.
             </summary>
             <param name="level">The level of the entry.</param>
-            <param name="entry">The textual value of the entry.</param>
+            <param name="data">The textual value of the entry.</param>
+        </member>
+        <member name="M:BepInEx.Logging.Logger.CreateLogSource(System.String)">
+            <summary>
+            Creates a new log source with a name and attaches it to log sources.
+            </summary>
+            <param name="sourceName">Name of the log source to create.</param>
+            <returns>An instance of <see cref="T:BepInEx.Logging.ManualLogSource"/> that allows to write logs.</returns>
         </member>
         <member name="T:BepInEx.Logging.LogLevel">
             <summary>
@@ -1020,6 +1189,11 @@
             All log levels.
             </summary>
         </member>
+        <member name="T:BepInEx.Logging.LogLevelExtensions">
+            <summary>
+            Helper methods for log level handling.
+            </summary>
+        </member>
         <member name="M:BepInEx.Logging.LogLevelExtensions.GetHighestLevel(BepInEx.Logging.LogLevel)">
             <summary>
             Gets the highest log level when there could potentially be multiple levels provided.
@@ -1034,41 +1208,181 @@
             <param name="level">The log level(s).</param>
             <returns>A console color associated with the highest log level supplied.</returns>
         </member>
+        <member name="T:BepInEx.Logging.ILogListener">
+            <summary>
+            A generic log listener that receives log events and can route them to some output (e.g. file, console, socket).
+            </summary>
+        </member>
+        <member name="M:BepInEx.Logging.ILogListener.LogEvent(System.Object,BepInEx.Logging.LogEventArgs)">
+            <summary>
+            Handle an incoming log event.
+            </summary>
+            <param name="sender">Log source that sent the event. Don't use; instead use <see cref="P:BepInEx.Logging.LogEventArgs.Source"/></param>
+            <param name="eventArgs">Information about the log message.</param>
+        </member>
+        <member name="T:BepInEx.Logging.ILogSource">
+            <summary>
+            Log source that can output log messages.
+            </summary>
+        </member>
+        <member name="P:BepInEx.Logging.ILogSource.SourceName">
+            <summary>
+            Name of the log source.
+            </summary>
+        </member>
+        <member name="E:BepInEx.Logging.ILogSource.LogEvent">
+            <summary>
+            Event that sends the log message. Call <see cref="M:System.EventHandler.Invoke(System.Object,System.EventArgs)"/> to send a log message.
+            </summary>
+        </member>
+        <member name="T:BepInEx.Logging.ManualLogSource">
+            <summary>
+            A generic, multi-purpose log source. Exposes simple API to manually emit logs.
+            </summary>
+        </member>
+        <member name="P:BepInEx.Logging.ManualLogSource.SourceName">
+            <inheritdoc />
+        </member>
+        <member name="E:BepInEx.Logging.ManualLogSource.LogEvent">
+            <inheritdoc />
+        </member>
+        <member name="M:BepInEx.Logging.ManualLogSource.#ctor(System.String)">
+            <summary>
+            Creates a manual log source.
+            </summary>
+            <param name="sourceName">Name of the log source.</param>
+        </member>
+        <member name="M:BepInEx.Logging.ManualLogSource.Log(BepInEx.Logging.LogLevel,System.Object)">
+            <summary>
+            Logs a message with the specified log level.
+            </summary>
+            <param name="level">Log levels to attach to the message. Multiple can be used with bitwise ORing.</param>
+            <param name="data">Data to log.</param>
+        </member>
+        <member name="M:BepInEx.Logging.ManualLogSource.LogFatal(System.Object)">
+            <summary>
+            Logs a message with <see cref="F:BepInEx.Logging.LogLevel.Fatal"/> level.
+            </summary>
+            <param name="data">Data to log.</param>
+        </member>
+        <member name="M:BepInEx.Logging.ManualLogSource.LogError(System.Object)">
+            <summary>
+            Logs a message with <see cref="F:BepInEx.Logging.LogLevel.Error"/> level.
+            </summary>
+            <param name="data">Data to log.</param>
+        </member>
+        <member name="M:BepInEx.Logging.ManualLogSource.LogWarning(System.Object)">
+            <summary>
+            Logs a message with <see cref="F:BepInEx.Logging.LogLevel.Warning"/> level.
+            </summary>
+            <param name="data">Data to log.</param>
+        </member>
+        <member name="M:BepInEx.Logging.ManualLogSource.LogMessage(System.Object)">
+            <summary>
+            Logs a message with <see cref="F:BepInEx.Logging.LogLevel.Message"/> level.
+            </summary>
+            <param name="data">Data to log.</param>
+        </member>
+        <member name="M:BepInEx.Logging.ManualLogSource.LogInfo(System.Object)">
+            <summary>
+            Logs a message with <see cref="F:BepInEx.Logging.LogLevel.Info"/> level.
+            </summary>
+            <param name="data">Data to log.</param>
+        </member>
+        <member name="M:BepInEx.Logging.ManualLogSource.LogDebug(System.Object)">
+            <summary>
+            Logs a message with <see cref="F:BepInEx.Logging.LogLevel.Debug"/> level.
+            </summary>
+            <param name="data">Data to log.</param>
+        </member>
+        <member name="M:BepInEx.Logging.ManualLogSource.Dispose">
+            <inheritdoc />
+        </member>
         <member name="T:BepInEx.Logging.TraceLogSource">
             <summary>
-            A trace listener that writes to an underlying <see cref="!:BaseLogger"/> instance.
+            A source that routes all logs from <see cref="T:System.Diagnostics.Trace"/> API to BepInEx logger.
             </summary>
             <inheritdoc cref="T:System.Diagnostics.TraceListener"/>
         </member>
+        <member name="P:BepInEx.Logging.TraceLogSource.IsListening">
+            <summary>
+            Whether Trace logs are rerouted.
+            </summary>
+        </member>
+        <member name="M:BepInEx.Logging.TraceLogSource.CreateSource">
+            <summary>
+            Creates a new trace log source.
+            </summary>
+            <returns>New log source (or already existing one).</returns>
+        </member>
+        <member name="P:BepInEx.Logging.TraceLogSource.LogSource">
+            <summary>
+            Internal log source.
+            </summary>
+        </member>
         <member name="M:BepInEx.Logging.TraceLogSource.#ctor">
-            <param name="logger">The logger instance to write to.</param>
+            <summary>
+            Creates a new trace log source.
+            </summary>
         </member>
         <member name="M:BepInEx.Logging.TraceLogSource.Write(System.String)">
             <summary>
-            Writes a message to the underlying <see cref="!:BaseLogger"/> instance.
+            Writes a message to the underlying <see cref="T:BepInEx.Logging.ManualLogSource"/> instance.
             </summary>
             <param name="message">The message to write.</param>
         </member>
         <member name="M:BepInEx.Logging.TraceLogSource.WriteLine(System.String)">
             <summary>
-            Writes a message and a newline to the underlying <see cref="!:BaseLogger"/> instance.
+            Writes a message and a newline to the underlying <see cref="T:BepInEx.Logging.ManualLogSource"/> instance.
             </summary>
             <param name="message">The message to write.</param>
+        </member>
+        <member name="M:BepInEx.Logging.TraceLogSource.TraceEvent(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.String,System.Object[])">
+            <inheritdoc />
+        </member>
+        <member name="M:BepInEx.Logging.TraceLogSource.TraceEvent(System.Diagnostics.TraceEventCache,System.String,System.Diagnostics.TraceEventType,System.Int32,System.String)">
+            <inheritdoc />
         </member>
         <member name="T:BepInEx.Logging.ConsoleLogListener">
             <summary>
             Logs entries using Unity specific outputs.
             </summary>
         </member>
+        <member name="M:BepInEx.Logging.ConsoleLogListener.LogEvent(System.Object,BepInEx.Logging.LogEventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="M:BepInEx.Logging.ConsoleLogListener.Dispose">
+            <inheritdoc />
+        </member>
         <member name="T:BepInEx.Logging.UnityLogListener">
             <summary>
             Logs entries using Unity specific outputs.
             </summary>
         </member>
+        <member name="M:BepInEx.Logging.UnityLogListener.LogEvent(System.Object,BepInEx.Logging.LogEventArgs)">
+            <inheritdoc />
+        </member>
+        <member name="M:BepInEx.Logging.UnityLogListener.Dispose">
+            <inheritdoc />
+        </member>
         <member name="T:BepInEx.Logging.UnityLogSource">
             <summary>
             Logs entries using Unity specific outputs.
             </summary>
+        </member>
+        <member name="P:BepInEx.Logging.UnityLogSource.SourceName">
+            <inheritdoc />
+        </member>
+        <member name="E:BepInEx.Logging.UnityLogSource.LogEvent">
+            <inheritdoc />
+        </member>
+        <member name="M:BepInEx.Logging.UnityLogSource.#ctor">
+            <summary>
+            Creates a new Unity log source.
+            </summary>
+        </member>
+        <member name="M:BepInEx.Logging.UnityLogSource.Dispose">
+            <inheritdoc />
         </member>
         <member name="T:BepInEx.Paths">
             <summary>
@@ -1254,14 +1568,23 @@
             <param name="self">The string to test.</param>
             <returns>True if the value parameter is null or empty, or if value consists exclusively of white-space characters.</returns>
         </member>
-        <member name="M:BepInEx.Utility.TryResolveDllAssembly``1(System.Reflection.AssemblyName,System.String,System.Func{System.String,``0},``0@)">
+        <member name="M:BepInEx.Utility.TopologicalSort``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Collections.Generic.IEnumerable{``0}})">
             <summary>
-            Try to resolve and load the given assembly DLL.
+            Sorts a given dependency graph using a direct toposort, reporting possible cyclic dependencies.
             </summary>
-            <param name="assemblyName">Name of the assembly, of the type <see cref="T:System.Reflection.AssemblyName" />.</param>
-            <param name="directory">Directory to search the assembly from.</param>
-            <param name="assembly">The loaded assembly.</param>
-            <returns>True, if the assembly was found and loaded. Otherwise, false.</returns>
+            <param name="nodes">Nodes to sort</param>
+            <param name="dependencySelector">Function that maps a node to a collection of its dependencies.</param>
+            <typeparam name="TNode">Type of the node in a dependency graph.</typeparam>
+            <returns>Collection of nodes sorted in the order of least dependencies to the most.</returns>
+            <exception cref="T:System.Exception">Thrown when a cyclic dependency occurs.</exception>
+        </member>
+        <member name="M:BepInEx.Utility.IsSubtypeOf(Mono.Cecil.TypeDefinition,System.Type)">
+            <summary>
+            Checks whether a given cecil type definition is a subtype of a provided type.
+            </summary>
+            <param name="self">Cecil type definition</param>
+            <param name="td">Type to check against</param>
+            <returns>Whether the given cecil type is a subtype of the type.</returns>
         </member>
         <member name="M:BepInEx.Utility.TryResolveDllAssembly(System.Reflection.AssemblyName,System.String,System.Reflection.Assembly@)">
             <summary>
@@ -1278,6 +1601,7 @@
             </summary>
             <param name="assemblyName">Name of the assembly, of the type <see cref="T:System.Reflection.AssemblyName" />.</param>
             <param name="directory">Directory to search the assembly from.</param>
+            <param name="readerParameters">Reader parameters that contain possible custom assembly resolver.</param>
             <param name="assembly">The loaded assembly.</param>
             <returns>True, if the assembly was found and loaded. Otherwise, false.</returns>
         </member>

@@ -50,6 +50,21 @@
 
             List<SortedTreeNode<IdType, DataType>> roots = LinkNodes();
 
+            // sort root nodes by weight
+            roots.Sort((a, b) =>
+            {
+                var weightOfA = KnownDependencies.GetWeight(a.Id) * KnownNodes.Count;
+                var weightOfB = KnownDependencies.GetWeight(b.Id) * KnownNodes.Count;
+
+                if (weightOfA == weightOfB)
+                {
+                    weightOfA += KnownPreferences.GetWeight(a.Id);
+                    weightOfB += KnownPreferences.GetWeight(b.Id);
+                }
+
+                return (weightOfA).CompareTo(weightOfB);
+            });
+
             AddUnsortedNodes(roots[0]);
 
             var sortedList = new List<DataType>(NodesToSort.Count);
@@ -125,11 +140,11 @@
 
                     foreach (SortedTreeNode<IdType, DataType> item in dependOn)
                     {
-                        if (!item.IsLinked)
+                        if (!item.IsLinked || !node.IsLinked)
                         {
                             node.SetRightChild(item);
 
-                            if (roots.Count == 0)
+                            if (!roots.Contains(node))
                                 roots.Add(node);
                         }
                     }
@@ -147,11 +162,11 @@
 
                     foreach (SortedTreeNode<IdType, DataType> item in dependOn)
                     {
-                        if (!item.IsLinked)
+                        if (!item.IsLinked || !node.IsLinked)
                         {
                             node.SetLeftChild(item);
 
-                            if (roots.Count == 0)
+                            if (!roots.Contains(node))
                                 roots.Add(node);
                         }
                     }
@@ -172,7 +187,7 @@
 
                     foreach (SortedTreeNode<IdType, DataType> item in dependOn)
                     {
-                        if (!item.IsLinked)
+                        if (!item.IsLinked || !node.IsLinked)
                         {
                             node.SetLeftChild(item);
                         }
