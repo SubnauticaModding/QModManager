@@ -9,13 +9,13 @@ ___
 
 **This file will not provide a step-by-step tutorial for creating mods!**
 
-While creating a mod, you can use the [`0Harmony.dll`](https://harmony.pardeike.net) found in the `BepInEx\core` folder to patch methods at runtime and change their code. You do not need (and should not) distribute `0Harmony.dll` with your mod! Just reference it in your project as usual and QMM takes care of the rest.
+While creating a mod, you can use the [`0Harmony.dll`](https://harmony.pardeike.net) found in the `BepInEx\core` folder to patch methods at runtime and change their code. You do not need to (and should not) distribute `0Harmony.dll` with your mod! Just reference it in your project as usual and QMM takes care of the rest.
 
 _**NOTE:** The version of Harmony shipped with QMM4 is [HarmonyX](https://github.com/BepInEx/HarmonyX/), a fork of Harmony 2. For the specific differences between HarmonyX and Harmony 2, please [see the HarmonyX wiki](https://github.com/BepInEx/HarmonyX/wiki/Difference-between-Harmony-and-HarmonyX). For general usage, please [see the Harmony 2 docs](https://harmony.pardeike.net)._
 
 Your mod must have a `static` method with **no parameters** that must be in a class which **needs to be in a namespace**. That method will be called when the game loads to load the mod. This is usually where you want to make your calls to [SMLHelper](https://nexusmods.com/subnautica/mods/113) or patch methods using [Harmony](https://harmony.pardeike.net).
 
-The patch method and the build DLL file name will be specified in the `mod.json` file.
+The patch method and the built DLL file name will be specified in the `mod.json` file.
 
 Example:
 
