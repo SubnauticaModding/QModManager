@@ -12,7 +12,15 @@
 
     internal class QModFactory : IQModFactory
     {
-        internal IManifestValidator Validator { get; set; } = new ManifestValidator();
+        public QModFactory(IPluginCollection pluginCollection = null, IManifestValidator validator = null)
+        {
+            this.Validator = validator ?? new ManifestValidator();
+            this.PluginCollection = pluginCollection ?? PluginCollection;
+        }
+
+        internal IManifestValidator Validator { get; }
+
+        internal IPluginCollection PluginCollection { get; }
 
         /// <summary>
         /// Searches through all folders in the provided directory and returns an ordered list of mods to load.<para/>
@@ -87,76 +95,108 @@
         {
             var modList = new List<QMod>(modsToLoad.Count + earlyErrors.Count);
 
-            foreach (QMod mod in modsToLoad)
+            for (int i = 0; i < modsToLoad.Count; i++)
             {
+                var mod = modsToLoad[i];
                 Logger.Debug($"{mod.Id} ready to load");
                 modList.Add(mod);
             }
 
-            foreach (QMod erroredMod in earlyErrors)
+            for (int i = 0; i < earlyErrors.Count; i++)
             {
+                var erroredMod = earlyErrors[i];
                 Logger.Debug($"{erroredMod.Id} had an early error");
                 modList.Add(erroredMod);
             }
 
-            foreach (QMod mod in modList)
+            Logger.Debug("Checking basic manifest details");
+            for (int i = 0; i < modList.Count; i++)
             {
-                if (mod.Status != ModStatus.Success)
-                    continue;
-
-                if (mod.RequiredMods != null)
-                {
-                    ValidateDependencies(modsToLoad, mod);
-                }
-
+                var mod = modList[i];
                 if (mod.Status == ModStatus.Success)
-                    this.Validator.ValidateManifest(mod);
+                    this.Validator.ValidateBasicManifest(mod);
+            }
+
+            Logger.Debug("Loading mod requirements from manifest");
+            for (int i = 0; i < modList.Count; i++)
+            {
+                var mod = modList[i];
+                if (mod.Status == ModStatus.Success)
+                    this.Validator.CheckRequiredMods(mod);
+            }
+
+            Logger.Debug("Loading mod assemblies");
+            for (int i = 0; i < modList.Count; i++)
+            {
+                var mod = modList[i];
+                if (mod.Status == ModStatus.Success)
+                    this.Validator.LoadAssembly(mod);
+            }
+
+            Logger.Debug("Checking mod requirements");
+            for (int i = 0; i < modList.Count; i++)
+            {
+                var mod = modList[i];
+                if (mod.Status == ModStatus.Success)
+                    ValidateDependencies(modList, mod);
+            }
+
+            Logger.Debug("Searching for mod patch methods");
+            for (int i = 0; i < modList.Count; i++)
+            {
+                var mod = modList[i];
+                if (mod.Status == ModStatus.Success)
+                    this.Validator.FindPatchMethods(mod);
+            }
+
+            // ensure that there is no reference to the assembly of any mod that failed to load
+            for (int i = 0; i < modList.Count; i++)
+            {
+                var mod = modList[i];
+                if (mod.Status != ModStatus.Success)
+                {
+                    Logger.Debug($"Cleaning up assembly references of failed mod '{mod.Id}'");
+                    mod.LoadedAssembly = null;
+                    mod.AssemblyName = null;
+                }
             }
 
             return modList;
         }
 
-        internal List<PluginInfo> BepInExPlugins { get; set; }
-        internal List<PluginInfo> RequiredBepInExPlugins { get; set; } = new List<PluginInfo>();
         private void ValidateDependencies(List<QMod> modsToLoad, QMod mod)
         {
             // Check the mod dependencies
             foreach (RequiredQMod requiredMod in mod.RequiredMods)
             {
                 QMod dependencyQMod = modsToLoad.Find(d => d.Id == requiredMod.Id);
-                PluginInfo dependencyPluginInfo = BepInExPlugins.Find(d => d.Metadata.GUID == requiredMod.Id);
 
-                if ((dependencyQMod == null || dependencyQMod.Status != ModStatus.Success) && dependencyPluginInfo == null)
+                if (dependencyQMod == null) // QMod for dependency was not found
                 {
-                    // Dependency not found or failed
-                    Logger.Error($"{mod.Id} cannot be loaded because it is missing a dependency. Missing mod: {requiredMod.Id}");
-                    mod.Status = ModStatus.MissingDependency;
-                    break;
-                }
-                else if (dependencyQMod == null && dependencyPluginInfo != null)
-                {
-                    if (!RequiredBepInExPlugins.Contains(dependencyPluginInfo))
-                        RequiredBepInExPlugins.Add(dependencyPluginInfo);
-
-                    continue;
+                    if (PluginCollection.IsKnownPlugin(mod.Id))
+                    {
+                        PluginCollection.MarkAsRequired(mod.Id);
+                        continue;// Dependency is a BenInEx plugin, not a QMod, and can be ignored here
+                    }
+                    else
+                    {
+                        // Dependency not found
+                        Logger.Error($"{mod.Id} cannot be loaded because it is missing a dependency. Missing mod: '{requiredMod.Id}'");
+                        mod.Status = ModStatus.MissingDependency;
+                        break;
+                    }
                 }
 
                 if (dependencyQMod.HasDependencies)
                 {
+                    // If the dependency has any dependencies itself, make sure they are also okay                    
                     ValidateDependencies(modsToLoad, dependencyQMod);
-                }
-
-                if (dependencyQMod.LoadedAssembly == null)
-                {
-                    // Dependency hasn't been validated yet
-                    this.Validator.ValidateManifest(dependencyQMod);
                 }
 
                 if (dependencyQMod.Status != ModStatus.Success)
                 {
-                    // Dependency failed to load successfully
-                    // Treat it as missing
-                    Logger.Error($"{mod.Id} cannot be loaded because its dependency failed to load. Failed mod: {requiredMod.Id}");
+                    // Dependency failed - treat as missing
+                    Logger.Error($"{mod.Id} cannot be loaded because one or more of its dependencies failed to load. Failed dependency: '{requiredMod.Id}'");
                     mod.Status = ModStatus.MissingDependency;
                     break;
                 }

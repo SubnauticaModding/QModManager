@@ -1,0 +1,52 @@
+name: Version Checker
+
+on:
+  pull_request:
+    branches: 
+      - master
+
+jobs:
+  analyse:
+    name: Analyse
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout pull request branch
+        uses: actions/checkout@v2
+
+      - name: Checkout master branch
+        uses: actions/checkout@v2
+        with:
+          ref: master
+          path: ./master
+
+      - name: Perform version check
+        id: version_check
+        uses: SubnauticaModding/Action-Version-Checker@master
+        with:
+          files: |
+            Data/latest-version.txt                       | /([0-9.]+)/g
+            Executable/Properties/AssemblyInfo.cs         | /\[assembly: Assembly(?:File)?Version\("([0-9.]+)"\)\]/g
+            Installer/Properties/AssemblyInfo.cs          | /\[assembly: Assembly(?:File)?Version\("([0-9.]+)"\)\]/g
+            Installer/QModsInstallerScript.iss            | /#define Version "([0-9.]+)"/g
+            QMMHarmonyShimmer/Properties/AssemblyInfo.cs  | /\[assembly: Assembly(?:File)?Version\("([0-9.]+)"\)\]/g
+            QMMLoader/Properties/AssemblyInfo.cs          | /\[assembly: Assembly(?:File)?Version\("([0-9.]+)"\)\]/g
+            QModManager/Properties/AssemblyInfo.cs        | /\[assembly: Assembly(?:File)?Version\("([0-9.]+)"\)\]/g
+            QModPluginEmulator/Properties/AssemblyInfo.cs | /\[assembly: Assembly(?:File)?Version\("([0-9.]+)"\)\]/g
+            UnityAudioFixer/Properties/AssemblyInfo.cs    | /\[assembly: Assembly(?:File)?Version\("([0-9.]+)"\)\]/g
+          master_repo_path: ./master
+
+      - name: Add annotations
+        uses: Attest/annotations-action@v1.0.7
+        with:
+          path: ${{ steps.version_check.outputs.annotations_path }}
+          title: Annotate
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Report status
+        run: |
+          if [[ -f ${{ steps.version_check.outputs.failed_check_path }} ]] ; then
+              exit 1
+          else
+              exit 0
+          fi
