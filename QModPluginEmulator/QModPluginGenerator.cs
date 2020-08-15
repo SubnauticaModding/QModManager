@@ -64,6 +64,7 @@ namespace QModManager
         }
 
         private static string[] QMMKnownAssemblyPaths = new[] {
+            Path.Combine(QMMPatchersPath, "QModManager.OculusNewtonsoftRedirect.dll"),
             Path.Combine(QMMPatchersPath, "QModManager.QMMHarmonyShimmer.dll"),
             Path.Combine(QMMPatchersPath, "QModManager.QModPluginGenerator.dll"),
             Path.Combine(QMMPatchersPath, "QModManager.UnityAudioFixer.dll"),
