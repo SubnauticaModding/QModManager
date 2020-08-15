@@ -104,7 +104,7 @@ namespace QModManager
             {
                 var data = File.ReadAllBytes(QMMAssemblyCachePath);
                 using (var ms = new MemoryStream(data))
-                using (var reader = new BsonReader(ms))
+                using (var reader = new BsonDataReader(ms))
                 {
                     var serializer = new JsonSerializer();
                     QMMAssemblyCache = serializer.Deserialize<QMMAssemblyCache>(reader);
@@ -132,7 +132,7 @@ namespace QModManager
                 Directory.CreateDirectory(BepInExCachePath);
 
                 using (var ms = new MemoryStream())
-                using (var writer = new BsonWriter(ms))
+                using (var writer = new BsonDataWriter(ms))
                 {
                     var serializer = new JsonSerializer();
                     serializer.Serialize(writer, QMMAssemblyCache);
