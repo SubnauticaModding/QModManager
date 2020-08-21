@@ -155,6 +155,9 @@ namespace QModManager
                 throw new InvalidOperationException($"BepInEx Cache Path invalid! ({BepInExCachePath})");
             }
 
+            if (!Directory.Exists(BepInExCachePath))
+                return;
+
             Logger.LogInfo("Clearing BepInEx cache...");
             var stopwatch = Stopwatch.StartNew();
 
