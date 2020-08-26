@@ -9,6 +9,7 @@ namespace QModManager.Utility
     {
         internal static readonly HashSet<string> BannedFolders = new HashSet<string>()
         {
+            ".backups",
             ".git",
             ".svn",
             "OST",
