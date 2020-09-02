@@ -582,7 +582,7 @@ begin
 
     begin
       if IsPreviousVersionInstalled() then
-        begin
+      begin
         if IsUpgrade() and FileExists(RemoveQuotes(GetUninstallString())) then
         begin
           if MsgBox('A previous installation of QModManager was detected. To update, it must be uninstalled.' + #13#10 + 'Do you want to uninstall it now?', mbInformation, MB_YESNO) = IDYES then
