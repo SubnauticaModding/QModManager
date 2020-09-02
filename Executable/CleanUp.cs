@@ -11,9 +11,17 @@ namespace QModManager
             if (child.Parent == null)
                 return false;
 
-            return child.Parent.FullName == parent.FullName || (recursive && child.Parent.IsChildOf(parent));
+            return child.Parent.FullName == parent.FullName || (recursive && child.Parent.IsChildOf(parent, recursive));
         }
-        private static bool IsChildOf(this DirectoryInfo child, string parentPath, bool recursive = false)
+
+        private static bool IsChildOf(this FileInfo child, DirectoryInfo parent, bool recurseive = true)
+        {
+            if (child.Directory == null)
+                return false;
+
+            return child.Directory.FullName == parent.FullName || (recurseive && child.Directory.IsChildOf(parent, recurseive));
+        }
+        private static bool IsChildOf(this FileInfo child, string parentPath, bool recursive = true)
             => child.IsChildOf(new DirectoryInfo(parentPath), recursive);
 
         internal static void Initialize(string gameRootDirectory, string managedDirectory)
@@ -25,14 +33,15 @@ namespace QModManager
 
             foreach (var path in pathsToCheck)
             {
-                if (path.Contains("system32") || path.Contains("Windows") || new DirectoryInfo(path).IsChildOf(bepinexCoreDirectory))
-                {
-                    Console.WriteLine($"Path is unsafe! {path}");
-                    continue;
-                }
-
                 foreach (var file in Directory.GetFiles(path, "*.dll", SearchOption.AllDirectories))
                 {
+                    var fileInfo = new FileInfo(file);
+                    if (fileInfo.FullName.Contains("system32") || fileInfo.FullName.Contains("Windows") || fileInfo.IsChildOf(bepinexCoreDirectory, true))
+                    {
+                        Console.WriteLine($"Path is unsafe! {path}");
+                        continue;
+                    }
+
                     try
                     {
                         using (var stream = new MemoryStream(File.ReadAllBytes(file)))
