@@ -86,6 +86,9 @@ Source: "..\Dependencies\BepInEx\*"; DestDir: "{app}"; Flags: recursesubdirs cre
 
 [Dirs]
 Name: "{app}\QMods"
+
+[Run]
+Filename: "{app}\BepInEx\patchers\QModManager\QModManager.exe"; Parameters: "-c"; Tasks: cleanup
  
 [UninstallRun]
 Filename: "{app}\BepInEx\patchers\QModManager\QModManager.exe"; Parameters: "-u";
@@ -109,6 +112,9 @@ Name: "select"; Description: "QModManager"; Flags: IsCustom;
 Name: "qmm"; Description: "QModManager"; Flags: fixed; Types: select;
 Name: "qmm\sn"; Description: "Install for Subnautica"; Flags: exclusive fixed;
 Name: "qmm\bz"; Description: "Install for Below Zero"; Flags: exclusive fixed;
+
+[Tasks]
+Name: "cleanup"; Description: "(Recommended) Clean up after previous Nitrox and QMM installs";
 
 [Code]
 // Import stuff from InstallerExtensions.dll
@@ -552,7 +558,7 @@ begin
   end
 end;    
 
-function IsPreviousVersionInstalled: boolean; // Returns true for previus versions < 4.0 (prior to the change to BepInEx)
+function IsPreviousVersionInstalled: Boolean; // Returns true for previus versions < 4.0 (prior to the change to BepInEx)
 var
   uninstallRegKey: String;
   previousVersion: String;

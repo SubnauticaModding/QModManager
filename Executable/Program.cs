@@ -12,6 +12,7 @@
         Install,
         Uninstall,
         RunByUser,
+        CleanUp
     }
 
     [Flags]
@@ -46,6 +47,8 @@
                         action = Action.Install;
                     else if (arg == "-u")
                         action = Action.Uninstall;
+                    else if (arg == "-c")
+                        action = Action.CleanUp;
                 }
 
                 string gameRootDirectory = Path.Combine(Environment.CurrentDirectory, "../../..");
@@ -125,10 +128,29 @@
                     Console.WriteLine("Unity audio disabled.");
                     Environment.Exit(0);
                 }
+                else if (action == Action.CleanUp)
+                {
+                    Console.WriteLine("Attempting to clean up Nitrox and previous QMM installs...");
+                    CleanUp.Initialize(gameRootDirectory, managedDirectory);
+                    Console.WriteLine("Clean-up complete.");
+                    Environment.Exit(0);
+                }
                 else
                 {
-                    Console.Write("Enable Unity sound? [Y/N] > ");
+                    Console.Write("Clean up install? [Y/N] > ");
                     ConsoleKey key = Console.ReadKey().Key;
+                    Console.WriteLine();
+
+                    if (key == ConsoleKey.Y)
+                    {
+                        Console.WriteLine("Attempting to clean up Nitrox and previous QMM installs...");
+                        CleanUp.Initialize(gameRootDirectory, managedDirectory);
+                        Console.WriteLine("Clean-up complete.");
+                        Console.WriteLine();
+                    }
+
+                    Console.Write("Enable Unity sound? [Y/N] > ");
+                    key = Console.ReadKey().Key;
                     Console.WriteLine();
 
                     if (key == ConsoleKey.Y)
