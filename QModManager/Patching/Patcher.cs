@@ -16,7 +16,7 @@ namespace QModManager.Patching
         {
             get
             {
-                if (Environment.CurrentDirectory.ToLower().Contains("system32") && Environment.CurrentDirectory.ToLowerInvariant().Contains("windows"))
+                if (Environment.CurrentDirectory.ToLowerInvariant().Contains("system32") && Environment.CurrentDirectory.ToLowerInvariant().Contains("windows"))
                     return null;
                 else
                     return Path.Combine(Environment.CurrentDirectory, "QMods");
