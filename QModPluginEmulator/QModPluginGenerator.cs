@@ -150,7 +150,7 @@ namespace QModManager
 
         private static void ClearBepInExCache()
         {
-            if (BepInExCachePath.Contains("system32") || BepInExCachePath.Contains("Windows"))
+            if (BepInExCachePath.ToLowerInvariant().Contains("system32") && BepInExCachePath.ToLowerInvariant().Contains("windows"))
             {
                 throw new InvalidOperationException($"BepInEx Cache Path invalid! ({BepInExCachePath})");
             }
