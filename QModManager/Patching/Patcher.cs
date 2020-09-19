@@ -12,16 +12,7 @@ namespace QModManager.Patching
     {
         internal const string IDRegex = "[^0-9a-zA-Z_]";
 
-        internal static string QModBaseDir
-        {
-            get
-            {
-                if (Environment.CurrentDirectory.Contains("system32") && Environment.CurrentDirectory.Contains("Windows"))
-                    return null;
-                else
-                    return Path.Combine(Environment.CurrentDirectory, "QMods");
-            }
-        }
+        internal static string QModBaseDir => Path.Combine(Environment.CurrentDirectory, "QMods");
 
         private static bool Patched = false;
         internal static QModGame CurrentlyRunningGame { get; private set; } = QModGame.None;
