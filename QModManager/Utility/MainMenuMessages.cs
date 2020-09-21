@@ -21,11 +21,26 @@
 
         private static readonly Vector2 newOffset = new Vector2(20f, 20f);
         private static Vector2 prevOffset;
+        private static Vector2? prevSize;
 
         private static List<string> messageQueue;
         private static List<ErrorMessage._Message> messages;
 
         private static bool inited => messageQueue != null;
+
+        // we'll restore original offset for messages if position is changed by some other mod (e.g. HudConfig)
+        private class CorrectMsgPos: MonoBehaviour
+        {
+            public void Update()
+            {
+                if (ErrorMessage.main.messageCanvas.localPosition == Vector3.zero)
+                    return;
+
+                ErrorMessage.main.offset = prevOffset;
+                Destroy(this);
+            }
+        }
+
 
         /// <summary>Adds an error message to the main menu.</summary>
         /// <param name="msg">The message to add.</param>
@@ -35,7 +50,7 @@
         /// <param name="autoformat">Whether or not to apply formatting tags to the message, or show it as it is.</param>
         internal static void Add(string msg, string callerID = null, int size = defaultSize, string color = defaultColor, bool autoformat = true)
         {
-            if (Patches.hInstance == null) // just in case
+            if (Patcher.hInstance == null) // just in case
             {
                 Logger.Error($"Tried to add main menu message before Harmony was initialized. (Message: \"{msg}\")");
                 return;
@@ -80,7 +95,10 @@
             messages.Add(message);
             message.timeEnd += 1e6f;
 
+            prevSize ??= GetRectTransform(message).sizeDelta;
             GetRectTransform(message).sizeDelta = new Vector2(1920f - ErrorMessage.main.offset.x * 2f, 0f);
+
+            ErrorMessage.main.gameObject.EnsureComponent<CorrectMsgPos>();
         }
 
         private static void OnSceneLoaded(Scene scene, LoadSceneMode _)
@@ -95,22 +113,20 @@
             {
                 yield return new WaitForSeconds(1f);
 
-                while (SaveLoadManager.main.isLoading)
-                    yield return null;
+                yield return new WaitWhile(() => SaveLoadManager.main.isLoading);
 
                 messages.ForEach(msg => msg.timeEnd = Time.time + 1f);
                 yield return new WaitForSeconds(1.1f); // wait for messages to dissapear
 
-                Vector2 originalSize = GetRectTransform(ErrorMessage.main.prefabMessage.GetComponent(SelectedTextType)).sizeDelta;
-
-                messages.ForEach(msg => GetRectTransform(msg).sizeDelta = originalSize);
-
+                messages.ForEach(msg => GetRectTransform(msg).sizeDelta = (Vector2)prevSize);
                 messages.Clear();
 
                 Patches.Unpatch();
 
                 yield return new WaitForSeconds(0.5f);
+
                 ErrorMessage.main.offset = prevOffset;
+                Component.Destroy(ErrorMessage.main.GetComponent<CorrectMsgPos>());
             }
         }
 
@@ -121,98 +137,105 @@
 
         private static void LoadDynamicAssembly()
         {
-            if (SelectedTextType == null)
+            if (SelectedTextType != null)
+                return;
+
+            Type TxtType = typeof(UnityEngine.UI.Text);
+            Type TxtProType = Type.GetType("TMPro.TextMeshProUGUI, Unity.TextMeshPro", false, false);
+
+            SelectedTextType = TxtProType ?? TxtType;
+
+            FieldInfo entryField = typeof(ErrorMessage._Message).GetField("entry");
+            if (TxtProType != null)
             {
-                Type TxtType = typeof(UnityEngine.UI.Text);
-                Type TxtProType = Type.GetType("TMPro.TextMeshProUGUI, Unity.TextMeshPro", false, false);
+                // Using TextMeshPro
+                FieldInfo recTransformField = TxtProType.GetField("m_rectTransform");
 
-                SelectedTextType = TxtProType ?? TxtType;
-
-                FieldInfo entryField = typeof(ErrorMessage._Message).GetField("entry");
-                if (TxtProType != null)
+                GetRectTransform = (obj) =>
                 {
-                    // Using TextMeshPro
-                    FieldInfo recTransformField = TxtProType.GetField("m_rectTransform");
+                    var entry = entryField.GetValue(obj);
+                    return (RectTransform)recTransformField.GetValue(entry);
+                };
+            }
+            else
+            {
+                // Using Text
+                PropertyInfo recTransformProperty = TxtType.GetProperty("rectTransform");
 
-                    GetRectTransform = (obj) =>
-                    {
-                        var entry = entryField.GetValue(obj);
-                        return (RectTransform)recTransformField.GetValue(entry);
-                    };
-                }
-                else
+                GetRectTransform = (obj) =>
                 {
-                    // Using Text
-                    PropertyInfo recTransformProperty = TxtType.GetProperty("rectTransform");
-
-                    GetRectTransform = (obj) =>
-                    {
-                        var entry = entryField.GetValue(obj);
-                        return (RectTransform)recTransformProperty.GetValue(entry, null);
-                    };
-                }
+                    var entry = entryField.GetValue(obj);
+                    return (RectTransform)recTransformProperty.GetValue(entry, null);
+                };
             }
         }
 
         #endregion Dynamic assembly loading
 
-        internal static class Patches
+        private static class Patches
         {
-            public static Harmony hInstance => Patcher.hInstance; // Point to the stored Harmony instance rather than getting it from the old TargetMethod workaround (hack)
-
             public static void Patch()
             {
                 Logger.Debug("Patching ErrorMessage");
 
-                //patching it only if we need to(transpilers take time)
-                hInstance.Patch(AccessTools.Method(typeof(ErrorMessage), nameof(ErrorMessage.OnUpdate)),
-                    transpiler: new HarmonyMethod(AccessTools.Method(typeof(Patches), nameof(UpdateMessages))));
+                Patcher.hInstance.PatchAll(typeof(Patches));
             }
 
             public static void Unpatch()
             {
                 Logger.Debug("Unpatching ErrorMessage");
 
-                hInstance.Unpatch(AccessTools.Method(typeof(ErrorMessage), nameof(ErrorMessage.Awake)),
-                    AccessTools.Method(typeof(AddMessages), nameof(AddMessages.Postfix)));
+                Patcher.hInstance.Unpatch(AccessTools.Method(typeof(ErrorMessage), nameof(ErrorMessage.Awake)),
+                    HarmonyPatchType.Postfix, Patcher.hInstance.Id);
 
-                hInstance.Unpatch(AccessTools.Method(typeof(ErrorMessage), nameof(ErrorMessage.OnUpdate)),
-                    AccessTools.Method(typeof(Patches), nameof(UpdateMessages)));
+                Patcher.hInstance.Unpatch(AccessTools.Method(typeof(ErrorMessage), nameof(ErrorMessage.OnUpdate)),
+                    HarmonyPatchType.Transpiler, Patcher.hInstance.Id);
             }
 
-            [HarmonyPatch(typeof(ErrorMessage), nameof(ErrorMessage.Awake))]
-            internal static class AddMessages
+            [HarmonyPostfix, HarmonyPatch(typeof(ErrorMessage), nameof(ErrorMessage.Awake))]
+            private static void ErrorMessage_Awake_Postfix()
             {
-                internal static void Postfix()
-                {
-                    prevOffset = ErrorMessage.main.offset;
+                prevOffset = ErrorMessage.main.offset;
 
-                    if (!inited)
-                        return;
+                if (!inited)
+                    return;
 
-                    ErrorMessage.main.offset = newOffset;
+                ErrorMessage.main.offset = newOffset;
 
-                    messageQueue.ForEach(msg => AddInternal(msg));
-                    messageQueue.Clear();
-                }
+                messageQueue.ForEach(msg => AddInternal(msg));
+                messageQueue.Clear();
             }
 
-            private static float _getVal(float val, ErrorMessage._Message message) => messages.Contains(message) ? 1f : val;
 
             // we changing result for 'float value = Mathf.Clamp01(MathExtensions.EvaluateLine(...' to 1.0f
             // so text don't stay in the center of the screen (because of changed 'timeEnd')
-            internal static IEnumerable<CodeInstruction> UpdateMessages(IEnumerable<CodeInstruction> cins)
+            [HarmonyTranspiler, HarmonyPatch(typeof(ErrorMessage), nameof(ErrorMessage.OnUpdate))]
+            private static IEnumerable<CodeInstruction> ErrorMessage_OnUpdate_Transpiler(IEnumerable<CodeInstruction> cins)
             {
-                var list = new List<CodeInstruction>(cins);
-                int index = list.FindIndex(cin => cin.opcode == OpCodes.Stloc_S && (cin.operand as LocalBuilder)?.LocalIndex == 11);
-
-                list.InsertRange(index, new List<CodeInstruction>
+                try
                 {
-                    new CodeInstruction(OpCodes.Ldloc_S, 6),
-                    new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(Patches), nameof(_getVal)))
-                });
+                    var code = new CodeMatcher(cins).
+                        End().
+                        MatchBack(true, new CodeMatch(OpCodes.Callvirt, typeof(List<ErrorMessage._Message>).GetMethod("get_Item"))).
+                        Advance(1);
 
-                return list;
+                    int msgLocalIndex = (code.Instruction.operand as LocalBuilder).LocalIndex; // index for _Message var in the second loop
+
+                    code.MatchForward(true, new CodeMatch(OpCodes.Call, typeof(Mathf).GetMethod(nameof(Mathf.Clamp01)))).
+                         Advance(1).
+                         Insert
+                         (
+                            new CodeInstruction(OpCodes.Ldloc_S, msgLocalIndex),
+                            Transpilers.EmitDelegate<Func<float, ErrorMessage._Message, float>>((val, message) => messages.Contains(message)? 1f: val)
+                         );
+
+                    return code.InstructionEnumeration();
+                }
+                catch (Exception e)
+                {
+                    Logger.Error($"Failed to patch ErrorMessage.OnUpdate() ({e})");
+                    return cins;
+                }
             }
         }
     }
