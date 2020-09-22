@@ -214,22 +214,19 @@
             {
                 try
                 {
-                    var code = new CodeMatcher(cins).
+                    return new CodeMatcher(cins).
                         End().
+                        // searching for line '_Message message2 = messages[j]' in the second loop (first from the end)
                         MatchBack(true, new CodeMatch(OpCodes.Callvirt, typeof(List<ErrorMessage._Message>).GetMethod("get_Item"))).
-                        Advance(1);
-
-                    int msgLocalIndex = (code.Instruction.operand as LocalBuilder).LocalIndex; // index for _Message var in the second loop
-
-                    code.MatchForward(true, new CodeMatch(OpCodes.Call, typeof(Mathf).GetMethod(nameof(Mathf.Clamp01)))).
-                         Advance(1).
-                         Insert
-                         (
-                            new CodeInstruction(OpCodes.Ldloc_S, msgLocalIndex),
-                            Transpilers.EmitDelegate<Func<float, ErrorMessage._Message, float>>((val, message) => messages.Contains(message)? 1f: val)
-                         );
-
-                    return code.InstructionEnumeration();
+                        Advance(1).
+                        // copying current 'message2' on stack
+                        Insert(new CodeInstruction(OpCodes.Dup)).
+                        // searching for line 'float value = Mathf.Clamp01(MathExtensions.EvaluateLine(...'
+                        MatchForward(true, new CodeMatch(OpCodes.Call, typeof(Mathf).GetMethod(nameof(Mathf.Clamp01)))).
+                        Advance(1).
+                        // if 'message2' is added by MainMenuMessages, then use 1.0f instead of calculated value (using copied 'message2' and current 'value')
+                        Insert(Transpilers.EmitDelegate<Func<ErrorMessage._Message, float, float>>((message, val) => messages.Contains(message)? 1f: val)).
+                        InstructionEnumeration();
                 }
                 catch (Exception e)
                 {
