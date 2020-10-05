@@ -164,7 +164,6 @@
             {
                 Logger.Debug("Patching ErrorMessage");
 
-                //patching it only if we need to(transpilers take time)
                 hInstance.Patch(AccessTools.Method(typeof(ErrorMessage), nameof(ErrorMessage.OnUpdate)),
                     transpiler: new HarmonyMethod(AccessTools.Method(typeof(Patches), nameof(UpdateMessages))));
             }

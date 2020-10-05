@@ -258,7 +258,7 @@ begin
           P := Pos('BaseInstallFolder_', FileLines[I])
           if P > 0 then
           begin
-            steamInstallPath := Copy(FileLines[I], P + 23, Length(FileLines[i]) - P - 23)
+            steamInstallPath := Copy(FileLines[I], P + 23, 3) + Copy(FileLines[I], P + 27, Length(FileLines[I]) - P  - 27);
             if (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '.exe')) and (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '_Data\Managed\Assembly-CSharp.dll')) then // If the folder is correct
             begin
               Result := steamInstallPath + '\steamapps\common\' + folder
@@ -558,7 +558,7 @@ begin
   end
 end;    
 
-function IsPreviousVersionInstalled: Boolean; // Returns true for previus versions < 4.0 (prior to the change to BepInEx)
+function IsPreviousVersionInstalled: Boolean;
 var
   uninstallRegKey: String;
   previousVersion: String;
@@ -592,51 +592,28 @@ var
   resultCode: Integer;
 begin
   if CurPageID = wpSelectComponents then
-  begin
-    appIsSet := true
+    appIsSet := true;
+  
+  Result := true;
+end;
 
+function PrepareToInstall(var NeedsRestart: boolean): string;
+var
+  uninstallString: string;
+  resultCode: integer;
+begin
+  NeedsRestart := false;
+
+  if IsPreviousVersionInstalled() then
+  begin
+    uninstallString := RemoveQuotes(GetUninstallString());
+    if FileExists(uninstallString) then
     begin
+      Exec(uninstallString, '/SILENT', '', SW_SHOW, ewWaitUntilTerminated, resultCode);
       if IsPreviousVersionInstalled() then
-      begin
-        if IsUpgrade() and FileExists(RemoveQuotes(GetUninstallString())) then
-        begin
-          if MsgBox('A previous installation of QModManager was detected. To update, it must be uninstalled.' + #13#10 + 'Do you want to uninstall it now?', mbInformation, MB_YESNO) = IDYES then
-          begin
-            uninstallString := RemoveQuotes(GetUninstallString());
-            Exec(ExpandConstant(uninstallString), '', '', SW_SHOW, ewWaitUntilTerminated, resultCode);
-              if IsPreviousVersionInstalled() then
-              begin
-                MsgBox('Previous installation of QModManager must be uninstalled to continue.', mbError, MB_OK);
-                Result := false;
-                Exit;
-              end
-              else
-                Result := true;
-          end
-          else
-          begin
-            MsgBox('Previous installation of QModManager must be uninstalled to continue.', mbError, MB_OK);
-            Result := false;
-            Exit;
-          end;
-        end
-        else
-        begin
-          if MsgBox('A previous installation of QModManager was detected, but the uninstaller could not be found.' + #13#10 + 'Improper uninstallation of QModManager can result in needing to verify your game files or reinstall the game.' + #13#10 + #13#10 + 'Install anyway?', mbError, MB_YESNO) = IDYES then
-          begin
-            Result := true;
-          end
-          else
-          begin
-            WizardForm.Close();
-            Result := false;
-            Exit;
-          end;
-        end;
-      end;
+        Result := 'Previous installation must be uninstalled to continue.';
     end;
   end;
-  Result := true;
 end;
 
 var TypesComboOnChangePrev: TNotifyEvent;
