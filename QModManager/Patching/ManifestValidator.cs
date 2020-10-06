@@ -18,6 +18,8 @@
             { "QModManager", ModStatus.BannedID },
             { "QModInstaller", ModStatus.BannedID },
             { "EnableAchievements", ModStatus.Merged },
+            { "AgonyAssetTools", ModStatus.Obsolete },
+            { "qmultimod.mod", ModStatus.Obsolete },
         };
 
         public void ValidateBasicManifest(QMod mod)
