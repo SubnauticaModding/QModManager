@@ -2,6 +2,7 @@
 {
     internal enum ModStatus
     {
+        Obsolete = -4,
         Merged = -3,
         //CanceledByAuthor = -2,
         CanceledByUser = -1,
