@@ -296,17 +296,19 @@ begin
     Left := WizardForm.SelectDirLabel.Left + WizardForm.SelectDirLabel.Left / 30
     Top := WizardForm.BackButton.Top + 10
     Height := WizardForm.BackButton.Height
+    Enabled := True
   end;
   
   BelowZeroButton := TNewRadioButton.Create(WizardForm)
   with BelowZeroButton do
   begin
-    Parent := WizardForm
-    Caption := 'Below Zero'
-    OnClick := @BelowZeroButtonOnClick
-    Left := SubnauticaButton.Left * 3
-    Top := WizardForm.BackButton.Top + 10
-    Height := WizardForm.BackButton.Height
+    //Parent := WizardForm
+    //Caption := 'Below Zero'
+    //OnClick := @BelowZeroButtonOnClick
+    //Left := SubnauticaButton.Left * 3
+    //Top := WizardForm.BackButton.Top + 10
+    //Height := WizardForm.BackButton.Height
+    Enabled := False
   end;
 end;
 
