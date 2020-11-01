@@ -303,13 +303,13 @@ begin
   SubnauticaButton := TNewRadioButton.Create(WizardForm)
   with SubnauticaButton do
   begin
-    Parent := WizardForm
-    Caption := 'Subnautica'
-    OnClick := @SubnauticaButtonOnClick
+    //Parent := WizardForm
+    //Caption := 'Subnautica'
+    //OnClick := @SubnauticaButtonOnClick
     Left := WizardForm.SelectDirLabel.Left + WizardForm.SelectDirLabel.Left / 30
-    Top := WizardForm.BackButton.Top + 10
-    Height := WizardForm.BackButton.Height
-    Enabled := True
+    //Top := WizardForm.BackButton.Top + 10
+    //Height := WizardForm.BackButton.Height
+    Enabled := False
   end;
   
   BelowZeroButton := TNewRadioButton.Create(WizardForm)
