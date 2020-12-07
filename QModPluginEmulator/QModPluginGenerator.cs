@@ -156,7 +156,14 @@ namespace QModManager
             Logger.LogInfo("Clearing BepInEx cache...");
             var stopwatch = Stopwatch.StartNew();
 
-            Directory.Delete(BepInExCachePath, true);
+            try
+            {
+                Directory.Delete(BepInExCachePath, true);
+            }
+            catch(IOException e)
+            {
+                Logger.LogDebug($"Clearing BepInEx cache failed with exception. \n{e}");
+            }
             stopwatch.Stop();
             Logger.LogInfo($"Cleared BepInEx cache in {stopwatch.ElapsedMilliseconds} ms.");
         }

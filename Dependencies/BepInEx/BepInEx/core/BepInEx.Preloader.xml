@@ -113,9 +113,14 @@
                 The main entrypoint of BepInEx, called from Doorstop.
             </summary>
         </member>
+        <member name="M:BepInEx.Preloader.PlatformUtils.SetPlatform">
+            <summary>
+            Recreation of MonoMod's PlatformHelper.DeterminePlatform method, but with libc calls instead of creating processes.
+            </summary>
+        </member>
         <member name="T:BepInEx.Preloader.RuntimeFixes.TraceFix">
             <summary>
-            This exists because the Mono implementation of <see cref="T:System.Diagnostics.Trace"/> is/was broken, and would call Write directly instead of calling TraceEvent. This class fixes that with a <see cref="N:BepInEx.Harmony"/> hook.
+            This exists because the Mono implementation of <see cref="T:System.Diagnostics.Trace"/> is/was broken, and would call Write directly instead of calling TraceEvent.
             </summary>
         </member>
         <member name="T:BepInEx.Preloader.Preloader">

@@ -126,9 +126,9 @@ namespace Harmony
 			foreach (var original in originals)
 			{
 				var info = GetPatchInfo(original);
-				info.Prefixes.DoIf(IDCheck, patchInfo => Unpatch(original, patchInfo.patch));
-				info.Postfixes.DoIf(IDCheck, patchInfo => Unpatch(original, patchInfo.patch));
-				info.Transpilers.DoIf(IDCheck, patchInfo => Unpatch(original, patchInfo.patch));
+				info.Prefixes.DoIf(IDCheck, patchInfo => Unpatch(original, patchInfo.PatchMethod));
+				info.Postfixes.DoIf(IDCheck, patchInfo => Unpatch(original, patchInfo.PatchMethod));
+				info.Transpilers.DoIf(IDCheck, patchInfo => Unpatch(original, patchInfo.PatchMethod));
 			}
 		}
 
@@ -170,9 +170,9 @@ namespace Harmony
 			CollectionExtensions.Do(GetPatchedMethods(), method =>
 			{
 				var info = HarmonySharedState.GetPatchInfo(method);
-				info.prefixes.Do(fix => assemblies[fix.owner] = fix.patch.DeclaringType.Assembly);
-				info.postfixes.Do(fix => assemblies[fix.owner] = fix.patch.DeclaringType.Assembly);
-				info.transpilers.Do(fix => assemblies[fix.owner] = fix.patch.DeclaringType.Assembly);
+				info.prefixes.Do(fix => assemblies[fix.owner] = fix.PatchMethod.DeclaringType.Assembly);
+				info.postfixes.Do(fix => assemblies[fix.owner] = fix.PatchMethod.DeclaringType.Assembly);
+				info.transpilers.Do(fix => assemblies[fix.owner] = fix.PatchMethod.DeclaringType.Assembly);
 			});
 
 			var result = new Dictionary<string, Version>();
