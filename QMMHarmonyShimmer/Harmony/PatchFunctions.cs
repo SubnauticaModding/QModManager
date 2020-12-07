@@ -24,7 +24,7 @@ namespace Harmony
 			var before = info.before ?? new string[0];
 			var after = info.after ?? new string[0];
 
-			patchInfo.AddPrefix(info.method, owner, priority, before, after);
+			patchInfo.AddPrefix(info.method, owner, priority, before, after, false);
 		}
 
 		public static void RemovePrefix(PatchInfo patchInfo, string owner)
@@ -40,7 +40,7 @@ namespace Harmony
 			var before = info.before ?? new string[0];
 			var after = info.after ?? new string[0];
 
-			patchInfo.AddPostfix(info.method, owner, priority, before, after);
+			patchInfo.AddPostfix(info.method, owner, priority, before, after, false);
 		}
 
 		public static void RemovePostfix(PatchInfo patchInfo, string owner)
@@ -56,7 +56,7 @@ namespace Harmony
 			var before = info.before ?? new string[0];
 			var after = info.after ?? new string[0];
 
-			patchInfo.AddTranspiler(info.method, owner, priority, before, after);
+			patchInfo.AddTranspiler(info.method, owner, priority, before, after, false);
 		}
 
 		public static void RemoveTranspiler(PatchInfo patchInfo, string owner)
@@ -72,7 +72,7 @@ namespace Harmony
 		public static List<MethodInfo> GetSortedPatchMethods(MethodBase original, Patch[] patches)
 		{
 			return patches
-				.Where(p => p.patch != null)
+				.Where(p => p.PatchMethod != null)
 				.OrderBy(p => p)
 				.Select(p => p.GetMethod(original))
 				.ToList();
