@@ -64,7 +64,6 @@ namespace QModManager
         }
 
         private static string[] QMMKnownAssemblyPaths = new[] {
-            Path.Combine(QMMPatchersPath, "QModManager.QMMHarmonyShimmer.dll"),
             Path.Combine(QMMPatchersPath, "QModManager.QModPluginGenerator.dll"),
             Path.Combine(QMMPatchersPath, "QModManager.UnityAudioFixer.dll"),
             Path.Combine(QMMPatchersPath, "QModManager.exe"),
@@ -204,6 +203,7 @@ namespace QModManager
 
             try
             {
+                AddAssemblyResolveEvent();
                 var result = new Dictionary<string, List<PluginInfo>>();
 
                 QModPluginInfos = new Dictionary<string, PluginInfo>();
@@ -291,6 +291,25 @@ namespace QModManager
                 Logger.LogFatal($"Failed to emulate QMods as plugins");
                 Logger.LogFatal(ex.ToString());
             }
+        }
+
+        private static void AddAssemblyResolveEvent()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
+            {
+                FileInfo[] allDlls = new DirectoryInfo(QModsPath).GetFiles("*.dll", SearchOption.AllDirectories);
+                foreach (FileInfo dll in allDlls)
+                {
+                    if (args.Name.Contains(Path.GetFileNameWithoutExtension(dll.Name)))
+                    {
+                        return Assembly.LoadFrom(dll.FullName);
+                    }
+                }
+
+                return null;
+            };
+
+            Logger.LogDebug("Added AssemblyResolve event");
         }
 
         [HarmonyPatch(typeof(MetadataHelper), nameof(MetadataHelper.GetMetadata), new Type[] { typeof(object) })]

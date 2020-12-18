@@ -89,7 +89,6 @@ namespace QModManager.Patching
 
                 Logger.Info("Started loading mods");
 
-                AddAssemblyResolveEvent();
             }
             catch (FatalPatchingException pEx)
             {
@@ -115,25 +114,6 @@ namespace QModManager.Patching
                     leftButton = Dialog.Button.SeeLog,
                 }.Show();
             }
-        }
-
-        private static void AddAssemblyResolveEvent()
-        {
-            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
-            {
-                FileInfo[] allDlls = new DirectoryInfo(QModBaseDir).GetFiles("*.dll", SearchOption.AllDirectories);
-                foreach (FileInfo dll in allDlls)
-                {
-                    if (args.Name.Contains(Path.GetFileNameWithoutExtension(dll.Name)))
-                    {
-                        return Assembly.LoadFrom(dll.FullName);
-                    }
-                }
-
-                return null;
-            };
-
-            Logger.Debug("Added AssemblyResolve event");
         }
 
         // Store the instance for use by MainMenuMessages
