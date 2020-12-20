@@ -459,6 +459,15 @@
              <param name="argumentVariations">Array of <see cref="T:HarmonyLib.ArgumentType"/></param>
             
         </member>
+        <member name="M:HarmonyLib.HarmonyPatch.#ctor(System.String,System.String,System.Nullable{HarmonyLib.MethodType},System.Type[],HarmonyLib.ArgumentType[])">
+             <summary>An annotation that specifies a method, property or constructor to patch</summary>
+             <param name="assemblyQualifiedDeclaringType">Assembly-qualified name of the declaring class/type</param>
+             <param name="methodName">The name of the method, property or constructor to patch</param>
+             <param name="methodType">The <see cref="T:HarmonyLib.MethodType"/></param>
+             <param name="argumentTypes">An array of argument types to target overloads</param>
+             <param name="argumentVariations">Array of <see cref="T:HarmonyLib.ArgumentType"/></param>
+            
+        </member>
         <member name="M:HarmonyLib.HarmonyPatch.#ctor(System.Type,HarmonyLib.MethodType)">
              <summary>An annotation that specifies a method, property or constructor to patch</summary>
              <param name="declaringType">The declaring class/type</param>
