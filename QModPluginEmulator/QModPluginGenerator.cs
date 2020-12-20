@@ -65,7 +65,6 @@ namespace QModManager
 
         private static string[] QMMKnownAssemblyPaths = new[] {
             Path.Combine(QMMPatchersPath, "QModManager.OculusNewtonsoftRedirect.dll"),
-            Path.Combine(QMMPatchersPath, "QModManager.QMMHarmonyShimmer.dll"),
             Path.Combine(QMMPatchersPath, "QModManager.QModPluginGenerator.dll"),
             Path.Combine(QMMPatchersPath, "QModManager.UnityAudioFixer.dll"),
             Path.Combine(QMMPatchersPath, "QModManager.exe"),
@@ -157,7 +156,14 @@ namespace QModManager
             Logger.LogInfo("Clearing BepInEx cache...");
             var stopwatch = Stopwatch.StartNew();
 
-            Directory.Delete(BepInExCachePath, true);
+            try
+            {
+                Directory.Delete(BepInExCachePath, true);
+            }
+            catch(IOException e)
+            {
+                Logger.LogDebug($"Clearing BepInEx cache failed with exception. \n{e}");
+            }
             stopwatch.Stop();
             Logger.LogInfo($"Cleared BepInEx cache in {stopwatch.ElapsedMilliseconds} ms.");
         }

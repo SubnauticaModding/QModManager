@@ -76,7 +76,6 @@ Source: "..\Build\QModManager.QMMLoader.xml"; DestDir: "{app}\BepInEx\plugins\QM
 
 ; BepInEx patchers
 Source: "..\Build\QModManager.OculusNewtonsoftRedirect.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
-Source: "..\Build\QModManager.QMMHarmonyShimmer.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModManager.QModPluginGenerator.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModManager.UnityAudioFixer.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModManager.UnityAudioFixer.xml"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
