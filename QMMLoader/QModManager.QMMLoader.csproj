@@ -78,7 +78,9 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(SolutionDir)Dependencies\BepInEx" "$(SolutionDir)VortexBuild"  /E /H /I /Q /Y
+    <PostBuildEvent>
+rmdir "$(SolutionDir)VortexBuild" /q /s
+xcopy "$(SolutionDir)Dependencies\BepInEx" "$(SolutionDir)VortexBuild"  /E /H /I /Q /Y
 
 
 xcopy "$(SolutionDir)Dependencies\cldb.dat" "$(SolutionDir)VortexBuild\BepInEx\patchers\QModManager\" /I /Q /Y
@@ -98,6 +100,7 @@ xcopy "$(TargetDir)QModManager.OculusNewtonsoftRedirect.dll" "$(SolutionDir)Vort
 xcopy "$(TargetDir)QModInstaller.dll" "$(SolutionDir)VortexBuild\BepInEx\plugins\QModManager\"  /I /Q /Y
 xcopy "$(TargetDir)QModInstaller.xml" "$(SolutionDir)VortexBuild\BepInEx\plugins\QModManager\"   /I /Q /Y
 xcopy "$(TargetDir)QModManager.QMMLoader.dll" "$(SolutionDir)VortexBuild\BepInEx\plugins\QModManager\"  /I /Q /Y
-xcopy "$(TargetDir)QModManager.QMMLoader.xml" "$(SolutionDir)VortexBuild\BepInEx\plugins\QModManager\"  /I /Q /Y</PostBuildEvent>
+xcopy "$(TargetDir)QModManager.QMMLoader.xml" "$(SolutionDir)VortexBuild\BepInEx\plugins\QModManager\"  /I /Q /Y
+</PostBuildEvent>
   </PropertyGroup>
 </Project>
