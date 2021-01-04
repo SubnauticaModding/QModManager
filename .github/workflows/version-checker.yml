@@ -29,7 +29,6 @@ jobs:
             Executable/Properties/AssemblyInfo.cs         | /\[assembly: Assembly(?:File)?Version\("([0-9.]+)"\)\]/g
             Installer/Properties/AssemblyInfo.cs          | /\[assembly: Assembly(?:File)?Version\("([0-9.]+)"\)\]/g
             Installer/QModsInstallerScript.iss            | /#define Version "([0-9.]+)"/g
-            QMMHarmonyShimmer/Properties/AssemblyInfo.cs  | /\[assembly: Assembly(?:File)?Version\("([0-9.]+)"\)\]/g
             QMMLoader/Properties/AssemblyInfo.cs          | /\[assembly: Assembly(?:File)?Version\("([0-9.]+)"\)\]/g
             QModManager/Properties/AssemblyInfo.cs        | /\[assembly: Assembly(?:File)?Version\("([0-9.]+)"\)\]/g
             QModPluginEmulator/Properties/AssemblyInfo.cs | /\[assembly: Assembly(?:File)?Version\("([0-9.]+)"\)\]/g

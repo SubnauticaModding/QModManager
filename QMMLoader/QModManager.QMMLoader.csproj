@@ -37,6 +37,9 @@
     <DocumentationFile>..\Build\QModManager.QMMLoader.xml</DocumentationFile>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>..\Dependencies\BepInEx\BepInEx\core\0Harmony.dll</HintPath>
@@ -75,4 +78,25 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+rmdir "$(SolutionDir)VortexBuild" /q /s
+xcopy "$(SolutionDir)Dependencies\BepInEx" "$(SolutionDir)VortexBuild"  /E /H /I /Q /Y
+xcopy "$(SolutionDir)Dependencies\cldb.dat" "$(SolutionDir)VortexBuild\BepInEx\patchers\QModManager\" /I /Q /Y
+
+xcopy "$(SolutionDir)packages\AssetsTools.NET.2.0.3\lib\net35\AssetsTools.NET.dll" "$(SolutionDir)VortexBuild\BepInEx\patchers\QModManager\" /I /Q /Y
+
+
+xcopy "$(TargetDir)QModManager.exe" "$(SolutionDir)VortexBuild\BepInEx\patchers\QModManager\"   /I /Q /Y
+xcopy "$(TargetDir)QModManager.QModPluginGenerator.dll" "$(SolutionDir)VortexBuild\BepInEx\patchers\QModManager\"  /I /Q /Y
+xcopy "$(TargetDir)QModManager.UnityAudioFixer.dll" "$(SolutionDir)VortexBuild\BepInEx\patchers\QModManager\"  /I /Q /Y
+xcopy "$(TargetDir)QModManager.UnityAudioFixer.xml" "$(SolutionDir)VortexBuild\BepInEx\patchers\QModManager\" /I /Q /Y
+
+
+xcopy "$(TargetDir)QModInstaller.dll" "$(SolutionDir)VortexBuild\BepInEx\plugins\QModManager\"  /I /Q /Y
+xcopy "$(TargetDir)QModInstaller.xml" "$(SolutionDir)VortexBuild\BepInEx\plugins\QModManager\"   /I /Q /Y
+xcopy "$(TargetDir)QModManager.QMMLoader.dll" "$(SolutionDir)VortexBuild\BepInEx\plugins\QModManager\"  /I /Q /Y
+xcopy "$(TargetDir)QModManager.QMMLoader.xml" "$(SolutionDir)VortexBuild\BepInEx\plugins\QModManager\"  /I /Q /Y
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>

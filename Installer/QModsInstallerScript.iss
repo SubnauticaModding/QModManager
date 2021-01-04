@@ -5,7 +5,7 @@
 #endif
 
 #define Name "QModManager" ; The name of the game will be added after it
-#define Version "4.0.2.3"
+#define Version "4.0.2.4"
 #define Author "QModManager"
 #define URL "https://github.com/QModManager/QModManager"
 #define SupportURL "https://discord.gg/UpWuWwq"
@@ -59,7 +59,6 @@ Source: "..\Build\InstallerExtensions.dll"; Flags: DontCopy
 ; Files required by QModManager itself
 Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModInstaller.xml"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
-Source: "..\Build\QModManager.QMMHarmonyShimmer.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModManager.QMMLoader.dll"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModManager.QMMLoader.xml"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModManager.QModPluginGenerator.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
@@ -296,17 +295,19 @@ begin
     Left := WizardForm.SelectDirLabel.Left + WizardForm.SelectDirLabel.Left / 30
     Top := WizardForm.BackButton.Top + 10
     Height := WizardForm.BackButton.Height
+    Enabled := True
   end;
   
   BelowZeroButton := TNewRadioButton.Create(WizardForm)
   with BelowZeroButton do
   begin
-    Parent := WizardForm
-    Caption := 'Below Zero'
-    OnClick := @BelowZeroButtonOnClick
-    Left := SubnauticaButton.Left * 3
-    Top := WizardForm.BackButton.Top + 10
-    Height := WizardForm.BackButton.Height
+    //Parent := WizardForm
+    //Caption := 'Below Zero'
+    //OnClick := @BelowZeroButtonOnClick
+    //Left := SubnauticaButton.Left * 3
+    //Top := WizardForm.BackButton.Top + 10
+    //Height := WizardForm.BackButton.Height
+    Enabled := False
   end;
 end;
 
