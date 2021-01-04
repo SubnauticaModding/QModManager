@@ -76,10 +76,7 @@
             {
                 if (mod.LoadedAssembly == modAssembly)
                 {
-                    if (mod.IsLoaded)
-                        return mod;
-                    else
-                        break;
+                    return mod;
                 }
             }
 
