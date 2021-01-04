@@ -44,7 +44,7 @@ namespace QModManager
         }
 
         private static Harmony harmony;
-        private static MethodInfo entryPointTarget = AccessTools.Method(typeof(GameInput), nameof(GameInput.Awake));
+        private static MethodInfo entryPointTarget = AccessTools.Method(typeof(PlatformUtils), nameof(PlatformUtils.PlatformInitAsync));
         private static MethodInfo entryPointPatch = AccessTools.Method(typeof(QMMLoader), nameof(QMMLoader.InitializeQModManager));
         private void Initialize()
         {

@@ -1616,10 +1616,18 @@
             <param name="share">File share options</param>
             <returns></returns>
         </member>
-        <member name="P:BepInEx.Utility.CurrentOs">
+        <member name="M:BepInEx.Utility.TryParseAssemblyName(System.String,System.Reflection.AssemblyName@)">
             <summary>
-            Current OS BepInEx is running on.
+            Try to parse given string as an assembly name
             </summary>
+            <param name="fullName">Fully qualified assembly name</param>
+            <param name="assemblyName">Resulting <see cref="T:System.Reflection.AssemblyName"/> instance</param>
+            <returns><c>true</c>, if parsing was successful, otherwise <c>false</c></returns>
+            <remarks>
+            On some versions of mono, using <see cref="M:System.Reflection.Assembly.GetName"/> fails because it runs on unmanaged side
+            which has problems with encoding.
+            Using <see cref="T:System.Reflection.AssemblyName"/> solves this by doing parsing on managed side instead.
+            </remarks>
         </member>
         <member name="T:UnityInjector.ConsoleUtil.SafeConsole">
             <summary>

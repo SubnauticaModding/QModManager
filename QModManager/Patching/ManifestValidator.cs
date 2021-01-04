@@ -18,6 +18,8 @@
             { "QModManager", ModStatus.BannedID },
             { "QModInstaller", ModStatus.BannedID },
             { "EnableAchievements", ModStatus.Merged },
+            { "AgonyAssetTools", ModStatus.Obsolete },
+            { "qmultimod.mod", ModStatus.Obsolete },
         };
 
         public void ValidateBasicManifest(QMod mod)
@@ -239,7 +241,7 @@
             }
             catch (ReflectionTypeLoadException rtle)
             {
-                Logger.Debug($"Unable to load types for '{qMod.Id}': " + rtle.Message);
+                Logger.Debug($"Unable to load types for '{qMod.Id}': \nInnerException: \n" + rtle.InnerException + "\n LoaderExceptions:\n" +string.Join("/n", rtle.LoaderExceptions.ToList()));
                 qMod.Status = ModStatus.MissingDependency;
             }
 
