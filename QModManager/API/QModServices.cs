@@ -39,7 +39,7 @@
         /// <returns></returns>
         public IQMod FindModById(string modId)
         {
-            if (knownMods.TryGetValue(modId, out IQMod mod) && mod.IsLoaded)
+            if (knownMods.TryGetValue(modId, out IQMod mod) && mod.Enable)
             {
                 return mod;
             }
@@ -58,7 +58,7 @@
         {
             if (knownMods.TryGetValue(modId, out IQMod mod))
             {
-                return mod.IsLoaded;
+                return mod.Enable;
             }
 
             return false;
