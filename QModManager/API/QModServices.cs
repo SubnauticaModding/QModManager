@@ -39,7 +39,7 @@
         /// <returns></returns>
         public IQMod FindModById(string modId)
         {
-            if (knownMods.TryGetValue(modId, out IQMod mod))
+            if (knownMods.TryGetValue(modId, out IQMod mod) && mod.IsLoaded)
             {
                 return mod;
             }
@@ -56,7 +56,12 @@
         /// </returns>
         public bool ModPresent(string modId)
         {
-            return knownMods.ContainsKey(modId);
+            if (knownMods.TryGetValue(modId, out IQMod mod))
+            {
+                return mod.IsLoaded;
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -70,7 +75,9 @@
             foreach (IQMod mod in knownMods.Values)
             {
                 if (mod.LoadedAssembly == modAssembly)
+                {
                     return mod;
+                }
             }
 
             return null;
