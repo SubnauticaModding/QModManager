@@ -18,7 +18,7 @@ namespace QModManager
     {
         internal const string PluginGuid = "QModManager.QMMLoader";
         internal const string PluginName = "QMMLoader";
-        internal const string PluginVersion = "1.0";
+        internal const string PluginVersion = "1.0.1";
 
         internal const string SubnauticaProcessName = "Subnautica";
         internal const string SubnauticaZeroProcessName = "SubnauticaZero";
