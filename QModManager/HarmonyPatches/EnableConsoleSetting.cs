@@ -4,16 +4,19 @@
     using QModManager.Utility;
     using UnityEngine;
 
-    [HarmonyPatch(typeof(DevConsole), nameof(DevConsole.Awake))]
-    internal static class DevConsole_Awake_Patch
+    [HarmonyPatch(typeof(DevConsole), nameof(DevConsole.Update))]
+    internal static class DevConsole_Update_Patch
     {
         // This patch toggles the console based on the mod option
 
         [HarmonyPostfix]
         internal static void Postfix()
         {
-            DevConsole.disableConsole = !Config.EnableConsole;
-            PlayerPrefs.SetInt("UWE.DisableConsole", Config.EnableConsole ? 0 : 1);
+            if(DevConsole.disableConsole != !Config.EnableConsole)
+            {
+                DevConsole.disableConsole = !Config.EnableConsole;
+                PlayerPrefs.SetInt("UWE.DisableConsole", Config.EnableConsole ? 0 : 1);
+            }
         }
     }
 

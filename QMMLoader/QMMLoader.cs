@@ -18,7 +18,7 @@ namespace QModManager
     {
         internal const string PluginGuid = "QModManager.QMMLoader";
         internal const string PluginName = "QMMLoader";
-        internal const string PluginVersion = "1.0";
+        internal const string PluginVersion = "1.0.1";
 
         internal const string SubnauticaProcessName = "Subnautica";
         internal const string SubnauticaZeroProcessName = "SubnauticaZero";
@@ -44,7 +44,7 @@ namespace QModManager
         }
 
         private static Harmony harmony;
-        private static MethodInfo entryPointTarget = AccessTools.Method(typeof(PlatformUtils), nameof(PlatformUtils.PlatformInitAsync));
+        private static MethodInfo entryPointTarget = AccessTools.Method(typeof(StartScreen), nameof(StartScreen.LoadMainMenu));
         private static MethodInfo entryPointPatch = AccessTools.Method(typeof(QMMLoader), nameof(QMMLoader.InitializeQModManager));
         private void Initialize()
         {
