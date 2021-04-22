@@ -21,6 +21,10 @@ namespace QModManager.Checks
             "Subnautica_Data/Plugins/steam_api64.cdx",
             "Subnautica_Data/Plugins/steam_api64.ini",
             "Subnautica_Data/Plugins/steam_emu.ini",
+            "Profile/SteamUserID.cfg",
+            "Profile/Stats/Achievements.Bin",
+            "launcher.bat",
+            "chuj.cdx",
         };
 
         internal static void IsPirate(string folder)
