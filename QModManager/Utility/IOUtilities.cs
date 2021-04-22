@@ -21,6 +21,8 @@ namespace QModManager.Utility
             "SubnauticaZero_Data",
             "_CommonRedist",
             "steam_shader_cache",
+            "SavesDir",
+            "SavesDir2",
         };
 
         internal static void LogFolderStructureAsTree(string directory = null)
