@@ -10,7 +10,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5A8D179E-C749-4346-AD81-05F11C082A1C}"
 	ProjectSection(SolutionItems) = preProject
 		Data\latest-version.txt = Data\latest-version.txt
-		Installer\QModsInstallerScript.iss = Installer\QModsInstallerScript.iss
+		Installer\QModsInstallerScript - Both.iss = Installer\QModsInstallerScript - Both.iss
+		Installer\QModsInstallerScript - BZ.iss = Installer\QModsInstallerScript - BZ.iss
+		Installer\QModsInstallerScript - SN1.iss = Installer\QModsInstallerScript - SN1.iss
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InstallerExtensions", "Installer\InstallerExtensions.csproj", "{92726127-A08F-4843-BF96-4989CE1BF422}"
