@@ -5,7 +5,7 @@
 #endif
 
 #define Name "QModManager" ; The name of the game will be added after it
-#define Version "4.0.2.6"
+#define Version "4.0.4"
 #define Author "QModManager"
 #define URL "https://github.com/QModManager/QModManager"
 #define SupportURL "https://discord.gg/UpWuWwq"
@@ -56,17 +56,30 @@ Source: "..\Dependencies\VclStylesinno.dll"; Flags: DontCopy
 Source: "..\Dependencies\Carbon.vsf"; Flags: DontCopy
 ; Installer extensions
 Source: "..\Build\InstallerExtensions.dll"; Flags: DontCopy
+
 ; Files required by QModManager itself
+; Dependencies
+Source: "..\packages\AssetsTools.NET.2.0.3\lib\net35\AssetsTools.NET.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+Source: "..\Dependencies\cldb.dat"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+Source: "..\Dependencies\Oculus.Newtonsoft.Json.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+Source: "..\packages\Newtonsoft.Json.12.0.1\lib\netstandard2.0\Newtonsoft.Json.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+Source: "..\packages\Newtonsoft.Json.Bson.1.0.2\lib\netstandard2.0\Newtonsoft.Json.Bson.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+
+; QMM
 Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModInstaller.xml"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
+Source: "..\Build\QModManager.exe"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+
+; BepInEx plugins
 Source: "..\Build\QModManager.QMMLoader.dll"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModManager.QMMLoader.xml"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
+
+; BepInEx patchers
+Source: "..\Build\QModManager.OculusNewtonsoftRedirect.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModManager.QModPluginGenerator.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModManager.UnityAudioFixer.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModManager.UnityAudioFixer.xml"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
-Source: "..\packages\AssetsTools.NET.2.0.3\lib\net35\AssetsTools.NET.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
-Source: "..\Dependencies\cldb.dat"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
-Source: "..\Build\QModManager.exe"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+
 ; BepInEx
 Source: "..\Dependencies\BepInEx\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs replacesameversion sharedfile uninsnosharedfileprompt;
 
@@ -244,7 +257,7 @@ begin
           P := Pos('BaseInstallFolder_', FileLines[I])
           if P > 0 then
           begin
-            steamInstallPath := Copy(FileLines[I], P + 23, Length(FileLines[i]) - P - 23)
+            steamInstallPath := Copy(FileLines[I], P + 23, 3) + Copy(FileLines[I], P + 27, Length(FileLines[I]) - P  - 27);
             if (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '.exe')) and (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '_Data\Managed\Assembly-CSharp.dll')) then // If the folder is correct
             begin
               Result := steamInstallPath + '\steamapps\common\' + folder
@@ -301,13 +314,13 @@ begin
   BelowZeroButton := TNewRadioButton.Create(WizardForm)
   with BelowZeroButton do
   begin
-    //Parent := WizardForm
-    //Caption := 'Below Zero'
-    //OnClick := @BelowZeroButtonOnClick
-    //Left := SubnauticaButton.Left * 3
-    //Top := WizardForm.BackButton.Top + 10
-    //Height := WizardForm.BackButton.Height
-    Enabled := False
+    Parent := WizardForm
+    Caption := 'Below Zero'
+    OnClick := @BelowZeroButtonOnClick
+    Left := SubnauticaButton.Left * 3
+    Top := WizardForm.BackButton.Top + 10
+    Height := WizardForm.BackButton.Height
+    Enabled := True
   end;
 end;
 
@@ -544,7 +557,7 @@ begin
   end
 end;    
 
-function IsPreviousVersionInstalled: Boolean; // Returns true for previus versions < 4.0 (prior to the change to BepInEx)
+function IsPreviousVersionInstalled: Boolean;
 var
   uninstallRegKey: String;
   previousVersion: String;
@@ -578,51 +591,28 @@ var
   resultCode: Integer;
 begin
   if CurPageID = wpSelectComponents then
-  begin
-    appIsSet := true
+    appIsSet := true;
+  
+  Result := true;
+end;
 
+function PrepareToInstall(var NeedsRestart: boolean): string;
+var
+  uninstallString: string;
+  resultCode: integer;
+begin
+  NeedsRestart := false;
+
+  if IsPreviousVersionInstalled() then
+  begin
+    uninstallString := RemoveQuotes(GetUninstallString());
+    if FileExists(uninstallString) then
     begin
+      Exec(uninstallString, '/SILENT', '', SW_SHOW, ewWaitUntilTerminated, resultCode);
       if IsPreviousVersionInstalled() then
-      begin
-        if IsUpgrade() and FileExists(RemoveQuotes(GetUninstallString())) then
-        begin
-          if MsgBox('A previous installation of QModManager was detected. To update, it must be uninstalled.' + #13#10 + 'Do you want to uninstall it now?', mbInformation, MB_YESNO) = IDYES then
-          begin
-            uninstallString := RemoveQuotes(GetUninstallString());
-            Exec(ExpandConstant(uninstallString), '', '', SW_SHOW, ewWaitUntilTerminated, resultCode);
-              if IsPreviousVersionInstalled() then
-              begin
-                MsgBox('Previous installation of QModManager must be uninstalled to continue.', mbError, MB_OK);
-                Result := false;
-                Exit;
-              end
-              else
-                Result := true;
-          end
-          else
-          begin
-            MsgBox('Previous installation of QModManager must be uninstalled to continue.', mbError, MB_OK);
-            Result := false;
-            Exit;
-          end;
-        end
-        else
-        begin
-          if MsgBox('A previous installation of QModManager was detected, but the uninstaller could not be found.' + #13#10 + 'Improper uninstallation of QModManager can result in needing to verify your game files or reinstall the game.' + #13#10 + #13#10 + 'Install anyway?', mbError, MB_YESNO) = IDYES then
-          begin
-            Result := true;
-          end
-          else
-          begin
-            WizardForm.Close();
-            Result := false;
-            Exit;
-          end;
-        end;
-      end;
+        Result := 'Previous installation must be uninstalled to continue.';
     end;
   end;
-  Result := true;
 end;
 
 var TypesComboOnChangePrev: TNotifyEvent;

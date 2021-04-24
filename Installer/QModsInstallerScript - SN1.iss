@@ -5,7 +5,7 @@
 #endif
 
 #define Name "QModManager" ; The name of the game will be added after it
-#define Version "4.0.2.6"
+#define Version "4.0.4"
 #define Author "QModManager"
 #define URL "https://github.com/QModManager/QModManager"
 #define SupportURL "https://discord.gg/UpWuWwq"
@@ -56,17 +56,30 @@ Source: "..\Dependencies\VclStylesinno.dll"; Flags: DontCopy
 Source: "..\Dependencies\Carbon.vsf"; Flags: DontCopy
 ; Installer extensions
 Source: "..\Build\InstallerExtensions.dll"; Flags: DontCopy
+
 ; Files required by QModManager itself
+; Dependencies
+Source: "..\packages\AssetsTools.NET.2.0.3\lib\net35\AssetsTools.NET.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+Source: "..\Dependencies\cldb.dat"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+Source: "..\Dependencies\Oculus.Newtonsoft.Json.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+Source: "..\packages\Newtonsoft.Json.12.0.1\lib\netstandard2.0\Newtonsoft.Json.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+Source: "..\packages\Newtonsoft.Json.Bson.1.0.2\lib\netstandard2.0\Newtonsoft.Json.Bson.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+
+; QMM
 Source: "..\Build\QModInstaller.dll"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModInstaller.xml"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
+Source: "..\Build\QModManager.exe"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+
+; BepInEx plugins
 Source: "..\Build\QModManager.QMMLoader.dll"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModManager.QMMLoader.xml"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
+
+; BepInEx patchers
+Source: "..\Build\QModManager.OculusNewtonsoftRedirect.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModManager.QModPluginGenerator.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModManager.UnityAudioFixer.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\Build\QModManager.UnityAudioFixer.xml"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
-Source: "..\packages\AssetsTools.NET.2.0.3\lib\net35\AssetsTools.NET.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
-Source: "..\Dependencies\cldb.dat"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
-Source: "..\Build\QModManager.exe"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+
 ; BepInEx
 Source: "..\Dependencies\BepInEx\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs replacesameversion sharedfile uninsnosharedfileprompt;
 
@@ -97,7 +110,6 @@ Name: "select"; Description: "QModManager"; Flags: IsCustom;
 [Components]
 Name: "qmm"; Description: "QModManager"; Flags: fixed; Types: select;
 Name: "qmm\sn"; Description: "Install for Subnautica"; Flags: exclusive fixed;
-Name: "qmm\bz"; Description: "Install for Below Zero"; Flags: exclusive fixed;
 
 [Tasks]
 Name: "cleanup"; Description: "(Recommended) Clean up after previous Nitrox and QMM installs";
@@ -124,33 +136,11 @@ begin
   Result := IsSubnautica(ExpandConstant('{app}'));
 end;
 
-function IsBelowZero(path: String): Boolean;
-begin
-  if (FileExists(path + '\SubnauticaZero.exe')) and (FileExists(path + '\SubnauticaZero_Data\Managed\Assembly-CSharp.dll')) then
-  begin
-    Result := true
-    Exit
-  end
-  else
-  begin
-    Result := false
-    Exit
-  end
-end;
-function IsBelowZeroApp(): Boolean;
-begin
-  Result := IsBelowZero(ExpandConstant('{app}'));
-end;
-
 function GetName(def: string): String;
 begin
   if (IsSubnauticaApp()) then
   begin
     Result := '{#Name} (Subnautica)'
-  end
-  else if (IsBelowZeroApp()) then
-  begin
-    Result := '{#Name} (Below Zero)'
   end
   else
   begin
@@ -163,10 +153,6 @@ begin
   if (IsSubnauticaApp()) then
   begin
     Result := '{#UpdatesURL}/subnautica/mods/201'
-  end
-  else if (IsBelowZeroApp()) then
-  begin
-    Result := '{#UpdatesURL}/subnauticabelowzero/mods/1'
   end
   else
   begin
@@ -186,14 +172,9 @@ begin
     except
       app := 'null'
     end;
-    if IsSubnautica(app) and IsBelowZero(app) then
+    if not IsSubnautica(app) then
     begin
-      WizardForm.SelectComponentsLabel.Caption := 'Multiple games detected in the same folder, cannot install'
-      Exit
-    end;
-    if not IsSubnautica(app) and not IsBelowZero(app) then
-    begin
-      WizardForm.SelectComponentsLabel.Caption := 'No game detected in this folder, cannot install'
+      WizardForm.SelectComponentsLabel.Caption := 'Game not detected in this folder, cannot install'
       Exit
     end;
     Index := WizardForm.ComponentsList.Items.IndexOf('Install for Subnautica')
@@ -205,15 +186,6 @@ begin
         WizardForm.SelectComponentsLabel.Caption := 'Install QModManager for Subnautica'
       end
     end;
-    Index := WizardForm.ComponentsList.Items.IndexOf('Install for Below Zero')
-    if Index <> -1 then
-    begin
-      if IsBelowZero(app) then
-      begin
-        WizardForm.ComponentsList.Checked[Index] := true
-        WizardForm.SelectComponentsLabel.Caption := 'Install QModManager for Below Zero'
-      end
-    end
   end
 end;
 
@@ -244,7 +216,7 @@ begin
           P := Pos('BaseInstallFolder_', FileLines[I])
           if P > 0 then
           begin
-            steamInstallPath := Copy(FileLines[I], P + 23, Length(FileLines[i]) - P - 23)
+            steamInstallPath := Copy(FileLines[I], P + 23, 3) + Copy(FileLines[I], P + 27, Length(FileLines[I]) - P  - 27);
             if (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '.exe')) and (FileExists(steamInstallPath + '\steamapps\common\' + folder + '\' + name + '_Data\Managed\Assembly-CSharp.dll')) then // If the folder is correct
             begin
               Result := steamInstallPath + '\steamapps\common\' + folder
@@ -261,18 +233,11 @@ end;
 
 var ACLabel: TLabel;
 var SubnauticaButton: TNewRadioButton;
-var BelowZeroButton: TNewRadioButton;
 
 procedure SubnauticaButtonOnClick(Sender: TObject);
 begin
   WizardForm.DirEdit.Text := GetDir('Subnautica', 'Subnautica')
   SubnauticaButton.Checked := true
-end;
-
-procedure BelowZeroButtonOnClick(Sender: TObject);
-begin
-  WizardForm.DirEdit.Text := GetDir('SubnauticaZero', 'SubnauticaZero')
-  BelowZeroButton.Checked := true
 end;
 
 function InitializeWizard_AddButtons(): Boolean;
@@ -298,17 +263,6 @@ begin
     Enabled := True
   end;
   
-  BelowZeroButton := TNewRadioButton.Create(WizardForm)
-  with BelowZeroButton do
-  begin
-    //Parent := WizardForm
-    //Caption := 'Below Zero'
-    //OnClick := @BelowZeroButtonOnClick
-    //Left := SubnauticaButton.Left * 3
-    //Top := WizardForm.BackButton.Top + 10
-    //Height := WizardForm.BackButton.Height
-    Enabled := False
-  end;
 end;
 
 function CurPageChanged_AddButtons(CurPageID: Integer): Boolean;
@@ -320,24 +274,15 @@ begin
     begin
       SubnauticaButton.Enabled := false
     end;
-    if GetDir('SubnauticaZero', 'SubnauticaZero') = 'none' then
-    begin
-      BelowZeroButton.Enabled := false
-    end;
     
-    if SubnauticaButton.Enabled and not BelowZeroButton.Enabled then
+    if SubnauticaButton.Enabled then
     begin
       WizardForm.DirEdit.Text := GetDir('Subnautica', 'Subnautica')
       SubnauticaButton.Checked := true
     end
-    else if BelowZeroButton.Enabled and not SubnauticaButton.Enabled then
-    begin
-      WizardForm.DirEdit.Text := GetDir('SubnauticaZero', 'SubnauticaZero')
-      BelowZeroButton.Checked := true
-    end;
+    
   end;
   SubnauticaButton.Visible := CurPageID = wpSelectDir
-  BelowZeroButton.Visible := CurPageID = wpSelectDir
   ACLabel.Visible := CurPageID = wpSelectDir
 end;
 
@@ -348,35 +293,20 @@ var
   S: String;
 begin
   if Pos('subnautica', LowerCase(WizardForm.DirEdit.Text)) <> 0 then
-  begin
-    if PathsEqual(WizardForm.DirEdit.Text, GetDir('Subnautica', 'Subnautica')) then
     begin
-      SubnauticaButton.Checked := true
-    end
-    else
-    begin
-      SubnauticaButton.Checked := false;
-    end
-  end
-  else
-  begin
-    SubnauticaButton.Checked := false;
-    if Pos('subnauticazero', LowerCase(WizardForm.DirEdit.Text)) <> 0 then
-    begin
-      if PathsEqual(WizardForm.DirEdit.Text, GetDir('SubnauticaZero', 'SubnauticaZero')) then
+      if PathsEqual(WizardForm.DirEdit.Text, GetDir('Subnautica', 'Subnautica')) then
       begin
-        BelowZeroButton.Checked := true
+        SubnauticaButton.Checked := true
       end
       else
       begin
-        BelowZeroButton.Checked := false;
+        SubnauticaButton.Checked := false;
       end
     end
-    else
+  else
     begin
-      BelowZeroButton.Checked := false;
-    end
-  end;
+      SubnauticaButton.Checked := false;
+    end;
   
   if (Pos('://', WizardForm.DirEdit.Text) <> 0) or (Pos(':\\', WizardForm.DirEdit.Text) <> 0) then
   begin
@@ -407,11 +337,6 @@ begin
     Result := '{52CC87AA-645D-40FB-8411-510142191678}'
     Exit
   end;
-  if IsBelowZero(ExpandConstant('{app}')) then
-  begin
-    Result := '{A535470D-3403-46A2-8D44-28AD4B90C9A3}'
-    Exit
-  end
 end;
 
 function IsAppRunning(const FileName : string): Boolean;
@@ -530,9 +455,9 @@ begin
     Exit
   end;
   appIsSet := false
-  if IsAppRunning('Subnautica.exe') or IsAppRunning('SubnauticaZero.exe') then
+  if IsAppRunning('Subnautica.exe') then
   begin
-    MsgBox('You need to close Subnautica and Subnautica: Below Zero before installing QModManager.' + #13#10 + 'If none of these games are running, please reboot your computer.', mbError, MB_OK);
+    MsgBox('You need to close Subnautica before installing QModManager.' + #13#10 + 'If the game is not running, please reboot your computer.', mbError, MB_OK);
     Result := false
   end
   else
@@ -544,7 +469,7 @@ begin
   end
 end;    
 
-function IsPreviousVersionInstalled: Boolean; // Returns true for previus versions < 4.0 (prior to the change to BepInEx)
+function IsPreviousVersionInstalled: Boolean;
 var
   uninstallRegKey: String;
   previousVersion: String;
@@ -578,51 +503,28 @@ var
   resultCode: Integer;
 begin
   if CurPageID = wpSelectComponents then
-  begin
-    appIsSet := true
+    appIsSet := true;
+  
+  Result := true;
+end;
 
+function PrepareToInstall(var NeedsRestart: boolean): string;
+var
+  uninstallString: string;
+  resultCode: integer;
+begin
+  NeedsRestart := false;
+
+  if IsPreviousVersionInstalled() then
+  begin
+    uninstallString := RemoveQuotes(GetUninstallString());
+    if FileExists(uninstallString) then
     begin
+      Exec(uninstallString, '/SILENT', '', SW_SHOW, ewWaitUntilTerminated, resultCode);
       if IsPreviousVersionInstalled() then
-      begin
-        if IsUpgrade() and FileExists(RemoveQuotes(GetUninstallString())) then
-        begin
-          if MsgBox('A previous installation of QModManager was detected. To update, it must be uninstalled.' + #13#10 + 'Do you want to uninstall it now?', mbInformation, MB_YESNO) = IDYES then
-          begin
-            uninstallString := RemoveQuotes(GetUninstallString());
-            Exec(ExpandConstant(uninstallString), '', '', SW_SHOW, ewWaitUntilTerminated, resultCode);
-              if IsPreviousVersionInstalled() then
-              begin
-                MsgBox('Previous installation of QModManager must be uninstalled to continue.', mbError, MB_OK);
-                Result := false;
-                Exit;
-              end
-              else
-                Result := true;
-          end
-          else
-          begin
-            MsgBox('Previous installation of QModManager must be uninstalled to continue.', mbError, MB_OK);
-            Result := false;
-            Exit;
-          end;
-        end
-        else
-        begin
-          if MsgBox('A previous installation of QModManager was detected, but the uninstaller could not be found.' + #13#10 + 'Improper uninstallation of QModManager can result in needing to verify your game files or reinstall the game.' + #13#10 + #13#10 + 'Install anyway?', mbError, MB_YESNO) = IDYES then
-          begin
-            Result := true;
-          end
-          else
-          begin
-            WizardForm.Close();
-            Result := false;
-            Exit;
-          end;
-        end;
-      end;
+        Result := 'Previous installation must be uninstalled to continue.';
     end;
   end;
-  Result := true;
 end;
 
 var TypesComboOnChangePrev: TNotifyEvent;
