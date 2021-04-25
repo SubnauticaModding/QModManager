@@ -56,7 +56,7 @@
 
             Logger.Info($"Game Version: {SNUtils.GetPlasticChangeSetOfBuild()} Build Date: {SNUtils.GetDateTimeOfBuild():dd-MMMM-yyyy}");
             Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}{(IsValidGameRunning && MinimumBuildVersion != 0 ? $" built for {CurrentlyRunningGame} v{MinimumBuildVersion}" : string.Empty)}...");
-            Logger.Info($"Today is {DateTime.Today:dd-MMMM-yyyy}");
+            Logger.Info($"Today is {DateTime.Today:dd-MMMM-yyyy_HH:mm:ss}");
 
             CurrentGameVersion = SNUtils.GetPlasticChangeSetOfBuild(-1);
             if (!IsValidGameVersion)
