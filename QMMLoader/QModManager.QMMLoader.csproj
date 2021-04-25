@@ -96,7 +96,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>-rmdir "$(SolutionDir)VortexBuild\$(Configuration)" /q /s
+    <PostBuildEvent>rmdir "$(SolutionDir)VortexBuild\$(Configuration)" /q /s
 xcopy "$(SolutionDir)Dependencies\BepInEx" "$(SolutionDir)VortexBuild\$(Configuration)"  /E /H /I /Q /Y
 
 
@@ -119,7 +119,8 @@ xcopy "$(TargetDir)QModInstaller.xml" "$(SolutionDir)VortexBuild\$(Configuration
 xcopy "$(TargetDir)QModManager.QMMLoader.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\plugins\QModManager\"  /I /Q /Y
 xcopy "$(TargetDir)QModManager.QMMLoader.xml" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\plugins\QModManager\"  /I /Q /Y
 
-powershell Compress-Archive -Path '$(SolutionDir)VortexBuild\$(Configuration)' -DestinationPath '$(SolutionDir)VortexBuild\QModManager_$(Configuration).zip' -Force
+powershell Compress-Archive -Path '$(SolutionDir)VortexBuild\$(Configuration)\Bepinex' -DestinationPath '$(SolutionDir)VortexBuild\QModManager_$(Configuration).zip' -Force
+powershell Compress-Archive -LiteralPath '$(SolutionDir)VortexBuild\$(Configuration)\doorstop_config.ini', '$(SolutionDir)VortexBuild\$(Configuration)\winhttp.dll' -DestinationPath '$(SolutionDir)VortexBuild\QModManager_$(Configuration).zip' -Update
 
 "$(SolutionDir)Dependencies\Inno\ISCC.exe" "$(TargetDir)QModsInstallerScript.iss"</PostBuildEvent>
   </PropertyGroup>
