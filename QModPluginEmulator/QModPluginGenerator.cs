@@ -3,8 +3,7 @@ using BepInEx.Bootstrap;
 using BepInEx.Logging;
 using HarmonyLib;
 using Mono.Cecil;
-using Oculus.Newtonsoft.Json.Bson;
-using Oculus.Newtonsoft.Json;
+using Newtonsoft.Json;
 using QModManager.API;
 using QModManager.Patching;
 using QModManager.Utility;
@@ -16,6 +15,7 @@ using System.Linq;
 using System.Reflection;
 using TypeloaderCache = System.Collections.Generic.Dictionary<string, BepInEx.Bootstrap.CachedAssembly<BepInEx.PluginInfo>>;
 using QMMAssemblyCache = System.Collections.Generic.Dictionary<string, long>;
+using QModManager.API.ModLoading;
 
 namespace QModManager
 {
@@ -63,12 +63,27 @@ namespace QModManager
             }
         }
 
+        [HarmonyPatch(typeof(PreStartScreen), nameof(PreStartScreen.Start))]
+        [HarmonyPrefix]
+        private static void InitializeQMM()
+        {
+            Patcher.Patch(); // Run QModManager patch
+
+            var modsToLoad = QModsToLoad.ToList();
+            var initializer = new Initializer(Patcher.CurrentlyRunningGame);
+
+            initializer.InitializeMods(modsToLoad);
+
+            SummaryLogger.ReportIssues(modsToLoad);
+            SummaryLogger.LogSummaries(modsToLoad);
+        }
+
         private static string[] QMMKnownAssemblyPaths = new[] {
+            Path.Combine(QMMPatchersPath, "QModManager.OculusNewtonsoftRedirect.dll"),
             Path.Combine(QMMPatchersPath, "QModManager.QModPluginGenerator.dll"),
             Path.Combine(QMMPatchersPath, "QModManager.UnityAudioFixer.dll"),
             Path.Combine(QMMPatchersPath, "QModManager.exe"),
             Path.Combine(QMMPluginsPath, "QModInstaller.dll"),
-            Path.Combine(QMMPluginsPath, "QModManager.QMMLoader.dll")
         };
 
         private static QMMAssemblyCache GetNewQMMAssemblyCache()
@@ -102,10 +117,12 @@ namespace QModManager
             {
                 var data = File.ReadAllBytes(QMMAssemblyCachePath);
                 using (var ms = new MemoryStream(data))
-                using (var reader = new BsonReader(ms))
+                using (var reader = new StreamReader(ms))
+                using (var jsreader = new JsonTextReader(reader))
                 {
+
                     var serializer = new JsonSerializer();
-                    QMMAssemblyCache = serializer.Deserialize<QMMAssemblyCache>(reader);
+                    QMMAssemblyCache = serializer.Deserialize<QMMAssemblyCache>(jsreader);
                 }
                 stopwatch.Stop();
                 Logger.LogInfo($"QMMAssemblyCache loaded in {stopwatch.ElapsedMilliseconds} ms.");
@@ -130,10 +147,11 @@ namespace QModManager
                 Directory.CreateDirectory(BepInExCachePath);
 
                 using (var ms = new MemoryStream())
-                using (var writer = new BsonWriter(ms))
+                using (var writer = new StreamWriter(ms))
+                using(var jsreader = new JsonTextWriter(writer))
                 {
                     var serializer = new JsonSerializer();
-                    serializer.Serialize(writer, QMMAssemblyCache);
+                    serializer.Serialize(jsreader, QMMAssemblyCache);
                     File.WriteAllBytes(QMMAssemblyCachePath, ms.ToArray());
                 }
 
@@ -203,7 +221,6 @@ namespace QModManager
 
             try
             {
-                AddAssemblyResolveEvent();
                 var result = new Dictionary<string, List<PluginInfo>>();
 
                 QModPluginInfos = new Dictionary<string, PluginInfo>();
@@ -285,31 +302,13 @@ namespace QModManager
                 __result[Assembly.GetExecutingAssembly().Location] = QModPluginInfos.Values.Distinct().ToList();
 
                 TypeLoader.SaveAssemblyCache(GeneratedPluginCache, result);
+
             }
             catch (Exception ex)
             {
                 Logger.LogFatal($"Failed to emulate QMods as plugins");
                 Logger.LogFatal(ex.ToString());
             }
-        }
-
-        private static void AddAssemblyResolveEvent()
-        {
-            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
-            {
-                FileInfo[] allDlls = new DirectoryInfo(QModsPath).GetFiles("*.dll", SearchOption.AllDirectories);
-                foreach (FileInfo dll in allDlls)
-                {
-                    if (args.Name.Contains(Path.GetFileNameWithoutExtension(dll.Name)))
-                    {
-                        return Assembly.LoadFrom(dll.FullName);
-                    }
-                }
-
-                return null;
-            };
-
-            Logger.LogDebug("Added AssemblyResolve event");
         }
 
         [HarmonyPatch(typeof(MetadataHelper), nameof(MetadataHelper.GetMetadata), new Type[] { typeof(object) })]

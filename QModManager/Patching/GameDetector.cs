@@ -18,13 +18,20 @@
         /// </summary>
         private static readonly Dictionary<QModGame, int> SupportedGameVersions = new Dictionary<QModGame, int>
         {
-            { QModGame.Subnautica, 0 },
-            { QModGame.BelowZero, 0 }
+#if SUBNAUTICA_STABLE
+            { QModGame.Subnautica, 67838 }
+#elif BELOWZERO_STABLE
+            { QModGame.BelowZero, 42690 }
+#elif SUBNAUTICA_EXP
+            { QModGame.Subnautica, 67838 }
+#elif BELOWZERO_EXP
+            {QModGame.BelowZero, 44244 }
+#endif
         };
 
         internal bool IsValidGameRunning => SupportedGameVersions.ContainsKey(CurrentlyRunningGame);
         internal int MinimumBuildVersion => IsValidGameRunning ? SupportedGameVersions[CurrentlyRunningGame] : -1;
-        internal bool IsValidGameVersion => IsValidGameRunning && MinimumBuildVersion == 0 || (CurrentGameVersion > -1 && CurrentGameVersion >= MinimumBuildVersion);
+        internal bool IsValidGameVersion => IsValidGameRunning && (MinimumBuildVersion == 0 || (CurrentGameVersion > -1 && CurrentGameVersion >= MinimumBuildVersion));
 
         internal GameDetector()
         {
@@ -54,11 +61,12 @@
                 throw new FatalPatchingException("No game executable was found!");
             }
 
-            Logger.Info($"Game Version: {SNUtils.GetPlasticChangeSetOfBuild()} Build Date: {SNUtils.GetDateTimeOfBuild():dd-MMMM-yyyy}");
+            CurrentGameVersion = SNUtils.GetPlasticChangeSetOfBuild(-1);
+
+            Logger.Info($"Game Version: {CurrentGameVersion} Build Date: {SNUtils.GetDateTimeOfBuild():dd-MMMM-yyyy}");
             Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}{(IsValidGameRunning && MinimumBuildVersion != 0 ? $" built for {CurrentlyRunningGame} v{MinimumBuildVersion}" : string.Empty)}...");
             Logger.Info($"Today is {DateTime.Today:dd-MMMM-yyyy_HH:mm:ss}");
 
-            CurrentGameVersion = SNUtils.GetPlasticChangeSetOfBuild(-1);
             if (!IsValidGameVersion)
             {
                 Logger.Fatal("A fatal error has occurred. An invalid game version was detected!");

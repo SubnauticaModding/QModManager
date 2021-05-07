@@ -9,32 +9,53 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>QModManager</RootNamespace>
     <AssemblyName>QModManager.UnityAudioFixer</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\Build\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\Build\QModManager.UnityAudioFixer.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SN.STABLE|AnyCPU'">
+    <OutputPath>..\Build\$(Configuration)\</OutputPath>
+    <DefineConstants>SUBNAUTICA;SUBNAUTICA_STABLE</DefineConstants>
+    <DocumentationFile>..\Build\$(Configuration)\QModManager.UnityAudioFixer.xml</DocumentationFile>
     <Optimize>true</Optimize>
-    <OutputPath>..\Build\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\Build\QModManager.UnityAudioFixer.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SN.EXP|AnyCPU'">
+    <OutputPath>..\Build\$(Configuration)\</OutputPath>
+    <DefineConstants>SUBNAUTICA;SUBNAUTICA_EXP</DefineConstants>
+    <DocumentationFile>..\Build\$(Configuration)\QModManager.UnityAudioFixer.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BZ.STABLE|AnyCPU'">
+    <OutputPath>..\Build\$(Configuration)\</OutputPath>
+    <DefineConstants>BELOWZERO;BELOWZERO_STABLE</DefineConstants>
+    <DocumentationFile>..\Build\$(Configuration)\QModManager.UnityAudioFixer.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BZ.EXP|AnyCPU'">
+    <OutputPath>..\Build\$(Configuration)\</OutputPath>
+    <DefineConstants>BELOWZERO;BELOWZERO_EXP</DefineConstants>
+    <DocumentationFile>..\Build\$(Configuration)\QModManager.UnityAudioFixer.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AssetsTools.NET, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AssetsTools.NET">
       <HintPath>..\packages\AssetsTools.NET.2.0.3\lib\net35\AssetsTools.NET.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -46,10 +67,6 @@
       <HintPath>..\Dependencies\BepInEx\BepInEx\core\Mono.Cecil.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="QModInstaller">
-      <HintPath>..\Build\QModInstaller.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
@@ -58,6 +75,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QModManager\QModManager.csproj">
+      <Project>{da63f59d-4676-4726-afec-bd9d3682733f}</Project>
+      <Name>QModManager</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
