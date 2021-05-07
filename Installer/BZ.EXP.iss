@@ -62,8 +62,6 @@ Source: "InstallerExtensions.dll"; Flags: DontCopy
 Source: "..\..\packages\AssetsTools.NET.2.0.3\lib\net35\AssetsTools.NET.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\..\Dependencies\cldb.dat"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\..\Dependencies\Oculus.Newtonsoft.Json.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
-Source: "..\..\packages\Newtonsoft.Json.12.0.1\lib\netstandard2.0\Newtonsoft.Json.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
-Source: "..\..\packages\Newtonsoft.Json.Bson.1.0.2\lib\netstandard2.0\Newtonsoft.Json.Bson.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 
 ; QMM
 Source: "QModInstaller.dll"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;

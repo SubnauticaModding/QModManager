@@ -3,7 +3,6 @@ using BepInEx.Bootstrap;
 using BepInEx.Logging;
 using HarmonyLib;
 using Mono.Cecil;
-using Newtonsoft.Json.Bson;
 using Newtonsoft.Json;
 using QModManager.API;
 using QModManager.Patching;
@@ -85,7 +84,6 @@ namespace QModManager
             Path.Combine(QMMPatchersPath, "QModManager.UnityAudioFixer.dll"),
             Path.Combine(QMMPatchersPath, "QModManager.exe"),
             Path.Combine(QMMPluginsPath, "QModInstaller.dll"),
-            Path.Combine(QMMPluginsPath, "QModManager.QMMLoader.dll")
         };
 
         private static QMMAssemblyCache GetNewQMMAssemblyCache()
@@ -119,10 +117,12 @@ namespace QModManager
             {
                 var data = File.ReadAllBytes(QMMAssemblyCachePath);
                 using (var ms = new MemoryStream(data))
-                using (var reader = new BsonDataReader(ms))
+                using (var reader = new StreamReader(ms))
+                using (var jsreader = new JsonTextReader(reader))
                 {
+
                     var serializer = new JsonSerializer();
-                    QMMAssemblyCache = serializer.Deserialize<QMMAssemblyCache>(reader);
+                    QMMAssemblyCache = serializer.Deserialize<QMMAssemblyCache>(jsreader);
                 }
                 stopwatch.Stop();
                 Logger.LogInfo($"QMMAssemblyCache loaded in {stopwatch.ElapsedMilliseconds} ms.");
@@ -147,10 +147,11 @@ namespace QModManager
                 Directory.CreateDirectory(BepInExCachePath);
 
                 using (var ms = new MemoryStream())
-                using (var writer = new BsonDataWriter(ms))
+                using (var writer = new StreamWriter(ms))
+                using(var jsreader = new JsonTextWriter(writer))
                 {
                     var serializer = new JsonSerializer();
-                    serializer.Serialize(writer, QMMAssemblyCache);
+                    serializer.Serialize(jsreader, QMMAssemblyCache);
                     File.WriteAllBytes(QMMAssemblyCachePath, ms.ToArray());
                 }
 
