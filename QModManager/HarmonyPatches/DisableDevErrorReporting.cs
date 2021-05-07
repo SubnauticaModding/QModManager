@@ -11,9 +11,6 @@
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(SentrySdk), nameof(SentrySdk.Start))]
-#if !SUBNAUTICA_STABLE
-        [HarmonyPatch(typeof(SentrySdk), nameof(SentrySdk.TrySendingEvent))]
-#endif
         internal static bool Prefix(SentrySdk __instance)
         {
             GameObject.Destroy(__instance);
