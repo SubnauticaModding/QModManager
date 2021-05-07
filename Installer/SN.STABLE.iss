@@ -61,7 +61,6 @@ Source: "InstallerExtensions.dll"; Flags: DontCopy
 ; Dependencies
 Source: "..\..\packages\AssetsTools.NET.2.0.3\lib\net35\AssetsTools.NET.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\..\Dependencies\cldb.dat"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
-Source: "..\..\Dependencies\Oculus.Newtonsoft.Json.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 
 ; QMM
 Source: "QModInstaller.dll"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
@@ -69,7 +68,6 @@ Source: "QModInstaller.xml"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags
 Source: "QModManager.exe"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 
 ; BepInEx patchers
-Source: "QModManager.OculusNewtonsoftRedirect.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "QModManager.QModPluginGenerator.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "QModManager.UnityAudioFixer.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "QModManager.UnityAudioFixer.xml"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;

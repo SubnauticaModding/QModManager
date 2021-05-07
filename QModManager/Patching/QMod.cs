@@ -1,6 +1,10 @@
 ﻿namespace QModManager.Patching
 {
+#if SUBNAUTICA_STABLE
+    using Oculus.Newtonsoft.Json;
+#else
     using Newtonsoft.Json;
+#endif
     using QModManager.API;
     using QModManager.DataStructures;
     using System;
@@ -13,7 +17,7 @@
     {
         internal object instance = null;
 
-        #region JSON & IQModSerialiable
+#region JSON & IQModSerialiable
 
         public QMod()
         {
@@ -58,7 +62,7 @@
 
         public bool HasDependencies => Dependencies.Length > 0 || VersionDependencies.Count > 0;
 
-        #endregion
+#endregion
 
         public QModGame SupportedGame { get; internal set; }
 

@@ -19,7 +19,7 @@
         private static readonly Dictionary<QModGame, int> SupportedGameVersions = new Dictionary<QModGame, int>
         {
 #if SUBNAUTICA_STABLE
-            { QModGame.Subnautica, 67838 }
+            { QModGame.Subnautica, 67816 }
 #elif BELOWZERO_STABLE
             { QModGame.BelowZero, 42690 }
 #elif SUBNAUTICA_EXP

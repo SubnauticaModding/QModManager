@@ -3,7 +3,11 @@ using BepInEx.Bootstrap;
 using BepInEx.Logging;
 using HarmonyLib;
 using Mono.Cecil;
-using Newtonsoft.Json;
+#if SUBNAUTICA_STABLE
+using Oculus.Newtonsoft.Json;
+#else
+    using Newtonsoft.Json;
+#endif
 using QModManager.API;
 using QModManager.Patching;
 using QModManager.Utility;
@@ -63,8 +67,13 @@ namespace QModManager
             }
         }
 
+#if SUBNAUTICA_STABLE
+        [HarmonyPatch(typeof(PlatformUtils), nameof(PlatformUtils.PlatformInitAsync))]
+        [HarmonyPostfix]
+#else
         [HarmonyPatch(typeof(PreStartScreen), nameof(PreStartScreen.Start))]
         [HarmonyPrefix]
+#endif
         private static void InitializeQMM()
         {
             Patcher.Patch(); // Run QModManager patch
