@@ -4,7 +4,7 @@
     using QModManager.Utility;
     using UnityEngine;
 
-    [HarmonyPatch(typeof(DevConsole), nameof(DevConsole.Update))]
+    [HarmonyPatch(typeof(DevConsole), nameof(DevConsole.Awake))]
     internal static class DevConsole_Update_Patch
     {
         // This patch toggles the console based on the mod option
