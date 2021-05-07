@@ -5,7 +5,7 @@
 #endif
 
 #define Name "QModManager" ; The name of the game will be added after it
-#define Version "4.1.0"
+#define Version "4.1.1"
 #define Author "QModManager"
 #define URL "https://github.com/QModManager/QModManager"
 #define SupportURL "https://discord.gg/UpWuWwq"
@@ -69,10 +69,6 @@ Source: "..\..\packages\Newtonsoft.Json.Bson.1.0.2\lib\netstandard2.0\Newtonsoft
 Source: "QModInstaller.dll"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
 Source: "QModInstaller.xml"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
 Source: "QModManager.exe"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
-
-; BepInEx plugins
-Source: "QModManager.QMMLoader.dll"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
-Source: "QModManager.QMMLoader.xml"; DestDir: "{app}\BepInEx\plugins\QModManager"; Flags: ignoreversion;
 
 ; BepInEx patchers
 Source: "QModManager.OculusNewtonsoftRedirect.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;

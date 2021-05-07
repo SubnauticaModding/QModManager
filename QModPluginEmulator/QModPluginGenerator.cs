@@ -16,6 +16,7 @@ using System.Linq;
 using System.Reflection;
 using TypeloaderCache = System.Collections.Generic.Dictionary<string, BepInEx.Bootstrap.CachedAssembly<BepInEx.PluginInfo>>;
 using QMMAssemblyCache = System.Collections.Generic.Dictionary<string, long>;
+using QModManager.API.ModLoading;
 
 namespace QModManager
 {
@@ -61,6 +62,21 @@ namespace QModManager
                 Logger.LogFatal($"Beginning stacktrace:");
                 Logger.LogFatal(ex.StackTrace);
             }
+        }
+
+        [HarmonyPatch(typeof(PreStartScreen), nameof(PreStartScreen.Start))]
+        [HarmonyPrefix]
+        private static void InitializeQMM()
+        {
+            Patcher.Patch(); // Run QModManager patch
+
+            var modsToLoad = QModsToLoad.ToList();
+            var initializer = new Initializer(Patcher.CurrentlyRunningGame);
+
+            initializer.InitializeMods(modsToLoad);
+
+            SummaryLogger.ReportIssues(modsToLoad);
+            SummaryLogger.LogSummaries(modsToLoad);
         }
 
         private static string[] QMMKnownAssemblyPaths = new[] {
@@ -285,6 +301,7 @@ namespace QModManager
                 __result[Assembly.GetExecutingAssembly().Location] = QModPluginInfos.Values.Distinct().ToList();
 
                 TypeLoader.SaveAssemblyCache(GeneratedPluginCache, result);
+
             }
             catch (Exception ex)
             {

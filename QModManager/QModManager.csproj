@@ -79,6 +79,10 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="UnityEngine">
+      <HintPath>..\Dependencies\$(Configuration)\UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
       <HintPath>..\Dependencies\$(Configuration)\UnityEngine.AssetBundleModule.dll</HintPath>
       <Private>False</Private>
@@ -123,7 +127,7 @@
     <Compile Include="DataStructures\SortedTreeNode.cs" />
     <Compile Include="DataStructures\SortedTreeNodeCollection.cs" />
     <Compile Include="DataStructures\WeightedList.cs" />
-    <Compile Include="EntryPoint.cs" />
+    <Compile Include="QMMLoader.cs" />
     <Compile Include="Checks\NitroxCheck.cs" />
     <Compile Include="HarmonyPatches\EnableConsoleSetting.cs" />
     <Compile Include="HarmonyPatches\DisableDevErrorReporting.cs" />
