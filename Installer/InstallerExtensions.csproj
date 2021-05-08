@@ -17,7 +17,7 @@
     <OutputPath>..\Build\$(Configuration)\</OutputPath>
     <DefineConstants>SUBNAUTICA;SUBNAUTICA_STABLE</DefineConstants>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
@@ -26,7 +26,7 @@
     <OutputPath>..\Build\$(Configuration)\</OutputPath>
     <DefineConstants>SUBNAUTICA;SUBNAUTICA_EXP</DefineConstants>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
@@ -35,7 +35,7 @@
     <OutputPath>..\Build\$(Configuration)\</OutputPath>
     <DefineConstants>BELOWZERO;BELOWZERO_STABLE</DefineConstants>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
@@ -44,7 +44,7 @@
     <OutputPath>..\Build\$(Configuration)\</OutputPath>
     <DefineConstants>BELOWZERO;BELOWZERO_EXP</DefineConstants>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>none</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
@@ -73,6 +73,6 @@
   <Import Project="../packages/UnmanagedExports.1.2.7/tools/RGiesecke.DllExport.targets" Condition="Exists('../packages/UnmanagedExports.1.2.7/tools/RGiesecke.DllExport.targets')" />
   <PropertyGroup>
     <PostBuildEvent>
-echo F|xcopy /S /Q /Y /F  "$(ProjectDir)$(Configuration).iss" "$(TargetDir)\QModsInstallerScript.iss"</PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
