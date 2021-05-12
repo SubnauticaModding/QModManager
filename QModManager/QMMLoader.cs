@@ -31,6 +31,7 @@
             while(obj.transform.parent?.gameObject != null)
                 obj = obj.transform.parent.gameObject;
 
+            obj.EnsureComponent<SceneCleanerPreserve>();
             DontDestroyOnLoad(obj);
         }
     }
