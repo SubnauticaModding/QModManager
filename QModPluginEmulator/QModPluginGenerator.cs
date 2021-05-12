@@ -96,15 +96,12 @@ namespace QModManager
         }
 
 #if SUBNAUTICA
-        private static void InitializeQMM(IEnumerator __result)
+        private static IEnumerator InitializeQMM(IEnumerator result)
         {
             if(ModsToLoad != null)
             {
-                //Had to add this as Postfixes do not seem to run at the end of coroutines but at the first yield return. 
-                while(__result.MoveNext())
-                {
+                yield return result;
 
-                }
                 Initializer.InitializeMods(ModsToLoad, PatchingOrder.NormalInitialize);
                 Initializer.InitializeMods(ModsToLoad, PatchingOrder.PostInitialize);
                 Initializer.InitializeMods(ModsToLoad, PatchingOrder.MetaPostInitialize);
@@ -112,6 +109,7 @@ namespace QModManager
                 SummaryLogger.ReportIssues(ModsToLoad);
                 SummaryLogger.LogSummaries(ModsToLoad);
             }
+            yield break;
         }
 #elif BELOWZERO
         private static void InitializeQMM()
