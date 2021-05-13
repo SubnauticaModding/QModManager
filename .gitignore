@@ -290,7 +290,4 @@ __pycache__/
 *.xsd.cs
 
 # Game Assemblies
-Assembly-CSharp-firstpass.dll
-Assembly-CSharp.dll
-Assembly-CSharp-firstpass_publicized.dll
-Assembly-CSharp_publicized.dll
+Assembly-CSharp*
