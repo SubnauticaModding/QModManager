@@ -20,6 +20,7 @@ using System.Reflection;
 using TypeloaderCache = System.Collections.Generic.Dictionary<string, BepInEx.Bootstrap.CachedAssembly<BepInEx.PluginInfo>>;
 using QMMAssemblyCache = System.Collections.Generic.Dictionary<string, long>;
 using QModManager.API.ModLoading;
+using System.Collections;
 
 namespace QModManager
 {
@@ -42,7 +43,9 @@ namespace QModManager
         internal static Dictionary<string, QMod> QModsToLoadById;
         internal static Dictionary<string, PluginInfo> QModPluginInfos;
         internal static List<PluginInfo> InitialisedQModPlugins;
-
+        private static Initializer Initializer;
+        private static List<QMod> ModsToLoad;
+        private static Harmony Harmony;
         internal static IVersionParser VersionParserService { get; set; } = new VersionParser();
 
         private static TypeloaderCache PluginCache;
@@ -53,11 +56,11 @@ namespace QModManager
             try
             {
                 PluginCache = GetPluginCache();
-                var harmony = new Harmony("QModManager.QModPluginGenerator");
-                harmony.Patch(
+                Harmony = new Harmony("QModManager.QModPluginGenerator");
+                Harmony.Patch(
                     typeof(TypeLoader).GetMethod(nameof(TypeLoader.FindPluginTypes)).MakeGenericMethod(typeof(PluginInfo)),
                     postfix: new HarmonyMethod(typeof(QModPluginGenerator).GetMethod(nameof(TypeLoaderFindPluginTypesPostfix))));
-                harmony.PatchAll(typeof(QModPluginGenerator));
+
             }
             catch (Exception ex)
             {
@@ -68,24 +71,60 @@ namespace QModManager
         }
 
 #if SUBNAUTICA_STABLE
-        [HarmonyPatch(typeof(PlatformUtils), nameof(PlatformUtils.PlatformInitAsync))]
-        [HarmonyPostfix]
+        [HarmonyPatch(typeof(SystemsSpawner), nameof(SystemsSpawner.Awake))]
 #else
         [HarmonyPatch(typeof(PreStartScreen), nameof(PreStartScreen.Start))]
-        [HarmonyPrefix]
 #endif
-        private static void InitializeQMM()
+        [HarmonyPrefix]
+        private static void PreInitializeQMM()
         {
             Patcher.Patch(); // Run QModManager patch
 
-            var modsToLoad = QModsToLoad.ToList();
-            var initializer = new Initializer(Patcher.CurrentlyRunningGame);
+            ModsToLoad = QModsToLoad.ToList();
+            Initializer = new Initializer(Patcher.CurrentlyRunningGame);
+            Initializer.InitializeMods(ModsToLoad, PatchingOrder.MetaPreInitialize);
+            Initializer.InitializeMods(ModsToLoad, PatchingOrder.PreInitialize);
 
-            initializer.InitializeMods(modsToLoad);
-
-            SummaryLogger.ReportIssues(modsToLoad);
-            SummaryLogger.LogSummaries(modsToLoad);
+            Harmony.Patch(
+                AccessTools.Method(
+#if SUBNAUTICA
+                    typeof(PlatformUtils), nameof(PlatformUtils.PlatformInitAsync)
+#elif BELOWZERO
+                    typeof(SpriteManager), nameof(SpriteManager.OnLoadedSpriteAtlases)
+#endif
+                    ), postfix: new HarmonyMethod(AccessTools.Method(typeof(QModPluginGenerator), nameof(QModPluginGenerator.InitializeQMM))));
         }
+
+#if SUBNAUTICA
+        private static IEnumerator InitializeQMM(IEnumerator result)
+        {
+            if(ModsToLoad != null)
+            {
+                yield return result;
+
+                Initializer.InitializeMods(ModsToLoad, PatchingOrder.NormalInitialize);
+                Initializer.InitializeMods(ModsToLoad, PatchingOrder.PostInitialize);
+                Initializer.InitializeMods(ModsToLoad, PatchingOrder.MetaPostInitialize);
+
+                SummaryLogger.ReportIssues(ModsToLoad);
+                SummaryLogger.LogSummaries(ModsToLoad);
+            }
+            yield break;
+        }
+#elif BELOWZERO
+        private static void InitializeQMM()
+        {
+            if(ModsToLoad != null)
+            {
+                Initializer.InitializeMods(ModsToLoad, PatchingOrder.NormalInitialize);
+                Initializer.InitializeMods(ModsToLoad, PatchingOrder.PostInitialize);
+                Initializer.InitializeMods(ModsToLoad, PatchingOrder.MetaPostInitialize);
+
+                SummaryLogger.ReportIssues(ModsToLoad);
+                SummaryLogger.LogSummaries(ModsToLoad);
+            }
+        }
+#endif
 
         private static string[] QMMKnownAssemblyPaths = new[] {
 #if !SUBNAUTICA_STABLE
@@ -224,6 +263,7 @@ namespace QModManager
         [Obsolete("Should not be used!", true)]
         public static void TypeLoaderFindPluginTypesPostfix(ref Dictionary<string, List<PluginInfo>> __result, string directory)
         {
+            Harmony.PatchAll(typeof(QModPluginGenerator));
             if (directory != Paths.PluginPath)
                 return;
 

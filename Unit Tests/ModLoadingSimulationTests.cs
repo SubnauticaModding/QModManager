@@ -55,7 +55,11 @@
             TestPatchClass.Reset();
 
             var initializer = new Initializer(QModGame.Subnautica);
-            initializer.InitializeMods(list);
+            initializer.InitializeMods(list, PatchingOrder.MetaPreInitialize);
+            initializer.InitializeMods(list, PatchingOrder.PreInitialize);
+            initializer.InitializeMods(list, PatchingOrder.NormalInitialize);
+            initializer.InitializeMods(list, PatchingOrder.PostInitialize);
+            initializer.InitializeMods(list, PatchingOrder.MetaPostInitialize);
 
             Assert.AreEqual(ModStatus.Success, list[0].Status);
 
