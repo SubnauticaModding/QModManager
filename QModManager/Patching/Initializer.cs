@@ -13,16 +13,7 @@
             currentGame = currentlyRunningGame;
         }
 
-        internal void InitializeMods(List<QMod> modsToInitialize)
-        {
-            InitializeMods(modsToInitialize, PatchingOrder.MetaPreInitialize);
-            InitializeMods(modsToInitialize, PatchingOrder.PreInitialize);
-            InitializeMods(modsToInitialize, PatchingOrder.NormalInitialize);
-            InitializeMods(modsToInitialize, PatchingOrder.PostInitialize);
-            InitializeMods(modsToInitialize, PatchingOrder.MetaPostInitialize);
-        }
-
-        private void InitializeMods(List<QMod> modsToInitialize, PatchingOrder order)
+        internal void InitializeMods(List<QMod> modsToInitialize, PatchingOrder order)
         {
             foreach (QMod mod in modsToInitialize)
             {

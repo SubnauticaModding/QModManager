@@ -12,8 +12,11 @@
         [HarmonyPostfix]
         internal static void Postfix()
         {
-            DevConsole.disableConsole = !Config.EnableConsole;
-            PlayerPrefs.SetInt("UWE.DisableConsole", Config.EnableConsole ? 0 : 1);
+            if(DevConsole.disableConsole != !Config.EnableConsole)
+            {
+                DevConsole.disableConsole = !Config.EnableConsole;
+                PlayerPrefs.SetInt("UWE.DisableConsole", Config.EnableConsole ? 0 : 1);
+            }
         }
     }
 

@@ -1,7 +1,5 @@
 ﻿using BepInEx;
 using QModManager.API;
-using QModManager.API.ModLoading;
-using QModManager.Patching;
 
 namespace QModManager
 {

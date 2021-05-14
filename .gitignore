@@ -24,6 +24,7 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Vv]ortex[Bb]uild/
+[Bb]uild/
 
 # Visual Studio 2015 cache/options directory
 .vs/
@@ -287,11 +288,6 @@ __pycache__/
 *.btm.cs
 *.odx.cs
 *.xsd.cs
-Dependencies/Assembly-CSharp-firstpass.dll
-Dependencies/Assembly-CSharp.dll
-Dependencies/Assembly-CSharp-firstpass_publicized.dll
-Dependencies/Assembly-CSharp_publicized.dll
-/Build/Assembly-CSharp-firstpass.dll
-/Build/Assembly-CSharp.dll
-/Build/Assembly-CSharp-firstpass_publicized.dll
-/Build/Assembly-CSharp_publicized.dll
+
+# Game Assemblies
+Assembly-CSharp*

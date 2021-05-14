@@ -177,7 +177,6 @@
             public static void Patch()
             {
                 Logger.Debug("Patching ErrorMessage");
-
                 Patcher.hInstance.PatchAll(typeof(Patches));
             }
 

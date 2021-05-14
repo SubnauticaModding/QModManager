@@ -9,30 +9,61 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>QModManager</RootNamespace>
     <AssemblyName>QModManager.QModPluginGenerator</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\Build\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SN.STABLE|AnyCPU'">
+    <OutputPath>..\Build\$(Configuration)\</OutputPath>
+    <DefineConstants>SUBNAUTICA;SUBNAUTICA_STABLE</DefineConstants>
     <Optimize>true</Optimize>
-    <OutputPath>..\Build\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
     <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SN.EXP|AnyCPU'">
+    <OutputPath>..\Build\$(Configuration)\</OutputPath>
+    <DefineConstants>SUBNAUTICA;SUBNAUTICA_EXP</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BZ.STABLE|AnyCPU'">
+    <OutputPath>..\Build\$(Configuration)\</OutputPath>
+    <DefineConstants>BELOWZERO;BELOWZERO_STABLE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BZ.EXP|AnyCPU'">
+    <OutputPath>..\Build\$(Configuration)\</OutputPath>
+    <DefineConstants>BELOWZERO;BELOWZERO_EXP</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>..\Dependencies\BepInEx\BepInEx\core\0Harmony.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass_publicized">
+      <HintPath>..\Dependencies\$(Configuration)\Assembly-CSharp-firstpass_publicized.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp_publicized">
+      <HintPath>..\Dependencies\$(Configuration)\Assembly-CSharp_publicized.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="BepInEx">
@@ -44,22 +75,17 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Dependencies\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="QModInstaller, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Build\QModInstaller.dll</HintPath>
+      <HintPath>..\Dependencies\$(Configuration)\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="UnityEngine">
-      <HintPath>..\Dependencies\UnityEngine.dll</HintPath>
+      <HintPath>..\Dependencies\$(Configuration)\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\Dependencies\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>..\Dependencies\$(Configuration)\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -68,5 +94,36 @@
     <Compile Include="QModPluginGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\QModManager\QModManager.csproj">
+      <Project>{da63f59d-4676-4726-afec-bd9d3682733f}</Project>
+      <Name>QModManager</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>rmdir "$(SolutionDir)VortexBuild\$(Configuration)" /q /s
+xcopy "$(SolutionDir)Dependencies\BepInEx" "$(SolutionDir)VortexBuild\$(Configuration)"  /E /H /I /Q /Y
+xcopy "$(SolutionDir)Dependencies\cldb.dat" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\" /I /Q /Y
+xcopy "$(SolutionDir)packages\AssetsTools.NET.2.0.3\lib\net35\AssetsTools.NET.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\" /I /Q /Y
+xcopy "$(TargetDir)QModManager.exe" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\"   /I /Q /Y
+xcopy "$(TargetDir)QModManager.QModPluginGenerator.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\"  /I /Q /Y
+xcopy "$(TargetDir)QModManager.UnityAudioFixer.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\"  /I /Q /Y
+xcopy "$(TargetDir)QModManager.UnityAudioFixer.xml" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\" /I /Q /Y
+
+if NOT "$(ConfigurationName)"  =="SN.STABLE" (
+
+xcopy "$(SolutionDir)Dependencies\Oculus.Newtonsoft.Json.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\" /I /Q /Y
+xcopy "$(TargetDir)QModManager.OculusNewtonsoftRedirect.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\"  /I /Q /Y
+)
+
+xcopy "$(TargetDir)QModInstaller.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\plugins\QModManager\"  /I /Q /Y
+xcopy "$(TargetDir)QModInstaller.xml" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\plugins\QModManager\"   /I /Q /Y
+
+powershell Compress-Archive -Path '$(SolutionDir)VortexBuild\$(Configuration)\Bepinex' -DestinationPath '$(SolutionDir)VortexBuild\QModManager_$(Configuration).zip' -Force
+powershell Compress-Archive -LiteralPath '$(SolutionDir)VortexBuild\$(Configuration)\doorstop_config.ini', '$(SolutionDir)VortexBuild\$(Configuration)\winhttp.dll' -DestinationPath '$(SolutionDir)VortexBuild\QModManager_$(Configuration).zip' -Update
+
+echo F|xcopy /S /Q /Y /F  "$(SolutionDir)Installer\$(Configuration).iss" "$(TargetDir)\QModsInstallerScript.iss"
+"$(SolutionDir)Dependencies\Inno\ISCC.exe" "$(TargetDir)QModsInstallerScript.iss"</PostBuildEvent>
+  </PropertyGroup>
 </Project>
