@@ -108,12 +108,9 @@ namespace QModManager
 
                 SummaryLogger.ReportIssues(ModsToLoad);
                 SummaryLogger.LogSummaries(ModsToLoad);
-                if(Patcher.Dialogs.Count > 0)
+                foreach(Dialog dialog in Patcher.Dialogs)
                 {
-                    foreach(Dialog dialog in Patcher.Dialogs)
-                    {
-                        dialog.Show();
-                    }
+                    dialog.Show();
                 }
             }
             yield break;
@@ -130,12 +127,9 @@ namespace QModManager
                 SummaryLogger.ReportIssues(ModsToLoad);
                 SummaryLogger.LogSummaries(ModsToLoad);
 
-                if(Patcher.Dialogs.Count > 0)
+                foreach(Dialog dialog in Patcher.Dialogs)
                 {
-                    foreach(Dialog dialog in Patcher.Dialogs)
-                    {
-                        dialog.Show();
-                    }
+                    dialog.Show();
                 }
             }
         }
