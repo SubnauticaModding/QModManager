@@ -79,16 +79,9 @@
             if(coroutineHandler is null)
             {
                 coroutineHandler = new GameObject("QModManager Dialog Coroutine");
-                coroutineHandler.AddComponent<DummyBehaviour>().StartCoroutine(ShowDialogEnumerator());
             }
-            else if(coroutineHandler.TryGetComponent(out DummyBehaviour dummyBehaviour))
-            {
-                dummyBehaviour.StartCoroutine(ShowDialogEnumerator());
-            }
-            else
-            {
-                coroutineHandler.AddComponent<DummyBehaviour>().StartCoroutine(ShowDialogEnumerator());
-            }
+            var dummyBehaviour = coroutineHandler.EnsureComponent<DummyBehaviour>();
+            dummyBehaviour.StartCoroutine(ShowDialogEnumerator());
         }
 
         private IEnumerator ShowDialogEnumerator()
