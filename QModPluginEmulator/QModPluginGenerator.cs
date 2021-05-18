@@ -82,18 +82,36 @@ namespace QModManager
             }
         }
 
-        public static List<string> DirtyLogStrings = new List<string>()
+        public static List<string> DirtyStartStrings = new List<string>()
         {
-            "(Filename", "Resetting cell with", "Replacing cell",
+            "Resetting cell with", "Replacing cell",
             "PerformGarbage", "Fallback handler could not load"
+        };
+
+        public static List<string> DirtyMidStrings = new List<string>()
+        {
+            "\n(Filename", 
         };
 
         private static void LibcHelper_Format_Postfix(ref string __result)
         {
-            foreach(string dirtyString in DirtyLogStrings)
+            foreach(string dirtyString in DirtyStartStrings)
             {
-                if(__result.Contains(dirtyString))
-                __result = __result.Remove(__result.IndexOf(dirtyString));
+                if(__result.StartsWith(dirtyString))
+                {
+                    __result = "";
+                    return;
+                }
+            }
+
+            foreach(string dirtyString in DirtyMidStrings)
+            {
+                int i = __result.IndexOf(dirtyString);
+                if(i >= 0)
+                {
+                    __result = __result.Remove(i);
+                    return;
+                }
             }
         }
 
