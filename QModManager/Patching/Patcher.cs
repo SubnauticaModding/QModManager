@@ -26,10 +26,7 @@ namespace QModManager.Patching
             try
             {
                 if (Patched)
-                {
-                    Logger.Warn("Patch method was called multiple times!");
                     return; // Halt patching
-                }
 
                 Patched = true;
 
