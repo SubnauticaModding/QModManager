@@ -19,7 +19,7 @@
         private static readonly Dictionary<QModGame, int> SupportedGameVersions = new Dictionary<QModGame, int>
         {
 #if SUBNAUTICA_STABLE
-            { QModGame.Subnautica, 67816 }
+            { QModGame.Subnautica, 65786 }
 #elif BELOWZERO_STABLE
             { QModGame.BelowZero, 44290 }
 #elif SUBNAUTICA_EXP
@@ -65,7 +65,7 @@
 
             Logger.Info($"Game Version: {CurrentGameVersion} Build Date: {SNUtils.GetDateTimeOfBuild():dd-MMMM-yyyy}");
             Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}{(IsValidGameRunning && MinimumBuildVersion != 0 ? $" built for {CurrentlyRunningGame} v{MinimumBuildVersion}" : string.Empty)}...");
-            Logger.Info($"Today is {DateTime.Today:dd-MMMM-yyyy_HH:mm:ss}");
+            Logger.Info($"Today is {DateTime.Now:dd-MMMM-yyyy_HH:mm:ss}");
 
             if (!IsValidGameVersion)
             {

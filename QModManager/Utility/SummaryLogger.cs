@@ -141,23 +141,23 @@
 
                 message += " Check the log for more information.";
 
-                new Dialog()
+                Patcher.Dialogs.Add(new Dialog()
                 {
                     message = message,
                     leftButton = Dialog.Button.SeeLog,
                     rightButton = Dialog.Button.Close,
                     color = Dialog.DialogColor.Red
-                }.Show();
+                });
             }
             else if (VersionCheck.result != null)
             {
-                new Dialog()
+                Patcher.Dialogs.Add(new Dialog()
                 {
                     message = $"There is a newer version of QModManager available: {VersionCheck.result.ToStringParsed()} (current version: {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()})",
                     leftButton = Dialog.Button.Download,
                     rightButton = Dialog.Button.Close,
                     color = Dialog.DialogColor.Blue
-                }.Show();
+                });
             }
         }
     }

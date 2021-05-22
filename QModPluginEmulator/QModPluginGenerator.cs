@@ -57,6 +57,18 @@ namespace QModManager
             {
                 PluginCache = GetPluginCache();
                 Harmony = new Harmony("QModManager.QModPluginGenerator");
+                foreach(Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                {
+                    if(assembly?.GetName()?.Name?.Contains("MirrorInternalLogs") ?? false)
+                    {
+                        Type type = AccessTools.TypeByName("MirrorInternalLogs.Util.LibcHelper");
+                        var method = type?.GetMethod("Format");
+
+                        if(method != null)
+                            Harmony.Patch(method, postfix: new HarmonyMethod(typeof(QModPluginGenerator), nameof(QModPluginGenerator.LibcHelper_Format_Postfix)));
+                        break;
+                    }
+                }
                 Harmony.Patch(
                     typeof(TypeLoader).GetMethod(nameof(TypeLoader.FindPluginTypes)).MakeGenericMethod(typeof(PluginInfo)),
                     postfix: new HarmonyMethod(typeof(QModPluginGenerator).GetMethod(nameof(TypeLoaderFindPluginTypesPostfix))));
@@ -70,6 +82,39 @@ namespace QModManager
             }
         }
 
+        public static List<string> DirtyStartStrings = new List<string>()
+        {
+            "Resetting cell with", "Replacing cell",
+            "PerformGarbage", "Fallback handler could not load"
+        };
+
+        public static List<string> DirtyMidStrings = new List<string>()
+        {
+            "\n(Filename", 
+        };
+
+        private static void LibcHelper_Format_Postfix(ref string __result)
+        {
+            foreach(string dirtyString in DirtyStartStrings)
+            {
+                if(__result.StartsWith(dirtyString))
+                {
+                    __result = "";
+                    return;
+                }
+            }
+
+            foreach(string dirtyString in DirtyMidStrings)
+            {
+                int i = __result.IndexOf(dirtyString);
+                if(i >= 0)
+                {
+                    __result = __result.Remove(i);
+                    return;
+                }
+            }
+        }
+
 #if SUBNAUTICA_STABLE
         [HarmonyPatch(typeof(SystemsSpawner), nameof(SystemsSpawner.Awake))]
 #else
@@ -78,6 +123,8 @@ namespace QModManager
         [HarmonyPrefix]
         private static void PreInitializeQMM()
         {
+
+
             Patcher.Patch(); // Run QModManager patch
 
             ModsToLoad = QModsToLoad.ToList();
@@ -108,6 +155,10 @@ namespace QModManager
 
                 SummaryLogger.ReportIssues(ModsToLoad);
                 SummaryLogger.LogSummaries(ModsToLoad);
+                foreach(Dialog dialog in Patcher.Dialogs)
+                {
+                    dialog.Show();
+                }
             }
             yield break;
         }
@@ -122,6 +173,11 @@ namespace QModManager
 
                 SummaryLogger.ReportIssues(ModsToLoad);
                 SummaryLogger.LogSummaries(ModsToLoad);
+
+                foreach(Dialog dialog in Patcher.Dialogs)
+                {
+                    dialog.Show();
+                }
             }
         }
 #endif

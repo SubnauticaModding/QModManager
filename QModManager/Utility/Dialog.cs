@@ -71,39 +71,55 @@
         internal Button rightButton = Button.Disabled;
 
         private GameObject coroutineHandler;
+        private float pos = 0;
+        private Sprite Sprite;
 
         internal void Show()
         {
-            coroutineHandler = new GameObject("QModManager Dialog Coroutine");
-            coroutineHandler.AddComponent<DummyBehaviour>().StartCoroutine(ShowDialogEnumerator());
+            if(coroutineHandler is null)
+            {
+                coroutineHandler = new GameObject("QModManager Dialog Coroutine");
+            }
+            var dummyBehaviour = coroutineHandler.EnsureComponent<DummyBehaviour>();
+            dummyBehaviour.StartCoroutine(ShowDialogEnumerator());
         }
 
         private IEnumerator ShowDialogEnumerator()
         {
-            while (uGUI._main == null)
+            //Must have at least one button with an action
+            if(leftButton.Action is null && rightButton.Action is null)
+            {
+                UnityEngine.Object.Destroy(coroutineHandler);
+                yield break;
+            }
+
+            //Ensures a new dialog is not created until the main menu has fully loaded or it will break;
+            while(uGUI_MainMenu.main is null || FPSInputModule.current is null || FPSInputModule.current.lastGroup != uGUI_MainMenu.main)
                 yield return null;
 
             uGUI_SceneConfirmation confirmation = uGUI.main.confirmation;
 
-            // Disable buttons if their action is null
-            if (leftButton.Action == null)
-                confirmation.yes.gameObject.SetActive(false);
-            if (rightButton.Action == null)
-                confirmation.no.gameObject.SetActive(false);
+            // Show dialog 
+            //Had to move this before the code to change its values as the values are reset during the showing in BelowZero.
+            confirmation.Show(message, OnCallBack);
 
-            // Disable buttons if their text is null, otherwise set their button text
-            if (string.IsNullOrEmpty(leftButton.Text))
+            // Disable left button if its text or action is null, otherwise set their button text
+            if(leftButton.Action == null || string.IsNullOrEmpty(leftButton.Text))
                 confirmation.yes.gameObject.SetActive(false);
             else
                 SetText(confirmation.yes.gameObject, leftButton.Text);
-            if (string.IsNullOrEmpty(rightButton.Text))
+
+            // Disable right button if its text or action is null, otherwise set their button text
+            if(rightButton.Action == null || string.IsNullOrEmpty(rightButton.Text))
                 confirmation.no.gameObject.SetActive(false);
             else
                 SetText(confirmation.no.gameObject, rightButton.Text);
 
+            // Reduce the text size on the buttons
+            ChangeAllFontSizes(confirmation.gameObject, -4f);
+
             // If one button is disabled, center the other
-            float pos = 0;
-            if (confirmation.yes.gameObject.activeSelf && !confirmation.no.gameObject.activeSelf)
+            if(confirmation.yes.gameObject.activeSelf && !confirmation.no.gameObject.activeSelf)
             {
                 pos = confirmation.yes.transform.localPosition.x;
                 confirmation.yes.transform.localPosition = new Vector3(
@@ -111,7 +127,7 @@
                     confirmation.yes.transform.localPosition.y,
                     confirmation.yes.transform.localPosition.z);
             }
-            if (!confirmation.yes.gameObject.activeSelf && confirmation.no.gameObject.activeSelf)
+            else if(!confirmation.yes.gameObject.activeSelf && confirmation.no.gameObject.activeSelf)
             {
                 pos = confirmation.no.transform.localPosition.x;
                 confirmation.no.transform.localPosition = new Vector3(
@@ -121,61 +137,54 @@
             }
 
             // Turn the dialog blue if the blue parameter is true
-            Sprite sprite = confirmation.gameObject.GetComponentInChildren<Image>().sprite;
-            if (color == DialogColor.Blue)
+            Sprite = confirmation.gameObject.GetComponentInChildren<Image>().sprite;
+            if(color == DialogColor.Blue)
                 confirmation.gameObject.GetComponentInChildren<Image>().sprite = confirmation.gameObject.GetComponentsInChildren<Image>()[1].sprite;
 
-            // Reduce the text size on the buttons
-            object[] texts = ChangeAllFontSizes(confirmation.gameObject, -4f);
+        }
 
-            // Show dialog
-            confirmation.Show(message, delegate (bool leftButtonClicked)
+        internal void OnCallBack(bool leftButtonClicked)
+        {
+            uGUI_SceneConfirmation confirmation = uGUI.main.confirmation;
+
+            // Run actions based on which button was pressed
+            if(leftButtonClicked)
+                leftButton.Action?.Invoke();
+            else
+                rightButton.Action?.Invoke();
+
+            // Revert everything to its original state
+            if(confirmation.yes.gameObject.activeSelf && !confirmation.no.gameObject.activeSelf)
             {
-                // Run actions based on which button was pressed
-                if (leftButtonClicked)
-                    leftButton.Action?.Invoke();
-                else
-                    rightButton.Action?.Invoke();
+                confirmation.yes.transform.localPosition = new Vector3(
+                    pos,
+                    confirmation.yes.transform.localPosition.y,
+                    confirmation.yes.transform.localPosition.z);
+            }
+            if(!confirmation.yes.gameObject.activeSelf && confirmation.no.gameObject.activeSelf)
+            {
+                confirmation.no.transform.localPosition = new Vector3(
+                    pos,
+                    confirmation.no.transform.localPosition.y,
+                    confirmation.no.transform.localPosition.z);
+            }
 
-                // Revert everything to its original state
-                if (confirmation.yes.gameObject.activeSelf && !confirmation.no.gameObject.activeSelf)
-                {
-                    confirmation.yes.transform.localPosition = new Vector3(
-                        pos,
-                        confirmation.yes.transform.localPosition.y,
-                        confirmation.yes.transform.localPosition.z);
-                }
-                if (!confirmation.yes.gameObject.activeSelf && confirmation.no.gameObject.activeSelf)
-                {
-                    confirmation.no.transform.localPosition = new Vector3(
-                        pos,
-                        confirmation.no.transform.localPosition.y,
-                        confirmation.no.transform.localPosition.z);
-                }
+            confirmation.yes.gameObject.SetActive(true);
+            confirmation.no.gameObject.SetActive(true);
 
-                confirmation.yes.gameObject.SetActive(true);
-                confirmation.no.gameObject.SetActive(true);
+            SetText(confirmation.yes.gameObject, "Yes");
+            SetText(confirmation.no.gameObject, "No");
 
-                SetText(confirmation.yes.gameObject, "Yes");
-                SetText(confirmation.no.gameObject, "No");
+            confirmation.gameObject.GetComponentInChildren<Image>().sprite = Sprite;
 
-                confirmation.gameObject.GetComponentInChildren<Image>().sprite = sprite;
+            ChangeAllFontSizes(confirmation.gameObject, 4f);
 
-                ChangeAllFontSizes(texts, 4f);
-
+            // Re-open the dialog if the button pressed was not close
+            bool closeButtonClicked = (leftButtonClicked && leftButton == Button.Close) || (!leftButtonClicked && rightButton == Button.Close);
+            if(!closeButtonClicked)
+                Show();
+            else
                 UnityEngine.Object.Destroy(coroutineHandler);
-
-                // Re-open the dialog if the button pressed was not close
-                bool closeButtonClicked = (leftButtonClicked && leftButton == Button.Close) || (!leftButtonClicked && rightButton == Button.Close);
-                if (!closeButtonClicked)
-                    Show();
-            });
-
-            // Focus popup
-            while (confirmation.selected)
-                yield return new WaitForSecondsRealtime(0.25f);
-
-            confirmation.Select();
         }
 
         private static void SetText(GameObject obj, string text)
@@ -204,29 +213,18 @@
             }
 
             object txt = obj.GetComponentInChildren(SelectedTextType);
-
             textProperty.SetValue(txt, text, null);
         }
 
-        private static object[] ChangeAllFontSizes(GameObject obj, float change)
-        {
-            if (fontSizeProperty == null)
-                return null;
-
-            object[] textComponents = obj.GetComponentsInChildren(SelectedTextType);
-
-            ChangeAllFontSizes(textComponents, change);
-
-            return textComponents;
-        }
-
-        private static void ChangeAllFontSizes(object[] textComponents, float change)
+        private static void ChangeAllFontSizes(GameObject obj, float change)
         {
             if (fontSizeProperty == null)
                 return;
 
+            object[] textComponents = obj.GetComponentsInChildren(SelectedTextType);
+
             // Loop starts at 1 because text 0 is the main dialog text, which shouldn't be changed
-            for (int i = 1; i < textComponents.Length; i++)
+            for(int i = 1; i < textComponents.Length; i++)
             {
                 object t = textComponents[i];
                 float originalSize = (float)fontSizeProperty.GetValue(t, null);
