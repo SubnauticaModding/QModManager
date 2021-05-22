@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<installer-script minSpecVersion="1.000000">
+  <title>QModManager</title>
+  <background mime-type="image/png" file="banner.png" scaling="proportional"/>
+  <background-darkAqua mime-type="image/png" file="banner.png" scaling="proportional"/>
+  <welcome file="welcome.html" mime-type="text/html" />
+  <conclusion file="conclusion.html" mime-type="text/html" />
+  <license file="LICENSE.html" mime-type="text/html"/>
+  <options customize="never" allow-external-scripts="no"/>
+  <domains enable_localSystem="false" />
+  <domains enable_anywhere="true" />
+  <domains enable_currentUserHome="true" />
+  <installation-check script="installCheck()"/>
+  <script>
+    function installCheck() {
+      if (!(system.compareVersions(system.version.ProductVersion, '10.6.0') >= 0)) {
+        my.result.title = 'Unable to install'
+        my.result.message = 'QModManager requires Mac OS X 10.6 or later.'
+        my.result.type = 'Fatal'
+        return false
+      }
+      if (system.files.fileExistsAtPath('/Library/QModManager/4.0.2.3/')) {
+        my.result.title = 'Previous Installation Detected'
+        my.result.message = 'A previous installation of QModManager exists at /Library/QModManager/4.0.2.3/. This installer will remove the previous installation prior to installing. Please back up any data before proceeding.'
+        my.result.type = 'Warning'
+        return false
+      }
+      return true
+    }
+  </script>
+  <choices-outline>
+    <line choice="QModManager"/>
+  </choices-outline>
+  <choice id="QModManager" title="QModManager">
+    <pkg-ref id="QModManager.pkg"/>
+  </choice>
+  <pkg-ref id="QModManager.pkg" auth="Root">QModManager.pkg</pkg-ref>
+</installer-script>
