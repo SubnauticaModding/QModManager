@@ -12,15 +12,16 @@ using QModManager.API;
 using QModManager.Patching;
 using QModManager.Utility;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
+using QModManager.API.ModLoading;
 using TypeloaderCache = System.Collections.Generic.Dictionary<string, BepInEx.Bootstrap.CachedAssembly<BepInEx.PluginInfo>>;
 using QMMAssemblyCache = System.Collections.Generic.Dictionary<string, long>;
-using QModManager.API.ModLoading;
-using System.Collections;
 
 namespace QModManager
 {
@@ -57,14 +58,14 @@ namespace QModManager
             {
                 PluginCache = GetPluginCache();
                 Harmony = new Harmony("QModManager.QModPluginGenerator");
-                foreach(Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
                 {
-                    if(assembly?.GetName()?.Name?.Contains("MirrorInternalLogs") ?? false)
+                    if (assembly?.GetName()?.Name?.Contains("MirrorInternalLogs") ?? false)
                     {
                         Type type = AccessTools.TypeByName("MirrorInternalLogs.Util.LibcHelper");
                         var method = type?.GetMethod("Format");
 
-                        if(method != null)
+                        if (method != null)
                             Harmony.Patch(method, postfix: new HarmonyMethod(typeof(QModPluginGenerator), nameof(QModPluginGenerator.LibcHelper_Format_Postfix)));
                         break;
                     }
@@ -88,30 +89,26 @@ namespace QModManager
             "PerformGarbage", "Fallback handler could not load"
         };
 
-        public static List<string> DirtyMidStrings = new List<string>()
+        public static List<string> DirtyPatterns = new List<string>()
         {
-            "\n(Filename", 
+            @"[\r\n]+(\(Filename: .*\))"
         };
 
         private static void LibcHelper_Format_Postfix(ref string __result)
         {
-            foreach(string dirtyString in DirtyStartStrings)
+            foreach (string dirtyString in DirtyStartStrings)
             {
-                if(__result.StartsWith(dirtyString))
+                if (__result.StartsWith(dirtyString))
                 {
-                    __result = "";
+                    __result = string.Empty;
                     return;
                 }
             }
 
-            foreach(string dirtyString in DirtyMidStrings)
+            foreach (string dirtyPattern in DirtyPatterns)
             {
-                int i = __result.IndexOf(dirtyString);
-                if(i >= 0)
-                {
-                    __result = __result.Remove(i);
-                    return;
-                }
+                var regex = new Regex(dirtyPattern);
+                __result = regex.Replace(__result, string.Empty).Trim();
             }
         }
 
@@ -145,7 +142,7 @@ namespace QModManager
 #if SUBNAUTICA
         private static IEnumerator InitializeQMM(IEnumerator result)
         {
-            if(ModsToLoad != null)
+            if (ModsToLoad != null)
             {
                 yield return result;
 
@@ -155,7 +152,7 @@ namespace QModManager
 
                 SummaryLogger.ReportIssues(ModsToLoad);
                 SummaryLogger.LogSummaries(ModsToLoad);
-                foreach(Dialog dialog in Patcher.Dialogs)
+                foreach (Dialog dialog in Patcher.Dialogs)
                 {
                     dialog.Show();
                 }
@@ -254,7 +251,7 @@ namespace QModManager
 
                 using (var ms = new MemoryStream())
                 using (var writer = new StreamWriter(ms))
-                using(var jsreader = new JsonTextWriter(writer))
+                using (var jsreader = new JsonTextWriter(writer))
                 {
                     var serializer = new JsonSerializer();
                     serializer.Serialize(jsreader, QMMAssemblyCache);
@@ -283,7 +280,7 @@ namespace QModManager
             {
                 Directory.Delete(BepInExCachePath, true);
             }
-            catch(IOException e)
+            catch (IOException e)
             {
                 Logger.LogDebug($"Clearing BepInEx cache failed with exception. \n{e}");
             }
