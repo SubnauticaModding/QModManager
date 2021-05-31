@@ -6,7 +6,7 @@ using Mono.Cecil;
 #if SUBNAUTICA_STABLE
 using Oculus.Newtonsoft.Json;
 #else
-    using Newtonsoft.Json;
+using Newtonsoft.Json;
 #endif
 using QModManager.API;
 using QModManager.Patching;
@@ -57,14 +57,14 @@ namespace QModManager
             {
                 PluginCache = GetPluginCache();
                 Harmony = new Harmony("QModManager.QModPluginGenerator");
-                foreach(Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
+                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
                 {
-                    if(assembly?.GetName()?.Name?.Contains("MirrorInternalLogs") ?? false)
+                    if (assembly?.GetName()?.Name?.Contains("MirrorInternalLogs") ?? false)
                     {
                         Type type = AccessTools.TypeByName("MirrorInternalLogs.Util.LibcHelper");
                         var method = type?.GetMethod("Format");
 
-                        if(method != null)
+                        if (method != null)
                             Harmony.Patch(method, postfix: new HarmonyMethod(typeof(QModPluginGenerator), nameof(QModPluginGenerator.LibcHelper_Format_Postfix)));
                         break;
                     }
@@ -90,30 +90,32 @@ namespace QModManager
 
         public static List<string> DirtyMidStrings = new List<string>()
         {
-            "\n(Filename", 
+            "\n(Filename",
         };
 
         private static void LibcHelper_Format_Postfix(ref string __result)
         {
-            foreach(string dirtyString in DirtyStartStrings)
+            foreach (string dirtyString in DirtyStartStrings)
             {
-                if(__result.StartsWith(dirtyString))
+                if (__result.StartsWith(dirtyString))
                 {
                     __result = "";
                     return;
                 }
             }
 
-            foreach(string dirtyString in DirtyMidStrings)
+            foreach (string dirtyString in DirtyMidStrings)
             {
                 int i = __result.IndexOf(dirtyString);
-                if(i >= 0)
+                if (i >= 0)
                 {
                     __result = __result.Remove(i);
                     return;
                 }
             }
         }
+
+        private static bool initialized = false;
 
 #if SUBNAUTICA_STABLE
         [HarmonyPatch(typeof(SystemsSpawner), nameof(SystemsSpawner.Awake))]
@@ -123,7 +125,11 @@ namespace QModManager
         [HarmonyPrefix]
         private static void PreInitializeQMM()
         {
-
+            if (initialized)
+            {
+                return;
+            }
+            initialized = true;
 
             Patcher.Patch(); // Run QModManager patch
 
@@ -145,7 +151,7 @@ namespace QModManager
 #if SUBNAUTICA
         private static IEnumerator InitializeQMM(IEnumerator result)
         {
-            if(ModsToLoad != null)
+            if (ModsToLoad != null)
             {
                 yield return result;
 
@@ -155,7 +161,7 @@ namespace QModManager
 
                 SummaryLogger.ReportIssues(ModsToLoad);
                 SummaryLogger.LogSummaries(ModsToLoad);
-                foreach(Dialog dialog in Patcher.Dialogs)
+                foreach (Dialog dialog in Patcher.Dialogs)
                 {
                     dialog.Show();
                 }
@@ -165,7 +171,7 @@ namespace QModManager
 #elif BELOWZERO
         private static void InitializeQMM()
         {
-            if(ModsToLoad != null)
+            if (ModsToLoad != null)
             {
                 Initializer.InitializeMods(ModsToLoad, PatchingOrder.NormalInitialize);
                 Initializer.InitializeMods(ModsToLoad, PatchingOrder.PostInitialize);
@@ -174,7 +180,7 @@ namespace QModManager
                 SummaryLogger.ReportIssues(ModsToLoad);
                 SummaryLogger.LogSummaries(ModsToLoad);
 
-                foreach(Dialog dialog in Patcher.Dialogs)
+                foreach (Dialog dialog in Patcher.Dialogs)
                 {
                     dialog.Show();
                 }
@@ -254,7 +260,7 @@ namespace QModManager
 
                 using (var ms = new MemoryStream())
                 using (var writer = new StreamWriter(ms))
-                using(var jsreader = new JsonTextWriter(writer))
+                using (var jsreader = new JsonTextWriter(writer))
                 {
                     var serializer = new JsonSerializer();
                     serializer.Serialize(jsreader, QMMAssemblyCache);
@@ -283,7 +289,7 @@ namespace QModManager
             {
                 Directory.Delete(BepInExCachePath, true);
             }
-            catch(IOException e)
+            catch (IOException e)
             {
                 Logger.LogDebug($"Clearing BepInEx cache failed with exception. \n{e}");
             }
