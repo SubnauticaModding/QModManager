@@ -6,7 +6,7 @@ using Mono.Cecil;
 #if SUBNAUTICA_STABLE
 using Oculus.Newtonsoft.Json;
 #else
-    using Newtonsoft.Json;
+using Newtonsoft.Json;
 #endif
 using QModManager.API;
 using QModManager.Patching;
@@ -83,13 +83,13 @@ namespace QModManager
             }
         }
 
-        public static List<string> DirtyStartStrings = new List<string>()
+        private readonly static List<string> DirtyStartStrings = new List<string>()
         {
             "Resetting cell with", "Replacing cell",
             "PerformGarbage", "Fallback handler could not load"
         };
 
-        public static List<string> DirtyPatterns = new List<string>()
+        private readonly static List<string> DirtyPatterns = new List<string>()
         {
             @"[\r\n]+(\(Filename: .*\))"
         };
@@ -162,7 +162,7 @@ namespace QModManager
 #elif BELOWZERO
         private static void InitializeQMM()
         {
-            if(ModsToLoad != null)
+            if (ModsToLoad != null)
             {
                 Initializer.InitializeMods(ModsToLoad, PatchingOrder.NormalInitialize);
                 Initializer.InitializeMods(ModsToLoad, PatchingOrder.PostInitialize);
@@ -171,7 +171,7 @@ namespace QModManager
                 SummaryLogger.ReportIssues(ModsToLoad);
                 SummaryLogger.LogSummaries(ModsToLoad);
 
-                foreach(Dialog dialog in Patcher.Dialogs)
+                foreach (Dialog dialog in Patcher.Dialogs)
                 {
                     dialog.Show();
                 }
