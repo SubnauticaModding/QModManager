@@ -89,9 +89,8 @@ namespace QModManager
             "PerformGarbage", "Fallback handler could not load"
         };
 
-        private readonly static List<string> DirtyPatterns = new List<string>()
-        {
-            @"[\r\n]+(\(Filename: .*\))"
+        private readonly static List<Regex> DirtyRegexPatterns = new List<Regex>() {
+            new Regex(@"[\r\n]+(\(Filename: .*\))", RegexOptions.Compiled)
         };
 
         private static void LibcHelper_Format_Postfix(ref string __result)
@@ -105,10 +104,9 @@ namespace QModManager
                 }
             }
 
-            foreach (string dirtyPattern in DirtyPatterns)
+            foreach (Regex pattern in DirtyRegexPatterns)
             {
-                var regex = new Regex(dirtyPattern);
-                __result = regex.Replace(__result, string.Empty).Trim();
+                __result = pattern.Replace(__result, string.Empty).Trim();
             }
         }
 
