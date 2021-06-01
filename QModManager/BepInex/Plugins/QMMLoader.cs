@@ -1,10 +1,14 @@
 ﻿using BepInEx;
+#if !SUBNAUTICA_STABLE
 using HarmonyLib;
+#if !BELOWZERO
 using System.Collections;
+#endif
+#endif
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace QModInstaller
+namespace QModInstaller.BepInEx.Plugins
 {
     using QModManager.API.ModLoading;
     using QModManager.Patching;
@@ -14,16 +18,12 @@ namespace QModInstaller
     /// QMMLoader - simply fires up the QModManager entry point.
     /// </summary>
     [BepInPlugin(PluginGuid, PluginName, PluginVersion)]
-    [BepInProcess(SubnauticaProcessName)]
-    [BepInProcess(SubnauticaZeroProcessName)]
+    [BepInProcess("Subnautica"), BepInProcess("SubnauticaZero")]
     public class QMMLoader : BaseUnityPlugin
     {
         internal const string PluginGuid = "QModManager.QMMLoader";
         internal const string PluginName = "QMMLoader";
-        internal const string PluginVersion = "1.0.2";
-
-        internal const string SubnauticaProcessName = "Subnautica";
-        internal const string SubnauticaZeroProcessName = "SubnauticaZero";
+        internal const string PluginVersion = "4.1.4";
 
         internal static List<QMod> QModsToLoad;
         private static Initializer Initializer;

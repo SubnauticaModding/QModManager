@@ -118,6 +118,7 @@
     <Compile Include="API\IQMod.cs" />
     <Compile Include="API\IQModAPI.cs" />
     <Compile Include="API\IQModServices.cs" />
+    <Compile Include="BepInex\Plugins\LogFilter.cs" />
     <Compile Include="Patching\IPluginCollection.cs" />
     <Compile Include="Patching\ModStatus.cs" />
     <Compile Include="API\ModLoading\QModCoreAttribute.cs" />
@@ -133,7 +134,7 @@
     <Compile Include="DataStructures\SortedTreeNode.cs" />
     <Compile Include="DataStructures\SortedTreeNodeCollection.cs" />
     <Compile Include="DataStructures\WeightedList.cs" />
-    <Compile Include="QMMLoader.cs" />
+    <Compile Include="BepInex\Plugins\QMMLoader.cs" />
     <Compile Include="Checks\NitroxCheck.cs" />
     <Compile Include="HarmonyPatches\EnableConsoleSetting.cs" />
     <Compile Include="HarmonyPatches\DisableDevErrorReporting.cs" />
@@ -169,6 +170,7 @@
     <Compile Include="Checks\VersionCheck.cs" />
     <Compile Include="Utility\VersionParser.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>
