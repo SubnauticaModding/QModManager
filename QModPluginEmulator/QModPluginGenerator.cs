@@ -4,6 +4,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using Mono.Cecil;
 #if SUBNAUTICA_STABLE
+using System.Collections;
 using Oculus.Newtonsoft.Json;
 #else
 using Newtonsoft.Json;
@@ -12,7 +13,6 @@ using QModManager.API;
 using QModManager.Patching;
 using QModManager.Utility;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
