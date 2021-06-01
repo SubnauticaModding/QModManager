@@ -55,9 +55,8 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AssetsTools.NET">
-      <HintPath>..\packages\AssetsTools.NET.2.0.3\lib\net35\AssetsTools.NET.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="AssetsTools.NET, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\AssetsTools.NET.2.0.9\lib\net40\AssetsTools.NET.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
       <HintPath>..\Dependencies\BepInEx\BepInEx\core\BepInEx.dll</HintPath>
