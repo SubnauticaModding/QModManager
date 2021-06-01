@@ -1,4 +1,6 @@
 ﻿using BepInEx;
+using HarmonyLib;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -42,10 +44,10 @@ namespace QModInstaller
             obj.EnsureComponent<SceneCleanerPreserve>();
             DontDestroyOnLoad(obj);
 
-            InitializeQMods();
+            PreInitializeQMods();
         }
 
-        private void InitializeQMods()
+        private void PreInitializeQMods()
         {
             if (QModsToLoad is null)
             {
@@ -58,6 +60,8 @@ namespace QModInstaller
             Initializer = new Initializer(Patcher.CurrentlyRunningGame);
             Initializer.InitializeMods(QModsToLoad, PatchingOrder.MetaPreInitialize);
             Initializer.InitializeMods(QModsToLoad, PatchingOrder.PreInitialize);
+
+#if SUBNAUTICA_STABLE
             Initializer.InitializeMods(QModsToLoad, PatchingOrder.NormalInitialize);
             Initializer.InitializeMods(QModsToLoad, PatchingOrder.PostInitialize);
             Initializer.InitializeMods(QModsToLoad, PatchingOrder.MetaPostInitialize);
@@ -68,6 +72,60 @@ namespace QModInstaller
             {
                 dialog.Show();
             }
+#else
+            var harmony = new Harmony(PluginGuid);
+            harmony.Patch(
+                AccessTools.Method(
+#if SUBNAUTICA
+                    typeof(PlatformUtils), nameof(PlatformUtils.PlatformInitAsync)
+#elif BELOWZERO
+                    typeof(SpriteManager), nameof(SpriteManager.OnLoadedSpriteAtlases)
+#endif
+                    ),
+                    postfix: new HarmonyMethod(AccessTools.Method(typeof(QMMLoader), nameof(QMMLoader.InitializeQMods)))
+                );
+#endif
         }
+
+#if SUBNAUTICA_EXP
+        private static IEnumerator InitializeQMods(IEnumerator result)
+        {
+            yield return result;
+
+            if (QModsToLoad != null)
+            {
+                Initializer.InitializeMods(QModsToLoad, PatchingOrder.NormalInitialize);
+                Initializer.InitializeMods(QModsToLoad, PatchingOrder.PostInitialize);
+                Initializer.InitializeMods(QModsToLoad, PatchingOrder.MetaPostInitialize);
+
+                SummaryLogger.ReportIssues(QModsToLoad);
+                SummaryLogger.LogSummaries(QModsToLoad);
+                foreach (Dialog dialog in Patcher.Dialogs)
+                {
+                    dialog.Show();
+                }
+            }
+        }
+#elif BELOWZERO
+        private static void InitializeQMods() 
+        {
+            if (QModsToLoad is null)
+            {
+                return;
+            }
+
+            Initializer.InitializeMods(QModsToLoad, PatchingOrder.NormalInitialize);
+            Initializer.InitializeMods(QModsToLoad, PatchingOrder.PostInitialize);
+            Initializer.InitializeMods(QModsToLoad, PatchingOrder.MetaPostInitialize);
+
+            SummaryLogger.ReportIssues(QModsToLoad);
+            SummaryLogger.LogSummaries(QModsToLoad);
+
+            foreach (Dialog dialog in Patcher.Dialogs)
+            {
+                dialog.Show();
+            }
+        }
+#endif
     }
 }
