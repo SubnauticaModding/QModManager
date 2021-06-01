@@ -117,9 +117,29 @@ namespace QModManager
 
 #if SUBNAUTICA_STABLE
         [HarmonyPatch(typeof(SystemsSpawner), nameof(SystemsSpawner.Awake))]
+        [HarmonyPrefix]
+        private static void PreInitializeQMM()
+        {
+            Patcher.Patch(); // Run QModManager patch
+
+            ModsToLoad = QModsToLoad.ToList();
+            Initializer = new Initializer(Patcher.CurrentlyRunningGame);
+            Initializer.InitializeMods(ModsToLoad, PatchingOrder.MetaPreInitialize);
+            Initializer.InitializeMods(ModsToLoad, PatchingOrder.PreInitialize);
+            Initializer.InitializeMods(ModsToLoad, PatchingOrder.NormalInitialize);
+            Initializer.InitializeMods(ModsToLoad, PatchingOrder.PostInitialize);
+            Initializer.InitializeMods(ModsToLoad, PatchingOrder.MetaPostInitialize);
+
+            SummaryLogger.ReportIssues(ModsToLoad);
+            SummaryLogger.LogSummaries(ModsToLoad);
+            foreach(Dialog dialog in Patcher.Dialogs)
+            {
+                dialog.Show();
+            }
+
+        }
 #else
         [HarmonyPatch(typeof(PreStartScreen), nameof(PreStartScreen.Start))]
-#endif
         [HarmonyPrefix]
         private static void PreInitializeQMM()
         {
@@ -142,7 +162,7 @@ namespace QModManager
                     ), postfix: new HarmonyMethod(AccessTools.Method(typeof(QModPluginGenerator), nameof(QModPluginGenerator.InitializeQMM))));
         }
 
-#if SUBNAUTICA
+#if SUBNAUTICA_EXP
         private static IEnumerator InitializeQMM(IEnumerator result)
         {
             if(ModsToLoad != null)
@@ -180,6 +200,7 @@ namespace QModManager
                 }
             }
         }
+#endif
 #endif
 
         private static string[] QMMKnownAssemblyPaths = new[] {
