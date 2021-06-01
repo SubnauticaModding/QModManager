@@ -12,6 +12,7 @@ using QModManager.API;
 using QModManager.Patching;
 using QModManager.Utility;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
