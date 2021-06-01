@@ -23,22 +23,31 @@ namespace QModInstaller.BepInEx.Plugins
         }
 
         private readonly static Regex[] DirtyRegexPatterns = new Regex[] {
-            new Regex(@"([\r\n]+)?(\(Filename: .*\))$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(Replacing cell.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(Resetting cell with.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(PerformGarbage.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(Fallback handler could not load.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(Heartbeat CSV.*,[0-9])$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(L0: PerformGarbageCollection ->.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(L0: CellManager::EstimateBytes.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(Kinematic body only supports Speculative Continuous collision detection.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(@"([\r\n]+)?(\(Filename: .*\))", RegexOptions.Compiled),
+            new Regex(@"([\r\n]+)?(Replacing cell.*)", RegexOptions.Compiled),
+            new Regex(@"([\r\n]+)?(Resetting cell with.*)", RegexOptions.Compiled),
+            new Regex(@"([\r\n]+)?(Fallback handler could not load.*)", RegexOptions.Compiled),
+            new Regex(@"([\r\n]+)?(Heartbeat CSV.*,[0-9])", RegexOptions.Compiled),
+            new Regex(@"([\r\n]+)?(L[0-9]: .*)", RegexOptions.Compiled),
+            new Regex(@"([\r\n]+)?(Kinematic body only supports Speculative Continuous collision detection)", RegexOptions.Compiled)
         };
 
         private static void LibcHelper_Format_Postfix(ref string __result)
         {
+            bool match = false;
             foreach (Regex pattern in DirtyRegexPatterns)
             {
-                __result = pattern.Replace(__result, string.Empty).Trim();
+                if (pattern.IsMatch(__result))
+                {
+                    __result = pattern.Replace(__result, string.Empty).Trim();
+                    match = true;
+                }
+            }
+
+            // if our filtering resulted in an empty string, return null so that MirrorInternalLogs will skip the line
+            if (match && string.IsNullOrWhiteSpace(__result))
+            {
+                __result = null;
             }
         }
     }
