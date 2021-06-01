@@ -23,7 +23,6 @@ namespace QModInstaller
         internal const string SubnauticaProcessName = "Subnautica";
         internal const string SubnauticaZeroProcessName = "SubnauticaZero";
 
-        [System.NonSerialized]
         internal static List<QMod> QModsToLoad;
         private static Initializer Initializer;
 
