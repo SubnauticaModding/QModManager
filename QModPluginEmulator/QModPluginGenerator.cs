@@ -17,10 +17,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
+using QModManager.API.ModLoading;
 using TypeloaderCache = System.Collections.Generic.Dictionary<string, BepInEx.Bootstrap.CachedAssembly<BepInEx.PluginInfo>>;
 using QMMAssemblyCache = System.Collections.Generic.Dictionary<string, long>;
-using QModManager.API.ModLoading;
-using System.Collections;
 
 namespace QModManager
 {
@@ -82,46 +82,58 @@ namespace QModManager
             }
         }
 
-        public static List<string> DirtyStartStrings = new List<string>()
-        {
-            "Resetting cell with", "Replacing cell",
-            "PerformGarbage", "Fallback handler could not load"
-        };
-
-        public static List<string> DirtyMidStrings = new List<string>()
-        {
-            "\n(Filename",
+        private readonly static List<Regex> DirtyRegexPatterns = new List<Regex>() {
+            new Regex(@"([\r\n]+)?(\(Filename: .*\))$", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(@"^(Replacing cell.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(@"^(Resetting cell with.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(@"^(PerformGarbage.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(@"^(Fallback handler could not load.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(@"^(Heartbeat CSV.*,[0-9])$", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(@"^(L0: PerformGarbageCollection ->.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(@"^(L0: CellManager::EstimateBytes.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(@"^(Kinematic body only supports Speculative Continuous collision detection.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
         };
 
         private static void LibcHelper_Format_Postfix(ref string __result)
         {
-            foreach (string dirtyString in DirtyStartStrings)
+            foreach (Regex pattern in DirtyRegexPatterns)
             {
-                if (__result.StartsWith(dirtyString))
-                {
-                    __result = "";
-                    return;
-                }
-            }
-
-            foreach (string dirtyString in DirtyMidStrings)
-            {
-                int i = __result.IndexOf(dirtyString);
-                if (i >= 0)
-                {
-                    __result = __result.Remove(i);
-                    return;
-                }
+                __result = pattern.Replace(__result, string.Empty).Trim();
             }
         }
 
         private static bool initialized = false;
-
 #if SUBNAUTICA_STABLE
         [HarmonyPatch(typeof(SystemsSpawner), nameof(SystemsSpawner.Awake))]
+        [HarmonyPrefix]
+        private static void PreInitializeQMM()
+        {
+            if (initialized)
+            {
+                return;
+            }
+            initialized = true;
+
+            Patcher.Patch(); // Run QModManager patch
+
+            ModsToLoad = QModsToLoad.ToList();
+            Initializer = new Initializer(Patcher.CurrentlyRunningGame);
+            Initializer.InitializeMods(ModsToLoad, PatchingOrder.MetaPreInitialize);
+            Initializer.InitializeMods(ModsToLoad, PatchingOrder.PreInitialize);
+            Initializer.InitializeMods(ModsToLoad, PatchingOrder.NormalInitialize);
+            Initializer.InitializeMods(ModsToLoad, PatchingOrder.PostInitialize);
+            Initializer.InitializeMods(ModsToLoad, PatchingOrder.MetaPostInitialize);
+
+            SummaryLogger.ReportIssues(ModsToLoad);
+            SummaryLogger.LogSummaries(ModsToLoad);
+            foreach(Dialog dialog in Patcher.Dialogs)
+            {
+                dialog.Show();
+            }
+
+        }
 #else
         [HarmonyPatch(typeof(PreStartScreen), nameof(PreStartScreen.Start))]
-#endif
         [HarmonyPrefix]
         private static void PreInitializeQMM()
         {
@@ -148,7 +160,7 @@ namespace QModManager
                     ), postfix: new HarmonyMethod(AccessTools.Method(typeof(QModPluginGenerator), nameof(QModPluginGenerator.InitializeQMM))));
         }
 
-#if SUBNAUTICA
+#if SUBNAUTICA_EXP
         private static IEnumerator InitializeQMM(IEnumerator result)
         {
             if (ModsToLoad != null)
@@ -186,6 +198,7 @@ namespace QModManager
                 }
             }
         }
+#endif
 #endif
 
         private static string[] QMMKnownAssemblyPaths = new[] {
