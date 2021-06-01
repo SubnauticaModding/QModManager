@@ -83,27 +83,20 @@ namespace QModManager
             }
         }
 
-        private readonly static List<string> DirtyStartStrings = new List<string>()
-        {
-            "Resetting cell with", "Replacing cell",
-            "PerformGarbage", "Fallback handler could not load"
-        };
-
         private readonly static List<Regex> DirtyRegexPatterns = new List<Regex>() {
-            new Regex(@"[\r\n]+(\(Filename: .*\))", RegexOptions.Compiled)
+            new Regex(@"([\r\n]+)?(\(Filename: .*\))$", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(@"^(Replacing cell.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(@"^(Resetting cell with.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(@"^(PerformGarbage.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(@"^(Fallback handler could not load.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(@"^(Heartbeat CSV.*,[0-9])$", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(@"^(L0: PerformGarbageCollection ->.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(@"^(L0: CellManager::EstimateBytes.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
+            new Regex(@"^(Kinematic body only supports Speculative Continuous collision detection.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
         };
 
         private static void LibcHelper_Format_Postfix(ref string __result)
         {
-            foreach (string dirtyString in DirtyStartStrings)
-            {
-                if (__result.StartsWith(dirtyString))
-                {
-                    __result = string.Empty;
-                    return;
-                }
-            }
-
             foreach (Regex pattern in DirtyRegexPatterns)
             {
                 __result = pattern.Replace(__result, string.Empty).Trim();
