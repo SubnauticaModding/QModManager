@@ -18,7 +18,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using QModManager.API.ModLoading;
 using TypeloaderCache = System.Collections.Generic.Dictionary<string, BepInEx.Bootstrap.CachedAssembly<BepInEx.PluginInfo>>;
 using QMMAssemblyCache = System.Collections.Generic.Dictionary<string, long>;
@@ -58,18 +57,6 @@ namespace QModManager
             {
                 PluginCache = GetPluginCache();
                 Harmony = new Harmony("QModManager.QModPluginGenerator");
-                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-                {
-                    if (assembly?.GetName()?.Name?.Contains("MirrorInternalLogs") ?? false)
-                    {
-                        Type type = AccessTools.TypeByName("MirrorInternalLogs.Util.LibcHelper");
-                        var method = type?.GetMethod("Format");
-
-                        if (method != null)
-                            Harmony.Patch(method, postfix: new HarmonyMethod(typeof(QModPluginGenerator), nameof(QModPluginGenerator.LibcHelper_Format_Postfix)));
-                        break;
-                    }
-                }
                 Harmony.Patch(
                     typeof(TypeLoader).GetMethod(nameof(TypeLoader.FindPluginTypes)).MakeGenericMethod(typeof(PluginInfo)),
                     postfix: new HarmonyMethod(typeof(QModPluginGenerator).GetMethod(nameof(TypeLoaderFindPluginTypesPostfix))));
@@ -80,26 +67,6 @@ namespace QModManager
                 Logger.LogFatal($"An exception occurred while attempting to generate BepInEx PluginInfos: {ex.Message}.");
                 Logger.LogFatal($"Beginning stacktrace:");
                 Logger.LogFatal(ex.StackTrace);
-            }
-        }
-
-        private readonly static List<Regex> DirtyRegexPatterns = new List<Regex>() {
-            new Regex(@"([\r\n]+)?(\(Filename: .*\))$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(Replacing cell.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(Resetting cell with.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(PerformGarbage.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(Fallback handler could not load.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(Heartbeat CSV.*,[0-9])$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(L0: PerformGarbageCollection ->.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(L0: CellManager::EstimateBytes.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(Kinematic body only supports Speculative Continuous collision detection.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-        };
-
-        private static void LibcHelper_Format_Postfix(ref string __result)
-        {
-            foreach (Regex pattern in DirtyRegexPatterns)
-            {
-                __result = pattern.Replace(__result, string.Empty).Trim();
             }
         }
 
