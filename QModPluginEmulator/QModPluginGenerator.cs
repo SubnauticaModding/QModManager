@@ -19,7 +19,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using QModManager.API.ModLoading;
 using TypeloaderCache = System.Collections.Generic.Dictionary<string, BepInEx.Bootstrap.CachedAssembly<BepInEx.PluginInfo>>;
 using QMMAssemblyCache = System.Collections.Generic.Dictionary<string, long>;
 
@@ -44,15 +43,13 @@ namespace QModManager
         internal static Dictionary<string, QMod> QModsToLoadById;
         internal static Dictionary<string, PluginInfo> QModPluginInfos;
         internal static List<PluginInfo> InitialisedQModPlugins;
-        private static Initializer Initializer;
-        private static List<QMod> ModsToLoad;
         private static Harmony Harmony;
         internal static IVersionParser VersionParserService { get; set; } = new VersionParser();
 
         private static TypeloaderCache PluginCache;
 
         [Obsolete("Should not be used!", true)]
-        public static void Finish()
+        public static void Initialize()
         {
             try
             {
@@ -74,6 +71,9 @@ namespace QModManager
                     typeof(TypeLoader).GetMethod(nameof(TypeLoader.FindPluginTypes)).MakeGenericMethod(typeof(PluginInfo)),
                     postfix: new HarmonyMethod(typeof(QModPluginGenerator).GetMethod(nameof(TypeLoaderFindPluginTypesPostfix))));
 
+                Harmony.Patch(
+                    typeof(MetadataHelper).GetMethod(nameof(MetadataHelper.GetMetadata), new Type[] { typeof(object) }),
+                        prefix: new HarmonyMethod(AccessTools.Method(typeof(QModPluginGenerator), nameof(QModPluginGenerator.MetadataHelperGetMetadataPrefix))));
             }
             catch (Exception ex)
             {
@@ -102,94 +102,6 @@ namespace QModManager
                 __result = pattern.Replace(__result, string.Empty).Trim();
             }
         }
-
-#if SUBNAUTICA_STABLE
-        [HarmonyPatch(typeof(SystemsSpawner), nameof(SystemsSpawner.Awake))]
-        [HarmonyPrefix]
-        private static void PreInitializeQMM()
-        {
-            Patcher.Patch(); // Run QModManager patch
-
-            ModsToLoad = QModsToLoad.ToList();
-            Initializer = new Initializer(Patcher.CurrentlyRunningGame);
-            Initializer.InitializeMods(ModsToLoad, PatchingOrder.MetaPreInitialize);
-            Initializer.InitializeMods(ModsToLoad, PatchingOrder.PreInitialize);
-            Initializer.InitializeMods(ModsToLoad, PatchingOrder.NormalInitialize);
-            Initializer.InitializeMods(ModsToLoad, PatchingOrder.PostInitialize);
-            Initializer.InitializeMods(ModsToLoad, PatchingOrder.MetaPostInitialize);
-
-            SummaryLogger.ReportIssues(ModsToLoad);
-            SummaryLogger.LogSummaries(ModsToLoad);
-            foreach(Dialog dialog in Patcher.Dialogs)
-            {
-                dialog.Show();
-            }
-
-        }
-#else
-        [HarmonyPatch(typeof(PreStartScreen), nameof(PreStartScreen.Start))]
-        [HarmonyPrefix]
-        private static void PreInitializeQMM()
-        {
-
-
-            Patcher.Patch(); // Run QModManager patch
-
-            ModsToLoad = QModsToLoad.ToList();
-            Initializer = new Initializer(Patcher.CurrentlyRunningGame);
-            Initializer.InitializeMods(ModsToLoad, PatchingOrder.MetaPreInitialize);
-            Initializer.InitializeMods(ModsToLoad, PatchingOrder.PreInitialize);
-
-            Harmony.Patch(
-                AccessTools.Method(
-#if SUBNAUTICA
-                    typeof(PlatformUtils), nameof(PlatformUtils.PlatformInitAsync)
-#elif BELOWZERO
-                    typeof(SpriteManager), nameof(SpriteManager.OnLoadedSpriteAtlases)
-#endif
-                    ), postfix: new HarmonyMethod(AccessTools.Method(typeof(QModPluginGenerator), nameof(QModPluginGenerator.InitializeQMM))));
-        }
-
-#if SUBNAUTICA_EXP
-        private static IEnumerator InitializeQMM(IEnumerator result)
-        {
-            if (ModsToLoad != null)
-            {
-                yield return result;
-
-                Initializer.InitializeMods(ModsToLoad, PatchingOrder.NormalInitialize);
-                Initializer.InitializeMods(ModsToLoad, PatchingOrder.PostInitialize);
-                Initializer.InitializeMods(ModsToLoad, PatchingOrder.MetaPostInitialize);
-
-                SummaryLogger.ReportIssues(ModsToLoad);
-                SummaryLogger.LogSummaries(ModsToLoad);
-                foreach (Dialog dialog in Patcher.Dialogs)
-                {
-                    dialog.Show();
-                }
-            }
-            yield break;
-        }
-#elif BELOWZERO
-        private static void InitializeQMM()
-        {
-            if (ModsToLoad != null)
-            {
-                Initializer.InitializeMods(ModsToLoad, PatchingOrder.NormalInitialize);
-                Initializer.InitializeMods(ModsToLoad, PatchingOrder.PostInitialize);
-                Initializer.InitializeMods(ModsToLoad, PatchingOrder.MetaPostInitialize);
-
-                SummaryLogger.ReportIssues(ModsToLoad);
-                SummaryLogger.LogSummaries(ModsToLoad);
-
-                foreach (Dialog dialog in Patcher.Dialogs)
-                {
-                    dialog.Show();
-                }
-            }
-        }
-#endif
-#endif
 
         private static string[] QMMKnownAssemblyPaths = new[] {
 #if !SUBNAUTICA_STABLE
@@ -328,7 +240,6 @@ namespace QModManager
         [Obsolete("Should not be used!", true)]
         public static void TypeLoaderFindPluginTypesPostfix(ref Dictionary<string, List<PluginInfo>> __result, string directory)
         {
-            Harmony.PatchAll(typeof(QModPluginGenerator));
             if (directory != Paths.PluginPath)
                 return;
 
@@ -418,17 +329,18 @@ namespace QModManager
                 __result[Assembly.GetExecutingAssembly().Location] = QModPluginInfos.Values.Distinct().ToList();
 
                 TypeLoader.SaveAssemblyCache(GeneratedPluginCache, result);
-
             }
             catch (Exception ex)
             {
                 Logger.LogFatal($"Failed to emulate QMods as plugins");
                 Logger.LogFatal(ex.ToString());
             }
+            finally
+            {
+                QModInstaller.QMMLoader.QModsToLoad = QModsToLoad?.ToList();
+            }
         }
 
-        [HarmonyPatch(typeof(MetadataHelper), nameof(MetadataHelper.GetMetadata), new Type[] { typeof(object) })]
-        [HarmonyPrefix]
         private static bool MetadataHelperGetMetadataPrefix(object plugin, ref BepInPlugin __result)
         {
             if (plugin is QModPlugin)
