@@ -49,13 +49,13 @@ namespace QModInstaller.BepInEx.Plugins
 
         private void PreInitializeQMods()
         {
+            Patcher.Patch(); // Run QModManager patch
+
             if (QModsToLoad is null)
             {
                 Logger.LogWarning("QModsToLoad is null!");
                 return;
             }
-
-            Patcher.Patch(); // Run QModManager patch
 
             Initializer = new Initializer(Patcher.CurrentlyRunningGame);
             Initializer.InitializeMods(QModsToLoad, PatchingOrder.MetaPreInitialize);
@@ -92,28 +92,20 @@ namespace QModInstaller.BepInEx.Plugins
         {
             yield return result;
 
-            if (QModsToLoad != null)
-            {
-                Initializer.InitializeMods(QModsToLoad, PatchingOrder.NormalInitialize);
-                Initializer.InitializeMods(QModsToLoad, PatchingOrder.PostInitialize);
-                Initializer.InitializeMods(QModsToLoad, PatchingOrder.MetaPostInitialize);
+            Initializer.InitializeMods(QModsToLoad, PatchingOrder.NormalInitialize);
+            Initializer.InitializeMods(QModsToLoad, PatchingOrder.PostInitialize);
+            Initializer.InitializeMods(QModsToLoad, PatchingOrder.MetaPostInitialize);
 
-                SummaryLogger.ReportIssues(QModsToLoad);
-                SummaryLogger.LogSummaries(QModsToLoad);
-                foreach (Dialog dialog in Patcher.Dialogs)
-                {
-                    dialog.Show();
-                }
+            SummaryLogger.ReportIssues(QModsToLoad);
+            SummaryLogger.LogSummaries(QModsToLoad);
+            foreach (Dialog dialog in Patcher.Dialogs)
+            {
+                dialog.Show();
             }
         }
 #elif BELOWZERO
         private static void InitializeQMods() 
         {
-            if (QModsToLoad is null)
-            {
-                return;
-            }
-
             Initializer.InitializeMods(QModsToLoad, PatchingOrder.NormalInitialize);
             Initializer.InitializeMods(QModsToLoad, PatchingOrder.PostInitialize);
             Initializer.InitializeMods(QModsToLoad, PatchingOrder.MetaPostInitialize);
