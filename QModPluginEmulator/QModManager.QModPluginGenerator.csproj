@@ -89,6 +89,8 @@
   <PropertyGroup>
     <PostBuildEvent>rmdir "$(SolutionDir)VortexBuild\$(Configuration)" /q /s
 xcopy "$(SolutionDir)Dependencies\BepInEx" "$(SolutionDir)VortexBuild\$(Configuration)"  /E /H /I /Q /Y
+xcopy "$(SolutionDir)Dependencies\$(Configuration)\BepInEx.cfg" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\config\"  /I /Q /Y
+mkdir "$(SolutionDir)VortexBuild\$(Configuration)\QMods"
 xcopy "$(SolutionDir)Dependencies\cldb.dat" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\" /I /Q /Y
 xcopy "$(SolutionDir)packages\AssetsTools.NET.2.0.3\lib\net35\AssetsTools.NET.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\" /I /Q /Y
 xcopy "$(TargetDir)QModManager.exe" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\"   /I /Q /Y
@@ -105,7 +107,7 @@ xcopy "$(TargetDir)QModManager.OculusNewtonsoftRedirect.dll" "$(SolutionDir)Vort
 xcopy "$(TargetDir)QModInstaller.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\plugins\QModManager\"  /I /Q /Y
 xcopy "$(TargetDir)QModInstaller.xml" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\plugins\QModManager\"   /I /Q /Y
 
-powershell Compress-Archive -Path '$(SolutionDir)VortexBuild\$(Configuration)\Bepinex' -DestinationPath '$(SolutionDir)VortexBuild\QModManager_$(Configuration).zip' -Force
+powershell Compress-Archive -Path '$(SolutionDir)VortexBuild\$(Configuration)\BepInEx' -DestinationPath '$(SolutionDir)VortexBuild\QModManager_$(Configuration).zip' -Force
 powershell Compress-Archive -LiteralPath '$(SolutionDir)VortexBuild\$(Configuration)\doorstop_config.ini', '$(SolutionDir)VortexBuild\$(Configuration)\winhttp.dll' -DestinationPath '$(SolutionDir)VortexBuild\QModManager_$(Configuration).zip' -Update
 
 echo F|xcopy /S /Q /Y /F  "$(SolutionDir)Installer\$(Configuration).iss" "$(TargetDir)\QModsInstallerScript.iss"

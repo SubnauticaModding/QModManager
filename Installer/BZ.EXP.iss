@@ -76,6 +76,7 @@ Source: "QModManager.UnityAudioFixer.xml"; DestDir: "{app}\BepInEx\patchers\QMod
 
 ; BepInEx
 Source: "..\..\Dependencies\BepInEx\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs replacesameversion sharedfile uninsnosharedfileprompt;
+Source: "..\..\Dependencies\BZ.EXP\BepInEx.cfg"; DestDir: "{app}\BepInEx\config"; Flags: ignoreversion sharedfile uninsnosharedfileprompt;
 
 [Dirs]
 Name: "{app}\QMods"
