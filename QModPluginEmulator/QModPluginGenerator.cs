@@ -73,7 +73,7 @@ namespace QModManager
         }
 
 
-        private static string[] QMMKnownAssemblyPaths = new[] {
+        private readonly static string[] QMMKnownAssemblyPaths = new[] {
 #if !SUBNAUTICA_STABLE
             Path.Combine(QMMPatchersPath, "QModManager.OculusNewtonsoftRedirect.dll"),
 #endif
