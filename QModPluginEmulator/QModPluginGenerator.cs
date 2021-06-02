@@ -4,6 +4,7 @@ using BepInEx.Logging;
 using HarmonyLib;
 using Mono.Cecil;
 #if SUBNAUTICA_STABLE
+using System.Collections;
 using Oculus.Newtonsoft.Json;
 #else
 using Newtonsoft.Json;
@@ -12,19 +13,18 @@ using QModManager.API;
 using QModManager.Patching;
 using QModManager.Utility;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text.RegularExpressions;
-using QModManager.API.ModLoading;
 using TypeloaderCache = System.Collections.Generic.Dictionary<string, BepInEx.Bootstrap.CachedAssembly<BepInEx.PluginInfo>>;
 using QMMAssemblyCache = System.Collections.Generic.Dictionary<string, long>;
 
 namespace QModManager
 {
+    using QModInstaller.BepInEx.Plugins;
+
     public static class QModPluginGenerator
     {
         internal static readonly string QModsPath = Path.Combine(Paths.GameRootPath, "QMods");
@@ -44,36 +44,25 @@ namespace QModManager
         internal static Dictionary<string, QMod> QModsToLoadById;
         internal static Dictionary<string, PluginInfo> QModPluginInfos;
         internal static List<PluginInfo> InitialisedQModPlugins;
-        private static Initializer Initializer;
-        private static List<QMod> ModsToLoad;
         private static Harmony Harmony;
         internal static IVersionParser VersionParserService { get; set; } = new VersionParser();
 
         private static TypeloaderCache PluginCache;
 
         [Obsolete("Should not be used!", true)]
-        public static void Finish()
+        public static void Initialize()
         {
             try
             {
                 PluginCache = GetPluginCache();
                 Harmony = new Harmony("QModManager.QModPluginGenerator");
-                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-                {
-                    if (assembly?.GetName()?.Name?.Contains("MirrorInternalLogs") ?? false)
-                    {
-                        Type type = AccessTools.TypeByName("MirrorInternalLogs.Util.LibcHelper");
-                        var method = type?.GetMethod("Format");
-
-                        if (method != null)
-                            Harmony.Patch(method, postfix: new HarmonyMethod(typeof(QModPluginGenerator), nameof(QModPluginGenerator.LibcHelper_Format_Postfix)));
-                        break;
-                    }
-                }
                 Harmony.Patch(
                     typeof(TypeLoader).GetMethod(nameof(TypeLoader.FindPluginTypes)).MakeGenericMethod(typeof(PluginInfo)),
                     postfix: new HarmonyMethod(typeof(QModPluginGenerator).GetMethod(nameof(TypeLoaderFindPluginTypesPostfix))));
 
+                Harmony.Patch(
+                    typeof(MetadataHelper).GetMethod(nameof(MetadataHelper.GetMetadata), new Type[] { typeof(object) }),
+                        prefix: new HarmonyMethod(AccessTools.Method(typeof(QModPluginGenerator), nameof(QModPluginGenerator.MetadataHelperGetMetadataPrefix))));
             }
             catch (Exception ex)
             {
@@ -83,126 +72,8 @@ namespace QModManager
             }
         }
 
-        private readonly static List<Regex> DirtyRegexPatterns = new List<Regex>() {
-            new Regex(@"([\r\n]+)?(\(Filename: .*\))$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(Replacing cell.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(Resetting cell with.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(PerformGarbage.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(Fallback handler could not load.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(Heartbeat CSV.*,[0-9])$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(L0: PerformGarbageCollection ->.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(L0: CellManager::EstimateBytes.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-            new Regex(@"^(Kinematic body only supports Speculative Continuous collision detection.*)$", RegexOptions.Compiled | RegexOptions.Multiline),
-        };
 
-        private static void LibcHelper_Format_Postfix(ref string __result)
-        {
-            foreach (Regex pattern in DirtyRegexPatterns)
-            {
-                __result = pattern.Replace(__result, string.Empty).Trim();
-            }
-        }
-
-        private static bool initialized = false;
-#if SUBNAUTICA_STABLE
-        [HarmonyPatch(typeof(SystemsSpawner), nameof(SystemsSpawner.Awake))]
-        [HarmonyPrefix]
-        private static void PreInitializeQMM()
-        {
-            if (initialized)
-            {
-                return;
-            }
-            initialized = true;
-
-            Patcher.Patch(); // Run QModManager patch
-
-            ModsToLoad = QModsToLoad.ToList();
-            Initializer = new Initializer(Patcher.CurrentlyRunningGame);
-            Initializer.InitializeMods(ModsToLoad, PatchingOrder.MetaPreInitialize);
-            Initializer.InitializeMods(ModsToLoad, PatchingOrder.PreInitialize);
-            Initializer.InitializeMods(ModsToLoad, PatchingOrder.NormalInitialize);
-            Initializer.InitializeMods(ModsToLoad, PatchingOrder.PostInitialize);
-            Initializer.InitializeMods(ModsToLoad, PatchingOrder.MetaPostInitialize);
-
-            SummaryLogger.ReportIssues(ModsToLoad);
-            SummaryLogger.LogSummaries(ModsToLoad);
-            foreach(Dialog dialog in Patcher.Dialogs)
-            {
-                dialog.Show();
-            }
-
-        }
-#else
-        [HarmonyPatch(typeof(PreStartScreen), nameof(PreStartScreen.Start))]
-        [HarmonyPrefix]
-        private static void PreInitializeQMM()
-        {
-            if (initialized)
-            {
-                return;
-            }
-            initialized = true;
-
-            Patcher.Patch(); // Run QModManager patch
-
-            ModsToLoad = QModsToLoad.ToList();
-            Initializer = new Initializer(Patcher.CurrentlyRunningGame);
-            Initializer.InitializeMods(ModsToLoad, PatchingOrder.MetaPreInitialize);
-            Initializer.InitializeMods(ModsToLoad, PatchingOrder.PreInitialize);
-
-            Harmony.Patch(
-                AccessTools.Method(
-#if SUBNAUTICA
-                    typeof(PlatformUtils), nameof(PlatformUtils.PlatformInitAsync)
-#elif BELOWZERO
-                    typeof(SpriteManager), nameof(SpriteManager.OnLoadedSpriteAtlases)
-#endif
-                    ), postfix: new HarmonyMethod(AccessTools.Method(typeof(QModPluginGenerator), nameof(QModPluginGenerator.InitializeQMM))));
-        }
-
-#if SUBNAUTICA_EXP
-        private static IEnumerator InitializeQMM(IEnumerator result)
-        {
-            if (ModsToLoad != null)
-            {
-                yield return result;
-
-                Initializer.InitializeMods(ModsToLoad, PatchingOrder.NormalInitialize);
-                Initializer.InitializeMods(ModsToLoad, PatchingOrder.PostInitialize);
-                Initializer.InitializeMods(ModsToLoad, PatchingOrder.MetaPostInitialize);
-
-                SummaryLogger.ReportIssues(ModsToLoad);
-                SummaryLogger.LogSummaries(ModsToLoad);
-                foreach (Dialog dialog in Patcher.Dialogs)
-                {
-                    dialog.Show();
-                }
-            }
-            yield break;
-        }
-#elif BELOWZERO
-        private static void InitializeQMM()
-        {
-            if (ModsToLoad != null)
-            {
-                Initializer.InitializeMods(ModsToLoad, PatchingOrder.NormalInitialize);
-                Initializer.InitializeMods(ModsToLoad, PatchingOrder.PostInitialize);
-                Initializer.InitializeMods(ModsToLoad, PatchingOrder.MetaPostInitialize);
-
-                SummaryLogger.ReportIssues(ModsToLoad);
-                SummaryLogger.LogSummaries(ModsToLoad);
-
-                foreach (Dialog dialog in Patcher.Dialogs)
-                {
-                    dialog.Show();
-                }
-            }
-        }
-#endif
-#endif
-
-        private static string[] QMMKnownAssemblyPaths = new[] {
+        private readonly static string[] QMMKnownAssemblyPaths = new[] {
 #if !SUBNAUTICA_STABLE
             Path.Combine(QMMPatchersPath, "QModManager.OculusNewtonsoftRedirect.dll"),
 #endif
@@ -339,7 +210,6 @@ namespace QModManager
         [Obsolete("Should not be used!", true)]
         public static void TypeLoaderFindPluginTypesPostfix(ref Dictionary<string, List<PluginInfo>> __result, string directory)
         {
-            Harmony.PatchAll(typeof(QModPluginGenerator));
             if (directory != Paths.PluginPath)
                 return;
 
@@ -429,17 +299,18 @@ namespace QModManager
                 __result[Assembly.GetExecutingAssembly().Location] = QModPluginInfos.Values.Distinct().ToList();
 
                 TypeLoader.SaveAssemblyCache(GeneratedPluginCache, result);
-
             }
             catch (Exception ex)
             {
                 Logger.LogFatal($"Failed to emulate QMods as plugins");
                 Logger.LogFatal(ex.ToString());
             }
+            finally
+            {
+                QMMLoader.QModsToLoad = QModsToLoad?.ToList();
+            }
         }
 
-        [HarmonyPatch(typeof(MetadataHelper), nameof(MetadataHelper.GetMetadata), new Type[] { typeof(object) })]
-        [HarmonyPrefix]
         private static bool MetadataHelperGetMetadataPrefix(object plugin, ref BepInPlugin __result)
         {
             if (plugin is QModPlugin)
