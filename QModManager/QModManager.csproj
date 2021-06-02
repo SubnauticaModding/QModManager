@@ -108,7 +108,7 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup Condition="'$(Configuration)|$(Platform)' == 'BZ.EXP|AnyCPU'">
+  <ItemGroup Condition="'$(Configuration)' == 'BZ.EXP'">
     <Reference Include="Sentry">
       <HintPath>..\Dependencies\$(Configuration)\Sentry.dll</HintPath>
       <Private>False</Private>
