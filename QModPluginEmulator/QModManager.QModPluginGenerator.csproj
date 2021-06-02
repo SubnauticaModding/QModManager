@@ -107,7 +107,7 @@ xcopy "$(TargetDir)QModManager.OculusNewtonsoftRedirect.dll" "$(SolutionDir)Vort
 xcopy "$(TargetDir)QModInstaller.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\plugins\QModManager\"  /I /Q /Y
 xcopy "$(TargetDir)QModInstaller.xml" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\plugins\QModManager\"   /I /Q /Y
 
-powershell Compress-Archive -Path '$(SolutionDir)VortexBuild\$(Configuration)\Bepinex' -DestinationPath '$(SolutionDir)VortexBuild\QModManager_$(Configuration).zip' -Force
+powershell Compress-Archive -Path '$(SolutionDir)VortexBuild\$(Configuration)\BepInEx' -DestinationPath '$(SolutionDir)VortexBuild\QModManager_$(Configuration).zip' -Force
 powershell Compress-Archive -LiteralPath '$(SolutionDir)VortexBuild\$(Configuration)\doorstop_config.ini', '$(SolutionDir)VortexBuild\$(Configuration)\winhttp.dll' -DestinationPath '$(SolutionDir)VortexBuild\QModManager_$(Configuration).zip' -Update
 
 echo F|xcopy /S /Q /Y /F  "$(SolutionDir)Installer\$(Configuration).iss" "$(TargetDir)\QModsInstallerScript.iss"
