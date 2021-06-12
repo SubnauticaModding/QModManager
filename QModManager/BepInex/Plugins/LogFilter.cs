@@ -13,7 +13,7 @@ namespace QModInstaller.BepInEx.Plugins
     {
         internal const string PluginGuid = "QModManager.LogFilter";
         internal const string PluginName = PluginGuid;
-        internal const string PluginVersion = "4.1.4";
+        internal const string PluginVersion = "4.2";
 
         private void Awake()
         {
