@@ -92,7 +92,7 @@ xcopy "$(SolutionDir)Dependencies\BepInEx" "$(SolutionDir)VortexBuild\$(Configur
 xcopy "$(SolutionDir)Dependencies\$(Configuration)\BepInEx.cfg" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\config\"  /I /Q /Y
 mkdir "$(SolutionDir)VortexBuild\$(Configuration)\QMods"
 xcopy "$(SolutionDir)Dependencies\cldb.dat" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\" /I /Q /Y
-xcopy "$(SolutionDir)packages\AssetsTools.NET.2.0.3\lib\net35\AssetsTools.NET.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\" /I /Q /Y
+xcopy "$(SolutionDir)packages\AssetsTools.NET.2.0.9\lib\net40\AssetsTools.NET.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\" /I /Q /Y
 xcopy "$(TargetDir)QModManager.exe" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\"   /I /Q /Y
 xcopy "$(TargetDir)QModManager.QModPluginGenerator.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\"  /I /Q /Y
 xcopy "$(TargetDir)QModManager.UnityAudioFixer.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\"  /I /Q /Y

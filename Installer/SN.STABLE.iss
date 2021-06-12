@@ -59,7 +59,7 @@ Source: "InstallerExtensions.dll"; Flags: DontCopy
 
 ; Files required by QModManager itself
 ; Dependencies
-Source: "..\..\packages\AssetsTools.NET.2.0.3\lib\net35\AssetsTools.NET.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+Source: "..\..\packages\AssetsTools.NET.2.0.9\lib\net40\AssetsTools.NET.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\..\Dependencies\cldb.dat"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 
 ; QMM
