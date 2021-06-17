@@ -110,8 +110,7 @@ xcopy "$(TargetDir)QModManager.OculusNewtonsoftRedirect.dll" "$(SolutionDir)Vort
 xcopy "$(TargetDir)QModInstaller.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\plugins\QModManager\"  /I /Q /Y
 xcopy "$(TargetDir)QModInstaller.xml" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\plugins\QModManager\"   /I /Q /Y
 
-$(SolutionDir)packages\7-Zip.CommandLine.18.1.0\tools\7za.exe a "$(SolutionDir)VortexBuild\QModManager_$(Configuration).zip" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx" -r
-$(SolutionDir)packages\7-Zip.CommandLine.18.1.0\tools\7za.exe a "$(SolutionDir)VortexBuild\QModManager_$(Configuration).zip" "$(SolutionDir)VortexBuild\$(Configuration)\doorstop_config.ini" "$(SolutionDir)VortexBuild\$(Configuration)\winhttp.dll"
+$(SolutionDir)packages\7-Zip.CommandLine.18.1.0\tools\7za.exe a "$(SolutionDir)VortexBuild\QModManager_$(Configuration).zip" "$(SolutionDir)VortexBuild\$(Configuration)\*"
 
 echo F|xcopy /S /Q /Y /F  "$(SolutionDir)Installer\$(Configuration).iss" "$(TargetDir)\QModsInstallerScript.iss"
 "$(SolutionDir)Dependencies\Inno\ISCC.exe" "$(TargetDir)QModsInstallerScript.iss"</PostBuildEvent>
