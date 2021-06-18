@@ -90,7 +90,7 @@ namespace QModManager
             AssetsFileInstance afi = am.LoadAssetsFile(path, false);
             am.LoadClassDatabase(Path.Combine(UnityAudioFixerPath, "cldb.dat"));
             AssetFileInfoEx audioInfo = afi.table.GetAssetInfo(4);
-            AssetTypeInstance audioAti = am.GetATI(afi.file, audioInfo);
+            AssetTypeInstance audioAti = am.GetTypeInstance(afi.file, audioInfo);
             AssetTypeValueField audioBaseField = audioAti.GetBaseField();
             audioBaseField.Get("m_DisableAudio").GetValue().Set(newValue);
             byte[] audioAsset;

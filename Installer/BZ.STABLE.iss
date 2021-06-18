@@ -5,7 +5,7 @@
 #endif
 
 #define Name "QModManager" ; The name of the game will be added after it
-#define Version "4.1.4"
+#define Version "4.2"
 #define Author "QModManager"
 #define URL "https://github.com/QModManager/QModManager"
 #define SupportURL "https://discord.gg/UpWuWwq"
@@ -59,7 +59,7 @@ Source: "InstallerExtensions.dll"; Flags: DontCopy
 
 ; Files required by QModManager itself
 ; Dependencies
-Source: "..\..\packages\AssetsTools.NET.2.0.3\lib\net35\AssetsTools.NET.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
+Source: "..\..\packages\AssetsTools.NET.2.0.9\lib\net40\AssetsTools.NET.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\..\Dependencies\cldb.dat"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 Source: "..\..\Dependencies\Oculus.Newtonsoft.Json.dll"; DestDir: "{app}\BepInEx\patchers\QModManager"; Flags: ignoreversion;
 
@@ -76,6 +76,7 @@ Source: "QModManager.UnityAudioFixer.xml"; DestDir: "{app}\BepInEx\patchers\QMod
 
 ; BepInEx
 Source: "..\..\Dependencies\BepInEx\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs replacesameversion sharedfile uninsnosharedfileprompt;
+Source: "..\..\Dependencies\BZ.STABLE\BepInEx.cfg"; DestDir: "{app}\BepInEx\config"; Flags: ignoreversion sharedfile uninsnosharedfileprompt;
 
 [Dirs]
 Name: "{app}\QMods"

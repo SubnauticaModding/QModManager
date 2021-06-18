@@ -36,6 +36,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QModManager.QModPluginGener
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QModManager.OculusNewtonsoftRedirect", "OculusNewtonsoftRedirect\QModManager.OculusNewtonsoftRedirect.csproj", "{25558450-FF33-4FDF-91C7-0C5C00A94A57}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build Scripts", "Build Scripts", "{075884D3-CC6F-4B56-B050-C31A8E11FA52}"
+	ProjectSection(SolutionItems) = preProject
+		Scripts\QModPluginGenerator-post-build.cmd = Scripts\QModPluginGenerator-post-build.cmd
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		BZ.EXP|Any CPU = BZ.EXP|Any CPU
@@ -223,6 +228,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{075884D3-CC6F-4B56-B050-C31A8E11FA52} = {5A8D179E-C749-4346-AD81-05F11C082A1C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {54A73C4F-4981-48CC-AD91-27D3D090D5D4}

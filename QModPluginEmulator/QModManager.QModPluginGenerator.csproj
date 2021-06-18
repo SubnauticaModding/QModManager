@@ -13,42 +13,27 @@
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SN.STABLE|AnyCPU'">
     <OutputPath>..\Build\$(Configuration)\</OutputPath>
     <DefineConstants>SUBNAUTICA;SUBNAUTICA_STABLE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SN.EXP|AnyCPU'">
     <OutputPath>..\Build\$(Configuration)\</OutputPath>
     <DefineConstants>SUBNAUTICA;SUBNAUTICA_EXP</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BZ.STABLE|AnyCPU'">
     <OutputPath>..\Build\$(Configuration)\</OutputPath>
     <DefineConstants>BELOWZERO;BELOWZERO_STABLE</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'BZ.EXP|AnyCPU'">
     <OutputPath>..\Build\$(Configuration)\</OutputPath>
     <DefineConstants>BELOWZERO;BELOWZERO_EXP</DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <LangVersion>7.3</LangVersion>
-    <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
@@ -100,30 +85,11 @@
       <Name>QModManager</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>rmdir "$(SolutionDir)VortexBuild\$(Configuration)" /q /s
-xcopy "$(SolutionDir)Dependencies\BepInEx" "$(SolutionDir)VortexBuild\$(Configuration)"  /E /H /I /Q /Y
-xcopy "$(SolutionDir)Dependencies\cldb.dat" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\" /I /Q /Y
-xcopy "$(SolutionDir)packages\AssetsTools.NET.2.0.3\lib\net35\AssetsTools.NET.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\" /I /Q /Y
-xcopy "$(TargetDir)QModManager.exe" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\"   /I /Q /Y
-xcopy "$(TargetDir)QModManager.QModPluginGenerator.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\"  /I /Q /Y
-xcopy "$(TargetDir)QModManager.UnityAudioFixer.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\"  /I /Q /Y
-xcopy "$(TargetDir)QModManager.UnityAudioFixer.xml" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\" /I /Q /Y
-
-if NOT "$(ConfigurationName)"  =="SN.STABLE" (
-
-xcopy "$(SolutionDir)Dependencies\Oculus.Newtonsoft.Json.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\" /I /Q /Y
-xcopy "$(TargetDir)QModManager.OculusNewtonsoftRedirect.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\"  /I /Q /Y
-)
-
-xcopy "$(TargetDir)QModInstaller.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\plugins\QModManager\"  /I /Q /Y
-xcopy "$(TargetDir)QModInstaller.xml" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\plugins\QModManager\"   /I /Q /Y
-
-powershell Compress-Archive -Path '$(SolutionDir)VortexBuild\$(Configuration)\Bepinex' -DestinationPath '$(SolutionDir)VortexBuild\QModManager_$(Configuration).zip' -Force
-powershell Compress-Archive -LiteralPath '$(SolutionDir)VortexBuild\$(Configuration)\doorstop_config.ini', '$(SolutionDir)VortexBuild\$(Configuration)\winhttp.dll' -DestinationPath '$(SolutionDir)VortexBuild\QModManager_$(Configuration).zip' -Update
-
-echo F|xcopy /S /Q /Y /F  "$(SolutionDir)Installer\$(Configuration).iss" "$(TargetDir)\QModsInstallerScript.iss"
-"$(SolutionDir)Dependencies\Inno\ISCC.exe" "$(TargetDir)QModsInstallerScript.iss"</PostBuildEvent>
+    <PostBuildEvent>call "$(SolutionDir)\Scripts\QModPluginGenerator-post-build.cmd" "$(SolutionDir)" "$(TargetDir)" "$(ConfigurationName)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
