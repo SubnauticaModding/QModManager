@@ -85,32 +85,11 @@
       <Name>QModManager</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>rmdir "$(SolutionDir)VortexBuild\$(Configuration)" /q /s
-xcopy "$(SolutionDir)Dependencies\BepInEx" "$(SolutionDir)VortexBuild\$(Configuration)"  /E /H /I /Q /Y
-xcopy "$(SolutionDir)Dependencies\$(Configuration)\BepInEx.cfg" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\config\"  /I /Q /Y
-mkdir "$(SolutionDir)VortexBuild\$(Configuration)\QMods"
-xcopy "$(SolutionDir)Dependencies\cldb.dat" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\" /I /Q /Y
-xcopy "$(SolutionDir)packages\AssetsTools.NET.2.0.9\lib\net40\AssetsTools.NET.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\" /I /Q /Y
-xcopy "$(TargetDir)QModManager.exe" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\"   /I /Q /Y
-xcopy "$(TargetDir)QModManager.QModPluginGenerator.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\"  /I /Q /Y
-xcopy "$(TargetDir)QModManager.UnityAudioFixer.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\"  /I /Q /Y
-xcopy "$(TargetDir)QModManager.UnityAudioFixer.xml" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\" /I /Q /Y
-
-if NOT "$(ConfigurationName)"  =="SN.STABLE" (
-
-xcopy "$(SolutionDir)Dependencies\Oculus.Newtonsoft.Json.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\" /I /Q /Y
-xcopy "$(TargetDir)QModManager.OculusNewtonsoftRedirect.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\patchers\QModManager\"  /I /Q /Y
-)
-
-xcopy "$(TargetDir)QModInstaller.dll" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\plugins\QModManager\"  /I /Q /Y
-xcopy "$(TargetDir)QModInstaller.xml" "$(SolutionDir)VortexBuild\$(Configuration)\BepInEx\plugins\QModManager\"   /I /Q /Y
-
-powershell Compress-Archive -Path '$(SolutionDir)VortexBuild\$(Configuration)\BepInEx' -DestinationPath '$(SolutionDir)VortexBuild\QModManager_$(Configuration).zip' -Force
-powershell Compress-Archive -LiteralPath '$(SolutionDir)VortexBuild\$(Configuration)\doorstop_config.ini', '$(SolutionDir)VortexBuild\$(Configuration)\winhttp.dll' -DestinationPath '$(SolutionDir)VortexBuild\QModManager_$(Configuration).zip' -Update
-
-echo F|xcopy /S /Q /Y /F  "$(SolutionDir)Installer\$(Configuration).iss" "$(TargetDir)\QModsInstallerScript.iss"
-"$(SolutionDir)Dependencies\Inno\ISCC.exe" "$(TargetDir)QModsInstallerScript.iss"</PostBuildEvent>
+    <PostBuildEvent>call "$(SolutionDir)\Scripts\QModPluginGenerator-post-build.cmd" "$(SolutionDir)" "$(TargetDir)" "$(ConfigurationName)"</PostBuildEvent>
   </PropertyGroup>
 </Project>
