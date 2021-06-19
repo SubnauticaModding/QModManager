@@ -50,7 +50,7 @@ namespace QModManager
         private static TypeloaderCache PluginCache;
 
         [Obsolete("Should not be used!", true)]
-        public static void Initialize()
+        public static void Finish()
         {
             try
             {
