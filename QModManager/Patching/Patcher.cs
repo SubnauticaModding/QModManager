@@ -67,12 +67,24 @@ namespace QModManager.Patching
                     Logger.Exception(e);
                 }
 
-                if (!QModBaseDir.StartsWith(Environment.CurrentDirectory))
+                var normalizedModDir = Path.GetFullPath(QModBaseDir);
+                if (!normalizedModDir.EndsWith($"{Path.DirectorySeparatorChar}") && !normalizedModDir.EndsWith($"{Path.AltDirectorySeparatorChar}"))
+                    normalizedModDir += $"{Path.DirectorySeparatorChar}";
+                var ModDirUri = new Uri(normalizedModDir);
+
+                var normalizedGameDir = Path.GetFullPath(Environment.CurrentDirectory);
+                
+                if (!normalizedGameDir.EndsWith($"{Path.DirectorySeparatorChar}") && !normalizedGameDir.EndsWith($"{Path.AltDirectorySeparatorChar}"))
+                    normalizedGameDir += $"{Path.DirectorySeparatorChar}";
+                var GameDirUri = new Uri(normalizedGameDir);
+
+
+                if (!GameDirUri.IsBaseOf(ModDirUri))
                 {
                     try
                     {
                         Logger.Info("Mods Folder structure:");
-                        IOUtilities.LogFolderStructureAsTree(QModBaseDir);
+                        IOUtilities.LogFolderStructureAsTree(Path.Combine(BepInEx.Paths.BepInExRootPath, ".."));
                         Logger.Info("Mods Folder structure ended.");
                     }
                     catch (Exception e)
