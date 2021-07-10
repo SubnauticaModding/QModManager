@@ -13,7 +13,7 @@ namespace QModManager.Patching
     {
         internal const string IDRegex = "[^0-9a-zA-Z_]";
 
-        internal static string QModBaseDir => Path.Combine(Environment.CurrentDirectory, "QMods");
+        internal static string QModBaseDir => Path.Combine(BepInEx.Paths.BepInExRootPath, "../QMods");
 
         private static bool Patched = false;
         internal static QModGame CurrentlyRunningGame { get; private set; } = QModGame.None;
@@ -54,16 +54,32 @@ namespace QModManager.Patching
                     return;
                 }
 
+
                 try
                 {
-                    Logger.Info("Folder structure:");
+                    Logger.Info("Game Folder structure:");
                     IOUtilities.LogFolderStructureAsTree();
-                    Logger.Info("Folder structure ended.");
+                    Logger.Info("Game Folder structure ended.");
                 }
                 catch (Exception e)
                 {
                     Logger.Error("There was an error while trying to display the folder structure.");
                     Logger.Exception(e);
+                }
+
+                if (!QModBaseDir.StartsWith(Environment.CurrentDirectory))
+                {
+                    try
+                    {
+                        Logger.Info("Mods Folder structure:");
+                        IOUtilities.LogFolderStructureAsTree(QModBaseDir);
+                        Logger.Info("Mods Folder structure ended.");
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error("There was an error while trying to display the folder structure.");
+                        Logger.Exception(e);
+                    }
                 }
 
                 PirateCheck.IsPirate(Environment.CurrentDirectory);
