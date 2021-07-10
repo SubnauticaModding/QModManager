@@ -17,8 +17,7 @@ namespace QModManager
     public static class UnityAudioFixer
     {
         internal static string UnityAudioFixerPath => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        internal static string GameRootPath => Environment.CurrentDirectory;
-        internal static string DataPath => Directory.GetDirectories(GameRootPath, "*_Data", SearchOption.TopDirectoryOnly).SingleOrDefault();
+        internal static string DataPath => Directory.GetDirectories(Paths.GameRootPath, "*_Data", SearchOption.TopDirectoryOnly).SingleOrDefault();
         internal static QModGame Game
         {
             get
