@@ -1,5 +1,6 @@
 ﻿using AssetsTools.NET;
 using AssetsTools.NET.Extra;
+using BepInEx;
 using BepInEx.Logging;
 using Mono.Cecil;
 using QModManager.API;
