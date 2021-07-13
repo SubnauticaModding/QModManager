@@ -25,8 +25,9 @@
             LogStatus(mods, ModStatus.FailedIdentifyingGame, "Could not identify the supported game for the following mods:", Logger.Level.Error);
             LogStatus(mods, ModStatus.DuplicateIdDetected, "Found the following duplicate mods:", Logger.Level.Error);
             LogStatus(mods, ModStatus.DuplicatePatchAttemptDetected, "Found the following mods attempted duplicate patching:", Logger.Level.Error);
-            LogStatus(mods, ModStatus.MissingCoreInfo, "The following mods could not be loaded for patching due to a missing mod.json file:", Logger.Level.Error);
-            LogStatus(mods, ModStatus.InvalidCoreInfo, "The following mods could not be loaded for patching due to an invalid mod.json file:", Logger.Level.Error);
+            LogStatus(mods, ModStatus.MissingManifest, "The following mods could not be loaded for patching due to a missing mod.json file:", Logger.Level.Error);
+            LogStatus(mods, ModStatus.ManifestParsingError, "The following mods could not be loaded for patching due to an unreadable mod.json file:", Logger.Level.Error);
+            LogStatus(mods, ModStatus.InvalidCoreInfo, "The following mods could not be loaded for patching due to missing or invalid data in the mod.json file:", Logger.Level.Error);
             LogStatus(mods, ModStatus.MissingAssemblyFile, "The following mods had no DLL file to load:", Logger.Level.Error);
             LogStatus(mods, ModStatus.FailedLoadingAssemblyFile, "The following mods failing loading their DLL files:", Logger.Level.Error);
             LogStatus(mods, ModStatus.UnidentifiedMod, "The following mods could not be identified for loading:", Logger.Level.Error);

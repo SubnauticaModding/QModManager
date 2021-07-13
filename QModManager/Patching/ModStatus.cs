@@ -18,11 +18,12 @@
         FailedIdentifyingGame = 9,
         DuplicateIdDetected = 10,
         DuplicatePatchAttemptDetected = 11,
-        MissingCoreInfo = 12,
-        InvalidCoreInfo = 13,
-        MissingAssemblyFile = 14,
-        FailedLoadingAssemblyFile = 15,
-        UnidentifiedMod = 16,
-        BannedID = 17,
+        MissingManifest = 12,
+        ManifestParsingError = 13,
+        InvalidCoreInfo = 14,
+        MissingAssemblyFile = 15,
+        FailedLoadingAssemblyFile = 16,
+        UnidentifiedMod = 17,
+        BannedID = 18,
     }
 }
