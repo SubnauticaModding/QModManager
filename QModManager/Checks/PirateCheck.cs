@@ -6,12 +6,14 @@ namespace QModManager.Checks
 {
     internal static class PirateCheck
     {
-        internal static void PirateDetected()
+        private const int FileSize = 220000;
+      
+        private static void PirateDetected()
         {
             Logger.Warn("Ahoy, matey! Ye be a pirate!");
         }
-
-        internal static readonly HashSet<string> CrackedFiles = new HashSet<string>()
+        
+        private static readonly HashSet<string> CrackedFiles = new HashSet<string>()
         {
             "steam_api64.cdx",
             "steam_api64.ini",
@@ -29,20 +31,20 @@ namespace QModManager.Checks
 
         internal static void IsPirate(string folder)
         {
-            string steamDll = Path.Combine(folder, "steam_api64.dll");
+            var steamDll = Path.Combine(folder, "steam_api64.dll");
             if (File.Exists(steamDll))
             {
-                FileInfo fileInfo = new FileInfo(steamDll);
-
-                if (fileInfo.Length > 220000)
+                FileInfo dllInfo = new FileInfo(steamDll);
+                if (dllInfo.Length > FileSize)
                 {
-                    PirateDetected();
-                    return;
+                    FileChecking(folder);
                 }
             }
-
-            foreach (string file in CrackedFiles)
-            {
+        }
+        
+        private static void FileChecking(string folder)
+        {
+            foreach (var file in CrackedFiles) {
                 if (File.Exists(Path.Combine(folder, file)))
                 {
                     PirateDetected();
