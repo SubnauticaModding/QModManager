@@ -22,8 +22,12 @@
                 __instance.AddToggleOption(ModsTab, "Enable console", Config.EnableConsole, new UnityAction<bool>(value =>
                 {
                     Config.EnableConsole = value;
+#if SUBNAUTICA
                     DevConsole.disableConsole = !value;
                     UnityEngine.PlayerPrefs.SetInt("UWE.DisableConsole", value ? 0 : 1);
+#else
+                    PlatformUtils.SetDevToolsEnabled(value);
+#endif
                 }));
 
                 __instance.AddToggleOption(ModsTab, "Enable debug logs", Config.EnableDebugLogs, new UnityAction<bool>(value => Config.EnableDebugLogs = value));
