@@ -68,8 +68,8 @@
 
                 if (!File.Exists(jsonFile))
                 {
-                    Logger.Error($"Unable to set up mod in folder \"{folderName}\"");
-                    earlyErrors.Add(new QModPlaceholder(folderName, ModStatus.MissingCoreInfo));
+                    Logger.Error($"Unable to set up mod in folder \"{folderName}\" due to missing mod.json");
+                    earlyErrors.Add(new QModPlaceholder(folderName, ModStatus.MissingManifest));
                     continue;
                 }
 
@@ -77,8 +77,8 @@
 
                 if (mod == null)
                 {
-                    Logger.Error($"Unable to set up mod in folder \"{folderName}\"");
-                    earlyErrors.Add(new QModPlaceholder(folderName, ModStatus.MissingCoreInfo));
+                    Logger.Error($"Unable to set up mod in folder \"{folderName}\" due to invalid json in the mod.json");
+                    earlyErrors.Add(new QModPlaceholder(folderName, ModStatus.ManifestParsingError));
                     continue;
                 }
 
