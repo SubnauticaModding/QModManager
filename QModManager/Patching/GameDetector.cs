@@ -23,7 +23,7 @@
 #elif BELOWZERO_STABLE
             { QModGame.BelowZero, 45391 }
 #elif SUBNAUTICA_EXP
-            { QModGame.Subnautica, 68020 }
+            { QModGame.Subnautica, 68186 }
 #elif BELOWZERO_EXP
             { QModGame.BelowZero, 44291 }
 #endif
