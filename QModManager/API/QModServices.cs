@@ -138,5 +138,13 @@
             var callingMod = GetMod(ReflectionHelper.CallingAssemblyByStackTrace());
             MainMenuMessages.Add(msg, callingMod?.DisplayName, size, color, autoformat);
         }
+
+        /// <summary>
+        /// Gets the currently running game.
+        /// </summary>
+        /// <value>
+        /// The currently running game.
+        /// </value>
+        public QModGame CurrentlyRunningGame => Patcher.CurrentlyRunningGame;
     }
 }
