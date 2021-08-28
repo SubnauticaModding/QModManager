@@ -98,7 +98,7 @@ namespace QModManager.Patching
 
                 PatchHarmony();
 
-                if (NitroxCheck.IsInstalled)
+                if (NitroxCheck.IsRunning)
                 {
                     Logger.Warn($"Nitrox was detected running!");
 

@@ -7,8 +7,9 @@ namespace QModManager.Checks
 {
     internal static class NitroxCheck
     {
-        internal static bool IsInstalled { get; set; } = false;
+        internal static bool IsRunning { get; set; } = false;
 
+        
         [HarmonyPatch(typeof(GameInput), nameof(GameInput.Awake))]
         internal static class AwakePatch
         {
@@ -22,7 +23,7 @@ namespace QModManager.Checks
 
                         if (method.DeclaringType.Name == "Main" && method.Name == "Execute")
                         {
-                            IsInstalled = true;
+                            IsRunning = true;
                         }
                     }
                 }
