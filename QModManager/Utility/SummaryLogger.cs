@@ -34,6 +34,7 @@
             LogStatus(mods, ModStatus.BannedID, "The following mods could not be loaded because they are using a banned ID:", Logger.Level.Error);
             LogStatus(mods, ModStatus.Merged, "The following mods have been merged with QModManager and have been skipped:", Logger.Level.Warn);
             LogStatus(mods, ModStatus.Obsolete, "The following mods are obsolete and have been skipped:", Logger.Level.Warn);
+            LogStatus(mods, ModStatus.NitroxIncompatible, "The following mods are not listed as compatible with Nitrox and have been skipped:", Logger.Level.Warn);
         }
 
         private static void LogStatus(List<QMod> mods, ModStatus statusToReport, string summary, Logger.Level logLevel)

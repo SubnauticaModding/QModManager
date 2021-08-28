@@ -2,6 +2,7 @@
 {
     internal enum ModStatus
     {
+        NitroxIncompatible = -5,
         Obsolete = -4,
         Merged = -3,
         //CanceledByAuthor = -2,
