@@ -1,4 +1,6 @@
-﻿namespace QModManager.API
+﻿using QModManager.Checks;
+
+namespace QModManager.API
 {
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -10,13 +12,13 @@
     /// Services offered to mods.
     /// </summary>
     /// <seealso cref="IQModServices" />
-    public class QModServices : IQModServices
+    public class QModServices: IQModServices
     {
         private static readonly Dictionary<string, IQMod> knownMods = new Dictionary<string, IQMod>();
 
         internal static void LoadKnownMods(List<QMod> loadedMods)
         {
-            foreach (QMod mod in loadedMods)
+            foreach(QMod mod in loadedMods)
                 knownMods.Add(mod.Id, mod);
         }
 
@@ -39,7 +41,7 @@
         /// <returns></returns>
         public IQMod FindModById(string modId)
         {
-            if (knownMods.TryGetValue(modId, out IQMod mod) && mod.Enable)
+            if(knownMods.TryGetValue(modId, out IQMod mod) && mod.Enable)
             {
                 return mod;
             }
@@ -56,7 +58,7 @@
         /// </returns>
         public bool ModPresent(string modId)
         {
-            if (knownMods.TryGetValue(modId, out IQMod mod))
+            if(knownMods.TryGetValue(modId, out IQMod mod))
             {
                 return mod.Enable;
             }
@@ -72,9 +74,9 @@
         /// <exception cref="System.NotImplementedException"></exception>
         public IQMod FindModByAssembly(Assembly modAssembly)
         {
-            foreach (IQMod mod in knownMods.Values)
+            foreach(IQMod mod in knownMods.Values)
             {
-                if (mod.LoadedAssembly == modAssembly)
+                if(mod.LoadedAssembly == modAssembly)
                 {
                     return mod;
                 }
@@ -146,5 +148,14 @@
         /// The currently running game.
         /// </value>
         public QModGame CurrentlyRunningGame => Patcher.CurrentlyRunningGame;
+
+
+        /// <summary>
+        /// Gets a value indicating whether Nitrox is being used.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if Nitrox is being used; otherwise, <c>false</c>.
+        /// </value>
+        public bool NitroxRunning => NitroxCheck.IsRunning;
     }
 }
