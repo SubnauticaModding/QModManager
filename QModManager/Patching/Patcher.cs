@@ -100,12 +100,12 @@ namespace QModManager.Patching
 
                 if (NitroxCheck.IsInstalled)
                 {
-                    Logger.Fatal($"Nitrox was detected!");
+                    Logger.Warn($"Nitrox was detected running!");
 
                     Dialogs.Add(new Dialog()
                     {
-                        message = "Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.",
-                        leftButton = Dialog.Button.Disabled,
+                        message = "Nitrox detected. \nNitrox compatibility with QModManager is HIGHLY EXPERIMENTAL Expect bugs!.",
+                        leftButton = Dialog.Button.Close,
                         rightButton = Dialog.Button.Disabled,
                         color = Dialog.DialogColor.Red,
                     });
