@@ -39,5 +39,13 @@
         /// The currently running game.
         /// </value>
         QModGame CurrentlyRunningGame { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether Nitrox is being used.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if Nitrox is being used; otherwise, <c>false</c>.
+        /// </value>
+        bool NitroxRunning { get; }
     }
 }
