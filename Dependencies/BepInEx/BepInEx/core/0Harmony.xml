@@ -1011,6 +1011,7 @@
         </member>
         <member name="M:HarmonyLib.Harmony.PatchAll">
              <summary>Searches the current assembly for Harmony annotations and uses them to create patches</summary>
+             <remarks>This method can fail to use the correct assembly when being inlined. It calls StackTrace.GetFrame(1) which can point to the wrong method/assembly. If you are unsure or run into problems, use <code>PatchAll(Assembly.GetExecutingAssembly())</code> instead.</remarks>
             
         </member>
         <member name="M:HarmonyLib.Harmony.CreateProcessor(System.Reflection.MethodBase)">
@@ -3147,6 +3148,44 @@
              <param name="method">The method involved</param>
              <param name="logger">The logger</param>
              <returns>True if current position is invalid and error was logged</returns>
+            
+        </member>
+        <member name="M:HarmonyLib.CodeMatcher.ThrowIfInvalid(System.String)">
+             <summary>Throw an InvalidOperationException if current state is invalid (position out of bounds / last match failed)</summary>
+             <param name="explanation">Explanation of where/why the exception was thrown that will be added to the exception message</param>
+             <returns>The same code matcher</returns>
+            
+        </member>
+        <member name="M:HarmonyLib.CodeMatcher.ThrowIfNotMatch(System.String,HarmonyLib.CodeMatch[])">
+            <summary>Throw an InvalidOperationException if current state is invalid (position out of bounds / last match failed),
+            or if the matches do not match at current position</summary>
+            <param name="explanation">Explanation of where/why the exception was thrown that will be added to the exception message</param>
+            <param name="matches">Some code matches</param>
+            <returns>The same code matcher</returns>
+            
+        </member>
+        <member name="M:HarmonyLib.CodeMatcher.ThrowIfNotMatchForward(System.String,HarmonyLib.CodeMatch[])">
+            <summary>Throw an InvalidOperationException if current state is invalid (position out of bounds / last match failed),
+            or if the matches do not match at any point between current position and the end</summary>
+            <param name="explanation">Explanation of where/why the exception was thrown that will be added to the exception message</param>
+            <param name="matches">Some code matches</param>
+            <returns>The same code matcher</returns>
+            
+        </member>
+        <member name="M:HarmonyLib.CodeMatcher.ThrowIfNotMatchBack(System.String,HarmonyLib.CodeMatch[])">
+            <summary>Throw an InvalidOperationException if current state is invalid (position out of bounds / last match failed),
+            or if the matches do not match at any point between current position and the start</summary>
+            <param name="explanation">Explanation of where/why the exception was thrown that will be added to the exception message</param>
+            <param name="matches">Some code matches</param>
+            <returns>The same code matcher</returns>
+            
+        </member>
+        <member name="M:HarmonyLib.CodeMatcher.ThrowIfFalse(System.String,System.Func{HarmonyLib.CodeMatcher,System.Boolean})">
+            <summary>Throw an InvalidOperationException if current state is invalid (position out of bounds / last match failed),
+            or if the check function returns false</summary>
+            <param name="explanation">Explanation of where/why the exception was thrown that will be added to the exception message</param>
+            <param name="stateCheckFunc">Function that checks validity of current state. If it returns false, an exception is thrown</param>
+            <returns>The same code matcher</returns>
             
         </member>
         <member name="M:HarmonyLib.CodeMatcher.SetInstruction(HarmonyLib.CodeInstruction)">
