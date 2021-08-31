@@ -23,7 +23,7 @@ namespace QModInstaller.BepInEx.Plugins
     {
         internal const string PluginGuid = "QModManager.QMMLoader";
         internal const string PluginName = "QMMLoader";
-        internal const string PluginVersion = "4.2.2.1";
+        internal const string PluginVersion = "4.3.0";
 
         internal static List<QMod> QModsToLoad;
         private static Initializer Initializer;
