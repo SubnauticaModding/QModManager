@@ -35,7 +35,7 @@
                 string.IsNullOrEmpty(mod.DisplayName) ||
                 string.IsNullOrEmpty(mod.Author))
             {
-                mod.Status = ModStatus.MissingCoreInfo;
+                mod.Status = ModStatus.InvalidCoreInfo;
                 return;
             }
 

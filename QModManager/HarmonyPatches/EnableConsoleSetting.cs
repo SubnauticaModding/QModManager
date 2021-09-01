@@ -12,14 +12,27 @@
         [HarmonyPostfix]
         internal static void Postfix()
         {
-            if(DevConsole.disableConsole != !Config.EnableConsole)
+#if BELOWZERO
+            if (PlatformUtils.GetDevToolsEnabled() != Config.EnableConsole)
+#elif SUBNAUTICA_EXP
+            if (PlatformUtils.devToolsEnabled != Config.EnableConsole)
+#else
+            if (DevConsole.disableConsole != !Config.EnableConsole)
+#endif
             {
+#if BELOWZERO
+                PlatformUtils.SetDevToolsEnabled(Config.EnableConsole);
+#elif SUBNAUTICA_EXP
+                PlatformUtils.devToolsEnabled = Config.EnableConsole;
+#else
                 DevConsole.disableConsole = !Config.EnableConsole;
                 PlayerPrefs.SetInt("UWE.DisableConsole", Config.EnableConsole ? 0 : 1);
+#endif
             }
         }
     }
 
+#if SUBNAUTICA_STABLE // the toggle is removed in Subnautica.exp and BelowZero
     [HarmonyPatch(typeof(PlayerPrefsUtils), nameof(PlayerPrefsUtils.PrefsToggle))]
     internal static class PlayerPrefsUtils_PrefsToggle_Patch
     {
@@ -34,4 +47,5 @@
             }
         }
     }
+#endif
 }

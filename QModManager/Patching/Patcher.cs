@@ -13,7 +13,7 @@ namespace QModManager.Patching
     {
         internal const string IDRegex = "[^0-9a-zA-Z_]";
 
-        internal static string QModBaseDir => Path.Combine(Environment.CurrentDirectory, "QMods");
+        internal static string QModBaseDir => Path.Combine(BepInEx.Paths.BepInExRootPath, "../QMods");
 
         private static bool Patched = false;
         internal static QModGame CurrentlyRunningGame { get; private set; } = QModGame.None;
@@ -54,11 +54,12 @@ namespace QModManager.Patching
                     return;
                 }
 
+
                 try
                 {
-                    Logger.Info("Folder structure:");
+                    Logger.Info("Game Folder structure:");
                     IOUtilities.LogFolderStructureAsTree();
-                    Logger.Info("Folder structure ended.");
+                    Logger.Info("Game Folder structure ended.");
                 }
                 catch (Exception e)
                 {
@@ -66,18 +67,45 @@ namespace QModManager.Patching
                     Logger.Exception(e);
                 }
 
+                var normalizedModDir = Path.GetFullPath(QModBaseDir);
+                if (!normalizedModDir.EndsWith($"{Path.DirectorySeparatorChar}") && !normalizedModDir.EndsWith($"{Path.AltDirectorySeparatorChar}"))
+                    normalizedModDir += $"{Path.DirectorySeparatorChar}";
+                var ModDirUri = new Uri(normalizedModDir);
+
+                var normalizedGameDir = Path.GetFullPath(Environment.CurrentDirectory);
+                
+                if (!normalizedGameDir.EndsWith($"{Path.DirectorySeparatorChar}") && !normalizedGameDir.EndsWith($"{Path.AltDirectorySeparatorChar}"))
+                    normalizedGameDir += $"{Path.DirectorySeparatorChar}";
+                var GameDirUri = new Uri(normalizedGameDir);
+
+
+                if (!GameDirUri.IsBaseOf(ModDirUri))
+                {
+                    try
+                    {
+                        Logger.Info("Mods Folder structure:");
+                        IOUtilities.LogFolderStructureAsTree(Path.Combine(BepInEx.Paths.BepInExRootPath, ".."));
+                        Logger.Info("Mods Folder structure ended.");
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error("There was an error while trying to display the folder structure.");
+                        Logger.Exception(e);
+                    }
+                }
+
                 PirateCheck.IsPirate(Environment.CurrentDirectory);
 
                 PatchHarmony();
 
-                if (NitroxCheck.IsInstalled)
+                if (NitroxCheck.IsRunning)
                 {
-                    Logger.Fatal($"Nitrox was detected!");
+                    Logger.Warn($"Nitrox was detected running!");
 
                     Dialogs.Add(new Dialog()
                     {
-                        message = "Both QModManager and Nitrox detected. QModManager is not compatible with Nitrox. Please uninstall one of them.",
-                        leftButton = Dialog.Button.Disabled,
+                        message = "Nitrox detected. \nNitrox compatibility with QModManager is HIGHLY EXPERIMENTAL Expect bugs!.",
+                        leftButton = Dialog.Button.Close,
                         rightButton = Dialog.Button.Disabled,
                         color = Dialog.DialogColor.Red,
                     });

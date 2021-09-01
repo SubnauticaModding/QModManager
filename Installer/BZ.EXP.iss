@@ -5,7 +5,7 @@
 #endif
 
 #define Name "QModManager" ; The name of the game will be added after it
-#define Version "4.2.1"
+#define Version "4.3.0"
 #define Author "QModManager"
 #define URL "https://github.com/QModManager/QModManager"
 #define SupportURL "https://discord.gg/UpWuWwq"

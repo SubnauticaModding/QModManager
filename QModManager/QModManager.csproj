@@ -107,6 +107,10 @@
       <HintPath>..\Dependencies\$(Configuration)\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
+	<Reference Include="Unity.ResourceManager" Condition="$(Configuration.Contains('BZ.'))">
+      <HintPath>..\Dependencies\$(Configuration)\Unity.ResourceManager.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)' == 'BZ.EXP'">
     <Reference Include="Sentry">

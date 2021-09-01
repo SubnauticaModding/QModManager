@@ -1,5 +1,6 @@
 ﻿using AssetsTools.NET;
 using AssetsTools.NET.Extra;
+using BepInEx;
 using BepInEx.Logging;
 using Mono.Cecil;
 using QModManager.API;
@@ -17,8 +18,7 @@ namespace QModManager
     public static class UnityAudioFixer
     {
         internal static string UnityAudioFixerPath => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        internal static string GameRootPath => Path.Combine(UnityAudioFixerPath, "../../..");
-        internal static string DataPath => Directory.GetDirectories(GameRootPath, "*_Data", SearchOption.TopDirectoryOnly).SingleOrDefault();
+        internal static string DataPath => Directory.GetDirectories(Paths.GameRootPath, "*_Data", SearchOption.TopDirectoryOnly).SingleOrDefault();
         internal static QModGame Game
         {
             get

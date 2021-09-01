@@ -60,6 +60,9 @@
         [JsonProperty]
         public string EntryMethod { get; set; }
 
+        [JsonProperty]
+        public bool NitroxCompat { get; set; } = false;
+
         public bool HasDependencies => Dependencies.Length > 0 || VersionDependencies.Count > 0;
 
 #endregion

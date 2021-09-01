@@ -27,14 +27,10 @@ namespace QModManager
 
     public static class QModPluginGenerator
     {
-        internal static readonly string QModsPath = Path.Combine(Paths.GameRootPath, "QMods");
-        private static readonly string BepInExRootPath = Path.Combine(Paths.GameRootPath, "BepInEx");
-        private static readonly string BepInExCachePath = Path.Combine(Paths.BepInExRootPath, "cache");
-        private static readonly string BepInExPatchersPath = Path.Combine(Paths.BepInExRootPath, "patchers");
-        private static readonly string BepInExPluginsPath = Path.Combine(Paths.BepInExRootPath, "plugins");
-        private static readonly string QMMPatchersPath = Path.Combine(BepInExPatchersPath, "QModManager");
-        private static readonly string QMMPluginsPath = Path.Combine(BepInExPluginsPath, "QModManager");
-        private static readonly string QMMAssemblyCachePath = Path.Combine(BepInExCachePath, "qmodmanager.dat");
+        internal static readonly string QModsPath = Path.Combine(Paths.BepInExRootPath, "../QMods");
+        private static readonly string QMMPatchersPath = Path.Combine(Paths.PatcherPluginPath, "QModManager");
+        private static readonly string QMMPluginsPath = Path.Combine(Paths.PluginPath, "QModManager");
+        private static readonly string QMMAssemblyCachePath = Path.Combine(Paths.CachePath, "qmodmanager.dat");
         private static QMMAssemblyCache QMMAssemblyCache;
 
         private static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("QModPluginGenerator");
@@ -141,7 +137,7 @@ namespace QModManager
 
             try
             {
-                Directory.CreateDirectory(BepInExCachePath);
+                Directory.CreateDirectory(Paths.CachePath);
 
                 using (var ms = new MemoryStream())
                 using (var writer = new StreamWriter(ms))
@@ -164,7 +160,7 @@ namespace QModManager
 
         private static void ClearBepInExCache()
         {
-            if (!Directory.Exists(BepInExCachePath))
+            if (!Directory.Exists(Paths.CachePath))
                 return;
 
             Logger.LogInfo("Clearing BepInEx cache...");
@@ -172,7 +168,7 @@ namespace QModManager
 
             try
             {
-                Directory.Delete(BepInExCachePath, true);
+                Directory.Delete(Paths.CachePath, true);
             }
             catch (IOException e)
             {

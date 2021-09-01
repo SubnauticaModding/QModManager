@@ -31,5 +31,21 @@
         /// <param name="color">The color of the text.</param>
         /// <param name="autoformat">Whether or not to apply formatting tags to the message, or show it as it is.</param>
         void AddCriticalMessage(string msg, int size = MainMenuMessages.defaultSize, string color = MainMenuMessages.defaultColor, bool autoformat = true);
+
+        /// <summary>
+        /// Gets the currently running game.
+        /// </summary>
+        /// <value>
+        /// The currently running game.
+        /// </value>
+        QModGame CurrentlyRunningGame { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether Nitrox is being used.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if Nitrox is being used; otherwise, <c>false</c>.
+        /// </value>
+        bool NitroxRunning { get; }
     }
 }
