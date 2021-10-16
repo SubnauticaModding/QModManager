@@ -25,9 +25,7 @@
 #if SUBNAUTICA_STABLE
                     DevConsole.disableConsole = !value;
                     UnityEngine.PlayerPrefs.SetInt("UWE.DisableConsole", value ? 0 : 1);
-#elif SUBNAUTICA_EXP
-                    PlatformUtils.devToolsEnabled = value;
-#else
+#elif BELOWZERO || SUBNAUTICA_EXP
                     PlatformUtils.SetDevToolsEnabled(value);
 #endif
                 }));
