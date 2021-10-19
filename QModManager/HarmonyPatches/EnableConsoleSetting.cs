@@ -12,18 +12,14 @@
         [HarmonyPostfix]
         internal static void Postfix()
         {
-#if BELOWZERO
+#if BELOWZERO || SUBNAUTICA_EXP
             if (PlatformUtils.GetDevToolsEnabled() != Config.EnableConsole)
-#elif SUBNAUTICA_EXP
-            if (PlatformUtils.devToolsEnabled != Config.EnableConsole)
 #else
             if (DevConsole.disableConsole != !Config.EnableConsole)
 #endif
             {
-#if BELOWZERO
+#if BELOWZERO || SUBNAUTICA_EXP
                 PlatformUtils.SetDevToolsEnabled(Config.EnableConsole);
-#elif SUBNAUTICA_EXP
-                PlatformUtils.devToolsEnabled = Config.EnableConsole;
 #else
                 DevConsole.disableConsole = !Config.EnableConsole;
                 PlayerPrefs.SetInt("UWE.DisableConsole", Config.EnableConsole ? 0 : 1);
