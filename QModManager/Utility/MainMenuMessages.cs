@@ -114,8 +114,12 @@
                 yield return new WaitForSeconds(1f);
 
                 yield return new WaitWhile(() => SaveLoadManager.main.isLoading);
-
-                messages.ForEach(msg => msg.timeEnd = Time.time + 1f);
+#if SUBNAUTICA
+                float time = Time.time;
+#elif BELOWZERO
+                float time = PDA.time;
+#endif
+                messages.ForEach(msg => msg.timeEnd = time + 1f);
                 yield return new WaitForSeconds(1.1f); // wait for messages to dissapear
 
                 messages.ForEach(msg => GetRectTransform(msg).sizeDelta = (Vector2)prevSize);
@@ -149,7 +153,7 @@
             if (TxtProType != null)
             {
                 // Using TextMeshPro
-                FieldInfo recTransformField = TxtProType.GetField("m_rectTransform");
+                FieldInfo recTransformField = TxtProType.GetField("m_rectTransform", BindingFlags.Instance | BindingFlags.NonPublic);
 
                 GetRectTransform = (obj) =>
                 {
