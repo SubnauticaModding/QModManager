@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$(SolutionDir)common.props" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -62,12 +63,12 @@
       <HintPath>..\Dependencies\BepInEx\BepInEx\core\0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Assembly-CSharp-firstpass_publicized">
-      <HintPath>..\Dependencies\$(Configuration)\Assembly-CSharp-firstpass_publicized.dll</HintPath>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>$(Dependencies)\Assemblies\Assembly-CSharp-firstpass.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Assembly-CSharp_publicized">
-      <HintPath>..\Dependencies\$(Configuration)\Assembly-CSharp_publicized.dll</HintPath>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(Dependencies)\Assemblies\Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="BepInEx">
@@ -75,46 +76,46 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>..\Dependencies\$(Configuration)\Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(Dependencies)\Assemblies\Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="UnityEngine">
-      <HintPath>..\Dependencies\$(Configuration)\UnityEngine.dll</HintPath>
+      <HintPath>$(Dependencies)\Assemblies\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>..\Dependencies\$(Configuration)\UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>$(Dependencies)\Assemblies\UnityEngine.AssetBundleModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\Dependencies\$(Configuration)\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(Dependencies)\Assemblies\UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>..\Dependencies\$(Configuration)\UnityEngine.IMGUIModule.dll</HintPath>
+      <HintPath>$(Dependencies)\Assemblies\UnityEngine.IMGUIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>..\Dependencies\$(Configuration)\UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>$(Dependencies)\Assemblies\UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputModule">
-      <HintPath>..\Dependencies\$(Configuration)\UnityEngine.InputModule.dll</HintPath>
+      <HintPath>$(Dependencies)\Assemblies\UnityEngine.InputModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>..\Dependencies\$(Configuration)\UnityEngine.UI.dll</HintPath>
+      <HintPath>$(Dependencies)\Assemblies\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
 	<Reference Include="Unity.ResourceManager" Condition="$(Configuration.Contains('BZ.'))">
-      <HintPath>..\Dependencies\$(Configuration)\Unity.ResourceManager.dll</HintPath>
+      <HintPath>$(Dependencies)\Assemblies\Unity.ResourceManager.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)' == 'BZ.EXP'">
     <Reference Include="Sentry">
-      <HintPath>..\Dependencies\$(Configuration)\Sentry.dll</HintPath>
+      <HintPath>$(Dependencies)\Assemblies\Sentry.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -177,7 +178,11 @@
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PreBuildEvent>
+rmdir "$(Dependencies)\Assemblies" /q /s
+mkdir "$(Dependencies)\Assemblies"
+Echo $(SolutionDir)nstrip.exe  -p -cg -cg-exclude-events "$(ManagedDir)" "$(Dependencies)/Assemblies"
+$(SolutionDir)nstrip.exe -p -cg -cg-exclude-events "$(ManagedDir)" "$(Dependencies)/Assemblies"
+	</PreBuildEvent>
   </PropertyGroup>
 </Project>
