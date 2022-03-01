@@ -306,8 +306,9 @@
       copy "$(TargetDir)SMLHelper.xml" "$(TargetDir)SMLHelper_BZ\SMLHelper.xml" /y &gt; nul
       copy "$(TargetDir)SMLHelper.dll" "$(TargetDir)SMLHelper_BZ\SMLHelper.dll" /y &gt; nul
       rmdir "$(SolutionDir)BepinexPackages\BelowZero_Packages\SMLHelper\QMods\SMLHelper_BZ" /q /s &gt; nul
-      xcopy "$(TargetDir)SMLHelper_BZ" "$(SolutionDir)BepinexPackages\BelowZero_Packages\SMLHelper\QMods\SMLHelper_BZ\" /y /d
-      $(SolutionDir)packages\7-Zip.CommandLine.18.1.0\tools\7za.exe a "$(SolutionDir)BepinexPackages\BelowZero_Packages\SMLHelper.zip" "$(SolutionDir)BepinexPackages\BelowZero_Packages\SMLHelper\*"
+      xcopy "$(TargetDir)SMLHelper_BZ" "$(SolutionDir)BepinexPackages\BelowZero_Packages\SMLHelper\QMods\SMLHelper_BZ\" /y /d &gt; nul
+      IF EXIST "$(SolutionDir)BepinexPackages\BelowZero_Packages\SMLHelper.zip" DEL /F "$(SolutionDir)BepinexPackages\BelowZero_Packages\SMLHelper.zip"
+      $(SolutionDir)packages\7-Zip.CommandLine.18.1.0\tools\7za.exe a "$(SolutionDir)BepinexPackages\BelowZero_Packages\SMLHelper.zip" "$(SolutionDir)BepinexPackages\BelowZero_Packages\SMLHelper\*" &gt; nul
       powershell Compress-Archive -Path '$(TargetDir)SMLHelper_BZ' -DestinationPath '$(TargetDir)\SMLHelper_$(ConfigurationName).zip' -Force
       )
 
@@ -319,6 +320,7 @@
       copy "$(TargetDir)SMLHelper.dll" "$(TargetDir)SMLHelper_BZ\SMLHelper.dll" /y &gt; nul
       rmdir "$(SolutionDir)BepinexPackages\BelowZero_Packages\SMLHelper_Exp\QMods\SMLHelper_BZ" /q /s &gt; nul
       xcopy "$(TargetDir)SMLHelper_BZ" "$(SolutionDir)BepinexPackages\BelowZero_Packages\SMLHelper_Exp\QMods\SMLHelper_BZ\" /y /d &gt;nul
+      IF EXIST "$(SolutionDir)BepinexPackages\BelowZero_Packages\SMLHelper_Exp.zip" DEL /F "$(SolutionDir)BepinexPackages\BelowZero_Packages\SMLHelper_Exp.zip"
       $(SolutionDir)packages\7-Zip.CommandLine.18.1.0\tools\7za.exe a "$(SolutionDir)BepinexPackages\BelowZero_Packages\SMLHelper_Exp.zip" "$(SolutionDir)BepinexPackages\BelowZero_Packages\SMLHelper_Exp\*"
       powershell Compress-Archive -Path '$(TargetDir)SMLHelper_BZ' -DestinationPath '$(TargetDir)\SMLHelper_$(ConfigurationName).zip' -Force
       )
@@ -331,6 +333,7 @@
       copy  "$(TargetDir)SMLHelper.dll" "$(TargetDir)Modding Helper\SMLHelper.dll" /y &gt; nul
       rmdir "$(SolutionDir)BepinexPackages\Subnautica_Packages\SMLHelper\QMods\Modding Helper" /q /s &gt; nul
       xcopy "$(TargetDir)Modding Helper" "$(SolutionDir)BepinexPackages\Subnautica_Packages\SMLHelper\QMods\Modding Helper\" /y /d &gt;nul
+      IF EXIST "$(SolutionDir)BepinexPackages\Subnautica_Packages\SMLHelper.zip" DEL /F "$(SolutionDir)BepinexPackages\Subnautica_Packages\SMLHelper.zip"
       $(SolutionDir)packages\7-Zip.CommandLine.18.1.0\tools\7za.exe a "$(SolutionDir)BepinexPackages\Subnautica_Packages\SMLHelper.zip" "$(SolutionDir)BepinexPackages\Subnautica_Packages\SMLHelper\*"
       powershell Compress-Archive -Path '$(TargetDir)Modding Helper' -DestinationPath '$(TargetDir)\SMLHelper_$(ConfigurationName).zip' -Force
       )
@@ -343,6 +346,7 @@
       copy  "$(TargetDir)SMLHelper.dll" "$(TargetDir)Modding Helper\SMLHelper.dll" /y &gt; nul
       rmdir "$(SolutionDir)BepinexPackages\Subnautica_Packages\SMLHelper_Exp\QMods\Modding Helper" /q /s &gt; nul
       xcopy "$(TargetDir)Modding Helper" "$(SolutionDir)BepinexPackages\Subnautica_Packages\SMLHelper_Exp\QMods\Modding Helper\" /y /d
+      IF EXIST "$(SolutionDir)BepinexPackages\Subnautica_Packages\SMLHelper_Exp.zip" DEL /F "$(SolutionDir)BepinexPackages\Subnautica_Packages\SMLHelper_Exp.zip"
       $(SolutionDir)packages\7-Zip.CommandLine.18.1.0\tools\7za.exe a "$(SolutionDir)BepinexPackages\Subnautica_Packages\SMLHelper_Exp.zip" "$(SolutionDir)BepinexPackages\Subnautica_Packages\SMLHelper_Exp\*"
       powershell Compress-Archive -Path '$(TargetDir)Modding Helper' -DestinationPath '$(TargetDir)\SMLHelper_$(ConfigurationName).zip' -Force
       )
