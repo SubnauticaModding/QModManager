@@ -3,22 +3,27 @@
 	<PropertyGroup Condition="'$(Configuration)'=='SN.STABLE'">
 		<GameDir>C:\Program Files (x86)\Steam\steamapps\common\Subnautica</GameDir>
 		<ManagedDir>$(GameDir)\Subnautica_Data\Managed</ManagedDir>
-		<Dependencies>$(SolutionDir)\Dependencies\$(Configuration)</Dependencies>
 	</PropertyGroup>
 	<PropertyGroup Condition="'$(Configuration)'=='BZ.STABLE'">
 		<GameDir>C:\Program Files (x86)\Steam\steamapps\common\SubnauticaZero</GameDir>
 		<ManagedDir>$(GameDir)\SubnauticaZero_Data\Managed</ManagedDir>
-		<Dependencies>$(SolutionDir)\Dependencies\$(Configuration)</Dependencies>
 	</PropertyGroup>
 	<!-- using Contains so VS won't auto add this configs to all projects -->
 	<PropertyGroup Condition="$(Configuration.Contains('SN.EXP'))">
 		<GameDir>C:\Program Files (x86)\Steam\steamapps\common\Subnautica</GameDir>
 		<ManagedDir>$(GameDir)\Subnautica_Data\Managed</ManagedDir>
-		<Dependencies>$(SolutionDir)\Dependencies\$(Configuration)</Dependencies>
 	</PropertyGroup>
 	<PropertyGroup Condition="$(Configuration.Contains('BZ.EXP'))">
 		<GameDir>C:\Program Files (x86)\Steam\steamapps\common\SubnauticaZero</GameDir>
 		<ManagedDir>$(GameDir)\SubnauticaZero_Data\Managed</ManagedDir>
-		<Dependencies>$(SolutionDir)\Dependencies\$(Configuration)</Dependencies>
+	</PropertyGroup>
+	<PropertyGroup>
+		<Dependencies>$(SolutionDir)Dependencies</Dependencies>
+		<AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+		<Optimize>true</Optimize>
+		<LangVersion>latest</LangVersion>
+		<ReferencePath>
+			$(Dependencies);$(Dependencies)\$(Configuration)\Assemblies;$(Dependencies)\$(Configuration);
+		</ReferencePath>
 	</PropertyGroup>
 </Project>
