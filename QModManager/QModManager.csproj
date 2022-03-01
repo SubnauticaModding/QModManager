@@ -60,8 +60,8 @@
     <LangVersion>latest</LangVersion>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
-	<Import Project="$(SolutionDir)References.targets" />
-    <ItemGroup>
+  <Import Project="$(SolutionDir)References.targets" />
+  <ItemGroup>
     <Reference Include="0Harmony, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\HarmonyX.2.7.0\lib\net45\0Harmony.dll</HintPath>
       <Private>False</Private>
@@ -161,8 +161,7 @@
     <PreBuildEvent>
 		rmdir "$(Dependencies)/$(Configuration)/Assemblies" /q /s
 		mkdir "$(Dependencies)/$(Configuration)/Assemblies"
-		Echo $(SolutionDir)nstrip.exe -p -cg -cg-exclude-events "$(ManagedDir)" "$(Dependencies)/$(Configuration)/Assemblies"
-		$(SolutionDir)nstrip.exe -p -cg -cg-exclude-events "$(ManagedDir)" "$(Dependencies)/$(Configuration)/Assemblies"
+		$(SolutionDir)nstrip.exe -p -cg -cg-exclude-events "$(ManagedDir)" "$(Dependencies)/$(Configuration)/Assemblies" &gt;nul
 	</PreBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\BepInEx.Core.5.4.19\build\BepInEx.Core.targets" Condition="Exists('..\packages\BepInEx.Core.5.4.19\build\BepInEx.Core.targets')" />
