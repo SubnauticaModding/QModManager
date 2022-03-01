@@ -1,0 +1,7 @@
+{
+    "name": "QModManager",
+    "version_number": "4.4.0",
+    "website_url": "https://github.com/SubnauticaModding/QModManager",
+    "description": "QModManager is an intermidiate loader for mods made for the QMM system.",
+    "dependencies": [ "Subnautica_Modding-BepInExPack_Subnautica-5.4.19" ]
+}
