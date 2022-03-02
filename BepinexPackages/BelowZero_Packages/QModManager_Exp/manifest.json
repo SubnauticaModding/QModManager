@@ -1,7 +1,11 @@
 {
     "name": "QModManager_BZ_Experimental",
-    "version_number": "4.4.1",
+    "version_number": "4.4.2",
     "website_url": "https://github.com/SubnauticaModding/QModManager",
     "description": "QModManager is an intermidiate loader for mods made for the QMM system.",
-    "dependencies": [ "Subnautica_Modding-BepInExPack_BelowZero-5.4.19" ]
+    "dependencies": [ 
+		"Subnautica_Modding-BepInExPack_BelowZero-5.4.19", 
+		"Subnautica_Modding-UnityAudioEnabler-4.3.1",
+		"Subnautica_Modding-MirrorInternalLogs-9.0.0"
+		]
 }

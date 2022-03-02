@@ -1,6 +1,6 @@
 {
     "name": "BepInExPack_Subnautica_Experimental",
-    "version_number": "5.4.19",
+    "version_number": "5.4.1901",
     "website_url": "https://github.com/BepInEx/BepInEx",
     "description": "BepInEx pack for Subnautica. Preconfigured",
     "dependencies": []
