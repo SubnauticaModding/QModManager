@@ -1,9 +1,7 @@
 ﻿using BepInEx;
 #if !SUBNAUTICA_STABLE
 using HarmonyLib;
-#if !BELOWZERO
 using System.Collections;
-#endif
 #endif
 using System.Collections.Generic;
 using UnityEngine;
@@ -76,48 +74,35 @@ namespace QModInstaller.BepInEx.Plugins
             var harmony = new Harmony(PluginGuid);
             harmony.Patch(
                 AccessTools.Method(
-#if SUBNAUTICA
                     typeof(PlatformUtils), nameof(PlatformUtils.PlatformInitAsync)
-#elif BELOWZERO
-                    typeof(SpriteManager), nameof(SpriteManager.OnLoadedSpriteAtlases)
-#endif
                     ),
                     postfix: new HarmonyMethod(AccessTools.Method(typeof(QMMLoader), nameof(QMMLoader.InitializeQMods)))
                 );
-#endif
         }
 
-#if SUBNAUTICA_EXP
         private static IEnumerator InitializeQMods(IEnumerator result)
         {
-            yield return result;
-
-            Initializer.InitializeMods(QModsToLoad, PatchingOrder.NormalInitialize);
-            Initializer.InitializeMods(QModsToLoad, PatchingOrder.PostInitialize);
-            Initializer.InitializeMods(QModsToLoad, PatchingOrder.MetaPostInitialize);
-
-            SummaryLogger.ReportIssues(QModsToLoad);
-            SummaryLogger.LogSummaries(QModsToLoad);
-            foreach (Dialog dialog in Patcher.Dialogs)
+            while (result.MoveNext())
             {
-                dialog.Show();
+                yield return result;
             }
-        }
-#elif BELOWZERO
-        private static void InitializeQMods() 
-        {
-            Initializer.InitializeMods(QModsToLoad, PatchingOrder.NormalInitialize);
-            Initializer.InitializeMods(QModsToLoad, PatchingOrder.PostInitialize);
-            Initializer.InitializeMods(QModsToLoad, PatchingOrder.MetaPostInitialize);
 
-            SummaryLogger.ReportIssues(QModsToLoad);
-            SummaryLogger.LogSummaries(QModsToLoad);
-
-            foreach (Dialog dialog in Patcher.Dialogs)
-            {
-                dialog.Show();
-            }
-        }
+#if BELOWZERO
+            if(!SpriteManager.hasInitialized)
+                yield return new WaitUntil(()=>SpriteManager.hasInitialized);
 #endif
+
+            Initializer.InitializeMods(QModsToLoad, PatchingOrder.NormalInitialize);
+            Initializer.InitializeMods(QModsToLoad, PatchingOrder.PostInitialize);
+            Initializer.InitializeMods(QModsToLoad, PatchingOrder.MetaPostInitialize);
+
+            SummaryLogger.ReportIssues(QModsToLoad);
+            SummaryLogger.LogSummaries(QModsToLoad);
+            foreach (Dialog dialog in Patcher.Dialogs)
+            {
+                dialog.Show();
+            }
+#endif
+        }
     }
 }
