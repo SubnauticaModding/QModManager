@@ -159,10 +159,10 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
-		rmdir "$(Dependencies)/$(Configuration)/Assemblies" /q /s
+		IF NOT EXIST "$(Dependencies)/$(Configuration)/Assemblies" (
 		mkdir "$(Dependencies)/$(Configuration)/Assemblies"
 		$(SolutionDir)nstrip.exe -p -cg -cg-exclude-events "$(ManagedDir)" "$(Dependencies)/$(Configuration)/Assemblies" &gt;nul
-	</PreBuildEvent>
+		)</PreBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\BepInEx.Core.5.4.19\build\BepInEx.Core.targets" Condition="Exists('..\packages\BepInEx.Core.5.4.19\build\BepInEx.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
