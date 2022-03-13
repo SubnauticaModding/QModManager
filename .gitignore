@@ -290,4 +290,4 @@ __pycache__/
 *.xsd.cs
 
 # Game Assemblies
-Assembly-CSharp*
+[Dd]ependencies/**/[Aa]ssemblies/

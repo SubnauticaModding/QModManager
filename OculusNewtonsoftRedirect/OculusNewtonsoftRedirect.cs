@@ -4,13 +4,13 @@ using Mono.Cecil;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace QModManager
 {
     public static class OculusNewtonsoftRedirect
     {
-        private static string OculusNewtonsoftJsonPath => Path.Combine(
-            Paths.BepInExRootPath, "patchers", "QModManager", "Oculus.Newtonsoft.Json.dll");
+        private static string OculusNewtonsoftJsonPath => Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty, "Oculus.Newtonsoft.Json.dll");
 
         private static readonly ManualLogSource Logger = BepInEx.Logging.Logger.CreateLogSource("OculusNewtonsoftRedirect");
 

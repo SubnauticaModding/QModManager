@@ -1,0 +1,7 @@
+{
+    "name": "BepInExPack_BelowZero",
+    "version_number": "5.4.1901",
+    "website_url": "https://github.com/BepInEx/BepInEx",
+    "description": "BepInEx pack for Subnautica BelowZero. Preconfigured",
+    "dependencies": []
+}

@@ -1,0 +1,7 @@
+{
+    "name": "MirrorInternalLogs",
+    "version_number": "9.0.1001",
+    "website_url": "https://github.com/BepInEx/BepInEx.Debug",
+    "description": "MirrorInternalLogs pack for Subnautica. Preconfigured",
+    "dependencies": [ ]
+}
