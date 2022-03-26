@@ -3,7 +3,6 @@ using AssetsTools.NET.Extra;
 using BepInEx;
 using BepInEx.Logging;
 using Mono.Cecil;
-using QModManager.API;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,18 +18,18 @@ namespace QModManager
     {
         internal static string UnityAudioFixerPath => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         internal static string DataPath => Directory.GetDirectories(Paths.GameRootPath, "*_Data", SearchOption.TopDirectoryOnly).SingleOrDefault();
-        internal static QModGame Game
+        internal static string Game
         {
             get
             {
                 switch (new DirectoryInfo(DataPath).Name)
                 {
                     case "Subnautica_Data":
-                        return QModGame.Subnautica;
+                        return "Subnautica";
                     case "SubnauticaZero_Data":
-                        return QModGame.BelowZero;
+                        return "BelowZero";
                     default:
-                        return QModGame.None;
+                        return "";
                 }
             }
         }
@@ -82,9 +81,9 @@ namespace QModManager
             }
         }
 
-        private static void ChangeDisableUnityAudio(string path, bool newValue, QModGame game)
+        private static void ChangeDisableUnityAudio(string path, bool newValue, string game)
         {
-            if (game != QModGame.Subnautica && game != QModGame.BelowZero)
+            if (game != "Subnautica" && game != "BelowZero")
                 throw new ArgumentException("Neither Subnautica nor Below Zero detected!");
             AssetsManager am = new AssetsManager();
             AssetsFileInstance afi = am.LoadAssetsFile(path, false);
