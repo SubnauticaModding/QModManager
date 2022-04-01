@@ -50,22 +50,20 @@
                 switch (statusToReport)
                 {
                     case ModStatus.MissingDependency:
+                        if (mod.HasDependencies)
                         {
-                            if (mod.HasDependencies)
+                            Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is missing these dependencies:");
+                            foreach (RequiredQMod dependency in mod.RequiredMods)
                             {
-                                Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is missing these dependencies:");
-                                foreach (RequiredQMod dependency in mod.RequiredMods)
-                                {
-                                    if (QModServices.Main.GetMod(mod.Id) is not IQMod requiredMod || !requiredMod.IsLoaded || !requiredMod.Enable)
-                                        Console.WriteLine($"   - {dependency.Id}{(dependency.RequiresMinimumVersion ? $" at version {dependency.MinimumVersion} or newer" : string.Empty)}");
-                                }
+                                if (QModServices.Main.GetMod(mod.Id) is not IQMod requiredMod || !requiredMod.IsLoaded || !requiredMod.Enable)
+                                    Console.WriteLine($"   - {dependency.Id}{(dependency.RequiresMinimumVersion ? $" at version {dependency.MinimumVersion} or newer" : string.Empty)}");
                             }
-                            else
-                            {
-                                Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is missing a dependency but none are listed in mod.json, Please check Nexusmods for list of Dependencies.");
-                            }
-                            break;
                         }
+                        else
+                        {
+                            Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) is missing a dependency but none are listed in mod.json, Please check Nexusmods for list of Dependencies.");
+                        }
+                        break;
 
                     case ModStatus.OutOfDateDependency:
                         Console.WriteLine($"- {mod.DisplayName} ({mod.Id}) requires a newer version of these dependencies:");
