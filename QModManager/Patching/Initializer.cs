@@ -1,6 +1,4 @@
-﻿using QModManager.Checks;
-
-namespace QModManager.API.ModLoading
+﻿namespace QModManager.API.ModLoading
 {
     using QModManager.Patching;
     using QModManager.Utility;
@@ -29,14 +27,6 @@ namespace QModManager.API.ModLoading
                 {
                     mod.PatchMethods.Clear(); // Do not attempt any other patch methods
                     mod.Status = ModStatus.CurrentGameNotSupported;
-                    continue;
-                }
-
-                
-                if(!mod.NitroxCompat && NitroxCheck.IsRunning)
-                {
-                    mod.PatchMethods.Clear(); // Do not attempt any other patch methods
-                    mod.Status = ModStatus.NitroxIncompatible;
                     continue;
                 }
 
