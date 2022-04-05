@@ -2,6 +2,7 @@
 {
     using QModManager.API;
     using QModManager.API.ModLoading;
+    using QModManager.Checks;
     using QModManager.Utility;
     using System;
     using System.Collections.Generic;
@@ -63,10 +64,14 @@
                     mod.SupportedGame = QModGame.Subnautica;
                     break;
                 default:
-                {
                     mod.Status = ModStatus.FailedIdentifyingGame;
                     return;
-                }
+            }
+
+            if (!mod.NitroxCompat && NitroxCheck.IsRunning)
+            {
+                mod.Status = ModStatus.NitroxIncompatible;
+                return;
             }
 
             try
@@ -241,7 +246,7 @@
             }
             catch (ReflectionTypeLoadException rtle)
             {
-                Logger.Debug($"Unable to load types for '{qMod.Id}': \nInnerException: \n" + rtle.InnerException + "\n LoaderExceptions:\n" +string.Join("/n", rtle.LoaderExceptions.ToList()));
+                Logger.Debug($"Unable to load types for '{qMod.Id}': \nInnerException: \n" + rtle.InnerException + "\n LoaderExceptions:\n" + string.Join("/n", rtle.LoaderExceptions.ToList()));
                 qMod.Status = ModStatus.MissingDependency;
             }
 
