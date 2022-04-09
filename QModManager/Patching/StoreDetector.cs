@@ -43,47 +43,30 @@
 
         internal static bool IsSteam(string directory)
         {
-            string[] files = Directory.GetFiles(directory);
-            for (int i = 1; i <= files.Length; i++)
+            string checkfile = Path.Combine(directory, "steam_api64.dll");
+            if (File.Exists(checkfile))
             {
-                FileInfo fileinfo = new FileInfo(files[i - 1]);
-                if (i != files.Length)
-                {
-                    if (fileinfo.Name == "steam_api64.dll")
-                    {
-                        return true;
-                    }
-                }
+                return true;
             }
             return false;
         }
 
         internal static bool IsEpic(string directory)
         {
-            foreach (string dir in Directory.GetDirectories(directory))
+            string checkfolder = Path.Combine(directory, ".eggstore");
+            if (Directory.Exists(checkfolder)
             {
-                DirectoryInfo dirInfo = new DirectoryInfo(dir);
-                if (dirInfo.Name == ".eggstore")
-                {
-                    return true;
-                }
+                return true;
             }
             return false;
         }
 
         internal static bool IsMSStore(string directory)
         {
-            string[] files = Directory.GetFiles(directory);
-            for (int i = 1; i <= files.Length; i++)
+            string checkfile = Path.Combine(directory, "MicrosoftGame.config");
+            if (File.Exists(checkfile))
             {
-                FileInfo fileinfo = new FileInfo(files[i - 1]);
-                if (i != files.Length)
-                {
-                    if (fileinfo.Name == "MicrosoftGame.config")
-                    {
-                        return true;
-                    }
-                }
+                return true;
             }
             return false;
         }
