@@ -54,7 +54,7 @@
         internal static bool IsEpic(string directory)
         {
             string checkfolder = Path.Combine(directory, ".eggstore");
-            if (Directory.Exists(checkfolder)
+            if (Directory.Exists(checkfolder))
             {
                 return true;
             }
