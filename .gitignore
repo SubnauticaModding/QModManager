@@ -292,3 +292,4 @@ __pycache__/
 # Game Assemblies
 [Dd]ependencies/**/[Aa]ssemblies/
 *.zip
+*.dll
