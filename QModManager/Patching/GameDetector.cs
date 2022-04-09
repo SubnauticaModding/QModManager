@@ -20,12 +20,9 @@
         {
 #if SUBNAUTICA_STABLE
             { QModGame.Subnautica, 65786 }
-#elif BELOWZERO_STABLE
-            { QModGame.BelowZero, 45391 }
-#elif SUBNAUTICA_EXP
+#else
+            { QModGame.BelowZero, 45391 },
             { QModGame.Subnautica, 68186 }
-#elif BELOWZERO_EXP
-            { QModGame.BelowZero, 45500 }
 #endif
         };
 
