@@ -114,9 +114,9 @@
                 yield return new WaitForSeconds(1f);
 
                 yield return new WaitWhile(() => SaveLoadManager.main.isLoading);
-#if SUBNAUTICA
+#if SUBNAUTICA_STABLE
                 float time = Time.time;
-#elif BELOWZERO
+#else
                 float time = PDA.time;
 #endif
                 messages.ForEach(msg => msg.timeEnd = time + 1f);
