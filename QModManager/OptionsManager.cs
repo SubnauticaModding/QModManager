@@ -17,6 +17,7 @@
                 ModsTab = __instance.AddTab("Mods");
                 __instance.AddHeading(ModsTab, "QModManager");
 
+                //TODO: This is the Last berrier to unifying the 2 games installs.....  Below Zero has an optional value at the end of AddToggleOption that makes it so these fail when using a binary compiled on the wrong game.
                 __instance.AddToggleOption(ModsTab, "Check for updates", Config.CheckForUpdates, new UnityAction<bool>(value => Config.CheckForUpdates = value));
 
                 __instance.AddToggleOption(ModsTab, "Enable console", Config.EnableConsole, new UnityAction<bool>(value =>
