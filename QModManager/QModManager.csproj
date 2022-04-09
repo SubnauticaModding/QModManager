@@ -137,6 +137,7 @@
     <Compile Include="API\ModLoading\QModPatchAttributeBase.cs" />
     <Compile Include="Patching\QModPlaceholder.cs" />
     <Compile Include="Patching\QModPatchMethod.cs" />
+    <Compile Include="Patching\StoreDetector.cs" />
     <Compile Include="Utility\Config.cs" />
     <Compile Include="Utility\MainMenuMessages.cs" />
     <Compile Include="Utility\SummaryLogger.cs" />

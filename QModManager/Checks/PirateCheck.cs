@@ -6,6 +6,10 @@ namespace QModManager.Checks
 {
     internal static class PirateCheck
     {
+        internal static string Steamapi => "steam_api64.dll";
+        internal static int Steamapilengh => 220000;
+
+
         internal static void PirateDetected()
         {
             Logger.Warn("Ahoy, matey! Ye be a pirate!");
@@ -29,12 +33,12 @@ namespace QModManager.Checks
 
         internal static void IsPirate(string folder)
         {
-            string steamDll = Path.Combine(folder, "steam_api64.dll");
+            string steamDll = Path.Combine(folder, Steamapi);
             if (File.Exists(steamDll))
             {
                 FileInfo fileInfo = new FileInfo(steamDll);
 
-                if (fileInfo.Length > 220000)
+                if (fileInfo.Length > Steamapilengh)
                 {
                     PirateDetected();
                     return;
