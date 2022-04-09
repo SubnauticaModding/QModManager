@@ -87,10 +87,13 @@ namespace QModInstaller.BepInEx.Plugins
                 yield return result;
             }
 
-#if BELOWZERO
-            if(!SpriteManager.hasInitialized)
-                yield return new WaitUntil(()=>SpriteManager.hasInitialized);
-#endif
+            var hasInitializedField = typeof(SpriteManager).GetField("hasInitialized", System.Reflection.BindingFlags.Static);
+            if (hasInitializedField != null)
+            {
+                bool hasInitialized = (bool)hasInitializedField.GetValue(null);
+                if (!hasInitialized)
+                    yield return new WaitUntil(() => hasInitialized);
+            }
 
             Initializer.InitializeMods(QModsToLoad, PatchingOrder.NormalInitialize);
             Initializer.InitializeMods(QModsToLoad, PatchingOrder.PostInitialize);
