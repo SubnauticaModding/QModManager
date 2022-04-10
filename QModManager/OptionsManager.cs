@@ -6,8 +6,8 @@
     using QModManager.Utility;
     using System.Reflection;
     using UnityEngine.Events;
-    using System;
-    using System.IO;
+    using System.Collections.Generic;
+    using System.Linq;
 
     internal static class OptionsManager
     {
@@ -66,7 +66,7 @@
                 #endregion Mod Config
 
                 #region Mod List
-                ModListTab = __instance.AddTab("Loaded Mods List");
+                ModListTab = __instance.AddTab("QMods List");
 
 #if SUBNAUTICA_STABLE
                 __instance.AddHeading(ModListTab, $"QModManager Stable for Subnautica running version {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}");
@@ -77,11 +77,12 @@
 #elif BELOWZERO_EXP
                 __instance.AddHeading(ModListTab, $"QModManager Experimental for Below Zero running version {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}");
 #endif
+                
                 __instance.AddHeading(ModListTab, $"- - List of currently running Mods - -");
-                var mods = QModServices.Main.GetAllMods();
+
+                IEnumerable<IQMod> mods = QModServices.Main.GetAllMods().OrderBy(mod => mod.Id);
                 int modsactivecounter = 0;
 
-                //Maybe add algorithm to sort Mods after Name
                 foreach (var mod in mods)
                 {
                     if(mod.Enable)
@@ -90,7 +91,10 @@
                         modsactivecounter++;
                     }
                 }
-                __instance.AddHeading(ModListTab, $"Statistics: {modsactivecounter} Mods activated from {mods.Count} loaded");
+
+                __instance.AddHeading(ModListTab, $"- - Statistics - -");
+                __instance.AddHeading(ModListTab, $"{modsactivecounter} Mods activated from {mods.Count()} loaded");
+                __instance.AddHeading(ModListTab, $"{mods.Count() - modsactivecounter} Mods inactive from {mods.Count()} total");
                 #endregion Mod List
             }
         }
