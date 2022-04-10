@@ -51,6 +51,12 @@
                     Process.Start(VersionCheck.bzNexus);
             });
 
+            internal static readonly Button Pirate = new Button("Close", () =>
+            {
+                Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
+                Application.Quit();
+            });
+
             internal Button() { }
             internal Button(string text, Action action)
             {

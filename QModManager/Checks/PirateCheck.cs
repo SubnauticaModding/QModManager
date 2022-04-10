@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Logger = QModManager.Utility.Logger;
 
@@ -10,10 +11,8 @@ namespace QModManager.Checks
         internal static int Steamapilengh => 220000;
 
 
-        internal static void PirateDetected()
-        {
-            Logger.Warn("Ahoy, matey! Ye be a pirate!");
-        }
+        internal static string folder = Environment.CurrentDirectory;
+        internal static bool PirateDetected;
 
         internal static readonly HashSet<string> CrackedFiles = new HashSet<string>()
         {
@@ -31,28 +30,32 @@ namespace QModManager.Checks
             "chuj.cdx",
         };
 
-        internal static void IsPirate(string folder)
+        internal static void IsPirate()
         {
             string steamDll = Path.Combine(folder, Steamapi);
-            if (File.Exists(steamDll))
+            bool steamStore = File.Exists(steamDll);
+            if (steamStore)
             {
                 FileInfo fileInfo = new FileInfo(steamDll);
-
                 if (fileInfo.Length > Steamapilengh)
                 {
-                    PirateDetected();
-                    return;
+                    PirateDetected = true;
                 }
             }
 
-            foreach (string file in CrackedFiles)
+            if (!PirateDetected)
             {
-                if (File.Exists(Path.Combine(folder, file)))
+                foreach (string file in CrackedFiles)
                 {
-                    PirateDetected();
-                    return;
+                    if (File.Exists(Path.Combine(folder, file)))
+                    {
+                        PirateDetected = true;
+                        break;
+                    }
                 }
             }
+
+            Logger.Info(PirateDetected? "Ahoy, matey! Ye be a pirate!":"Seems Legit.");
         }
     }
 }
