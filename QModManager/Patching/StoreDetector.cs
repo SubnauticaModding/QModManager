@@ -29,7 +29,7 @@
             }
             else if (IsEpic(directory))
             {
-                return "Eic Games";
+                return "Epic Games";
             }
             else if (IsMSStore(directory))
             {
@@ -88,7 +88,7 @@
             {
                 if (File.Exists(Path.Combine(folder, file)))
                 {
-                    return false;
+                    return true;
                 }
             }
             return false;
