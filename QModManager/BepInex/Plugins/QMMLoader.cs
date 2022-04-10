@@ -9,8 +9,10 @@ using UnityEngine;
 namespace QModInstaller.BepInEx.Plugins
 {
     using QModManager.API.ModLoading;
+    using QModManager.Checks;
     using QModManager.Patching;
     using QModManager.Utility;
+    using System;
 
     /// <summary>
     /// QMMLoader - simply fires up the QModManager entry point.
@@ -25,6 +27,15 @@ namespace QModInstaller.BepInEx.Plugins
 
         internal static List<QMod> QModsToLoad;
         private static Initializer Initializer;
+
+        /// <summary>
+        /// "Only for use by Bepinex"
+        /// </summary>
+        [Obsolete("Only for use by Bepinex", true)]
+        public QMMLoader()
+        {
+            PirateCheck.IsPirate();
+        }
 
         /// <summary>
         /// Prevents a default instance of the <see cref="QMMLoader"/> class from being created 

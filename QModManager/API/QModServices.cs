@@ -157,5 +157,13 @@ namespace QModManager.API
         ///   <c>true</c> if Nitrox is being used; otherwise, <c>false</c>.
         /// </value>
         public bool NitroxRunning => NitroxCheck.IsRunning;
+
+        /// <summary>
+        /// Gets a value indicating whether Piracy was detected.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if Piracy was detected; otherwise, <c>false</c>.
+        /// </value>
+        public bool PirateDetected => PirateCheck.PirateDetected;
     }
 }
