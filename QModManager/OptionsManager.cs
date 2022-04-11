@@ -77,24 +77,48 @@
 #elif BELOWZERO_EXP
                 __instance.AddHeading(ModListTab, $"QModManager Experimental for Below Zero running version {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}");
 #endif
-                
-                __instance.AddHeading(ModListTab, $"- - List of currently running Mods - -");
+                var modprio_sml = QModServices.Main.GetMod("SMLHelper");
+                if (modprio_sml != null)
+                {
+                    __instance.AddHeading(ModListTab, $"{modprio_sml.DisplayName} {(modprio_sml.Enable ? $"v{modprio_sml.ParsedVersion}" : $"")} {(modprio_sml.IsLoaded ? "is activated" : "is deactivated")}");
+                }
+                else
+                {
+                    __instance.AddHeading(ModListTab, $"SML Helper is not installed");
+                }
 
-                IEnumerable<IQMod> mods = QModServices.Main.GetAllMods().OrderBy(mod => mod.Id);
-                int modsactivecounter = 0;
+                IEnumerable<IQMod> mods = QModServices.Main.GetAllMods().OrderBy(mod => mod.DisplayName);
+                List<IQMod> activeMods = new List<IQMod>();
+                List<IQMod> inactiveMods = new List<IQMod>();
 
                 foreach (var mod in mods)
                 {
-                    if(mod.Enable)
+                    if (mod.Enable)
                     {
-                        __instance.AddHeading(ModListTab, $"{mod.DisplayName} version {mod.ParsedVersion.ToString()} from {mod.Author}");
-                        modsactivecounter++;
+                        activeMods.Add(mod);
+                    }
+                    else
+                    {
+                        inactiveMods.Add(mod);
                     }
                 }
 
                 __instance.AddHeading(ModListTab, $"- - Statistics - -");
-                __instance.AddHeading(ModListTab, $"{modsactivecounter} Mods activated from {mods.Count()} loaded");
-                __instance.AddHeading(ModListTab, $"{mods.Count() - modsactivecounter} Mods inactive from {mods.Count()} total");
+                __instance.AddHeading(ModListTab, $"{activeMods.Count} Mods activated from {mods.Count()} loaded");
+                __instance.AddHeading(ModListTab, $"{inactiveMods.Count} Mods inactive from {mods.Count()} total");
+
+                __instance.AddHeading(ModListTab, $"- - List of currently running Mods - -");
+                foreach (var mod in activeMods)
+                {
+                    __instance.AddHeading(ModListTab, $"{mod.DisplayName} v{mod.ParsedVersion.ToString()} from {mod.Author}");
+                }
+
+                __instance.AddHeading(ModListTab, $"- - List of Disabled Mods - -");
+
+                foreach (var mod in inactiveMods)
+                {
+                    __instance.AddHeading(ModListTab, $"{mod.DisplayName} from {mod.Author}");
+                }
                 #endregion Mod List
             }
         }
