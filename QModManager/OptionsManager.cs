@@ -66,17 +66,16 @@
                 #endregion Mod Config
 
                 #region Mod List
+                //Create new Tab in the Menu
                 ModListTab = __instance.AddTab("QMods List");
 
-#if SUBNAUTICA_STABLE
-                __instance.AddHeading(ModListTab, $"QModManager Stable for Subnautica running version {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}");
-#elif SUBNAUTICA_EXP
-                __instance.AddHeading(ModListTab, $"QModManager Experimental for Subnautica running version {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}");
-#elif BELOWZERO_STABLE
-                __instance.AddHeading(ModListTab, $"QModManager Stable for Below Zero running version {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}");
-#elif BELOWZERO_EXP
-                __instance.AddHeading(ModListTab, $"QModManager Experimental for Below Zero running version {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}");
+                //Add QMM Informations
+#if SUBNAUTICA_EXP || BELOWZERO_EXP
+                __instance.AddHeading(ModListTab, $"QModManager -Experimental- running version {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}");
+#else
+                __instance.AddHeading(ModListTab, $"QModManager running version {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}");
 #endif
+                //Add SML Informations
                 var modprio_sml = QModServices.Main.GetMod("SMLHelper");
                 if (modprio_sml != null)
                 {
@@ -104,8 +103,9 @@
                 }
 
                 __instance.AddHeading(ModListTab, $"- - Statistics - -");
-                __instance.AddHeading(ModListTab, $"{activeMods.Count} Mods activated from {mods.Count()} loaded");
-                __instance.AddHeading(ModListTab, $"{inactiveMods.Count} Mods inactive from {mods.Count()} total");
+                __instance.AddHeading(ModListTab, $"{mods.Count()} Mods found");
+                __instance.AddHeading(ModListTab, $"{activeMods.Count} Mods enabled");
+                __instance.AddHeading(ModListTab, $"{inactiveMods.Count} Mods disabled");
 
                 __instance.AddHeading(ModListTab, $"- - List of currently running Mods - -");
                 foreach (var mod in activeMods)
