@@ -83,7 +83,7 @@
                 }
                 else
                 {
-                    __instance.AddHeading(ModListTab, $"SML Helper is not installed");
+                    __instance.AddHeading(ModListTab, $"SMLHelper is not installed");
                 }
 
                 IEnumerable<IQMod> mods = QModServices.Main.GetAllMods().OrderBy(mod => mod.DisplayName);
