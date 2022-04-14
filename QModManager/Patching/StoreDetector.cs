@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using QModManager.Checks;
 
 namespace QModManager.Patching
@@ -8,83 +7,47 @@ namespace QModManager.Patching
     {
         internal static string GetUsedGameStore()
         {
-            var directory = Environment.CurrentDirectory;;
-            
-
-            if (NonValidStore(directory))
+            if (NonValidStore())
             {
-                return "free Store";
+                return "Invalid store";
             }
 
-            if (IsSteam(directory))
+            if (IsSteam())
             {
                 return "Steam";
             }
 
-            if (IsEpic(directory))
+            if (IsEpic())
             {
                 return "Epic Games";
             }
 
-            if (IsMSStore(directory))
+            if (IsMSStore())
             {
                 return "MSStore";
             }
 
-            return "was not able to identify Store";
+            return "Unable to identify game store.";
         }
 
-        private static bool IsSteam(string directory)
+        private static bool IsSteam()
         {
-            string checkfile = Path.Combine(directory, "steam_api64.dll");
-            if (File.Exists(checkfile))
-            {
-                return true;
-            }
-            return false;
+            return PlatformServicesUtils.IsRuntimePluginDllPresent("CSteamworks");
         }
 
-        private static bool IsEpic(string directory)
+        private static bool IsEpic()
         {
-            string checkfolder = Path.Combine(directory, ".eggstore");
-            if (Directory.Exists(checkfolder))
-            {
-                return true;
-            }
-            return false;
+            return Array.IndexOf(Environment.GetCommandLineArgs(), "-EpicPortal") != -1;
         }
 
-        private static bool IsMSStore(string directory)
+        private static bool IsMSStore()
         {
-            string checkfile = Path.Combine(directory, "MicrosoftGame.config");
-            if (File.Exists(checkfile))
-            {
-                return true;
-            }
-            return false;
+            return PlatformServicesUtils.IsRuntimePluginDllPresent("XGamingRuntimeThunks");
         }
 
-        private static bool NonValidStore(string folder)
+        private static bool NonValidStore()
         {
-            string steamDll = Path.Combine(folder, PirateCheck.SteamApiName);
-            if (File.Exists(steamDll))
-            {
-                FileInfo fileInfo = new FileInfo(steamDll);
-
-                if (fileInfo.Length > PirateCheck.SteamApiLength)
-                {
-                    return true;
-                }
-            }
-
-            foreach (string file in PirateCheck.CrackedFiles)
-            {
-                if (File.Exists(Path.Combine(folder, file)))
-                {
-                    return true;
-                }
-            }
-            return false;
+            return PirateCheck.PirateDetected;
         }
     }
 }
