@@ -13,6 +13,9 @@
     {
         internal static int ModsTab;
         internal static int ModListTab;
+        internal static List<ModDataTemplate> modlist;
+        internal static List<ModDataTemplate> modchanges;
+
 
         [HarmonyPatch(typeof(uGUI_OptionsPanel), nameof(uGUI_OptionsPanel.AddTabs))]
         internal static class OptionsPatch
@@ -92,6 +95,13 @@
 
                 foreach (var mod in mods)
                 {
+                    ModDataTemplate _tmpmod = new ModDataTemplate();
+                    _tmpmod.ID = mod.Id;
+                    _tmpmod.AssemblyName = mod.AssemblyName;
+                    _tmpmod.LoadedAssembly = mod.LoadedAssembly;
+                    _tmpmod.Enabled = mod.Enable;
+                    modlist.Add(_tmpmod);
+
                     if (mod.Enable)
                     {
                         activeMods.Add(mod);
@@ -111,6 +121,17 @@
                 foreach (var mod in activeMods)
                 {
                     __instance.AddHeading(ModListTab, $"{mod.DisplayName} v{mod.ParsedVersion.ToString()} from {mod.Author}");
+
+                    MethodInfo Modlist_AddToggleOption = null;
+                    Modlist_AddToggleOption = typeof(uGUI_OptionsPanel).GetMethod(nameof(Modlist_AddToggleOption), new System.Type[] { typeof(int), typeof(string), typeof(bool), typeof(UnityAction<bool>) });
+                    //Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", mod.Enable, new UnityAction<bool>(value => activeMods[(activeMods.IndexOf(mod))].Enable = value) });
+
+                    //int index = modlist.IndexOf(modlist.Where(mdt => mdt.ID.ToString() == mod.Id.ToString()).FirstOrDefault());
+                    //Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", modlist[index].Enabled , new UnityAction<bool>(value => modlist[index].Enabled = value) });
+                    //Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", modlist[index].Enabled, MyOnchangeMethode(Mod.id; value) });
+                    //Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", modlist[index].Enabled, new UnityAction<bool>(value => MyOnchangeMethode(modlist[index].ID, value)) });
+
+                    Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", mod.Enable, new UnityAction<bool>(value => MyOnchangeMethode(mod.Id, value)) });
                 }
 
                 __instance.AddHeading(ModListTab, $"- - List of Disabled Mods - -");
@@ -121,6 +142,41 @@
                 }
                 #endregion Mod List
             }
+
+            static void MyOnchangeMethode(string id, bool status)
+            {
+                ModDataTemplate _tmpmod = modlist.Where(mdt => mdt.ID.ToString() == id).FirstOrDefault();
+                if (_tmpmod == null )
+                {
+                    _tmpmod.Enabled = status;
+                    modchanges.Add(_tmpmod);
+                }
+                else
+                {
+                    //theoretical i don't need that if statement because if the Mod is already in the List there is only the possibility of removing it anyway when only 2 status exist ???
+                    if(_tmpmod.Enabled != status)
+                    {
+                        modchanges.Remove(_tmpmod);
+                    }
+                }
+
+                if(modchanges.Count == 0)
+                {
+                    //disable Apply Button
+                }
+                else
+                {
+                    //enable Apply Button
+                }
+            }
+        }
+
+        internal class ModDataTemplate
+        {
+            public string ID { get; set; }
+            public Assembly LoadedAssembly { get; set; }
+            public string AssemblyName { get; set; }
+            public bool Enabled { get; set; }
         }
     }
 }
