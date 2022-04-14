@@ -79,7 +79,7 @@
                 var modprio_sml = QModServices.Main.GetMod("SMLHelper");
                 if (modprio_sml != null)
                 {
-                    __instance.AddHeading(ModListTab, $"{modprio_sml.DisplayName} {(modprio_sml.Enable ? $"v{modprio_sml.ParsedVersion}" : $"")} {(modprio_sml.IsLoaded ? "is activated" : "is deactivated")}");
+                    __instance.AddHeading(ModListTab, $"{modprio_sml.DisplayName} {(modprio_sml.Enable ? $"v{modprio_sml.ParsedVersion}" : string.Empty)} is {(modprio_sml.IsLoaded ? "enabled" : "disabled")}");
                 }
                 else
                 {
