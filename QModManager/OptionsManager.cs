@@ -72,8 +72,10 @@
 
                 #region Mod List
                 Logger.Log(Logger.Level.Debug, "OptionsMenu - Start creating Modlist");
-                modlist = null;
-                modchanges = null;
+                //modlist = null;
+                modlist = new List<ModDataTemplate>();
+                //modchanges = null;
+                modchanges = new List<ModDataTemplate>();
 
                 //Create new Tab in the Menu
                 ModListTab = __instance.AddTab("QMods List");
@@ -108,7 +110,6 @@
                 List<IQMod> activeMods = new List<IQMod>();
                 List<IQMod> inactiveMods = new List<IQMod>();
 
-                ModDataTemplate _tmpmod = new ModDataTemplate();
                 foreach (var mod in mods)
                 {
                     if (mod.Enable)
@@ -121,22 +122,27 @@
                         inactiveMods.Add(mod);
                     }
 
+                    ModDataTemplate _tmpmod = new ModDataTemplate();
                     try
                     {
-                        //_tmpmod.ID = mod.Id;
-                        /*
+                        _tmpmod.ID = mod.Id;
+                        
                         if (mod.LoadedAssembly != null)
                         {
-                            _tmpmod.AssemblyName = mod.AssemblyName;
-                            _tmpmod.LoadedAssembly = mod.LoadedAssembly;
+                            Logger.Log(Logger.Level.Debug, $"NANANANANANA - Just checking {mod.DisplayName} ; {mod.AssemblyName} ; {mod.LoadedAssembly.Location}");
+                            _tmpmod.PathToAssemblyFile = mod.LoadedAssembly.Location;
                         }
-                        */
-                        //_tmpmod.Enabled = mod.Enable;
-                        //modlist.Add(_tmpmod);
+                        else
+                        {
+                            Logger.Log(Logger.Level.Debug, $"NANANANANANA - Just checking {mod.DisplayName} has no Loaded Assembly");
+                        }
+                        
+                        _tmpmod.Enabled = mod.Enable;
+                        modlist.Add(_tmpmod);
                     }
                     catch
                     {
-                        Logger.Log(Logger.Level.Debug, "123456789 - Error on adding Temp Mod to Modlist");
+                        Logger.Log(Logger.Level.Debug, "NANANANANANA - Error on adding Temp Mod to Modlist");
                     }
 
                 }
@@ -183,7 +189,7 @@
                 Logger.Log(Logger.Level.Debug, $"WOLOLOLOLOLO - the submit id is {id} and the Status is {status}");
 
                 ModDataTemplate _tmpmod = new ModDataTemplate();
-                IEnumerable<ModDataTemplate> _tmpmodlist;
+                //IEnumerable<ModDataTemplate> _tmpmodlist;
 
                 //try
                 //{
@@ -191,27 +197,31 @@
                 try
                 {
                     //_tmpmod = modlist.Where(mdt => mdt.ID.ToString() == id).FirstOrDefault();
-                        
+                    
+                    //Check if the Modlist contains any Mods
                     if(modlist.Count == 0)
                     {
+                        //If not i do not need to search for Mods already in 
                         Logger.Log(Logger.Level.Debug, $"modlistcount is Zero");
-                        _tmpmodlist = null;
+                        _tmpmod = null;
+                        //_tmpmodlist = null;
                     }
                     else
                     {
                         Logger.Log(Logger.Level.Debug, $"modlistcount not Zero");
-                        _tmpmodlist = modlist.Where(mdt => mdt.ID == id);
+                        _tmpmod = modlist.Where(mdt => mdt.ID.ToString() == id).FirstOrDefault();
+                        //_tmpmodlist = modlist.Where(mdt => mdt.ID == id);
 
-                        foreach (ModDataTemplate test in _tmpmodlist)
-                        {
-                            Logger.Log(Logger.Level.Debug, $"WOLOLOLOLOLO - found mod {test.ID}");
-                        }
+                        //foreach (ModDataTemplate test in _tmpmodlist)
+                        //{
+                        //Logger.Log(Logger.Level.Debug, $"WOLOLOLOLOLO - found mod {test.ID}");
+                        //}
                     }
 
                 }
-                catch (Exception e)
+                catch
                 {
-                    throw e;
+                    
                 }
                 /*
                 catch
@@ -272,8 +282,7 @@
         internal class ModDataTemplate
         {
             public string ID { get; set; }
-            //public Assembly LoadedAssembly { get; set; }
-            //public string AssemblyName { get; set; }
+            public string PathToAssemblyFile { get; set; }
             public bool Enabled { get; set; }
         }
     }
