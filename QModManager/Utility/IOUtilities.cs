@@ -126,5 +126,7 @@ namespace QModManager.Utility
                 s += "|   ";
             return s;
         }
+
+        internal static void ChangeModStatustoFile
     }
 }

@@ -18,8 +18,8 @@
         [HarmonyPatch(typeof(uGUI_OptionsPanel), nameof(uGUI_OptionsPanel.AddTabs))]
         internal static class OptionsPatch
         {
-            public static List<ModDataTemplate> modlist;
-            public static List<ModDataTemplate> modchanges { get; set; }
+            internal static List<ModDataTemplate> ModList;
+            public static List<ModDataTemplate> ModListPendingChanges;
             //internal static bool testbool { get; set; }
 
             [HarmonyPostfix]
@@ -71,11 +71,15 @@
                 #endregion Mod Config
 
                 #region Mod List
+                //Start creating Ingame Mod List
                 Logger.Log(Logger.Level.Debug, "OptionsMenu - Start creating Modlist");
-                //modlist = null;
-                modlist = new List<ModDataTemplate>();
-                //modchanges = null;
-                modchanges = new List<ModDataTemplate>();
+                
+                //Reset ModList and Pending Changes on Relead the List Menu - We do not want to save any Data or take over Data from previous time here
+                ModList = new List<ModDataTemplate>();
+                ModListPendingChanges = new List<ModDataTemplate>();
+                IEnumerable<IQMod> mods = QModServices.Main.GetAllMods().OrderBy(mod => mod.DisplayName);
+                List<IQMod> activeMods = new List<IQMod>();
+                List<IQMod> inactiveMods = new List<IQMod>();
 
                 //Create new Tab in the Menu
                 ModListTab = __instance.AddTab("QMods List");
@@ -86,30 +90,18 @@
 #else
                 __instance.AddHeading(ModListTab, $"QModManager running version {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}");
 #endif
-                //Add SML Informations
+                //Add SML Informations to the Top as its pretty Important
                 var modprio_sml = QModServices.Main.GetMod("SMLHelper");
                 if (modprio_sml != null)
                 {
                     __instance.AddHeading(ModListTab, $"{modprio_sml.DisplayName} {(modprio_sml.Enable ? $"v{modprio_sml.ParsedVersion}" : string.Empty)} is {(modprio_sml.IsLoaded ? "enabled" : "disabled")}");
-
-
-                    //*** Test
-                    //testbool = modprio_sml.Enable;
-                    //MethodInfo SML_AddToggleOption = null;
-                    //SML_AddToggleOption = typeof(uGUI_OptionsPanel).GetMethod(nameof(AddToggleOption), new System.Type[] { typeof(int), typeof(string), typeof(bool), typeof(UnityAction<bool>) });
-                    //SML_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", testbool, new UnityAction<bool>(value => testbool = value ) });
-                    //SML_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", modprio_sml.Enable , new UnityAction<bool>(value => MyOnchangeMethode(modprio_sml.Id, value) ) });
-
                 }
                 else
                 {
                     __instance.AddHeading(ModListTab, $"SMLHelper is not installed");
                 }
 
-                IEnumerable<IQMod> mods = QModServices.Main.GetAllMods().OrderBy(mod => mod.DisplayName);
-                List<IQMod> activeMods = new List<IQMod>();
-                List<IQMod> inactiveMods = new List<IQMod>();
-
+                //Now lets create the Mod List
                 foreach (var mod in mods)
                 {
                     if (mod.Enable)
@@ -122,11 +114,11 @@
                         inactiveMods.Add(mod);
                     }
 
+                    //Write down a Temporary reduced Modlist that is interactable (The QMM Modlist is only Readonly and has many information we do not need for now)
                     ModDataTemplate _tmpmod = new ModDataTemplate();
                     try
                     {
                         _tmpmod.ID = mod.Id;
-                        
                         if (mod.LoadedAssembly != null)
                         {
                             Logger.Log(Logger.Level.Debug, $"NANANANANANA - Just checking {mod.DisplayName} ; {mod.AssemblyName} ; {mod.LoadedAssembly.Location}");
@@ -135,10 +127,9 @@
                         else
                         {
                             Logger.Log(Logger.Level.Debug, $"NANANANANANA - Just checking {mod.DisplayName} has no Loaded Assembly");
-                        }
-                        
+                        }   
                         _tmpmod.Enabled = mod.Enable;
-                        modlist.Add(_tmpmod);
+                        ModList.Add(_tmpmod);
                     }
                     catch
                     {
@@ -147,122 +138,71 @@
 
                 }
 
+                //Now show some Statistics ahead of the List.
                 __instance.AddHeading(ModListTab, $"- - Statistics - -");
                 __instance.AddHeading(ModListTab, $"{mods.Count()} Mods found");
                 __instance.AddHeading(ModListTab, $"{activeMods.Count} Mods enabled");
                 __instance.AddHeading(ModListTab, $"{inactiveMods.Count} Mods disabled");
 
+                //Now we write down the actull List with all Mods. Starting with the Active Mods
                 __instance.AddHeading(ModListTab, $"- - List of currently running Mods - -");
                 foreach (var mod in activeMods)
                 {
+                    //This is the Header Entry
                     __instance.AddHeading(ModListTab, $"{mod.DisplayName} v{mod.ParsedVersion.ToString()} from {mod.Author}");
 
+                    //This is the Collapse SubMenu of the Entry
                     MethodInfo Modlist_AddToggleOption = null;
-                    Modlist_AddToggleOption = typeof(uGUI_OptionsPanel).GetMethod(nameof(AddToggleOption), new System.Type[] { typeof(int), typeof(string), typeof(bool), typeof(UnityAction<bool>) });
-
-
-                    //int index = modlist.IndexOf(modlist.Where(mdt => mdt.ID.ToString() == mod.Id.ToString()).FirstOrDefault());
-                    //Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", modlist[index].Enabled , new UnityAction<bool>(value => modlist[index].Enabled = value) });
-                    
-                    //Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", modlist[index].Enabled, MyOnchangeMethode(Mod.id; value) });
-                    //Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", modlist[index].Enabled, new UnityAction<bool>(value => MyOnchangeMethode(modlist[index].ID, value)) });
-
-                    Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", mod.Enable, new UnityAction<bool>(value => MyOnChangeMethode(__instance, mod.Id, value)) });
+                    Modlist_AddToggleOption = typeof(uGUI_OptionsPanel).GetMethod(nameof(AddToggleOption), new System.Type[] { typeof(int), typeof(string), typeof(bool), typeof(UnityAction<bool>) });                    
+                    Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", ModList[ModList.FindIndex(mdt => mdt.ID == mod.Id)].Enabled , new UnityAction<bool>(value => OnChangeModStatus(ModList[ModList.FindIndex(mdt => mdt.ID == mod.Id)], value)) });
                 }
 
+                //Continue with Disabled Mods
                 __instance.AddHeading(ModListTab, $"- - List of Disabled Mods - -");
-
                 foreach (var mod in inactiveMods)
                 {
+                    //This is the Header Entry
                     __instance.AddHeading(ModListTab, $"{mod.DisplayName} from {mod.Author}");
+
+                    //This is the Collapse SubMenu of the Entry
+                    MethodInfo Modlist_AddToggleOption = null;
+                    Modlist_AddToggleOption = typeof(uGUI_OptionsPanel).GetMethod(nameof(AddToggleOption), new System.Type[] { typeof(int), typeof(string), typeof(bool), typeof(UnityAction<bool>) });
+                    Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", ModList[ModList.FindIndex(mdt => mdt.ID == mod.Id)].Enabled, new UnityAction<bool>(value => OnChangeModStatus(ModList[ModList.FindIndex(mdt => mdt.ID == mod.Id)], value)) });
                 }
 
-                Logger.Log(Logger.Level.Debug, "OptionsMenu - Creating Modlist Ending");
+                Logger.Log(Logger.Level.Debug, "OptionsMenu - ModList - Creating Modlist Ending");
                 #endregion Mod List
             }
 
-            static void MyOnChangeMethode(uGUI_OptionsPanel __instance, string id, bool status)
+            static void OnChangeModStatus(ModDataTemplate ChangedMod,bool status)
             {
-                
-                Logger.Log(Logger.Level.Debug, "WOLOLOLOLOLO - enter MyOnChangeMethode");
+                Logger.Log(Logger.Level.Debug, $"WOLOLOLOLOLO - the submit id is {ChangedMod.ID} and the Status is {status}");
+                ChangedMod.Enabled = status;
 
-                Logger.Log(Logger.Level.Debug, $"WOLOLOLOLOLO - the submit id is {id} and the Status is {status}");
-
-                ModDataTemplate _tmpmod = new ModDataTemplate();
-                //IEnumerable<ModDataTemplate> _tmpmodlist;
-
-                //try
-                //{
-                Logger.Log(Logger.Level.Debug, "WOLOLOLOLOLO - searched Mod");
-                try
+                if( string.IsNullOrEmpty(ModListPendingChanges.Find(mdt => mdt.ID == ChangedMod.ID).ID) )
                 {
-                    //_tmpmod = modlist.Where(mdt => mdt.ID.ToString() == id).FirstOrDefault();
-                    
-                    //Check if the Modlist contains any Mods
-                    if(modlist.Count == 0)
-                    {
-                        //If not i do not need to search for Mods already in 
-                        Logger.Log(Logger.Level.Debug, $"modlistcount is Zero");
-                        _tmpmod = null;
-                        //_tmpmodlist = null;
-                    }
-                    else
-                    {
-                        Logger.Log(Logger.Level.Debug, $"modlistcount not Zero");
-                        _tmpmod = modlist.Where(mdt => mdt.ID.ToString() == id).FirstOrDefault();
-                        //_tmpmodlist = modlist.Where(mdt => mdt.ID == id);
-
-                        //foreach (ModDataTemplate test in _tmpmodlist)
-                        //{
-                        //Logger.Log(Logger.Level.Debug, $"WOLOLOLOLOLO - found mod {test.ID}");
-                        //}
-                    }
-
-                }
-                catch
-                {
-                    
-                }
-                /*
-                catch
-                {
-                    Logger.Log(Logger.Level.Debug, "WOLOLOLOLOLO - ERROR - searched Mod");
-                }
-                */
-                                        
-                if (_tmpmod == null)
-                {
-                    Logger.Log(Logger.Level.Debug, "WOLOLOLOLOLO - Mod is not null");
                     try
                     {
-                        Logger.Log(Logger.Level.Debug, "WOLOLOLOLOLO - Adding mod to change list");
-                        _tmpmod.Enabled = status;
-                        modchanges.Add(_tmpmod);
+                        ModListPendingChanges.Add(ChangedMod);
                     }
                     catch
                     {
-                        Logger.Log(Logger.Level.Debug, "WOLOLOLOLOLO - ERROR - Adding mod to change list");
+                        Logger.Log(Logger.Level.Debug, "OptionsMenu - ModList - Error on Adding Mod to Pending Status Change List");
                     }
                 }
                 else
                 {
-                    //theoretical i don't need that if statement because if the Mod is already in the List there is only the possibility of removing it anyway when only 2 status exist ???
-                    if (_tmpmod.Enabled != status)
+                    try
                     {
-                        try
-                        {
-                            Logger.Log(Logger.Level.Debug, "WOLOLOLOLOLO - remove mod from list again.");
-                            modchanges.Remove(_tmpmod);
-                        }
-                        catch
-                        {
-                            Logger.Log(Logger.Level.Debug, "WOLOLOLOLOLO - remove mod from list again.");
-                        }
-
+                        ModListPendingChanges.Remove(ChangedMod);
+                    }
+                    catch
+                    {
+                        Logger.Log(Logger.Level.Debug, "OptionsMenu - ModList - Error on Removing Mod to Pending Status Change List");
                     }
                 }
 
-                if (modchanges.Count == 0)
+                if (ModListPendingChanges.Count == 0)
                 {
                     //disable Apply Button
                 }
@@ -270,12 +210,6 @@
                 {
                     //enable Apply Button
                 }
-                //}
-                //catch
-                //{
-                    //Logger.Log(Logger.Level.Debug, "123456789 - Error on MyOnChangeMethode");
-                //}
-
             }
         }
 
