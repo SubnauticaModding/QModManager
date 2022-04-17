@@ -8,20 +8,21 @@
     using UnityEngine.Events;
     using System.Collections.Generic;
     using System.Linq;
-    using System;
+    using QModManager.DataStructures;
 
     internal static class OptionsManager
-    {      
+    {
+        internal static string ModsListTabName = "QMods List";
         internal static int ModsTab;
         internal static int ModListTab;
-        
+        internal static List<SimpleModDataTemplate> ModList;
+        public static List<SimpleModDataTemplate> ModListPendingChanges;
+        //Dedicated Indicator to do not loosing change Status on Modlist
+        public static bool PendingChangesOnModList;
+
         [HarmonyPatch(typeof(uGUI_OptionsPanel), nameof(uGUI_OptionsPanel.AddTabs))]
         internal static class OptionsPatch
         {
-            internal static List<ModDataTemplate> ModList;
-            public static List<ModDataTemplate> ModListPendingChanges;
-            //internal static bool testbool { get; set; }
-
             [HarmonyPostfix]
             internal static void Postfix(uGUI_OptionsPanel __instance)
             {
@@ -75,8 +76,9 @@
                 Logger.Log(Logger.Level.Debug, "OptionsMenu - Start creating Modlist");
                 
                 //Reset ModList and Pending Changes on Relead the List Menu - We do not want to save any Data or take over Data from previous time here
-                ModList = new List<ModDataTemplate>();
-                ModListPendingChanges = new List<ModDataTemplate>();
+                ModList = new List<SimpleModDataTemplate>();
+                ModListPendingChanges = new List<SimpleModDataTemplate>();
+                PendingChangesOnModList = false;
                 IEnumerable<IQMod> mods = QModServices.Main.GetAllMods().OrderBy(mod => mod.DisplayName);
                 List<IQMod> activeMods = new List<IQMod>();
                 List<IQMod> inactiveMods = new List<IQMod>();
@@ -115,18 +117,18 @@
                     }
 
                     //Write down a Temporary reduced Modlist that is interactable (The QMM Modlist is only Readonly and has many information we do not need for now)
-                    ModDataTemplate _tmpmod = new ModDataTemplate();
+                    SimpleModDataTemplate _tmpmod = new SimpleModDataTemplate();
                     try
                     {
                         _tmpmod.ID = mod.Id;
                         if (mod.LoadedAssembly != null)
                         {
-                            Logger.Log(Logger.Level.Debug, $"NANANANANANA - Just checking {mod.DisplayName} ; {mod.AssemblyName} ; {mod.LoadedAssembly.Location}");
+                            //Logger.Log(Logger.Level.Debug, $"NANANANANANA - Just checking {mod.DisplayName} ; {mod.AssemblyName} ; {mod.LoadedAssembly.Location}");
                             _tmpmod.PathToAssemblyFile = mod.LoadedAssembly.Location;
                         }
                         else
                         {
-                            Logger.Log(Logger.Level.Debug, $"NANANANANANA - Just checking {mod.DisplayName} has no Loaded Assembly");
+                            //Logger.Log(Logger.Level.Debug, $"NANANANANANA - Just checking {mod.DisplayName} has no Loaded Assembly");
                         }   
                         _tmpmod.Enabled = mod.Enable;
                         ModList.Add(_tmpmod);
@@ -154,7 +156,7 @@
                     //This is the Collapse SubMenu of the Entry
                     MethodInfo Modlist_AddToggleOption = null;
                     Modlist_AddToggleOption = typeof(uGUI_OptionsPanel).GetMethod(nameof(AddToggleOption), new System.Type[] { typeof(int), typeof(string), typeof(bool), typeof(UnityAction<bool>) });                    
-                    Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", ModList[ModList.FindIndex(mdt => mdt.ID == mod.Id)].Enabled , new UnityAction<bool>(value => OnChangeModStatus(ModList[ModList.FindIndex(mdt => mdt.ID == mod.Id)], value)) });
+                    Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", ModList[ModList.FindIndex(mdt => mdt.ID == mod.Id)].Enabled , new UnityAction<bool>(value => OnChangeModStatus(ModList[ModList.FindIndex(mdt => mdt.ID == mod.Id)], value, __instance)) });
                 }
 
                 //Continue with Disabled Mods
@@ -167,14 +169,15 @@
                     //This is the Collapse SubMenu of the Entry
                     MethodInfo Modlist_AddToggleOption = null;
                     Modlist_AddToggleOption = typeof(uGUI_OptionsPanel).GetMethod(nameof(AddToggleOption), new System.Type[] { typeof(int), typeof(string), typeof(bool), typeof(UnityAction<bool>) });
-                    Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", ModList[ModList.FindIndex(mdt => mdt.ID == mod.Id)].Enabled, new UnityAction<bool>(value => OnChangeModStatus(ModList[ModList.FindIndex(mdt => mdt.ID == mod.Id)], value)) });
+                    Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", ModList[ModList.FindIndex(mdt => mdt.ID == mod.Id)].Enabled, new UnityAction<bool>(value => OnChangeModStatus(ModList[ModList.FindIndex(mdt => mdt.ID == mod.Id)], value, __instance)) });
                 }
 
                 Logger.Log(Logger.Level.Debug, "OptionsMenu - ModList - Creating Modlist Ending");
+                
                 #endregion Mod List
             }
 
-            static void OnChangeModStatus(ModDataTemplate ChangedMod,bool status)
+            static void OnChangeModStatus(SimpleModDataTemplate ChangedMod,bool status, uGUI_OptionsPanel __instance)
             {
                 Logger.Log(Logger.Level.Debug, $"WOLOLOLOLOLO - the submit id is {ChangedMod.ID} and the Status is {status}");
                 ChangedMod.Enabled = status;
@@ -205,19 +208,62 @@
                 if (ModListPendingChanges.Count == 0)
                 {
                     //disable Apply Button
+                    __instance.applyButton.gameObject.SetActive(false);
+                    PendingChangesOnModList = false;
                 }
                 else
                 {
                     //enable Apply Button
+                    __instance.applyButton.gameObject.SetActive(true);
+                    PendingChangesOnModList = true;
                 }
             }
         }
 
-        internal class ModDataTemplate
+        [HarmonyPatch(typeof(uGUI_OptionsPanel), nameof(uGUI_OptionsPanel.OnApplyButton))]
+        internal static class OptionsPatch_OnApplyButton
+        {          
+            [HarmonyPrefix]
+            internal static bool Prefix(uGUI_OptionsPanel __instance)
+            {
+                //Warning Save Button is shared over the hole Option Menu !
+
+                //Check if Pending Changes exist and only run Save for one Menu and not Both
+                if(OptionsManager.PendingChangesOnModList)
+                {
+                    if (OptionsManager.ModListPendingChanges.Count > 0)
+                    {
+                        foreach (SimpleModDataTemplate mod in OptionsManager.ModListPendingChanges)
+                        {
+                            IOUtilities.ChangeModStatustoFile(mod);
+                        }
+                    }
+                    __instance.applyButton.gameObject.SetActive(false);
+                    return false; //run custom
+                }
+                else
+                {
+                    return true; //let the Original Run
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(uGUI_TabbedControlsPanel), nameof(uGUI_TabbedControlsPanel.SelectTab))]
+        internal static class TabbedControlsPanelPatch_SelectTab
         {
-            public string ID { get; set; }
-            public string PathToAssemblyFile { get; set; }
-            public bool Enabled { get; set; }
+            [HarmonyPostfix]
+            internal static void Postfix(uGUI_TabbedControlsPanel __instance)
+            {
+                //To avoid Saving changes made on Modlist reset the Pending Status if not looking at the Modlist Tab
+                if (__instance.GetComponentInChildren<UnityEngine.UI.Text>().text == ModsListTabName)
+                {
+                    OptionsManager.PendingChangesOnModList = true;
+                }
+                else
+                {
+                    OptionsManager.PendingChangesOnModList = false;
+                }                
+            }
         }
     }
 }

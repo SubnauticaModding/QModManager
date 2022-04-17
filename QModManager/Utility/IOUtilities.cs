@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using QModManager.DataStructures;
+using Oculus.Newtonsoft.Json;
 
 namespace QModManager.Utility
 {
@@ -127,6 +128,32 @@ namespace QModManager.Utility
             return s;
         }
 
-        internal static void ChangeModStatustoFile
+        internal static void ChangeModStatustoFile(SimpleModDataTemplate smdt)
+        {
+            //Get the Configfile
+            string modconfigpath = Path.GetFullPath(Path.GetDirectoryName(smdt.PathToAssemblyFile));
+            dynamic modconfigfile = JsonConvert.DeserializeObject(File.ReadAllText(modconfigpath));
+
+            //Modify the Configfile
+            Logger.Log(Logger.Level.Debug, $"TESTTESTTESTTESTTEST - {modconfigfile["Enable"]}");
+            modconfigfile["Enable"] = smdt.Enabled.ToString();
+            Logger.Log(Logger.Level.Debug, $"TESTTESTTESTTESTTEST - {modconfigfile["Enable"]}");
+
+            /*
+            //Save it back
+            Formatting myformat = new Formatting();
+            myformat = Formatting.Indented;
+            string jsonstr= JsonConvert.SerializeObject(modconfigfile, myformat);
+            try
+            {
+                File.WriteAllText(modconfigpath, jsonstr);
+                Logger.Log(Logger.Level.Info, "Mod Compare List for Savegame was saved to Mod Folder");
+            }
+            catch
+            {
+                Logger.Log(Logger.Level.Error, "ErrorID:5713/31A - Saving Changed Mod Configfile failed");
+            }
+            */
+        }
     }
 }
