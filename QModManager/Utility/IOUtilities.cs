@@ -128,10 +128,14 @@ namespace QModManager.Utility
             return s;
         }
 
+        /*
         internal static void ChangeModStatustoFile(SimpleModDataTemplate smdt)
         {
+            Logger.Log(Logger.Level.Debug, $"Welcome to the ChangeModStatustoFile Methode");
+
             //Get the Configfile
-            string modconfigpath = Path.GetFullPath(Path.GetDirectoryName(smdt.PathToAssemblyFile));
+            string modconfigpath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(smdt.PathToAssemblyFile)),"mod.json");
+            Logger.Log(Logger.Level.Debug, $"Path {modconfigpath}");
             dynamic modconfigfile = JsonConvert.DeserializeObject(File.ReadAllText(modconfigpath));
 
             //Modify the Configfile
@@ -139,7 +143,7 @@ namespace QModManager.Utility
             modconfigfile["Enable"] = smdt.Enabled.ToString();
             Logger.Log(Logger.Level.Debug, $"TESTTESTTESTTESTTEST - {modconfigfile["Enable"]}");
 
-            /*
+            
             //Save it back
             Formatting myformat = new Formatting();
             myformat = Formatting.Indented;
@@ -153,7 +157,8 @@ namespace QModManager.Utility
             {
                 Logger.Log(Logger.Level.Error, "ErrorID:5713/31A - Saving Changed Mod Configfile failed");
             }
-            */
+            
         }
+        */
     }
 }

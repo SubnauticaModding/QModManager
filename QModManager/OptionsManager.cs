@@ -9,6 +9,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using QModManager.DataStructures;
+    using Oculus.Newtonsoft.Json;
+    using System.IO;
 
     internal static class OptionsManager
     {
@@ -182,7 +184,18 @@
                 Logger.Log(Logger.Level.Debug, $"WOLOLOLOLOLO - the submit id is {ChangedMod.ID} and the Status is {status}");
                 ChangedMod.Enabled = status;
 
-                if( string.IsNullOrEmpty(ModListPendingChanges.Find(mdt => mdt.ID == ChangedMod.ID).ID) )
+                SimpleModDataTemplate _modexist = new SimpleModDataTemplate();
+                try
+                {
+                    //Is there a better way than try/catch using Find while determind a null or Empty when no Mod is found ?
+                    _modexist = ModListPendingChanges.Find(mdt => mdt.ID == ChangedMod.ID);
+                }
+                catch
+                {
+                    _modexist = null;
+                }
+
+                if(_modexist == null)
                 {
                     try
                     {
@@ -193,7 +206,7 @@
                         Logger.Log(Logger.Level.Debug, "OptionsMenu - ModList - Error on Adding Mod to Pending Status Change List");
                     }
                 }
-                else
+                else if(_modexist.ID == ChangedMod.ID)
                 {
                     try
                     {
@@ -204,11 +217,16 @@
                         Logger.Log(Logger.Level.Debug, "OptionsMenu - ModList - Error on Removing Mod to Pending Status Change List");
                     }
                 }
+                else
+                {
+                    Logger.Log(Logger.Level.Debug, "OptionsMenu - ModList - Error on Adding AND Removing Mod to Pending Status Change List.");
+                    //mhh that should not happen....
+                }
 
                 if (ModListPendingChanges.Count == 0)
                 {
-                    //disable Apply Button
-                    __instance.applyButton.gameObject.SetActive(false);
+                    ////disable Apply Button
+                    //__instance.applyButton.gameObject.SetActive(false);
                     PendingChangesOnModList = false;
                 }
                 else
@@ -220,6 +238,7 @@
             }
         }
 
+        /*
         [HarmonyPatch(typeof(uGUI_OptionsPanel), nameof(uGUI_OptionsPanel.OnApplyButton))]
         internal static class OptionsPatch_OnApplyButton
         {          
@@ -239,7 +258,7 @@
                         }
                     }
                     __instance.applyButton.gameObject.SetActive(false);
-                    return false; //run custom
+                    return false; //run custom only
                 }
                 else
                 {
@@ -247,7 +266,69 @@
                 }
             }
         }
+        */
 
+        [HarmonyPatch(typeof(uGUI_OptionsPanel), nameof(uGUI_OptionsPanel.OnApplyButton))]
+        internal static class OptionsPatch_OnApplyButton
+        {
+            [HarmonyPostfix]
+            internal static void Postfix(uGUI_OptionsPanel __instance)
+            {
+                //Warning Save Button is shared over the hole Option Menu !
+                Logger.Log(Logger.Level.Debug, $"OptionsMenu - OnApplyButton - Mod Count going to Change Status: {OptionsManager.ModListPendingChanges.Count}");
+                if (OptionsManager.ModListPendingChanges.Count > 0)
+                {
+                    foreach (SimpleModDataTemplate _mod in OptionsManager.ModListPendingChanges)
+                    {
+                        Logger.Log(Logger.Level.Debug, $"OptionsMenu - OnApplyButton - {_mod.ID}");
+                        try
+                        {
+                            ChangeModStatustoFile(_mod);
+                        }
+                        catch
+                        {
+                            Logger.Log(Logger.Level.Debug, $"OptionsMenu - OnApplyButton - erro on pass");
+                        }
+                        
+                    }
+                }
+                //just in case disable to button again
+                __instance.applyButton.gameObject.SetActive(false);
+            }
+
+            internal static void ChangeModStatustoFile(SimpleModDataTemplate smdt)
+            {
+                Logger.Log(Logger.Level.Debug, $"Welcome to the ChangeModStatustoFile Methode");
+
+                //Get the Configfile
+                string modconfigpath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(smdt.PathToAssemblyFile)), "mod.json");
+                Logger.Log(Logger.Level.Debug, $"Path {modconfigpath}");
+                dynamic modconfigfile = JsonConvert.DeserializeObject(File.ReadAllText(modconfigpath));
+
+                //Modify the Configfile
+                Logger.Log(Logger.Level.Debug, $"TESTTESTTESTTESTTEST - {modconfigfile["Enable"]}");
+                modconfigfile["Enable"] = smdt.Enabled.ToString();
+                Logger.Log(Logger.Level.Debug, $"TESTTESTTESTTESTTEST - {modconfigfile["Enable"]}");
+
+                /*
+                //Save it back
+                Formatting myformat = new Formatting();
+                myformat = Formatting.Indented;
+                string jsonstr= JsonConvert.SerializeObject(modconfigfile, myformat);
+                try
+                {
+                    File.WriteAllText(modconfigpath, jsonstr);
+                    Logger.Log(Logger.Level.Info, "Mod Compare List for Savegame was saved to Mod Folder");
+                }
+                catch
+                {
+                    Logger.Log(Logger.Level.Error, "ErrorID:5713/31A - Saving Changed Mod Configfile failed");
+                }
+                */
+            }
+        }
+
+        /*
         [HarmonyPatch(typeof(uGUI_TabbedControlsPanel), nameof(uGUI_TabbedControlsPanel.SelectTab))]
         internal static class TabbedControlsPanelPatch_SelectTab
         {
@@ -255,7 +336,7 @@
             internal static void Postfix(uGUI_TabbedControlsPanel __instance)
             {
                 //To avoid Saving changes made on Modlist reset the Pending Status if not looking at the Modlist Tab
-                if (__instance.GetComponentInChildren<UnityEngine.UI.Text>().text == ModsListTabName)
+                if (__instance.GetComponentInChildren<UnityEngine.UI.Text>().text == ModsListTabName && ModListPendingChanges.Count > 0)
                 {
                     OptionsManager.PendingChangesOnModList = true;
                 }
@@ -265,5 +346,6 @@
                 }                
             }
         }
+        */
     }
 }
