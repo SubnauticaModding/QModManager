@@ -9,8 +9,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using QModManager.DataStructures;
-    using Oculus.Newtonsoft.Json;
-    using System.IO;
+    using System;
 
     internal static class OptionsManager
     {
@@ -82,6 +81,42 @@
                 ModListPendingChanges = new List<SimpleModDataTemplate>();
                 PendingChangesOnModList = false;
                 IEnumerable<IQMod> mods = QModServices.Main.GetAllMods().OrderBy(mod => mod.DisplayName);
+
+                //test
+                Logger.Log(Logger.Level.Debug, $"NANANANANANA1 - Mods - test1");
+                try
+                {
+                    List<QMod> testmods = new List<QMod>();
+                    foreach (var iQMod in QModServices.Main.GetAllMods())
+                        if (iQMod is QMod qMod)
+                            testmods.Add(qMod);
+
+                    foreach (var _mod in testmods)
+                    {
+                        Logger.Log(Logger.Level.Debug, $"NANANANANANA1 - Mods - {_mod.Id} , {_mod.Enable} , {_mod.SubDirectory}");
+                    }
+                }
+                catch
+                {
+
+                }
+                Logger.Log(Logger.Level.Debug, $"NANANANANANA1 - Mods - test2");
+                try
+                {
+                    List<QMod> testmods2 = QModServices.Main.GetAllMods().OrderBy(mod => mod.DisplayName) as List<QMod>;
+
+                    foreach (var _mod in testmods2)
+                    {
+                        Logger.Log(Logger.Level.Debug, $"NANANANANANA2 - Mods - {_mod.Id} , {_mod.Enable} , {_mod.SubDirectory}");
+                    }
+
+                }
+                catch
+                {
+
+                }
+                // ENDE TEST
+
                 List<IQMod> activeMods = new List<IQMod>();
                 List<IQMod> inactiveMods = new List<IQMod>();
 
@@ -108,6 +143,7 @@
                 //Now lets create the Mod List
                 foreach (var mod in mods)
                 {
+                    
                     if (mod.Enable)
                     {
                         activeMods.Add(mod);
@@ -195,7 +231,7 @@
                     _modexist = null;
                 }
 
-                if(_modexist == null)
+                if (_modexist == null)
                 {
                     try
                     {
@@ -226,7 +262,6 @@
                 if (ModListPendingChanges.Count == 0)
                 {
                     ////disable Apply Button
-                    //__instance.applyButton.gameObject.SetActive(false);
                     PendingChangesOnModList = false;
                 }
                 else
@@ -238,36 +273,6 @@
             }
         }
 
-        /*
-        [HarmonyPatch(typeof(uGUI_OptionsPanel), nameof(uGUI_OptionsPanel.OnApplyButton))]
-        internal static class OptionsPatch_OnApplyButton
-        {          
-            [HarmonyPrefix]
-            internal static bool Prefix(uGUI_OptionsPanel __instance)
-            {
-                //Warning Save Button is shared over the hole Option Menu !
-
-                //Check if Pending Changes exist and only run Save for one Menu and not Both
-                if(OptionsManager.PendingChangesOnModList)
-                {
-                    if (OptionsManager.ModListPendingChanges.Count > 0)
-                    {
-                        foreach (SimpleModDataTemplate mod in OptionsManager.ModListPendingChanges)
-                        {
-                            IOUtilities.ChangeModStatustoFile(mod);
-                        }
-                    }
-                    __instance.applyButton.gameObject.SetActive(false);
-                    return false; //run custom only
-                }
-                else
-                {
-                    return true; //let the Original Run
-                }
-            }
-        }
-        */
-
         [HarmonyPatch(typeof(uGUI_OptionsPanel), nameof(uGUI_OptionsPanel.OnApplyButton))]
         internal static class OptionsPatch_OnApplyButton
         {
@@ -275,72 +280,16 @@
             internal static void Postfix(uGUI_OptionsPanel __instance)
             {
                 //Warning Save Button is shared over the hole Option Menu !
-                Logger.Log(Logger.Level.Debug, $"OptionsMenu - OnApplyButton - Mod Count going to Change Status: {OptionsManager.ModListPendingChanges.Count}");
                 if (OptionsManager.ModListPendingChanges.Count > 0)
                 {
                     foreach (SimpleModDataTemplate _mod in OptionsManager.ModListPendingChanges)
                     {
-                        ChangeModStatustoFile(_mod);
+                        IOUtilities.ChangeModStatustoFile(_mod);
                     }
                 }
                 //just in case disable to button again
                 __instance.applyButton.gameObject.SetActive(false);
             }
-            
-            internal static void ChangeModStatustoFile(SimpleModDataTemplate smdt)
-            {
-                //Get the Configfile
-                string modconfigpath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(smdt.PathToAssemblyFile)), "mod.json");
-                var modconfig = JsonConvert.DeserializeObject<Dictionary<string,object>>(File.ReadAllText(modconfigpath));
-
-                //Modify the Configfile
-                foreach (var kvp in modconfig)
-                {
-                    if (kvp.Key.ToLower() == "enable")
-                    {
-                        Logger.Log(Logger.Level.Debug, $"TESTTESTTEST - json thing - {modconfig[kvp.Key]}");
-                        modconfig[kvp.Key] = smdt.Enabled;
-                        Logger.Log(Logger.Level.Debug, $"TESTTESTTEST - json thing - {modconfig[kvp.Key]}");
-                        break;
-                    }
-                }       
-                
-                //Save it back
-                Formatting myformat = new Formatting();
-                myformat = Formatting.Indented;
-                string jsonstr= JsonConvert.SerializeObject(modconfig, myformat);
-                try
-                {
-                    File.WriteAllText(modconfigpath, jsonstr);
-                    Logger.Log(Logger.Level.Info, "Mod Compare List for Savegame was saved to Mod Folder");
-                }
-                catch
-                {
-                    Logger.Log(Logger.Level.Error, "ErrorID:5713/31A - Saving Changed Mod Configfile failed");
-                }
-                
-            }
-            
         }
-
-        /*
-        [HarmonyPatch(typeof(uGUI_TabbedControlsPanel), nameof(uGUI_TabbedControlsPanel.SelectTab))]
-        internal static class TabbedControlsPanelPatch_SelectTab
-        {
-            [HarmonyPostfix]
-            internal static void Postfix(uGUI_TabbedControlsPanel __instance)
-            {
-                //To avoid Saving changes made on Modlist reset the Pending Status if not looking at the Modlist Tab
-                if (__instance.GetComponentInChildren<UnityEngine.UI.Text>().text == ModsListTabName && ModListPendingChanges.Count > 0)
-                {
-                    OptionsManager.PendingChangesOnModList = true;
-                }
-                else
-                {
-                    OptionsManager.PendingChangesOnModList = false;
-                }                
-            }
-        }
-        */
     }
 }

@@ -128,37 +128,36 @@ namespace QModManager.Utility
             return s;
         }
 
-        /*
         internal static void ChangeModStatustoFile(SimpleModDataTemplate smdt)
         {
-            Logger.Log(Logger.Level.Debug, $"Welcome to the ChangeModStatustoFile Methode");
-
             //Get the Configfile
-            string modconfigpath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(smdt.PathToAssemblyFile)),"mod.json");
-            Logger.Log(Logger.Level.Debug, $"Path {modconfigpath}");
-            dynamic modconfigfile = JsonConvert.DeserializeObject(File.ReadAllText(modconfigpath));
+            string modconfigpath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(smdt.PathToAssemblyFile)), "mod.json");
+            var modconfig = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(modconfigpath));
 
             //Modify the Configfile
-            Logger.Log(Logger.Level.Debug, $"TESTTESTTESTTESTTEST - {modconfigfile["Enable"]}");
-            modconfigfile["Enable"] = smdt.Enabled.ToString();
-            Logger.Log(Logger.Level.Debug, $"TESTTESTTESTTESTTEST - {modconfigfile["Enable"]}");
+            foreach (var kvp in modconfig)
+            {
+                if (kvp.Key.ToLower() == "enable")
+                {
+                    modconfig[kvp.Key] = smdt.Enabled;
+                    break;
+                }
+            }
 
-            
             //Save it back
             Formatting myformat = new Formatting();
             myformat = Formatting.Indented;
-            string jsonstr= JsonConvert.SerializeObject(modconfigfile, myformat);
+            string jsonstr = JsonConvert.SerializeObject(modconfig, myformat);
             try
             {
                 File.WriteAllText(modconfigpath, jsonstr);
-                Logger.Log(Logger.Level.Info, "Mod Compare List for Savegame was saved to Mod Folder");
+                Logger.Log(Logger.Level.Info, $"IOUtilities - ChangeModStatustoFile - mod.json Update for {smdt.ID} was succesful saved to Mod Folder");
             }
             catch
             {
                 Logger.Log(Logger.Level.Error, "ErrorID:5713/31A - Saving Changed Mod Configfile failed");
             }
-            
+
         }
-        */
     }
 }
