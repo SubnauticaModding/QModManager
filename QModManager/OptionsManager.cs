@@ -280,41 +280,35 @@
                 {
                     foreach (SimpleModDataTemplate _mod in OptionsManager.ModListPendingChanges)
                     {
-                        Logger.Log(Logger.Level.Debug, $"OptionsMenu - OnApplyButton - {_mod.ID}");
-                        try
-                        {
-                            ChangeModStatustoFile(_mod);
-                        }
-                        catch
-                        {
-                            Logger.Log(Logger.Level.Debug, $"OptionsMenu - OnApplyButton - erro on pass");
-                        }
-                        
+                        ChangeModStatustoFile(_mod);
                     }
                 }
                 //just in case disable to button again
                 __instance.applyButton.gameObject.SetActive(false);
             }
-
+            
             internal static void ChangeModStatustoFile(SimpleModDataTemplate smdt)
             {
-                Logger.Log(Logger.Level.Debug, $"Welcome to the ChangeModStatustoFile Methode");
-
                 //Get the Configfile
                 string modconfigpath = Path.Combine(Path.GetFullPath(Path.GetDirectoryName(smdt.PathToAssemblyFile)), "mod.json");
-                Logger.Log(Logger.Level.Debug, $"Path {modconfigpath}");
-                dynamic modconfigfile = JsonConvert.DeserializeObject(File.ReadAllText(modconfigpath));
+                var modconfig = JsonConvert.DeserializeObject<Dictionary<string,object>>(File.ReadAllText(modconfigpath));
 
                 //Modify the Configfile
-                Logger.Log(Logger.Level.Debug, $"TESTTESTTESTTESTTEST - {modconfigfile["Enable"]}");
-                modconfigfile["Enable"] = smdt.Enabled.ToString();
-                Logger.Log(Logger.Level.Debug, $"TESTTESTTESTTESTTEST - {modconfigfile["Enable"]}");
-
-                /*
+                foreach (var kvp in modconfig)
+                {
+                    if (kvp.Key.ToLower() == "enable")
+                    {
+                        Logger.Log(Logger.Level.Debug, $"TESTTESTTEST - json thing - {modconfig[kvp.Key]}");
+                        modconfig[kvp.Key] = smdt.Enabled;
+                        Logger.Log(Logger.Level.Debug, $"TESTTESTTEST - json thing - {modconfig[kvp.Key]}");
+                        break;
+                    }
+                }       
+                
                 //Save it back
                 Formatting myformat = new Formatting();
                 myformat = Formatting.Indented;
-                string jsonstr= JsonConvert.SerializeObject(modconfigfile, myformat);
+                string jsonstr= JsonConvert.SerializeObject(modconfig, myformat);
                 try
                 {
                     File.WriteAllText(modconfigpath, jsonstr);
@@ -324,8 +318,9 @@
                 {
                     Logger.Log(Logger.Level.Error, "ErrorID:5713/31A - Saving Changed Mod Configfile failed");
                 }
-                */
+                
             }
+            
         }
 
         /*
