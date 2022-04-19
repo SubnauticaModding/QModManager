@@ -25,6 +25,8 @@ namespace QModManager.Checks
             "Subnautica_Data/Plugins/steam_emu.ini",
             "Profile/SteamUserID.cfg",
             "Profile/Stats/Achievements.Bin",
+            "Profile/VALVE/SteamUserID.cfg",
+            "Profile/VALVE/Stats/Achievements.Bin",
             "launcher.bat",
             "chuj.cdx",
         };
