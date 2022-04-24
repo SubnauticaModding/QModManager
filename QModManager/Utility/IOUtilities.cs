@@ -1,7 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using QModManager.Patching;
+
+#if SUBNAUTICA_STABLE
+    using Oculus.Newtonsoft.Json;
+#else
+using Newtonsoft.Json;
+#endif
 
 namespace QModManager.Utility
 {
@@ -125,6 +131,47 @@ namespace QModManager.Utility
             for (int i = 1; i <= spaces; i += 4)
                 s += "|   ";
             return s;
+        }
+
+        internal static void ChangeModStatustoFile(QMod qmod)
+        {
+            //Get the Configfile (The mod.json in the Mod Directory)
+            string modconfigpath = Path.Combine(Path.GetFullPath(qmod.SubDirectory), "mod.json");
+            if (File.Exists(modconfigpath))
+            {
+                //we doing it with a Dictionary instead of <IQMod> because we have Data in the File that is NOT handles by QMM we would loose this information and that is bad.
+                var modconfig = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(modconfigpath));
+
+                //Modify the Configfile
+                foreach (var kvp in modconfig)
+                {
+                    if (kvp.Key.ToLower() == "enable")
+                    {
+                        modconfig[kvp.Key] = qmod.Enable;
+                        break;
+                    }
+                }
+
+                //Create a JSON Format so it will be Readable by User in a Text Editor
+                Formatting myformat = new Formatting();
+                myformat = Formatting.Indented;
+
+                //Save it back to File
+                string jsonstr = JsonConvert.SerializeObject(modconfig, myformat);
+                try
+                {
+                    File.WriteAllText(modconfigpath, jsonstr);
+                    Logger.Log(Logger.Level.Info, $"IOUtilities - ChangeModStatustoFile - Enabled Status Update for {qmod.Id} was succesful written to: {modconfigpath}");
+                }
+                catch
+                {
+                    Logger.Log(Logger.Level.Error, $"ErrorID:5713/36B - Saving mod.json for Mod {qmod.Id} to {modconfigpath} failed. - Was the File open in a other Program ? Permission Error ?");
+                }
+            }
+            else
+            {
+                Logger.Log(Logger.Level.Error, $"ErrorID:5713/17A - File {modconfigpath} does not exist! - Mod {qmod.Id}");
+            }
         }
     }
 }
