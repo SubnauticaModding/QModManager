@@ -288,18 +288,18 @@
                 {
                     //if the List Contains Pending entries show Info Box
                     Dialog dialog = new Dialog();
-                    //dialog.message = "Important ! Changes on Mods will enforce a Game Reboot after all changes are saved to system. Please wait until next notice";
                     dialog.message = "Important ! Changes on Mods will enforce a Game Reboot after all changes are saved to system.";
                     dialog.color = Dialog.DialogColor.Red;
                     dialog.rightButton = Dialog.Button.CancelModChanges;
                     dialog.leftButton = Dialog.Button.ApplyModChanges;
                     dialog.Show();
                 }
-                //Disbale the button if all Changes got applied
+
+                //In case User Canceled or the Quit was not executed properly
                 if (OptionsManager.ModListPendingChanges.Count != 0)
                 {
                     //As the Original Methode would be disable the Button anyway. We need to Enable it again.
-                    __instance.applyButton.gameObject.SetActive(false);
+                    __instance.applyButton.gameObject.SetActive(true);
                 }
             }
         }

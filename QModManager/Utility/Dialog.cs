@@ -78,14 +78,18 @@
 
         public static IEnumerator ApplychangesandExit()
         {
+            //Apply every pending Mod Change
             foreach (QMod _mod in OptionsManager.ModListPendingChanges)
             {
                 IOUtilities.ChangeModStatustoFile(_mod);
             }
+            //Clear the List to make sure the Check after the Button works valid when the User Canceled or the Quit Game didn't executed correct.
             OptionsManager.ModListPendingChanges.Clear();
 
+            //It seems that the Filewriter Process need some time after saving. Otherwise the Game crashes.
             yield return new WaitForSecondsRealtime(1);
 
+            //Close the Game now.
             Application.Quit();
         }
 
