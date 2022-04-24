@@ -10,6 +10,7 @@
     using QModManager.Patching;
     using UnityEngine;
     using UnityEngine.UI;
+    using UWE;
 
     internal class Dialog
     {
@@ -43,6 +44,7 @@
                 }
             });
             internal static readonly Button Close = new Button("Close", () => { });
+            internal static readonly Button CancelModChanges = new Button("Cancel", () => { });
             internal static readonly Button Download = new Button("Download", () =>
             {
                 if (Patcher.CurrentlyRunningGame == QModGame.Subnautica)
@@ -50,12 +52,21 @@
                 else
                     Process.Start(VersionCheck.bzNexus);
             });
-
             internal static readonly Button Pirate = new Button("Close", () =>
             {
                 Process.Start("https://www.youtube.com/watch?v=dQw4w9WgXcQ");
                 Application.Quit();
             });
+            internal static readonly Button ExitGame = new Button("Exit Game", () =>
+            {
+                Application.Quit();
+            }
+                );
+            internal static readonly Button ApplyModChanges = new Button("Apply", () =>
+                {
+                   CoroutineHost.StartCoroutine(ApplychangesandExit());
+                }
+            );
 
             internal Button() { }
             internal Button(string text, Action action)
@@ -63,6 +74,19 @@
                 Text = text;
                 Action = action;
             }
+        }
+
+        public static IEnumerator ApplychangesandExit()
+        {
+            foreach (QMod _mod in OptionsManager.ModListPendingChanges)
+            {
+                IOUtilities.ChangeModStatustoFile(_mod);
+            }
+            OptionsManager.ModListPendingChanges.Clear();
+
+            yield return new WaitForSecondsRealtime(1);
+
+            Application.Quit();
         }
 
         internal enum DialogColor

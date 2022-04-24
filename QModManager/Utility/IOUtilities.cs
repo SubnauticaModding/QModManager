@@ -2,7 +2,12 @@
 using System.Collections.Generic;
 using System.IO;
 using QModManager.Patching;
-using Oculus.Newtonsoft.Json;
+
+#if SUBNAUTICA_STABLE
+    using Oculus.Newtonsoft.Json;
+#else
+using Newtonsoft.Json;
+#endif
 
 namespace QModManager.Utility
 {

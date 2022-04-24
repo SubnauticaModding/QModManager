@@ -77,6 +77,8 @@
                 foreach (var iQMod in QModServices.Main.GetAllMods().OrderBy(mod => mod.DisplayName))
                     if (iQMod is QMod qMod)
                         mods.Add(qMod);
+                List<QMod> erroredMods = mods.FindAll(m => !m.IsLoaded && m.Status > 0);
+                int erroredModscount = erroredMods.Count;
                 List<QMod> activeMods = new List<QMod>();
                 List<QMod> inactiveMods = new List<QMod>();
 
@@ -84,11 +86,16 @@
                 ModListTab = __instance.AddTab("QMods List");
 
                 //Add QMM Informations
-#if SUBNAUTICA_EXP || BELOWZERO_EXP
-                __instance.AddHeading(ModListTab, $"QModManager -Experimental- running version {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}");
-#else
-                __instance.AddHeading(ModListTab, $"QModManager running version {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}");
+#if SUBNAUTICA_STABLE
+                __instance.AddHeading(ModListTab, $"Running QModManager {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()} for Subnautica");
+#elif SUBNAUTICA_EXP
+                __instance.AddHeading(ModListTab, $"Running QModManager -Experimental- {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()} for Subnautica");
+#elif BELOWZERO_STABLE
+                __instance.AddHeading(ModListTab, $"Running QModManager {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()} for Below Zero");
+#elif BELOWZERO_EXP
+                __instance.AddHeading(ModListTab, $"Running QModManager -Experimental- {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()} for Below Zero");
 #endif
+
                 //Add SML Informations to the Top as its pretty Important
                 var modprio_sml = QModServices.Main.GetMod("SMLHelper");
                 if (modprio_sml != null)
@@ -103,34 +110,84 @@
                 //Now lets create the Mod List
                 foreach (var mod in mods)
                 {
-                    if (mod.Enable)
+                    if (mod.Id != "SMLHelper")
                     {
-                        activeMods.Add(mod);
+                        if (mod.Enable)
+                        {
+                            activeMods.Add(mod);
 
-                    }
-                    else
-                    {
-                        inactiveMods.Add(mod);
+                        }
+                        else
+                        {
+                            inactiveMods.Add(mod);
+                        }
                     }
                 }
 
                 //Now show some Statistics ahead of the List.
                 __instance.AddHeading(ModListTab, $"- - Statistics - -");
                 __instance.AddHeading(ModListTab, $"{mods.Count()} Mods found");
+                if (erroredModscount != 0)
+                {
+                    __instance.AddHeading(ModListTab, $"WARNING: {erroredModscount} Mods failed to load");
+                }
                 __instance.AddHeading(ModListTab, $"{activeMods.Count} Mods enabled");
                 __instance.AddHeading(ModListTab, $"{inactiveMods.Count} Mods disabled");
+
+
+                //At first show the Mods with errors. But show it only, when Mod errors exist
+                if (erroredModscount != 0)
+                {
+                    __instance.AddHeading(ModListTab, $"- - List of Error Mods, You need to take Actions on them ! - -");
+                    foreach (var mod in erroredMods)
+                    {
+                        //This is the Header Entry
+                        //__instance.AddHeading(ModListTab, $"{mod.DisplayName} from {mod.Author}");
+
+                        //This is the Collapse SubMenu of the Entry
+                        if (Patcher.CurrentlyRunningGame == QModGame.Subnautica)
+                        {
+                            MethodInfo Modlist_AddToggleOption = null;
+                            Modlist_AddToggleOption = typeof(uGUI_OptionsPanel).GetMethod(nameof(AddToggleOption), new System.Type[] { typeof(int), typeof(string), typeof(bool), typeof(UnityAction<bool>) });
+#if SUBNAUTICA_STABLE
+                            Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, $"{mod.DisplayName}", mod.Enable, new UnityAction<bool>(value => OnChangeModStatus(mod, value, __instance)) });
+#else
+                            Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, $"{mod.DisplayName} from {mod.Author}", mod.Enable, new UnityAction<bool>(value => OnChangeModStatus(mod, value, __instance)) });
+#endif
+                        }
+                        else
+                        {
+                            MethodInfo Modlist_AddToggleOption = null;
+                            Modlist_AddToggleOption = typeof(uGUI_OptionsPanel).GetMethod(nameof(AddToggleOption), new System.Type[] { typeof(int), typeof(string), typeof(bool), typeof(UnityAction<bool>), typeof(string) });
+                            Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, $"{mod.DisplayName} from {mod.Author}", mod.Enable, new UnityAction<bool>(value => OnChangeModStatus(mod, value, __instance)), null });
+                        }
+                    }
+                }
 
                 //Now we write down the actull List with all Mods. Starting with the Active Mods
                 __instance.AddHeading(ModListTab, $"- - List of currently running Mods - -");
                 foreach (var mod in activeMods)
                 {
                     //This is the Header Entry
-                    __instance.AddHeading(ModListTab, $"{mod.DisplayName} v{mod.ParsedVersion.ToString()} from {mod.Author}");
+                    //__instance.AddHeading(ModListTab, $"{mod.DisplayName} v{mod.ParsedVersion.ToString()} from {mod.Author}");
 
                     //This is the Collapse SubMenu of the Entry
-                    MethodInfo Modlist_AddToggleOption = null;
-                    Modlist_AddToggleOption = typeof(uGUI_OptionsPanel).GetMethod(nameof(AddToggleOption), new System.Type[] { typeof(int), typeof(string), typeof(bool), typeof(UnityAction<bool>) });                    
-                    Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", mod.Enable , new UnityAction<bool>(value => OnChangeModStatus(mod, value, __instance)) });
+                    if (Patcher.CurrentlyRunningGame == QModGame.Subnautica)
+                    {
+                        MethodInfo Modlist_AddToggleOption = null;
+                        Modlist_AddToggleOption = typeof(uGUI_OptionsPanel).GetMethod(nameof(AddToggleOption), new System.Type[] { typeof(int), typeof(string), typeof(bool), typeof(UnityAction<bool>) });
+#if SUBNAUTICA_STABLE
+                        Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, $"{mod.DisplayName}", mod.Enable, new UnityAction<bool>(value => OnChangeModStatus(mod, value, __instance)) });
+#else
+                        Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, $"{mod.DisplayName} v{mod.ParsedVersion.ToString()} from {mod.Author}", mod.Enable, new UnityAction<bool>(value => OnChangeModStatus(mod, value, __instance)) });
+#endif
+                    }
+                    else
+                    {
+                        MethodInfo Modlist_AddToggleOption = null;
+                        Modlist_AddToggleOption = typeof(uGUI_OptionsPanel).GetMethod(nameof(AddToggleOption), new System.Type[] { typeof(int), typeof(string), typeof(bool), typeof(UnityAction<bool>), typeof(string) });
+                        Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, $"{mod.DisplayName} v{mod.ParsedVersion.ToString()} from {mod.Author}", mod.Enable, new UnityAction<bool>(value => OnChangeModStatus(mod, value, __instance)), null });
+                    }
                 }
 
                 //Continue with Disabled Mods
@@ -138,17 +195,30 @@
                 foreach (var mod in inactiveMods)
                 {
                     //This is the Header Entry
-                    __instance.AddHeading(ModListTab, $"{mod.DisplayName} from {mod.Author}");
+                    //__instance.AddHeading(ModListTab, $"{mod.DisplayName} from {mod.Author}");
 
                     //This is the Collapse SubMenu of the Entry
-                    MethodInfo Modlist_AddToggleOption = null;
-                    Modlist_AddToggleOption = typeof(uGUI_OptionsPanel).GetMethod(nameof(AddToggleOption), new System.Type[] { typeof(int), typeof(string), typeof(bool), typeof(UnityAction<bool>) });
-                    Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, "Enable Mod", mod.Enable , new UnityAction<bool>(value => OnChangeModStatus(mod, value, __instance)) });
+                    if (Patcher.CurrentlyRunningGame == QModGame.Subnautica)
+                    {
+                        MethodInfo Modlist_AddToggleOption = null;
+                        Modlist_AddToggleOption = typeof(uGUI_OptionsPanel).GetMethod(nameof(AddToggleOption), new System.Type[] { typeof(int), typeof(string), typeof(bool), typeof(UnityAction<bool>) });
+#if SUBNAUTICA_STABLE
+                        Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, $"{mod.DisplayName}", mod.Enable, new UnityAction<bool>(value => OnChangeModStatus(mod, value, __instance)) });
+#else
+                        Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, $"{mod.DisplayName} from {mod.Author}", mod.Enable, new UnityAction<bool>(value => OnChangeModStatus(mod, value, __instance)) });
+#endif
+                    }
+                    else
+                    {
+                        MethodInfo Modlist_AddToggleOption = null;
+                        Modlist_AddToggleOption = typeof(uGUI_OptionsPanel).GetMethod(nameof(AddToggleOption), new System.Type[] { typeof(int), typeof(string), typeof(bool), typeof(UnityAction<bool>), typeof(string) });
+                        Modlist_AddToggleOption.Invoke(__instance, new object[] { ModListTab, $"{mod.DisplayName} from {mod.Author}", mod.Enable, new UnityAction<bool>(value => OnChangeModStatus(mod, value, __instance)), null });
+                    }
                 }
 
                 Logger.Log(Logger.Level.Debug, "OptionsMenu - ModList - Creating Modlist Ending");
                 
-                #endregion Mod List
+#endregion Mod List
             }
 
             static void OnChangeModStatus(QMod ChangedMod,bool status, uGUI_OptionsPanel __instance)
@@ -216,14 +286,21 @@
                 //Warning Save Button is shared over the hole Option Menu !
                 if (OptionsManager.ModListPendingChanges.Count > 0)
                 {
-                    //if the List Contains Pending entries send every change to the File Writer
-                    foreach (QMod _mod in OptionsManager.ModListPendingChanges)
-                    {
-                        IOUtilities.ChangeModStatustoFile(_mod);
-                    }
+                    //if the List Contains Pending entries show Info Box
+                    Dialog dialog = new Dialog();
+                    //dialog.message = "Important ! Changes on Mods will enforce a Game Reboot after all changes are saved to system. Please wait until next notice";
+                    dialog.message = "Important ! Changes on Mods will enforce a Game Reboot after all changes are saved to system.";
+                    dialog.color = Dialog.DialogColor.Red;
+                    dialog.rightButton = Dialog.Button.CancelModChanges;
+                    dialog.leftButton = Dialog.Button.ApplyModChanges;
+                    dialog.Show();
                 }
-                //just in case disable to button again
-                __instance.applyButton.gameObject.SetActive(false);
+                //Disbale the button if all Changes got applied
+                if (OptionsManager.ModListPendingChanges.Count != 0)
+                {
+                    //As the Original Methode would be disable the Button anyway. We need to Enable it again.
+                    __instance.applyButton.gameObject.SetActive(false);
+                }
             }
         }
     }
