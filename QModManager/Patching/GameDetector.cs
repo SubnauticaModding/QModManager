@@ -61,7 +61,16 @@
             CurrentGameVersion = SNUtils.GetPlasticChangeSetOfBuild(-1);
 
             Logger.Info($"Game Version: {CurrentGameVersion} Build Date: {SNUtils.GetDateTimeOfBuild():dd-MMMM-yyyy} Store: {StoreDetector.GetUsedGameStore()}");
-            Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}{(IsValidGameRunning && MinimumBuildVersion != 0 ? $" built for {CurrentlyRunningGame} v{MinimumBuildVersion}" : string.Empty)}...");
+
+#if SUBNAUTICA_STABLE
+            Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()} built for Subnautica v{SupportedGameVersions[QModGame.Subnautica]}...");
+#elif SUBNAUTICA_EXP
+            Logger.Info($"Loading QModManager -Experimental- v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()} built for Subnautica v{SupportedGameVersions[QModGame.Subnautica]}...");
+#elif BELOWZERO_STABLE
+            Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()} built for Below Zero v{SupportedGameVersions[QModGame.BelowZero]}...");
+#elif BELOWZERO_EXP
+            Logger.Info($"Loading QModManager -Experimental- v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()} built for Below Zero v{SupportedGameVersions[QModGame.BelowZero]}...");
+#endif
             Logger.Info($"Today is {DateTime.Now:dd-MMMM-yyyy_HH:mm:ss}");
 
             if (!IsValidGameVersion)
