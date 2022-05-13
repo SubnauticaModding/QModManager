@@ -12,8 +12,15 @@ Config based patch management for Subnautica and Subnautica: Below Zero
 
 QMods is available for several mod managers. Typically they will install QMods for you as a dependency of whichever mod you download.
 
+Subnautica
+
 * [Thunderstore](https://subnautica.thunderstore.io/package/Subnautica_Modding/QModManager/)
-* [Nexus]( https://www.nexusmods.com/subnautica/mods/201)
+* [Nexus](https://www.nexusmods.com/subnautica/mods/201)
+
+Below Zero
+
+* [Thunderstore](https://belowzero.thunderstore.io/package/Subnautica_Modding/QModManager_BZ/)
+* [Nexus](https://www.nexusmods.com/subnauticabelowzero/mods/1)
 
 ### Manual
 
