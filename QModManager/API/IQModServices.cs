@@ -1,5 +1,6 @@
 ﻿namespace QModManager.API
 {
+    using System;
     using System.Reflection;
     using QModManager.Utility;
 
@@ -56,5 +57,13 @@
         ///   <c>true</c> if Piracy was detected; otherwise, <c>false</c>.
         /// </value>
         bool PirateDetected { get; }
+
+        /// <summary>
+        /// Gets the current Q Mod Manager Version.
+        /// </summary>
+        /// <value>
+        ///   Return Running QMM Version.
+        /// </value>
+        Version QMMrunningVersion { get; }
     }
 }
