@@ -60,22 +60,29 @@ namespace QModManager.Utility
                 string[] files = Directory.GetFiles(directory);
                 for (int i = 1; i <= files.Length; i++)
                 {
-                    FileInfo fileinfo = new FileInfo(files[i - 1]);
-                    if (i != files.Length)
-                        Console.WriteLine($"{GenerateSpaces(0)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
-                    else
-                        Console.WriteLine($"{GenerateSpaces(0)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
+                    try
+                    {
+                        FileInfo fileinfo = new FileInfo(files[i - 1]);
+                        if (i != files.Length)
+                            Console.WriteLine($"{GenerateSpaces(0)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
+                        else
+                            Console.WriteLine($"{GenerateSpaces(0)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"{GenerateSpaces(0)}|---- ERROR ON GETTING FILE INFORMATION - {e.Message}");
+                    }
                 }
             }
             catch (Exception e)
             {
                 throw e;
             }
-        }
+}
         internal static void WriteFolderStructureRecursively(string directory, int spaces = 0)
         {
             try
-            {
+            { 
                 DirectoryInfo dirInfo = new DirectoryInfo(directory);
                 Console.WriteLine($"{GenerateSpaces(spaces)}|---+ {dirInfo.Name}");
 
@@ -93,11 +100,18 @@ namespace QModManager.Utility
                 string[] files = Directory.GetFiles(directory);
                 for (int i = 1; i <= files.Length; i++)
                 {
-                    FileInfo fileinfo = new FileInfo(files[i - 1]);
-                    if (i != files.Length)
-                        Console.WriteLine($"{GenerateSpaces(spaces + 4)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
-                    else
-                        Console.WriteLine($"{GenerateSpaces(spaces + 4)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
+                    try
+                    {
+                        FileInfo fileinfo = new FileInfo(files[i - 1]);
+                        if (i != files.Length)
+                            Console.WriteLine($"{GenerateSpaces(spaces + 4)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
+                        else
+                            Console.WriteLine($"{GenerateSpaces(spaces + 4)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"{GenerateSpaces(spaces + 4)}|---- ERROR ON GETTING FILE INFORMATION -> {e.Message}");
+                    }
                 }
             }
             catch (Exception e)
