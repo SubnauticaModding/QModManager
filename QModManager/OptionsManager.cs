@@ -46,6 +46,7 @@
                     AddToggleOption.Invoke(__instance, new object[] { ModsTab, "Enable debug logs", Config.EnableDebugLogs, new UnityAction<bool>(value => Config.EnableDebugLogs = value) });
                     AddToggleOption.Invoke(__instance, new object[] { ModsTab, "Enable developer mode", Config.EnableDevMode, new UnityAction<bool>(value => Config.EnableDevMode = value) });
                     AddToggleOption.Invoke(__instance, new object[] { ModsTab, "Enable Mod List Menu", Config.EnableModListMenu, new UnityAction<bool>(value => Config.EnableModListMenu = value) });
+                    AddToggleOption.Invoke(__instance, new object[] { ModsTab, "Show Warning on Loading Second Save", Config.ShowWarnOnLoadSecondSave, new UnityAction<bool>(value => Config.ShowWarnOnLoadSecondSave = value) });
                 }
                 else
                 {
@@ -66,6 +67,7 @@
                     AddToggleOption.Invoke(__instance, new object[] { ModsTab, "Enable debug logs", Config.EnableDebugLogs, new UnityAction<bool>(value => Config.EnableDebugLogs = value), null });
                     AddToggleOption.Invoke(__instance, new object[] { ModsTab, "Enable developer mode", Config.EnableDevMode, new UnityAction<bool>(value => Config.EnableDevMode = value), null });
                     AddToggleOption.Invoke(__instance, new object[] { ModsTab, "Enable Mod List Menu", Config.EnableModListMenu, new UnityAction<bool>(value => Config.EnableModListMenu = value), null });
+                    AddToggleOption.Invoke(__instance, new object[] { ModsTab, "Show Warning on Loading Second Save", Config.ShowWarnOnLoadSecondSave, new UnityAction<bool>(value => Config.ShowWarnOnLoadSecondSave = value), null });
                 }
                 #endregion Mod Config
 

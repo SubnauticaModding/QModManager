@@ -49,7 +49,6 @@
         /// </value>
         bool NitroxRunning { get; }
 
-
         /// <summary>
         /// Gets a value indicating whether Piracy was detected.
         /// </summary>
@@ -57,7 +56,7 @@
         ///   <c>true</c> if Piracy was detected; otherwise, <c>false</c>.
         /// </value>
         bool PirateDetected { get; }
-
+        
         /// <summary>
         /// Gets the current Q Mod Manager Version.
         /// </summary>
@@ -65,5 +64,13 @@
         ///   Return Running QMM Version.
         /// </value>
         Version QMMrunningVersion { get; }
+        
+        /// <summary>
+        /// Gets a value indicating when a Savegame was already loaded. (Turns <c>true</c> when entering the Mainmenu again.)
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> Mainmenu is entered AFTER a Savegame was loaded already; otherwise, <c>false</c>.
+        /// </value>
+        bool AnySavegamewasalreadyloaded { get; }
     }
 }

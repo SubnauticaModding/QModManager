@@ -174,5 +174,13 @@ namespace QModManager.API
         ///   Return Running QMM Version.
         /// </value>
         public Version QMMrunningVersion => Assembly.GetExecutingAssembly().GetName().Version;
+
+        /// <summary>
+        /// Gets a value indicating when a Savegame was already loaded (Turn true when entering the Mainmenu again.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> Mainmenu is entered AFTER a Savegame was loaded already; otherwise, <c>false</c>.
+        /// </value>
+        public bool AnySavegamewasalreadyloaded => ReturnfromSavegameWarning.AnySavegamewasloaded;
     }
 }
