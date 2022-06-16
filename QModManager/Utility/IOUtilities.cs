@@ -4,7 +4,7 @@ using System.IO;
 using QModManager.Patching;
 
 #if SUBNAUTICA_STABLE
-    using Oculus.Newtonsoft.Json;
+using Oculus.Newtonsoft.Json;
 #else
 using Newtonsoft.Json;
 #endif
@@ -66,11 +66,14 @@ namespace QModManager.Utility
                         if (i != files.Length)
                             Console.WriteLine($"{GenerateSpaces(0)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
                         else
-                            Console.WriteLine($"{GenerateSpaces(0)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
+                            Console.WriteLine($"{GenerateSpaces(0)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine($"{GenerateSpaces(0)}|---- ERROR ON GETTING FILE INFORMATION - {e.Message}");
+                        if (i != files.Length)
+                            Console.WriteLine($"{GenerateSpaces(0)}|---- ERROR ON GETTING FILE INFORMATIONS - {e.Message}");
+                        else
+                            Console.WriteLine($"{GenerateSpaces(0)}`---- ERROR ON GETTING FILE INFORMATIONS - {e.Message}");
                     }
                 }
             }
@@ -103,14 +106,33 @@ namespace QModManager.Utility
                     try
                     {
                         FileInfo fileinfo = new FileInfo(files[i - 1]);
-                        if (i != files.Length)
-                            Console.WriteLine($"{GenerateSpaces(spaces + 4)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
+                        if (fileinfo.Name == "mod.json")
+                        {
+                            var modjson = JsonConvert.DeserializeObject<QMod>(File.ReadAllText(fileinfo.FullName));
+                            if (i != files.Length)
+                            {
+
+                                Console.WriteLine($"{GenerateSpaces(spaces + 4)}|---- {fileinfo.Name} [{modjson.Id} v{modjson.Version} by {modjson.Author} for {modjson.Game}] ({ParseSize(fileinfo.Length)})");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"{GenerateSpaces(spaces + 4)}`---- {fileinfo.Name} [{modjson.Id} v{modjson.Version} by {modjson.Author} for {modjson.Game}] ({ParseSize(fileinfo.Length)})");
+                            }
+                        }
                         else
-                            Console.WriteLine($"{GenerateSpaces(spaces + 4)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
+                        {
+                            if (i != files.Length)
+                                Console.WriteLine($"{GenerateSpaces(spaces + 4)}|---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
+                            else
+                                Console.WriteLine($"{GenerateSpaces(spaces + 4)}`---- {fileinfo.Name} ({ParseSize(fileinfo.Length)})");
+                        }
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine($"{GenerateSpaces(spaces + 4)}|---- ERROR ON GETTING FILE INFORMATION -> {e.Message}");
+                        if (i != files.Length)
+                            Console.WriteLine($"{GenerateSpaces(spaces + 4)}|---- ERROR ON GETTING FILE INFORMATIONS - {e.Message}");
+                        else
+                            Console.WriteLine($"{GenerateSpaces(spaces + 4)}`---- ERROR ON GETTING FILE INFORMATIONS - {e.Message}");
                     }
                 }
             }

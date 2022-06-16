@@ -94,6 +94,11 @@
                     //Create new Tab in the Menu
                     ModListTab = __instance.AddTab("QMods List");
 
+                    if(QModServices.Main.PirateDetected)
+                    {
+                        __instance.AddHeading(ModListTab, $"If you like the Game, please Support it and buy it. Thanks.");
+                    }
+
                     //Add QMM Informations
 #if SUBNAUTICA_STABLE
                     __instance.AddHeading(ModListTab, $"Running QModManager {Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()} for Subnautica");

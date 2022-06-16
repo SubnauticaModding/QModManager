@@ -80,7 +80,7 @@
                 }
                 else if (latestVersion < currentVersion)
                 {
-                    Logger.Info($"QMM Internal Versionchecker: Received latest version from GitHub. We're ahead. This is probably a development build.");
+                    Logger.Info($"QMM Internal Versionchecker: Received latest version ({latestVersion.ToStringParsed()}) from GitHub. We're ahead. This is probably a development build (current version: {currentVersion.ToStringParsed()}).");
                 }
                 else
                 {
