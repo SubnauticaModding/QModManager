@@ -199,9 +199,9 @@ namespace QModManager.Utility
                     File.WriteAllText(modconfigpath, jsonstr);
                     Logger.Log(Logger.Level.Info, $"IOUtilities - ChangeModStatustoFile - Enabled Status Update for {qmod.Id} was succesful written to: {modconfigpath}");
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Logger.Log(Logger.Level.Error, $"ErrorID:5713/36B - Saving mod.json for Mod {qmod.Id} to {modconfigpath} failed. - Was the File open in a other Program ? Permission Error ?");
+                    Logger.Log(Logger.Level.Error, $"ErrorID:5713/36B - Saving mod.json for Mod {qmod.Id} to {modconfigpath} failed. - Was the File open in a other Program ? Permission Error ? Original Message:\n {ex.Message}");
                 }
             }
             else
