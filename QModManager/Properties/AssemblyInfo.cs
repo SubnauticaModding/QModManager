@@ -13,8 +13,8 @@ using System.Runtime.InteropServices;
 
 [assembly: ComVisible(false)]
 
-[assembly: AssemblyVersion("4.4.3")]
-[assembly: AssemblyFileVersion("4.4.3")]
+[assembly: AssemblyVersion("4.4.4")]
+[assembly: AssemblyFileVersion("4.4.4")]
 
 [assembly: InternalsVisibleTo("QMMTests")]
 [assembly: InternalsVisibleTo("QModManager")]
