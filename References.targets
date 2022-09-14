@@ -262,7 +262,7 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-	<ItemGroup Condition="$(Configuration.StartsWith('BZ')) And $(Configuration.EndsWith('EXP'))">
+	<ItemGroup Condition="$(Configuration.StartsWith('BZ'))">
 		<Reference Include="Sentry">
 			<Private>False</Private>
 		</Reference>
