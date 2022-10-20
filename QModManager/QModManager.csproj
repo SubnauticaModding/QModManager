@@ -101,6 +101,7 @@
     <Compile Include="API\IQModAPI.cs" />
     <Compile Include="API\IQModServices.cs" />
     <Compile Include="BepInex\Plugins\LogFilter.cs" />
+    <Compile Include="HarmonyPatches\MaskTelemetryLogging.cs" />
     <Compile Include="Patching\IPluginCollection.cs" />
     <Compile Include="Patching\ModStatus.cs" />
     <Compile Include="API\ModLoading\QModCoreAttribute.cs" />

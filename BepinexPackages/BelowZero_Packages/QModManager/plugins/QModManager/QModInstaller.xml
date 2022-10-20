@@ -152,6 +152,14 @@
               <c>true</c> if Nitrox is being used; otherwise, <c>false</c>.
             </value>
         </member>
+        <member name="P:QModManager.API.IQModServices.PirateDetected">
+            <summary>
+            Gets a value indicating whether Piracy was detected.
+            </summary>
+            <value>
+              <c>true</c> if Piracy was detected; otherwise, <c>false</c>.
+            </value>
+        </member>
         <member name="T:QModManager.API.ModLoading.QModCoreAttribute">
             <summary>
             Identifies the patching class for your QMod.
@@ -352,6 +360,14 @@
             </summary>
             <value>
               <c>true</c> if Nitrox is being used; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:QModManager.API.QModServices.PirateDetected">
+            <summary>
+            Gets a value indicating whether Piracy was detected.
+            </summary>
+            <value>
+              <c>true</c> if Piracy was detected; otherwise, <c>false</c>.
             </value>
         </member>
         <member name="T:QModManager.API.RequiredQMod">
@@ -595,6 +611,11 @@
         <member name="T:QModInstaller.BepInEx.Plugins.QMMLoader">
             <summary>
             QMMLoader - simply fires up the QModManager entry point.
+            </summary>
+        </member>
+        <member name="M:QModInstaller.BepInEx.Plugins.QMMLoader.#ctor">
+            <summary>
+            "Only for use by Bepinex"
             </summary>
         </member>
         <member name="M:QModInstaller.BepInEx.Plugins.QMMLoader.Awake">

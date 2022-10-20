@@ -21,7 +21,7 @@
 #if SUBNAUTICA_STABLE
             { QModGame.Subnautica, 65786 }
 #else
-            { QModGame.BelowZero, 45391 },
+            { QModGame.BelowZero, 49184 },
             { QModGame.Subnautica, 68186 }
 #endif
         };
