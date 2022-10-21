@@ -35,6 +35,17 @@
             set => Set("Enable developer mode", value);
         }
 
+        internal static bool EnableModListMenu
+        {
+            get => Get("Enable Mod List Menu", true);
+            set => Set("Enable Mod List Menu", value);
+        }
+        internal static bool ShowWarnOnLoadSecondSave
+        {
+            get => Get("Show Warning on Loading Second Save", false);
+            set => Set("Show Warning on Loading Second Save", value);
+        }
+
         private static readonly string ConfigPath = Path.Combine(Environment.CurrentDirectory, "qmodmanager-config.json");
 
         private static Dictionary<string, object> Cfg = new Dictionary<string, object>();

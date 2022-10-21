@@ -1,97 +1,53 @@
-﻿namespace QModManager.Patching
-{
-    using System;
-    using System.IO;
-    using Checks;
+﻿using System;
+using QModManager.Checks;
 
+namespace QModManager.Patching
+{
     internal class StoreDetector
     {
         internal static string GetUsedGameStore()
         {
-            string directory = null;
-
-            try
+            if (NonValidStore())
             {
-                directory ??= Environment.CurrentDirectory;
-            }
-            catch
-            {
-                return "Error on getting Store";
+                return "Invalid store";
             }
 
-            if (NonValidStore(directory))
-            {
-                return "free Store";
-            }
-            else if (IsSteam(directory))
+            if (IsSteam())
             {
                 return "Steam";
             }
-            else if (IsEpic(directory))
+
+            if (IsEpic())
             {
-                return "Eic Games";
+                return "Epic Games";
             }
-            else if (IsMSStore(directory))
+
+            if (IsMSStore())
             {
                 return "MSStore";
             }
-            else
-            {
-                return "was not able to identify Store";
-            }
+
+            return "Unable to identify game store.";
         }
 
-        internal static bool IsSteam(string directory)
+        private static bool IsSteam()
         {
-            string checkfile = Path.Combine(directory, "steam_api64.dll");
-            if (File.Exists(checkfile))
-            {
-                return true;
-            }
-            return false;
+            return PlatformServicesUtils.IsRuntimePluginDllPresent("CSteamworks");
         }
 
-        internal static bool IsEpic(string directory)
+        private static bool IsEpic()
         {
-            string checkfolder = Path.Combine(directory, ".eggstore");
-            if (Directory.Exists(checkfolder))
-            {
-                return true;
-            }
-            return false;
+            return Array.IndexOf(Environment.GetCommandLineArgs(), "-EpicPortal") != -1;
         }
 
-        internal static bool IsMSStore(string directory)
+        private static bool IsMSStore()
         {
-            string checkfile = Path.Combine(directory, "MicrosoftGame.config");
-            if (File.Exists(checkfile))
-            {
-                return true;
-            }
-            return false;
+            return PlatformServicesUtils.IsRuntimePluginDllPresent("XGamingRuntimeThunks");
         }
 
-        internal static bool NonValidStore(string folder)
+        private static bool NonValidStore()
         {
-            string steamDll = Path.Combine(folder, PirateCheck.Steamapi);
-            if (File.Exists(steamDll))
-            {
-                FileInfo fileInfo = new FileInfo(steamDll);
-
-                if (fileInfo.Length > PirateCheck.Steamapilengh)
-                {
-                    return true;
-                }
-            }
-
-            foreach (string file in PirateCheck.CrackedFiles)
-            {
-                if (File.Exists(Path.Combine(folder, file)))
-                {
-                    return false;
-                }
-            }
-            return false;
+            return PirateCheck.PirateDetected;
         }
     }
 }

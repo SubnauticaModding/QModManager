@@ -60,9 +60,39 @@
 
             CurrentGameVersion = SNUtils.GetPlasticChangeSetOfBuild(-1);
 
-            Logger.Info($"Game Version: {CurrentGameVersion} Build Date: {SNUtils.GetDateTimeOfBuild():dd-MMMM-yyyy} Store: {StoreDetector.GetUsedGameStore()}");
-            Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}{(IsValidGameRunning && MinimumBuildVersion != 0 ? $" built for {CurrentlyRunningGame} v{MinimumBuildVersion}" : string.Empty)}...");
-            Logger.Info($"Today is {DateTime.Now:dd-MMMM-yyyy_HH:mm:ss}");
+            try
+            {
+                Logger.Info($"Game Version: {CurrentGameVersion} Build Date: {SNUtils.GetDateTimeOfBuild():dd-MMMM-yyyy} Store: {StoreDetector.GetUsedGameStore()}");
+            }
+            catch
+            {
+                Logger.Warn($"Game Version: {CurrentGameVersion} Build Date: [Error in displaying Time and Date] Store: {StoreDetector.GetUsedGameStore()}");
+            }
+
+#if SUBNAUTICA_STABLE
+            Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()} built for Subnautica v{SupportedGameVersions[QModGame.Subnautica]}...");
+#elif SUBNAUTICA_EXP
+            Logger.Info($"Loading QModManager -Experimental- v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()} built for Subnautica v{SupportedGameVersions[QModGame.Subnautica]}...");
+#elif BELOWZERO_STABLE
+            Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()} built for Below Zero v{SupportedGameVersions[QModGame.BelowZero]}...");
+#elif BELOWZERO_EXP
+            Logger.Info($"Loading QModManager -Experimental- v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()} built for Below Zero v{SupportedGameVersions[QModGame.BelowZero]}...");
+#endif
+            try
+            {
+                Logger.Info($"Today is {DateTime.Now:dd-MMMM-yyyy_HH:mm:ss}");
+            }
+            catch
+            {
+                try
+                {
+                    Logger.Warn($"Today is: Unable to format Time here is the raw Version - {DateTime.Now}");
+                }
+                catch 
+                { 
+                    Logger.Error($"Today is: Unable to Read Time and Date. Possible due to unsupported Calender settings."); 
+                }    
+            }
 
             if (!IsValidGameVersion)
             {

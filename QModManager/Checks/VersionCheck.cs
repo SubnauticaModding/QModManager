@@ -19,13 +19,13 @@
         {
             if (!Config.CheckForUpdates)
             {
-                Logger.Info("Update check disabled");
+                Logger.Info("QMM Internal Versionchecker: Update check disabled");
                 return;
             }
 
             if (!NetworkUtilities.CheckConnection())
             {
-                Logger.Info("Cannot check for updates, internet disabled");
+                Logger.Info("QMM Internal Versionchecker: Cannot check for updates, internet disabled");
                 return;
             }
 
@@ -37,14 +37,14 @@
                 {
                     if (e.Error != null)
                     {
-                        Logger.Error("There was an error retrieving the latest version from GitHub!");
+                        Logger.Error("QMM Internal Versionchecker: There was an error retrieving the latest version from GitHub!");
                         Logger.Exception(e.Error);
                         return;
                     }
                     Parse(e.Result);
                 };
 
-                Logger.Debug("Getting the latest version...");
+                Logger.Debug("QMM Internal Versionchecker: Getting the latest version...");
                 client.DownloadStringAsync(new Uri(VersionURL));
             }
         }
@@ -56,15 +56,23 @@
                 Version currentVersion = Assembly.GetExecutingAssembly().GetName().Version;
                 if (versionStr == null)
                 {
-                    Logger.Error("There was an error retrieving the latest version from GitHub!");
+                    Logger.Error("QMM Internal Versionchecker: There was an error retrieving the latest version from GitHub!");
                     return;
                 }
-                var latestVersion = new Version(versionStr);
+
+                string[] versionStr_splittet = versionStr.Split('.');
+                string version_builder = $"{versionStr_splittet[0]}.{(versionStr_splittet.Length >= 2 ? $"{versionStr_splittet[1]}" : "0")}.{(versionStr_splittet.Length >= 3 ? $"{versionStr_splittet[2]}" : "0")}.{(versionStr_splittet.Length >= 4 ? $"{versionStr_splittet[3]}" : "0")}";
+                var latestVersion = new Version(version_builder);
+
                 if (latestVersion == null)
                 {
-                    Logger.Error("There was an error retrieving the latest version from GitHub!");
+                    Logger.Error("QMM Internal Versionchecker: There was an error retrieving the latest version from GitHub!");
                     return;
                 }
+                
+                //Logger.Debug($"QMM Version Checker - Parse - current Version value: {currentVersion}");
+                //Logger.Debug($"QMM Version Checker - Parse - latest Version value: {latestVersion}");
+
                 if (latestVersion > currentVersion)
                 {
                     Logger.Info($"Newer version found: {latestVersion.ToStringParsed()} (current version: {currentVersion.ToStringParsed()})");
@@ -72,16 +80,16 @@
                 }
                 else if (latestVersion < currentVersion)
                 {
-                    Logger.Info($"Received latest version from GitHub. We're ahead. This is probably a development build.");
+                    Logger.Info($"QMM Internal Versionchecker: Received latest version ({latestVersion.ToStringParsed()}) from GitHub. We're ahead. This is probably a development build (current version: {currentVersion.ToStringParsed()}).");
                 }
                 else
                 {
-                    Logger.Info($"Received latest version from GitHub. We are up to date!");
+                    Logger.Info($"QMM Internal Versionchecker: Received latest version from GitHub. We are up to date!");
                 }
             }
             catch (Exception e)
             {
-                Logger.Error("There was an error retrieving the latest version from GitHub!");
+                Logger.Error("QMM Internal Versionchecker: There was an error retrieving the latest version from GitHub!");
                 Logger.Exception(e);
                 return;
             }
