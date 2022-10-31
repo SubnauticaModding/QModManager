@@ -47,5 +47,14 @@
         ///   <c>true</c> if Nitrox is being used; otherwise, <c>false</c>.
         /// </value>
         bool NitroxRunning { get; }
+
+
+        /// <summary>
+        /// Gets a value indicating whether Piracy was detected.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if Piracy was detected; otherwise, <c>false</c>.
+        /// </value>
+        bool PirateDetected { get; }
     }
 }

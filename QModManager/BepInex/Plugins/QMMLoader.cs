@@ -9,8 +9,10 @@ using UnityEngine;
 namespace QModInstaller.BepInEx.Plugins
 {
     using QModManager.API.ModLoading;
+    using QModManager.Checks;
     using QModManager.Patching;
     using QModManager.Utility;
+    using System;
 
     /// <summary>
     /// QMMLoader - simply fires up the QModManager entry point.
@@ -21,10 +23,19 @@ namespace QModInstaller.BepInEx.Plugins
     {
         internal const string PluginGuid = "QModManager.QMMLoader";
         internal const string PluginName = "QMMLoader";
-        internal const string PluginVersion = "4.4.3";
+        internal const string PluginVersion = "4.4.4";
 
         internal static List<QMod> QModsToLoad;
         private static Initializer Initializer;
+
+        /// <summary>
+        /// "Only for use by Bepinex"
+        /// </summary>
+        [Obsolete("Only for use by Bepinex", true)]
+        public QMMLoader()
+        {
+            PirateCheck.IsPirate();
+        }
 
         /// <summary>
         /// Prevents a default instance of the <see cref="QMMLoader"/> class from being created 
@@ -84,13 +95,15 @@ namespace QModInstaller.BepInEx.Plugins
         {
             while (result.MoveNext())
             {
-                yield return result;
+                yield return result.Current;
             }
 
-#if BELOWZERO
-            if(!SpriteManager.hasInitialized)
-                yield return new WaitUntil(()=>SpriteManager.hasInitialized);
-#endif
+            var hasInitializedField = typeof(SpriteManager).GetField("hasInitialized", System.Reflection.BindingFlags.Public|System.Reflection.BindingFlags.Static);
+            if (hasInitializedField != null)
+            {
+                if (!(bool)hasInitializedField.GetValue(null))
+                    yield return new WaitUntil(() => (bool)hasInitializedField.GetValue(null));
+            }
 
             Initializer.InitializeMods(QModsToLoad, PatchingOrder.NormalInitialize);
             Initializer.InitializeMods(QModsToLoad, PatchingOrder.PostInitialize);

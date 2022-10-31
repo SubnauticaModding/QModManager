@@ -12,13 +12,13 @@
         [HarmonyPostfix]
         internal static void Postfix()
         {
-#if BELOWZERO || SUBNAUTICA_EXP
+#if !SUBNAUTICA_STABLE
             if (PlatformUtils.GetDevToolsEnabled() != Config.EnableConsole)
 #else
             if (DevConsole.disableConsole != !Config.EnableConsole)
 #endif
             {
-#if BELOWZERO || SUBNAUTICA_EXP
+#if !SUBNAUTICA_STABLE
                 PlatformUtils.SetDevToolsEnabled(Config.EnableConsole);
 #else
                 DevConsole.disableConsole = !Config.EnableConsole;

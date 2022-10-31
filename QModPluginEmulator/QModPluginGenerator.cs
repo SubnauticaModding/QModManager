@@ -74,8 +74,6 @@ namespace QModManager
             Path.Combine(QMMPatchersPath, "QModManager.OculusNewtonsoftRedirect.dll"),
 #endif
             Path.Combine(QMMPatchersPath, "QModManager.QModPluginGenerator.dll"),
-            Path.Combine(QMMPatchersPath, "QModManager.UnityAudioFixer.dll"),
-            Path.Combine(QMMPatchersPath, "QModManager.exe"),
             Path.Combine(QMMPluginsPath, "QModInstaller.dll"),
         };
 

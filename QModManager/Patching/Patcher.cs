@@ -94,8 +94,6 @@ namespace QModManager.Patching
                     }
                 }
 
-                PirateCheck.IsPirate(Environment.CurrentDirectory);
-
                 PatchHarmony();
 
                 if (NitroxCheck.IsRunning)
@@ -112,6 +110,21 @@ namespace QModManager.Patching
 
                     return;
                 }
+
+                // TODO: Uncomment when we're no longer supporting pirated builds.
+                /*
+                if (PirateCheck.PirateDetected)
+                {
+                    Dialogs.Add(new Dialog()
+                    {
+                        message = "Ahoy,matey! Ye be a pirate!",
+                        leftButton = Dialog.Button.Pirate,
+                        rightButton = Dialog.Button.Pirate,
+                        color = Dialog.DialogColor.Red,
+                    });
+
+                    return;
+                }*/
 
                 VersionCheck.Check();
 

@@ -20,12 +20,9 @@
         {
 #if SUBNAUTICA_STABLE
             { QModGame.Subnautica, 65786 }
-#elif BELOWZERO_STABLE
-            { QModGame.BelowZero, 45391 }
-#elif SUBNAUTICA_EXP
+#else
+            { QModGame.BelowZero, 49184 },
             { QModGame.Subnautica, 68186 }
-#elif BELOWZERO_EXP
-            { QModGame.BelowZero, 45500 }
 #endif
         };
 
@@ -63,7 +60,7 @@
 
             CurrentGameVersion = SNUtils.GetPlasticChangeSetOfBuild(-1);
 
-            Logger.Info($"Game Version: {CurrentGameVersion} Build Date: {SNUtils.GetDateTimeOfBuild():dd-MMMM-yyyy}");
+            Logger.Info($"Game Version: {CurrentGameVersion} Build Date: {SNUtils.GetDateTimeOfBuild():dd-MMMM-yyyy} Store: {StoreDetector.GetUsedGameStore()}");
             Logger.Info($"Loading QModManager v{Assembly.GetExecutingAssembly().GetName().Version.ToStringParsed()}{(IsValidGameRunning && MinimumBuildVersion != 0 ? $" built for {CurrentlyRunningGame} v{MinimumBuildVersion}" : string.Empty)}...");
             Logger.Info($"Today is {DateTime.Now:dd-MMMM-yyyy_HH:mm:ss}");
 
