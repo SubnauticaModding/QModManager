@@ -4,44 +4,34 @@
     using System.IO;
     using Checks;
 
-    internal class StoreDetector
+    internal static class StoreDetector
     {
         internal static string GetUsedGameStore()
         {
-            string directory = null;
+            var directory = Environment.CurrentDirectory;
 
-            try
-            {
-                directory ??= Environment.CurrentDirectory;
-            }
-            catch
-            {
-                return "Error on getting Store";
-            }
-
-            if (NonValidStore(directory))
+            if (InvalidStore(directory))
             {
                 return "free Store";
             }
-            else if (IsSteam(directory))
+
+            if (IsSteam(directory))
             {
                 return "Steam";
             }
-            else if (IsEpic(directory))
+            if (IsEpic(directory))
             {
                 return "Eic Games";
             }
-            else if (IsMSStore(directory))
+            if (IsMSStore(directory))
             {
                 return "MSStore";
             }
-            else
-            {
-                return "was not able to identify Store";
-            }
+            
+            return "was not able to identify Store";
         }
 
-        internal static bool IsSteam(string directory)
+        private static bool IsSteam(string directory)
         {
             string checkfile = Path.Combine(directory, "steam_api64.dll");
             if (File.Exists(checkfile))
@@ -51,7 +41,7 @@
             return false;
         }
 
-        internal static bool IsEpic(string directory)
+        private static bool IsEpic(string directory)
         {
             string checkfolder = Path.Combine(directory, ".eggstore");
             if (Directory.Exists(checkfolder))
@@ -61,7 +51,7 @@
             return false;
         }
 
-        internal static bool IsMSStore(string directory)
+        private static bool IsMSStore(string directory)
         {
             string checkfile = Path.Combine(directory, "MicrosoftGame.config");
             if (File.Exists(checkfile))
@@ -71,7 +61,7 @@
             return false;
         }
 
-        internal static bool NonValidStore(string folder)
+        private static bool InvalidStore(string folder)
         {
             string steamDll = Path.Combine(folder, PirateCheck.Steamapi);
             if (File.Exists(steamDll))

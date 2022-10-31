@@ -111,6 +111,7 @@ namespace QModManager.Patching
                     return;
                 }
 
+                // TODO: Uncomment when we're no longer supporting pirated builds.
                 /*
                 if (PirateCheck.PirateDetected)
                 {
