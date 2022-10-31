@@ -34,7 +34,7 @@
             //Check if Index was changed to any other Value. If yes the Position was likely found.
             if (Index > -1)
             {
-                Logger.Log(Logger.Level.Debug, $"{thistranspiler} - Transpiler injectection position found");
+                Logger.Log(Logger.Level.Debug, $"{thistranspiler} - Transpiler injection position found");
                 codes[Index] = new CodeInstruction(OpCodes.Ldstr, "Telemetry session started. Platform: '{0}', UserId: ->Masked by QModManager for privacy Reason<-, SessionId: {1}");
                 codes.RemoveRange(Index, 0);
                 codes.RemoveRange(Index+10, 5);
