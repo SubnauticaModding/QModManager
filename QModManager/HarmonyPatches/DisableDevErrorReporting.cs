@@ -18,7 +18,6 @@
             return false;
         }
 
-#if !SUBNAUTICA_STABLE
         [HarmonyPostfix]
         [HarmonyPatch(typeof(SystemsSpawner), nameof(SystemsSpawner.SetupSingleton))]
         internal static IEnumerator Postfix(IEnumerator enumerator)
@@ -26,6 +25,5 @@
             yield return null;
             yield break;
         }
-#endif
     }
 }

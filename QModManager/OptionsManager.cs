@@ -30,12 +30,7 @@
                     AddToggleOption.Invoke(__instance, new object[] { ModsTab, "Enable console", Config.EnableConsole, new UnityAction<bool>(value =>
                 {
                     Config.EnableConsole = value;
-#if SUBNAUTICA_STABLE
-                    DevConsole.disableConsole = !value;
-                    UnityEngine.PlayerPrefs.SetInt("UWE.DisableConsole", value ? 0 : 1);
-#elif BELOWZERO || SUBNAUTICA_EXP
                     PlatformUtils.SetDevToolsEnabled(value);
-#endif
                 }) });
 
                     AddToggleOption.Invoke(__instance, new object[] { ModsTab, "Enable debug logs", Config.EnableDebugLogs, new UnityAction<bool>(value => Config.EnableDebugLogs = value) });
@@ -49,12 +44,7 @@
                     AddToggleOption.Invoke(__instance, new object[] { ModsTab, "Enable console", Config.EnableConsole, new UnityAction<bool>(value =>
                 {
                     Config.EnableConsole = value;
-#if SUBNAUTICA_STABLE
-                    DevConsole.disableConsole = !value;
-                    UnityEngine.PlayerPrefs.SetInt("UWE.DisableConsole", value ? 0 : 1);
-#elif BELOWZERO || SUBNAUTICA_EXP
                     PlatformUtils.SetDevToolsEnabled(value);
-#endif
                 }), null });
 
                     AddToggleOption.Invoke(__instance, new object[] { ModsTab, "Enable debug logs", Config.EnableDebugLogs, new UnityAction<bool>(value => Config.EnableDebugLogs = value), null });

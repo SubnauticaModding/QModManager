@@ -3,12 +3,7 @@ using BepInEx.Bootstrap;
 using BepInEx.Logging;
 using HarmonyLib;
 using Mono.Cecil;
-#if SUBNAUTICA_STABLE
-using System.Collections;
-using Oculus.Newtonsoft.Json;
-#else
 using Newtonsoft.Json;
-#endif
 using QModManager.API;
 using QModManager.Patching;
 using QModManager.Utility;
@@ -70,9 +65,7 @@ namespace QModManager
 
 
         private readonly static string[] QMMKnownAssemblyPaths = new[] {
-#if !SUBNAUTICA_STABLE
             Path.Combine(QMMPatchersPath, "QModManager.OculusNewtonsoftRedirect.dll"),
-#endif
             Path.Combine(QMMPatchersPath, "QModManager.QModPluginGenerator.dll"),
             Path.Combine(QMMPluginsPath, "QModInstaller.dll"),
         };
