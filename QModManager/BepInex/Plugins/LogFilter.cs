@@ -8,7 +8,7 @@ namespace QModInstaller.BepInEx.Plugins
     /// Handles filtering noisy logs from the QModManager logs.
     /// </summary>
     [BepInPlugin(PluginGuid, PluginName, PluginVersion)]
-    [BepInProcess("Subnautica"), BepInProcess("SubnauticaZero")]
+    [BepInProcess("Subnautica"), BepInProcess("SubnauticaZero"), BepInProcess("Subnautica Below Zero")]
     internal class LogFilter : BaseUnityPlugin
     {
         internal const string PluginGuid = "QModManager.LogFilter";

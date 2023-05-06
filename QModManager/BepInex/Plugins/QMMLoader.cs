@@ -18,7 +18,7 @@ namespace QModInstaller.BepInEx.Plugins
     /// QMMLoader - simply fires up the QModManager entry point.
     /// </summary>
     [BepInPlugin(PluginGuid, PluginName, PluginVersion)]
-    [BepInProcess("Subnautica"), BepInProcess("SubnauticaZero")]
+    [BepInProcess("Subnautica"), BepInProcess("SubnauticaZero"), BepInProcess("Subnautica Below Zero")]
     public class QMMLoader : BaseUnityPlugin
     {
         internal const string PluginGuid = "QModManager.QMMLoader";
