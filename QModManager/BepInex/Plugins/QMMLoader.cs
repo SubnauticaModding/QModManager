@@ -1,8 +1,6 @@
 ﻿using BepInEx;
-#if !SUBNAUTICA_STABLE
 using HarmonyLib;
 using System.Collections;
-#endif
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,7 +21,7 @@ namespace QModInstaller.BepInEx.Plugins
     {
         internal const string PluginGuid = "QModManager.QMMLoader";
         internal const string PluginName = "QMMLoader";
-        internal const string PluginVersion = "4.4.4";
+        internal const string PluginVersion = "4.5.0";
 
         internal static List<QMod> QModsToLoad;
         private static Initializer Initializer;
@@ -70,18 +68,6 @@ namespace QModInstaller.BepInEx.Plugins
             Initializer.InitializeMods(QModsToLoad, PatchingOrder.MetaPreInitialize);
             Initializer.InitializeMods(QModsToLoad, PatchingOrder.PreInitialize);
 
-#if SUBNAUTICA_STABLE
-            Initializer.InitializeMods(QModsToLoad, PatchingOrder.NormalInitialize);
-            Initializer.InitializeMods(QModsToLoad, PatchingOrder.PostInitialize);
-            Initializer.InitializeMods(QModsToLoad, PatchingOrder.MetaPostInitialize);
-
-            SummaryLogger.ReportIssues(QModsToLoad);
-            SummaryLogger.LogSummaries(QModsToLoad);
-            foreach (Dialog dialog in Patcher.Dialogs)
-            {
-                dialog.Show();
-            }
-#else
             var harmony = new Harmony(PluginGuid);
             harmony.Patch(
                 AccessTools.Method(
@@ -115,7 +101,6 @@ namespace QModInstaller.BepInEx.Plugins
             {
                 dialog.Show();
             }
-#endif
         }
     }
 }

@@ -1,11 +1,7 @@
 ﻿namespace QModManager.Patching
 {
     using BepInEx;
-#if SUBNAUTICA_STABLE
-    using Oculus.Newtonsoft.Json;
-#else
     using Newtonsoft.Json;
-#endif
     using QModManager.API;
     using QModManager.DataStructures;
     using QModManager.Utility;

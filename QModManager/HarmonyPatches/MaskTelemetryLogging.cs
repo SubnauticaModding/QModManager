@@ -1,51 +1,54 @@
 ﻿namespace QModManager.HarmonyPatches
 {
     using HarmonyLib;
-    using QModManager.Utility;
+    using System;
+    using System.Collections;
+    using UnityEngine;
+    using UnityEngine.Networking;
 
-    //transpiller
-    using System.Collections.Generic;
-    using System.Reflection.Emit;
-
-#if BELOWZERO
-    [HarmonyPatch(typeof(Telemetry),MethodType.Enumerator)]
-    [HarmonyPatch(nameof(Telemetry.SendSesionStart))]
+    [HarmonyPatch(typeof(Telemetry), nameof(Telemetry.SendSesionStart))]
     static class MaskTelemetryLogging
     {
-        [HarmonyTranspiler]
-        public static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        public static IEnumerator Postfix(IEnumerator values, Telemetry __instance, string setPlatformName, string setUserId)
         {
-            string thistranspiler = "Telemetry_SendSesionStart";
-            Logger.Log(Logger.Level.Debug, $"{thistranspiler} - Start Transpiler");
-            var Index = -1;
-            var codes = new List<CodeInstruction>(instructions);
-
-            //analyse the code to find the right place for injection
-            for (var i = 0; i < codes.Count; i++)
+            yield return __instance.platformServices.TryEnsureServerAccessAsync(false);
+            if (!__instance.platformServices.CanAccessServers())
             {
-                //determinde the check to find the right place and not missmatch it accidentally with a other one
-                if (codes[i].opcode == OpCodes.Ldstr && codes[i + 17].opcode == OpCodes.Box && codes[i + 21].opcode == OpCodes.Ret)
-                {
-                    Index = i;
-                    break;
-                }
+                yield break;
             }
-
-            //Check if Index was changed to any other Value. If yes the Position was likely found.
-            if (Index > -1)
+            __instance.platformName = (string.IsNullOrEmpty(setPlatformName) ? "Null" : setPlatformName);
+            __instance.userId = (string.IsNullOrEmpty(setUserId) ? "Null" : setUserId);
+            __instance.csId = SNUtils.GetPlasticChangeSetOfBuild(0);
+            WWWForm wwwform = new WWWForm();
+            wwwform.AddField("product_id", Telemetry.productId);
+            wwwform.AddField("platform", __instance.platformName);
+            wwwform.AddField("platform_user_id", __instance.userId);
+            wwwform.AddField("cs_id", __instance.csId);
+            wwwform.AddField("language", Language.main.GetCurrentLanguage());
+            wwwform.AddField("arguments", string.Join(", ", Environment.GetCommandLineArgs()));
+            wwwform.AddField("used_cheats", DevConsole.HasUsedConsole().ToString());
+            wwwform.AddField("gpu_name", SystemInfo.graphicsDeviceName);
+            wwwform.AddField("gpu_memory", SystemInfo.graphicsMemorySize);
+            wwwform.AddField("gpu_api", SystemInfo.graphicsDeviceType.ToString());
+            wwwform.AddField("cpu_name", SystemInfo.processorType);
+            wwwform.AddField("system_memory", SystemInfo.systemMemorySize);
+            wwwform.AddField("system_os", SystemInfo.operatingSystem);
+            wwwform.AddField("quality", QualitySettings.GetQualityLevel());
+            wwwform.AddField("res_x", Screen.width);
+            wwwform.AddField("res_y", Screen.height);
+            UnityWebRequest webRequest = UnityWebRequest.Post(string.Format("{0}/session-start", "https://analytics.unknownworlds.com/api"), wwwform);
+            yield return webRequest.SendWebRequest();
+            if (webRequest.isNetworkError || webRequest.isHttpError)
             {
-                Logger.Log(Logger.Level.Debug, $"{thistranspiler} - Transpiler injection position found");
-                codes[Index] = new CodeInstruction(OpCodes.Ldstr, "Telemetry session started. Platform: '{0}', UserId: ->Masked by QModManager for privacy Reason<-, SessionId: {1}");
-                codes.RemoveRange(Index, 0);
-                codes.RemoveRange(Index+10, 5);
+                Debug.LogError(webRequest.error);
             }
             else
             {
-                Logger.Log(Logger.Level.Error, $"{thistranspiler} - Index was not found");
+                SessionStartResponse sessionStartResponse = SessionStartResponse.CreateFromJSON(webRequest.downloadHandler.text);
+                __instance.sessionId = sessionStartResponse.session_id;
+                Debug.LogFormat("Telemetry session started. Platform: '{0}', UserId: ->Masked by QModManager for privacy reason<-, SessionId: {1}", new object[] { __instance.platformName, __instance.sessionId });
             }
-
-            return codes;
+            yield break;
         }
     }
-#endif
 }

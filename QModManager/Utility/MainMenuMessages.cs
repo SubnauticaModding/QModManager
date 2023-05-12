@@ -114,11 +114,9 @@
                 yield return new WaitForSeconds(1f);
 
                 yield return new WaitWhile(() => SaveLoadManager.main.isLoading);
-#if SUBNAUTICA_STABLE
-                float time = Time.time;
-#else
+
                 float time = PDA.time;
-#endif
+
                 messages.ForEach(msg => msg.timeEnd = time + 1f);
                 yield return new WaitForSeconds(1.1f); // wait for messages to dissapear
 
@@ -191,7 +189,7 @@
                 Patcher.hInstance.Unpatch(AccessTools.Method(typeof(ErrorMessage), nameof(ErrorMessage.Awake)),
                     HarmonyPatchType.Postfix, Patcher.hInstance.Id);
 
-                Patcher.hInstance.Unpatch(AccessTools.Method(typeof(ErrorMessage), nameof(ErrorMessage.OnUpdate)),
+                Patcher.hInstance.Unpatch(AccessTools.Method(typeof(ErrorMessage), nameof(ErrorMessage.OnLateUpdate)),
                     HarmonyPatchType.Transpiler, Patcher.hInstance.Id);
             }
 
@@ -212,7 +210,7 @@
 
             // we changing result for 'float value = Mathf.Clamp01(MathExtensions.EvaluateLine(...' to 1.0f
             // so text don't stay in the center of the screen (because of changed 'timeEnd')
-            [HarmonyTranspiler, HarmonyPatch(typeof(ErrorMessage), nameof(ErrorMessage.OnUpdate))]
+            [HarmonyTranspiler, HarmonyPatch(typeof(ErrorMessage), nameof(ErrorMessage.OnLateUpdate))]
             private static IEnumerable<CodeInstruction> ErrorMessage_OnUpdate_Transpiler(IEnumerable<CodeInstruction> cins)
             {
                 try
@@ -233,7 +231,7 @@
                 }
                 catch (Exception e)
                 {
-                    Logger.Error($"Failed to patch ErrorMessage.OnUpdate() ({e})");
+                    Logger.Error($"Failed to patch ErrorMessage.OnLateUpdate() ({e})");
                     return cins;
                 }
             }
